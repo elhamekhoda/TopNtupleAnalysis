@@ -1,0 +1,97 @@
+
+README
+-----------------------
+
+This is a framework for reading flat ntuples generated from AnalysisTop,
+running an analysis over them and producing final plots.
+The framework works by reading the flat ntuples using the class MiniTree, as called
+from read.cxx and then running an analysis class (that derives of Analysis) on each event and
+producing histograms to be saved in the output(s).
+
+To compile the code, do (only ROOT must be setup):
+make
+
+To check your options on how to run it:
+./read --help
+
+For example:
+./read --files input1.root,input2.root --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0
+
+The --analysis flag indicate which class that derives of analysis should be called. It is created in read.cxx.
+To create your own Analysis class, just change read.cxx to check the value of --analysis and create an instance of your analysis class
+in analogy with:
+
+  std::vector<Analysis *> vec_analysis; 
+  if (analysis == "AnaTtresSL") {
+    vec_analysis.push_back(new AnaTtresSL(outList[0], true,  false )); // resolved electron
+    vec_analysis.push_back(new AnaTtresSL(outList[1], false, false )); // resolved muon
+    vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true  )); // boosted  electron
+    vec_analysis.push_back(new AnaTtresSL(outList[3], false, true  )); // boosted  muon
+  } 
+
+The list of output files is given as 4 files, since in this analysis 4 channels are expected. If your analysis only outputs one file, only the
+first should be considered.
+
+The list of inout files can be given as a comma-separated list, or it can be given as a newline-separated text file that ends in .txt and starts
+with input, for example:
+./read --files input.txt --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0
+
+where input.txt has:
+input1.root
+input2.root
+
+Take a look at the Root/AnaTtresSL.cxx and TopNtupleAnalysis/AnaTtresSL.h files for an analysis example.
+
+For now this code uses an input file called EventCount.root to find out the number of events before skimming.
+This file can be produced using:
+python scripts/yieldsFromAmi.py 
+
+If, however, the mini flat ntuple files contain a histogram with the sum of weights (which is the correct
+way of doing this), one can just read the information from there.
+
+
+Auxiliary scripts
+---------------------------
+
+The input files for read.cxx can be produced by running top-xaod from the TopAnalysis package with the OutputMinixAOD flag set to False
+in the configuration file.
+The output is then downloaded with dq2-get and the script in scripts/addFiles.py can be used to add all output ROOT file in a single file per
+sample type. Use it by editing its first two lines, so that the first points to the directory on which the files were downloaded and
+the second one points to the directory on which the summed output is supposed to be.
+
+inputDirectory = '/afs/phas.gla.ac.uk/user/d/dferreira/atlas_data/dferreira02/tt13e4_06'
+runDirectory = 'test2/'
+
+Also change the next lines that indicates how to group the samples in files (ie: which dataset IDs should go in the W+jets output file).
+The format user.CERN_USER.ABCDEF.BLABLABLA is expected and only the ABCDEF information is used to compare the DSID of the sample with the ones
+in the list provided in DC14MC13TeV.py
+The list is organised using the code in grid.py from the TopExamples package.
+
+names  = ['13TeV_FS_ttbarPowhegPythia_e4', '13TeV_FS_ZmassivebcSherpa_e4', '13TeV_FS_SingleTopPowhegPythia_e4', '13TeV_FS_WmassivebcSherpa_e4']
+names += ['13TeV_FS_ZprimePythia500_e4', '13TeV_FS_ZprimePythia1000_e4', '13TeV_FS_ZprimePythia2000_e4', '13TeV_FS_ZprimePythia3000_e4', '13TeV_FS_ZprimePythia5000_e4']
+
+Run it with:
+python scripts/addFiles.py
+
+After the files are added, edit scripts/run.py to point to the added output directory and to a directory on which the histograms are to be saved:
+ntuplesDir = 'test2'
+outputDir = 'test2_hist'
+
+Change also the command line for the read code if necessary, by changing the value of --analysis to your own Analysis.
+Run it with:
+python scripts/run.py
+
+The output files will be stored in the outputDir and can be plot using the scripts/plot.C macro. You may prefer to
+write your own macro, but if you use this one, it can be used as follows (from the directory on which the files are):
+  root -l -b -q '../scripts/plot.C+("lepPt","./","_rmu.root",false)'
+
+where "_rmu.root" is the ending of the ROOT file (which in this case indicates the channel of the analysis) nad "lepPt" is the
+histoggram name, while "./" is the directory on which to find the input file. You might need to change the plot.C macro in the
+initStackConfig function to point to the correct input files, so the stack plot can be correctly made.
+
+
+For more information, contact:
+Danilo Enoque Ferreira de Lima
+dferreir@mail.cern.ch
+
+
