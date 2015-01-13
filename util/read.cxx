@@ -157,6 +157,23 @@ int main(int argc, char **argv) {
   SampleXsection sampleXsection;
   sampleXsection.readFromFile("scripts/XSectionFromAmi-13TeV.txt");
 
+  // retrieve, list of sum of weights
+  std::map<int, float> sumOfWeights;
+  TChain t_sumWeights("sumWeights");
+  for (int k = 0; k < fileList.size(); ++k) {
+    t_sumWeights.Add(fileList[k].c_str());
+  }
+  int dsid;
+  float value;
+  t_sumWeights.SetBranchAddress("dsid", &dsid);
+  t_sumWeights.SetBranchAddress("totalEventsWeighted", &value);
+  for (int k = 0; k < t_sumWeights.GetEntries(); ++k) {
+    t_sumWeights.GetEntry(k);
+    if (sumOfWeights.find(dsid) == sumOfWeights.end())
+      sumOfWeights[dsid] = 0;
+    sumOfWeights[dsid] += value;
+  }
+
   for (int k = 0; k < mt.GetEntries(); ++k) {
     if (k % 100 == 0)
       std::cout << "Entry " << k << "/" << mt.GetEntries() << std::endl;
@@ -170,6 +187,9 @@ int main(int argc, char **argv) {
       weight *= sel.mcWeight();// *sel.pileupWeight();
       weight *= sampleXsection.getXsection(channel);
       weight /= getEventCountBeforeSkimming(channel);
+      //weight /= sumOfWeights[channel]; // this will be the correct way of doing this
+      // but keeping this commented as it ihas only been added in the trunk of AnalysisTop now
+      // if you use a recent version of AnalysisTop, uncomment the last line
     }
     for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
       vec_analysis[iAna]->run(sel, weight);
