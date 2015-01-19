@@ -221,6 +221,7 @@ void MiniTree::prepareBranches() {
   jet_e = 0;
   jet_mv1 = 0;
   jet_ip3dsv1 = 0;
+  jet_jvf = 0;
   jet_closeToLepton = 0;
 
   ljet_pt = 0;
@@ -253,6 +254,7 @@ void MiniTree::prepareBranches() {
     m_chain->Branch("jet_e", &jet_e);
     m_chain->Branch("jet_mv1", &jet_mv1);
     m_chain->Branch("jet_ip3dsv1", &jet_ip3dsv1);
+    m_chain->Branch("jet_jvf", &jet_jvf);
     m_chain->Branch("jet_closeToLepton", &jet_closeToLepton);
 
     m_chain->Branch("ljet_pt", &ljet_pt);
@@ -300,6 +302,7 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("jet_e", &jet_e);
     m_chain->SetBranchAddress("jet_mv1", &jet_mv1);
     m_chain->SetBranchAddress("jet_ip3dsv1", &jet_ip3dsv1);
+    m_chain->SetBranchAddress("jet_jvf", &jet_jvf);
     m_chain->SetBranchAddress("jet_closeToLepton", &jet_closeToLepton);
 
     m_chain->SetBranchAddress("ljet_pt", &ljet_pt);
