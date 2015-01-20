@@ -1,5 +1,14 @@
 #!/usr/bin/env python
-#import TopExamples.analysis
+
+# to run this, be sure you have checked out TopExamples
+# alternatively, if you want to run this without RootCore:
+# mkdir TopExamples
+# cp [from TopExamples main directory]/python/grid.py TopExamples/
+# touch TopExamples/__init__.py
+# export PYTHONPATH=$PYTHONPATH:$PWD
+# and copy DC14MC13TeV.py to the current directory
+#
+# you are free to add the Grid results in any other way you prefer
 import DC14MC13TeV
 
 inputDirectory = '/afs/phas.gla.ac.uk/user/d/dferreira/atlas_data/dferreira02/tt13e4_10'
