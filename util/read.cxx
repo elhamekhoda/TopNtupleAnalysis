@@ -186,8 +186,8 @@ int main(int argc, char **argv) {
     if (!isData) {
       weight *= sel.mcWeight();// *sel.pileupWeight();
       weight *= sampleXsection.getXsection(channel);
-      weight /= getEventCountBeforeSkimming(channel);
-      //weight /= sumOfWeights[channel]; // this will be the correct way of doing this
+      //weight /= getEventCountBeforeSkimming(channel);
+      weight /= sumOfWeights[channel]; // this will be the correct way of doing this
       // but keeping this commented as it ihas only been added in the trunk of AnalysisTop now
       // if you use a recent version of AnalysisTop, uncomment the last line
     }
