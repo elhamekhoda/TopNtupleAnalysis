@@ -73,9 +73,18 @@ names += ['13TeV_FS_ZprimePythia500_e4', '13TeV_FS_ZprimePythia1000_e4', '13TeV_
 Run it with:
 python scripts/addFiles.py
 
+(you need to have the TopExamples and the necessary dataset names added in the Samples class. This is only a helper script and you might
+ prefer to do hadd yourself to avoid using the TopExamples structure, if you run locally)
+
 After the files are added, edit scripts/run.py to point to the added output directory and to a directory on which the histograms are to be saved:
 ntuplesDir = 'test2'
 outputDir = 'test2_hist'
+
+You need to checkout the following package to retrieve the 13 TeV cross sections from the configuration file properly.
+(in the future an official 13 TeV configuration file might be helpful)
+
+svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk TopDataPreparation
+There is no need to compile it, since the current Makefile includes it directly only for the C++ file needed.
 
 Change also the command line for the read code if necessary, by changing the value of --analysis to your own Analysis.
 Run it with:

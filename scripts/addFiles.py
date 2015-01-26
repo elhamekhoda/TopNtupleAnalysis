@@ -11,8 +11,8 @@
 # you are free to add the Grid results in any other way you prefer
 import DC14MC13TeV
 
-inputDirectory = '/afs/phas.gla.ac.uk/user/d/dferreira/atlas_data/dferreira02/tt13e4_10'
-runDirectory = 'test2/'
+inputDirectory = '/afs/phas.gla.ac.uk/user/d/dferreira/atlas_data/dferreira02/tt13e4_12'
+runDirectory = 'test12/'
 
 names  = ['13TeV_FS_ttbarPowhegPythia_e4', '13TeV_FS_ZmassivebcSherpa_e4', '13TeV_FS_SingleTopPowhegPythia_e4', '13TeV_FS_WmassivebcSherpa_e4']
 names += ['13TeV_FS_ZprimePythia500_e4', '13TeV_FS_ZprimePythia1000_e4', '13TeV_FS_ZprimePythia2000_e4', '13TeV_FS_ZprimePythia3000_e4', '13TeV_FS_ZprimePythia5000_e4']
