@@ -154,7 +154,8 @@ int main(int argc, char **argv) {
   Event sel; // selected objects
 
   SampleXsection sampleXsection;
-  sampleXsection.readFromFile("scripts/XSectionFromAmi-13TeV.txt");
+  //sampleXsection.readFromFile("scripts/XSectionFromAmi-13TeV.txt");
+  sampleXsection.readFromFile("scripts/XSection-MC15-13TeV.data");
 
   // retrieve, list of sum of weights
   std::map<int, float> sumOfWeights;
@@ -186,7 +187,8 @@ int main(int argc, char **argv) {
       weight *= sel.mcWeight();// *sel.pileupWeight();
       weight *= sampleXsection.getXsection(channel);
       //weight /= getEventCountBeforeSkimming(channel);
-      weight /= sumOfWeights[channel]; // this will be the correct way of doing this
+      if (sumOfWeights[channel] != 0)
+        weight /= sumOfWeights[channel]; // this will be the correct way of doing this
       // but keeping this commented as it ihas only been added in the trunk of AnalysisTop now
       // if you use a recent version of AnalysisTop, uncomment the last line
     }
