@@ -9,13 +9,15 @@
 # and copy DC14MC13TeV.py to the current directory
 #
 # you are free to add the Grid results in any other way you prefer
-import DC14MC13TeV
+import HQTTtResonancesTools.DC15MC13TeV_EXOT4_p2352
+import HQTTtResonancesTools.DC14MC13TeV_EXOT4_p1845
 
-inputDirectory = '/afs/phas.gla.ac.uk/user/d/dferreira/atlas_data/dferreira02/tt13e4_12'
-runDirectory = 'test12/'
+inputDirectory = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/28052015'
+runDirectory = 'test13/'
 
-names  = ['13TeV_FS_ttbarPowhegPythia_e4', '13TeV_FS_ZmassivebcSherpa_e4', '13TeV_FS_SingleTopPowhegPythia_e4', '13TeV_FS_WmassivebcSherpa_e4']
-names += ['13TeV_FS_ZprimePythia500_e4', '13TeV_FS_ZprimePythia1000_e4', '13TeV_FS_ZprimePythia2000_e4', '13TeV_FS_ZprimePythia3000_e4', '13TeV_FS_ZprimePythia5000_e4']
+names  = ['MC15_13TeV_FS_EXOT4_ttbarPowhegPythia']
+#name   += ['MC15_13TeV_FS_EXOT4_ZmassivebcSherpa', 'MC15_13TeV_FS_EXOT4_SingleTopPowhegPythia_e4', 'MC15_13TeV_FS_EXOT4_WmassivebcSherpa_e4']
+#names += ['MC15_13TeV_FS_EXOT4_ZprimePythia500', 'MC15_13TeV_FS_EXOT4_ZprimePythia1000_e4', 'MC15_13TeV_FS_EXOT4_ZprimePythia2000_e4', 'MC15_13TeV_FS_EXOT4_ZprimePythia3000_e4', 'MC15_13TeV_FS_EXOT4_ZprimePythia5000_e4']
 
 import TopExamples.grid
 
@@ -35,8 +37,13 @@ for sample in samples:
     if not justfile.split('.')[0] == 'user':
       continue
     dsid_dir = justfile.split('.')[2]
-    for s in sample.datasets:
-      if s.split('.')[0] == 'mc14_13TeV':
+    for mys in sample.datasets:
+      s = mys
+      if len(s.split(':')) > 1:
+        s = s.split(':')[1]
+      if s.split('.')[0] == 'mc15_13TeV':
+        dsid_sample = s.split('.')[1]
+      elif s.split('.')[0] == 'mc14_13TeV':
         dsid_sample = s.split('.')[1]
       elif s.split('.')[0] == 'user':
         dsid_sample = s.split('.')[2]

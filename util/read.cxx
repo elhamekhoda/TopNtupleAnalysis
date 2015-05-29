@@ -20,7 +20,6 @@
 #include "TopNtupleAnalysis/AnaTtresSL.h"
 
 #include "TopDataPreparation/SampleXsection.h"
-#include "Cintex/Cintex.h"
 
 #include "TopNtupleAnalysis/ParseUtils.h"
 
@@ -33,7 +32,7 @@
 
 int main(int argc, char **argv) {
 
-  ROOT::Cintex::Cintex::Enable();
+  //ROOT::Cintex::Cintex::Enable();
 
   gROOT->ProcessLine("#include <vector>");
   gInterpreter->GenerateDictionary("vector<vector<float> >", "vector");

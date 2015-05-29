@@ -1,6 +1,6 @@
 
-ntuplesDir = 'test2'
-outputDir = 'test2_hist'
+ntuplesDir = 'test13'
+outputDir = 'test13_hist'
 
 import glob
 files = glob.glob(ntuplesDir+'/*.root')

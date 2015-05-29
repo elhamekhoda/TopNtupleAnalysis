@@ -14,7 +14,7 @@ CXXFLAGS  += -Wno-long-long -fPIC
 CXXFLAGS  += $(shell root-config --cflags)
 
 LDFLAGS    =
-LDFLAGS   += $(ROOTLIB) -lCintex
+LDFLAGS   += $(ROOTLIB)
 
 OBJS       = Root/Event.o Root/LargeJet.o Root/Muon.o Root/Electron.o Root/Jet.o Root/MObject.o
 OBJS      += Root/ParseUtils.o
