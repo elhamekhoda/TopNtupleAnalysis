@@ -15,18 +15,50 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
   : Analysis(filename), m_electron(electron), m_boosted(boosted),
     m_neutrinoBuilder("MeV"), m_chi2("MeV") {
 
-  m_chi2.Init(TtresChi2::DATA2012SUMMER2013);
+  m_chi2.Init(TtresChi2::DATA2015_week1);
 
-  m_hSvc.create1D("lepPt", "; Lepton p_{T} ; Events", 30, 0, 300);
+  m_hSvc.create1D("lepPt", "; Lepton p_{T} [GeV]; Events", 30, 0, 300);
   m_hSvc.create1D("lepEta", "; Lepton #eta ; Events", 50, -2.5, 2.5);
   m_hSvc.create1D("lepPhi", "; Lepton #phi ; Events", 64, -3.2, 3.2);
 
-  m_hSvc.create1D("leadJetPt", "; Leading Jet p_{T} ; Events", 50, 0, 500);
-  m_hSvc.create1D("leadbJetPt", "; Leading b-jet p_{T} ; Events", 50, 0, 500);
+  m_hSvc.create1D("leadJetPt", "; Leading Jet p_{T} [GeV]; Events", 50, 0, 500);  
+  m_hSvc.create1D("nJets", "; number of jets ; Events", 10, 0, 10);
+  
+  m_hSvc.create1D("leadbJetPt", "; Leading b-jet p_{T} [GeV]; Events", 50, 0, 500);
+  m_hSvc.create1D("nBtagJets", "; number of b-tagged jets ; Events", 10, 0, 10);  
 
-  m_hSvc.create1D("met", "; Missing E_{T} ; Events", 50, 0, 500);
-  m_hSvc.create1D("met_phi", "; Missing E_{T} #phi; Events", 64, -3.2, 3.2);
-
+  m_hSvc.create1D("met", "; Missing E_{T} [GeV]; Events", 50, 0, 500);
+  m_hSvc.create1D("met_phi", "; Missing E_{T} #phi; Events", 64, -3.2, 3.2);  
+  
+  m_hSvc.create1D("jet0_m", "; mass of the jet[0] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet1_m", "; mass of the jet[1] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet2_m", "; mass of the jet[2] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet3_m", "; mass of the jet[3] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet4_m", "; mass of the jet[4] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet5_m", "; mass of the jet[5] [GeV]; Events", 50, 0, 500); 
+  
+  m_hSvc.create1D("jet0_pt", "; pt of the jet[0] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet1_pt", "; pt of the jet[1] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet2_pt", "; pt of the jet[2] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet3_pt", "; pt of the jet[3] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet4_pt", "; pt of the jet[4] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet5_pt", "; pt of the jet[5] [GeV]; Events", 50, 0, 500); 
+  
+  m_hSvc.create1D("jet0_eta", "; #eta of the jet[0]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet1_eta", "; #eta of the jet[1]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet2_eta", "; #eta of the jet[2]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet3_eta", "; #eta of the jet[3]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet4_eta", "; #eta of the jet[4]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet5_eta", "; #eta of the jet[5]; Events", 20, -10, 10); 
+  
+  m_hSvc.create1D("jet0_phi", "; #phi of the jet[0]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet1_phi", "; #phi of the jet[1]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet2_phi", "; #phi of the jet[2]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet3_phi", "; #phi of the jet[3]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet4_phi", "; #phi of the jet[4]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet5_phi", "; #phi of the jet[5]; Events", 20, -10, 10); 
+  
+  
   if (m_boosted) {
     m_hSvc.create1D("closeJetPt", "; Selected Jet p_{T} ; Events", 25, 0, 500);
 
@@ -36,13 +68,13 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
 
     m_hSvc.create1D("mtlep_boo", "; m_{t,lep} ; Events", 40, 0, 400);
   } else {
-    m_hSvc.create1D("mtlep_res", "; m_{t,lep} ; Events", 40, 0, 400);
-    m_hSvc.create1D("mthad_res", "; m_{t,had} ; Events", 40, 0, 400);
-    m_hSvc.create1D("mwhad_res", "; m_{W,had} ; Events", 40, 0, 400);
+    m_hSvc.create1D("mtlep_res", "; m_{t,lep} [GeV]; Events", 40, 0, 400);
+    m_hSvc.create1D("mthad_res", "; m_{t,had} [GeV]; Events", 40, 0, 400);
+    m_hSvc.create1D("mwhad_res", "; m_{W,had} [GeV]; Events", 40, 0, 400);
     m_hSvc.create1D("chi2", "; #chi^{2} ; Events", 50, 0, 10);
   }
 
-  m_hSvc.create1D("mtt", "; m_{t#bar{t}} ; Events", 60, 0, 6000);
+  m_hSvc.create1D("mtt", "; m_{t#bar{t}} [GeV]; Events", 60, 0, 6000);
 }
 
 AnaTtresSL::~AnaTtresSL() {
@@ -81,12 +113,58 @@ void AnaTtresSL::run(const Event &e, double weight) {
 
   const TLorentzVector &j = e.jet()[0].mom();
   h->h1D("leadJetPt", "", s)->Fill(j.Perp()*1e-3, weight);
-  size_t bidx = 0;
-  for (; bidx < e.jet().size(); ++bidx)
-    if (e.jet()[bidx].btag())
-      break;
-  h->h1D("leadbJetPt", "", s)->Fill(e.jet()[bidx].mom().Perp()*1e-3, weight);
+  
+  // for now
+  int nJets = e.jet().size(); //njets 
+  h->h1D("nJets", "", s)->Fill(nJets, weight);
+  
+  int nBtagged = 0; //nB-tagged jets 
+  for (size_t bidx = 0; bidx < e.jet().size(); ++bidx)
+    if (e.jet()[bidx].btag()){
+      if(nBtagged==0)h->h1D("leadbJetPt", "", s)->Fill(e.jet()[bidx].mom().Perp()*1e-3, weight);
+      nBtagged += 1;
+    }
+   h->h1D("nBtagJets", "", s)->Fill(nBtagged, weight);
 
+  // Jet kinematics  
+  
+  std::vector<float> jetMass_vector;
+  std::vector<float> jetPt_vector;
+  std::vector<float> jetEta_vector;
+  std::vector<float> jetPhi_vector;
+  
+  jetMass_vector.resize(e.jet().size());
+  jetPt_vector.resize(e.jet().size());
+  jetEta_vector.resize(e.jet().size());
+  jetPhi_vector.resize(e.jet().size());  
+  
+  size_t iJet = 0;
+  for (; iJet < e.jet().size(); ++iJet){
+    const TLorentzVector &jet_p4 = e.jet()[iJet].mom();
+    jetMass_vector[iJet] =  e.jet()[iJet].mom().M();
+    jetPt_vector[iJet]   =  e.jet()[iJet].mom().Pt();
+    //std::cout << jetPt_vector[iJet] << std::endl;
+    jetEta_vector[iJet]  =  e.jet()[iJet].mom().Eta();
+    jetPhi_vector[iJet]  =  e.jet()[iJet].mom().Phi();    
+  }//for
+  
+  int maxNjet = (e.jet().size()<6) ? e.jet().size() : 6;
+  for (int i = 0; i < maxNjet; ++i){  
+     
+     std::string nameJet_m = "jet" + std::to_string(i)+"_m";
+     h->h1D(nameJet_m, "", s)->Fill(jetMass_vector[i]*1e-3, weight);
+     
+     std::string nameJet_pt = "jet" + std::to_string(i)+"_pt";
+     h->h1D(nameJet_pt, "", s)->Fill(jetPt_vector[i]*1e-3, weight);
+     
+     std::string nameJet_eta = "jet" + std::to_string(i)+"_eta";
+     h->h1D(nameJet_eta, "", s)->Fill(jetEta_vector[i], weight);
+     
+     std::string nameJet_phi = "jet" + std::to_string(i)+"_phi";
+     h->h1D(nameJet_phi, "", s)->Fill(jetPhi_vector[i], weight);    
+  
+  }//for
+  
   float mtt = 0;
 
   h->h1D("met", "", s)->Fill(e.met().Perp()*1e-3, weight);
@@ -154,6 +232,7 @@ void AnaTtresSL::run(const Event &e, double weight) {
     // status has to be true
 
     if (status) mtt = m_chi2.getResult_Mtt();
+
     for (size_t z = 0; z < vjets.size(); ++z) {
       delete vjets[z];
     }

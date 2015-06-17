@@ -17,7 +17,7 @@ TtresChi2::TtresChi2(std::string units){
   m_Btag = AFFECTBTAG;
   m_RunMode = RUNDEFAULT;
   m_NeutrinoBuilder = new TtresNeutrinoBuilder(units);
-  Init(DATA2012SUMMER2013PT100);
+  Init(DATA2015_week1);
   res_chi2All  = -1.;
   res_chi2WH   = -1.;
   res_chi2TopH = -1.;
@@ -45,6 +45,33 @@ void TtresChi2::Init(Chi2Version version, double highJetMass) {
   m_highJetMass = highJetMass;
 
   switch (version){
+  
+     case DATA2015_week1:   
+  	// TopAnalysis 2.3.12
+	// Parton matching: HQTTtResonancesTools
+	
+  	MjjP=84.58*m_Units;
+  	SMjjP=11.41*m_Units;
+  	
+  	m_TopMinusW_had_mean=91.15*m_Units;
+  	m_TopMinusW_had_sigma=14.83*m_Units;
+  	
+  	m_Top_lep_mean=168.8*m_Units;
+  	m_Top_lep_sigma=23.60*m_Units;
+  	
+  	m_PtDiff_mean=-3.52*m_Units;
+  	m_PtDiff_sigma=37.33*m_Units;
+  	
+  	m_PtDiffRel_mean=-0.0139; 
+  	m_PtDiffRel_sigma=0.07421; 
+	
+  	m_PtDiffRelMass_mean=-0.0051; 
+  	m_PtDiffRelMass_sigma=0.04434; 
+	
+  	MTHJJ=176.8*m_Units; 
+  	STHJJ=18.48*m_Units;
+	break;	
+  
   
      case DATA2012SUMMER2013PT100:
   	//Rel17.2: values obtained for Z' 0.5TeV-2 TeV including njets>=5 events
