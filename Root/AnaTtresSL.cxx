@@ -28,7 +28,10 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
   m_hSvc.create1D("nBtagJets", "; number of b-tagged jets ; Events", 10, 0, 10);  
 
   m_hSvc.create1D("met", "; Missing E_{T} [GeV]; Events", 50, 0, 500);
-  m_hSvc.create1D("met_phi", "; Missing E_{T} #phi; Events", 64, -3.2, 3.2);  
+  m_hSvc.create1D("met_phi", "; Missing E_{T} #phi; Events", 64, -3.2, 3.2);
+    
+  m_hSvc.create1D("mwt", "; Transverse W mass [GeV]; Events", 40, 0, 400);
+  m_hSvc.create1D("mu", "; mu; Events", 100, 0, 100);
   
   m_hSvc.create1D("jet0_m", "; mass of the jet[0] [GeV]; Events", 50, 0, 500); 
   m_hSvc.create1D("jet1_m", "; mass of the jet[1] [GeV]; Events", 50, 0, 500); 
@@ -57,7 +60,6 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
   m_hSvc.create1D("jet3_phi", "; #phi of the jet[3]; Events", 20, -10, 10); 
   m_hSvc.create1D("jet4_phi", "; #phi of the jet[4]; Events", 20, -10, 10); 
   m_hSvc.create1D("jet5_phi", "; #phi of the jet[5]; Events", 20, -10, 10); 
-  
   
   if (m_boosted) {
     m_hSvc.create1D("closeJetPt", "; Selected Jet p_{T} ; Events", 25, 0, 500);
@@ -97,7 +99,7 @@ void AnaTtresSL::run(const Event &e, double weight) {
   if (!m_boosted)
     if (!(e.passes("rejets") || e.passes("rmujets")))
       return;
-
+    
   HistogramService *h = &m_hSvc;
   TLorentzVector l;
   if (m_electron) {
@@ -168,6 +170,12 @@ void AnaTtresSL::run(const Event &e, double weight) {
   float mtt = 0;
 
   h->h1D("met", "", s)->Fill(e.met().Perp()*1e-3, weight);
+    
+  //transverse W mass  
+  h->h1D("mwt", "", s)->Fill(sqrt(2. * l.Perp() * e.met().Perp() * (1. - cos(l.Phi() - e.met().Phi())))*1e-3, weight); 
+  
+  //mu
+  h->h1D("mu", "", s)->Fill(e.mu(), weight); 
 
   if (m_boosted && (e.passes("bejets") || e.passes("bmujets"))) {
 
@@ -232,7 +240,7 @@ void AnaTtresSL::run(const Event &e, double weight) {
     // status has to be true
 
     if (status) mtt = m_chi2.getResult_Mtt();
-
+    
     for (size_t z = 0; z < vjets.size(); ++z) {
       delete vjets[z];
     }
