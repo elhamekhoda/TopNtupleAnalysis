@@ -45,12 +45,12 @@ const float Event::pileupWeight() const {
   return m_pileupWeight;
 }
 
-float &Event::mcWeight() {
-  return m_mcWeight;
+float &Event::weight_mc() {
+  return m_weight_mc;
 }
 
-const float Event::mcWeight() const {
-  return m_mcWeight;
+const float Event::weight_mc() const {
+  return m_weight_mc;
 }
 
 std::vector<Electron> &Event::electron() {

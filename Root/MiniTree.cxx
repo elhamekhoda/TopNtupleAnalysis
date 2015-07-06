@@ -41,13 +41,13 @@ void MiniTree::read(int event, Event &e) {
 
   e.npv() = 0; //TODO
   e.mu() = mu;
-  e.mcWeight() = mcWeight;
+  e.weight_mc() = weight_mc;
   e.pileupWeight() = pileupWeight;
 
   for (int k = 0; k < el_pt->size(); ++k) {
     e.electron().push_back(Electron());
     e.electron()[k].mom().SetPtEtaPhiE(el_pt->at(k), el_eta->at(k), el_phi->at(k), el_e->at(k));
-    e.electron()[k].setMI(el_miniiso->at(k));
+    //e.electron()[k].setMI(el_miniiso->at(k));
     e.electron()[k].setTightPP(true);
     e.electron()[k].caloMom() = e.electron()[k].mom();
     e.electron()[k].trkMom() = e.electron()[k].mom();
@@ -72,7 +72,7 @@ void MiniTree::read(int event, Event &e) {
     e.jet()[k].trueFlavour() = 0; // TODO jet_trueflav==0?-99:jet_trueflav->at(k);
     e.jet()[k].mv1() = jet_mv1==0?-99:jet_mv1->at(k);
     e.jet()[k].ip3dsv1() = jet_ip3dsv1==0?-99:jet_ip3dsv1->at(k);
-    e.jet()[k].jvf() = jet_jvf==0?-99:jet_jvf->at(k);
+    e.jet()[k].jvt() = jet_jvt==0?-99:jet_jvt->at(k);
     e.jet()[k].closeToLepton() = jet_closeToLepton==0?-99:jet_closeToLepton->at(k);
   }
 
@@ -108,7 +108,7 @@ void MiniTree::write(const Event &e) {
 
   mu = e.mu();
 
-  mcWeight = e.mcWeight();
+  weight_mc = e.weight_mc();
   pileupWeight = e.pileupWeight();
 
   el_pt->clear();
@@ -221,7 +221,7 @@ void MiniTree::prepareBranches() {
   jet_e = 0;
   jet_mv1 = 0;
   jet_ip3dsv1 = 0;
-  jet_jvf = 0;
+  jet_jvt = 0;
   jet_closeToLepton = 0;
 
   ljet_pt = 0;
@@ -233,20 +233,20 @@ void MiniTree::prepareBranches() {
 
   if (m_toWrite) {
     m_chain->Branch("mcChannelNumber", &mcChannelNumber);
-    m_chain->Branch("mcWeight", &mcWeight);
+    m_chain->Branch("weight_mc", &weight_mc);
     m_chain->Branch("pileupWeight", &pileupWeight);
 
     m_chain->Branch("el_pt", &el_pt);
     m_chain->Branch("el_eta", &el_eta);
     m_chain->Branch("el_phi", &el_phi);
     m_chain->Branch("el_e", &el_e);
-    m_chain->Branch("el_miniiso", &el_miniiso);
+    //m_chain->Branch("el_miniiso", &el_miniiso);
 
     m_chain->Branch("mu_pt", &mu_pt);
     m_chain->Branch("mu_eta", &mu_eta);
     m_chain->Branch("mu_phi", &mu_phi);
     m_chain->Branch("mu_e", &mu_e);
-    m_chain->Branch("mu_miniiso", &mu_miniiso);
+    //m_chain->Branch("mu_miniiso", &mu_miniiso);
 
     m_chain->Branch("jet_pt", &jet_pt);
     m_chain->Branch("jet_eta", &jet_eta);
@@ -254,7 +254,7 @@ void MiniTree::prepareBranches() {
     m_chain->Branch("jet_e", &jet_e);
     m_chain->Branch("jet_mv1", &jet_mv1);
     m_chain->Branch("jet_ip3dsv1", &jet_ip3dsv1);
-    m_chain->Branch("jet_jvf", &jet_jvf);
+    m_chain->Branch("jet_jvt", &jet_jvt);
     m_chain->Branch("jet_closeToLepton", &jet_closeToLepton);
 
     m_chain->Branch("ljet_pt", &ljet_pt);
@@ -281,20 +281,20 @@ void MiniTree::prepareBranches() {
     m_chain->Branch("emu", &emu);
   } else {
     m_chain->SetBranchAddress("mcChannelNumber", &mcChannelNumber);
-    m_chain->SetBranchAddress("mcWeight", &mcWeight);
+    m_chain->SetBranchAddress("weight_mc", &weight_mc);
     m_chain->SetBranchAddress("pileupWeight", &pileupWeight);
 
     m_chain->SetBranchAddress("el_pt", &el_pt);
     m_chain->SetBranchAddress("el_eta", &el_eta);
     m_chain->SetBranchAddress("el_phi", &el_phi);
     m_chain->SetBranchAddress("el_e", &el_e);
-    m_chain->SetBranchAddress("el_miniiso", &el_miniiso);
+    //m_chain->SetBranchAddress("el_miniiso", &el_miniiso);
 
     m_chain->SetBranchAddress("mu_pt", &mu_pt);
     m_chain->SetBranchAddress("mu_eta", &mu_eta);
     m_chain->SetBranchAddress("mu_phi", &mu_phi);
     m_chain->SetBranchAddress("mu_e", &mu_e);
-    m_chain->SetBranchAddress("mu_miniiso", &mu_miniiso);
+    //m_chain->SetBranchAddress("mu_miniiso", &mu_miniiso);
 
     m_chain->SetBranchAddress("jet_pt", &jet_pt);
     m_chain->SetBranchAddress("jet_eta", &jet_eta);
@@ -302,7 +302,7 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("jet_e", &jet_e);
     m_chain->SetBranchAddress("jet_mv1", &jet_mv1);
     m_chain->SetBranchAddress("jet_ip3dsv1", &jet_ip3dsv1);
-    m_chain->SetBranchAddress("jet_jvf", &jet_jvf);
+    m_chain->SetBranchAddress("jet_jvt", &jet_jvt);
     m_chain->SetBranchAddress("jet_closeToLepton", &jet_closeToLepton);
 
     m_chain->SetBranchAddress("ljet_pt", &ljet_pt);

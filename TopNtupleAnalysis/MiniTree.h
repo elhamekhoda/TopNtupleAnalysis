@@ -42,7 +42,7 @@ class MiniTree {
     std::string m_name;
 
 
-    Float_t         mcWeight;
+    Float_t         weight_mc;
     Float_t         pileupWeight;
     UInt_t          eventNumber;
     UInt_t          runNumber;
@@ -67,7 +67,7 @@ class MiniTree {
     vector<int>     *jet_closeToLepton;
     vector<float>   *jet_mv1;
     vector<float>   *jet_ip3dsv1;
-    vector<float>   *jet_jvf;
+    vector<float>   *jet_jvt;
     vector<float>   *ljet_pt;
     vector<float>   *ljet_eta;
     vector<float>   *ljet_phi;

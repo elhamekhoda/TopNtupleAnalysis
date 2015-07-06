@@ -12,7 +12,7 @@ Jet::Jet()
   m_trueflavour = 1;
   m_mv1 = 0;
   m_ip3dsv1 = 0;
-  m_jvf = 1;
+  m_jvt = 1;
   m_closeToLepton = 0;
 }
 
@@ -21,7 +21,7 @@ Jet::Jet(const TLorentzVector &v)
   m_trueflavour = 1;
   m_mv1 = 0;
   m_ip3dsv1 = 0;
-  m_jvf = 1;
+  m_jvt = 1;
   m_closeToLepton = 0;
 }
 
@@ -38,8 +38,8 @@ const int Jet::trueFlavour() const {
 bool Jet::pass() const {
   if (std::fabs(mom().Eta()) > 2.5) return false;
   if (mom().Perp() < 25e3) return false;
-  if ( (mom().Perp() <= 50e3) && (std::fabs(mom().Eta()) < 2.4) && \
-       (std::fabs(jvf()) <= 0.5) )
+  if ( (mom().Perp() <= 50e3) && (std::fabs(mom().Eta()) < 2.4) )//&& \
+       (std::fabs(jvt()) <= 0.5) )
     return false;
   return true;
 }
@@ -71,11 +71,11 @@ int &Jet::closeToLepton() {
   return m_closeToLepton;
 }
 
-const float Jet::jvf() const {
-  return m_jvf;
+const float Jet::jvt() const {
+  return m_jvt;
 }
-float &Jet::jvf() {
-  return m_jvf;
+float &Jet::jvt() {
+  return m_jvt;
 }
 
 

@@ -49,8 +49,8 @@ class Event {
     float &mu();
     const float mu() const;
 
-    float &mcWeight();
-    const float mcWeight() const;
+    float &weight_mc();
+    const float weight_mc() const;
 
     std::vector<std::string> &passes();
     const bool passes(const std::string &selection) const;
@@ -87,7 +87,7 @@ class Event {
     int m_npv;
     float m_rho;
 
-    float m_mcWeight;
+    float m_weight_mc;
     float m_pileupWeight;
     unsigned int m_lbn;
 };

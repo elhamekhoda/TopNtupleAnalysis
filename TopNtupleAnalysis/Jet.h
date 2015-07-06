@@ -23,8 +23,8 @@ class Jet : public MObject {
     const float ip3dsv1() const;
     float &ip3dsv1();
 
-    const float jvf() const;
-    float &jvf();
+    const float jvt() const;
+    float &jvt();
 
     bool pass() const;
     bool btag() const;
@@ -36,7 +36,7 @@ class Jet : public MObject {
     int m_trueflavour;
     float m_mv1;
     float m_ip3dsv1;
-    float m_jvf;
+    float m_jvt;
     int m_closeToLepton;
 
 };

@@ -186,14 +186,14 @@ int main(int argc, char **argv) {
     
     double weight = 1;
     if (!isData) {
-      weight *= sel.mcWeight();// *sel.pileupWeight();
+      weight *= sel.weight_mc();// *sel.pileupWeight();
       weight *= sampleXsection.getXsection(channel);
       //weight /= getEventCountBeforeSkimming(channel);
       if (sumOfWeights[channel] != 0)
         weight /= sumOfWeights[channel]; // this will be the correct way of doing this
       // but keeping this commented as it has only been added in the trunk of AnalysisTop now
       // if you use a recent version of AnalysisTop, uncomment the last line
-      //std::cout << "weight: " << weight << "\t"<< sel.mcWeight() << "\t" << sampleXsection.getXsection(channel) << "\t" << sumOfWeights[channel]<<  std::endl;          
+      std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" << sumOfWeights[channel]<<  std::endl;          
     }
     for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
       vec_analysis[iAna]->run(sel, weight);
