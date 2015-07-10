@@ -8,6 +8,7 @@
 #include "TFile.h"
 #include <vector>
 #include <string>
+#include <iostream>
 #include "TChain.h"
 
 MiniTree::MiniTree(bool toWrite, const std::string &file, const std::string &name)
@@ -138,6 +139,7 @@ void MiniTree::write(const Event &e) {
   jet_phi->clear();
   jet_e->clear();
   jet_mv1->clear();
+  jet_mv2c20->clear();
   jet_ip3dsv1->clear();
   jet_closeToLepton->clear();
   for (int k = 0; k < e.jet().size(); ++k) {
@@ -146,6 +148,7 @@ void MiniTree::write(const Event &e) {
     jet_phi->push_back(e.jet()[k].mom().Phi());
     jet_e->push_back(e.jet()[k].mom().E());
     jet_mv1->push_back(e.jet()[k].mv1());
+    jet_mv2c20->push_back(e.jet()[k].mv2c20());
     jet_ip3dsv1->push_back(e.jet()[k].ip3dsv1());
     jet_closeToLepton->push_back(e.jet()[k].closeToLepton());
   }
@@ -220,6 +223,7 @@ void MiniTree::prepareBranches() {
   jet_phi = 0;
   jet_e = 0;
   jet_mv1 = 0;
+  jet_mv2c20 = 0;
   jet_ip3dsv1 = 0;
   jet_jvt = 0;
   jet_closeToLepton = 0;
@@ -253,6 +257,7 @@ void MiniTree::prepareBranches() {
     m_chain->Branch("jet_phi", &jet_phi);
     m_chain->Branch("jet_e", &jet_e);
     m_chain->Branch("jet_mv1", &jet_mv1);
+    m_chain->Branch("jet_mv2c20", &jet_mv2c20);
     m_chain->Branch("jet_ip3dsv1", &jet_ip3dsv1);
     m_chain->Branch("jet_jvt", &jet_jvt);
     m_chain->Branch("jet_closeToLepton", &jet_closeToLepton);
@@ -279,6 +284,13 @@ void MiniTree::prepareBranches() {
     m_chain->Branch("ee", &ee);
     m_chain->Branch("mumu", &mumu);
     m_chain->Branch("emu", &emu);
+    
+    m_chain->Branch("binning01", &binning01);
+    m_chain->Branch("binning02", &binning02);
+    m_chain->Branch("binning03", &binning03);
+    m_chain->Branch("binning04", &binning04);
+    m_chain->Branch("binning05", &binning05);
+    
   } else {
     m_chain->SetBranchAddress("mcChannelNumber", &mcChannelNumber);
     m_chain->SetBranchAddress("weight_mc", &weight_mc);
@@ -301,6 +313,7 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("jet_phi", &jet_phi);
     m_chain->SetBranchAddress("jet_e", &jet_e);
     m_chain->SetBranchAddress("jet_mv1", &jet_mv1);
+    m_chain->SetBranchAddress("jet_mv2c20", &jet_mv2c20);
     m_chain->SetBranchAddress("jet_ip3dsv1", &jet_ip3dsv1);
     m_chain->SetBranchAddress("jet_jvt", &jet_jvt);
     m_chain->SetBranchAddress("jet_closeToLepton", &jet_closeToLepton);
@@ -327,6 +340,12 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("ee", &ee);
     m_chain->SetBranchAddress("mumu", &mumu);
     m_chain->SetBranchAddress("emu", &emu);
+    
+    m_chain->SetBranchAddress("binning01", &binning01);
+    m_chain->SetBranchAddress("binning02", &binning02);
+    m_chain->SetBranchAddress("binning03", &binning03);
+    m_chain->SetBranchAddress("binning04", &binning04);
+    m_chain->SetBranchAddress("binning05", &binning05);
   }
 }
 

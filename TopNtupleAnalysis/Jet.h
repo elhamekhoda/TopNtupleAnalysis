@@ -19,6 +19,9 @@ class Jet : public MObject {
 
     const float mv1() const;
     float &mv1();
+    
+    const float mv2c20() const;
+    float &mv2c20();
 
     const float ip3dsv1() const;
     float &ip3dsv1();
@@ -28,6 +31,7 @@ class Jet : public MObject {
 
     bool pass() const;
     bool btag() const;
+    bool btag_mv2c20_60() const;
 
     int &closeToLepton();
     const int closeToLepton() const;
@@ -35,6 +39,7 @@ class Jet : public MObject {
   protected:
     int m_trueflavour;
     float m_mv1;
+    float m_mv2c20;
     float m_ip3dsv1;
     float m_jvt;
     int m_closeToLepton;

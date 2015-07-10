@@ -28,19 +28,23 @@ class MiniTree {
     void write(const Event &e);
 
     double &sumWeights();
-
-
-  private:
+    TTree *m_chain;
     double m_sumWeights;
 
-    void prepareBranches();
-
     TFile  *m_fileToWrite;
-    TTree *m_chain;
     TTree *m_num;
     bool m_toWrite;
     std::string m_name;
+    
+    Float_t         binning01;
+    Float_t         binning02;
+    Float_t         binning03;
+    Float_t         binning04;
+    Float_t         binning05;
 
+  private:
+
+    void prepareBranches();
 
     Float_t         weight_mc;
     Float_t         pileupWeight;
@@ -66,6 +70,7 @@ class MiniTree {
     vector<float>   *jet_e;
     vector<int>     *jet_closeToLepton;
     vector<float>   *jet_mv1;
+    vector<float>   *jet_mv2c20;
     vector<float>   *jet_ip3dsv1;
     vector<float>   *jet_jvt;
     vector<float>   *ljet_pt;
@@ -76,6 +81,7 @@ class MiniTree {
     vector<float>   *ljet_sd12;
     vector<int>     *ljet_good;
 
+    
     Float_t         met_met;
     Float_t         met_phi;
 

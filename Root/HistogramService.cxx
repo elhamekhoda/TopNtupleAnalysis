@@ -66,12 +66,14 @@ HistogramService::~HistogramService() {
     }
   }
   m_file->cd("/");
+  m_file->Close();
   for (std::map<std::string, std::vector<std::string> *>::const_iterator kt = m_vs.begin(); kt != m_vs.end(); ++kt) {
     gDirectory->WriteObject(m_vs[kt->first], kt->first.c_str());
   }
   if (m_tree && m_treeFile) {
     m_treeFile->cd();
     m_tree->Write();
+    m_treeFile->Close();
     //delete m_treeFile;
   }
 }

@@ -18,6 +18,8 @@ class Analysis {
     virtual ~Analysis();
 
     virtual void run(const Event &e, double weight) = 0;
+    virtual void terminate() = 0;
+    virtual void setIsData(bool isData) = 0;
 
   protected:
     std::string m_filename;

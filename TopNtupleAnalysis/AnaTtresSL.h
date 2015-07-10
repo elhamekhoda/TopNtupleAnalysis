@@ -21,6 +21,8 @@ class AnaTtresSL : public Analysis {
     virtual ~AnaTtresSL();
 
     void run(const Event &e, double weight);
+    void terminate() {};
+    void setIsData(bool isData) {};
 
   protected:
     bool m_electron;
