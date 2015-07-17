@@ -47,7 +47,9 @@ class MiniTree {
     void prepareBranches();
 
     Float_t         weight_mc;
-    Float_t         pileupWeight;
+    Float_t         weight_pileup;
+    Float_t         weight_bTagSF;
+    Float_t         weight_leptonSF;
     UInt_t          eventNumber;
     UInt_t          runNumber;
     UInt_t          mcChannelNumber;

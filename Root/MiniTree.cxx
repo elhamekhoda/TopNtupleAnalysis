@@ -43,8 +43,10 @@ void MiniTree::read(int event, Event &e) {
   e.npv() = 0; //TODO
   e.mu() = mu;
   e.weight_mc() = weight_mc;
-  e.pileupWeight() = pileupWeight;
-
+  e.weight_pileup() = weight_pileup;
+  e.weight_bTagSF() = weight_bTagSF;
+  e.weight_leptonSF() = weight_leptonSF;
+  
   for (int k = 0; k < el_pt->size(); ++k) {
     e.electron().push_back(Electron());
     e.electron()[k].mom().SetPtEtaPhiE(el_pt->at(k), el_eta->at(k), el_phi->at(k), el_e->at(k));
@@ -73,6 +75,7 @@ void MiniTree::read(int event, Event &e) {
     e.jet()[k].trueFlavour() = 0; // TODO jet_trueflav==0?-99:jet_trueflav->at(k);
     e.jet()[k].mv1() = jet_mv1==0?-99:jet_mv1->at(k);
     e.jet()[k].ip3dsv1() = jet_ip3dsv1==0?-99:jet_ip3dsv1->at(k);
+    e.jet()[k].mv2c20() = jet_mv2c20==0?-99:jet_mv2c20->at(k);
     e.jet()[k].jvt() = jet_jvt==0?-99:jet_jvt->at(k);
     e.jet()[k].closeToLepton() = jet_closeToLepton==0?-99:jet_closeToLepton->at(k);
   }
@@ -109,8 +112,10 @@ void MiniTree::write(const Event &e) {
 
   mu = e.mu();
 
-  weight_mc = e.weight_mc();
-  pileupWeight = e.pileupWeight();
+  weight_mc 	  = e.weight_mc();
+  weight_pileup   = e.weight_pileup();
+  weight_bTagSF   = e.weight_bTagSF();
+  weight_leptonSF = e.weight_leptonSF();
 
   el_pt->clear();
   el_eta->clear();
@@ -238,7 +243,9 @@ void MiniTree::prepareBranches() {
   if (m_toWrite) {
     m_chain->Branch("mcChannelNumber", &mcChannelNumber);
     m_chain->Branch("weight_mc", &weight_mc);
-    m_chain->Branch("pileupWeight", &pileupWeight);
+    m_chain->Branch("weight_pileup", &weight_pileup);
+    m_chain->Branch("weight_bTagSF", &weight_bTagSF);
+    m_chain->Branch("weight_leptonSF", &weight_leptonSF);    
 
     m_chain->Branch("el_pt", &el_pt);
     m_chain->Branch("el_eta", &el_eta);
@@ -294,7 +301,9 @@ void MiniTree::prepareBranches() {
   } else {
     m_chain->SetBranchAddress("mcChannelNumber", &mcChannelNumber);
     m_chain->SetBranchAddress("weight_mc", &weight_mc);
-    m_chain->SetBranchAddress("pileupWeight", &pileupWeight);
+    m_chain->SetBranchAddress("weight_pileup", &weight_pileup);
+    m_chain->SetBranchAddress("weight_bTagSF", &weight_bTagSF);
+    m_chain->SetBranchAddress("weight_leptonSF", &weight_leptonSF);
 
     m_chain->SetBranchAddress("el_pt", &el_pt);
     m_chain->SetBranchAddress("el_eta", &el_eta);

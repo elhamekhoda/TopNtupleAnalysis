@@ -43,14 +43,20 @@ class Event {
     int &channelNumber();
     const int channelNumber() const;
 
-    float &pileupWeight();
-    const float pileupWeight() const;
+    float &weight_pileup();
+    const float weight_pileup() const;
 
     float &mu();
     const float mu() const;
 
     float &weight_mc();
     const float weight_mc() const;
+    
+    float &weight_bTagSF();
+    const float weight_bTagSF() const;
+    
+    float &weight_leptonSF();
+    const float weight_leptonSF() const;
 
     std::vector<std::string> &passes();
     const bool passes(const std::string &selection) const;
@@ -88,7 +94,10 @@ class Event {
     float m_rho;
 
     float m_weight_mc;
-    float m_pileupWeight;
+    float m_weight_pileup;
+    float m_weight_bTagSF;
+    float m_weight_leptonSF;
+    
     unsigned int m_lbn;
 };
 

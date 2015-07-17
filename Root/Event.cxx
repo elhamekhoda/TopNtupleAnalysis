@@ -38,11 +38,11 @@ void Event::clear() {
   m_passes.clear();
 }
 
-float &Event::pileupWeight() {
-  return m_pileupWeight;
+float &Event::weight_pileup() {
+  return m_weight_pileup;
 }
-const float Event::pileupWeight() const {
-  return m_pileupWeight;
+const float Event::weight_pileup() const {
+  return m_weight_pileup;
 }
 
 float &Event::weight_mc() {
@@ -51,6 +51,22 @@ float &Event::weight_mc() {
 
 const float Event::weight_mc() const {
   return m_weight_mc;
+}
+
+float &Event::weight_bTagSF() {
+  return m_weight_bTagSF;
+}
+
+const float Event::weight_bTagSF() const {
+  return m_weight_bTagSF;
+}
+
+float &Event::weight_leptonSF() {
+  return m_weight_leptonSF;
+}
+
+const float Event::weight_leptonSF() const {
+  return m_weight_leptonSF;
 }
 
 std::vector<Electron> &Event::electron() {

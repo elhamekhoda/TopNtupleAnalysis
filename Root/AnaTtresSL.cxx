@@ -122,7 +122,7 @@ void AnaTtresSL::run(const Event &e, double weight) {
   
   int nBtagged = 0; //nB-tagged jets 
   for (size_t bidx = 0; bidx < e.jet().size(); ++bidx)
-    if (e.jet()[bidx].btag()){
+    if (e.jet()[bidx].btag_mv2c20_60()){
       if(nBtagged==0)h->h1D("leadbJetPt", "", s)->Fill(e.jet()[bidx].mom().Perp()*1e-3, weight);
       nBtagged += 1;
     }
@@ -233,7 +233,7 @@ void AnaTtresSL::run(const Event &e, double weight) {
       vjets[z]->SetPtEtaPhiE(e.jet()[z].mom().Perp(), e.jet()[z].mom().Eta(), e.jet()[z].mom().Phi(), e.jet()[z].mom().E());
       // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTagingxAODEDM
       // https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks
-      vjets_btagged.push_back(e.jet()[z].btag());
+      vjets_btagged.push_back(e.jet()[z].btag_mv2c20_60());
     }
     TLorentzVector met = e.met();
     bool status = m_chi2.findMinChiSquare(&l, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L); 
