@@ -15,7 +15,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
   : Analysis(filename), m_electron(electron), m_boosted(boosted),
     m_neutrinoBuilder("MeV"), m_chi2("MeV") {
 
-  m_chi2.Init(TtresChi2::DATA2015_week1);
+  m_chi2.Init(TtresChi2::DATA2015_MC15);
 
   m_hSvc.create1D("lepPt", "; Lepton p_{T} [GeV]; Events", 30, 0, 300);
   m_hSvc.create1D("lepEta", "; Lepton #eta ; Events", 50, -2.5, 2.5);
