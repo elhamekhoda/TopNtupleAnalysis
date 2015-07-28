@@ -47,6 +47,7 @@ void MiniTree::read(int event, Event &e) {
   e.weight_bTagSF() = weight_bTagSF;
   e.weight_leptonSF() = weight_leptonSF;
   
+  e.MC_ttbar_beforeFSR().SetPtEtaPhiM(MC_ttbar_beforeFSR_pt, MC_ttbar_beforeFSR_eta, MC_ttbar_beforeFSR_phi, MC_ttbar_beforeFSR_m);
   for (int k = 0; k < el_pt->size(); ++k) {
     e.electron().push_back(Electron());
     e.electron()[k].mom().SetPtEtaPhiE(el_pt->at(k), el_eta->at(k), el_phi->at(k), el_e->at(k));
@@ -240,12 +241,22 @@ void MiniTree::prepareBranches() {
   ljet_sd12 = 0;
   ljet_good = 0;
 
+  MC_ttbar_beforeFSR_pt = 0;
+  MC_ttbar_beforeFSR_eta = 0;
+  MC_ttbar_beforeFSR_phi = 0;
+  MC_ttbar_beforeFSR_m = 0;
+
   if (m_toWrite) {
     m_chain->Branch("mcChannelNumber", &mcChannelNumber);
     m_chain->Branch("weight_mc", &weight_mc);
     m_chain->Branch("weight_pileup", &weight_pileup);
     m_chain->Branch("weight_bTagSF", &weight_bTagSF);
     m_chain->Branch("weight_leptonSF", &weight_leptonSF);    
+
+    m_chain->Branch("MC_ttbar_beforeFSR_pt", &MC_ttbar_beforeFSR_pt);
+    m_chain->Branch("MC_ttbar_beforeFSR_eta", &MC_ttbar_beforeFSR_eta);
+    m_chain->Branch("MC_ttbar_beforeFSR_phi", &MC_ttbar_beforeFSR_phi);
+    m_chain->Branch("MC_ttbar_beforeFSR_m", &MC_ttbar_beforeFSR_m);
 
     m_chain->Branch("el_pt", &el_pt);
     m_chain->Branch("el_eta", &el_eta);
@@ -304,6 +315,11 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("weight_pileup", &weight_pileup);
     m_chain->SetBranchAddress("weight_bTagSF", &weight_bTagSF);
     m_chain->SetBranchAddress("weight_leptonSF", &weight_leptonSF);
+
+    m_chain->SetBranchAddress("MC_ttbar_beforeFSR_pt", &MC_ttbar_beforeFSR_pt);
+    m_chain->SetBranchAddress("MC_ttbar_beforeFSR_eta", &MC_ttbar_beforeFSR_eta);
+    m_chain->SetBranchAddress("MC_ttbar_beforeFSR_phi", &MC_ttbar_beforeFSR_phi);
+    m_chain->SetBranchAddress("MC_ttbar_beforeFSR_m", &MC_ttbar_beforeFSR_m);
 
     m_chain->SetBranchAddress("el_pt", &el_pt);
     m_chain->SetBranchAddress("el_eta", &el_eta);

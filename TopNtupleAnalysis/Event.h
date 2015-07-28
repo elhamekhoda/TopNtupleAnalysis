@@ -70,6 +70,8 @@ class Event {
     const int npv() const;
 
 
+    TLorentzVector &MC_ttbar_beforeFSR();
+    const TLorentzVector &MC_ttbar_beforeFSR() const;
 
   protected:
 
@@ -83,6 +85,7 @@ class Event {
     std::vector<LargeJet> m_largeJet;
 
     TLorentzVector m_met;
+    TLorentzVector m_MC_ttbar_beforeFSR;
 
     int m_runNumber;
     int m_eventNumber;

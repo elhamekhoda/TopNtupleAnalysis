@@ -13,6 +13,13 @@ Event::Event() {
 Event::~Event() {
 }
 
+TLorentzVector &Event::MC_ttbar_beforeFSR() {
+  return m_MC_ttbar_beforeFSR;
+}
+const TLorentzVector &Event::MC_ttbar_beforeFSR() const {
+  return m_MC_ttbar_beforeFSR;
+}
+
 std::vector<std::string> &Event::passes() {
   return m_passes;
 }

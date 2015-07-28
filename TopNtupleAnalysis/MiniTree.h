@@ -83,6 +83,10 @@ class MiniTree {
     vector<float>   *ljet_sd12;
     vector<int>     *ljet_good;
 
+    float           MC_ttbar_beforeFSR_pt;
+    float           MC_ttbar_beforeFSR_eta;
+    float           MC_ttbar_beforeFSR_phi;
+    float           MC_ttbar_beforeFSR_m;
     
     Float_t         met_met;
     Float_t         met_phi;
