@@ -17,20 +17,20 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
 
   m_chi2.Init(TtresChi2::DATA2015_MC15);
 
-  m_hSvc.create1D("lepPt", "; Lepton p_{T} [GeV]; Events", 30, 0, 300);
-  m_hSvc.create1D("lepEta", "; Lepton #eta ; Events", 50, -2.5, 2.5);
-  m_hSvc.create1D("lepPhi", "; Lepton #phi ; Events", 64, -3.2, 3.2);
+  m_hSvc.create1D("lepPt", "; Lepton p_{T} [GeV]; Events", 50, 0, 500);
+  m_hSvc.create1D("lepEta", "; Lepton #eta ; Events", 60, -3.0, 3.0);
+  m_hSvc.create1D("lepPhi", "; Lepton #phi ; Events", 80, -4.0, 4.0);
 
-  m_hSvc.create1D("leadJetPt", "; Leading Jet p_{T} [GeV]; Events", 50, 0, 500);  
+  m_hSvc.create1D("leadJetPt", "; Leading Jet p_{T} [GeV]; Events", 90, 0, 900);  
   m_hSvc.create1D("nJets", "; number of jets ; Events", 10, 0, 10);
   
   m_hSvc.create1D("leadbJetPt", "; Leading b-jet p_{T} [GeV]; Events", 50, 0, 500);
   m_hSvc.create1D("nBtagJets", "; number of b-tagged jets ; Events", 10, 0, 10);  
 
   m_hSvc.create1D("met", "; Missing E_{T} [GeV]; Events", 50, 0, 500);
-  m_hSvc.create1D("met_phi", "; Missing E_{T} #phi; Events", 64, -3.2, 3.2);
+  m_hSvc.create1D("met_phi", "; Missing E_{T} #phi; Events", 80, -4.0, 4.0);
     
-  m_hSvc.create1D("mwt", "; Transverse W mass [GeV]; Events", 40, 0, 400);
+  m_hSvc.create1D("mwt", "; W transverse mass [GeV]; Events", 50, 0, 500);
   m_hSvc.create1D("mu", "; mu; Events", 100, 0, 100);
   
   m_hSvc.create1D("jet0_m", "; mass of the jet[0] [GeV]; Events", 50, 0, 500); 
@@ -73,7 +73,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
     m_hSvc.create1D("mtlep_res", "; m_{t,lep} [GeV]; Events", 40, 0, 400);
     m_hSvc.create1D("mthad_res", "; m_{t,had} [GeV]; Events", 40, 0, 400);
     m_hSvc.create1D("mwhad_res", "; m_{W,had} [GeV]; Events", 40, 0, 400);
-    m_hSvc.create1D("chi2", "; #chi^{2} ; Events", 50, 0, 10);
+    m_hSvc.create1D("chi2", "; log(#chi^{2}) ; Events", 40, -1, 7);
   }
 
   m_hSvc.create1D("mtt", "; m_{t#bar{t}} [GeV]; Events", 60, 0, 6000);
@@ -237,20 +237,32 @@ void AnaTtresSL::run(const Event &e, double weight) {
     }
     TLorentzVector met = e.met();
     bool status = m_chi2.findMinChiSquare(&l, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L); 
-    // status has to be true
+    
+    float chi2Value = 1000000; // log10(1000000) = 6
+    float mwh = 0;
+    float mtl = 0;
+    float mth = 0;
 
-    if (status) mtt = m_chi2.getResult_Mtt();
+    if (status){
+        chi2Value = chi2ming1;
+	mwh = m_chi2.getResult_Mwh();
+	mtl = m_chi2.getResult_Mtl();
+	mth = m_chi2.getResult_Mth();
+	mtt = m_chi2.getResult_Mtt();
+    }
     
     for (size_t z = 0; z < vjets.size(); ++z) {
       delete vjets[z];
     }
     vjets.clear();
     vjets_btagged.clear();
+
+    //Fill histograms
     h->h1D("mtt", "", s)->Fill(mtt*1e-3, weight);
-    h->h1D("mtlep_res", "", s)->Fill(m_chi2.getResult_Mtl()*1e-3, weight);
-    h->h1D("mthad_res", "", s)->Fill(m_chi2.getResult_Mth()*1e-3, weight);
-    h->h1D("mwhad_res", "", s)->Fill(m_chi2.getResult_Mwh()*1e-3, weight);
-    h->h1D("chi2", "", s)->Fill(chi2ming1, weight);
+    h->h1D("mtlep_res", "", s)->Fill(mtl*1e-3, weight);
+    h->h1D("mthad_res", "", s)->Fill(mth*1e-3, weight);
+    h->h1D("mwhad_res", "", s)->Fill(mwh*1e-3, weight);
+    h->h1D("chi2", "", s)->Fill(log10(chi2Value), weight);
   }
 
 
