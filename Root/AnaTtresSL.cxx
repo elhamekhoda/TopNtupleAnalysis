@@ -32,6 +32,8 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
     
   m_hSvc.create1D("mwt", "; W transverse mass [GeV]; Events", 50, 0, 500);
   m_hSvc.create1D("mu", "; mu; Events", 100, 0, 100);
+  m_hSvc.create1D("closejl_minDeltaR", "; min #delta R(lep, jet); Events", 40, 0, 4);
+  m_hSvc.create1D("closejl_pt", "; Pt of closest jet to lep; Events", 50, 0, 500);
   
   m_hSvc.create1D("jet0_m", "; mass of the jet[0] [GeV]; Events", 50, 0, 500); 
   m_hSvc.create1D("jet1_m", "; mass of the jet[1] [GeV]; Events", 50, 0, 500); 
@@ -66,8 +68,9 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
 
     m_hSvc.create1D("largeJetPt", "; Large jet p_{T} ; Events", 20, 300, 700);
     m_hSvc.create1D("largeJetM", "; Large jet M ; Events", 15, 0, 300);
+    m_hSvc.create1D("largeJetEta", "; Large jet eta ; Events", 30, -3., 3.);
+    m_hSvc.create1D("largeJetPhi", "; Large jet phi ; Events", 40, -4., 4.);
     m_hSvc.create1D("largeJetSd12", "; Large jet #sqrt{d_{12}} ; Events", 30, 0, 300);
-
     m_hSvc.create1D("mtlep_boo", "; m_{t,lep} ; Events", 40, 0, 400);
   } else {
     m_hSvc.create1D("mtlep_res", "; m_{t,lep} [GeV]; Events", 40, 0, 400);
@@ -82,51 +85,51 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
 AnaTtresSL::~AnaTtresSL() {
 }
 
-void AnaTtresSL::run(const Event &e, double weight) {
+void AnaTtresSL::run(const Event &evt, double weight) {
   std::string s = ""; // this would be the systematics ... could be sent as an argument in the future
 
   // check channel
-  if (m_electron && (e.electron().size() != 1 || e.muon().size() != 0))
+  if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
 
-  if (!m_electron && (e.electron().size() != 0 || e.muon().size() != 1))
+  if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
 
   if (m_boosted)
-    if (!(e.passes("bejets") || e.passes("bmujets")))
+    if (!(evt.passes("bejets") || evt.passes("bmujets")))
       return;
 
   if (!m_boosted)
-    if (!(e.passes("rejets") || e.passes("rmujets")))
+    if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
     
   HistogramService *h = &m_hSvc;
   TLorentzVector l;
   if (m_electron) {
-    l = e.electron()[0].mom();
+    l = evt.electron()[0].mom();
   } else {
-    l = e.muon()[0].mom();
+    l = evt.muon()[0].mom();
   }
   h->h1D("lepPt", "", s)->Fill(l.Perp()*1e-3, weight);
   h->h1D("lepEta", "", s)->Fill(l.Eta(), weight);
   h->h1D("lepPhi", "", s)->Fill(l.Phi(), weight);
 
-  h->h1D("met_phi", "", s)->Fill(e.met().Phi(), weight);
+  h->h1D("met_phi", "", s)->Fill(evt.met().Phi(), weight);
 
-  const TLorentzVector &j = e.jet()[0].mom();
+  const TLorentzVector &j = evt.jet()[0].mom();
   h->h1D("leadJetPt", "", s)->Fill(j.Perp()*1e-3, weight);
   
   // for now
-  int nJets = e.jet().size(); //njets 
+  int nJets = evt.jet().size(); //njets 
   h->h1D("nJets", "", s)->Fill(nJets, weight);
   
   int nBtagged = 0; //nB-tagged jets 
-  for (size_t bidx = 0; bidx < e.jet().size(); ++bidx)
-    if (e.jet()[bidx].btag_mv2c20_60()){
-      if(nBtagged==0)h->h1D("leadbJetPt", "", s)->Fill(e.jet()[bidx].mom().Perp()*1e-3, weight);
+  for (size_t bidx = 0; bidx < evt.jet().size(); ++bidx)
+    if (evt.jet()[bidx].btag_mv2c20_60()){
+      if(nBtagged==0)h->h1D("leadbJetPt", "", s)->Fill(evt.jet()[bidx].mom().Perp()*1e-3, weight);
       nBtagged += 1;
     }
-   h->h1D("nBtagJets", "", s)->Fill(nBtagged, weight);
+  h->h1D("nBtagJets", "", s)->Fill(nBtagged, weight);
 
   // Jet kinematics  
   
@@ -135,22 +138,21 @@ void AnaTtresSL::run(const Event &e, double weight) {
   std::vector<float> jetEta_vector;
   std::vector<float> jetPhi_vector;
   
-  jetMass_vector.resize(e.jet().size());
-  jetPt_vector.resize(e.jet().size());
-  jetEta_vector.resize(e.jet().size());
-  jetPhi_vector.resize(e.jet().size());  
+  jetMass_vector.resize(evt.jet().size());
+  jetPt_vector.resize(evt.jet().size());
+  jetEta_vector.resize(evt.jet().size());
+  jetPhi_vector.resize(evt.jet().size());  
   
   size_t iJet = 0;
-  for (; iJet < e.jet().size(); ++iJet){
-    const TLorentzVector &jet_p4 = e.jet()[iJet].mom();
-    jetMass_vector[iJet] =  e.jet()[iJet].mom().M();
-    jetPt_vector[iJet]   =  e.jet()[iJet].mom().Pt();
-    //std::cout << jetPt_vector[iJet] << std::endl;
-    jetEta_vector[iJet]  =  e.jet()[iJet].mom().Eta();
-    jetPhi_vector[iJet]  =  e.jet()[iJet].mom().Phi();    
+  for (; iJet < evt.jet().size(); ++iJet){
+    const TLorentzVector &jet_p4 = evt.jet()[iJet].mom();
+    jetMass_vector[iJet] =  evt.jet()[iJet].mom().M();
+    jetPt_vector[iJet]   =  evt.jet()[iJet].mom().Pt();
+    jetEta_vector[iJet]  =  evt.jet()[iJet].mom().Eta();
+    jetPhi_vector[iJet]  =  evt.jet()[iJet].mom().Phi();    
   }//for
   
-  int maxNjet = (e.jet().size()<6) ? e.jet().size() : 6;
+  int maxNjet = (evt.jet().size()<6) ? evt.jet().size() : 6;
   for (int i = 0; i < maxNjet; ++i){  
      
      std::string nameJet_m = "jet" + std::to_string(i)+"_m";
@@ -167,40 +169,63 @@ void AnaTtresSL::run(const Event &e, double weight) {
   
   }//for
   
-  float mtt = 0;
+  float mtt = -1;
 
-  h->h1D("met", "", s)->Fill(e.met().Perp()*1e-3, weight);
+  //missing Et
+  h->h1D("met", "", s)->Fill(evt.met().Perp()*1e-3, weight);
     
   //transverse W mass  
-  h->h1D("mwt", "", s)->Fill(sqrt(2. * l.Perp() * e.met().Perp() * (1. - cos(l.Phi() - e.met().Phi())))*1e-3, weight); 
+  h->h1D("mwt", "", s)->Fill(sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(l.Phi() - evt.met().Phi())))*1e-3, weight); 
   
   //mu
-  h->h1D("mu", "", s)->Fill(e.mu(), weight); 
+  h->h1D("mu", "", s)->Fill(evt.mu(), weight); 
 
-  if (m_boosted && (e.passes("bejets") || e.passes("bmujets"))) {
+  //deltaR between lepton and the closest narrow jet
+  float closejl_deltaR  = 99;
+  int closejl_idx  	= -1;
+
+  float deltaR_tmp 	= -1;
+  size_t jet_idx = 0;
+  for (; jet_idx < evt.jet().size(); ++jet_idx){    
+    deltaR_tmp = l.DeltaR(evt.jet()[jet_idx].mom());
+    if (deltaR_tmp < closejl_deltaR){
+    	closejl_deltaR = deltaR_tmp;
+	closejl_idx = jet_idx;
+    }	
+  }//for     
+  
+  float closejl_pt = -1;
+  if (closejl_idx>0)	closejl_pt = evt.jet()[closejl_idx].mom().Perp();
+  
+  h->h1D("closejl_minDeltaR", "", s)->Fill(closejl_deltaR, weight); 
+  h->h1D("closejl_pt", "", s)->Fill(closejl_pt*1e-3, weight);
+       
+  if (m_boosted && (evt.passes("bejets") || evt.passes("bmujets"))) {
 
     size_t close_idx = 0;
-    for (; close_idx < e.jet().size(); ++close_idx)
-      if (e.jet()[close_idx].closeToLepton())
+    for (; close_idx < evt.jet().size(); ++close_idx)
+      if (evt.jet()[close_idx].closeToLepton())
         break;
-    const TLorentzVector &sj = e.jet()[close_idx].mom();
+    const TLorentzVector &sj = evt.jet()[close_idx].mom();
     h->h1D("closeJetPt", "", s)->Fill(sj.Perp()*1e-3, weight);
 
     size_t goodljet_idx = 0;
-    for (; goodljet_idx < e.largeJet().size(); ++goodljet_idx)
-      if (e.largeJet()[goodljet_idx].good())
+    for (; goodljet_idx < evt.largeJet().size(); ++goodljet_idx)
+      if (evt.largeJet()[goodljet_idx].good())
         break;
-    const TLorentzVector &lj = e.largeJet()[goodljet_idx].mom();
+    const TLorentzVector &lj = evt.largeJet()[goodljet_idx].mom();
     h->h1D("largeJetPt", "", s)->Fill(lj.Perp()*1e-3, weight);
     h->h1D("largeJetM", "", s)->Fill(lj.M()*1e-3, weight);
-    h->h1D("largeJetSd12", "", s)->Fill(e.largeJet()[goodljet_idx].split12()*1e-3, weight);
+    h->h1D("largeJetEta", "", s)->Fill(lj.Eta(), weight);
+    h->h1D("largeJetPhi", "", s)->Fill(lj.Phi(), weight);
+    h->h1D("largeJetSd12", "", s)->Fill(evt.largeJet()[goodljet_idx].split12()*1e-3, weight);
 
     // recalc. mtt
     // lepton = l
     // large-R jet = hadronic top = lj
     // selected jet = leptonic top's b-jet = sj
     // neutrino px, py = met
-    std::vector<TLorentzVector*> vec_nu = m_neutrinoBuilder.candidatesFromWMass_Rotation(&l, e.met().Perp(), e.met().Phi(), true);   
+    std::vector<TLorentzVector*> vec_nu = m_neutrinoBuilder.candidatesFromWMass_Rotation(&l, evt.met().Perp(), evt.met().Phi(), true);   
     TLorentzVector nu(0,0,0,0);
     if (vec_nu.size() > 0) {
       nu = *(vec_nu[0]);
@@ -212,7 +237,7 @@ void AnaTtresSL::run(const Event &e, double weight) {
     h->h1D("mtlep_boo", "", s)->Fill((sj+nu+l).M()*1e-3, weight);
   }
 
-  if (!m_boosted && (e.passes("rejets") || e.passes("rmujets"))) {
+  if (!m_boosted && (evt.passes("rejets") || evt.passes("rmujets"))) {
 
     // inputs 
     // LEPTON --> TLorentzVector for your lepton
@@ -228,20 +253,20 @@ void AnaTtresSL::run(const Event &e, double weight) {
 
     std::vector<TLorentzVector *> vjets;
     std::vector<bool> vjets_btagged;
-    for (size_t z = 0; z < e.jet().size(); ++z) {
+    for (size_t z = 0; z < evt.jet().size(); ++z) {
       vjets.push_back(new TLorentzVector(0,0,0,0));
-      vjets[z]->SetPtEtaPhiE(e.jet()[z].mom().Perp(), e.jet()[z].mom().Eta(), e.jet()[z].mom().Phi(), e.jet()[z].mom().E());
+      vjets[z]->SetPtEtaPhiE(evt.jet()[z].mom().Perp(), evt.jet()[z].mom().Eta(), evt.jet()[z].mom().Phi(), evt.jet()[z].mom().E());
       // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTagingxAODEDM
       // https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks
-      vjets_btagged.push_back(e.jet()[z].btag_mv2c20_60());
+      vjets_btagged.push_back(evt.jet()[z].btag_mv2c20_60());
     }
-    TLorentzVector met = e.met();
+    TLorentzVector met = evt.met();
     bool status = m_chi2.findMinChiSquare(&l, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L); 
     
     float chi2Value = 1000000; // log10(1000000) = 6
-    float mwh = 0;
-    float mtl = 0;
-    float mth = 0;
+    float mwh = -1;
+    float mtl = -1;
+    float mth = -1;
 
     if (status){
         chi2Value = chi2ming1;
