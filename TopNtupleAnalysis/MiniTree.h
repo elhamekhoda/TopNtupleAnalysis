@@ -53,6 +53,7 @@ class MiniTree {
     UInt_t          eventNumber;
     UInt_t          runNumber;
     UInt_t          mcChannelNumber;
+    int		    npv;
     Float_t         mu;
     vector<float>   *el_pt;
     vector<float>   *el_eta;
@@ -82,7 +83,41 @@ class MiniTree {
     vector<float>   *ljet_m;
     vector<float>   *ljet_sd12;
     vector<int>     *ljet_good;
+  
+    float           MC_w1h_pt;
+    float           MC_w1h_eta;
+    float           MC_w1h_phi;
+    float           MC_w1h_m;
+    int		    MC_w1h_pdgId;
 
+    float           MC_w2h_pt;
+    float           MC_w2h_eta;
+    float           MC_w2h_phi;
+    float           MC_w2h_m;
+    int		    MC_w2h_pdgId;
+
+    float           MC_bh_pt;
+    float           MC_bh_eta;
+    float           MC_bh_phi;
+    float           MC_bh_m;
+    
+    float           MC_w1l_pt;
+    float           MC_w1l_eta;
+    float           MC_w1l_phi;
+    float           MC_w1l_m;
+    signed int	    MC_w1l_pdgId;
+
+    float           MC_w2l_pt;
+    float           MC_w2l_eta;
+    float           MC_w2l_phi;
+    float           MC_w2l_m;
+    int		    MC_w2l_pdgId;
+
+    float           MC_bl_pt;
+    float           MC_bl_eta;
+    float           MC_bl_phi;
+    float           MC_bl_m;
+    
     float           MC_ttbar_beforeFSR_pt;
     float           MC_ttbar_beforeFSR_eta;
     float           MC_ttbar_beforeFSR_phi;

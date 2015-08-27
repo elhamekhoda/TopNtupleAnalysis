@@ -69,6 +69,31 @@ class Event {
     int &npv();
     const int npv() const;
 
+    TLorentzVector &MC_w1h();
+    const TLorentzVector &MC_w1h() const;
+    int &MC_w1h_pdgId();
+    const int MC_w1h_pdgId() const;
+    
+    TLorentzVector &MC_w2h();
+    const TLorentzVector &MC_w2h() const;
+    int &MC_w2h_pdgId();
+    const int MC_w2h_pdgId() const;
+    
+    TLorentzVector &MC_bh();
+    const TLorentzVector &MC_bh() const;
+    
+    TLorentzVector &MC_w1l();
+    const TLorentzVector &MC_w1l() const;
+    int &MC_w1l_pdgId();
+    const int MC_w1l_pdgId() const;
+    
+    TLorentzVector &MC_w2l();
+    const TLorentzVector &MC_w2l() const;
+    int &MC_w2l_pdgId();
+    const int MC_w2l_pdgId() const;
+    
+    TLorentzVector &MC_bl();
+    const TLorentzVector &MC_bl() const;
 
     TLorentzVector &MC_ttbar_beforeFSR();
     const TLorentzVector &MC_ttbar_beforeFSR() const;
@@ -85,6 +110,18 @@ class Event {
     std::vector<LargeJet> m_largeJet;
 
     TLorentzVector m_met;
+    
+    TLorentzVector m_MC_w1h;
+    int m_MC_w1h_pdgId;
+    TLorentzVector m_MC_w2h;
+    int m_MC_w2h_pdgId;   
+    TLorentzVector m_MC_bh;
+    TLorentzVector m_MC_w1l;
+    int m_MC_w1l_pdgId;
+    TLorentzVector m_MC_w2l;
+    int m_MC_w2l_pdgId;   
+    TLorentzVector m_MC_bl;    
+    
     TLorentzVector m_MC_ttbar_beforeFSR;
 
     int m_runNumber;

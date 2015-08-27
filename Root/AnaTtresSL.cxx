@@ -17,23 +17,41 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
 
   m_chi2.Init(TtresChi2::DATA2015_MC15);
 
-  m_hSvc.create1D("lepPt", "; Lepton p_{T} [GeV]; Events", 50, 0, 500);
-  m_hSvc.create1D("lepEta", "; Lepton #eta ; Events", 60, -3.0, 3.0);
-  m_hSvc.create1D("lepPhi", "; Lepton #phi ; Events", 80, -4.0, 4.0);
+  m_hSvc.create1D("lepPt", "; Lepton p_{T} [GeV]; Events", 40, 0, 500);
+  m_hSvc.create1D("lepEta", "; Lepton #eta ; Events", 24, -3.0, 3.0);
+  m_hSvc.create1D("lepPhi", "; Lepton #phi ; Events", 40, -4.0, 4.0);
 
-  m_hSvc.create1D("leadJetPt", "; Leading Jet p_{T} [GeV]; Events", 90, 0, 900);  
+  m_hSvc.create1D("leadJetPt", "; Leading Jet p_{T} [GeV]; Events", 30, 0, 900);  
   m_hSvc.create1D("nJets", "; number of jets ; Events", 10, 0, 10);
   
-  m_hSvc.create1D("leadbJetPt", "; Leading b-jet p_{T} [GeV]; Events", 50, 0, 500);
+  m_hSvc.create1D("leadbJetPt", "; Leading b-jet p_{T} [GeV]; Events", 40, 0, 500);
   m_hSvc.create1D("nBtagJets", "; number of b-tagged jets ; Events", 10, 0, 10);  
 
-  m_hSvc.create1D("met", "; Missing E_{T} [GeV]; Events", 50, 0, 500);
-  m_hSvc.create1D("met_phi", "; Missing E_{T} #phi; Events", 80, -4.0, 4.0);
+  m_hSvc.create1D("MET", "; Missing E_{T} [GeV]; Events", 50, 0, 500);
+  m_hSvc.create1D("MET_phi", "; Missing E_{T} #phi; Events", 40, -4.0, 4.0);
     
   m_hSvc.create1D("mwt", "; W transverse mass [GeV]; Events", 50, 0, 500);
-  m_hSvc.create1D("mu", "; mu; Events", 100, 0, 100);
+  m_hSvc.create1D("mu", "; <mu>; Events", 100, 0, 100);
+  m_hSvc.create1D("npv", "; npv; Events", 50, 0, 50);
+
+  m_hSvc.create1D("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 40, 0, 4);
+  m_hSvc.create1D("closejl_pt", "; Pt of closest jet to lep [GeV]; Events", 40, 0, 500);
   m_hSvc.create1D("closejl_minDeltaR", "; min #delta R(lep, jet); Events", 40, 0, 4);
   m_hSvc.create1D("closejl_pt", "; Pt of closest jet to lep; Events", 50, 0, 500);
+  
+  //2D histograms used for the fake estimation
+  m_hSvc.create2D("closejl_pt_vs_minDR", "; Pt of closest jet to lep [GeV]; min #Delta R(lep, jet)", 40, 0, 500, 40, 0, 4);
+  m_hSvc.create2D("lep_pt_vs_minDR", "; Pt of lep [GeV]; min #Delta R(lep, jet)", 40, 0, 500, 40, 0, 4);
+  m_hSvc.create2D("lep_pt_vs_close_pt", "; Pt of lep [GeV]; Pt of closest jet to lep [GeV]", 40, 0, 500, 50, 0, 500);
+  
+  //Truth
+  m_hSvc.create1D("MC_e_pt", "; Pt of MC electron [GeV]; Events", 40, 0, 500);
+  m_hSvc.create1D("MC_e_eta", "; Eta of MC electron ; Events", 24, -3.0, 3.0);
+  m_hSvc.create1D("MC_e_phi", "; Phi of MC electron ; Events", 30, -3.0, 3.0);
+  m_hSvc.create1D("MC_e_m", "; Mass of MC electron [GeV]; Events", 50, 0, 500);
+  
+  m_hSvc.create2D("MC_eAcceptance_pt_vs_eta", "; pt of electron(truth) [GeV]; #eta of electron(truth)", 40, 0, 500, 24, -3., 3.);
+  m_hSvc.create2D("MC_muAcceptance_pt_vs_eta", "; pt of muon(truth) [GeV]; #eta of muon(truth)", 40, 0, 500, 24, -3., 3.);
   
   m_hSvc.create1D("jet0_m", "; mass of the jet[0] [GeV]; Events", 50, 0, 500); 
   m_hSvc.create1D("jet1_m", "; mass of the jet[1] [GeV]; Events", 50, 0, 500); 
@@ -42,12 +60,12 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
   m_hSvc.create1D("jet4_m", "; mass of the jet[4] [GeV]; Events", 50, 0, 500); 
   m_hSvc.create1D("jet5_m", "; mass of the jet[5] [GeV]; Events", 50, 0, 500); 
   
-  m_hSvc.create1D("jet0_pt", "; pt of the jet[0] [GeV]; Events", 50, 0, 500); 
-  m_hSvc.create1D("jet1_pt", "; pt of the jet[1] [GeV]; Events", 50, 0, 500); 
-  m_hSvc.create1D("jet2_pt", "; pt of the jet[2] [GeV]; Events", 50, 0, 500); 
-  m_hSvc.create1D("jet3_pt", "; pt of the jet[3] [GeV]; Events", 50, 0, 500); 
-  m_hSvc.create1D("jet4_pt", "; pt of the jet[4] [GeV]; Events", 50, 0, 500); 
-  m_hSvc.create1D("jet5_pt", "; pt of the jet[5] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet0_pt", "; pt of the jet[0] [GeV]; Events", 40, 0, 500); 
+  m_hSvc.create1D("jet1_pt", "; pt of the jet[1] [GeV]; Events", 40, 0, 500); 
+  m_hSvc.create1D("jet2_pt", "; pt of the jet[2] [GeV]; Events", 40, 0, 500); 
+  m_hSvc.create1D("jet3_pt", "; pt of the jet[3] [GeV]; Events", 40, 0, 500); 
+  m_hSvc.create1D("jet4_pt", "; pt of the jet[4] [GeV]; Events", 40, 0, 500); 
+  m_hSvc.create1D("jet5_pt", "; pt of the jet[5] [GeV]; Events", 40, 0, 500); 
   
   m_hSvc.create1D("jet0_eta", "; #eta of the jet[0]; Events", 20, -10, 10); 
   m_hSvc.create1D("jet1_eta", "; #eta of the jet[1]; Events", 20, -10, 10); 
@@ -64,19 +82,21 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
   m_hSvc.create1D("jet5_phi", "; #phi of the jet[5]; Events", 20, -10, 10); 
   
   if (m_boosted) {
-    m_hSvc.create1D("closeJetPt", "; Selected Jet p_{T} ; Events", 25, 0, 500);
+    m_hSvc.create1D("closeJetPt", "; Selected Jet p_{T} ; Events", 40, 0, 500);
 
-    m_hSvc.create1D("largeJetPt", "; Large jet p_{T} ; Events", 20, 300, 700);
-    m_hSvc.create1D("largeJetM", "; Large jet M ; Events", 15, 0, 300);
+    m_hSvc.create1D("largeJetPt", "; Large jet p_{T} ; Events", 40, 0, 800);
+    m_hSvc.create1D("largeJetM", "; Large jet M ; Events", 30, 0, 300);
+    m_hSvc.create1D("largeJetEta", "; Large jet eta ; Events", 24, -3., 3.);
+    m_hSvc.create1D("largeJetPhi", "; Large jet phi ; Events", 40, -4., 4.);
     m_hSvc.create1D("largeJetEta", "; Large jet eta ; Events", 30, -3., 3.);
     m_hSvc.create1D("largeJetPhi", "; Large jet phi ; Events", 40, -4., 4.);
     m_hSvc.create1D("largeJetSd12", "; Large jet #sqrt{d_{12}} ; Events", 30, 0, 300);
-    m_hSvc.create1D("mtlep_boo", "; m_{t,lep} ; Events", 40, 0, 400);
+    m_hSvc.create1D("mtlep_boo", "; m_{t,lep} ; Events", 70, 0, 700);
   } else {
     m_hSvc.create1D("mtlep_res", "; m_{t,lep} [GeV]; Events", 40, 0, 400);
     m_hSvc.create1D("mthad_res", "; m_{t,had} [GeV]; Events", 40, 0, 400);
     m_hSvc.create1D("mwhad_res", "; m_{W,had} [GeV]; Events", 40, 0, 400);
-    m_hSvc.create1D("chi2", "; log(#chi^{2}) ; Events", 40, -1, 7);
+    m_hSvc.create1D("chi2", "; log(#chi^{2}) ; Events", 50, -3, 7);
   }
 
   m_hSvc.create1D("mtt", "; m_{t#bar{t}} [GeV]; Events", 60, 0, 6000);
@@ -114,7 +134,7 @@ void AnaTtresSL::run(const Event &evt, double weight) {
   h->h1D("lepEta", "", s)->Fill(l.Eta(), weight);
   h->h1D("lepPhi", "", s)->Fill(l.Phi(), weight);
 
-  h->h1D("met_phi", "", s)->Fill(evt.met().Phi(), weight);
+  h->h1D("MET_phi", "", s)->Fill(evt.met().Phi(), weight);
 
   const TLorentzVector &j = evt.jet()[0].mom();
   h->h1D("leadJetPt", "", s)->Fill(j.Perp()*1e-3, weight);
@@ -170,56 +190,121 @@ void AnaTtresSL::run(const Event &evt, double weight) {
   }//for
   
   float mtt = -1;
+  
+  //missing et
+  h->h1D("MET", "", s)->Fill(evt.met().Perp()*1e-3, weight);
 
-  //missing Et
-  h->h1D("met", "", s)->Fill(evt.met().Perp()*1e-3, weight);
-    
   //transverse W mass  
   h->h1D("mwt", "", s)->Fill(sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(l.Phi() - evt.met().Phi())))*1e-3, weight); 
   
   //mu
   h->h1D("mu", "", s)->Fill(evt.mu(), weight); 
+  
+  //npv
+  h->h1D("npv", "", s)->Fill(evt.npv(), weight);
 
   //deltaR between lepton and the closest narrow jet
   float closejl_deltaR  = 99;
-  int closejl_idx  	= -1;
-
-  float deltaR_tmp 	= -1;
+  float deltaR_tmp      = 99;
+  int closejl_idx       = -1;
+  
   size_t jet_idx = 0;
   for (; jet_idx < evt.jet().size(); ++jet_idx){    
     deltaR_tmp = l.DeltaR(evt.jet()[jet_idx].mom());
     if (deltaR_tmp < closejl_deltaR){
-    	closejl_deltaR = deltaR_tmp;
-	closejl_idx = jet_idx;
-    }	
+        closejl_deltaR = deltaR_tmp;
+        closejl_idx = jet_idx;
+    }   
   }//for     
   
   float closejl_pt = -1;
-  if (closejl_idx>0)	closejl_pt = evt.jet()[closejl_idx].mom().Perp();
+  if (closejl_idx>0)    closejl_pt = evt.jet()[closejl_idx].mom().Perp();
   
   h->h1D("closejl_minDeltaR", "", s)->Fill(closejl_deltaR, weight); 
   h->h1D("closejl_pt", "", s)->Fill(closejl_pt*1e-3, weight);
-       
-  if (m_boosted && (evt.passes("bejets") || evt.passes("bmujets"))) {
+  
+  //2D plots
+  h->h2D("closejl_pt_vs_minDR", "", s)->Fill(closejl_pt*1e-3, closejl_deltaR, weight);
+  h->h2D("lep_pt_vs_minDR", "", s)->Fill(l.Perp()*1e-3, closejl_deltaR, weight);
+  h->h2D("lep_pt_vs_close_pt", "", s)->Fill(l.Perp()*1e-3, closejl_pt*1e-3, weight);
 
+  ///----------------------------------
+  //Pre-selection sample for the fake
+  ///----------------------------------
+  
+  ///Electrons
+  float MC_e_pt  = -1;
+  float MC_e_eta = -1;
+  float MC_e_phi = -1;
+  float MC_e_m   = -1;
+    
+  if (evt.MC_w1l().Perp()>0 && evt.MC_w1l_pdgId()==11){
+  	MC_e_pt  = evt.MC_w1l().Perp();
+	MC_e_eta = evt.MC_w1l().Eta();
+	MC_e_phi = evt.MC_w1l().Phi();
+	MC_e_m   = evt.MC_w1l().M();
+	//std::cout << "w1l" << evt.MC_w1l_pdgId() << std::endl;
+  }else if(evt.MC_w2l().Perp()>0 && evt.MC_w2l_pdgId()==-11){
+	MC_e_pt  = evt.MC_w2l().Perp();
+        MC_e_eta = evt.MC_w2l().Eta();
+        MC_e_phi = evt.MC_w2l().Phi();
+        MC_e_m   = evt.MC_w2l().M();
+        //std::cout << "w2l" << evt.MC_w2l_pdgId() << std::endl;
+  }//if
+    
+  h->h1D("MC_e_pt", "", s) ->Fill(MC_e_pt*1e-3);
+  h->h1D("MC_e_eta", "", s)->Fill(MC_e_eta);
+  h->h1D("MC_e_phi", "", s)->Fill(MC_e_phi);
+  h->h1D("MC_e_m", "", s)  ->Fill(MC_e_m*1e-3);
+  h->h2D("MC_eAcceptance_pt_vs_eta", "", s)->Fill(MC_e_pt*1e-3, MC_e_eta);
+  
+  ///Muons
+  float MC_mu_pt  = -1;
+  float MC_mu_eta = -1;
+  float MC_mu_phi = -1;
+  float MC_mu_m   = -1;
+
+  if (evt.MC_w1l().Perp()>0 && evt.MC_w1l_pdgId()==13){
+        MC_mu_pt  = evt.MC_w1l().Perp();
+        MC_mu_eta = evt.MC_w1l().Eta();
+        MC_mu_phi = evt.MC_w1l().Phi();
+        MC_mu_m   = evt.MC_w1l().M();
+        //std::cout << "w1l" << evt.MC_w1l_pdgId() << std::endl;
+  }else if(evt.MC_w2l().Perp()>0 && evt.MC_w2l_pdgId()==-13){
+        MC_mu_pt  = evt.MC_w2l().Perp();
+        MC_mu_eta = evt.MC_w2l().Eta();
+        MC_mu_phi = evt.MC_w2l().Phi();
+        MC_mu_m   = evt.MC_w2l().M();
+        //std::cout << "w2l" << evt.MC_w2l_pdgId() << std::endl;
+  }//if
+
+  h->h1D("MC_mu_pt", "", s) ->Fill(MC_mu_pt*1e-3);
+  h->h1D("MC_mu_eta", "", s)->Fill(MC_mu_eta);
+  h->h1D("MC_mu_phi", "", s)->Fill(MC_mu_phi);
+  h->h1D("MC_mu_m", "", s)  ->Fill(MC_mu_m*1e-3);
+  h->h2D("MC_muAcceptance_pt_vs_eta", "", s)->Fill(MC_mu_pt*1e-3, MC_mu_eta);  
+  
+  if (m_boosted && (evt.passes("bejets") || evt.passes("bmujets"))) {
+    
     size_t close_idx = 0;
     for (; close_idx < evt.jet().size(); ++close_idx)
       if (evt.jet()[close_idx].closeToLepton())
         break;
     const TLorentzVector &sj = evt.jet()[close_idx].mom();
     h->h1D("closeJetPt", "", s)->Fill(sj.Perp()*1e-3, weight);
-
+    
     size_t goodljet_idx = 0;
     for (; goodljet_idx < evt.largeJet().size(); ++goodljet_idx)
       if (evt.largeJet()[goodljet_idx].good())
         break;
+    
     const TLorentzVector &lj = evt.largeJet()[goodljet_idx].mom();
     h->h1D("largeJetPt", "", s)->Fill(lj.Perp()*1e-3, weight);
     h->h1D("largeJetM", "", s)->Fill(lj.M()*1e-3, weight);
     h->h1D("largeJetEta", "", s)->Fill(lj.Eta(), weight);
     h->h1D("largeJetPhi", "", s)->Fill(lj.Phi(), weight);
     h->h1D("largeJetSd12", "", s)->Fill(evt.largeJet()[goodljet_idx].split12()*1e-3, weight);
-
+    
     // recalc. mtt
     // lepton = l
     // large-R jet = hadronic top = lj
@@ -232,13 +317,13 @@ void AnaTtresSL::run(const Event &evt, double weight) {
       for (size_t z = 0; z < vec_nu.size(); ++z) delete vec_nu[z];
       vec_nu.clear();
     }
-    mtt = (lj+sj+nu+l).M();
+    
+    if (evt.largeJet().size()!=0)    mtt = (lj+sj+nu+l).M();
     h->h1D("mtt", "", s)->Fill(mtt*1e-3, weight);
     h->h1D("mtlep_boo", "", s)->Fill((sj+nu+l).M()*1e-3, weight);
-  }
-
-  if (!m_boosted && (evt.passes("rejets") || evt.passes("rmujets"))) {
-
+    
+  }else if (!m_boosted && (evt.passes("rejets") || evt.passes("rmujets"))) {
+    
     // inputs 
     // LEPTON --> TLorentzVector for your lepton
     // vjets -->  std::vector<TLorentzVector*> for the jets
@@ -289,7 +374,6 @@ void AnaTtresSL::run(const Event &evt, double weight) {
     h->h1D("mwhad_res", "", s)->Fill(mwh*1e-3, weight);
     h->h1D("chi2", "", s)->Fill(log10(chi2Value), weight);
   }
-
 
 }
 

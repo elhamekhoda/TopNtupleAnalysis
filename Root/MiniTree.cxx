@@ -40,14 +40,29 @@ void MiniTree::read(int event, Event &e) {
   m_chain->GetEntry(event);
   e.channelNumber() = mcChannelNumber;
 
-  e.npv() = 0; //TODO
+  e.npv() = npv; 
   e.mu() = mu;
   e.weight_mc() = weight_mc;
   e.weight_pileup() = weight_pileup;
   e.weight_bTagSF() = weight_bTagSF;
   e.weight_leptonSF() = weight_leptonSF;
   
+  // adding the truth information into the event  
+     
+  e.MC_w1h().SetPtEtaPhiM(MC_w1h_pt, MC_w1h_eta, MC_w1h_phi, MC_w1h_m);
+  e.MC_w1h_pdgId() = MC_w1h_pdgId;
+  e.MC_w2h().SetPtEtaPhiM(MC_w2h_pt, MC_w2h_eta, MC_w2h_phi, MC_w2h_m);
+  e.MC_w2h_pdgId() = MC_w2h_pdgId;
+  e.MC_bh().SetPtEtaPhiM( MC_bh_pt, MC_bh_eta, MC_bh_phi, MC_bh_m);
+  
+  e.MC_w1l().SetPtEtaPhiM(MC_w1l_pt, MC_w1l_eta, MC_w1l_phi, MC_w1l_m);
+  e.MC_w1l_pdgId() = MC_w1l_pdgId;
+  e.MC_w2l().SetPtEtaPhiM(MC_w2l_pt, MC_w2l_eta, MC_w2l_phi, MC_w2l_m);
+  e.MC_w2l_pdgId() = MC_w2l_pdgId;
+  e.MC_bl().SetPtEtaPhiM( MC_bl_pt, MC_bl_eta, MC_bl_phi, MC_bl_m);
+  
   e.MC_ttbar_beforeFSR().SetPtEtaPhiM(MC_ttbar_beforeFSR_pt, MC_ttbar_beforeFSR_eta, MC_ttbar_beforeFSR_phi, MC_ttbar_beforeFSR_m);
+  
   for (int k = 0; k < el_pt->size(); ++k) {
     e.electron().push_back(Electron());
     e.electron()[k].mom().SetPtEtaPhiE(el_pt->at(k), el_eta->at(k), el_phi->at(k), el_e->at(k));
@@ -80,7 +95,7 @@ void MiniTree::read(int event, Event &e) {
     e.jet()[k].jvt() = jet_jvt==0?-99:jet_jvt->at(k);
     e.jet()[k].closeToLepton() = jet_closeToLepton==0?-99:jet_closeToLepton->at(k);
   }
-
+   
   for (int k = 0; k < ljet_pt->size(); ++k) {
     e.largeJet().push_back(LargeJet());
     e.largeJet()[k].mom().SetPtEtaPhiE(ljet_pt->at(k), ljet_eta->at(k), ljet_phi->at(k), ljet_e->at(k));
@@ -88,7 +103,7 @@ void MiniTree::read(int event, Event &e) {
     e.largeJet()[k].good() = ljet_good->at(k);
     e.largeJet()[k].trueFlavour() = 0; //TODO ljet_trueflav==0?-99:ljet_trueflav->at(k);
   }
-
+  
   e.met(met_met*std::cos(met_phi), met_met*std::sin(met_phi));
 
   e.passes().clear();
@@ -110,8 +125,8 @@ double &MiniTree::sumWeights() {
 
 void MiniTree::write(const Event &e) {
   mcChannelNumber = e.channelNumber();
-
-  mu = e.mu();
+  npv = e.npv();
+  mu  = e.mu();
 
   weight_mc 	  = e.weight_mc();
   weight_pileup   = e.weight_pileup();
@@ -241,6 +256,40 @@ void MiniTree::prepareBranches() {
   ljet_sd12 = 0;
   ljet_good = 0;
 
+  MC_w1h_pt 	= -5000;
+  MC_w1h_eta 	= -5000;
+  MC_w1h_phi 	= -5000;
+  MC_w1h_m 	= -5000;  
+  MC_w1h_pdgId 	= 0;
+  
+  MC_w2h_pt 	= -5000;
+  MC_w2h_eta 	= -5000;
+  MC_w2h_phi 	= -5000;
+  MC_w2h_m 	= -5000;
+  MC_w2h_pdgId 	= 0;
+  
+  MC_bh_pt 	= -5000;
+  MC_bh_eta 	= -5000;
+  MC_bh_phi 	= -5000;
+  MC_bh_m 	= -5000;
+  
+  MC_w1l_pt 	= -5000;
+  MC_w1l_eta 	= -5000;
+  MC_w1l_phi 	= -5000;
+  MC_w1l_m 	= -5000;
+  MC_w1l_pdgId 	= 0;
+  
+  MC_w2l_pt 	= -5000;
+  MC_w2l_eta 	= -5000;
+  MC_w2l_phi 	= -5000;
+  MC_w2l_m 	= -5000;
+  MC_w2l_pdgId 	= 0;
+  
+  MC_bl_pt 	= -5000;
+  MC_bl_eta 	= -5000;
+  MC_bl_phi 	= -5000;
+  MC_bl_m 	= -5000;
+  
   MC_ttbar_beforeFSR_pt = 0;
   MC_ttbar_beforeFSR_eta = 0;
   MC_ttbar_beforeFSR_phi = 0;
@@ -253,6 +302,40 @@ void MiniTree::prepareBranches() {
     m_chain->Branch("weight_bTagSF", &weight_bTagSF);
     m_chain->Branch("weight_leptonSF", &weight_leptonSF);    
 
+    m_chain->Branch("MC_w1h_pt",  	&MC_w1h_pt);
+    m_chain->Branch("MC_w1h_eta", 	&MC_w1h_eta);
+    m_chain->Branch("MC_w1h_phi", 	&MC_w1h_phi);
+    m_chain->Branch("MC_w1h_m",		&MC_w1h_m);
+    m_chain->Branch("MC_w1h_pdgId",	&MC_w1h_pdgId);
+    
+    m_chain->Branch("MC_w2h_pt",  	&MC_w2h_pt);
+    m_chain->Branch("MC_w2h_eta", 	&MC_w2h_eta);
+    m_chain->Branch("MC_w2h_phi", 	&MC_w2h_phi);
+    m_chain->Branch("MC_w2h_m",		&MC_w2h_m);
+    m_chain->Branch("MC_w2h_pdgId",	&MC_w2h_pdgId);
+    
+    m_chain->Branch("MC_bh_pt",  	&MC_bh_pt);
+    m_chain->Branch("MC_bh_eta", 	&MC_bh_eta);
+    m_chain->Branch("MC_bh_phi", 	&MC_bh_phi);
+    m_chain->Branch("MC_bh_m",		&MC_bh_m);
+    
+    m_chain->Branch("MC_w1l_pt",  	&MC_w1l_pt);
+    m_chain->Branch("MC_w1l_eta", 	&MC_w1l_eta);
+    m_chain->Branch("MC_w1l_phi", 	&MC_w1l_phi);
+    m_chain->Branch("MC_w1l_m",		&MC_w1l_m);
+    m_chain->Branch("MC_w1l_pdgId",	&MC_w1l_pdgId);
+    
+    m_chain->Branch("MC_w2l_pt",  	&MC_w2l_pt);
+    m_chain->Branch("MC_w2l_eta", 	&MC_w2l_eta);
+    m_chain->Branch("MC_w2l_phi", 	&MC_w2l_phi);
+    m_chain->Branch("MC_w2l_m",		&MC_w2l_m);
+    m_chain->Branch("MC_w2l_pdgId",	&MC_w2l_pdgId);
+    
+    m_chain->Branch("MC_bl_pt",  	&MC_bl_pt);
+    m_chain->Branch("MC_bl_eta", 	&MC_bl_eta);
+    m_chain->Branch("MC_bl_phi", 	&MC_bl_phi);
+    m_chain->Branch("MC_bl_m",		&MC_bl_m);    
+    
     m_chain->Branch("MC_ttbar_beforeFSR_pt", &MC_ttbar_beforeFSR_pt);
     m_chain->Branch("MC_ttbar_beforeFSR_eta", &MC_ttbar_beforeFSR_eta);
     m_chain->Branch("MC_ttbar_beforeFSR_phi", &MC_ttbar_beforeFSR_phi);
@@ -289,7 +372,8 @@ void MiniTree::prepareBranches() {
 
     m_chain->Branch("met_met", &met_met);
     m_chain->Branch("met_phi", &met_phi);
-
+    
+    m_chain->Branch("npv", &npv);
     m_chain->Branch("mu", &mu);
 
     m_chain->Branch("bejets", &bejets);
@@ -310,12 +394,46 @@ void MiniTree::prepareBranches() {
     m_chain->Branch("binning05", &binning05);
     
   } else {
-    m_chain->SetBranchAddress("mcChannelNumber", &mcChannelNumber);
-    m_chain->SetBranchAddress("weight_mc", &weight_mc);
-    m_chain->SetBranchAddress("weight_pileup", &weight_pileup);
-    m_chain->SetBranchAddress("weight_bTagSF", &weight_bTagSF);
-    m_chain->SetBranchAddress("weight_leptonSF", &weight_leptonSF);
-
+    m_chain->SetBranchAddress("mcChannelNumber",  &mcChannelNumber);
+    m_chain->SetBranchAddress("weight_mc", 	  &weight_mc);
+    m_chain->SetBranchAddress("weight_pileup", 	  &weight_pileup);
+    m_chain->SetBranchAddress("weight_bTagSF", 	  &weight_bTagSF);
+    m_chain->SetBranchAddress("weight_leptonSF",  &weight_leptonSF);
+    
+    m_chain->SetBranchAddress("MC_w1h_pt",  	&MC_w1h_pt);
+    m_chain->SetBranchAddress("MC_w1h_eta", 	&MC_w1h_eta);
+    m_chain->SetBranchAddress("MC_w1h_phi", 	&MC_w1h_phi);
+    m_chain->SetBranchAddress("MC_w1h_m",	&MC_w1h_m);
+    m_chain->SetBranchAddress("MC_w1h_pdgId",	&MC_w1h_pdgId);
+        
+    m_chain->SetBranchAddress("MC_w2h_pt",  	&MC_w2h_pt);
+    m_chain->SetBranchAddress("MC_w2h_eta", 	&MC_w2h_eta);
+    m_chain->SetBranchAddress("MC_w2h_phi", 	&MC_w2h_phi);
+    m_chain->SetBranchAddress("MC_w2h_m",	&MC_w2h_m);
+    m_chain->SetBranchAddress("MC_w2h_pdgId",	&MC_w2h_pdgId);
+    
+    m_chain->SetBranchAddress("MC_bh_pt",  	&MC_bh_pt);
+    m_chain->SetBranchAddress("MC_bh_eta", 	&MC_bh_eta);
+    m_chain->SetBranchAddress("MC_bh_phi", 	&MC_bh_phi);
+    m_chain->SetBranchAddress("MC_bh_m",	&MC_bh_m);
+    
+    m_chain->SetBranchAddress("MC_w1l_pt",  	&MC_w1l_pt);
+    m_chain->SetBranchAddress("MC_w1l_eta", 	&MC_w1l_eta);
+    m_chain->SetBranchAddress("MC_w1l_phi", 	&MC_w1l_phi);
+    m_chain->SetBranchAddress("MC_w1l_m",	&MC_w1l_m);
+    m_chain->SetBranchAddress("MC_w1l_pdgId",	&MC_w1l_pdgId);
+    
+    m_chain->SetBranchAddress("MC_w2l_pt",  	&MC_w2l_pt);
+    m_chain->SetBranchAddress("MC_w2l_eta", 	&MC_w2l_eta);
+    m_chain->SetBranchAddress("MC_w2l_phi", 	&MC_w2l_phi);
+    m_chain->SetBranchAddress("MC_w2l_m",	&MC_w2l_m);
+    m_chain->SetBranchAddress("MC_w2l_pdgId",	&MC_w2l_pdgId);
+    
+    m_chain->SetBranchAddress("MC_bl_pt",  	&MC_bl_pt);
+    m_chain->SetBranchAddress("MC_bl_eta", 	&MC_bl_eta);
+    m_chain->SetBranchAddress("MC_bl_phi", 	&MC_bl_phi);
+    m_chain->SetBranchAddress("MC_bl_m",	&MC_bl_m);  
+    
     m_chain->SetBranchAddress("MC_ttbar_beforeFSR_pt", &MC_ttbar_beforeFSR_pt);
     m_chain->SetBranchAddress("MC_ttbar_beforeFSR_eta", &MC_ttbar_beforeFSR_eta);
     m_chain->SetBranchAddress("MC_ttbar_beforeFSR_phi", &MC_ttbar_beforeFSR_phi);
@@ -325,13 +443,13 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("el_eta", &el_eta);
     m_chain->SetBranchAddress("el_phi", &el_phi);
     m_chain->SetBranchAddress("el_e", &el_e);
-    //m_chain->SetBranchAddress("el_miniiso", &el_miniiso);
+    m_chain->SetBranchAddress("el_miniiso", &el_miniiso);
 
     m_chain->SetBranchAddress("mu_pt", &mu_pt);
     m_chain->SetBranchAddress("mu_eta", &mu_eta);
     m_chain->SetBranchAddress("mu_phi", &mu_phi);
     m_chain->SetBranchAddress("mu_e", &mu_e);
-    //m_chain->SetBranchAddress("mu_miniiso", &mu_miniiso);
+    m_chain->SetBranchAddress("mu_miniiso", &mu_miniiso);
 
     m_chain->SetBranchAddress("jet_pt", &jet_pt);
     m_chain->SetBranchAddress("jet_eta", &jet_eta);
@@ -353,6 +471,7 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("met_met", &met_met);
     m_chain->SetBranchAddress("met_phi", &met_phi);
   
+    m_chain->SetBranchAddress("npv", &npv);
     m_chain->SetBranchAddress("mu", &mu);
 
     m_chain->SetBranchAddress("bejets", &bejets);

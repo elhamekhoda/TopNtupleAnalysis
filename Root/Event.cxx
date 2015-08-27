@@ -13,13 +13,6 @@ Event::Event() {
 Event::~Event() {
 }
 
-TLorentzVector &Event::MC_ttbar_beforeFSR() {
-  return m_MC_ttbar_beforeFSR;
-}
-const TLorentzVector &Event::MC_ttbar_beforeFSR() const {
-  return m_MC_ttbar_beforeFSR;
-}
-
 std::vector<std::string> &Event::passes() {
   return m_passes;
 }
@@ -116,7 +109,6 @@ const std::vector<LargeJet> &Event::largeJet() const {
   return m_largeJet;
 }
 
-
 int &Event::runNumber() {
   return m_runNumber;
 }
@@ -154,14 +146,12 @@ const float Event::mu() const {
   return m_mu;
 }
 
-
 int &Event::npv() {
   return m_npv;
 }
 const int Event::npv() const {
   return m_npv;
 }
-
 
 unsigned int &Event::lbn() {
   return m_lbn;
@@ -170,4 +160,89 @@ unsigned int &Event::lbn() {
 const unsigned int Event::lbn() const {
   return m_lbn;
 }
+
+//Variables from the truth: lepton+jet channel
+
+//hadronic top decay
+TLorentzVector &Event::MC_w1h() {
+  return m_MC_w1h;
+}
+const TLorentzVector &Event::MC_w1h() const {
+  return m_MC_w1h;
+}
+
+int &Event::MC_w1h_pdgId() {
+  return m_MC_w1h_pdgId;
+}
+const int Event::MC_w1h_pdgId() const {
+  return m_MC_w1h_pdgId;
+}
+
+TLorentzVector &Event::MC_w2h() {
+  return m_MC_w2h;
+}
+const TLorentzVector &Event::MC_w2h() const {
+  return m_MC_w2h;
+}
+
+int &Event::MC_w2h_pdgId() {
+  return m_MC_w2h_pdgId;
+}
+const int Event::MC_w2h_pdgId() const {
+  return m_MC_w2h_pdgId;
+}
+
+TLorentzVector &Event::MC_bh() {
+  return m_MC_bh;
+}
+const TLorentzVector &Event::MC_bh() const {
+  return m_MC_bh;
+}
+
+//leptonic top decay
+TLorentzVector &Event::MC_w1l() {
+  return m_MC_w1l;
+}
+const TLorentzVector &Event::MC_w1l() const {
+  return m_MC_w1l;
+}
+
+signed int &Event::MC_w1l_pdgId() {
+  return m_MC_w1l_pdgId;
+}
+const signed int Event::MC_w1l_pdgId() const {
+  return m_MC_w1l_pdgId;
+}
+
+TLorentzVector &Event::MC_w2l() {
+  return m_MC_w2l;
+}
+const TLorentzVector &Event::MC_w2l() const {
+  return m_MC_w2l;
+}
+
+int &Event::MC_w2l_pdgId() {
+  return m_MC_w2l_pdgId;
+}
+const int Event::MC_w2l_pdgId() const {
+  return m_MC_w2l_pdgId;
+}
+
+TLorentzVector &Event::MC_bl() {
+  return m_MC_bl;
+}
+const TLorentzVector &Event::MC_bl() const {
+  return m_MC_bl;
+}
+
+TLorentzVector &Event::MC_ttbar_beforeFSR() {
+  return m_MC_ttbar_beforeFSR;
+}
+const TLorentzVector &Event::MC_ttbar_beforeFSR() const {
+  return m_MC_ttbar_beforeFSR;
+}
+
+
+
+
 
