@@ -159,6 +159,9 @@ int main(int argc, char **argv) {
   }else if(analysis == "AnaTtresQCD"){
     vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[0], true,  false ) ); //resolved electron
     vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[1], false, false ) ); // resolved muon
+   
+    vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[2], true,  true  )); // boosted  electron
+    vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[3], false, true  )); // boosted  muon
   }
 
   Event sel; // selected objects

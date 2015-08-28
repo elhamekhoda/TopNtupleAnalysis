@@ -229,7 +229,7 @@ void AnaTtresQCD::run(const Event &evt, double weight) {
   h->h2D("lep_pt_vs_close_pt", "", s)->Fill(l.Perp()*1e-3, closejl_pt*1e-3, weight);
 
   ///----------------------------------
-  //Pre-selection sample for the fake
+  //Pre-selection sample for the efficiency studies
   ///----------------------------------
   
   ///Electrons
