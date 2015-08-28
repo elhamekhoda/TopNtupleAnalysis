@@ -443,13 +443,13 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("el_eta", &el_eta);
     m_chain->SetBranchAddress("el_phi", &el_phi);
     m_chain->SetBranchAddress("el_e", &el_e);
-    m_chain->SetBranchAddress("el_miniiso", &el_miniiso);
+    //m_chain->SetBranchAddress("el_miniiso", &el_miniiso);
 
     m_chain->SetBranchAddress("mu_pt", &mu_pt);
     m_chain->SetBranchAddress("mu_eta", &mu_eta);
     m_chain->SetBranchAddress("mu_phi", &mu_phi);
     m_chain->SetBranchAddress("mu_e", &mu_e);
-    m_chain->SetBranchAddress("mu_miniiso", &mu_miniiso);
+    //m_chain->SetBranchAddress("mu_miniiso", &mu_miniiso);
 
     m_chain->SetBranchAddress("jet_pt", &jet_pt);
     m_chain->SetBranchAddress("jet_eta", &jet_eta);
@@ -485,11 +485,11 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("mumu", &mumu);
     m_chain->SetBranchAddress("emu", &emu);
     
-    m_chain->SetBranchAddress("binning01", &binning01);
-    m_chain->SetBranchAddress("binning02", &binning02);
-    m_chain->SetBranchAddress("binning03", &binning03);
-    m_chain->SetBranchAddress("binning04", &binning04);
-    m_chain->SetBranchAddress("binning05", &binning05);
+    //m_chain->SetBranchAddress("binning01", &binning01);
+    //m_chain->SetBranchAddress("binning02", &binning02);
+    //m_chain->SetBranchAddress("binning03", &binning03);
+    //m_chain->SetBranchAddress("binning04", &binning04);
+    //m_chain->SetBranchAddress("binning05", &binning05);
   }
 }
 

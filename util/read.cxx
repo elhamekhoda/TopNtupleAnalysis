@@ -18,6 +18,7 @@
 
 #include "TopNtupleAnalysis/Analysis.h"
 #include "TopNtupleAnalysis/AnaTtresSL.h"
+#include "TopNtupleAnalysis/AnaTtresQCD.h"
 
 #include "TopDataPreparation/SampleXsection.h"
 
@@ -142,14 +143,22 @@ int main(int argc, char **argv) {
     outList.push_back(tmp);
   }
 
-
+  //AnaTtresSL
   std::vector<Analysis *> vec_analysis;
    
+  //AnaTtresQCD
+  std::vector<Analysis *> vec_analysisQCD;
+  
   if (analysis == "AnaTtresSL") {
     vec_analysis.push_back(new AnaTtresSL(outList[0], true,  false )); // resolved electron
     vec_analysis.push_back(new AnaTtresSL(outList[1], false, false )); // resolved muon
-    //vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true  )); // boosted  electron
-    //vec_analysis.push_back(new AnaTtresSL(outList[3], false, true  )); // boosted  muon           
+    
+    vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true  )); // boosted  electron
+    vec_analysis.push_back(new AnaTtresSL(outList[3], false, true  )); // boosted  muon
+           
+  }else if(analysis == "AnaTtresQCD"){
+    vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[0], true,  false ) ); //resolved electron
+    vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[1], false, false ) ); // resolved muon
   }
 
   Event sel; // selected objects
@@ -171,18 +180,15 @@ int main(int argc, char **argv) {
 	t_sumWeights.SetBranchAddress("totalEventsWeighted", &value);
 	for (int k = 0; k < t_sumWeights.GetEntries(); ++k) {
 	  t_sumWeights.GetEntry(k);
-	  if (sumOfWeights.find(dsid) == sumOfWeights.end())
-	   sumOfWeights[dsid] = 0;
+	  if (sumOfWeights.find(dsid) == sumOfWeights.end())	sumOfWeights[dsid] = 0;
 	  sumOfWeights[dsid] += value;
 	}
   }
 
   for (int k = 0; k < mt.GetEntries(); ++k) {
-    if (k % 100 == 0)
-      std::cout << "Entry " << k << "/" << mt.GetEntries() << std::endl;
-
+    if (k % 100 == 0)	std::cout << "Entry " << k << "/" << mt.GetEntries() << std::endl;
+    
     mt.read(k, sel);
-
     int channel = sel.channelNumber();
     
     double weight = 1;
@@ -198,9 +204,24 @@ int main(int argc, char **argv) {
       // if you use a recent version of AnalysisTop, uncomment the last line
       // std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" <<  sel.weight_bTagSF() << "\t" << sel.weight_leptonSF() << "\t" << sumOfWeights[channel]  << std::endl;          
     }
-    for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
-      vec_analysis[iAna]->run(sel, weight);
+    
+    int nBtagged = 0;    
+    for (size_t bidx = 0; bidx < sel.jet().size(); ++bidx){
+      if (sel.jet()[bidx].btag_mv2c20_60()){
+      	nBtagged += 1;	
+      }
     }
+    
+    if(analysis=="AnaTtresSL"){
+       for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
+           vec_analysis[iAna]->run(sel, weight);
+	    
+    }else if(analysis=="AnaTtresQCD"){
+       for (size_t iAna = 0; iAna < vec_analysisQCD.size(); ++iAna) 
+           vec_analysisQCD[iAna]->run(sel, weight);
+
+    }//if  
+
   }
 
   for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
@@ -208,7 +229,13 @@ int main(int argc, char **argv) {
     delete vec_analysis[iAna];
   }
 
+  for (size_t iAna = 0; iAna < vec_analysisQCD.size(); ++iAna) {
+    vec_analysisQCD[iAna]->terminate();
+    delete vec_analysisQCD[iAna];
+  }
+
   vec_analysis.clear();
+  vec_analysisQCD.clear();
 
   return 0;
 }

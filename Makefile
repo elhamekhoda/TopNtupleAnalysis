@@ -24,7 +24,7 @@ OBJS      += Root/KinematicUtils.o
 
 OBJS_READ += $(OBJS)
 OBJS_READ += Root/EventCount.o
-OBJS_READ += Root/Analysis.o Root/AnaTtresSL.o Root/AnaTuDoSL.o Root/AnaTuDoTtresResolved.o Root/AnaTuDoTtresBoosted.o Root/HistogramService.o
+OBJS_READ += Root/Analysis.o Root/AnaTtresSL.o Root/AnaTuDoSL.o Root/AnaTuDoTtresResolved.o Root/AnaTuDoTtresBoosted.o Root/HistogramService.o Root/AnaTtresQCD.o
 OBJS_READ += util/read.o
 
 OBJS_READTUDO += $(OBJS)

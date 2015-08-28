@@ -4,14 +4,14 @@
  */
 
 #include "TopNtupleAnalysis/Analysis.h"
-#include "TopNtupleAnalysis/AnaTtresSL.h"
+#include "TopNtupleAnalysis/AnaTtresQCD.h"
 #include "TopNtupleAnalysis/Event.h"
 #include "TLorentzVector.h"
 #include <vector>
 #include <string>
 #include "TopNtupleAnalysis/HistogramService.h"
 
-AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
+AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool boosted)
   : Analysis(filename), m_electron(electron), m_boosted(boosted),
     m_neutrinoBuilder("MeV"), m_chi2("MeV") {
 
@@ -36,7 +36,23 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
 
   m_hSvc.create1D("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 40, 0, 4);
   m_hSvc.create1D("closejl_pt", "; Pt of closest jet to lep [GeV]; Events", 40, 0, 500);
- 
+  m_hSvc.create1D("closejl_minDeltaR", "; min #delta R(lep, jet); Events", 40, 0, 4);
+  m_hSvc.create1D("closejl_pt", "; Pt of closest jet to lep; Events", 50, 0, 500);
+  
+  //2D histograms used for the fake estimation
+  m_hSvc.create2D("closejl_pt_vs_minDR", "; Pt of closest jet to lep [GeV]; min #Delta R(lep, jet)", 40, 0, 500, 40, 0, 4);
+  m_hSvc.create2D("lep_pt_vs_minDR", "; Pt of lep [GeV]; min #Delta R(lep, jet)", 40, 0, 500, 40, 0, 4);
+  m_hSvc.create2D("lep_pt_vs_close_pt", "; Pt of lep [GeV]; Pt of closest jet to lep [GeV]", 40, 0, 500, 50, 0, 500);
+  
+  //Truth
+  m_hSvc.create1D("MC_e_pt", "; Pt of MC electron [GeV]; Events", 40, 0, 500);
+  m_hSvc.create1D("MC_e_eta", "; Eta of MC electron ; Events", 24, -3.0, 3.0);
+  m_hSvc.create1D("MC_e_phi", "; Phi of MC electron ; Events", 30, -3.0, 3.0);
+  m_hSvc.create1D("MC_e_m", "; Mass of MC electron [GeV]; Events", 50, 0, 500);
+  
+  m_hSvc.create2D("MC_eAcceptance_pt_vs_eta", "; pt of electron(truth) [GeV]; #eta of electron(truth)", 40, 0, 500, 24, -3., 3.);
+  m_hSvc.create2D("MC_muAcceptance_pt_vs_eta", "; pt of muon(truth) [GeV]; #eta of muon(truth)", 40, 0, 500, 24, -3., 3.);
+  
   m_hSvc.create1D("jet0_m", "; mass of the jet[0] [GeV]; Events", 50, 0, 500); 
   m_hSvc.create1D("jet1_m", "; mass of the jet[1] [GeV]; Events", 50, 0, 500); 
   m_hSvc.create1D("jet2_m", "; mass of the jet[2] [GeV]; Events", 50, 0, 500); 
@@ -67,9 +83,12 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
   
   if (m_boosted) {
     m_hSvc.create1D("closeJetPt", "; Selected Jet p_{T} ; Events", 40, 0, 500);
+
     m_hSvc.create1D("largeJetPt", "; Large jet p_{T} ; Events", 40, 0, 800);
     m_hSvc.create1D("largeJetM", "; Large jet M ; Events", 30, 0, 300);
     m_hSvc.create1D("largeJetEta", "; Large jet eta ; Events", 24, -3., 3.);
+    m_hSvc.create1D("largeJetPhi", "; Large jet phi ; Events", 40, -4., 4.);
+    m_hSvc.create1D("largeJetEta", "; Large jet eta ; Events", 30, -3., 3.);
     m_hSvc.create1D("largeJetPhi", "; Large jet phi ; Events", 40, -4., 4.);
     m_hSvc.create1D("largeJetSd12", "; Large jet #sqrt{d_{12}} ; Events", 30, 0, 300);
     m_hSvc.create1D("mtlep_boo", "; m_{t,lep} ; Events", 70, 0, 700);
@@ -83,10 +102,10 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
   m_hSvc.create1D("mtt", "; m_{t#bar{t}} [GeV]; Events", 60, 0, 6000);
 }
 
-AnaTtresSL::~AnaTtresSL() {
+AnaTtresQCD::~AnaTtresQCD() {
 }
 
-void AnaTtresSL::run(const Event &evt, double weight) {
+void AnaTtresQCD::run(const Event &evt, double weight) {
   std::string s = ""; // this would be the systematics ... could be sent as an argument in the future
 
   // check channel
@@ -199,10 +218,72 @@ void AnaTtresSL::run(const Event &evt, double weight) {
   }//for     
   
   float closejl_pt = -1;
-  if (closejl_idx>0)    closejl_pt = evt.jet()[closejl_idx].mom().Perp();  
+  if (closejl_idx>0)    closejl_pt = evt.jet()[closejl_idx].mom().Perp();
+  
   h->h1D("closejl_minDeltaR", "", s)->Fill(closejl_deltaR, weight); 
   h->h1D("closejl_pt", "", s)->Fill(closejl_pt*1e-3, weight);
+  
+  //2D plots
+  h->h2D("closejl_pt_vs_minDR", "", s)->Fill(closejl_pt*1e-3, closejl_deltaR, weight);
+  h->h2D("lep_pt_vs_minDR", "", s)->Fill(l.Perp()*1e-3, closejl_deltaR, weight);
+  h->h2D("lep_pt_vs_close_pt", "", s)->Fill(l.Perp()*1e-3, closejl_pt*1e-3, weight);
 
+  ///----------------------------------
+  //Pre-selection sample for the fake
+  ///----------------------------------
+  
+  ///Electrons
+  float MC_e_pt  = -1;
+  float MC_e_eta = -1;
+  float MC_e_phi = -1;
+  float MC_e_m   = -1;
+    
+  if (evt.MC_w1l().Perp()>0 && evt.MC_w1l_pdgId()==11){
+  	MC_e_pt  = evt.MC_w1l().Perp();
+	MC_e_eta = evt.MC_w1l().Eta();
+	MC_e_phi = evt.MC_w1l().Phi();
+	MC_e_m   = evt.MC_w1l().M();
+	//std::cout << "w1l" << evt.MC_w1l_pdgId() << std::endl;
+  }else if(evt.MC_w2l().Perp()>0 && evt.MC_w2l_pdgId()==-11){
+	MC_e_pt  = evt.MC_w2l().Perp();
+        MC_e_eta = evt.MC_w2l().Eta();
+        MC_e_phi = evt.MC_w2l().Phi();
+        MC_e_m   = evt.MC_w2l().M();
+        //std::cout << "w2l" << evt.MC_w2l_pdgId() << std::endl;
+  }//if
+    
+  h->h1D("MC_e_pt", "", s) ->Fill(MC_e_pt*1e-3);
+  h->h1D("MC_e_eta", "", s)->Fill(MC_e_eta);
+  h->h1D("MC_e_phi", "", s)->Fill(MC_e_phi);
+  h->h1D("MC_e_m", "", s)  ->Fill(MC_e_m*1e-3);
+  h->h2D("MC_eAcceptance_pt_vs_eta", "", s)->Fill(MC_e_pt*1e-3, MC_e_eta);
+  
+  ///Muons
+  float MC_mu_pt  = -1;
+  float MC_mu_eta = -1;
+  float MC_mu_phi = -1;
+  float MC_mu_m   = -1;
+
+  if (evt.MC_w1l().Perp()>0 && evt.MC_w1l_pdgId()==13){
+        MC_mu_pt  = evt.MC_w1l().Perp();
+        MC_mu_eta = evt.MC_w1l().Eta();
+        MC_mu_phi = evt.MC_w1l().Phi();
+        MC_mu_m   = evt.MC_w1l().M();
+        //std::cout << "w1l" << evt.MC_w1l_pdgId() << std::endl;
+  }else if(evt.MC_w2l().Perp()>0 && evt.MC_w2l_pdgId()==-13){
+        MC_mu_pt  = evt.MC_w2l().Perp();
+        MC_mu_eta = evt.MC_w2l().Eta();
+        MC_mu_phi = evt.MC_w2l().Phi();
+        MC_mu_m   = evt.MC_w2l().M();
+        //std::cout << "w2l" << evt.MC_w2l_pdgId() << std::endl;
+  }//if
+
+  h->h1D("MC_mu_pt", "", s) ->Fill(MC_mu_pt*1e-3);
+  h->h1D("MC_mu_eta", "", s)->Fill(MC_mu_eta);
+  h->h1D("MC_mu_phi", "", s)->Fill(MC_mu_phi);
+  h->h1D("MC_mu_m", "", s)  ->Fill(MC_mu_m*1e-3);
+  h->h2D("MC_muAcceptance_pt_vs_eta", "", s)->Fill(MC_mu_pt*1e-3, MC_mu_eta);  
+  
   if (m_boosted && (evt.passes("bejets") || evt.passes("bmujets"))) {
     
     size_t close_idx = 0;
