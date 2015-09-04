@@ -54,7 +54,9 @@ class MiniTree {
     UInt_t          runNumber;
     UInt_t          mcChannelNumber;
     int		    npv;
+    float	    vtxz;
     Float_t         mu;
+    Float_t	    mu_original;
     vector<float>   *el_pt;
     vector<float>   *el_eta;
     vector<float>   *el_phi;

@@ -48,6 +48,9 @@ class Event {
 
     float &mu();
     const float mu() const;
+    
+    float &mu_original();
+    const float mu_original() const;
 
     float &weight_mc();
     const float weight_mc() const;
@@ -64,10 +67,15 @@ class Event {
     // not implemented yet:
     unsigned int &lbn();
     const unsigned int lbn() const;
+ 
     const int hfor() const;
     int &hfor();
+
     int &npv();
     const int npv() const;
+
+    float &vtxz();
+    const float vtxz() const;
 
     TLorentzVector &MC_w1h();
     const TLorentzVector &MC_w1h() const;
@@ -129,8 +137,10 @@ class Event {
     int m_channelNumber;
     bool m_isData;
     float m_mu;
+    float m_mu_original;
 
     int m_npv;
+    float m_vtxz;
     float m_rho;
 
     float m_weight_mc;

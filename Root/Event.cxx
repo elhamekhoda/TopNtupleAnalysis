@@ -146,11 +146,26 @@ const float Event::mu() const {
   return m_mu;
 }
 
+float &Event::mu_original() {
+  return m_mu_original;
+}
+const float Event::mu_original() const {
+  return m_mu_original;
+}
+
 int &Event::npv() {
   return m_npv;
 }
 const int Event::npv() const {
   return m_npv;
+}
+
+float &Event::vtxz(){
+  return m_vtxz;
+}
+
+const float Event::vtxz() const{
+  return m_vtxz;
 }
 
 unsigned int &Event::lbn() {

@@ -41,7 +41,9 @@ void MiniTree::read(int event, Event &e) {
   e.channelNumber() = mcChannelNumber;
 
   e.npv() = npv; 
+  e.vtxz() = vtxz;
   e.mu() = mu;
+  e.mu_original() = mu_original;
   e.weight_mc() = weight_mc;
   e.weight_pileup() = weight_pileup;
   e.weight_bTagSF() = weight_bTagSF;
@@ -126,7 +128,9 @@ double &MiniTree::sumWeights() {
 void MiniTree::write(const Event &e) {
   mcChannelNumber = e.channelNumber();
   npv = e.npv();
+  vtxz= e.vtxz();
   mu  = e.mu();
+  mu_original = e.mu_original();
 
   weight_mc 	  = e.weight_mc();
   weight_pileup   = e.weight_pileup();
@@ -374,7 +378,9 @@ void MiniTree::prepareBranches() {
     m_chain->Branch("met_phi", &met_phi);
     
     m_chain->Branch("npv", &npv);
+    m_chain->Branch("vtxz", &vtxz);
     m_chain->Branch("mu", &mu);
+    m_chain->Branch("mu_original", &mu_original);
 
     m_chain->Branch("bejets", &bejets);
     m_chain->Branch("bmujets", &bmujets);
@@ -397,7 +403,7 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("mcChannelNumber",  &mcChannelNumber);
     m_chain->SetBranchAddress("weight_mc", 	  &weight_mc);
     m_chain->SetBranchAddress("weight_pileup", 	  &weight_pileup);
-    m_chain->SetBranchAddress("weight_bTagSF", 	  &weight_bTagSF);
+    m_chain->SetBranchAddress("weight_bTagSF_70", 	  &weight_bTagSF);
     m_chain->SetBranchAddress("weight_leptonSF",  &weight_leptonSF);
     
     m_chain->SetBranchAddress("MC_w1h_pt",  	&MC_w1h_pt);
@@ -472,7 +478,9 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("met_phi", &met_phi);
   
     m_chain->SetBranchAddress("npv", &npv);
+    m_chain->SetBranchAddress("vtxz", &vtxz);
     m_chain->SetBranchAddress("mu", &mu);
+    m_chain->SetBranchAddress("mu_original_xAOD", &mu_original);
 
     m_chain->SetBranchAddress("bejets", &bejets);
     m_chain->SetBranchAddress("bmujets", &bmujets);

@@ -56,6 +56,11 @@ bool Jet::btag_mv2c20_60() const {
   return true;
 }
 
+bool Jet::btag_mv2c20_70() const {
+  if (mv2c20() < -0.0436) return false;
+  return true;
+}
+
 const float Jet::mv1() const {
   return m_mv1;
 }

@@ -32,6 +32,8 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
     
   m_hSvc.create1D("mwt", "; W transverse mass [GeV]; Events", 50, 0, 500);
   m_hSvc.create1D("mu", "; <mu>; Events", 100, 0, 100);
+  m_hSvc.create1D("mu_original", "; <mu_origianl>; Events", 100, 0, 100);
+  m_hSvc.create1D("vtxz", ";Z position of truth primary vertex; Events", 40, -400, 400);
   m_hSvc.create1D("npv", "; npv; Events", 50, 0, 50);
 
   m_hSvc.create1D("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 40, 0, 4);
@@ -126,7 +128,7 @@ void AnaTtresSL::run(const Event &evt, double weight) {
   
   int nBtagged = 0; //nB-tagged jets 
   for (size_t bidx = 0; bidx < evt.jet().size(); ++bidx)
-    if (evt.jet()[bidx].btag_mv2c20_60()){
+    if (evt.jet()[bidx].btag_mv2c20_70()){
       if(nBtagged==0)h->h1D("leadbJetPt", "", s)->Fill(evt.jet()[bidx].mom().Perp()*1e-3, weight);
       nBtagged += 1;
     }
@@ -180,9 +182,13 @@ void AnaTtresSL::run(const Event &evt, double weight) {
   
   //mu
   h->h1D("mu", "", s)->Fill(evt.mu(), weight); 
-  
+  h->h1D("mu_original", "", s)->Fill(evt.mu_original(), weight); 
+    
   //npv
   h->h1D("npv", "", s)->Fill(evt.npv(), weight);
+  
+  //z prosition of primary vertex
+  h->h1D("vtxz", "", s)->Fill(evt.vtxz(), weight);
 
   //deltaR between lepton and the closest narrow jet
   float closejl_deltaR  = 99;

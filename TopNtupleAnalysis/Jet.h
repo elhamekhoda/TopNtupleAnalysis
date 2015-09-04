@@ -22,7 +22,7 @@ class Jet : public MObject {
     
     const float mv2c20() const;
     float &mv2c20();
-
+    
     const float ip3dsv1() const;
     float &ip3dsv1();
 
@@ -32,6 +32,7 @@ class Jet : public MObject {
     bool pass() const;
     bool btag() const;
     bool btag_mv2c20_60() const;
+    bool btag_mv2c20_70() const;
 
     int &closeToLepton();
     const int closeToLepton() const;

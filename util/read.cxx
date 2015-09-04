@@ -151,11 +151,10 @@ int main(int argc, char **argv) {
   
   if (analysis == "AnaTtresSL") {
     vec_analysis.push_back(new AnaTtresSL(outList[0], true,  false )); // resolved electron
-    vec_analysis.push_back(new AnaTtresSL(outList[1], false, false )); // resolved muon
-    
+    vec_analysis.push_back(new AnaTtresSL(outList[1], false, false )); // resolved muon    
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true  )); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true  )); // boosted  muon
-           
+       
   }else if(analysis == "AnaTtresQCD"){
     vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[0], true,  false ) ); //resolved electron
     vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[1], false, false ) ); // resolved muon
@@ -205,23 +204,23 @@ int main(int argc, char **argv) {
         weight /= sumOfWeights[channel]; // this will be the correct way of doing this
       // but keeping this commented as it has only been added in the trunk of AnalysisTop now
       // if you use a recent version of AnalysisTop, uncomment the last line
-      // std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" <<  sel.weight_bTagSF() << "\t" << sel.weight_leptonSF() << "\t" << sumOfWeights[channel]  << std::endl;          
+      // std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" <<  sel.weight_bTagSF() << "\t" << sel.weight_leptonSF() << "\t" << sel.weight_pileup() << "\t" << sumOfWeights[channel]  << std::endl;          
     }
     
     int nBtagged = 0;    
     for (size_t bidx = 0; bidx < sel.jet().size(); ++bidx){
-      if (sel.jet()[bidx].btag_mv2c20_60()){
+      if (sel.jet()[bidx].btag_mv2c20_70()){
       	nBtagged += 1;	
       }
     }
     
     if(analysis=="AnaTtresSL"){
        for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-           vec_analysis[iAna]->run(sel, weight);
-	    
+           if(nBtagged>=1)	vec_analysis[iAna]->run(sel, weight);
+	   
     }else if(analysis=="AnaTtresQCD"){
        for (size_t iAna = 0; iAna < vec_analysisQCD.size(); ++iAna) 
-           vec_analysisQCD[iAna]->run(sel, weight);
+           if(nBtagged>=1)  vec_analysisQCD[iAna]->run(sel, weight);
 
     }//if  
 
