@@ -105,6 +105,35 @@ class Event {
 
     TLorentzVector &MC_ttbar_beforeFSR();
     const TLorentzVector &MC_ttbar_beforeFSR() const;
+    
+    //MA
+    TLorentzVector &MA_w1h();
+    const TLorentzVector &MA_w1h() const;
+    int &MA_w1h_pdgId();
+    const int MA_w1h_pdgId() const;
+    
+    TLorentzVector &MA_w2h();
+    const TLorentzVector &MA_w2h() const;
+    int &MA_w2h_pdgId();
+    const int MA_w2h_pdgId() const;
+    
+    TLorentzVector &MA_bh();
+    const TLorentzVector &MA_bh() const;
+    
+    TLorentzVector &MA_w1l();
+    const TLorentzVector &MA_w1l() const;
+    
+    int &MA_w1l_pdgId();
+    const int MA_w1l_pdgId() const;
+    
+    TLorentzVector &MA_w2l();
+    const TLorentzVector &MA_w2l() const;
+    
+    int &MA_w2l_pdgId();
+    const int MA_w2l_pdgId() const;
+        
+    TLorentzVector &MA_bl();
+    const TLorentzVector &MA_bl() const;
 
   protected:
 
@@ -131,6 +160,17 @@ class Event {
     TLorentzVector m_MC_bl;    
     
     TLorentzVector m_MC_ttbar_beforeFSR;
+    
+    TLorentzVector m_MA_w1h;
+    int m_MA_w1h_pdgId;
+    TLorentzVector m_MA_w2h;
+    int m_MA_w2h_pdgId;   
+    TLorentzVector m_MA_bh;
+    TLorentzVector m_MA_w1l;
+    int m_MA_w1l_pdgId;
+    TLorentzVector m_MA_w2l;   
+    int m_MA_w2l_pdgId;   
+    TLorentzVector m_MA_bl; 
 
     int m_runNumber;
     int m_eventNumber;

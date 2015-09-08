@@ -257,7 +257,77 @@ const TLorentzVector &Event::MC_ttbar_beforeFSR() const {
   return m_MC_ttbar_beforeFSR;
 }
 
+//MA
+//hadronic top decay
 
+TLorentzVector &Event::MA_w1h() {
+  return m_MA_w1h;
+}
+const TLorentzVector &Event::MA_w1h() const {
+  return m_MA_w1h;
+}
 
+int &Event::MA_w1h_pdgId() {
+  return m_MA_w1h_pdgId;
+}
+const int Event::MA_w1h_pdgId() const {
+  return m_MA_w1h_pdgId;
+}
 
+TLorentzVector &Event::MA_w2h() {
+  return m_MA_w2h;
+}
+const TLorentzVector &Event::MA_w2h() const {
+  return m_MA_w2h;
+}
+
+int &Event::MA_w2h_pdgId() {
+  return m_MA_w2h_pdgId;
+}
+const int Event::MA_w2h_pdgId() const {
+  return m_MA_w2h_pdgId;
+}
+
+TLorentzVector &Event::MA_bh() {
+  return m_MA_bh;
+}
+const TLorentzVector &Event::MA_bh() const {
+  return m_MA_bh;
+}
+
+//leptonic top decay
+TLorentzVector &Event::MA_w1l() {
+  return m_MA_w1l;
+}
+const TLorentzVector &Event::MA_w1l() const {
+  return m_MA_w1l;
+}
+
+signed int &Event::MA_w1l_pdgId() {
+  return m_MA_w1l_pdgId;
+}
+const signed int Event::MA_w1l_pdgId() const {
+  return m_MA_w1l_pdgId;
+}
+
+TLorentzVector &Event::MA_w2l() {
+  return m_MA_w2l;
+}
+const TLorentzVector &Event::MA_w2l() const {
+  return m_MA_w2l;
+}
+
+int &Event::MA_w2l_pdgId() {
+  return m_MA_w2l_pdgId;
+}
+const int Event::MA_w2l_pdgId() const {
+  return m_MA_w2l_pdgId;
+}
+
+TLorentzVector &Event::MA_bl() {
+  return m_MA_bl;
+}
+const TLorentzVector &Event::MA_bl() const {
+  return m_MA_bl;
+}
 

@@ -107,7 +107,7 @@ class MiniTree {
     float           MC_w1l_eta;
     float           MC_w1l_phi;
     float           MC_w1l_m;
-    signed int	    MC_w1l_pdgId;
+    int	    	    MC_w1l_pdgId;
 
     float           MC_w2l_pt;
     float           MC_w2l_eta;
@@ -124,6 +124,40 @@ class MiniTree {
     float           MC_ttbar_beforeFSR_eta;
     float           MC_ttbar_beforeFSR_phi;
     float           MC_ttbar_beforeFSR_m;
+    
+    float           MA_w1h_pt;
+    float           MA_w1h_eta;
+    float           MA_w1h_phi;
+    float           MA_w1h_m;
+    int		    MA_w1h_pdgId;
+
+    float           MA_w2h_pt;
+    float           MA_w2h_eta;
+    float           MA_w2h_phi;
+    float           MA_w2h_m;
+    int		    MA_w2h_pdgId;
+
+    float           MA_bh_pt;
+    float           MA_bh_eta;
+    float           MA_bh_phi;
+    float           MA_bh_m;
+    
+    float           MA_w1l_pt;
+    float           MA_w1l_eta;
+    float           MA_w1l_phi;
+    float           MA_w1l_m;
+    int	    	    MA_w1l_pdgId;
+    
+    float           MA_w2l_pt;
+    float           MA_w2l_eta;
+    float           MA_w2l_phi;
+    float           MA_w2l_m;
+    int		    MA_w2l_pdgId;
+
+    float           MA_bl_pt;
+    float           MA_bl_eta;
+    float           MA_bl_phi;
+    float           MA_bl_m;   
     
     Float_t         met_met;
     Float_t         met_phi;

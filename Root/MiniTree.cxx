@@ -49,21 +49,55 @@ void MiniTree::read(int event, Event &e) {
   e.weight_bTagSF() = weight_bTagSF;
   e.weight_leptonSF() = weight_leptonSF;
   
-  // adding the truth information into the event  
-     
-  e.MC_w1h().SetPtEtaPhiM(MC_w1h_pt, MC_w1h_eta, MC_w1h_phi, MC_w1h_m);
-  e.MC_w1h_pdgId() = MC_w1h_pdgId;
-  e.MC_w2h().SetPtEtaPhiM(MC_w2h_pt, MC_w2h_eta, MC_w2h_phi, MC_w2h_m);
-  e.MC_w2h_pdgId() = MC_w2h_pdgId;
-  e.MC_bh().SetPtEtaPhiM( MC_bh_pt, MC_bh_eta, MC_bh_phi, MC_bh_m);
+  // adding the truth information into the event       
+  //std::cout << "MC_w1l_pt: " << MC_w1l_pt << " - MC_w1l_m: " << MC_w1l_m  << " - MC_w1l_eta: " << MC_w1l_eta << " - MC_w1l_phi: " << MC_w1l_phi<< " - MC_w1l_pdgID: "<< MC_w1l_pdgId << std::endl;
+  if(MC_w1h_pt>0)	e.MC_w1h().SetPtEtaPhiM(MC_w1h_pt, MC_w1h_eta, MC_w1h_phi, MC_w1h_m);
+  else			e.MC_w1h().SetPtEtaPhiM(2000, -9., -9., 0);  
+  e.MC_w1h_pdgId() 	= MC_w1h_pdgId;
   
-  e.MC_w1l().SetPtEtaPhiM(MC_w1l_pt, MC_w1l_eta, MC_w1l_phi, MC_w1l_m);
-  e.MC_w1l_pdgId() = MC_w1l_pdgId;
-  e.MC_w2l().SetPtEtaPhiM(MC_w2l_pt, MC_w2l_eta, MC_w2l_phi, MC_w2l_m);
-  e.MC_w2l_pdgId() = MC_w2l_pdgId;
-  e.MC_bl().SetPtEtaPhiM( MC_bl_pt, MC_bl_eta, MC_bl_phi, MC_bl_m);
+  if(MC_w2h_pt>0)	e.MC_w2h().SetPtEtaPhiM(MC_w2h_pt, MC_w2h_eta, MC_w2h_phi, MC_w2h_m);
+  else			e.MC_w2h().SetPtEtaPhiM(2000, -9., -9., 0);  
+  e.MC_w2h_pdgId() 	= MC_w2h_pdgId;
   
-  e.MC_ttbar_beforeFSR().SetPtEtaPhiM(MC_ttbar_beforeFSR_pt, MC_ttbar_beforeFSR_eta, MC_ttbar_beforeFSR_phi, MC_ttbar_beforeFSR_m);
+  if(MC_bh_pt>0)	e.MC_bh().SetPtEtaPhiM( MC_bh_pt, MC_bh_eta, MC_bh_phi, MC_bh_m);
+  else			e.MC_bh().SetPtEtaPhiM(2000, -9., -9., 0);  
+  
+  if(MC_w1l_pt>0)	e.MC_w1l().SetPtEtaPhiM(MC_w1l_pt, MC_w1l_eta, MC_w1l_phi, MC_w1l_m);
+  else			e.MC_w1l().SetPtEtaPhiM(2000, -9., 0., 0.);  
+  e.MC_w1l_pdgId() 	= MC_w1l_pdgId;
+  
+  if(MC_w2l_pt>0)	e.MC_w2l().SetPtEtaPhiM(MC_w2l_pt, MC_w2l_eta, MC_w2l_phi, MC_w2l_m);
+  else			e.MC_w2l().SetPtEtaPhiM(2000, -9., 0., 0.);
+  e.MC_w2l_pdgId() 	= MC_w2l_pdgId;
+  
+  if(MC_bl_pt>0)	e.MC_bl().SetPtEtaPhiM( MC_bl_pt, MC_bl_eta, MC_bl_phi, MC_bl_m);
+  else			e.MC_bl().SetPtEtaPhiM(2000, -9., 0., 0.);
+  
+  if(MC_ttbar_beforeFSR_pt>0)	e.MC_ttbar_beforeFSR().SetPtEtaPhiM(MC_ttbar_beforeFSR_pt, MC_ttbar_beforeFSR_eta, MC_ttbar_beforeFSR_phi, MC_ttbar_beforeFSR_m);
+  else				e.MC_ttbar_beforeFSR().SetPtEtaPhiM(2000, -9., 0., 0.);
+  
+  // adding the matched objets into the event 
+  if(MA_w1h_pt>0)	e.MA_w1h().SetPtEtaPhiM(MA_w1h_pt, MA_w1h_eta, MA_w1h_phi, MA_w1h_m);
+  else   		e.MA_w1h().SetPtEtaPhiM(2000, -9., 0., 0.);
+  e.MA_w1h_pdgId() 	= MA_w1h_pdgId;
+  
+  if(MA_w2h_pt>0)	e.MA_w2h().SetPtEtaPhiM(MA_w2h_pt, MA_w2h_eta, MA_w2h_phi, MA_w2h_m);
+  else   		e.MA_w2h().SetPtEtaPhiM(2000, -9., 0., 0.);
+  e.MA_w2h_pdgId() 	= MA_w2h_pdgId;
+  
+  if(MA_bh_pt>0)	e.MA_bh().SetPtEtaPhiM( MA_bh_pt, MA_bh_eta, MA_bh_phi, MA_bh_m);
+  else   		e.MA_bh().SetPtEtaPhiM(2000, -9., 0., 0.);
+  
+  if(MA_w1l_pt>0)	e.MA_w1l().SetPtEtaPhiM(MA_w1l_pt, MA_w1l_eta, MA_w1l_phi, MA_w1l_m);
+  else   		e.MA_w1l().SetPtEtaPhiM(2000, -9., 0., 0.);
+  e.MA_w1l_pdgId() 	= MA_w1l_pdgId;
+  
+  if(MA_w2l_pt>0)	e.MA_w2l().SetPtEtaPhiM(MA_w2l_pt, MA_w2l_eta, MA_w2l_phi, MA_w2l_m);
+  else			e.MA_w2l().SetPtEtaPhiM(2000, -9., 0., 0.);
+  e.MA_w2l_pdgId() 	= MA_w2l_pdgId;
+  
+  if(MA_bl_pt>0)	e.MA_bl().SetPtEtaPhiM( MA_bl_pt, MA_bl_eta, MA_bl_phi, MA_bl_m);  
+  else   		e.MA_bl().SetPtEtaPhiM(2000, -9., 0., 0.);
   
   for (int k = 0; k < el_pt->size(); ++k) {
     e.electron().push_back(Electron());
@@ -136,7 +170,7 @@ void MiniTree::write(const Event &e) {
   weight_pileup   = e.weight_pileup();
   weight_bTagSF   = e.weight_bTagSF();
   weight_leptonSF = e.weight_leptonSF();
-
+  
   el_pt->clear();
   el_eta->clear();
   el_phi->clear();
@@ -298,7 +332,42 @@ void MiniTree::prepareBranches() {
   MC_ttbar_beforeFSR_eta = 0;
   MC_ttbar_beforeFSR_phi = 0;
   MC_ttbar_beforeFSR_m = 0;
-
+  
+  //MA
+  MA_w1h_pt 	= -5000;
+  MA_w1h_eta 	= -5000;
+  MA_w1h_phi 	= -5000;
+  MA_w1h_m 	= -5000;  
+  MA_w1h_pdgId 	= 0;
+  
+  MA_w2h_pt 	= -5000;
+  MA_w2h_eta 	= -5000;
+  MA_w2h_phi 	= -5000;
+  MA_w2h_m 	= -5000;
+  MA_w2h_pdgId 	= 0;
+  
+  MA_bh_pt 	= -5000;
+  MA_bh_eta 	= -5000;
+  MA_bh_phi 	= -5000;
+  MA_bh_m 	= -5000;
+  
+  MA_w1l_pt 	= -5000;
+  MA_w1l_eta 	= -5000;
+  MA_w1l_phi 	= -5000;
+  MA_w1l_m 	= -5000;
+  MA_w1l_pdgId 	= 0;
+  
+  MA_w2l_pt 	= -5000;
+  MA_w2l_eta 	= -5000;
+  MA_w2l_phi 	= -5000;
+  MA_w2l_m 	= -5000;
+  MA_w2l_pdgId 	= 0;
+  
+  MA_bl_pt 	= -5000;
+  MA_bl_eta 	= -5000;
+  MA_bl_phi 	= -5000;
+  MA_bl_m 	= -5000;
+  
   if (m_toWrite) {
     m_chain->Branch("mcChannelNumber", &mcChannelNumber);
     m_chain->Branch("weight_mc", &weight_mc);
@@ -345,6 +414,41 @@ void MiniTree::prepareBranches() {
     m_chain->Branch("MC_ttbar_beforeFSR_phi", &MC_ttbar_beforeFSR_phi);
     m_chain->Branch("MC_ttbar_beforeFSR_m", &MC_ttbar_beforeFSR_m);
 
+    //MA
+    m_chain->Branch("MA_w1h_pt",  	&MA_w1h_pt);
+    m_chain->Branch("MA_w1h_eta", 	&MA_w1h_eta);
+    m_chain->Branch("MA_w1h_phi", 	&MA_w1h_phi);
+    m_chain->Branch("MA_w1h_m",		&MA_w1h_m);
+    m_chain->Branch("MA_w1h_pdgId",	&MA_w1h_pdgId);
+    
+    m_chain->Branch("MA_w2h_pt",  	&MA_w2h_pt);
+    m_chain->Branch("MA_w2h_eta", 	&MA_w2h_eta);
+    m_chain->Branch("MA_w2h_phi", 	&MA_w2h_phi);
+    m_chain->Branch("MA_w2h_m",		&MA_w2h_m);
+    m_chain->Branch("MA_w2h_pdgId",	&MA_w2h_pdgId);
+    
+    m_chain->Branch("MA_bh_pt",  	&MA_bh_pt);
+    m_chain->Branch("MA_bh_eta", 	&MA_bh_eta);
+    m_chain->Branch("MA_bh_phi", 	&MA_bh_phi);
+    m_chain->Branch("MA_bh_m",		&MA_bh_m);
+    
+    m_chain->Branch("MA_w1l_pt",  	&MA_w1l_pt);
+    m_chain->Branch("MA_w1l_eta", 	&MA_w1l_eta);
+    m_chain->Branch("MA_w1l_phi", 	&MA_w1l_phi);
+    m_chain->Branch("MA_w1l_m",		&MA_w1l_m);
+    m_chain->Branch("MA_w1l_pdgId",	&MA_w1l_pdgId);
+    
+    m_chain->Branch("MA_w2l_pt",  	&MA_w2l_pt);
+    m_chain->Branch("MA_w2l_eta", 	&MA_w2l_eta);
+    m_chain->Branch("MA_w2l_phi", 	&MA_w2l_phi);
+    m_chain->Branch("MA_w2l_m",		&MA_w2l_m);
+    m_chain->Branch("MA_w2l_pdgId",	&MA_w2l_pdgId);
+    
+    m_chain->Branch("MA_bl_pt",  	&MA_bl_pt);
+    m_chain->Branch("MA_bl_eta", 	&MA_bl_eta);
+    m_chain->Branch("MA_bl_phi", 	&MA_bl_phi);
+    m_chain->Branch("MA_bl_m",		&MA_bl_m);    
+    
     m_chain->Branch("el_pt", &el_pt);
     m_chain->Branch("el_eta", &el_eta);
     m_chain->Branch("el_phi", &el_phi);
@@ -444,6 +548,43 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("MC_ttbar_beforeFSR_eta", &MC_ttbar_beforeFSR_eta);
     m_chain->SetBranchAddress("MC_ttbar_beforeFSR_phi", &MC_ttbar_beforeFSR_phi);
     m_chain->SetBranchAddress("MC_ttbar_beforeFSR_m", &MC_ttbar_beforeFSR_m);
+
+    //MA
+    
+    m_chain->SetBranchAddress("MA_w1h_pt",  	&MA_w1h_pt);
+    std::cout << "MA_w1h_pt:" << MA_w1h_pt << std::endl;
+    m_chain->SetBranchAddress("MA_w1h_eta", 	&MA_w1h_eta);
+    m_chain->SetBranchAddress("MA_w1h_phi", 	&MA_w1h_phi);
+    m_chain->SetBranchAddress("MA_w1h_m",	&MA_w1h_m);
+    m_chain->SetBranchAddress("MA_w1h_pdgId",	&MA_w1h_pdgId);
+        
+    m_chain->SetBranchAddress("MA_w2h_pt",  	&MA_w2h_pt);
+    m_chain->SetBranchAddress("MA_w2h_eta", 	&MA_w2h_eta);
+    m_chain->SetBranchAddress("MA_w2h_phi", 	&MA_w2h_phi);
+    m_chain->SetBranchAddress("MA_w2h_m",	&MA_w2h_m);
+    m_chain->SetBranchAddress("MA_w2h_pdgId",	&MA_w2h_pdgId);
+    
+    m_chain->SetBranchAddress("MA_bh_pt",  	&MA_bh_pt);
+    m_chain->SetBranchAddress("MA_bh_eta", 	&MA_bh_eta);
+    m_chain->SetBranchAddress("MA_bh_phi", 	&MA_bh_phi);
+    m_chain->SetBranchAddress("MA_bh_m",	&MA_bh_m);
+    
+    m_chain->SetBranchAddress("MA_w1l_pt",  	&MA_w1l_pt);
+    m_chain->SetBranchAddress("MA_w1l_eta", 	&MA_w1l_eta);
+    m_chain->SetBranchAddress("MA_w1l_phi", 	&MA_w1l_phi);
+    m_chain->SetBranchAddress("MA_w1l_m",	&MA_w1l_m);
+    m_chain->SetBranchAddress("MA_w1l_pdgId",	&MA_w1l_pdgId);
+    
+    m_chain->SetBranchAddress("MA_w2l_pt",  	&MA_w2l_pt);
+    m_chain->SetBranchAddress("MA_w2l_eta", 	&MA_w2l_eta);
+    m_chain->SetBranchAddress("MA_w2l_phi", 	&MA_w2l_phi);
+    m_chain->SetBranchAddress("MA_w2l_m",	&MA_w2l_m);
+    m_chain->SetBranchAddress("MA_w2l_pdgId",	&MA_w2l_pdgId);
+       
+    m_chain->SetBranchAddress("MA_bl_pt",  	&MA_bl_pt);
+    m_chain->SetBranchAddress("MA_bl_eta", 	&MA_bl_eta);
+    m_chain->SetBranchAddress("MA_bl_phi", 	&MA_bl_phi);
+    m_chain->SetBranchAddress("MA_bl_m",	&MA_bl_m);
 
     m_chain->SetBranchAddress("el_pt", &el_pt);
     m_chain->SetBranchAddress("el_eta", &el_eta);
