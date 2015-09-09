@@ -17,10 +17,32 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
 
   m_chi2.Init(TtresChi2::DATA2015_MC15);
 
-  m_hSvc.create1D("lepPt", "; Lepton p_{T} [GeV]; Events", 40, 0, 500);
-  m_hSvc.create1D("lepEta", "; Lepton #eta ; Events", 24, -3.0, 3.0);
-  m_hSvc.create1D("lepPhi", "; Lepton #phi ; Events", 40, -4.0, 4.0);
-
+  //reco leptons
+  m_hSvc.create1D("lepMA_pt",    "; Lepton p_{T} [GeV]; Events", 40, 0, 500);
+  m_hSvc.create1D("lepMA_eta",   "; Lepton #eta ; Events", 24, -3.0, 3.0);
+  m_hSvc.create1D("lepMA_phi",   "; Lepton #phi ; Events", 40, -4.0, 4.0);
+  m_hSvc.create1D("lepMA_m",     "; Lepton mass [GeV]; Events", 100, 0, 0.5);
+  m_hSvc.create1D("lepMA_pdgId", "; Lepton pdgId ; Events", 30, -15, 15);
+  
+  
+  /*
+  //Truth leptons
+  //electrons
+  m_hSvc.create1D("MC_e_pt", "; Pt of MC electron [GeV]; Events", 40, 0, 500);
+  m_hSvc.create1D("MC_e_eta", "; Eta of MC electron ; Events", 24, -3.0, 3.0);
+  m_hSvc.create1D("MC_e_phi", "; Phi of MC electron ; Events", 30, -3.0, 3.0);
+  m_hSvc.create1D("MC_e_m", "; Mass of MC electron [GeV]; Events", 50, 0, 500);
+  
+  m_hSvc.create2D("MCe_vs_eta", "; pt of electron(truth) [GeV]; #eta of electron(truth)", 40, 0, 500, 24, -3., 3.);
+  
+  //muons
+  m_hSvc.create1D("MC_mu_pt", "; Pt of MC muon [GeV]; Events", 40, 0, 500);
+  m_hSvc.create1D("MC_mu_eta", "; Eta of MC muon ; Events", 24, -3.0, 3.0);
+  m_hSvc.create1D("MC_mu_phi", "; Phi of MC muon ; Events", 30, -3.0, 3.0);
+  m_hSvc.create1D("MC_mu_m", "; Mass of MC muon [GeV]; Events", 50, 0, 500);
+  
+  m_hSvc.create2D("MCmu_pt_vs_eta", "; pt of muon(truth) [GeV]; #eta of muon(truth)", 40, 0, 500, 24, -3., 3.);
+  
   m_hSvc.create1D("leadJetPt", "; Leading Jet p_{T} [GeV]; Events", 30, 0, 900);  
   m_hSvc.create1D("nJets", "; number of jets ; Events", 10, 0, 10);
   
@@ -124,6 +146,7 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   }
 
   m_hSvc.create1D("mtt", "; m_{t#bar{t}} [GeV]; Events", 60, 0, 6000);
+  */
 }
 
 AnaTtresQCD::~AnaTtresQCD() {
@@ -148,15 +171,136 @@ void AnaTtresQCD::run(const Event &evt, double weight) {
       return;
     
   HistogramService *h = &m_hSvc;
-  TLorentzVector l;
+  
+  ///----------------------------------
+  //Matching truth and reco lepton
+  ///----------------------------------
+  
+  TLorentzVector lept;
+
+  int leptMA_pdgId = 0;
+  float dr = 99;
+  float drMin = 0.4;
+  
   if (m_electron) {
-    l = evt.electron()[0].mom();
+    lept = evt.electron()[0].mom();
+    if (evt.MC_w1l_pdgId()==11){
+    	dr = lept.DeltaR(evt.MC_w1l());
+	if (dr<drMin)	leptMA_pdgId = evt.MC_w1l_pdgId();
+	
+    }else if (evt.MC_w2l_pdgId()==-11){
+    	dr = lept.DeltaR(evt.MC_w2l());
+    	if (dr<drMin)	leptMA_pdgId = evt.MC_w2l_pdgId();
+	
+    }else if (abs(evt.MC_w1l_pdgId())==13 || abs(evt.MC_w2l_pdgId())==13)    	std::cout << "reco electron and truth muon" << std::endl;    
+    
   } else {
-    l = evt.muon()[0].mom();
+    lept = evt.muon()[0].mom();
+    if (evt.MC_w1l_pdgId()==13){
+    	dr = lept.DeltaR(evt.MC_w1l());
+	if (dr<drMin)	leptMA_pdgId = evt.MC_w1l_pdgId();
+	
+    }else if (evt.MC_w2l_pdgId()==-13){
+    	dr = lept.DeltaR(evt.MC_w2l());
+	if (dr<drMin)	leptMA_pdgId = evt.MC_w2l_pdgId();
+	
+    }else if (abs(evt.MC_w1l_pdgId())==11 || abs(evt.MC_w2l_pdgId())==11)    	std::cout << "reco muon and truth electron" << std::endl;    
+  
+  }//m_electron
+  
+  float leptMA_pt  = -99;
+  float leptMA_eta = -99;
+  float leptMA_phi = -99;
+  float leptMA_m   = -99;
+  
+  if (leptMA_pdgId!=0){
+  	std::cout << "Matched lepton" << std::endl;
+	std::cout << "m_electron: " << m_electron << " -> matched to MC: " << leptMA_pdgId << std::endl;
+	std::cout << "MA lepton pT:" << lept.Pt() << std::endl;	
+	leptMA_pt  = lept.Perp();
+	leptMA_eta = lept.Eta();
+	leptMA_phi = lept.Phi();
+	leptMA_m   = lept.M();	
   }
-  h->h1D("lepPt", "", s)->Fill(l.Perp()*1e-3, weight);
-  h->h1D("lepEta", "", s)->Fill(l.Eta(), weight);
-  h->h1D("lepPhi", "", s)->Fill(l.Phi(), weight);
+  
+  //Filling histograms
+  h->h1D("lepMA_pt", "", s)   ->Fill(leptMA_pt*1e-3, weight);
+  h->h1D("lepMA_eta", "", s)  ->Fill(leptMA_eta,     weight);
+  h->h1D("lepMA_phi", "", s)  ->Fill(leptMA_phi,     weight);
+  h->h1D("lepMA_m", "", s)    ->Fill(leptMA_m*1e-3,  weight); 
+  h->h1D("lepMA_pdgId", "", s)->Fill(leptMA_pdgId,   weight); 
+  
+  std::cout << " -- " << std::endl;
+
+  
+  
+  //std::cout << " ** reco lepton ** " << std::endl;
+  //std::cout << "m_electron: " << m_electron << std::endl;
+  //std::cout << "lept.Pt(): " << lept.Perp() << " lept.M(): " << lept.M() << " lept.Eta(): " << lept.Eta() << " lept.Phi(): " << lept.Phi() << std::endl;
+  //std::cout << " ** truth lepton ** " << std::endl;
+  //std::cout << "evt.MC_w1l().Pt(): " << evt.MC_w1l().Perp() << " evt.MC_w1l().M(): " << evt.MC_w1l().M() << " evt.MC_w1l().Eta(): " << evt.MC_w1l().Eta() << " evt.MC_w1l().Phi(): " << evt.MC_w1l().Phi() << std::endl;
+  //std::cout << "evt.MC_w2l().Pt(): " << evt.MC_w2l().Perp() << " evt.MC_w2l().M(): " << evt.MC_w2l().M() << " evt.MC_w2l().Eta(): " << evt.MC_w2l().Eta() << " evt.MC_w2l().Phi(): " << evt.MC_w2l().Phi() << std::endl;
+  //std::cout << "pdgId1: " << evt.MC_w1l_pdgId() << " - pdgId2: " << evt.MC_w2l_pdgId() << std::endl;
+  //std::cout << "dr: " << dr << std::endl;
+  //std::cout << "leptMA_pdgId: " << leptMA_pdgId << std::endl;
+  //std::cout << "--" << std::endl;
+  
+  
+  
+  
+  
+  /*
+  ///Objects from the truth (MC)
+  
+  ///Electrons
+  float MC_e_pt  = -1;
+  float MC_e_eta = -1;
+  float MC_e_phi = -1;
+  float MC_e_m   = -1;
+      
+  if (evt.MC_w1l().Perp()>0 && evt.MC_w1l_pdgId()==11){
+  	MC_e_pt  = evt.MC_w1l().Perp();
+	MC_e_eta = evt.MC_w1l().Eta();
+	MC_e_phi = evt.MC_w1l().Phi();
+	MC_e_m   = evt.MC_w1l().M();
+  }else if(evt.MC_w2l().M()>0 && evt.MC_w2l_pdgId()==-11){
+	MC_e_pt  = evt.MC_w2l().Perp();
+        MC_e_eta = evt.MC_w2l().Eta();
+        MC_e_phi = evt.MC_w2l().Phi();
+        MC_e_m   = evt.MC_w2l().M();
+  }//if
+    
+  h->h1D("MC_e_pt", "", s) ->Fill(MC_e_pt*1e-3);
+  h->h1D("MC_e_eta", "", s)->Fill(MC_e_eta);
+  h->h1D("MC_e_phi", "", s)->Fill(MC_e_phi);
+  h->h1D("MC_e_m", "", s)  ->Fill(MC_e_m*1e-3);
+  h->h2D("MCe_pt_vs_eta", "", s)->Fill(MC_e_pt*1e-3, MC_e_eta);
+  
+  ///Muons
+  float MC_mu_pt  = -1;
+  float MC_mu_eta = -1;
+  float MC_mu_phi = -1;
+  float MC_mu_m   = -1;
+
+  if (evt.MC_w1l().M()>0 && evt.MC_w1l_pdgId()==13){
+        MC_mu_pt  = evt.MC_w1l().Perp();
+        MC_mu_eta = evt.MC_w1l().Eta();
+        MC_mu_phi = evt.MC_w1l().Phi();
+        MC_mu_m   = evt.MC_w1l().M();
+  }else if(evt.MC_w2l().M()>0 && evt.MC_w2l_pdgId()==-13){
+        MC_mu_pt  = evt.MC_w2l().Perp();
+        MC_mu_eta = evt.MC_w2l().Eta();
+        MC_mu_phi = evt.MC_w2l().Phi();
+        MC_mu_m   = evt.MC_w2l().M();
+  }//if
+
+  h->h1D("MC_mu_pt", "", s) ->Fill(MC_mu_pt*1e-3);
+  h->h1D("MC_mu_eta", "", s)->Fill(MC_mu_eta);
+  h->h1D("MC_mu_phi", "", s)->Fill(MC_mu_phi);
+  h->h1D("MC_mu_m", "", s)  ->Fill(MC_mu_m*1e-3);
+  h->h2D("MCmu_pt_vs_eta", "", s)->Fill(MC_mu_pt*1e-3, MC_mu_eta);  
+  
+
 
   h->h1D("MET_phi", "", s)->Fill(evt.met().Phi(), weight);
 
@@ -252,60 +396,7 @@ void AnaTtresQCD::run(const Event &evt, double weight) {
   h->h2D("lep_pt_vs_minDR", "", s)->Fill(l.Perp()*1e-3, closejl_deltaR, weight);
   h->h2D("lep_pt_vs_close_pt", "", s)->Fill(l.Perp()*1e-3, closejl_pt*1e-3, weight);
 
-  ///----------------------------------
-  //Pre-selection sample for the efficiency studies
-  ///----------------------------------
-  
-  ///Objects from the truth (MC)
-  
-  ///Electrons
-  float MC_e_pt  = -1;
-  float MC_e_eta = -1;
-  float MC_e_phi = -1;
-  float MC_e_m   = -1;
-      
-  if (evt.MC_w1l().M()>0 && evt.MC_w1l_pdgId()==11){
-  	MC_e_pt  = evt.MC_w1l().Perp();
-	MC_e_eta = evt.MC_w1l().Eta();
-	MC_e_phi = evt.MC_w1l().Phi();
-	MC_e_m   = evt.MC_w1l().M();
-  }else if(evt.MC_w2l().M()>0 && evt.MC_w2l_pdgId()==-11){
-	MC_e_pt  = evt.MC_w2l().Perp();
-        MC_e_eta = evt.MC_w2l().Eta();
-        MC_e_phi = evt.MC_w2l().Phi();
-        MC_e_m   = evt.MC_w2l().M();
-  }//if
-    
-  h->h1D("MC_e_pt", "", s) ->Fill(MC_e_pt*1e-3);
-  h->h1D("MC_e_eta", "", s)->Fill(MC_e_eta);
-  h->h1D("MC_e_phi", "", s)->Fill(MC_e_phi);
-  h->h1D("MC_e_m", "", s)  ->Fill(MC_e_m*1e-3);
-  h->h2D("MC_eAcceptance_pt_vs_eta", "", s)->Fill(MC_e_pt*1e-3, MC_e_eta);
-  
-  ///Muons
-  float MC_mu_pt  = -1;
-  float MC_mu_eta = -1;
-  float MC_mu_phi = -1;
-  float MC_mu_m   = -1;
 
-  if (evt.MC_w1l().Perp()>0 && evt.MC_w1l_pdgId()==13){
-        MC_mu_pt  = evt.MC_w1l().Perp();
-        MC_mu_eta = evt.MC_w1l().Eta();
-        MC_mu_phi = evt.MC_w1l().Phi();
-        MC_mu_m   = evt.MC_w1l().M();
-  }else if(evt.MC_w2l().Perp()>0 && evt.MC_w2l_pdgId()==-13){
-        MC_mu_pt  = evt.MC_w2l().Perp();
-        MC_mu_eta = evt.MC_w2l().Eta();
-        MC_mu_phi = evt.MC_w2l().Phi();
-        MC_mu_m   = evt.MC_w2l().M();
-  }//if
-
-  h->h1D("MC_mu_pt", "", s) ->Fill(MC_mu_pt*1e-3);
-  h->h1D("MC_mu_eta", "", s)->Fill(MC_mu_eta);
-  h->h1D("MC_mu_phi", "", s)->Fill(MC_mu_phi);
-  h->h1D("MC_mu_m", "", s)  ->Fill(MC_mu_m*1e-3);
-  h->h2D("MC_muAcceptance_pt_vs_eta", "", s)->Fill(MC_mu_pt*1e-3, MC_mu_eta);  
-  
   //Matched objects (MA)
   
   ///Electrons
@@ -446,6 +537,6 @@ void AnaTtresQCD::run(const Event &evt, double weight) {
     h->h1D("mwhad_res", "", s)->Fill(mwh*1e-3, weight);
     h->h1D("chi2", "", s)->Fill(log10(chi2Value), weight);
   }
-
+ */
 }
 
