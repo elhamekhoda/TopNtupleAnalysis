@@ -180,17 +180,17 @@ void AnaTtresQCD::run(const Event &evt, double weight) {
 
   int leptMA_pdgId = 0;
   float dr = 99;
-  float drMin = 0.4;
+  float drMax = 0.4;
   
   if (m_electron) {
     lept = evt.electron()[0].mom();
     if (evt.MC_w1l_pdgId()==11){
     	dr = lept.DeltaR(evt.MC_w1l());
-	if (dr<drMin)	leptMA_pdgId = evt.MC_w1l_pdgId();
+	if (dr<drMax)	leptMA_pdgId = evt.MC_w1l_pdgId();
 	
     }else if (evt.MC_w2l_pdgId()==-11){
     	dr = lept.DeltaR(evt.MC_w2l());
-    	if (dr<drMin)	leptMA_pdgId = evt.MC_w2l_pdgId();
+    	if (dr<drMax)	leptMA_pdgId = evt.MC_w2l_pdgId();
 	
     }else if (abs(evt.MC_w1l_pdgId())==13 || abs(evt.MC_w2l_pdgId())==13)    	std::cout << "reco electron and truth muon" << std::endl;    
     
@@ -198,11 +198,11 @@ void AnaTtresQCD::run(const Event &evt, double weight) {
     lept = evt.muon()[0].mom();
     if (evt.MC_w1l_pdgId()==13){
     	dr = lept.DeltaR(evt.MC_w1l());
-	if (dr<drMin)	leptMA_pdgId = evt.MC_w1l_pdgId();
+	if (dr<drMax)	leptMA_pdgId = evt.MC_w1l_pdgId();
 	
     }else if (evt.MC_w2l_pdgId()==-13){
     	dr = lept.DeltaR(evt.MC_w2l());
-	if (dr<drMin)	leptMA_pdgId = evt.MC_w2l_pdgId();
+	if (dr<drMax)	leptMA_pdgId = evt.MC_w2l_pdgId();
 	
     }else if (abs(evt.MC_w1l_pdgId())==11 || abs(evt.MC_w2l_pdgId())==11)    	std::cout << "reco muon and truth electron" << std::endl;    
   
