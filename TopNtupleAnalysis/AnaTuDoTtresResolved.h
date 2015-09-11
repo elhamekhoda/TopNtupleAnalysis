@@ -27,7 +27,7 @@ class AnaTuDoTtresResolved : public Analysis {
     AnaTuDoTtresResolved(const std::string &filename, bool electron, MiniTree *mini);
     virtual ~AnaTuDoTtresResolved();
 
-    void run(const Event &e, double weight);
+    void run(const Event &e, double weight, const std::string &syst);
     void terminate();
     void setIsData(bool isData);
 

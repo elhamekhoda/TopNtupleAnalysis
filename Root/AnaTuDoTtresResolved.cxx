@@ -50,13 +50,11 @@ void AnaTuDoTtresResolved::setIsData(bool isData){
     m_isData = isData;
 }
 
-void AnaTuDoTtresResolved::run(const Event &evt, double weight) {
+void AnaTuDoTtresResolved::run(const Event &evt, double weight, const std::string &s) {
     
     h_TuDoCutFlow -> Fill(0);
     h_TuDoCutFlow -> Fill(1);
 
-    std::string s = ""; // this would be the systematics ... could be sent as an argument in the future
-    
     // check channel
     if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
         return;

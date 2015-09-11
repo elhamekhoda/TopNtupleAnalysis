@@ -17,10 +17,10 @@
 
 class AnaTtresSL : public Analysis {
   public:
-    AnaTtresSL(const std::string &filename, bool electron, bool boosted);
+    AnaTtresSL(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList);
     virtual ~AnaTtresSL();
 
-    void run(const Event &e, double weight);
+    void run(const Event &e, double weight, const std::string &syst);
     void terminate() {};
     void setIsData(bool isData) {};
 

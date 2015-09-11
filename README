@@ -56,39 +56,31 @@ Auxiliary scripts
 The input files for read.cxx can be produced by running top-xaod from the TopAnalysis package with the OutputMinixAOD flag set to False
 in the configuration file.
 The output is then downloaded with dq2-get and the script in scripts/addFiles.py can be used to add all output ROOT file in a single file per
-sample type. Use it by editing its first two lines, so that the first points to the directory on which the files were downloaded and
-the second one points to the directory on which the summed output is supposed to be.
+sample type.
+However, for large files, it is recommended to use scripts/run.py directly, so that the original files are read and processed
+with no intermediate step.
 
-inputDirectory = '/afs/phas.gla.ac.uk/user/d/dferreira/atlas_data/dferreira02/tt13e4_06'
-runDirectory = 'test2/'
+To use scripts/run.py, edit the following lines so that ntuplesDir points to the directory where you downloaded the Grid
+datasets, outputDir points to the directory where to save the output of TopNtupleAnalysis and names contains a list of
+datasets defined according to the imports from HQTTtResonancesTools/python.
 
-Also change the next lines that indicates how to group the samples in files (ie: which dataset IDs should go in the W+jets output file).
-The format user.CERN_USER.ABCDEF.BLABLABLA is expected and only the ABCDEF information is used to compare the DSID of the sample with the ones
-in the list provided in DC14MC13TeV.py
-The list is organised using the code in grid.py from the TopExamples package.
+import HQTTtResonancesTools.DC15MC13TeV_25ns_EXOT4_p2375
+import HQTTtResonancesTools.DC15MC13TeV_EXOT4_p2352
 
-names  = ['13TeV_FS_ttbarPowhegPythia_e4', '13TeV_FS_ZmassivebcSherpa_e4', '13TeV_FS_SingleTopPowhegPythia_e4', '13TeV_FS_WmassivebcSherpa_e4']
-names += ['13TeV_FS_ZprimePythia500_e4', '13TeV_FS_ZprimePythia1000_e4', '13TeV_FS_ZprimePythia2000_e4', '13TeV_FS_ZprimePythia3000_e4', '13TeV_FS_ZprimePythia5000_e4']
+ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/09092015'
+outputDir = 'test25ns'
+analysisType='AnaTtresSL'
+
+# each string defines a set of datasets in the Grid, which are written in the Python files above
+names  = ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
 
 Run it with:
-python scripts/addFiles.py
+python scripts/run.py
 
-(you need to have the TopExamples and the necessary dataset names added in the Samples class. This is only a helper script and you might
- prefer to do hadd yourself to avoid using the TopExamples structure, if you run locally)
-
-After the files are added, edit scripts/run.py to point to the added output directory and to a directory on which the histograms are to be saved:
-ntuplesDir = 'test2'
-outputDir = 'test2_hist'
-
-You need to checkout the following package to retrieve the 13 TeV cross sections from the configuration file properly.
 (in the future an official 13 TeV configuration file might be helpful)
 
 svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk TopDataPreparation
 There is no need to compile it, since the current Makefile includes it directly only for the C++ file needed.
-
-Change also the command line for the read code if necessary, by changing the value of --analysis to your own Analysis.
-Run it with:
-python scripts/run.py
 
 The output files will be stored in the outputDir and can be plot using the scripts/plot.C macro. You may prefer to
 write your own macro, but if you use this one, it can be used as follows (from the directory on which the files are):

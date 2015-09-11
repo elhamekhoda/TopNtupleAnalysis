@@ -11,8 +11,8 @@
 #include <string>
 #include "TopNtupleAnalysis/HistogramService.h"
 
-AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
-  : Analysis(filename), m_electron(electron), m_boosted(boosted),
+AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList)
+  : Analysis(filename, systList), m_electron(electron), m_boosted(boosted),
     m_neutrinoBuilder("MeV"), m_chi2("MeV") {
 
   m_chi2.Init(TtresChi2::DATA2015_MC15);
@@ -88,9 +88,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted)
 AnaTtresSL::~AnaTtresSL() {
 }
 
-void AnaTtresSL::run(const Event &evt, double weight) {
-  std::string s = ""; // this would be the systematics ... could be sent as an argument in the future
-
+void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   // check channel
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;

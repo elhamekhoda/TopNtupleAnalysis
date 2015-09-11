@@ -9,15 +9,13 @@
 # and copy DC14MC13TeV.py to the current directory
 #
 # you are free to add the Grid results in any other way you prefer
-import HQTTtResonancesTools.DC15MC13TeV_EXOT4_p2352
-import HQTTtResonancesTools.DC14MC13TeV_EXOT4_p1845
+#import HQTTtResonancesTools.DC15MC13TeV_EXOT4_p2352
+import HQTTtResonancesTools.DC15MC13TeV_25ns_EXOT4_p2375
 
-inputDirectory = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/28052015'
-runDirectory = 'test13/'
+inputDirectory = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/09092015'
+runDirectory = 'test25ns/'
 
-names  = ['MC15_13TeV_FS_EXOT4_ttbarPowhegPythia']
-#name   += ['MC15_13TeV_FS_EXOT4_ZmassivebcSherpa', 'MC15_13TeV_FS_EXOT4_SingleTopPowhegPythia_e4', 'MC15_13TeV_FS_EXOT4_WmassivebcSherpa_e4']
-#names += ['MC15_13TeV_FS_EXOT4_ZprimePythia500', 'MC15_13TeV_FS_EXOT4_ZprimePythia1000_e4', 'MC15_13TeV_FS_EXOT4_ZprimePythia2000_e4', 'MC15_13TeV_FS_EXOT4_ZprimePythia3000_e4', 'MC15_13TeV_FS_EXOT4_ZprimePythia5000_e4']
+names  = ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
 
 import TopExamples.grid
 

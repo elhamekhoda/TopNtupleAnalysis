@@ -27,7 +27,7 @@ class AnaTuDoTtresBoosted : public Analysis {
     AnaTuDoTtresBoosted(const std::string &filename, bool electron, MiniTree *mini);
     virtual ~AnaTuDoTtresBoosted();
 
-    void run(const Event &e, double weight);
+    void run(const Event &e, double weight, const std::string &syst);
     void terminate();
     void setIsData(bool isData);
 

@@ -27,7 +27,7 @@ class AnaTuDoSL : public Analysis {
     AnaTuDoSL(const std::string &filename, bool electron, MiniTree *mini);
     virtual ~AnaTuDoSL();
 
-    void run(const Event &e, double weight);
+    void run(const Event &e, double weight, const std::string &syst);
     void terminate();
     void setIsData(bool isData);
 
