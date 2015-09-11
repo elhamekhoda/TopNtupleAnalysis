@@ -270,11 +270,23 @@ int main(int argc, char **argv) {
             weight *= sel.weight_bTagSF();
 
             if (suffix == "lepSF__1up" || suffix == "lepSF__1up_Loose") {
-              weight *= mt.weight_indiv_SF_EL_Trigger_UP*mt.weight_indiv_SF_EL_Reco_UP*mt.weight_indiv_SF_EL_ID_UP*mt.weight_indiv_SF_EL_Isol_UP;
-              weight *= mt.weight_indiv_SF_MU_Trigger_SYST_UP*mt.weight_indiv_SF_MU_Trigger_SYST_UP*mt.weight_indiv_SF_MU_ID_SYST_UP*mt.weight_indiv_SF_MU_Isol_SYST_UP;
+              weight *= mt.weight_indiv_SF_EL_Trigger_UP;
+              weight *= mt.weight_indiv_SF_EL_Reco_UP;
+              weight *= mt.weight_indiv_SF_EL_ID_UP;
+              weight *= mt.weight_indiv_SF_EL_Isol_UP;
+
+              weight *= mt.weight_indiv_SF_MU_Trigger_SYST_UP*mt.weight_indiv_SF_MU_Trigger_STAT_UP;
+              weight *= mt.weight_indiv_SF_MU_ID_SYST_UP*mt.weight_indiv_SF_MU_ID_STAT_UP;
+              weight *= mt.weight_indiv_SF_MU_Isol;
             } else if (suffix == "lepSF__1down" || suffix == "lepSF__1down_Loose") {
-              weight *= mt.weight_indiv_SF_EL_Trigger_DOWN*mt.weight_indiv_SF_EL_Reco_DOWN*mt.weight_indiv_SF_EL_ID_DOWN*mt.weight_indiv_SF_EL_Isol_DOWN;
-              weight *= mt.weight_indiv_SF_MU_Trigger_SYST_DOWN*mt.weight_indiv_SF_MU_Trigger_SYST_DOWN*mt.weight_indiv_SF_MU_ID_SYST_DOWN*mt.weight_indiv_SF_MU_Isol_SYST_DOWN;
+              weight *= mt.weight_indiv_SF_EL_Trigger_DOWN;
+              weight *= mt.weight_indiv_SF_EL_Reco_DOWN;
+              weight *= mt.weight_indiv_SF_EL_ID_DOWN;
+              weight *= mt.weight_indiv_SF_EL_Isol_DOWN;
+
+              weight *= mt.weight_indiv_SF_MU_Trigger_SYST_DOWN*mt.weight_indiv_SF_MU_Trigger_STAT_DOWN;
+              weight *= mt.weight_indiv_SF_MU_ID_SYST_DOWN*mt.weight_indiv_SF_MU_ID_STAT_DOWN;
+              weight *= mt.weight_indiv_SF_MU_Isol;
             } else {
               weight *= sel.weight_leptonSF();
             }

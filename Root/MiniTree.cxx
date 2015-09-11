@@ -549,10 +549,11 @@ void MiniTree::prepareBranches() {
       m_chain->SetBranchAddress("weight_indiv_SF_MU_ID_STAT_UP",        &weight_indiv_SF_MU_ID_STAT_UP);
       m_chain->SetBranchAddress("weight_indiv_SF_MU_ID_STAT_DOWN",      &weight_indiv_SF_MU_ID_STAT_DOWN);
       m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol",              &weight_indiv_SF_MU_Isol);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_STAT_UP",      &weight_indiv_SF_MU_Isol_STAT_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_STAT_DOWN",    &weight_indiv_SF_MU_Isol_STAT_DOWN);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_SYST_UP",      &weight_indiv_SF_MU_Isol_SYST_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_SYST_DOWN",    &weight_indiv_SF_MU_Isol_SYST_DOWN);
+      // not yet available in 2.3.23c
+      //m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_STAT_UP",      &weight_indiv_SF_MU_Isol_STAT_UP);
+      //m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_STAT_DOWN",    &weight_indiv_SF_MU_Isol_STAT_DOWN);
+      //m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_SYST_UP",      &weight_indiv_SF_MU_Isol_SYST_UP);
+      //m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_SYST_DOWN",    &weight_indiv_SF_MU_Isol_SYST_DOWN);
     }
     
     m_chain->SetBranchAddress("MC_w1h_pt",  	&MC_w1h_pt);
