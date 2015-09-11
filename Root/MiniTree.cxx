@@ -552,7 +552,6 @@ void MiniTree::prepareBranches() {
     //MA
     
     m_chain->SetBranchAddress("MA_w1h_pt",  	&MA_w1h_pt);
-    std::cout << "MA_w1h_pt:" << MA_w1h_pt << std::endl;
     m_chain->SetBranchAddress("MA_w1h_eta", 	&MA_w1h_eta);
     m_chain->SetBranchAddress("MA_w1h_phi", 	&MA_w1h_phi);
     m_chain->SetBranchAddress("MA_w1h_m",	&MA_w1h_m);

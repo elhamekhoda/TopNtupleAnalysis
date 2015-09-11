@@ -142,10 +142,10 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
   } else if(analysis == "AnaTtresQCD"){
-    vec_analysis.push_back(new AnaTtresQCD("QCD_"+outList[0], true,  false, systsListWithBlankNominal) ); //resolved electron
-    vec_analysis.push_back(new AnaTtresQCD("QCD_"+outList[1], false, false, systsListWithBlankNominal) ); // resolved muon
-    vec_analysis.push_back(new AnaTtresQCD("QCD_"+outList[2], true,  true,  systsListWithBlankNominal) ); // boosted  electron
-    vec_analysis.push_back(new AnaTtresQCD("QCD_"+outList[3], false, true,  systsListWithBlankNominal) ); // boosted  muon
+    vec_analysis.push_back(new AnaTtresQCD(outList[0], true,  false, systsListWithBlankNominal) ); //resolved electron
+    vec_analysis.push_back(new AnaTtresQCD(outList[1], false, false, systsListWithBlankNominal) ); // resolved muon
+    vec_analysis.push_back(new AnaTtresQCD(outList[2], true,  true,  systsListWithBlankNominal) ); // boosted  electron
+    vec_analysis.push_back(new AnaTtresQCD(outList[3], false, true,  systsListWithBlankNominal) ); // boosted  muon
   } else if (analysis == "AnaTtresSLMtt") {
     vec_analysis.push_back(new AnaTtresSLMtt(outList[0], true,  false, systsListWithBlankNominal)); // resolved electron
     vec_analysis.push_back(new AnaTtresSLMtt(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
@@ -199,7 +199,8 @@ int main(int argc, char **argv) {
       Event sel; // selected objects
 
       for (int k = 0; k < mt.GetEntries(); ++k) {
-        if (k % 100 == 0)	std::cout << "Entry " << k << "/" << mt.GetEntries() << std::endl;
+        if (k % 1000 == 0)
+          std::cout << "("<< tname << ") Entry " << k << "/" << mt.GetEntries() << std::endl;
     
         mt.read(k, sel);
         int channel = sel.channelNumber();
