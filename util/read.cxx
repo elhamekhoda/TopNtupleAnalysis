@@ -148,6 +148,7 @@ int main(int argc, char **argv) {
    
   //AnaTtresQCD
   std::vector<Analysis *> vec_analysisQCD;
+  std::vector<Analysis *> vec_analysisQCD_Loose;
   
   if (analysis == "AnaTtresSL") {
     vec_analysis.push_back(new AnaTtresSL(outList[0], true,  false )); // resolved electron
@@ -157,10 +158,15 @@ int main(int argc, char **argv) {
        
   }else if(analysis == "AnaTtresQCD"){
     vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[0], true,  false ) ); //resolved electron
-    vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[1], false, false ) ); // resolved muon
-   
+    vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[1], false, false ) ); // resolved muon   
     vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[2], true,  true  )); // boosted  electron
     vec_analysisQCD.push_back(new AnaTtresQCD("QCD_"+outList[3], false, true  )); // boosted  muon
+    
+    vec_analysisQCD_Loose.push_back(new AnaTtresQCD("QCD_Loose_"+outList[0], true,  false ) ); //resolved electron
+    vec_analysisQCD_Loose.push_back(new AnaTtresQCD("QCD_Loose_"+outList[1], false, false ) ); // resolved muon   
+    vec_analysisQCD_Loose.push_back(new AnaTtresQCD("QCD_Loose_"+outList[2], true,  true  )); // boosted  electron
+    vec_analysisQCD_Loose.push_back(new AnaTtresQCD("QCD_Loose_"+outList[3], false, true  )); // boosted  muon
+    
   }
 
   Event sel; // selected objects
@@ -224,8 +230,42 @@ int main(int argc, char **argv) {
 
     }//if  
 
-  }
-
+  }//for
+  
+  if (analysis == "AnaTtresQCD"){
+    std::cout << "AnaTtresQCD -> Producing plots using varibales from the nominal_Loose ttre" << std::endl;
+    MiniTree mt_Loose(false, fileList[0].c_str(), "nominal_Loose");
+    for (int k = 1; k < fileList.size(); ++k) {
+        mt_Loose.addFileToRead(fileList[k]);
+    }
+    for (int k = 0; k < mt_Loose.GetEntries(); ++k) {
+  	if (k % 100 == 0)	std::cout << "Entry " << k << "/" << mt_Loose.GetEntries() << std::endl;
+  	mt_Loose.read(k, sel);
+        int channel = sel.channelNumber();
+    
+        double weight = 1;
+        if (!isData) {
+             weight *= sel.weight_mc()*sel.weight_pileup();
+             weight *= sampleXsection.getXsection(channel);
+             weight *= sel.weight_bTagSF()*sel.weight_leptonSF();
+      
+             //weight /= getEventCountBeforeSkimming(channel);
+             if (sumOfWeights[channel] != 0)
+             weight /= sumOfWeights[channel]; 
+      	     // std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" <<  sel.weight_bTagSF() << "\t" << sel.weight_leptonSF() << "\t" << sel.weight_pileup() << "\t" << sumOfWeights[channel]  << std::endl;          
+        }//if
+	
+	int nBtagged = 0;    
+        for (size_t bidx = 0; bidx < sel.jet().size(); ++bidx)
+             if (sel.jet()[bidx].btag_mv2c20_70())	nBtagged += 1;	
+	
+	for (size_t iAna = 0; iAna < vec_analysisQCD.size(); ++iAna) 
+             if(nBtagged>=1)  vec_analysisQCD_Loose[iAna]->run(sel, weight);
+	
+  
+    }//for
+  }//if(analysis == "AnaTtresQCD")
+  
   for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
     vec_analysis[iAna]->terminate();
     delete vec_analysis[iAna];
@@ -236,8 +276,14 @@ int main(int argc, char **argv) {
     delete vec_analysisQCD[iAna];
   }
 
+  for (size_t iAna = 0; iAna < vec_analysisQCD_Loose.size(); ++iAna){
+    vec_analysisQCD_Loose[iAna]->terminate();
+    delete vec_analysisQCD_Loose[iAna];
+  }
+
   vec_analysis.clear();
   vec_analysisQCD.clear();
+  vec_analysisQCD_Loose.clear();
 
   return 0;
 }
