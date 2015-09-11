@@ -42,6 +42,43 @@ class MiniTree {
     Float_t         binning04;
     Float_t         binning05;
 
+    std::vector<Float_t> *weight_bTagSF_eigenvars_B_up;
+    std::vector<Float_t> *weight_bTagSF_eigenvars_B_down;
+    std::vector<Float_t> *weight_bTagSF_eigenvars_C_up;
+    std::vector<Float_t> *weight_bTagSF_eigenvars_C_down;
+    std::vector<Float_t> *weight_bTagSF_eigenvars_Light_up;
+    std::vector<Float_t> *weight_bTagSF_eigenvars_Light_down;
+
+    Float_t         weight_indiv_SF_EL_SF_Trigger;
+    Float_t         weight_indiv_SF_EL_SF_Trigger_UP;
+    Float_t         weight_indiv_SF_EL_SF_Trigger_DOWN;
+    Float_t         weight_indiv_SF_EL_SF_Reco;
+    Float_t         weight_indiv_SF_EL_SF_Reco_UP;
+    Float_t         weight_indiv_SF_EL_SF_Reco_DOWN;
+    Float_t         weight_indiv_SF_EL_SF_ID;
+    Float_t         weight_indiv_SF_EL_SF_ID_UP;
+    Float_t         weight_indiv_SF_EL_SF_ID_DOWN;
+    Float_t         weight_indiv_SF_EL_SF_Isol;
+    Float_t         weight_indiv_SF_EL_SF_Isol_UP;
+    Float_t         weight_indiv_SF_EL_SF_Isol_DOWN;
+
+    Float_t         weight_indiv_SF_MU_SF_Trigger;
+    Float_t         weight_indiv_SF_MU_SF_Trigger_SYST_UP;
+    Float_t         weight_indiv_SF_MU_SF_Trigger_SYST_DOWN;
+    Float_t         weight_indiv_SF_MU_SF_Trigger_STAT_UP;
+    Float_t         weight_indiv_SF_MU_SF_Trigger_STAT_DOWN;
+    Float_t         weight_indiv_SF_MU_SF_ID;
+    Float_t         weight_indiv_SF_MU_SF_ID_SYST_UP;
+    Float_t         weight_indiv_SF_MU_SF_ID_SYST_DOWN;
+    Float_t         weight_indiv_SF_MU_SF_ID_STAT_UP;
+    Float_t         weight_indiv_SF_MU_SF_ID_STAT_DOWN;
+    Float_t         weight_indiv_SF_MU_SF_Isol;
+    Float_t         weight_indiv_SF_MU_SF_Isol_STAT_UP;
+    Float_t         weight_indiv_SF_MU_SF_Isol_STAT_DOWN;
+    Float_t         weight_indiv_SF_MU_SF_Isol_SYST_UP;
+    Float_t         weight_indiv_SF_MU_SF_Isol_SYST_DOWN;
+
+
   private:
 
     void prepareBranches();
@@ -50,6 +87,7 @@ class MiniTree {
     Float_t         weight_pileup;
     Float_t         weight_bTagSF;
     Float_t         weight_leptonSF;
+
     UInt_t          eventNumber;
     UInt_t          runNumber;
     UInt_t          mcChannelNumber;

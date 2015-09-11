@@ -132,6 +132,30 @@ int main(int argc, char **argv) {
     if (tmpWithBlankNominal == "nominal") tmpWithBlankNominal = "";
     systsList.push_back(tmp);
     systsListWithBlankNominal.push_back(tmpWithBlankNominal);
+    if (loose) {
+      systsListWithBlankNominal.push_back(tmpWithBlankNominal+std::string("_Loose"));
+    }
+  }
+
+  if (systs != "nominal") { // if there are other systematics, include SF systs. too
+    systsListWithBlankNominal.push_back("lepSF__1up");
+    systsListWithBlankNominal.push_back("lepSF__1down");
+    systsListWithBlankNominal.push_back("btagbSF__1up");
+    systsListWithBlankNominal.push_back("btagbSF__1down");
+    systsListWithBlankNominal.push_back("btagcSF__1up");
+    systsListWithBlankNominal.push_back("btagcSF__1down");
+    systsListWithBlankNominal.push_back("btaglSF__1up");
+    systsListWithBlankNominal.push_back("btaglSF__1down");
+    if (loose) {
+      systsListWithBlankNominal.push_back("lepSF__1up_Loose");
+      systsListWithBlankNominal.push_back("lepSF__1down_Loose");
+      systsListWithBlankNominal.push_back("btagbSF__1up_Loose");
+      systsListWithBlankNominal.push_back("btagbSF__1down_Loose");
+      systsListWithBlankNominal.push_back("btagcSF__1up_Loose");
+      systsListWithBlankNominal.push_back("btagcSF__1down_Loose");
+      systsListWithBlankNominal.push_back("btaglSF__1up_Loose");
+      systsListWithBlankNominal.push_back("btaglSF__1down_Loose");
+    }
   }
 
   std::vector<Analysis *> vec_analysis;
@@ -175,13 +199,20 @@ int main(int argc, char **argv) {
     }
   }
 
+  // systsList contains the list of TTrees representing systematics
+  // given by the user
   for (size_t systIdx = 0; systIdx < systsList.size(); ++systIdx) {
+
+    // it does not have the xxx_Loose TTrees, so we add it ourselves and run over it too
     std::vector<std::string> lepton_modes;
     lepton_modes.push_back(systsList[systIdx]);
     if (loose) {
       lepton_modes.push_back(systsList[systIdx]+std::string("_Loose"));
     }
     for (size_t lmodeIdx = 0; lmodeIdx < lepton_modes.size(); ++lmodeIdx) {
+
+      // now we are looping over all possible TTrees with all systematic uncertainties
+      // Call MiniTree to open the files and read that TTree
       std::string tname = lepton_modes[lmodeIdx];
       MiniTree mt(false, fileList[0].c_str(), tname.c_str());
       for (int k = 1; k < fileList.size(); ++k) {
@@ -198,43 +229,81 @@ int main(int argc, char **argv) {
 
       Event sel; // selected objects
 
+      // now loop over all entries for this systematic uncertainty
       for (int k = 0; k < mt.GetEntries(); ++k) {
         if (k % 1000 == 0)
           std::cout << "("<< tname << ") Entry " << k << "/" << mt.GetEntries() << std::endl;
     
+        // read the event into an Event object to be sent to the Analysis code later
         mt.read(k, sel);
         int channel = sel.channelNumber();
     
-        double weight = 1;
-        if (!isData) {
-          weight *= sel.weight_mc()*sel.weight_pileup();
-          weight *= sampleXsection.getXsection(channel);
-          weight *= sel.weight_bTagSF()*sel.weight_leptonSF();
+        // this is list just contains systSuffixForHistograms for all systematics
+        // except for the nominal and nominal_Loose, on which it contains
+        // the electron SF, muon SF and b-tagging SF systematics
+        // these systematics do not show up as separate TTrees, so they need special treatment
+        std::vector<std::string> weightSystematics;
+        if (systSuffixForHistograms != "" && systSuffixForHistograms != "_Loose") {
+          weightSystematics.push_back(systSuffixForHistograms);
+        } else { // apply variations on the nominal
+          weightSystematics.push_back(systSuffixForHistograms);
+          weightSystematics.push_back(std::string("lepSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("lepSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("btagbSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("btagbSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("btagcSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("btagcSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("btaglSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("btaglSF__1down")+systSuffixForHistograms);
+        }
+        // loop over weight systematics
+        for (size_t wIdx = 0; wIdx < weightSystematics.size(); ++wIdx) {
+          std::string &suffix = weightSystematics[wIdx];
+
+          double weight = 1;
+          if (!isData) {
+            weight *= sel.weight_mc()*sel.weight_pileup();
+            weight *= sampleXsection.getXsection(channel);
+            // TODO (Danilo) -> Change the next lines to use the SF syst. var. information
+            // when suffix is one of the above
+            //
+            weight *= sel.weight_bTagSF();
+
+            if (suffix == "lepSF__1up" || suffix == "lepSF__1up_Loose") {
+              weight *= mt.weight_indiv_SF_EL_SF_Trigger_UP*mt.weight_indiv_SF_EL_SF_Reco_UP*mt.weight_indiv_SF_EL_SF_ID_UP*mt.weight_indiv_SF_EL_SF_Isol_UP;
+              weight *= mt.weight_indiv_SF_MU_SF_Trigger_SYST_UP*mt.weight_indiv_SF_MU_SF_Trigger_SYST_UP*mt.weight_indiv_SF_MU_SF_ID_SYST_UP*mt.weight_indiv_SF_MU_SF_Isol_SYST_UP;
+            } else if (suffix == "lepSF__1down" || suffix == "lepSF__1down_Loose") {
+              weight *= mt.weight_indiv_SF_EL_SF_Trigger_DOWN*mt.weight_indiv_SF_EL_SF_Reco_DOWN*mt.weight_indiv_SF_EL_SF_ID_DOWN*mt.weight_indiv_SF_EL_SF_Isol_DOWN;
+              weight *= mt.weight_indiv_SF_MU_SF_Trigger_SYST_DOWN*mt.weight_indiv_SF_MU_SF_Trigger_SYST_DOWN*mt.weight_indiv_SF_MU_SF_ID_SYST_DOWN*mt.weight_indiv_SF_MU_SF_Isol_SYST_DOWN;
+            } else {
+              weight *= sel.weight_leptonSF();
+            }
           
-          if (sumOfWeights[channel] != 0)
-            weight /= sumOfWeights[channel];
-          // std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" <<  sel.weight_bTagSF() << "\t" << sel.weight_leptonSF() << "\t" << sel.weight_pileup() << "\t" << sumOfWeights[channel]  << std::endl;          
-        }
-      
-        // this applies b-tagging early
-        // if you don't want it change the if below
-        int nBtagged = 0;    
-        for (size_t bidx = 0; bidx < sel.jet().size(); ++bidx) {
-          if (sel.jet()[bidx].btag_mv2c20_70()) {
-            nBtagged += 1;	
+            if (sumOfWeights[channel] != 0)
+              weight /= sumOfWeights[channel];
+            // std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" <<  sel.weight_bTagSF() << "\t" << sel.weight_leptonSF() << "\t" << sel.weight_pileup() << "\t" << sumOfWeights[channel]  << std::endl;          
           }
-        }
       
-        if (analysis=="AnaTtresSL") {
-          for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-            if(nBtagged>=1) vec_analysis[iAna]->run(sel, weight, systSuffixForHistograms);
-        } else if (analysis=="AnaTtresQCD") {
-          for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-            if(nBtagged>=1) vec_analysis[iAna]->run(sel, weight, systSuffixForHistograms);
-        } else if (analysis=="AnaTtresSLMtt") {
-          for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-            if(nBtagged>=1) vec_analysis[iAna]->run(sel, weight, systSuffixForHistograms);
-        } //if  
+          // this applies b-tagging early
+          // if you don't want it change the if below
+          int nBtagged = 0;    
+          for (size_t bidx = 0; bidx < sel.jet().size(); ++bidx) {
+            if (sel.jet()[bidx].btag_mv2c20_70()) {
+              nBtagged += 1;	
+            }
+          }
+      
+          if (analysis=="AnaTtresSL") {
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
+              if(nBtagged>=1) vec_analysis[iAna]->run(sel, weight, suffix);
+          } else if (analysis=="AnaTtresQCD") {
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
+              if(nBtagged>=1) vec_analysis[iAna]->run(sel, weight, suffix);
+          } else if (analysis=="AnaTtresSLMtt") {
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
+              if(nBtagged>=1) vec_analysis[iAna]->run(sel, weight, suffix);
+          } //if  
+        } // end of loop over weight systematics
       } // end of loop over entries
     } // end of loop over lepton modes (tight and loose)
   } // end of loop over systematics

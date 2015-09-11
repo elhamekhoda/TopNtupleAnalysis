@@ -13,12 +13,12 @@ outputDir = 'test25ns'
 # the QCD version aims at plots for QCD studies using the matrix method
 # look into read.cxx to see what is available
 # create yours, if you wish
-analysisType='AnaTtresSL'
-#analysisType='AnaTtresSLMtt'
+#analysisType='AnaTtresSL'
+analysisType='AnaTtresSLMtt'
 
 # leave it for nominal to run only the nominal
-systematics = 'nominal'
-#systematics = 'nominal,JET_JER_SINGLE_NP__1up,JET_NPScenario1_JET_GroupedNP_1__1up,EG_SCALE_ALL__1up,EG_RESOLUTION_ALL__1up,MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleUp,MUONS_ID__1up,MUONS_MS__1up,MUONS_SCALE__1up'
+#systematics = 'nominal'
+systematics = 'nominal,EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up,JET_JER_SINGLE_NP__1up,JET_NPScenario1_JET_GroupedNP_1__1down,JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_2__1down,JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_3__1down,JET_NPScenario1_JET_GroupedNP_3__1up,MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleDown,MET_SoftTrk_ScaleUp,MUONS_ID__1down,MUONS_ID__1up,MUONS_MS__1down,MUONS_MS__1up,MUONS_SCALE__1down,MUONS_SCALE__1up'
 
 # set to 1 to run the loose selection for QCD
 loose = 0
@@ -27,18 +27,18 @@ names   = []
 # 25 ns datasets
 names  = ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
 # these are 50 ns: for testing only
-#names += ['MC15_13TeV_FS_EXOT4_Zprime500']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime750']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime1000']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime1250']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime1500']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime1750']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime2000']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime2250']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime2500']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime2750']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime3000']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime4000']
+names += ['MC15_13TeV_FS_EXOT4_Zprime500']
+names += ['MC15_13TeV_FS_EXOT4_Zprime750']
+names += ['MC15_13TeV_FS_EXOT4_Zprime1000']
+names += ['MC15_13TeV_FS_EXOT4_Zprime1250']
+names += ['MC15_13TeV_FS_EXOT4_Zprime1500']
+names += ['MC15_13TeV_FS_EXOT4_Zprime1750']
+names += ['MC15_13TeV_FS_EXOT4_Zprime2000']
+names += ['MC15_13TeV_FS_EXOT4_Zprime2250']
+names += ['MC15_13TeV_FS_EXOT4_Zprime2500']
+names += ['MC15_13TeV_FS_EXOT4_Zprime2750']
+names += ['MC15_13TeV_FS_EXOT4_Zprime3000']
+names += ['MC15_13TeV_FS_EXOT4_Zprime4000']
 
 import TopExamples.grid
 
@@ -77,7 +77,9 @@ for sample in samples:
           # get all files in the directory
           files = glob.glob(d+'/*.root*')
           # and write it in ht elist of input files to process
-          for item in files: f.write(item+'\n')
+          for item in files:
+              if not '.part' in item:
+                  f.write(item+'\n')
           # go to the next directory in the same sample
           break
     f.close()
