@@ -49,34 +49,34 @@ class MiniTree {
     std::vector<Float_t> *weight_bTagSF_eigenvars_Light_up;
     std::vector<Float_t> *weight_bTagSF_eigenvars_Light_down;
 
-    Float_t         weight_indiv_SF_EL_SF_Trigger;
-    Float_t         weight_indiv_SF_EL_SF_Trigger_UP;
-    Float_t         weight_indiv_SF_EL_SF_Trigger_DOWN;
-    Float_t         weight_indiv_SF_EL_SF_Reco;
-    Float_t         weight_indiv_SF_EL_SF_Reco_UP;
-    Float_t         weight_indiv_SF_EL_SF_Reco_DOWN;
-    Float_t         weight_indiv_SF_EL_SF_ID;
-    Float_t         weight_indiv_SF_EL_SF_ID_UP;
-    Float_t         weight_indiv_SF_EL_SF_ID_DOWN;
-    Float_t         weight_indiv_SF_EL_SF_Isol;
-    Float_t         weight_indiv_SF_EL_SF_Isol_UP;
-    Float_t         weight_indiv_SF_EL_SF_Isol_DOWN;
+    Float_t         weight_indiv_SF_EL_Trigger;
+    Float_t         weight_indiv_SF_EL_Trigger_UP;
+    Float_t         weight_indiv_SF_EL_Trigger_DOWN;
+    Float_t         weight_indiv_SF_EL_Reco;
+    Float_t         weight_indiv_SF_EL_Reco_UP;
+    Float_t         weight_indiv_SF_EL_Reco_DOWN;
+    Float_t         weight_indiv_SF_EL_ID;
+    Float_t         weight_indiv_SF_EL_ID_UP;
+    Float_t         weight_indiv_SF_EL_ID_DOWN;
+    Float_t         weight_indiv_SF_EL_Isol;
+    Float_t         weight_indiv_SF_EL_Isol_UP;
+    Float_t         weight_indiv_SF_EL_Isol_DOWN;
 
-    Float_t         weight_indiv_SF_MU_SF_Trigger;
-    Float_t         weight_indiv_SF_MU_SF_Trigger_SYST_UP;
-    Float_t         weight_indiv_SF_MU_SF_Trigger_SYST_DOWN;
-    Float_t         weight_indiv_SF_MU_SF_Trigger_STAT_UP;
-    Float_t         weight_indiv_SF_MU_SF_Trigger_STAT_DOWN;
-    Float_t         weight_indiv_SF_MU_SF_ID;
-    Float_t         weight_indiv_SF_MU_SF_ID_SYST_UP;
-    Float_t         weight_indiv_SF_MU_SF_ID_SYST_DOWN;
-    Float_t         weight_indiv_SF_MU_SF_ID_STAT_UP;
-    Float_t         weight_indiv_SF_MU_SF_ID_STAT_DOWN;
-    Float_t         weight_indiv_SF_MU_SF_Isol;
-    Float_t         weight_indiv_SF_MU_SF_Isol_STAT_UP;
-    Float_t         weight_indiv_SF_MU_SF_Isol_STAT_DOWN;
-    Float_t         weight_indiv_SF_MU_SF_Isol_SYST_UP;
-    Float_t         weight_indiv_SF_MU_SF_Isol_SYST_DOWN;
+    Float_t         weight_indiv_SF_MU_Trigger;
+    Float_t         weight_indiv_SF_MU_Trigger_SYST_UP;
+    Float_t         weight_indiv_SF_MU_Trigger_SYST_DOWN;
+    Float_t         weight_indiv_SF_MU_Trigger_STAT_UP;
+    Float_t         weight_indiv_SF_MU_Trigger_STAT_DOWN;
+    Float_t         weight_indiv_SF_MU_ID;
+    Float_t         weight_indiv_SF_MU_ID_SYST_UP;
+    Float_t         weight_indiv_SF_MU_ID_SYST_DOWN;
+    Float_t         weight_indiv_SF_MU_ID_STAT_UP;
+    Float_t         weight_indiv_SF_MU_ID_STAT_DOWN;
+    Float_t         weight_indiv_SF_MU_Isol;
+    Float_t         weight_indiv_SF_MU_Isol_STAT_UP;
+    Float_t         weight_indiv_SF_MU_Isol_STAT_DOWN;
+    Float_t         weight_indiv_SF_MU_Isol_SYST_UP;
+    Float_t         weight_indiv_SF_MU_Isol_SYST_DOWN;
 
 
   private:

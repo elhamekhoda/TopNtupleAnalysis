@@ -525,34 +525,34 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_Light_down",     &weight_bTagSF_eigenvars_Light_down);
 
     if (m_name == "nominal" || m_name == "nominal_Loose") {
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_Trigger",           &weight_indiv_SF_EL_SF_Trigger);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_Trigger_UP",        &weight_indiv_SF_EL_SF_Trigger_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_Trigger_DOWN",      &weight_indiv_SF_EL_SF_Trigger_DOWN);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_Reco",              &weight_indiv_SF_EL_SF_Reco);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_Reco_UP",           &weight_indiv_SF_EL_SF_Reco_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_Reco_DOWN",         &weight_indiv_SF_EL_SF_Reco_DOWN);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_ID",                &weight_indiv_SF_EL_SF_ID);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_ID_UP",             &weight_indiv_SF_EL_SF_ID_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_ID_DOWN",           &weight_indiv_SF_EL_SF_ID_DOWN);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_Isol",              &weight_indiv_SF_EL_SF_Isol);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_Isol_UP",           &weight_indiv_SF_EL_SF_Isol_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_EL_SF_Isol_DOWN",         &weight_indiv_SF_EL_SF_Isol_DOWN);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_Trigger",           &weight_indiv_SF_EL_Trigger);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_Trigger_UP",        &weight_indiv_SF_EL_Trigger_UP);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_Trigger_DOWN",      &weight_indiv_SF_EL_Trigger_DOWN);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_Reco",              &weight_indiv_SF_EL_Reco);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_Reco_UP",           &weight_indiv_SF_EL_Reco_UP);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_Reco_DOWN",         &weight_indiv_SF_EL_Reco_DOWN);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_ID",                &weight_indiv_SF_EL_ID);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_ID_UP",             &weight_indiv_SF_EL_ID_UP);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_ID_DOWN",           &weight_indiv_SF_EL_ID_DOWN);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_Isol",              &weight_indiv_SF_EL_Isol);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_Isol_UP",           &weight_indiv_SF_EL_Isol_UP);
+      m_chain->SetBranchAddress("weight_indiv_SF_EL_Isol_DOWN",         &weight_indiv_SF_EL_Isol_DOWN);
   
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_Trigger",           &weight_indiv_SF_MU_SF_Trigger);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_Trigger_SYST_UP",   &weight_indiv_SF_MU_SF_Trigger_SYST_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_Trigger_SYST_DOWN", &weight_indiv_SF_MU_SF_Trigger_SYST_DOWN);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_Trigger_STAT_UP",   &weight_indiv_SF_MU_SF_Trigger_STAT_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_Trigger_STAT_DOWN", &weight_indiv_SF_MU_SF_Trigger_STAT_DOWN);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_ID",                &weight_indiv_SF_MU_SF_ID);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_ID_SYST_UP",        &weight_indiv_SF_MU_SF_ID_SYST_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_ID_SYST_DOWN",      &weight_indiv_SF_MU_SF_ID_SYST_DOWN);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_ID_STAT_UP",        &weight_indiv_SF_MU_SF_ID_STAT_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_ID_STAT_DOWN",      &weight_indiv_SF_MU_SF_ID_STAT_DOWN);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_Isol",              &weight_indiv_SF_MU_SF_Isol);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_Isol_STAT_UP",      &weight_indiv_SF_MU_SF_Isol_STAT_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_Isol_STAT_DOWN",    &weight_indiv_SF_MU_SF_Isol_STAT_DOWN);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_Isol_SYST_UP",      &weight_indiv_SF_MU_SF_Isol_SYST_UP);
-      m_chain->SetBranchAddress("weight_indiv_SF_MU_SF_Isol_SYST_DOWN",    &weight_indiv_SF_MU_SF_Isol_SYST_DOWN);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_Trigger",           &weight_indiv_SF_MU_Trigger);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_Trigger_SYST_UP",   &weight_indiv_SF_MU_Trigger_SYST_UP);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_Trigger_SYST_DOWN", &weight_indiv_SF_MU_Trigger_SYST_DOWN);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_Trigger_STAT_UP",   &weight_indiv_SF_MU_Trigger_STAT_UP);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_Trigger_STAT_DOWN", &weight_indiv_SF_MU_Trigger_STAT_DOWN);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_ID",                &weight_indiv_SF_MU_ID);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_ID_SYST_UP",        &weight_indiv_SF_MU_ID_SYST_UP);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_ID_SYST_DOWN",      &weight_indiv_SF_MU_ID_SYST_DOWN);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_ID_STAT_UP",        &weight_indiv_SF_MU_ID_STAT_UP);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_ID_STAT_DOWN",      &weight_indiv_SF_MU_ID_STAT_DOWN);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol",              &weight_indiv_SF_MU_Isol);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_STAT_UP",      &weight_indiv_SF_MU_Isol_STAT_UP);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_STAT_DOWN",    &weight_indiv_SF_MU_Isol_STAT_DOWN);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_SYST_UP",      &weight_indiv_SF_MU_Isol_SYST_UP);
+      m_chain->SetBranchAddress("weight_indiv_SF_MU_Isol_SYST_DOWN",    &weight_indiv_SF_MU_Isol_SYST_DOWN);
     }
     
     m_chain->SetBranchAddress("MC_w1h_pt",  	&MC_w1h_pt);
