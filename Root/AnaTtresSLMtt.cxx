@@ -42,8 +42,8 @@ void AnaTtresSLMtt::run(const Event &evt, double weight, const std::string &s) {
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
 
-  if (evt.channelNumber() == 410000) // for SM ttbar, we have mtt sliced samples above 1.5 TeV
-    if (evt.MC_ttbar_beforeFSR().M() > 1.5e6)
+  if (evt.channelNumber() == 410000) // for SM ttbar, we have mtt sliced samples above 1.1 TeV
+    if (evt.MC_ttbar_beforeFSR().M() > 1.1e6)
       return;
     
   HistogramService *h = &m_hSvc;
