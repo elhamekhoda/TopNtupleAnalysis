@@ -27,6 +27,7 @@ class HistogramService {
     void create1DVar(const std::string &name, const std::string &title, int binsX, double *bins, bool allSyst = true);
     void create1D(const std::string &name, const std::string &title, int binsX, double lowX, double highX, bool allSyst = true);
     void create2D(const std::string &name, const std::string &title, int binsX, double lowX, double highX, int binsY, double lowY, double highY, bool allSyst = true);
+    void create2DVar(const std::string &name, const std::string &title, int binsX, double *vecX, int binsY, double *vecY, bool allSyst = true);
 
     //TH1D *&h1D(const std::string &name, const std::string &trigger, const std::string &systematics);
     //TH2D *&h2D(const std::string &name, const std::string &trigger, const std::string &systematics);

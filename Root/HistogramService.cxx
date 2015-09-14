@@ -177,6 +177,7 @@ void HistogramService::createVS(const std::string &name) {
   }
   m_vs[name] = new std::vector<std::string>;
 }
+
 void HistogramService::create2D(const std::string &name, const std::string &title, int binsX, double lowX, double highX, int binsY, double lowY, double highY, bool allSyst) {
   m_lockTriggerAndSyst = true;
   
@@ -203,6 +204,35 @@ void HistogramService::create2D(const std::string &name, const std::string &titl
     }
   }
 }
+
+
+void HistogramService::create2DVar(const std::string &name, const std::string &title, int binsX, double *vecX, int binsY, double *vecY, bool allSyst) {
+  m_lockTriggerAndSyst = true;
+  
+  m_file->cd();
+  for (std::vector<std::string>::const_iterator it = m_listOfTriggers.begin(); it != m_listOfTriggers.end(); ++it) {
+    m_file->cd(std::string(m_filename+std::string(":/")+*it).c_str());
+    if (allSyst) {
+      for (std::vector<std::string>::const_iterator jt = m_listOfSystematics.begin(); jt != m_listOfSystematics.end(); ++jt) {
+        if (h_hist2D[*it][*jt].find(name) != h_hist2D[*it][*jt].end()) {
+          std::cout << "HistogramService: 2D histogram named \"" << name << "\" already exists. Giving up creating it." << std::endl;
+          return;
+        }
+        h_hist2D[*it][*jt][name] = new TH2F(concat(name, *jt).c_str(), title.c_str(), binsX, vecX, binsY, vecY);
+        h_hist2D[*it][*jt][name]->Sumw2();
+      }
+    } else { // only for nominal
+      if (h_hist2D[*it][""].find(name) != h_hist2D[*it][""].end()) {
+        std::cout << "HistogramService: 2D histogram named \"" << name << "\" already exists. Giving up creating it." << std::endl;
+        return;
+      }
+      h_hist2D[*it][""][name] = new TH2F(name.c_str(), title.c_str(), binsX, vecX, binsY, vecY);
+      h_hist2D[*it][""][name]->Sumw2();
+      m_noSystHist2D.push_back(name);
+    }
+  }
+}
+
 
 TH1F *&HistogramService::h1D(const std::string &name, const std::string &trigger, const std::string &systematics) {
   //std::cout << "Getting histogram " << name << " " << trigger << " " << systematics<< std::endl;

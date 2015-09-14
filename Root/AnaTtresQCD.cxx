@@ -17,28 +17,37 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
 
   m_chi2.Init(TtresChi2::DATA2015_MC15);
 
+  Double_t pT_bins[11] = {25,30,35,40,45,50,55,60,80,100,150};
+  Double_t DR_bins[21] = {0., 0.2, 0.4, 0.6, 0.8, 1., 1.2, 1.4, 1.6, 1.8, 2., 2.2, 2.4, 2.6, 2.8, 3., 3.2, 3.4, 3.6, 3.8, 4.};
+  
   //Histograms for MC variables
   //electrons
   m_hSvc.create1D("MC_e_pt", "; Pt of MC electron [GeV]; Events", 40, 0, 500);
   m_hSvc.create1D("MC_e_eta", "; Eta of MC electron ; Events", 24, -3.0, 3.0);
-  m_hSvc.create1D("MC_e_phi", "; Phi of MC electron ; Events", 30, -3.0, 3.0);
-  m_hSvc.create1D("MC_e_m", "; Mass of MC electron [GeV]; Events", 50, 0, 500);  
+  m_hSvc.create1D("MC_e_phi", "; Phi of MC electron ; Events", 40, -4.0, 4.0);
+  m_hSvc.create1D("MC_e_m", "; Mass of MC electron [GeV]; Events", 100, -0.2, 0.2);  
   m_hSvc.create2D("MCe_pt_vs_eta", "; pt of electron(truth) [GeV]; #eta of electron(truth)", 40, 0, 500, 24, -3., 3.);
   
   //muons
   m_hSvc.create1D("MC_mu_pt", "; Pt of MC muon [GeV]; Events", 40, 0, 500);
   m_hSvc.create1D("MC_mu_eta", "; Eta of MC muon ; Events", 24, -3.0, 3.0);
-  m_hSvc.create1D("MC_mu_phi", "; Phi of MC muon ; Events", 30, -3.0, 3.0);
-  m_hSvc.create1D("MC_mu_m", "; Mass of MC muon [GeV]; Events", 50, 0, 500);  
+  m_hSvc.create1D("MC_mu_phi", "; Phi of MC muon ; Events", 40, -4.0, 4.0);
+  m_hSvc.create1D("MC_mu_m", "; Mass of MC muon [GeV]; Events", 100, -0.2, 0.2);  
   m_hSvc.create2D("MCmu_pt_vs_eta", "; pt of muon(truth) [GeV]; #eta of muon(truth)", 40, 0, 500, 24, -3., 3.);
   
   //Matched reco leptons
   m_hSvc.create1D("lepMA_pt",    "; Lepton p_{T} [GeV]; Events", 40, 0, 500);
   m_hSvc.create1D("lepMA_eta",   "; Lepton #eta ; Events", 24, -3.0, 3.0);
   m_hSvc.create1D("lepMA_phi",   "; Lepton #phi ; Events", 40, -4.0, 4.0);
-  m_hSvc.create1D("lepMA_m",     "; Lepton mass [GeV]; Events", 100, 0, 0.5);
+  m_hSvc.create1D("lepMA_m",     "; Lepton mass [GeV]; Events", 100, -0.2, 0.2);
   m_hSvc.create1D("lepMA_pdgId", "; Lepton pdgId ; Events", 30, -15, 15);
   m_hSvc.create2D("MA_pt_vs_eta", "; pt of MA lepton [GeV]; #eta of MA lepton", 40, 0, 500, 24, -3., 3.);
+
+  //Delta R between the MA reco leptons and the closest jet
+  m_hSvc.create1D("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 40, 0, 4);
+  m_hSvc.create2DVar("LepMApt_vs_closejlDR", "; pt of MA lepton [GeV]; min #Delta R(lep, jet)", 10, pT_bins, 20, DR_bins);
+
+  
 
 }
 
@@ -155,6 +164,25 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
   	h->h1D("lepMA_m", "", s)    ->Fill(lept.M()*1e-3 ); 
   	h->h1D("lepMA_pdgId", "", s)->Fill(leptMA_pdgId  ); 
   	h->h2D("MA_pt_vs_eta", "", s)->Fill(lept.Perp()*1e-3, lept.Eta());  
+	
+	//deltaR between lepton and the closest narrow jet
+  	float closejl_deltaR  = 99;
+  	float deltaR_tmp      = 99;
+  	int closejl_idx       = -1;
+  
+  	size_t jet_idx = 0;
+  	for (; jet_idx < evt.jet().size(); ++jet_idx){    
+    	  deltaR_tmp = lept.DeltaR(evt.jet()[jet_idx].mom());
+    	  if (deltaR_tmp < closejl_deltaR){
+              closejl_deltaR = deltaR_tmp;
+              closejl_idx = jet_idx;
+    	  }   
+  	}//for     
+  	
+	if (closejl_deltaR<99){
+  	   h->h1D("closejl_minDeltaR", "", s)->Fill(closejl_deltaR); 
+	   h->h2D("LepMApt_vs_closejlDR", "", s)->Fill(lept.Perp()*1e-3, closejl_deltaR);
+	}
 
   }
   //std::cout << " -- " << std::endl;
