@@ -50,6 +50,7 @@ int main(int argc, char **argv) {
   std::string analysis = "AnaTtresSL";
   std::string systs = "nominal";
   int loose = 0;
+  int _nentries = -1;
 
   static struct extendedOption extOpt[] = {
         {"help",          no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -60,6 +61,8 @@ int main(int argc, char **argv) {
         {"output",   required_argument,     0, 'o', "Comma-separated list of output files.", &outFile, extendedOption::eOTString},
         {"systs",   required_argument,     0, 's', "Comma-separated list of systematics.", &systs, extendedOption::eOTString},
         {"loose",   required_argument,     0, 'l', "Should I run over the loose TTree too?", &loose, extendedOption::eOTInt},
+        {"nentries",   required_argument,     0, 'N', "Run over only the first entries if > 0.", &_nentries, extendedOption::eOTInt},
+
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -137,24 +140,49 @@ int main(int argc, char **argv) {
     }
   }
 
+  int n_eigenvars_b = 0;
+  int n_eigenvars_c = 0;
+  int n_eigenvars_l = 0;
+
   if (systs != "nominal") { // if there are other systematics, include SF systs. too
     systsListWithBlankNominal.push_back("lepSF__1up");
     systsListWithBlankNominal.push_back("lepSF__1down");
-    systsListWithBlankNominal.push_back("btagbSF__1up");
-    systsListWithBlankNominal.push_back("btagbSF__1down");
-    systsListWithBlankNominal.push_back("btagcSF__1up");
-    systsListWithBlankNominal.push_back("btagcSF__1down");
-    systsListWithBlankNominal.push_back("btaglSF__1up");
-    systsListWithBlankNominal.push_back("btaglSF__1down");
+
+    // count b-tagging variations
+    MiniTree mt(false, fileList[0].c_str(), "nominal");
+    Event sel;
+    mt.read(0, sel);
+    n_eigenvars_b = mt.weight_bTagSF_eigenvars_B_up->size();
+    n_eigenvars_c = mt.weight_bTagSF_eigenvars_C_up->size();
+    n_eigenvars_l = mt.weight_bTagSF_eigenvars_Light_up->size();
+
+    for (int i = 0; i < n_eigenvars_b; ++i) {
+      systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up");
+      systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1down");
+    }
+    for (int i = 0; i < n_eigenvars_c; ++i) {
+      systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1up");
+      systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1down");
+    }
+    for (int i = 0; i < n_eigenvars_l; ++i) {
+      systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up");
+      systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down");
+    }
     if (loose) {
       systsListWithBlankNominal.push_back("lepSF__1up_Loose");
       systsListWithBlankNominal.push_back("lepSF__1down_Loose");
-      systsListWithBlankNominal.push_back("btagbSF__1up_Loose");
-      systsListWithBlankNominal.push_back("btagbSF__1down_Loose");
-      systsListWithBlankNominal.push_back("btagcSF__1up_Loose");
-      systsListWithBlankNominal.push_back("btagcSF__1down_Loose");
-      systsListWithBlankNominal.push_back("btaglSF__1up_Loose");
-      systsListWithBlankNominal.push_back("btaglSF__1down_Loose");
+      for (int i = 0; i < n_eigenvars_b; ++i) {
+        systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up_Loose");
+        systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1down_Loose");
+      }
+      for (int i = 0; i < n_eigenvars_c; ++i) {
+        systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1up_Loose");
+        systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1down_Loose");
+      }
+      for (int i = 0; i < n_eigenvars_l; ++i) {
+        systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up_Loose");
+        systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down_Loose");
+      }
     }
   }
 
@@ -230,9 +258,12 @@ int main(int argc, char **argv) {
       Event sel; // selected objects
 
       // now loop over all entries for this systematic uncertainty
-      for (int k = 0; k < mt.GetEntries(); ++k) {
+      int nentries = mt.GetEntries();
+      if (_nentries < nentries && _nentries > 0)
+        nentries = _nentries;
+      for (int k = 0; k < nentries; ++k) {
         if (k % 1000 == 0)
-          std::cout << "("<< tname << ") Entry " << k << "/" << mt.GetEntries() << std::endl;
+          std::cout << "("<< tname << ") Entry " << k << "/" << nentries << std::endl;
     
         // read the event into an Event object to be sent to the Analysis code later
         mt.read(k, sel);
@@ -249,12 +280,19 @@ int main(int argc, char **argv) {
           weightSystematics.push_back(systSuffixForHistograms);
           weightSystematics.push_back(std::string("lepSF__1up")+systSuffixForHistograms);
           weightSystematics.push_back(std::string("lepSF__1down")+systSuffixForHistograms);
-          weightSystematics.push_back(std::string("btagbSF__1up")+systSuffixForHistograms);
-          weightSystematics.push_back(std::string("btagbSF__1down")+systSuffixForHistograms);
-          weightSystematics.push_back(std::string("btagcSF__1up")+systSuffixForHistograms);
-          weightSystematics.push_back(std::string("btagcSF__1down")+systSuffixForHistograms);
-          weightSystematics.push_back(std::string("btaglSF__1up")+systSuffixForHistograms);
-          weightSystematics.push_back(std::string("btaglSF__1down")+systSuffixForHistograms);
+
+          for (int i = 0; i < n_eigenvars_b; ++i) {
+            weightSystematics.push_back(std::string("btagbSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
+          }
+          for (int i = 0; i < n_eigenvars_c; ++i) {
+            weightSystematics.push_back(std::string("btagcSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
+          }
+          for (int i = 0; i < n_eigenvars_l; ++i) {
+            weightSystematics.push_back(std::string("btaglSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
+          }
         }
         // loop over weight systematics
         for (size_t wIdx = 0; wIdx < weightSystematics.size(); ++wIdx) {
@@ -264,31 +302,79 @@ int main(int argc, char **argv) {
           if (!isData) {
             weight *= sel.weight_mc()*sel.weight_pileup();
             weight *= sampleXsection.getXsection(channel);
-            // TODO (Danilo) -> Change the next lines to use the SF syst. var. information
-            // when suffix is one of the above
-            //
-            weight *= sel.weight_bTagSF();
 
-            if (suffix == "lepSF__1up" || suffix == "lepSF__1up_Loose") {
-              weight *= mt.weight_indiv_SF_EL_Trigger_UP;
-              weight *= mt.weight_indiv_SF_EL_Reco_UP;
-              weight *= mt.weight_indiv_SF_EL_ID_UP;
-              weight *= mt.weight_indiv_SF_EL_Isol_UP;
-
-              weight *= mt.weight_indiv_SF_MU_Trigger_SYST_UP*mt.weight_indiv_SF_MU_Trigger_STAT_UP;
-              weight *= mt.weight_indiv_SF_MU_ID_SYST_UP*mt.weight_indiv_SF_MU_ID_STAT_UP;
-              weight *= mt.weight_indiv_SF_MU_Isol;
-            } else if (suffix == "lepSF__1down" || suffix == "lepSF__1down_Loose") {
-              weight *= mt.weight_indiv_SF_EL_Trigger_DOWN;
-              weight *= mt.weight_indiv_SF_EL_Reco_DOWN;
-              weight *= mt.weight_indiv_SF_EL_ID_DOWN;
-              weight *= mt.weight_indiv_SF_EL_Isol_DOWN;
-
-              weight *= mt.weight_indiv_SF_MU_Trigger_SYST_DOWN*mt.weight_indiv_SF_MU_Trigger_STAT_DOWN;
-              weight *= mt.weight_indiv_SF_MU_ID_SYST_DOWN*mt.weight_indiv_SF_MU_ID_STAT_DOWN;
-              weight *= mt.weight_indiv_SF_MU_Isol;
+            double btagsf = 1.0;
+            size_t last = suffix.find("__1");
+            if (suffix.find("btagbSF_") != std::string::npos) {
+              size_t first = std::string("btagbSF_").size();
+              int eig = atoi(suffix.substr(first, last - first).c_str());
+              if (suffix.find("1up") != std::string::npos) {
+                btagsf = mt.weight_bTagSF_eigenvars_B_up->at(eig);
+              } else {
+                btagsf = mt.weight_bTagSF_eigenvars_B_down->at(eig);
+              }
+            } else if (suffix.find("btagcSF_") != std::string::npos) {
+              size_t first = std::string("btagcSF_").size();
+              int eig = atoi(suffix.substr(first, last - first).c_str());
+              if (suffix.find("1up") != std::string::npos) {
+                btagsf = mt.weight_bTagSF_eigenvars_C_up->at(eig);
+              } else {
+                btagsf = mt.weight_bTagSF_eigenvars_C_down->at(eig);
+              }
+            } else if (suffix.find("btaglSF_") != std::string::npos) {
+              size_t first = std::string("btaglSF_").size();
+              int eig = atoi(suffix.substr(first, last - first).c_str());
+              if (suffix.find("1up") != std::string::npos) {
+                btagsf = mt.weight_bTagSF_eigenvars_Light_up->at(eig);
+              } else {
+                btagsf = mt.weight_bTagSF_eigenvars_Light_down->at(eig);
+              }
             } else {
-              weight *= sel.weight_leptonSF();
+              btagsf = sel.weight_bTagSF();
+            }
+            weight *= btagsf;
+
+            weight *= sel.weight_leptonSF();
+            if (suffix == "lepSF__1up" || suffix == "lepSF__1up_Loose") {
+              double trig_elvar = mt.weight_indiv_SF_EL_Trigger_UP - mt.weight_indiv_SF_EL_Trigger;
+              double reco_elvar = mt.weight_indiv_SF_EL_Reco_UP - mt.weight_indiv_SF_EL_Reco;
+              double id_elvar = mt.weight_indiv_SF_EL_ID_UP - mt.weight_indiv_SF_EL_ID;
+              double isol_elvar = mt.weight_indiv_SF_EL_Isol_UP - mt.weight_indiv_SF_EL_Isol;
+              double total_el = std::sqrt(std::pow(trig_elvar, 2) + std::pow(reco_elvar, 2) + std::pow(id_elvar, 2) + std::pow(isol_elvar, 2));
+              if (sel.electron().size() > 0)
+                weight *= (1+total_el);
+
+              double trig1_muvar = mt.weight_indiv_SF_MU_Trigger_SYST_UP - mt.weight_indiv_SF_MU_Trigger;
+              double trig2_muvar = mt.weight_indiv_SF_MU_Trigger_STAT_UP - mt.weight_indiv_SF_MU_Trigger;
+              double id1_muvar = mt.weight_indiv_SF_MU_ID_SYST_UP - mt.weight_indiv_SF_MU_ID;
+              double id2_muvar = mt.weight_indiv_SF_MU_ID_STAT_UP - mt.weight_indiv_SF_MU_ID;
+
+              //double isol_muvar = mt.weight_indiv_SF_MU_Isol_UP - mt.weight_indiv_SF_MU_Isol;
+              //double total_mu = std::sqrt(std::pow(trig1_elvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2) + std::pow(isol_muvar, 2));
+
+              double total_mu = std::sqrt(std::pow(trig1_muvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2));
+              if (sel.muon().size() > 0)
+                weight *= (1+total_mu);
+            } else if (suffix == "lepSF__1down" || suffix == "lepSF__1down_Loose") {
+              double trig_elvar = mt.weight_indiv_SF_EL_Trigger_DOWN - mt.weight_indiv_SF_EL_Trigger;
+              double reco_elvar = mt.weight_indiv_SF_EL_Reco_DOWN - mt.weight_indiv_SF_EL_Reco;
+              double id_elvar = mt.weight_indiv_SF_EL_ID_DOWN - mt.weight_indiv_SF_EL_ID;
+              double isol_elvar = mt.weight_indiv_SF_EL_Isol_DOWN - mt.weight_indiv_SF_EL_Isol;
+              double total_el = std::sqrt(std::pow(trig_elvar, 2) + std::pow(reco_elvar, 2) + std::pow(id_elvar, 2) + std::pow(isol_elvar, 2));
+              if (sel.electron().size() > 0)
+                weight *= (1-total_el);
+
+              double trig1_muvar = mt.weight_indiv_SF_MU_Trigger_SYST_DOWN - mt.weight_indiv_SF_MU_Trigger;
+              double trig2_muvar = mt.weight_indiv_SF_MU_Trigger_STAT_DOWN - mt.weight_indiv_SF_MU_Trigger;
+              double id1_muvar = mt.weight_indiv_SF_MU_ID_SYST_DOWN - mt.weight_indiv_SF_MU_ID;
+              double id2_muvar = mt.weight_indiv_SF_MU_ID_STAT_DOWN - mt.weight_indiv_SF_MU_ID;
+
+              //double isol_muvar = mt.weight_indiv_SF_MU_Isol_DOWN - mt.weight_indiv_SF_MU_Isol; // not available yet
+              //double total_mu = std::sqrt(std::pow(trig1_elvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2) + std::pow(isol_muvar, 2));
+              //
+              double total_mu = std::sqrt(std::pow(trig1_muvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2));
+              if (sel.muon().size() > 0)
+                weight *= (1-total_mu);
             }
           
             if (sumOfWeights[channel] != 0)

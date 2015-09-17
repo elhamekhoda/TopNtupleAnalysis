@@ -517,14 +517,14 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("weight_bTagSF_70", &weight_bTagSF);
     m_chain->SetBranchAddress("weight_leptonSF",  &weight_leptonSF);
 
-    m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_B_up",           &weight_bTagSF_eigenvars_B_up);
-    m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_B_down",         &weight_bTagSF_eigenvars_B_down);
-    m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_C_up",           &weight_bTagSF_eigenvars_C_up);
-    m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_C_down",         &weight_bTagSF_eigenvars_C_down);
-    m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_Light_up",       &weight_bTagSF_eigenvars_Light_up);
-    m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_Light_down",     &weight_bTagSF_eigenvars_Light_down);
-
     if (m_name == "nominal" || m_name == "nominal_Loose") {
+      m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_B_up",           &weight_bTagSF_eigenvars_B_up);
+      m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_B_down",         &weight_bTagSF_eigenvars_B_down);
+      m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_C_up",           &weight_bTagSF_eigenvars_C_up);
+      m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_C_down",         &weight_bTagSF_eigenvars_C_down);
+      m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_Light_up",       &weight_bTagSF_eigenvars_Light_up);
+      m_chain->SetBranchAddress("weight_bTagSF_70_eigenvars_Light_down",     &weight_bTagSF_eigenvars_Light_down);
+
       m_chain->SetBranchAddress("weight_indiv_SF_EL_Trigger",           &weight_indiv_SF_EL_Trigger);
       m_chain->SetBranchAddress("weight_indiv_SF_EL_Trigger_UP",        &weight_indiv_SF_EL_Trigger_UP);
       m_chain->SetBranchAddress("weight_indiv_SF_EL_Trigger_DOWN",      &weight_indiv_SF_EL_Trigger_DOWN);
