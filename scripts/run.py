@@ -25,7 +25,8 @@ loose = 0
 
 names   = []
 # 25 ns datasets
-names  = ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
+names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
+names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
 # these are 50 ns: for testing only
 names += ['MC15_13TeV_FS_EXOT4_Zprime500']
 names += ['MC15_13TeV_FS_EXOT4_Zprime750']
@@ -37,7 +38,7 @@ names += ['MC15_13TeV_FS_EXOT4_Zprime2000']
 names += ['MC15_13TeV_FS_EXOT4_Zprime2250']
 names += ['MC15_13TeV_FS_EXOT4_Zprime2500']
 names += ['MC15_13TeV_FS_EXOT4_Zprime2750']
-names += ['MC15_13TeV_FS_EXOT4_Zprime3000']
+#names += ['MC15_13TeV_FS_EXOT4_Zprime3000']
 names += ['MC15_13TeV_FS_EXOT4_Zprime4000']
 
 import TopExamples.grid
