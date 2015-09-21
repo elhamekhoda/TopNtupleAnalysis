@@ -1,0 +1,125 @@
+Fit: "FitTtres"
+  BkgSyst: 0.10
+
+Region: bmu
+  HistoName: 1
+
+Region: be
+  HistoName: 0
+
+#Region: rmu
+#  HistoName: 2
+
+#Region: re
+#  HistoName: 3
+
+Sample: zp1tev
+  HistoFile: ttres_new/zp1tev.root
+  Xsec: 1.0
+  Param: 1.0
+
+Sample: zp125tev
+  HistoFile: ttres_new/zp125tev.root
+  Xsec: 1.0
+  Param: 1.25
+
+Sample: zp15tev
+  HistoFile: ttres_new/zp15tev.root
+  Xsec: 1.0
+  Param: 1.5
+
+Sample: zp175tev
+  HistoFile: ttres_new/zp175tev.root
+  Xsec: 1.0
+  Param: 1.75
+
+Sample: zp2tev
+  HistoFile: ttres_new/zp2tev.root
+  Xsec: 1.0
+  Param: 2.0
+
+Sample: zp225tev
+  HistoFile: ttres_new/zp225tev.root
+  Xsec: 1.0
+  Param: 2.25
+
+Sample: zp25tev
+  HistoFile: ttres_new/zp25tev.root
+  Xsec: 1.0
+  Param: 2.5
+
+Sample: zp275tev
+  HistoFile: ttres_new/zp275tev.root
+  Xsec: 1.0
+  Param: 2.75
+
+#Sample: zp3tev
+#  HistoFile: ttres_new/zp3tev.root
+#  Xsec: 1.0
+#  Param: 3
+
+Sample: zp4tev
+  HistoFile: ttres_new/zp4tev.root
+  Xsec: 1.0
+  Param: 4
+
+Systematic: jes1
+  HistoNameSufUp: JET_NPScenario1_JET_GroupedNP_1__1up
+  HistoNameSufDown: JET_NPScenario1_JET_GroupedNP_1__1down
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
+Systematic: jes2
+  HistoNameSufUp: JET_NPScenario1_JET_GroupedNP_2__1up
+  HistoNameSufDown: JET_NPScenario1_JET_GroupedNP_2__1down
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+  
+Systematic: jes3
+  HistoNameSufUp: JET_NPScenario1_JET_GroupedNP_3__1up
+  HistoNameSufDown: JET_NPScenario1_JET_GroupedNP_3__1down
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
+Systematic: jer
+  HistoNameSufUp: JET_JER_SINGLE_NP__1up
+  HistoNameSufDown: 
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
+Systematic: met_para
+  HistoNameSufUp: MET_SoftTrk_ResoPara
+  HistoNameSufDown: 
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
+Systematic: met_perp
+  HistoNameSufUp: MET_SoftTrk_ResoPerp
+  HistoNameSufDown: 
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
+Systematic: met_scale
+  HistoNameSufUp: MET_SoftTrk_ScaleUp
+  HistoNameSufDown: MET_SoftTrk_ScaleDown
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
+Systematic: muid
+  HistoNameSufUp: MUONS_ID__1up
+  HistoNameSufDown: MUONS_ID__1down
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
+Systematic: mums
+  HistoNameSufUp: MUONS_MS__1up
+  HistoNameSufDown: MUONS_MS__1down
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
+Systematic: muscale
+  HistoNameSufUp: MUONS_SCALE__1up
+  HistoNameSufDown: MUONS_SCALE__1down
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
+Systematic: eres
+  HistoNameSufUp: EG_RESOLUTION_ALL__1up
+  HistoNameSufDown: EG_RESOLUTION_ALL__1down
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
+Systematic: escale
+  HistoNameSufUp: EG_SCALE_ALL__1up
+  HistoNameSufDown: EG_SCALE_ALL__1down
+  Samples: zp500,zp750,zp1tev,zp125tev,zp15tev,zp175tev,zp2tev,zp225tev,zp25tev,zp275tev,zp3tev,zp4tev,zp5tev
+
