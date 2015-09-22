@@ -79,8 +79,8 @@ void AnaTuDoTtresResolved::run(const Event &evt, double weight, const std::strin
     
     h_TuDoCutFlow -> Fill(3);
 
-    m_mini->binning01 = -1;
-    m_mini->binning02 = abs(lepton.Eta());
+    m_mini->f("binning01") = -1;
+    m_mini->f("binning02") = abs(lepton.Eta());
     
     const TLorentzVector &leadingjet = evt.jet()[0].mom();
     int index_leadingjet = 0;
@@ -151,15 +151,15 @@ void AnaTuDoTtresResolved::terminate() {
     TH1D* cutflow;
     if(!m_isData) {
         if(m_electron) {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("rejets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
+            cutflow = (TH1D*) m_mini->m_file->Get("rejets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
         } else {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("rmujets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
+            cutflow = (TH1D*) m_mini->m_file->Get("rmujets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
         }
     } else {
         if(m_electron) {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("rejets/cutflow")->Clone("cutflow");
+            cutflow = (TH1D*) m_mini->m_file->Get("rejets/cutflow")->Clone("cutflow");
         } else {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("rmujets/cutflow")->Clone("cutflow");
+            cutflow = (TH1D*) m_mini->m_file->Get("rmujets/cutflow")->Clone("cutflow");
         }
 
     }

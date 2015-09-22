@@ -12,6 +12,7 @@
 #include "TopNtupleAnalysis/Event.h"
 
 #include "TFile.h"
+#include <map>
 
 using namespace std;
 
@@ -25,205 +26,39 @@ class MiniTree {
     int GetEntries();
     double getSumWeights();
     void read(int event, Event &e);
-    void write(const Event &e);
 
     double &sumWeights();
     TTree *m_chain;
     double m_sumWeights;
 
-    TFile  *m_fileToWrite;
+    TFile  *m_file;
     TTree *m_num;
-    bool m_toWrite;
     std::string m_name;
+
+    unsigned int         &ui(const std::string &n);
+    int                  &i(const std::string &n);
+    float                &f(const std::string &n);
+    char                 &c(const std::string &n);
+    std::vector<char>    *vc(const std::string &n);
+    std::vector<int>     *vi(const std::string &n);
+    std::vector<float>   *vf(const std::string &n);
+    std::vector<std::vector<int> > *vvi(const std::string &n);
+
+    enum MTType {mtUint = 0, mtInt, mtFloat, mtChar, mtVInt, mtVFloat, mtVChar, mtVVInt};
+    std::map<std::string, MTType> m_brs;
     
-    Float_t         binning01;
-    Float_t         binning02;
-    Float_t         binning03;
-    Float_t         binning04;
-    Float_t         binning05;
-
-    std::vector<Float_t> *weight_bTagSF_eigenvars_B_up;
-    std::vector<Float_t> *weight_bTagSF_eigenvars_B_down;
-    std::vector<Float_t> *weight_bTagSF_eigenvars_C_up;
-    std::vector<Float_t> *weight_bTagSF_eigenvars_C_down;
-    std::vector<Float_t> *weight_bTagSF_eigenvars_Light_up;
-    std::vector<Float_t> *weight_bTagSF_eigenvars_Light_down;
-
-    Float_t         weight_indiv_SF_EL_Trigger;
-    Float_t         weight_indiv_SF_EL_Trigger_UP;
-    Float_t         weight_indiv_SF_EL_Trigger_DOWN;
-    Float_t         weight_indiv_SF_EL_Reco;
-    Float_t         weight_indiv_SF_EL_Reco_UP;
-    Float_t         weight_indiv_SF_EL_Reco_DOWN;
-    Float_t         weight_indiv_SF_EL_ID;
-    Float_t         weight_indiv_SF_EL_ID_UP;
-    Float_t         weight_indiv_SF_EL_ID_DOWN;
-    Float_t         weight_indiv_SF_EL_Isol;
-    Float_t         weight_indiv_SF_EL_Isol_UP;
-    Float_t         weight_indiv_SF_EL_Isol_DOWN;
-
-    Float_t         weight_indiv_SF_MU_Trigger;
-    Float_t         weight_indiv_SF_MU_Trigger_SYST_UP;
-    Float_t         weight_indiv_SF_MU_Trigger_SYST_DOWN;
-    Float_t         weight_indiv_SF_MU_Trigger_STAT_UP;
-    Float_t         weight_indiv_SF_MU_Trigger_STAT_DOWN;
-    Float_t         weight_indiv_SF_MU_ID;
-    Float_t         weight_indiv_SF_MU_ID_SYST_UP;
-    Float_t         weight_indiv_SF_MU_ID_SYST_DOWN;
-    Float_t         weight_indiv_SF_MU_ID_STAT_UP;
-    Float_t         weight_indiv_SF_MU_ID_STAT_DOWN;
-    Float_t         weight_indiv_SF_MU_Isol;
-    Float_t         weight_indiv_SF_MU_Isol_STAT_UP;
-    Float_t         weight_indiv_SF_MU_Isol_STAT_DOWN;
-    Float_t         weight_indiv_SF_MU_Isol_SYST_UP;
-    Float_t         weight_indiv_SF_MU_Isol_SYST_DOWN;
-
-
   private:
 
     void prepareBranches();
 
-    Float_t         weight_mc;
-    Float_t         weight_pileup;
-    Float_t         weight_bTagSF;
-    Float_t         weight_leptonSF;
-
-    UInt_t          eventNumber;
-    UInt_t          runNumber;
-    UInt_t          mcChannelNumber;
-    int		    npv;
-    float	    vtxz;
-    Float_t         mu;
-    Float_t	    mu_original;
-    
-    vector<float>   *el_pt;
-    vector<float>   *el_eta;
-    vector<float>   *el_phi;
-    vector<float>   *el_e;
-    vector<float>   *el_charge;
-    vector<float>   *el_miniiso;
-    vector<char>    *el_isTight;
-    
-    vector<float>   *mu_pt;
-    vector<float>   *mu_eta;
-    vector<float>   *mu_phi;
-    vector<float>   *mu_e;
-    vector<float>   *mu_charge;
-    vector<float>   *mu_miniiso;
-    vector<char>    *mu_isTight;
-    
-    vector<float>   *jet_pt;
-    vector<float>   *jet_eta;
-    vector<float>   *jet_phi;
-    vector<float>   *jet_e;
-    vector<int>     *jet_closeToLepton;
-    vector<float>   *jet_mv1;
-    vector<float>   *jet_mv2c20;
-    vector<float>   *jet_ip3dsv1;
-    vector<float>   *jet_jvt;
-    
-    vector<float>   *ljet_pt;
-    vector<float>   *ljet_eta;
-    vector<float>   *ljet_phi;
-    vector<float>   *ljet_e;
-    vector<float>   *ljet_m;
-    vector<float>   *ljet_sd12;
-    vector<int>     *ljet_good;
-  
-    float           MC_w1h_pt;
-    float           MC_w1h_eta;
-    float           MC_w1h_phi;
-    float           MC_w1h_m;
-    int		    MC_w1h_pdgId;
-
-    float           MC_w2h_pt;
-    float           MC_w2h_eta;
-    float           MC_w2h_phi;
-    float           MC_w2h_m;
-    int		    MC_w2h_pdgId;
-
-    float           MC_bh_pt;
-    float           MC_bh_eta;
-    float           MC_bh_phi;
-    float           MC_bh_m;
-    
-    float           MC_w1l_pt;
-    float           MC_w1l_eta;
-    float           MC_w1l_phi;
-    float           MC_w1l_m;
-    int	    	    MC_w1l_pdgId;
-
-    float           MC_w2l_pt;
-    float           MC_w2l_eta;
-    float           MC_w2l_phi;
-    float           MC_w2l_m;
-    int		    MC_w2l_pdgId;
-
-    float           MC_bl_pt;
-    float           MC_bl_eta;
-    float           MC_bl_phi;
-    float           MC_bl_m;
-    
-    float           MC_ttbar_beforeFSR_pt;
-    float           MC_ttbar_beforeFSR_eta;
-    float           MC_ttbar_beforeFSR_phi;
-    float           MC_ttbar_beforeFSR_m;
-    
-    float           MA_w1h_pt;
-    float           MA_w1h_eta;
-    float           MA_w1h_phi;
-    float           MA_w1h_m;
-    int		    MA_w1h_pdgId;
-
-    float           MA_w2h_pt;
-    float           MA_w2h_eta;
-    float           MA_w2h_phi;
-    float           MA_w2h_m;
-    int		    MA_w2h_pdgId;
-
-    float           MA_bh_pt;
-    float           MA_bh_eta;
-    float           MA_bh_phi;
-    float           MA_bh_m;
-    
-    float           MA_w1l_pt;
-    float           MA_w1l_eta;
-    float           MA_w1l_phi;
-    float           MA_w1l_m;
-    int	    	    MA_w1l_pdgId;
-    
-    float           MA_w2l_pt;
-    float           MA_w2l_eta;
-    float           MA_w2l_phi;
-    float           MA_w2l_m;
-    int		    MA_w2l_pdgId;
-
-    float           MA_bl_pt;
-    float           MA_bl_eta;
-    float           MA_bl_phi;
-    float           MA_bl_m;   
-    
-    Float_t         met_met;
-    Float_t         met_phi;
-
-    vector<float>   *mc_pt;
-    vector<float>   *mc_eta;
-    vector<float>   *mc_phi;
-    vector<float>   *mc_e;
-    vector<int>     *mc_pdgId;
-
-    // selections (some will not exist)
-    Int_t           bejets;
-    Int_t           bmujets;
-    Int_t           rejets;
-    Int_t           rmujets;
-
-    Int_t           ejets;
-    Int_t           mujets;
-
-    Int_t           ee;
-    Int_t           mumu;
-    Int_t           emu;
+    std::map<std::string, float> m_f;
+    std::map<std::string, unsigned int> m_ui;
+    std::map<std::string, int> m_i;
+    std::map<std::string, char> m_c;
+    std::map<std::string, std::vector<char> *> m_vc;
+    std::map<std::string, std::vector<float> *> m_vf;
+    std::map<std::string, std::vector<int> *> m_vi;
+    std::map<std::string, std::vector<std::vector<int> > *> m_vvi;
 
 };
 

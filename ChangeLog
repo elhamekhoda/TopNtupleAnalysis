@@ -1,3 +1,10 @@
+2015-09-22 Danilo Ferreira de Lima <dferreir@cern.ch>
+	* Added code to make MiniTree generic to avoid updating it all the
+	time.
+	* Added track jet b-tagging using --btags X when X is negative.
+	* Added b-tagging SFs.
+	* TopNtupleAnalysis-00-01-01
+
 2015-09-18 Danilo Ferreira de Lima <dferreir@cern.ch>
 	* Start of ChangeLog (with some delay).
 	* Added b-tagging and lepton SF systematic uncertainties.

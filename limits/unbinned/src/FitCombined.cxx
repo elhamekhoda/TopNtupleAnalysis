@@ -142,6 +142,17 @@ int main(int argc, char **argv) {
   ROOT::Math::MinimizerOptions::SetDefaultMinimizer("Minuit2");
   ROOT::Math::MinimizerOptions::SetDefaultStrategy(1);
 
+  RooFitResult *fr = 0;
+  RooArgSet *params = 0;
+  params = jointModel->getParameters(*data);
+  RooStats::RemoveConstantParameters(params);
+  RooNLLVar* nll = (RooNLLVar*) jointModel->createNLL(*data, RooFit::Constrain(*params), RooFit::Offset(true), RooFit::Optimize(2), RooFit::Extended(true));
+  int status = minimizeFancy(nll, &fr);
+  
+  if (work->var("mu")->getVal() < 0)
+    work->var("mu")->setVal(0);
+
+  /*
   RooFitResult *fr = jointModel->fitTo(*data, SumW2Error(true), Minimizer("Minuit2", "Migrad"), Save(true), Strategy(2));
   if (fr->status() != 0 && fr->status() != 1) {
     fr = jointModel->fitTo(*data, SumW2Error(true), Minimizer("Minuit2", "Migrad"), Save(true), Strategy(1));
@@ -158,6 +169,7 @@ int main(int argc, char **argv) {
       }
     }
   }
+  */
   fr->Print();
 
   RooBinning b(x->getMin(), x->getMax());

@@ -151,15 +151,15 @@ void AnaTuDoTtresBoosted::terminate() {
     TH1D* cutflow;
     if(!m_isData) {
         if(m_electron) {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("bejets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
+            cutflow = (TH1D*) m_mini->m_file->Get("bejets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
         } else {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("bmujets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
+            cutflow = (TH1D*) m_mini->m_file->Get("bmujets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
         }
     } else {
         if(m_electron) {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("bejets/cutflow")->Clone("cutflow");
+            cutflow = (TH1D*) m_mini->m_file->Get("bejets/cutflow")->Clone("cutflow");
         } else {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("bmujets/cutflow")->Clone("cutflow");
+            cutflow = (TH1D*) m_mini->m_file->Get("bmujets/cutflow")->Clone("cutflow");
         }
 
     }

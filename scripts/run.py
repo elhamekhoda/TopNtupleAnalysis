@@ -84,5 +84,5 @@ for sample in samples:
           # go to the next directory in the same sample
           break
     f.close()
-    os.system('./read --loose '+str(loose)+' --files '+outputDir+"/input_"+sample.name+'.txt'+' --analysis '+analysisType+' --output '+outfile+'_re.root,'+outfile+'_rmu.root,'+outfile+'_be.root,'+outfile+'_bmu.root --systs '+systematics)
+    os.system('./read --btags -1 --loose '+str(loose)+' --files '+outputDir+"/input_"+sample.name+'.txt'+' --analysis '+analysisType+' --output '+outfile+'_re.root,'+outfile+'_rmu.root,'+outfile+'_be.root,'+outfile+'_bmu.root --systs '+systematics)
 

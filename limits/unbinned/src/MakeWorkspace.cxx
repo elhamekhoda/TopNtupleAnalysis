@@ -254,7 +254,7 @@ int main(int argc, char **argv) {
     RooFormulaVar *nsig_mu = 0;
     if (systs_bkg > 0) {
       nsig_mu = new RooFormulaVar(Form("fnsig_mu_%s", channels[zc].c_str()), "(@0*@1 + @2*@3)", \
-                         RooArgList(*s_n->systParam("norm"), *work->var("mu"), *alpha[alpha.size()-1], *nbkg));
+                         RooArgList(*s_n->systParam("norm"), *work->var("mu"), *alpha[alpha.size()-1], RooConst(systs_bkg)));
     } else {
       nsig_mu = new RooFormulaVar(Form("fnsig_mu_%s", channels[zc].c_str()), "@0*@1", \
                          RooArgList(*s_n->systParam("norm"), *work->var("mu")));

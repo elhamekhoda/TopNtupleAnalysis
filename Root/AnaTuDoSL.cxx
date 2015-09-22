@@ -341,15 +341,15 @@ void AnaTuDoSL::terminate() {
     TH1D* cutflow;
     if(!m_isData) {
         if(m_electron) {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("ejets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
+            cutflow = (TH1D*) m_mini->m_file->Get("ejets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
         } else {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("mujets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
+            cutflow = (TH1D*) m_mini->m_file->Get("mujets/cutflow_mc_pu_zvtx")->Clone("cutflow_mc_pu_zvtx");
         }
     } else {
         if(m_electron) {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("ejets/cutflow")->Clone("cutflow");
+            cutflow = (TH1D*) m_mini->m_file->Get("ejets/cutflow")->Clone("cutflow");
         } else {
-            cutflow = (TH1D*) m_mini->m_fileToWrite->Get("mujets/cutflow")->Clone("cutflow");
+            cutflow = (TH1D*) m_mini->m_file->Get("mujets/cutflow")->Clone("cutflow");
         }
 
     }
