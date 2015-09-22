@@ -26,8 +26,9 @@ float Muon::mi() const {
   return m_mi;
 }
 
-void Muon::setTight(bool t) {
-  m_tight = t;
+void Muon::setTight(char t) {
+  if (t)	m_tight = true;
+  else		m_tight = false;
 }
 
 bool Muon::isTight() const {

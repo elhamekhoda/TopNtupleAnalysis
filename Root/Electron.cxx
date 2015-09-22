@@ -28,8 +28,9 @@ float Electron::mi() const {
   return m_mi;
 }
 
-void Electron::setTightPP(bool t) {
-  m_isTightPP = t;
+void Electron::setTightPP(char t) {  
+  if (t)	m_isTightPP = true;
+  else		m_isTightPP = false;
 }
 
 bool Electron::isTightPP() const {

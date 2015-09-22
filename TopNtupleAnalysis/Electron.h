@@ -16,7 +16,8 @@ class Electron : public MObject {
 
     void setMI(float iso);
     float mi() const;
-    void setTightPP(bool isTightPP);
+    
+    void setTightPP(char isTightPP);
     bool isTightPP() const;
 
     void setMediumPP(bool isMediumPP);
@@ -46,6 +47,7 @@ class Electron : public MObject {
   protected:
     float m_mi;
     bool m_isTightPP;
+    
     bool m_isMediumPP;
     TLorentzVector m_mom_calo;
     TLorentzVector m_mom_trk;

@@ -17,9 +17,11 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
 
   m_chi2.Init(TtresChi2::DATA2015_MC15);
 
-  Double_t pT_bins[11] = {25,30,35,40,45,50,55,60,80,100,150};
-  Double_t DR_bins[21] = {0., 0.2, 0.4, 0.6, 0.8, 1., 1.2, 1.4, 1.6, 1.8, 2., 2.2, 2.4, 2.6, 2.8, 3., 3.2, 3.4, 3.6, 3.8, 4.};
-  
+  Double_t pT_bins_r[10] = {25, 35, 45, 55, 75, 95, 115, 165, 215, 275};
+  Double_t pT_bins_b[12] = {25, 35, 45, 55, 75, 95, 115, 165, 215, 275, 325, 500}; 
+  Double_t DR_bins_r[14] = {0., 0.1, 0.2, 0.3, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 5};
+  Double_t DR_bins_b[13] = {0., 0.1, 0.2, 0.3, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2};
+    
   //Histograms for MC variables
   //electrons
   m_hSvc.create1D("MC_e_pt", "; Pt of MC electron [GeV]; Events", 40, 0, 500);
@@ -36,18 +38,32 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   m_hSvc.create2D("MCmu_pt_vs_eta", "; pt of muon(truth) [GeV]; #eta of muon(truth)", 40, 0, 500, 24, -3., 3.);
   
   //Matched reco leptons
-  m_hSvc.create1D("lepMA_pt",    "; Lepton p_{T} [GeV]; Events", 40, 0, 500);
-  m_hSvc.create1D("lepMA_eta",   "; Lepton #eta ; Events", 24, -3.0, 3.0);
-  m_hSvc.create1D("lepMA_phi",   "; Lepton #phi ; Events", 40, -4.0, 4.0);
-  m_hSvc.create1D("lepMA_m",     "; Lepton mass [GeV]; Events", 100, -0.2, 0.2);
-  m_hSvc.create1D("lepMA_pdgId", "; Lepton pdgId ; Events", 30, -15, 15);
-  m_hSvc.create2D("MA_pt_vs_eta", "; pt of MA lepton [GeV]; #eta of MA lepton", 40, 0, 500, 24, -3., 3.);
+  m_hSvc.create1D("lepMa_pt",    "; Pt of Matched lept [GeV]; Events", 40, 0, 500);
+  m_hSvc.create1D("lepMa_eta",   "; #eta of Matched lept ; Events", 24, -3.0, 3.0);
+  m_hSvc.create1D("lepMa_phi",   "; #phi of Matched lept ; Events", 40, -4.0, 4.0);
+  m_hSvc.create1D("lepMa_m",     "; Mass of Matched lept [GeV]; Events", 100, -0.2, 0.2);
+  m_hSvc.create1D("lepMa_pdgId", "; pdgId of Matched lept ; Events", 30, -15, 15);
+  m_hSvc.create2D("Ma_pt_vs_eta", "; pt of Matched lepton [GeV]; #eta of Matched lepton", 40, 0, 500, 24, -3., 3.);
 
-  //Delta R between the MA reco leptons and the closest jet
-  m_hSvc.create1D("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 40, 0, 4);
-  m_hSvc.create2DVar("LepMApt_vs_closejlDR", "; pt of MA lepton [GeV]; min #Delta R(lep, jet)", 10, pT_bins, 20, DR_bins);
-
+  //Delta R between the Ma reco leptons and the closest jet
   
+  if (!boosted)	{
+     m_hSvc.create2DVar("LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 9, pT_bins_r, 13, DR_bins_r);
+     m_hSvc.create1DVar("minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 13, DR_bins_r);
+     m_hSvc.create1DVar("lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 9, pT_bins_r);
+     m_hSvc.create2DVar("antiTight_LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 9, pT_bins_r, 13, DR_bins_r);
+     m_hSvc.create1DVar("antiTight_minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 13, DR_bins_r);
+     m_hSvc.create1DVar("antiTight_lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 9, pT_bins_r);
+     
+  }else	{	
+     m_hSvc.create2DVar("LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 11, pT_bins_b, 12, DR_bins_b);
+     m_hSvc.create1DVar("minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 12, DR_bins_b);
+     m_hSvc.create1DVar("lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 11, pT_bins_b);
+     m_hSvc.create2DVar("antiTight_LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 11, pT_bins_b, 12, DR_bins_b);
+     m_hSvc.create1DVar("antiTight_minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 12, DR_bins_b);
+     m_hSvc.create1DVar("antiTight_lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 11, pT_bins_b);
+     
+  }
 
 }
 
@@ -121,49 +137,59 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
   ///----------------------------------
   
   TLorentzVector lept;
-
-  int leptMA_pdgId = 0;
+  bool lept_quality = true;
+    
+  int leptMa_pdgId = 0;
+  int leptnoMa_w1l_pdgId = 0;
+  int leptnoMa_w2l_pdgId = 0;
+  
   float dr = 99;
   float drMax = 0.4;
   
-  if (m_electron) {
-    lept = evt.electron()[0].mom();
+  if (m_electron) {  
+    lept = evt.electron()[0].mom();    
+    lept_quality = evt.electron()[0].isTightPP();    
+    
     if (evt.MC_w1l_pdgId()==11){
     	dr = lept.DeltaR(evt.MC_w1l());
-	if (dr<drMax)	leptMA_pdgId = evt.MC_w1l_pdgId();
+	if (dr<drMax)	leptMa_pdgId = evt.MC_w1l_pdgId();
+	else		leptnoMa_w1l_pdgId = evt.MC_w1l_pdgId();
 	
     }else if (evt.MC_w2l_pdgId()==-11){
     	dr = lept.DeltaR(evt.MC_w2l());
-    	if (dr<drMax)	leptMA_pdgId = evt.MC_w2l_pdgId();
+    	if (dr<drMax)	leptMa_pdgId = evt.MC_w2l_pdgId();
+	else		leptnoMa_w2l_pdgId = evt.MC_w2l_pdgId();
 	
-    }else if (abs(evt.MC_w1l_pdgId())==13 || abs(evt.MC_w2l_pdgId())==13)    	std::cout << "reco electron and truth muon" << std::endl;    
-    
+    }else if (abs(evt.MC_w1l_pdgId())==13 || abs(evt.MC_w2l_pdgId())==13)	std::cout << "reco electron and truth muon" << std::endl;
+	   
   } else {
     lept = evt.muon()[0].mom();
+    lept_quality = evt.muon()[0].isTight();    
+    
     if (evt.MC_w1l_pdgId()==13){
     	dr = lept.DeltaR(evt.MC_w1l());
-	if (dr<drMax)	leptMA_pdgId = evt.MC_w1l_pdgId();
+	if (dr<drMax)	leptMa_pdgId = evt.MC_w1l_pdgId();
 	
     }else if (evt.MC_w2l_pdgId()==-13){
     	dr = lept.DeltaR(evt.MC_w2l());
-	if (dr<drMax)	leptMA_pdgId = evt.MC_w2l_pdgId();
+	if (dr<drMax)	leptMa_pdgId = evt.MC_w2l_pdgId();
 	
     }else if (abs(evt.MC_w1l_pdgId())==11 || abs(evt.MC_w2l_pdgId())==11)    	std::cout << "reco muon and truth electron" << std::endl;    
   
   }//m_electron
-   
-  if (leptMA_pdgId!=0){
+ 
+  if (leptMa_pdgId!=0){
   	//std::cout << "Matched lepton" << std::endl;
-	//std::cout << "m_electron: " << m_electron << " -> matched to MC: " << leptMA_pdgId << std::endl;
-	//std::cout << "MA lepton pT:" << lept.Pt() << std::endl;	
+	//std::cout << "m_electron: " << m_electron << " -> Matched to MC: " << leptMa_pdgId << std::endl;
+	//std::cout << "Ma lepton pT:" << lept.Pt() << std::endl;	
 	  
   	//Filling histograms
-  	h->h1D("lepMA_pt", "", s)   ->Fill(lept.Perp()*1e-3);
-  	h->h1D("lepMA_eta", "", s)  ->Fill(lept.Eta()    );
-  	h->h1D("lepMA_phi", "", s)  ->Fill(lept.Phi()    );
-  	h->h1D("lepMA_m", "", s)    ->Fill(lept.M()*1e-3 ); 
-  	h->h1D("lepMA_pdgId", "", s)->Fill(leptMA_pdgId  ); 
-  	h->h2D("MA_pt_vs_eta", "", s)->Fill(lept.Perp()*1e-3, lept.Eta());  
+  	h->h1D("lepMa_pt", "", s)   ->Fill(lept.Perp()*1e-3);
+  	h->h1D("lepMa_eta", "", s)  ->Fill(lept.Eta()    );
+  	h->h1D("lepMa_phi", "", s)  ->Fill(lept.Phi()    );
+  	h->h1D("lepMa_m", "", s)    ->Fill(lept.M()*1e-3 ); 
+  	h->h1D("lepMa_pdgId", "", s)->Fill(leptMa_pdgId  ); 
+  	h->h2D("Ma_pt_vs_eta", "", s)->Fill(lept.Perp()*1e-3, lept.Eta());  
 	
 	//deltaR between lepton and the closest narrow jet
   	float closejl_deltaR  = 99;
@@ -180,11 +206,21 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
   	}//for     
   	
 	if (closejl_deltaR<99){
-  	   h->h1D("closejl_minDeltaR", "", s)->Fill(closejl_deltaR); 
-	   h->h2D("LepMApt_vs_closejlDR", "", s)->Fill(lept.Perp()*1e-3, closejl_deltaR);
-	}
+	
+	   if (lept_quality){
+  	      h->h1D("minDeltaR_jet_lept", "", s)->Fill(closejl_deltaR); 
+	      h->h2D("LepMa_pt_vs_DR", "", s)    ->Fill(lept.Perp()*1e-3, closejl_deltaR);
+	      h->h1D("lepMadR_pt", "", s)        ->Fill(lept.Perp()*1e-3);
+	   }else{
+	      h->h1D("antiTight_minDeltaR_jet_lept", "", s)->Fill(closejl_deltaR); 
+	      h->h2D("antiTight_LepMa_pt_vs_DR", "", s)    ->Fill(lept.Perp()*1e-3, closejl_deltaR);
+	      h->h1D("antiTight_lepMadR_pt", "", s)        ->Fill(lept.Perp()*1e-3);	   
+	   }//(lept_quality)
 
-  }
+	}//(closejl_deltaR<99)
+  }//(leptMa_pdgId!=0)
+  
+  
   //std::cout << " -- " << std::endl;
 
   
@@ -197,7 +233,7 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
   std::cout << "evt.MC_w2l().Pt(): " << evt.MC_w2l().Perp() << " evt.MC_w2l().M(): " << evt.MC_w2l().M() << " evt.MC_w2l().Eta(): " << evt.MC_w2l().Eta() << " evt.MC_w2l().Phi(): " << evt.MC_w2l().Phi() << std::endl;
   std::cout << "pdgId1: " << evt.MC_w1l_pdgId() << " - pdgId2: " << evt.MC_w2l_pdgId() << std::endl;
   std::cout << "dr: " << dr << std::endl;
-  std::cout << "leptMA_pdgId: " << leptMA_pdgId << std::endl;
+  std::cout << "leptMa_pdgId: " << leptMa_pdgId << std::endl;
   std::cout << "--" << std::endl;
   */
 

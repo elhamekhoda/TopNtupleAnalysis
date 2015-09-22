@@ -95,18 +95,23 @@ class MiniTree {
     float	    vtxz;
     Float_t         mu;
     Float_t	    mu_original;
+    
     vector<float>   *el_pt;
     vector<float>   *el_eta;
     vector<float>   *el_phi;
     vector<float>   *el_e;
     vector<float>   *el_charge;
     vector<float>   *el_miniiso;
+    vector<char>    *el_isTight;
+    
     vector<float>   *mu_pt;
     vector<float>   *mu_eta;
     vector<float>   *mu_phi;
     vector<float>   *mu_e;
     vector<float>   *mu_charge;
     vector<float>   *mu_miniiso;
+    vector<char>    *mu_isTight;
+    
     vector<float>   *jet_pt;
     vector<float>   *jet_eta;
     vector<float>   *jet_phi;
@@ -116,6 +121,7 @@ class MiniTree {
     vector<float>   *jet_mv2c20;
     vector<float>   *jet_ip3dsv1;
     vector<float>   *jet_jvt;
+    
     vector<float>   *ljet_pt;
     vector<float>   *ljet_eta;
     vector<float>   *ljet_phi;

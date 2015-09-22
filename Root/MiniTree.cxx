@@ -49,8 +49,7 @@ void MiniTree::read(int event, Event &e) {
   e.weight_bTagSF() = weight_bTagSF;
   e.weight_leptonSF() = weight_leptonSF;
   
-  // adding the truth information into the event       
-  //std::cout << "MC_w1l_pt: " << MC_w1l_pt << " - MC_w1l_m: " << MC_w1l_m  << " - MC_w1l_eta: " << MC_w1l_eta << " - MC_w1l_phi: " << MC_w1l_phi<< " - MC_w1l_pdgID: "<< MC_w1l_pdgId << std::endl;
+  // adding the truth information into the event        
   if(MC_w1h_pt>0)	e.MC_w1h().SetPtEtaPhiM(MC_w1h_pt, MC_w1h_eta, MC_w1h_phi, MC_w1h_m);
   else			e.MC_w1h().SetPtEtaPhiM(2000, -9., -9., 0);  
   e.MC_w1h_pdgId() 	= MC_w1h_pdgId;
@@ -103,7 +102,7 @@ void MiniTree::read(int event, Event &e) {
     e.electron().push_back(Electron());
     e.electron()[k].mom().SetPtEtaPhiE(el_pt->at(k), el_eta->at(k), el_phi->at(k), el_e->at(k));
     //e.electron()[k].setMI(el_miniiso->at(k));
-    e.electron()[k].setTightPP(true);
+    (el_isTight) ? e.electron()[k].setTightPP(el_isTight->at(k)) : e.electron()[k].setTightPP(true);
     e.electron()[k].caloMom() = e.electron()[k].mom();
     e.electron()[k].trkMom() = e.electron()[k].mom();
     e.electron()[k].z0() = 0;
@@ -114,6 +113,7 @@ void MiniTree::read(int event, Event &e) {
     e.muon()[k].mom().SetPtEtaPhiE(mu_pt->at(k), mu_eta->at(k), mu_phi->at(k), mu_e->at(k));
     e.muon()[k].setMI(0);
     e.muon()[k].setTight(true);
+    (mu_isTight) ? e.muon()[k].setTight(mu_isTight->at(k)) : e.muon()[k].setTight(true);
     e.muon()[k].z0() = 0;
     e.muon()[k].d0() = 0;
     e.muon()[k].sd0() = 0;
@@ -270,12 +270,14 @@ void MiniTree::prepareBranches() {
   el_phi = 0;
   el_miniiso = 0;
   el_e = 0;
+  el_isTight = 0;
 
   mu_pt = 0;
   mu_eta = 0;
   mu_phi = 0;
   mu_miniiso = 0;
   mu_e = 0;
+  mu_isTight = 0;
 
   jet_pt = 0;
   jet_eta = 0;
@@ -636,12 +638,14 @@ void MiniTree::prepareBranches() {
     m_chain->SetBranchAddress("el_phi", &el_phi);
     m_chain->SetBranchAddress("el_e", &el_e);
     //m_chain->SetBranchAddress("el_miniiso", &el_miniiso);
+    m_chain->SetBranchAddress("el_isTight", &el_isTight);
 
     m_chain->SetBranchAddress("mu_pt", &mu_pt);
     m_chain->SetBranchAddress("mu_eta", &mu_eta);
     m_chain->SetBranchAddress("mu_phi", &mu_phi);
     m_chain->SetBranchAddress("mu_e", &mu_e);
     //m_chain->SetBranchAddress("mu_miniiso", &mu_miniiso);
+    m_chain->SetBranchAddress("mu_isTight", &mu_isTight);
 
     m_chain->SetBranchAddress("jet_pt", &jet_pt);
     m_chain->SetBranchAddress("jet_eta", &jet_eta);

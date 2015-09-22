@@ -18,7 +18,7 @@ class Muon : public MObject {
     float mi() const;
 
     bool isTight() const;
-    void setTight(bool t);
+    void setTight(char t);
 
     const float z0() const;
     float &z0();
