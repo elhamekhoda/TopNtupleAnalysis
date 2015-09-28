@@ -21,7 +21,8 @@ class Analysis {
     virtual void run(const Event &e, double weight, const std::string &systUnc = "") = 0;
     virtual void terminate() = 0;
     virtual void setIsData(bool isData) = 0;
-
+    virtual void clearDuplicateList();
+    
   protected:
     std::string m_filename;
     HistogramService m_hSvc;

@@ -23,6 +23,11 @@ Analysis::Analysis(const std::string &filename)
 Analysis::~Analysis() {
 }
 
+
+void Analysis::clearDuplicateList(){
+   m_runEventPair.clear();
+}
+
 bool Analysis::isDuplicateEvent(unsigned int runNumber, unsigned int eventNumber){
   std::pair<unsigned int, unsigned int> runEvent(runNumber, eventNumber);
   //std::cout << runNumber << "\t" << eventNumber << std::endl;
