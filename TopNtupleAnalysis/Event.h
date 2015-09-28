@@ -34,13 +34,13 @@ class Event {
     unsigned int &runNumber();
     const unsigned int runNumber() const;
 
-    int &eventNumber();
-    const int eventNumber() const;
+    unsigned int &eventNumber();
+    const unsigned int eventNumber() const;
 
     bool &isData();
     const bool isData() const;
 
-    unsigned int &channelNumber();
+    int &channelNumber();
     const int channelNumber() const;
 
     float &weight_pileup();

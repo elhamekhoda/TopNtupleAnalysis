@@ -109,19 +109,19 @@ const std::vector<LargeJet> &Event::largeJet() const {
   return m_largeJet;
 }
 
-int &Event::runNumber() {
+unsigned int &Event::runNumber() {
   return m_runNumber;
 }
 
-const int Event::runNumber() const {
+const unsigned int Event::runNumber() const {
   return m_runNumber;
 }
 
-int &Event::eventNumber() {
+unsigned int &Event::eventNumber() {
   return m_eventNumber;
 }
 
-const int Event::eventNumber() const {
+const unsigned int Event::eventNumber() const {
   return m_eventNumber;
 }
 
