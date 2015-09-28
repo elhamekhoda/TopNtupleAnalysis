@@ -23,3 +23,13 @@ Analysis::Analysis(const std::string &filename)
 Analysis::~Analysis() {
 }
 
+bool Analysis::isDuplicateEvent(unsigned int runNumber, unsigned int eventNumber){
+  std::pair<unsigned int, unsigned int> runEvent(runNumber, eventNumber);
+  //std::cout << runNumber << "\t" << eventNumber << std::endl;
+  if( m_runEventPair.end() == m_runEventPair.find(runEvent) ) { 
+    m_runEventPair.insert(runEvent);
+    return false;
+  }
+  
+  return true;
+}

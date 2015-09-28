@@ -441,13 +441,13 @@ int main(int argc, char **argv) {
       
           if (analysis=="AnaTtresSL") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-              vec_analysis[iAna]->run(sel, weight, suffix);
+                vec_analysis[iAna]->run(sel, weight, suffix);
           } else if (analysis=="AnaTtresQCD") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-              vec_analysis[iAna]->run(sel, weight, suffix);
+                vec_analysis[iAna]->run(sel, weight, suffix);
           } else if (analysis=="AnaTtresSLMtt") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-              vec_analysis[iAna]->run(sel, weight, suffix);
+                vec_analysis[iAna]->run(sel, weight, suffix);
           } //if  
         } // end of loop over weight systematics
       } // end of loop over entries
@@ -463,4 +463,5 @@ int main(int argc, char **argv) {
 
   return 0;
 }
+
 

@@ -25,6 +25,8 @@ class Analysis {
   protected:
     std::string m_filename;
     HistogramService m_hSvc;
+    std::set<std::pair<unsigned int, unsigned int>> m_runEventPair;
+    bool isDuplicateEvent(unsigned int runNumber, unsigned int eventNumber);
 
 };
 

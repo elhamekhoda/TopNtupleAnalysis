@@ -34,7 +34,9 @@ void MiniTree::read(int event, Event &e) {
   e.clear();
   m_chain->GetEntry(event);
   e.channelNumber() = ui("mcChannelNumber");
-
+  e.eventNumber() = ui("eventNumber"); 
+  e.runNumber() = ui("runNumber"); 
+  
   e.npv() = i("npv"); 
   e.vtxz() = f("vtxz");
   e.mu() = f("mu");
@@ -201,6 +203,7 @@ void MiniTree::prepareBranches() {
   for (size_t z = 0; z < l->GetEntries(); ++z) {
     std::string name = l->At(z)->GetName();
     std::string type = ((TBranch *) l->At(z))->GetLeaf(name.c_str())->GetTypeName();
+    //std::cout<< name << "\t" << type << std::endl;
     if (type == "Float_t" || type == "float") {
       m_f[name] = -50000;
     } else if (type == "Int_t" || type == "int") {

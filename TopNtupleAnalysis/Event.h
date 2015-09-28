@@ -31,8 +31,8 @@ class Event {
     void met(float met_x, float met_y);
     TLorentzVector met() const;
 
-    int &runNumber();
-    const int runNumber() const;
+    unsigned int &runNumber();
+    const unsigned int runNumber() const;
 
     int &eventNumber();
     const int eventNumber() const;
@@ -40,7 +40,7 @@ class Event {
     bool &isData();
     const bool isData() const;
 
-    int &channelNumber();
+    unsigned int &channelNumber();
     const int channelNumber() const;
 
     float &weight_pileup();
@@ -172,8 +172,8 @@ class Event {
     int m_MA_w2l_pdgId;   
     TLorentzVector m_MA_bl; 
 
-    int m_runNumber;
-    int m_eventNumber;
+    unsigned int m_runNumber;
+    unsigned int m_eventNumber;
     int m_channelNumber;
     bool m_isData;
     float m_mu;

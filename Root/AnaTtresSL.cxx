@@ -90,6 +90,7 @@ AnaTtresSL::~AnaTtresSL() {
 
 void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   // check channel
+  
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
 
@@ -103,7 +104,10 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   if (!m_boosted)
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
-    
+  
+  if (isDuplicateEvent(evt.runNumber(), evt.eventNumber()) )
+      return;
+  
   HistogramService *h = &m_hSvc;
   TLorentzVector l;
   if (m_electron) {
