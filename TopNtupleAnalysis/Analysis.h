@@ -6,6 +6,7 @@
 #ifndef ANALYSIS_H
 #define ANALYSIS_H
 
+#include <iostream>
 #include <string>
 #include "TH1F.h"
 #include "TFile.h"
@@ -22,13 +23,15 @@ class Analysis {
     virtual void terminate() = 0;
     virtual void setIsData(bool isData) = 0;
     virtual void clearDuplicateList();
+    virtual unsigned int getNduplicate(){return m_Nduplicate;};
     
   protected:
     std::string m_filename;
     HistogramService m_hSvc;
     std::set<std::pair<unsigned int, unsigned int>> m_runEventPair;
     bool isDuplicateEvent(unsigned int runNumber, unsigned int eventNumber);
-
+    
+    unsigned int m_Nduplicate;
 };
 
 #endif

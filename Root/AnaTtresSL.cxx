@@ -83,6 +83,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   }
 
   m_hSvc.create1D("mtt", "; m_{t#bar{t}} [GeV]; Events", 60, 0, 6000);
+  
 }
 
 AnaTtresSL::~AnaTtresSL() {
@@ -105,8 +106,10 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
   
-  if (isDuplicateEvent(evt.runNumber(), evt.eventNumber()) )
+  if (s=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber()) ){
+      m_Nduplicate++;
       return;
+  }
   
   HistogramService *h = &m_hSvc;
   TLorentzVector l;

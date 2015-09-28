@@ -262,9 +262,31 @@ int main(int argc, char **argv) {
       // now we are looping over all possible TTrees with all systematic uncertainties
       // Call MiniTree to open the files and read that TTree
       std::string tname = lepton_modes[lmodeIdx];
+      /*
       MiniTree mt(false, fileList[0].c_str(), tname.c_str());
+      */
+      std::string temp1 = tname;
+      if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos)   { // run on both nominal and nominal_loose for the loose sample
+         temp1 = systsList[systIdx];
+      }
+      MiniTree mt(false, fileList[0], temp1.c_str());
+      if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos)   { // run on both nominal and nominal_loose for the loose sample
+          mt.addFileToRead(fileList[0], (systsList[systIdx]+std::string("_Loose")).c_str());
+      }
+      
+      
+      
       for (int k = 1; k < fileList.size(); ++k) {
-        mt.addFileToRead(fileList[k]);
+        
+	if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos){
+  	  // run on both nominal and nominal_loose for the loose sample
+          mt.addFileToRead(fileList[k], (systsList[systIdx]).c_str());
+          mt.addFileToRead(fileList[k], (systsList[systIdx]+std::string("_Loose")).c_str());
+	}
+	else{
+	  mt.addFileToRead(fileList[k], tname.c_str());
+	}
+        //mt.addFileToRead(fileList[k]);
       }
 
       // for the nominal "systematic unc.", use an empty string as suffix to be backward compatible
@@ -438,10 +460,11 @@ int main(int argc, char **argv) {
             if (nBtagged < abs(_btags))
               continue;
           }
-	  
+	  	  
           if (analysis=="AnaTtresSL") {
-            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
                 vec_analysis[iAna]->run(sel, weight, suffix);
+            }
           } else if (analysis=="AnaTtresQCD") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
                 vec_analysis[iAna]->run(sel, weight, suffix);
@@ -455,6 +478,7 @@ int main(int argc, char **argv) {
   } // end of loop over systematics
 
   for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+    std::cout << "Removed " << vec_analysis[iAna]->getNduplicate() << " duplicate entries" << std::endl;
     vec_analysis[iAna]->terminate();
     delete vec_analysis[iAna];
   }

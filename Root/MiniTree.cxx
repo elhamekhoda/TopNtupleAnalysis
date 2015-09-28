@@ -190,6 +190,10 @@ void MiniTree::addFileToRead(const std::string &fname) {
   ((TChain *) m_chain)->Add(fname.c_str());
 }
 
+void MiniTree::addFileToRead(const std::string &fname, const std::string &treeName) {
+  ((TChain *) m_chain)->Add((fname+"/"+treeName).c_str());
+}
+
 double MiniTree::getSumWeights() {
   return m_sumWeights;
 }

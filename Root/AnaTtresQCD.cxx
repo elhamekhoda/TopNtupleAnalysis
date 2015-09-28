@@ -86,9 +86,11 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
   
-  if (isDuplicateEvent(evt.runNumber(), evt.eventNumber()) )
+  if (s=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber()) ){
+      m_Nduplicate++;
       return;
-    
+  }
+  
   HistogramService *h = &m_hSvc;
   
   //Pre-selection

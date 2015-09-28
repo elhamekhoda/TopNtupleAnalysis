@@ -23,6 +23,7 @@ class MiniTree {
     virtual ~MiniTree();
 
     void addFileToRead(const std::string &fname);
+    void addFileToRead(const std::string &fname, const std::string &treeName);
     int GetEntries();
     double getSumWeights();
     void read(int event, Event &e);

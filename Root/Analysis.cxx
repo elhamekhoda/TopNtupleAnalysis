@@ -7,7 +7,7 @@
 #include "TopNtupleAnalysis/Event.h"
 
 Analysis::Analysis(const std::string &filename, std::vector<std::string> &systematicList)
-  : m_filename(filename), m_hSvc(filename) {
+  : m_filename(filename), m_hSvc(filename), m_Nduplicate(0) {
   for (size_t i = 0; i < systematicList.size(); ++i) {
     m_hSvc.addSystematics(systematicList[i]);
   }
@@ -15,7 +15,7 @@ Analysis::Analysis(const std::string &filename, std::vector<std::string> &system
 }
 
 Analysis::Analysis(const std::string &filename)
-  : m_filename(filename), m_hSvc(filename) {
+  : m_filename(filename), m_hSvc(filename), m_Nduplicate(0) {
   m_hSvc.addSystematics("");
   m_hSvc.addTrigger("");
 }
@@ -30,7 +30,6 @@ void Analysis::clearDuplicateList(){
 
 bool Analysis::isDuplicateEvent(unsigned int runNumber, unsigned int eventNumber){
   std::pair<unsigned int, unsigned int> runEvent(runNumber, eventNumber);
-  //std::cout << runNumber << "\t" << eventNumber << std::endl;
   if( m_runEventPair.end() == m_runEventPair.find(runEvent) ) { 
     m_runEventPair.insert(runEvent);
     return false;
