@@ -17,10 +17,10 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
 
   m_chi2.Init(TtresChi2::DATA2015_MC15);
 
-  Double_t pT_bins_r[10] = {25, 35, 45, 55, 75, 95, 115, 165, 215, 275};
-  Double_t pT_bins_b[12] = {25, 35, 45, 55, 75, 95, 115, 165, 215, 275, 325, 500}; 
-  Double_t DR_bins_r[14] = {0., 0.1, 0.2, 0.3, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 5};
-  Double_t DR_bins_b[13] = {0., 0.1, 0.2, 0.3, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2};
+  Double_t pT_bins_r[8] = {25, 40, 60, 80, 100, 150, 250, 500};
+  Double_t pT_bins_b[8] = {25, 40, 60, 80, 100, 150, 250, 500}; 
+  Double_t DR_bins_r[8] = {0.,0.2, 0.4, 0.6, 0.8, 1.0, 1.7, 5.0};
+  Double_t DR_bins_b[8] = {0.,0.2, 0.4, 0.6, 0.8, 1.0, 1.7, 5.0};
     
   //Histograms for MC variables
   //electrons
@@ -48,20 +48,14 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   //Delta R between the Ma reco leptons and the closest jet
   
   if (!boosted)	{
-     m_hSvc.create2DVar("LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 9, pT_bins_r, 13, DR_bins_r);
-     m_hSvc.create1DVar("minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 13, DR_bins_r);
-     m_hSvc.create1DVar("lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 9, pT_bins_r);
-     m_hSvc.create2DVar("antiTight_LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 9, pT_bins_r, 13, DR_bins_r);
-     m_hSvc.create1DVar("antiTight_minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 13, DR_bins_r);
-     m_hSvc.create1DVar("antiTight_lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 9, pT_bins_r);
+     m_hSvc.create2DVar("LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 7, pT_bins_r, 7, DR_bins_r);
+     m_hSvc.create1DVar("minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 7, DR_bins_r);
+     m_hSvc.create1DVar("lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 7, pT_bins_r);
      
   }else	{	
-     m_hSvc.create2DVar("LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 11, pT_bins_b, 12, DR_bins_b);
-     m_hSvc.create1DVar("minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 12, DR_bins_b);
-     m_hSvc.create1DVar("lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 11, pT_bins_b);
-     m_hSvc.create2DVar("antiTight_LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 11, pT_bins_b, 12, DR_bins_b);
-     m_hSvc.create1DVar("antiTight_minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 12, DR_bins_b);
-     m_hSvc.create1DVar("antiTight_lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 11, pT_bins_b);
+     m_hSvc.create2DVar("LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 7, pT_bins_b, 7, DR_bins_b);
+     m_hSvc.create1DVar("minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 7, DR_bins_b);
+     m_hSvc.create1DVar("lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 7, pT_bins_b);
      
   }
 
@@ -141,35 +135,27 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
   //Matching truth and reco lepton
   ///----------------------------------
   
-  TLorentzVector lept;
-  bool lept_quality = true;
-    
+  TLorentzVector lept;    
   int leptMa_pdgId = 0;
-  int leptnoMa_w1l_pdgId = 0;
-  int leptnoMa_w2l_pdgId = 0;
-  
+
   float dr = 99;
   float drMax = 0.4;
   
   if (m_electron) {  
-    lept = evt.electron()[0].mom();    
-    lept_quality = evt.electron()[0].isTightPP();    
+    lept = evt.electron()[0].mom();       
     
     if (evt.MC_w1l_pdgId()==11){
     	dr = lept.DeltaR(evt.MC_w1l());
 	if (dr<drMax)	leptMa_pdgId = evt.MC_w1l_pdgId();
-	else		leptnoMa_w1l_pdgId = evt.MC_w1l_pdgId();
 	
     }else if (evt.MC_w2l_pdgId()==-11){
     	dr = lept.DeltaR(evt.MC_w2l());
     	if (dr<drMax)	leptMa_pdgId = evt.MC_w2l_pdgId();
-	else		leptnoMa_w2l_pdgId = evt.MC_w2l_pdgId();
 	
     }else if (abs(evt.MC_w1l_pdgId())==13 || abs(evt.MC_w2l_pdgId())==13)	std::cout << "reco electron and truth muon" << std::endl;
 	   
   } else {
-    lept = evt.muon()[0].mom();
-    lept_quality = evt.muon()[0].isTight();    
+    lept = evt.muon()[0].mom();   
     
     if (evt.MC_w1l_pdgId()==13){
     	dr = lept.DeltaR(evt.MC_w1l());
@@ -200,10 +186,21 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
   	float closejl_deltaR  = 99;
   	float deltaR_tmp      = 99;
   	int closejl_idx       = -1;
-  
+	double deltaRapidity2  = 99;
+        double deltaPhi2       = 99;
+
   	size_t jet_idx = 0;
-  	for (; jet_idx < evt.jet().size(); ++jet_idx){    
-    	  deltaR_tmp = lept.DeltaR(evt.jet()[jet_idx].mom());
+  	for (; jet_idx < evt.jet().size(); ++jet_idx){  
+	
+	  deltaRapidity2 = evt.jet()[jet_idx].mom().Rapidity() - lept.Eta();
+          deltaRapidity2 = pow(deltaRapidity2, 2);
+          
+          deltaPhi2 = evt.jet()[jet_idx].mom().Phi() - lept.Phi();
+          deltaPhi2 = pow(deltaPhi2, 2);
+           
+          //deltaR_tmp = lept.DeltaR(evt.jet()[jet_idx].mom());
+          deltaR_tmp = sqrt(deltaPhi2 + deltaRapidity2);
+	  
     	  if (deltaR_tmp < closejl_deltaR){
               closejl_deltaR = deltaR_tmp;
               closejl_idx = jet_idx;
@@ -211,16 +208,9 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
   	}//for     
   	
 	if (closejl_deltaR<99){
-	
-	   if (lept_quality){
-  	      h->h1D("minDeltaR_jet_lept", "", s)->Fill(closejl_deltaR); 
-	      h->h2D("LepMa_pt_vs_DR", "", s)    ->Fill(lept.Perp()*1e-3, closejl_deltaR);
-	      h->h1D("lepMadR_pt", "", s)        ->Fill(lept.Perp()*1e-3);
-	   }else{
-	      h->h1D("antiTight_minDeltaR_jet_lept", "", s)->Fill(closejl_deltaR); 
-	      h->h2D("antiTight_LepMa_pt_vs_DR", "", s)    ->Fill(lept.Perp()*1e-3, closejl_deltaR);
-	      h->h1D("antiTight_lepMadR_pt", "", s)        ->Fill(lept.Perp()*1e-3);	   
-	   }//(lept_quality)
+  	   h->h1D("minDeltaR_jet_lept", "", s)->Fill(closejl_deltaR); 
+	   h->h2D("LepMa_pt_vs_DR", "", s)    ->Fill(lept.Perp()*1e-3, closejl_deltaR);
+	   h->h1D("lepMadR_pt", "", s)        ->Fill(lept.Perp()*1e-3);
 
 	}//(closejl_deltaR<99)
   }//(leptMa_pdgId!=0)

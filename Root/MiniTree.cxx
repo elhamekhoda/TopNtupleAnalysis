@@ -43,7 +43,7 @@ void MiniTree::read(int event, Event &e) {
   e.mu_original() = f("mu_original");
   e.weight_mc() = f("weight_mc");
   e.weight_pileup() = f("weight_pileup");
-  e.weight_bTagSF() = f("weight_bTagSF");
+  e.weight_bTagSF() = f("weight_bTagSF_70");
   e.weight_leptonSF() = f("weight_leptonSF");
   
   // adding the truth information into the event        
