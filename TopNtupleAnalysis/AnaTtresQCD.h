@@ -20,7 +20,8 @@ class AnaTtresQCD : public Analysis {
     AnaTtresQCD(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList);
     virtual ~AnaTtresQCD();
 
-    void run(const Event &e, double weight, const std::string &syst);
+    virtual void runEfficiency(const Event &e, double weight, const std::string &syst);
+    virtual void runFakeRate(const Event &e, double weight, const std::string &syst);
     void terminate() {};
     void setIsData(bool isData) {};
 

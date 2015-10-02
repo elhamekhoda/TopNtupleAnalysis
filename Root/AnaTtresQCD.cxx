@@ -21,7 +21,8 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   Double_t pT_bins_b[8] = {25, 40, 60, 80, 100, 150, 250, 500}; 
   Double_t DR_bins_r[8] = {0.,0.2, 0.4, 0.6, 0.8, 1.0, 1.7, 5.0};
   Double_t DR_bins_b[8] = {0.,0.2, 0.4, 0.6, 0.8, 1.0, 1.7, 5.0};
-    
+  Double_t closeLJpT_bins_r[8] = {25, 40, 60, 80, 100, 150, 250, 500};
+  Double_t closeLJpT_bins_b[8] = {25, 40, 60, 80, 100, 150, 250, 500}; 
   //Histograms for MC variables
   //electrons
   m_hSvc.create1D("MC_e_pt", "; Pt of MC electron [GeV]; Events", 40, 0, 500);
@@ -45,17 +46,30 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   m_hSvc.create1D("lepMa_pdgId", "; pdgId of Matched lept ; Events", 30, -15, 15);
   m_hSvc.create2D("Ma_pt_vs_eta", "; pt of Matched lepton [GeV]; #eta of Matched lepton", 40, 0, 500, 24, -3., 3.);
 
-  //Delta R between the Ma reco leptons and the closest jet
+  //For the fake studies
+  m_hSvc.create1D("MET", "; Missing E_{T} [GeV]; Events", 50, 0, 500);
+  m_hSvc.create1D("MET_phi", "; Missing E_{T} #phi; Events", 40, -4.0, 4.0);    
+  m_hSvc.create1D("mwt", "; W transverse mass [GeV]; Events", 50, 0, 500);  
   
   if (!boosted)	{
-     m_hSvc.create2DVar("LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 7, pT_bins_r, 7, DR_bins_r);
-     m_hSvc.create1DVar("minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 7, DR_bins_r);
-     m_hSvc.create1DVar("lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 7, pT_bins_r);
+     //Eff
+     m_hSvc.create2DVar("LepMa_pt_vs_DR", 	"; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 7, pT_bins_r, 7, DR_bins_r);
+     m_hSvc.create1DVar("minDeltaR_jet_lept", 	"; min #Delta R(lep, jet); Events", 7, DR_bins_r);
+     m_hSvc.create1DVar("lepMadR_pt",    	"; Pt of Matched lept [GeV]; Events", 7, pT_bins_r);
+     //Fake 
+     m_hSvc.create2DVar("lepPt_vs_closeJL_pt", 	"; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", 7, pT_bins_r, 7, closeLJpT_bins_r);
+     m_hSvc.create1DVar("closeLepJet_pt",    	"; Pt of closest jet to the lept [GeV]; Events", 7, closeLJpT_bins_r);
+     m_hSvc.create1DVar("lep_pt",    		"; Pt of Matched lept [GeV]; Events", 7, pT_bins_r);
      
-  }else	{	
-     m_hSvc.create2DVar("LepMa_pt_vs_DR", "; pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 7, pT_bins_b, 7, DR_bins_b);
-     m_hSvc.create1DVar("minDeltaR_jet_lept", "; min #Delta R(lep, jet); Events", 7, DR_bins_b);
-     m_hSvc.create1DVar("lepMadR_pt",    "; Pt of Matched lept [GeV]; Events", 7, pT_bins_b);
+  }else	{
+     //Eff	
+     m_hSvc.create2DVar("LepMa_pt_vs_DR", 	"; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", 7, pT_bins_b, 7, DR_bins_b);
+     m_hSvc.create1DVar("minDeltaR_jet_lept", 	"; min #Delta R(lep, jet); Events", 7, DR_bins_b);
+     m_hSvc.create1DVar("lepMadR_pt",    	"; Pt of Matched lept [GeV]; Events", 7, pT_bins_b);
+     //Fake 
+     m_hSvc.create2DVar("lepPt_vs_closeJL_pt", 	"; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", 7, pT_bins_b, 7, closeLJpT_bins_b);
+     m_hSvc.create1DVar("closeLepJet_pt",    	"; Pt of closest jet to the lept [GeV]; Events", 7, closeLJpT_bins_b);     
+     m_hSvc.create1DVar("lep_pt",    		"; Pt of Matched lept [GeV]; Events", 7, pT_bins_b);
      
   }
 
@@ -64,7 +78,8 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
 AnaTtresQCD::~AnaTtresQCD() {
 }
 
-void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
+
+void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::string &s){
   // check channel
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
@@ -216,7 +231,7 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
   }//(leptMa_pdgId!=0)
   
   
-  //std::cout << " -- " << std::endl;
+  //std::cout << " -- " << std::endl; 
 
   
   /*
@@ -232,5 +247,88 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s) {
   std::cout << "--" << std::endl;
   */
 
-}//AnaTtresQCD::run
+}//AnaTtresQCD::runEffRate 
+
+void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string &s){
+  // check channel
+  if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
+    return;
+
+  if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
+    return;
+
+  if (m_boosted)
+    if (!(evt.passes("bejets") || evt.passes("bmujets")))
+      return;
+
+  if (!m_boosted)
+    if (!(evt.passes("rejets") || evt.passes("rmujets")))
+      return;
+  
+  if (s=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber()) ){
+      m_Nduplicate++;
+      return;
+  }
+  
+  HistogramService *h = &m_hSvc;
+  
+  TLorentzVector lept;  
+  float met(0);
+  float mWt(0);  
+  float mWt_threshold(100000);
+  
+  //lepton
+  if (m_electron) 	lept = evt.electron()[0].mom(); 
+  else			lept = evt.muon()[0].mom();   
+ 
+  //MET
+  met = evt.met().Perp();
+  h->h1D("MET", "", s)	   ->Fill(met*1e-3);
+  h->h1D("MET_phi", "", s)->Fill(evt.met().Phi());
+  
+  //transverse W mass 
+  mWt = sqrt(2. * lept.Perp() * evt.met().Perp() * (1. - cos(lept.Phi() - evt.met().Phi()))); 
+  
+  if (mWt < mWt_threshold){
+  
+     h->h1D("mwt", "", s)->Fill(mWt*1e-3); 
+  
+     //deltaR between lepton and the closest narrow jet
+  
+     double deltaRapidity2  = 99;
+     double deltaPhi2       = 99;
+     float closejl_deltaR   = 99;
+     float deltaR_tmp       = 99;
+     int closejl_idx        = -1;
+     float closejl_pT       = -1;
+  
+     size_t jet_idx = 0;
+     for (; jet_idx < evt.jet().size(); ++jet_idx){  	
+       deltaRapidity2 = evt.jet()[jet_idx].mom().Rapidity() - lept.Eta();
+       deltaRapidity2 = pow(deltaRapidity2, 2);
+     
+       deltaPhi2 = evt.jet()[jet_idx].mom().Phi() - lept.Phi();
+       deltaPhi2 = pow(deltaPhi2, 2);
+      
+       //deltaR_tmp = lept.DeltaR(evt.jet()[jet_idx].mom());
+       deltaR_tmp = sqrt(deltaPhi2 + deltaRapidity2);
+
+        if (deltaR_tmp < closejl_deltaR){
+     	   closejl_deltaR = deltaR_tmp;
+     	   closejl_idx = jet_idx;
+	   closejl_pT  = evt.jet().at(jet_idx).mom().Pt();
+	   h->h1D("closeLepJet_pt", "", s)->Fill(closejl_pT*1e-3);
+	   h->h1D("lep_pt", "", s)->Fill(lept.Pt()*1e-3);
+	   h->h2D("lepPt_vs_closeJL_pt", "", s)    ->Fill(lept.Perp()*1e-3, closejl_pT*1e-3); 	   
+        }   
+     }//for
+     
+  }//if   
+  
+}//AnaTtresQCD::runFakeRate
+
+
+
+
+
 

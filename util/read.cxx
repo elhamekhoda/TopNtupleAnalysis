@@ -213,7 +213,7 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresSL(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
-  } else if(analysis == "AnaTtresQCD"){
+  } else if(analysis == "AnaTtresQCDreal"||analysis == "AnaTtresQCDfake"){
     vec_analysis.push_back(new AnaTtresQCD(outList[0], true,  false, systsListWithBlankNominal) ); //resolved electron
     vec_analysis.push_back(new AnaTtresQCD(outList[1], false, false, systsListWithBlankNominal) ); // resolved muon
     vec_analysis.push_back(new AnaTtresQCD(outList[2], true,  true,  systsListWithBlankNominal) ); // boosted  electron
@@ -437,7 +437,7 @@ int main(int argc, char **argv) {
           
             if (sumOfWeights[channel] != 0)
               weight /= sumOfWeights[channel];
-            // std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" <<  sel.weight_bTagSF() << "\t" << sel.weight_leptonSF() << "\t" << sel.weight_pileup() << "\t" << sumOfWeights[channel]  << std::endl;          
+              //std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" << btagsf  << "\t" << sel.weight_leptonSF() << "\t" << sel.weight_pileup() << "\t" << sumOfWeights[channel]  << std::endl;          
           }
       
           // this applies b-tagging early
@@ -465,9 +465,12 @@ int main(int argc, char **argv) {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
                 vec_analysis[iAna]->run(sel, weight, suffix);
             }
-          } else if (analysis=="AnaTtresQCD") {
+          } else if (analysis=="AnaTtresQCDreal") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-                vec_analysis[iAna]->run(sel, weight, suffix);
+                (dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runEfficiency(sel, weight, suffix);
+          } else if (analysis=="AnaTtresQCDfake") {
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
+                (dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runFakeRate(sel, weight, suffix);
           } else if (analysis=="AnaTtresSLMtt") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
                 vec_analysis[iAna]->run(sel, weight, suffix);
