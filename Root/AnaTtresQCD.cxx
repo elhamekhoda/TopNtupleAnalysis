@@ -78,6 +78,8 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
 AnaTtresQCD::~AnaTtresQCD() {
 }
 
+void AnaTtresQCD::run(const Event &evt, double weight, const std::string &s){
+}
 
 void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::string &s){
   // check channel
