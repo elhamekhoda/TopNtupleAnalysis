@@ -1,6 +1,8 @@
 
 ROOTCFLAGS    = $(shell root-config --cflags)
 
+SUFFIXES += .d
+
 MYCF=""
 
 ifneq ($(findstring m32,$(ROOTCFLAGS)),)
@@ -45,12 +47,28 @@ CXXFLAGS += -I../TopDataPreparation
 OBJS_READ += Root/TtresChi2.o Root/TtresdRmin.o Root/TtresNeutrinoBuilder.o
 OBJS_READTUDO += Root/TtresChi2.o Root/TtresdRmin.o Root/TtresNeutrinoBuilder.o
 
+all: read readTuDo
 
-%.o: %.cxx
+#We don't need to clean up when we're making these targets
+NODEPS:=clean
+#Find all the C++ files in the src/ directory
+SOURCES:=$(shell find Root/ util/ -name "*.cxx")
+#These are the dependency files, which make will clean up after it creates them
+DEPFILES:=$(patsubst %.cxx,%.d,$(SOURCES))
+#Don't create dependencies when we're cleaning, for instance
+ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
+    #Chances are, these files don't exist.  GMake will create them and
+    #clean up automatically afterwards
+    -include $(DEPFILES)
+endif
+
+
+%.o: %.cxx %.d
 	g++ -c $(CXXFLAGS) -o $@ $<
 
+%.d: %.cxx
+	g++ $(CXXFLAGS) -MM -MT '$(patsubst %.cxx,%.o,$<)' $< -MF $@
 
-all: read readTuDo
 
 read: $(OBJS_READ)
 	g++ $(CXXFLAGS) -o read $(OBJS_READ) $(LDFLAGS)
