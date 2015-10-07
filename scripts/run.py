@@ -1,11 +1,13 @@
 
-import HQTTtResonancesTools.DC15MC13TeV_25ns_EXOT4_p2375
-import HQTTtResonancesTools.DC15MC13TeV_EXOT4_p2352
+import HQTTtResonancesTools.DC15MC13TeV_25ns_EXOT4
 
 # input directory
-ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/09092015'
+#ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/09092015'
+#ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/cernbox/user/d/dferreir/topana/30092015'
+ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/cernbox/user/d/dferreir/topana/02102015'
 
 # output directory
+#outputDir = 'test'
 outputDir = 'test25ns'
 
 # the default is AnaTtresSL, which produces many control pltos for tt res.
@@ -27,19 +29,23 @@ names   = []
 # 25 ns datasets
 names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
 names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
+names  += ['MC15_13TeV_25ns_FS_EXOT4_singletop']
+names  += ['MC15_13TeV_25ns_FS_EXOT4_Wjets']
+names  += ['MC15_13TeV_25ns_FS_EXOT4_Zjets']
+names  += ['MC15_13TeV_25ns_FS_EXOT4_VV']
 # these are 50 ns: for testing only
-names += ['MC15_13TeV_FS_EXOT4_Zprime500']
-names += ['MC15_13TeV_FS_EXOT4_Zprime750']
-names += ['MC15_13TeV_FS_EXOT4_Zprime1000']
-names += ['MC15_13TeV_FS_EXOT4_Zprime1250']
-names += ['MC15_13TeV_FS_EXOT4_Zprime1500']
-names += ['MC15_13TeV_FS_EXOT4_Zprime1750']
-names += ['MC15_13TeV_FS_EXOT4_Zprime2000']
-names += ['MC15_13TeV_FS_EXOT4_Zprime2250']
-names += ['MC15_13TeV_FS_EXOT4_Zprime2500']
-names += ['MC15_13TeV_FS_EXOT4_Zprime2750']
-#names += ['MC15_13TeV_FS_EXOT4_Zprime3000']
-names += ['MC15_13TeV_FS_EXOT4_Zprime4000']
+##names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime500']
+##names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime750']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1000']
+##names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1250']
+##names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1500']
+##names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1750']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2000']
+##names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2250']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2500']
+##names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2750']
+##names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000']
+##names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000']
 
 import TopExamples.grid
 

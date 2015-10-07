@@ -17,6 +17,7 @@ AnaTtresSLMtt::AnaTtresSLMtt(const std::string &filename, bool electron, bool bo
 
   m_chi2.Init(TtresChi2::DATA2015_MC15);
 
+  m_hSvc.m_tree->Branch("truemtt",    &_tree_truemtt);
   m_hSvc.m_tree->Branch("mtt",    &_tree_mtt);
   m_hSvc.m_tree->Branch("weight", &_tree_weight);
   m_hSvc.m_tree->Branch("cat",    &_tree_cat);
@@ -54,6 +55,7 @@ void AnaTtresSLMtt::run(const Event &evt, double weight, const std::string &s) {
     l = evt.muon()[0].mom();
   }
 
+  _tree_truemtt = evt.MC_ttbar_beforeFSR().M()*1e-3;
   float mtt = -1;
   if (m_boosted && (evt.passes("bejets") || evt.passes("bmujets"))) {
     

@@ -145,9 +145,9 @@ int main(int argc, char **argv) {
   int n_eigenvars_b = 0;
   int n_eigenvars_c = 0;
   int n_eigenvars_l = 0;
-  std::vector<std::string> trackjetSFs;
-  std::string trackjet_pre = "trackjet_btagSF_70_eigenvars";
-  size_t trackjet_presize = std::string("trackjet_btagSF_70_eigenvars").size();
+  //std::vector<std::string> trackjetSFs;
+  //std::string trackjet_pre = "trackjet_btagSF_70_eigenvars";
+  //size_t trackjet_presize = std::string("trackjet_btagSF_70_eigenvars").size();
 
   if (systs != "nominal") { // if there are other systematics, include SF systs. too
     systsListWithBlankNominal.push_back("lepSF__1up");
@@ -159,9 +159,9 @@ int main(int argc, char **argv) {
     mt.read(0, sel);
 
     if (_btags > 0) {
-      n_eigenvars_b = mt.vf("weight_bTagSF_eigenvars_B_up")->size();
-      n_eigenvars_c = mt.vf("weight_bTagSF_eigenvars_C_up")->size();
-      n_eigenvars_l = mt.vf("weight_bTagSF_eigenvars_Light_up")->size();
+      n_eigenvars_b = mt.vf("weight_bTagSF_70_eigenvars_B_up")->size();
+      n_eigenvars_c = mt.vf("weight_bTagSF_70_eigenvars_C_up")->size();
+      n_eigenvars_l = mt.vf("weight_bTagSF_70_eigenvars_Light_up")->size();
 
       for (int i = 0; i < n_eigenvars_b; ++i) {
         systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up");
@@ -191,12 +191,45 @@ int main(int argc, char **argv) {
       }
     }
     if (_btags < 0) {
+      /*
       for (std::map<std::string, MiniTree::MTType>::const_iterator it = mt.m_brs.begin(); it != mt.m_brs.end(); ++it) {
         if (it->first.find(trackjet_pre) != std::string::npos) {
           systsListWithBlankNominal.push_back(std::string("bsf_")+it->first.substr(trackjet_presize));
           if (loose) systsListWithBlankNominal.push_back(std::string("bsf_")+it->first.substr(trackjet_presize)+std::string("_Loose"));
           trackjetSFs.push_back(std::string("bsf_")+it->first.substr(trackjet_presize));
           if (loose) trackjetSFs.push_back(std::string("bsf_")+it->first.substr(trackjet_presize)+std::string("_Loose"));
+        }
+      }
+      */
+
+      n_eigenvars_b = mt.vf("weight_trackjet_bTagSF_70_eigenvars_B_up")->size();
+      n_eigenvars_c = mt.vf("weight_trackjet_bTagSF_70_eigenvars_C_up")->size();
+      n_eigenvars_l = mt.vf("weight_trackjet_bTagSF_70_eigenvars_Light_up")->size();
+
+      for (int i = 0; i < n_eigenvars_b; ++i) {
+        systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up");
+        systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1down");
+      }
+      for (int i = 0; i < n_eigenvars_c; ++i) {
+        systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1up");
+        systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1down");
+      }
+      for (int i = 0; i < n_eigenvars_l; ++i) {
+        systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up");
+        systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down");
+      }
+      if (loose) {
+        for (int i = 0; i < n_eigenvars_b; ++i) {
+          systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up_Loose");
+          systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1down_Loose");
+        }
+        for (int i = 0; i < n_eigenvars_c; ++i) {
+          systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1up_Loose");
+          systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1down_Loose");
+        }
+        for (int i = 0; i < n_eigenvars_l; ++i) {
+          systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up_Loose");
+          systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down_Loose");
         }
       }
     }
@@ -323,7 +356,7 @@ int main(int argc, char **argv) {
           weightSystematics.push_back(std::string("lepSF__1up")+systSuffixForHistograms);
           weightSystematics.push_back(std::string("lepSF__1down")+systSuffixForHistograms);
 
-          if (_btags > 0) {
+          //if (_btags > 0) {
             for (int i = 0; i < n_eigenvars_b; ++i) {
               weightSystematics.push_back(std::string("btagbSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
               weightSystematics.push_back(std::string("btagbSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
@@ -336,11 +369,11 @@ int main(int argc, char **argv) {
               weightSystematics.push_back(std::string("btaglSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
               weightSystematics.push_back(std::string("btaglSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
             }
-          } else if (_btags < 0) {
-            for (size_t i = 0; i < trackjetSFs.size(); ++i) {
-              weightSystematics.push_back(trackjetSFs[i]+systSuffixForHistograms);
-            }
-          }
+          //} else if (_btags < 0) {
+          //  for (size_t i = 0; i < trackjetSFs.size(); ++i) {
+          //    weightSystematics.push_back(trackjetSFs[i]+systSuffixForHistograms);
+          //  }
+          //}
         }
         // loop over weight systematics
         for (size_t wIdx = 0; wIdx < weightSystematics.size(); ++wIdx) {
@@ -352,44 +385,48 @@ int main(int argc, char **argv) {
             weight *= sampleXsection.getXsection(channel);
 
             double btagsf = 1.0;
-            if (_btags > 0) {
+            std::string pref = "weight_bTagSF_70_";
+            if (_btags < 0)
+              pref = "weight_trackjet_bTagSF_70_";
+
+            //if (_btags > 0) {
               size_t last = suffix.find("__1");
               if (suffix.find("btagbSF_") != std::string::npos) {
                 size_t first = std::string("btagbSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
                 if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.vf("weight_bTagSF_eigenvars_B_up")->at(eig);
+                  btagsf = mt.vf(pref+"eigenvars_B_up")->at(eig);
                 } else {
-                  btagsf = mt.vf("weight_bTagSF_eigenvars_B_down")->at(eig);
+                  btagsf = mt.vf(pref+"eigenvars_B_down")->at(eig);
                 }
               } else if (suffix.find("btagcSF_") != std::string::npos) {
                 size_t first = std::string("btagcSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
                 if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.vf("weight_bTagSF_eigenvars_C_up")->at(eig);
+                  btagsf = mt.vf(pref+"eigenvars_C_up")->at(eig);
                 } else {
-                  btagsf = mt.vf("weight_bTagSF_eigenvars_C_down")->at(eig);
+                  btagsf = mt.vf(pref+"eigenvars_C_down")->at(eig);
                 }
               } else if (suffix.find("btaglSF_") != std::string::npos) {
                 size_t first = std::string("btaglSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
                 if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.vf("weight_bTagSF_eigenvars_Light_up")->at(eig);
+                  btagsf = mt.vf(pref+"eigenvars_Light_up")->at(eig);
                 } else {
-                  btagsf = mt.vf("weight_bTagSF_eigenvars_Light_down")->at(eig);
+                  btagsf = mt.vf(pref+"eigenvars_Light_down")->at(eig);
                 }
               } else {
                 btagsf = sel.weight_bTagSF();
               }
-            } else if (_btags < 0) {
-              if (suffix.find("bsf_") != std::string::npos) {
-                int f = std::string("bsf_").size();
-                int s = suffix.size() - f;
-                if (systSuffixForHistograms == "_Loose") s -= std::string("_Loose").size();
-                std::string n = trackjet_pre + suffix.substr(f, s);
-                btagsf = mt.f(n);
-              }
-            }
+            //} else if (_btags < 0) {
+            //  if (suffix.find("bsf_") != std::string::npos) {
+            //    int f = std::string("bsf_").size();
+            //    int s = suffix.size() - f;
+            //    if (systSuffixForHistograms == "_Loose") s -= std::string("_Loose").size();
+            //    std::string n = trackjet_pre + suffix.substr(f, s);
+            //    btagsf = mt.f(n);
+            //  }
+            //}
 
             weight *= btagsf;
             weight *= sel.weight_leptonSF();
@@ -407,10 +444,11 @@ int main(int argc, char **argv) {
               double id1_muvar = mt.f("weight_indiv_SF_MU_ID_SYST_UP") - mt.f("weight_indiv_SF_MU_ID");
               double id2_muvar = mt.f("weight_indiv_SF_MU_ID_STAT_UP") - mt.f("weight_indiv_SF_MU_ID");
 
-              //double isol_muvar = mt.f("weight_indiv_SF_MU_Isol_UP") - mt.f("weight_indiv_SF_MU_Isol");
-              //double total_mu = std::sqrt(std::pow(trig1_elvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2) + std::pow(isol_muvar, 2));
+              double isol1_muvar = mt.f("weight_indiv_SF_MU_Isol_SYST_UP") - mt.f("weight_indiv_SF_MU_Isol");
+              double isol2_muvar = mt.f("weight_indiv_SF_MU_Isol_STAT_UP") - mt.f("weight_indiv_SF_MU_Isol");
+              double total_mu = std::sqrt(std::pow(trig1_muvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2) + std::pow(isol1_muvar, 2) + std::pow(isol2_muvar, 2));
 
-              double total_mu = std::sqrt(std::pow(trig1_muvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2));
+              //double total_mu = std::sqrt(std::pow(trig1_muvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2));
               if (sel.muon().size() > 0)
                 weight *= (1+total_mu);
             } else if (suffix == "lepSF__1down" || suffix == "lepSF__1down_Loose") {
@@ -427,10 +465,9 @@ int main(int argc, char **argv) {
               double id1_muvar = mt.f("weight_indiv_SF_MU_ID_SYST_DOWN") - mt.f("weight_indiv_SF_MU_ID");
               double id2_muvar = mt.f("weight_indiv_SF_MU_ID_STAT_DOWN") - mt.f("weight_indiv_SF_MU_ID");
 
-              //double isol_muvar = mt.f("weight_indiv_SF_MU_Isol_DOWN") - mt.f("weight_indiv_SF_MU_Isol"); // not available yet
-              //double total_mu = std::sqrt(std::pow(trig1_elvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2) + std::pow(isol_muvar, 2));
-              //
-              double total_mu = std::sqrt(std::pow(trig1_muvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2));
+              double isol1_muvar = mt.f("weight_indiv_SF_MU_Isol_SYST_DOWN") - mt.f("weight_indiv_SF_MU_Isol");
+              double isol2_muvar = mt.f("weight_indiv_SF_MU_Isol_STAT_DOWN") - mt.f("weight_indiv_SF_MU_Isol");
+              double total_mu = std::sqrt(std::pow(trig1_muvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2) + std::pow(isol1_muvar, 2) + std::pow(isol2_muvar, 2));
               if (sel.muon().size() > 0)
                 weight *= (1-total_mu);
             }
@@ -449,9 +486,15 @@ int main(int argc, char **argv) {
               }
             }
           } else if (_btags < 0) {
-            for (size_t bidx = 0; bidx < mt.vf("trackjet_mv2c20")->size(); ++bidx) {
-              if (mt.vf("trackjet_mv2c20")->at(bidx) > -0.3098 && mt.vf("trackjet_pt")->at(bidx) > 10e3 &&
-                  std::fabs(mt.vf("trackjet_eta")->at(bidx)) < 2.5) {
+            //for (size_t bidx = 0; bidx < mt.vf("trackjet_mv2c20")->size(); ++bidx) {
+            //  if (mt.vf("trackjet_mv2c20")->at(bidx) > -0.3098 && mt.vf("trackjet_pt")->at(bidx) > 10e3 &&
+            //      std::fabs(mt.vf("trackjet_eta")->at(bidx)) < 2.5) {
+            //    nBtagged += 1;	
+            //  }
+            //}
+            for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+              if (mt.vf("tjet_mv2c20")->at(bidx) > -0.3098 && mt.vf("tjet_pt")->at(bidx) > 10e3 &&
+                  std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5) {
                 nBtagged += 1;	
               }
             }
