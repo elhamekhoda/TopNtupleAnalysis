@@ -20,9 +20,14 @@ LargeJet::LargeJet(const LargeJet &l)
   : MObject(l.mom(), MObject::largejet) {
   m_split12 = l.m_split12;
   m_trueFlavour = l.m_trueFlavour;
+  m_good = l.m_good;
 }
 
 LargeJet::~LargeJet() {
+}
+
+void LargeJet::setGood(bool b) {
+  m_good = b;
 }
 
 bool LargeJet::good() const {

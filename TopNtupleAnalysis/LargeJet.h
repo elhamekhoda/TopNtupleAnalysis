@@ -26,6 +26,7 @@ class LargeJet : public MObject {
 
     bool good() const;
     bool &good();
+    void setGood(bool);
 
   protected:
     double m_split12;

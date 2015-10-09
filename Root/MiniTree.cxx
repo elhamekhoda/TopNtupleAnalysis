@@ -133,7 +133,7 @@ void MiniTree::read(int event, Event &e) {
     e.largeJet().push_back(LargeJet());
     e.largeJet()[k].mom().SetPtEtaPhiE(vf("ljet_pt")->at(k), vf("ljet_eta")->at(k), vf("ljet_phi")->at(k), vf("ljet_e")->at(k));
     e.largeJet()[k].split12() = vf("ljet_sd12")->at(k);
-    e.largeJet()[k].good() = vi("ljet_good")->at(k);
+    e.largeJet()[k].setGood((vi("ljet_good")->at(k) == 1)?true:false);
     e.largeJet()[k].trueFlavour() = 0; //TODO ljet_trueflav==0?-99:ljet_trueflav->at(k);
   }
   
