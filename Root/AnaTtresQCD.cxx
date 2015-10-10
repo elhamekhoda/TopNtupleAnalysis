@@ -1,4 +1,4 @@
-/**
+/** 
  * @brief Analysis class for tt resonances.
  * @author Danilo Enoque Ferreira de Lima <dferreir@cern.ch>
  */
@@ -23,15 +23,16 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   Double_t DR_bins_b[8] = {0.,0.2, 0.4, 0.6, 0.8, 1.0, 1.7, 5.0};
   Double_t closeLJpT_bins_r[8] = {25, 40, 60, 80, 100, 150, 250, 500};
   Double_t closeLJpT_bins_b[8] = {25, 40, 60, 80, 100, 150, 250, 500}; 
-  //Histograms for MC variables
-  //electrons
+  
+  //****Efficiency studies  
+  //MC variables: electrons
   m_hSvc.create1D("MC_e_pt", "; Pt of MC electron [GeV]; Events", 40, 0, 500);
   m_hSvc.create1D("MC_e_eta", "; Eta of MC electron ; Events", 24, -3.0, 3.0);
   m_hSvc.create1D("MC_e_phi", "; Phi of MC electron ; Events", 40, -4.0, 4.0);
   m_hSvc.create1D("MC_e_m", "; Mass of MC electron [GeV]; Events", 100, -0.2, 0.2);  
   m_hSvc.create2D("MCe_pt_vs_eta", "; pt of electron(truth) [GeV]; #eta of electron(truth)", 40, 0, 500, 24, -3., 3.);
   
-  //muons
+  //MC variables: muons
   m_hSvc.create1D("MC_mu_pt", "; Pt of MC muon [GeV]; Events", 40, 0, 500);
   m_hSvc.create1D("MC_mu_eta", "; Eta of MC muon ; Events", 24, -3.0, 3.0);
   m_hSvc.create1D("MC_mu_phi", "; Phi of MC muon ; Events", 40, -4.0, 4.0);
@@ -46,10 +47,10 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   m_hSvc.create1D("lepMa_pdgId", "; pdgId of Matched lept ; Events", 30, -15, 15);
   m_hSvc.create2D("Ma_pt_vs_eta", "; pt of Matched lepton [GeV]; #eta of Matched lepton", 40, 0, 500, 24, -3., 3.);
 
-  //For the fake studies
-  m_hSvc.create1D("MET", "; Missing E_{T} [GeV]; Events", 50, 0, 500);
+  //****Fake studies  
+  m_hSvc.create1D("MET", "; Missing E_{T} [GeV]; Events", 25, 0, 25);
   m_hSvc.create1D("MET_phi", "; Missing E_{T} #phi; Events", 40, -4.0, 4.0);    
-  m_hSvc.create1D("mwt", "; W transverse mass [GeV]; Events", 50, 0, 500);  
+  m_hSvc.create1D("mwt", "; W transverse mass [GeV]; Events", 30, 0, 150);  
   
   if (!boosted)	{
      //Eff
@@ -104,9 +105,8 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
   
   HistogramService *h = &m_hSvc;
   
-  //Pre-selection
-  
-  ///Objects from the truth (MC) with (pT < 25GeV && |eta|<2.5)
+  //Pre-selection: 
+  ///Objects from the truth (MC) with (pT < 25GeV && |eta|<2.5)  
   
   ///Electrons
   
@@ -187,10 +187,7 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
   }//m_electron
  
   if (leptMa_pdgId!=0){
-  	//std::cout << "Matched lepton" << std::endl;
-	//std::cout << "m_electron: " << m_electron << " -> Matched to MC: " << leptMa_pdgId << std::endl;
-	//std::cout << "Ma lepton pT:" << lept.Pt() << std::endl;	
-	  
+  		  
   	//Filling histograms
   	h->h1D("lepMa_pt", "", s)   ->Fill(lept.Perp()*1e-3);
   	h->h1D("lepMa_eta", "", s)  ->Fill(lept.Eta()    );
@@ -232,23 +229,6 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
 	}//(closejl_deltaR<99)
   }//(leptMa_pdgId!=0)
   
-  
-  //std::cout << " -- " << std::endl; 
-
-  
-  /*
-  std::cout << " ** reco lepton ** " << std::endl;
-  std::cout << "m_electron: " << m_electron << std::endl;
-  std::cout << "lept.Pt(): " << lept.Perp() << " lept.M(): " << lept.M() << " lept.Eta(): " << lept.Eta() << " lept.Phi(): " << lept.Phi() << std::endl;
-  std::cout << " ** truth lepton ** " << std::endl;
-  std::cout << "evt.MC_w1l().Pt(): " << evt.MC_w1l().Perp() << " evt.MC_w1l().M(): " << evt.MC_w1l().M() << " evt.MC_w1l().Eta(): " << evt.MC_w1l().Eta() << " evt.MC_w1l().Phi(): " << evt.MC_w1l().Phi() << std::endl;
-  std::cout << "evt.MC_w2l().Pt(): " << evt.MC_w2l().Perp() << " evt.MC_w2l().M(): " << evt.MC_w2l().M() << " evt.MC_w2l().Eta(): " << evt.MC_w2l().Eta() << " evt.MC_w2l().Phi(): " << evt.MC_w2l().Phi() << std::endl;
-  std::cout << "pdgId1: " << evt.MC_w1l_pdgId() << " - pdgId2: " << evt.MC_w2l_pdgId() << std::endl;
-  std::cout << "dr: " << dr << std::endl;
-  std::cout << "leptMa_pdgId: " << leptMa_pdgId << std::endl;
-  std::cout << "--" << std::endl;
-  */
-
 }//AnaTtresQCD::runEffRate 
 
 void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string &s){
@@ -275,7 +255,6 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
   HistogramService *h = &m_hSvc;
   
   TLorentzVector lept;  
-  float met(0);
   float mWt(0);  
   float mWt_threshold(100000);
   
@@ -283,17 +262,14 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
   if (m_electron) 	lept = evt.electron()[0].mom(); 
   else			lept = evt.muon()[0].mom();   
  
-  //MET
-  met = evt.met().Perp();
-  h->h1D("MET", "", s)	   ->Fill(met*1e-3);
-  h->h1D("MET_phi", "", s)->Fill(evt.met().Phi());
-  
   //transverse W mass 
-  mWt = sqrt(2. * lept.Perp() * evt.met().Perp() * (1. - cos(lept.Phi() - evt.met().Phi()))); 
+  mWt = sqrt(2. * lept.Perp() * evt.met().Perp() * (1. - cos(lept.Phi() - evt.met().Phi()) )); 
   
   if (mWt < mWt_threshold){
   
-     h->h1D("mwt", "", s)->Fill(mWt*1e-3); 
+     h->h1D("MET", "", s)	   ->Fill(evt.met().Perp()*1e-3, weight);
+     h->h1D("MET_phi", "", s)->Fill(evt.met().Phi(), weight);  
+     h->h1D("mwt", "", s)->Fill(mWt*1e-3, weight); 
   
      //deltaR between lepton and the closest narrow jet
   
@@ -319,11 +295,15 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
      	   closejl_deltaR = deltaR_tmp;
      	   closejl_idx = jet_idx;
 	   closejl_pT  = evt.jet().at(jet_idx).mom().Pt();
-	   h->h1D("closeLepJet_pt", "", s)->Fill(closejl_pT*1e-3);
-	   h->h1D("lep_pt", "", s)->Fill(lept.Pt()*1e-3);
-	   h->h2D("lepPt_vs_closeJL_pt", "", s)    ->Fill(lept.Perp()*1e-3, closejl_pT*1e-3); 	   
+	      
         }   
      }//for
+     
+     if (closejl_deltaR<99){
+        h->h1D("closeLepJet_pt", "", s)	    ->Fill(closejl_pT*1e-3, weight);
+	h->h1D("lep_pt", "", s)		    ->Fill(lept.Pt()*1e-3, weight);
+	h->h2D("lepPt_vs_closeJL_pt", "", s)->Fill(lept.Perp()*1e-3, closejl_pT*1e-3, weight);      
+     }//if(closejl_deltaR<99)
      
   }//if   
   

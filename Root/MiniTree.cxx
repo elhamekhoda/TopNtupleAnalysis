@@ -36,8 +36,8 @@ void MiniTree::read(int event, Event &e) {
   e.channelNumber() = ui("mcChannelNumber");
   e.eventNumber() = ui("eventNumber"); 
   e.runNumber() = ui("runNumber"); 
-  
-  e.npv() = i("npv"); 
+
+  e.npv() = ui("npv"); 
   e.vtxz() = f("vtxz");
   e.mu() = f("mu");
   e.mu_original() = f("mu_original");
