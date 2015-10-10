@@ -23,9 +23,31 @@
 
 #include <memory>
 
+#include <fstream>
+
 int _stamp = 0;
+std::map<std::string, std::string> name = std::map<std::string, std::string>();
+std::map<std::string, std::pair<std::string, std::string> > syst = std::map<std::string, std::pair<std::string, std::string> >();
+float lumi_scale = 1.0;
 
 using namespace std;
+
+void loadConfig(const std::string &file) {
+  std::ifstream fi(file.c_str());
+  std::string line;
+  while (std::getline(fi, line)) {
+    std::istringstream iss(line);
+    std::string a, b, c, d;
+    if (!(iss >> a)) { break; } // error
+    if (a == "sample") {
+      iss >> b >> c;
+      name[b] = c;
+    } else if (a == "syst") {
+      iss >> b >> c >> d;
+      syst[b] = std::pair<std::string, std::string>(c, d);
+    }
+  }
+}
 
 shared_ptr<TGraphAsymmErrors> normaliseBand(shared_ptr<TGraphAsymmErrors> band, TH1D *MC_sum) {
   shared_ptr<TGraphAsymmErrors> rat((TGraphAsymmErrors *) band->Clone("ratio_band"));
@@ -283,9 +305,9 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
   if (Data) {
     Data->SetMaximum(maximum);
     if (yTitle != "") Data->GetYaxis()->SetTitle(yTitle.c_str());
+    Data->SetMinimum(0.001);
   }
   MC->SetMinimum(0.001);
-  Data->SetMinimum(0.001);
 
   MC->Draw();
   if (yTitle != "") MC->GetYaxis()->SetTitle(yTitle.c_str());
@@ -1020,24 +1042,24 @@ SampleSetConfiguration makeConfigurationPlots(const string &prefix, const string
   if (!isMcOnly)
     stackConfig.addType("Data");
   if (channel == "e" && !isMcOnly)
-    stackConfig.add("Data", Form("%s_e_DTE.root", prefix.c_str()), "data", "Data", "Data",
+    stackConfig.add("Data", Form("%s_e_%s.root", prefix.c_str(), name["data"].c_str()), "data", "Data", "Data",
                         "PL", 1, kBlack, 1, 0, 20, 1, "e");
   else if (channel == "mu" && !isMcOnly)
-    stackConfig.add("Data", Form("%s_mu_DTE.root", prefix.c_str()), "data", "Data", "Data",
+    stackConfig.add("Data", Form("%s_mu_%s.root", prefix.c_str(), name["data"].c_str()), "data", "Data", "Data",
                         "PL", 1, kBlack, 1, 0, 20, 1, "e");
   else if (channel == "comb" && !isMcOnly)
-    stackConfig.add("Data", Form("%s_comb_DTE.root", prefix.c_str()), "data", "Data", "Data",
+    stackConfig.add("Data", Form("%s_comb_%s.root", prefix.c_str(), name["data"].c_str()), "data", "Data", "Data",
                         "PL", 1, kBlack, 1, 0, 20, 1, "e");
 
-  stackConfig.add("MC", Form("%s_%s_ttbar.root", prefix.c_str(), channel.c_str()), "ttbar matched", "$t\\bar{t}$", "t#bar{t} (matched)",
+  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["ttbar"].c_str()), "ttbar", "$t\\bar{t}$", "t#bar{t}",
                           "F", 1, kBlack, 1001,      0, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_singletop.root", prefix.c_str(), channel.c_str()), "Single Top", "single top", "Single top",
+  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["singletop"].c_str()), "Single Top", "single top", "Single top",
                         "F", 1, kBlack, 1001,     62, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_Wjets.root", prefix.c_str(), channel.c_str()), "W+jets", "$W+$ jets", "W+jets",
+  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Wjets"].c_str()), "W+jets", "$W+$ jets", "W+jets",
                         "F", 1, kBlack, 1001,     92, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_Zjets.root", prefix.c_str(), channel.c_str()), "Z+jets", "$Z+$ jets", "Z+jets",
+  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Zjets"].c_str()), "Z+jets", "$Z+$ jets", "Z+jets",
                         "", 1, kBlack, 1001,    807, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_VV.root", prefix.c_str(), channel.c_str()), "diboson", "diboson", "diboson",
+  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["VV"].c_str()), "diboson", "diboson", "diboson",
                         "", 1, kBlack, 1001,       5, 1, 0, "hist");
 
   return stackConfig;
@@ -1052,38 +1074,38 @@ SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const
     stackConfig.addType(Form("MC%d", z));
   }
 
-  stackConfig.add("MC", Form("%s_%s_ttbar.root", prefix.c_str(), channel.c_str()), "ttbar matched", "$t\\bar{t}$", "t#bar{t} (matched)",
+  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["ttbar"].c_str()), "ttbar", "$t\\bar{t}$", "t#bar{t}",
                           "F", 1, kBlack, 1001,      0, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_singletop.root", prefix.c_str(), channel.c_str()), "Single Top", "single top", "Single top",
+  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["singletop"].c_str()), "Single Top", "single top", "Single top",
                         "F", 1, kBlack, 1001,     62, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_Wjets.root", prefix.c_str(), channel.c_str()), "W+jets", "$W+$ jets", "W+jets",
+  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Wjets"].c_str()), "W+jets", "$W+$ jets", "W+jets",
                         "F", 1, kBlack, 1001,     92, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_Zjets.root", prefix.c_str(), channel.c_str()), "Z+jets", "$Z+$ jets", "Z+jets",
+  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Zjets"].c_str()), "Z+jets", "$Z+$ jets", "Z+jets",
                         "", 1, kBlack, 1001,    807, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_VV.root", prefix.c_str(), channel.c_str()), "diboson", "diboson", "diboson",
+  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["VV"].c_str()), "diboson", "diboson", "diboson",
                         "", 1, kBlack, 1001,       5, 1, 0, "hist");
 
   int col[] = {kRed, kBlue, kGreen};
   for (int z = 0; z < other.size(); ++z) {
     stackConfig.add(Form("MC%d", z), other[z], title[z], title[z], title[z],
                           "F", 1, col[z], 1001,      0, 1, 0, "hist");
-    stackConfig.add(Form("MC%d", z), Form("%s_%s_singletop.root", prefix.c_str(), channel.c_str()), Form("single top %d", z), "single top", "single top",
+    stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["singletop"].c_str()), Form("single top %d", z), "single top", "single top",
                           "", 1, kBlack, 1001,     62, 1, 0, "hist");
-    stackConfig.add(Form("MC%d", z), Form("%s_%s_Wjets.root", prefix.c_str(), channel.c_str()), Form("W+jets %d", z), "$W+$ jets", "W + jets",
+    stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Wjets"].c_str()), Form("W+jets %d", z), "$W+$ jets", "W + jets",
                           "", 1, kBlack, 1001,     92, 1, 0, "hist");
-    stackConfig.add(Form("MC%d", z), Form("%s_%s_Zjets.root", prefix.c_str(), channel.c_str()), Form("Z+jets %d", z), "$Z+$ jets", "Z + jets",
+    stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Zjets"].c_str()), Form("Z+jets %d", z), "$Z+$ jets", "Z + jets",
                           "", 1, kBlack, 1001,    807, 1, 0, "hist");
-    stackConfig.add(Form("MC%d", z), Form("%s_%s_VV.root", prefix.c_str(), channel.c_str()), Form("diboson %d", z), "diboson", "diboson",
+    stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["VV"].c_str()), Form("diboson %d", z), "diboson", "diboson",
                           "", 1, kBlack, 1001,       5, 1, 0, "hist");
   }
   if (channel == "e.root")
-    stackConfig.add("Data", Form("%s_e_data.root", prefix.c_str()), "data", "data", "data",
+    stackConfig.add("Data", Form("%s_e_%s.root", prefix.c_str(), name["data"].c_str()), "data", "data", "data",
                         "PL", 1, kBlack, 1, 0, 20, 1, "e");
   else if (channel == "mu.root")
-    stackConfig.add("Data", Form("%s_mu_data.root", prefix.c_str()), "data", "data", "data",
+    stackConfig.add("Data", Form("%s_mu_%s.root", prefix.c_str(), name["data"].c_str()), "data", "data", "data",
                         "PL", 1, kBlack, 1, 0, 20, 1, "e");
   else if (channel == "comb.root")
-    stackConfig.add("Data", Form("%s_comb_DTE.root", prefix.c_str()), "data", "data", "data",
+    stackConfig.add("Data", Form("%s_comb_%s.root", prefix.c_str(), name["data"].c_str()), "data", "data", "data",
                         "PL", 1, kBlack, 1, 0, 20, 1, "e");
 
   return stackConfig;
@@ -1093,7 +1115,7 @@ SampleSetConfiguration makeConfigurationMCEff(const string &prefix, const string
   SampleSetConfiguration stackConfig;
 
   stackConfig.addType("MCAtNLO");
-  stackConfig.add("MCAtNLO", Form("%s_%s_ttbar.root", prefix.c_str(), channel.c_str()), "ttbar", "$t\\bar{t}", "t#bar{t}",
+  stackConfig.add("MCAtNLO", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["ttbar"].c_str()), "ttbar", "$t\\bar{t}", "t#bar{t}",
                         "F", 1, kBlack, 1001, 0, 1, 0, "hist");
 
   return stackConfig;
@@ -1131,10 +1153,24 @@ SampleSetConfiguration makeConfigurationDataEff(const string &prefix, const stri
 
 void addAllSystematics(SystematicCalculator &systCalc, const std::string &channel) {
   vector<string> only_ttbar;
-  only_ttbar.push_back("ttbar_");
+  only_ttbar.push_back("ttbar");
 
-  systCalc.add("(00) Luminosity", new NotData(new HistNorm(0.03)));
+  systCalc.add("00luminosity", new NotData(new HistNorm(0.03)));
+  systCalc.add("00ttbar cross section", new NotData(new Symm(new HistNorm(0.10, only_ttbar), new HistNorm(-0.10, only_ttbar))));
 
+  for (std::map<std::string, std::pair<std::string, std::string> >::iterator it = syst.begin(); it != syst.end(); ++it) {
+    std::string name = it->first;
+    size_t pos = 0;
+    while ((pos = name.find("_", pos)) != std::string::npos) {
+      name.replace(pos, 1, " ");
+      pos += 1;
+    }
+    if (it->second.second == "")
+      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second.first, ""))));
+    else
+      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second.first, ""), new HistDiff(it->second.second, ""))));
+  }
+  /*
   systCalc.add("(01) \\akt $R=0.4$ jet energy resolution", new NotData(new Symm(new HistDiff("JET_JER_SINGLE_NP__1up", ""))));
   systCalc.add("(02) \\akt $R=0.4$ jet energy scale 1", new NotData(new Symm(new HistDiff("JET_NPScenario1_JET_GroupedNP_1__1up", ""), new HistDiff("JET_NPScenario1_JET_GroupedNP_1__1down", ""))));
   systCalc.add("(03) \\akt $R=0.4$ jet energy scale 2", new NotData(new Symm(new HistDiff("JET_NPScenario1_JET_GroupedNP_2__1up", ""), new HistDiff("JET_NPScenario1_JET_GroupedNP_2__1down", ""))));
@@ -1169,9 +1205,9 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &channe
   systCalc.add("(27) l-jet mistag E2", new NotData(new Symm(new HistDiff("btaglSF_2__1up", ""), new HistDiff("btaglSF_2__1down", ""))));
   systCalc.add("(28) l-jet mistag E3", new NotData(new Symm(new HistDiff("btaglSF_3__1up", ""), new HistDiff("btaglSF_3__1down", ""))));
 
-  systCalc.add("(29) Lepton SF", new NotData(new Symm(new HistDiff("lepSF__1up", ""), new HistDiff("lepSF__1down", ""))));
+  //systCalc.add("(29) Lepton SF", new NotData(new Symm(new HistDiff("lepSF__1up", ""), new HistDiff("lepSF__1down", ""))));
+  */
 
-  systCalc.add("(30) ttbar cross section", new NotData(new Symm(new HistNorm(0.10, only_ttbar), new HistNorm(-0.10, only_ttbar))));
 
   //systCalc.add("(31) PDF", new Relative(Form("out_pdf1_%s", channel.c_str()), Form("out_pdf2_%s", channel.c_str()), only_allttbar));
   //systCalc.add("(32) Parton shower", new Relative(Form("out_pshower4_%s", channel.c_str()), Form("out_pshower1_%s", channel.c_str()), only_allttbar));

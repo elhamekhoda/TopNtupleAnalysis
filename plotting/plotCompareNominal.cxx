@@ -54,6 +54,7 @@ int main(int argc, char **argv) {
     float xMax = -9999;
     float xMin = -9999;
     float lumi = 5;
+    std::string config = "";
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -72,6 +73,7 @@ int main(int argc, char **argv) {
         {"xMax",            required_argument,     0, 'X', "Limit X maximum value.", &xMax, extendedOption::eOTFloat},
         {"xMin",            required_argument,     0, 'x', "Limit X minimum value.", &xMin, extendedOption::eOTFloat},
         {"lumi",            required_argument,     0, 'l', "Luminosity value to show.", &lumi, extendedOption::eOTFloat},
+        {"config",          required_argument,     0, 'C', "Configuration file.", &config, extendedOption::eOTString},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -84,6 +86,12 @@ int main(int argc, char **argv) {
       std::cout << "Dumping options:" << std::endl;
       dumpOptions(extOpt);
     }
+
+    lumi_scale = lumi;
+    if (config != "")
+      loadConfig(config.c_str());
+    else
+      loadConfig(std::string(argv[0]).substr(0, std::string(argv[0]).rfind('/'))+"/config.txt");
 
     std::string histogram = "";
     histogram = h_input;

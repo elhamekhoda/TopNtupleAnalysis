@@ -9,14 +9,15 @@ ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/cernbox/user/d/dferreir/topana/0
 # output directory
 #outputDir = 'test'
 outputDir = 'test25ns'
+outputDir = 'test_hist'
 
 # the default is AnaTtresSL, which produces many control pltos for tt res.
 # The Mtt version produces a TTree to do the limit setting
 # the QCD version aims at plots for QCD studies using the matrix method
 # look into read.cxx to see what is available
 # create yours, if you wish
-#analysisType='AnaTtresSL'
 analysisType='AnaTtresSLMtt'
+analysisType='AnaTtresSL'
 
 # leave it for nominal to run only the nominal
 #systematics = 'nominal'
@@ -28,7 +29,7 @@ loose = 0
 names   = []
 # 25 ns datasets
 names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
+#names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
 names  += ['MC15_13TeV_25ns_FS_EXOT4_singletop']
 names  += ['MC15_13TeV_25ns_FS_EXOT4_Wjets']
 names  += ['MC15_13TeV_25ns_FS_EXOT4_Zjets']
@@ -65,7 +66,8 @@ for sample in samples:
     # write list of files to be read when processing this sample
     f = open(outputDir+"/input_"+sample.name+'.txt', 'w')
     # output file after running read
-    outfile = outputDir+"/"+sample.name
+    #outfile = outputDir+"/"+sample.name
+    outfile = sample.name
     
     # go over all directories in the ntuplesDir
     for d in dirs:
@@ -90,5 +92,6 @@ for sample in samples:
           # go to the next directory in the same sample
           break
     f.close()
-    os.system('./read --btags -1 --loose '+str(loose)+' --files '+outputDir+"/input_"+sample.name+'.txt'+' --analysis '+analysisType+' --output '+outfile+'_re.root,'+outfile+'_rmu.root,'+outfile+'_be.root,'+outfile+'_bmu.root --systs '+systematics)
+    #os.system('./read --btags -1 --loose '+str(loose)+' --files '+outputDir+"/input_"+sample.name+'.txt'+' --analysis '+analysisType+' --output '+outfile+'_re.root,'+outfile+'_rmu.root,'+outfile+'_be.root,'+outfile+'_bmu.root --systs '+systematics)
+    os.system('./read --btags -1 --loose '+str(loose)+' --files '+outputDir+"/input_"+sample.name+'.txt'+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'.root,'+outputDir+'/resolved_mu_'+outfile+'.root,'+outputDir+'/boosted_e_'+outfile+'.root,'+outputDir+'/boosted_mu_'+outfile+'.root --systs '+systematics)
 

@@ -58,6 +58,7 @@ int main(int argc, char **argv) {
     int arrow = 0;
     int stamp = 0;
     float lumi = 5;
+    std::string config = "";
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -80,18 +81,25 @@ int main(int argc, char **argv) {
         {"arrow",           required_argument,     0, 'a', "Draw arrow.", &arrow, extendedOption::eOTInt},
         {"stamp",           required_argument,     0, 's', "0 = ATLAS Internal, 1 = ATLAS Preliminary.", &stamp, extendedOption::eOTInt},
         {"lumi",            required_argument,     0, 'l', "Luminosity value to show", &lumi, extendedOption::eOTFloat},
+        {"config",          required_argument,     0, 'C', "Configuration file for items.", &config, extendedOption::eOTString},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
 
     
     if (!parseArguments(argc, argv, extOpt) || help) {
-      dumpHelp("plot", extOpt, "plot\nCalculate systematic uncertainties and make histograms with them.\n");
+      dumpHelp(std::string(argv[0]), extOpt, "plot\nCalculate systematic uncertainties and make histograms with them.\n");
       return 0;
     } else {
       std::cout << "Dumping options:" << std::endl;
       dumpOptions(extOpt);
     }
+
+    lumi_scale = lumi;
+    if (config != "")
+      loadConfig(config.c_str());
+    else
+      loadConfig(std::string(argv[0]).substr(0, std::string(argv[0]).rfind('/'))+"/config.txt");
 
     _stamp = stamp;
 

@@ -150,8 +150,28 @@ int main(int argc, char **argv) {
   //size_t trackjet_presize = std::string("trackjet_btagSF_70_eigenvars").size();
 
   if (systs != "nominal") { // if there are other systematics, include SF systs. too
-    systsListWithBlankNominal.push_back("lepSF__1up");
-    systsListWithBlankNominal.push_back("lepSF__1down");
+    systsListWithBlankNominal.push_back("eTrigSF__1up");
+    systsListWithBlankNominal.push_back("eTrigSF__1down");
+    systsListWithBlankNominal.push_back("eRecoSF__1up");
+    systsListWithBlankNominal.push_back("eRecoSF__1down");
+    systsListWithBlankNominal.push_back("eIDSF__1up");
+    systsListWithBlankNominal.push_back("eIDSF__1down");
+    systsListWithBlankNominal.push_back("eIsolSF__1up");
+    systsListWithBlankNominal.push_back("eIsolSF__1down");
+
+    systsListWithBlankNominal.push_back("muTrigStatSF__1up");
+    systsListWithBlankNominal.push_back("muTrigStatSF__1down");
+    systsListWithBlankNominal.push_back("muIDStatSF__1up");
+    systsListWithBlankNominal.push_back("muIDStatSF__1down");
+    systsListWithBlankNominal.push_back("muIsolStatSF__1up");
+    systsListWithBlankNominal.push_back("muIsolStatSF__1down");
+
+    systsListWithBlankNominal.push_back("muTrigSystSF__1up");
+    systsListWithBlankNominal.push_back("muTrigSystSF__1down");
+    systsListWithBlankNominal.push_back("muIDSystSF__1up");
+    systsListWithBlankNominal.push_back("muIDSystSF__1down");
+    systsListWithBlankNominal.push_back("muIsolSystSF__1up");
+    systsListWithBlankNominal.push_back("muIsolSystSF__1down");
 
     // count b-tagging variations
     MiniTree mt(false, fileList[0].c_str(), "nominal");
@@ -175,6 +195,10 @@ int main(int argc, char **argv) {
         systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up");
         systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down");
       }
+      systsListWithBlankNominal.push_back("btageSF_0__1up");
+      systsListWithBlankNominal.push_back("btageSF_0__1down");
+      systsListWithBlankNominal.push_back("btageSF_1__1up");
+      systsListWithBlankNominal.push_back("btageSF_1__1down");
       if (loose) {
         for (int i = 0; i < n_eigenvars_b; ++i) {
           systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up_Loose");
@@ -188,6 +212,10 @@ int main(int argc, char **argv) {
           systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up_Loose");
           systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down_Loose");
         }
+        systsListWithBlankNominal.push_back("btageSF_0__1up_Loose");
+        systsListWithBlankNominal.push_back("btageSF_0__1down_Loose");
+        systsListWithBlankNominal.push_back("btageSF_1__1up_Loose");
+        systsListWithBlankNominal.push_back("btageSF_1__1down_Loose");
       }
     }
     if (_btags < 0) {
@@ -218,6 +246,10 @@ int main(int argc, char **argv) {
         systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up");
         systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down");
       }
+      systsListWithBlankNominal.push_back("btageSF_0__1up");
+      systsListWithBlankNominal.push_back("btageSF_0__1down");
+      systsListWithBlankNominal.push_back("btageSF_1__1up");
+      systsListWithBlankNominal.push_back("btageSF_1__1down");
       if (loose) {
         for (int i = 0; i < n_eigenvars_b; ++i) {
           systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up_Loose");
@@ -231,11 +263,35 @@ int main(int argc, char **argv) {
           systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up_Loose");
           systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down_Loose");
         }
+        systsListWithBlankNominal.push_back("btageSF_0__1up_Loose");
+        systsListWithBlankNominal.push_back("btageSF_0__1down_Loose");
+        systsListWithBlankNominal.push_back("btageSF_1__1up_Loose");
+        systsListWithBlankNominal.push_back("btageSF_1__1down_Loose");
       }
     }
     if (loose) {
-      systsListWithBlankNominal.push_back("lepSF__1up_Loose");
-      systsListWithBlankNominal.push_back("lepSF__1down_Loose");
+      systsListWithBlankNominal.push_back("eTrigSF__1up_Loose");
+      systsListWithBlankNominal.push_back("eTrigSF__1down_Loose");
+      systsListWithBlankNominal.push_back("eRecoSF__1up_Loose");
+      systsListWithBlankNominal.push_back("eRecoSF__1down_Loose");
+      systsListWithBlankNominal.push_back("eIDSF__1up_Loose");
+      systsListWithBlankNominal.push_back("eIDSF__1down_Loose");
+      systsListWithBlankNominal.push_back("eIsolSF__1up_Loose");
+      systsListWithBlankNominal.push_back("eIsolSF__1down_Loose");
+
+      systsListWithBlankNominal.push_back("muTrigStatSF__1up_Loose");
+      systsListWithBlankNominal.push_back("muTrigStatSF__1down_Loose");
+      systsListWithBlankNominal.push_back("muIDStatSF__1up_Loose");
+      systsListWithBlankNominal.push_back("muIDStatSF__1down_Loose");
+      systsListWithBlankNominal.push_back("muIsolStatSF__1up_Loose");
+      systsListWithBlankNominal.push_back("muIsolStatSF__1down_Loose");
+
+      systsListWithBlankNominal.push_back("muTrigSystSF__1up_Loose");
+      systsListWithBlankNominal.push_back("muTrigSystSF__1down_Loose");
+      systsListWithBlankNominal.push_back("muIDSystSF__1up_Loose");
+      systsListWithBlankNominal.push_back("muIDSystSF__1down_Loose");
+      systsListWithBlankNominal.push_back("muIsolSystSF__1up_Loose");
+      systsListWithBlankNominal.push_back("muIsolSystSF__1down_Loose");
     }
   }
 
@@ -353,8 +409,28 @@ int main(int argc, char **argv) {
           weightSystematics.push_back(systSuffixForHistograms);
         } else { // apply variations on the nominal
           weightSystematics.push_back(systSuffixForHistograms);
-          weightSystematics.push_back(std::string("lepSF__1up")+systSuffixForHistograms);
-          weightSystematics.push_back(std::string("lepSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("eTrigSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("eTrigSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("eRecoSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("eRecoSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("eIDSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("eIDSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("eIsolSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("eIsolSF__1down")+systSuffixForHistograms);
+
+          weightSystematics.push_back(std::string("muTrigStatSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("muTrigStatSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("muIDStatSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("muIDStatSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("muIsolStatSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("muIsolStatSF__1down")+systSuffixForHistograms);
+
+          weightSystematics.push_back(std::string("muTrigSystSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("muTrigSystSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("muIDSystSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("muIDSystSF__1down")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("muIsolSystSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("muIsolSystSF__1down")+systSuffixForHistograms);
 
           //if (_btags > 0) {
             for (int i = 0; i < n_eigenvars_b; ++i) {
@@ -369,6 +445,10 @@ int main(int argc, char **argv) {
               weightSystematics.push_back(std::string("btaglSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
               weightSystematics.push_back(std::string("btaglSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
             }
+            weightSystematics.push_back(std::string("btageSF_0__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btageSF_0__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btageSF_1__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btageSF_1__1down")+systSuffixForHistograms);
           //} else if (_btags < 0) {
           //  for (size_t i = 0; i < trackjetSFs.size(); ++i) {
           //    weightSystematics.push_back(trackjetSFs[i]+systSuffixForHistograms);
@@ -385,9 +465,9 @@ int main(int argc, char **argv) {
             weight *= sampleXsection.getXsection(channel);
 
             double btagsf = 1.0;
-            std::string pref = "weight_bTagSF_70_";
+            std::string pref = "weight_bTagSF_70";
             if (_btags < 0)
-              pref = "weight_trackjet_bTagSF_70_";
+              pref = "weight_trackjet_bTagSF_70";
 
             //if (_btags > 0) {
               size_t last = suffix.find("__1");
@@ -395,28 +475,40 @@ int main(int argc, char **argv) {
                 size_t first = std::string("btagbSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
                 if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.vf(pref+"eigenvars_B_up")->at(eig);
+                  btagsf = mt.vf(pref+"_eigenvars_B_up")->at(eig);
                 } else {
-                  btagsf = mt.vf(pref+"eigenvars_B_down")->at(eig);
+                  btagsf = mt.vf(pref+"_eigenvars_B_down")->at(eig);
                 }
               } else if (suffix.find("btagcSF_") != std::string::npos) {
                 size_t first = std::string("btagcSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
                 if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.vf(pref+"eigenvars_C_up")->at(eig);
+                  btagsf = mt.vf(pref+"_eigenvars_C_up")->at(eig);
                 } else {
-                  btagsf = mt.vf(pref+"eigenvars_C_down")->at(eig);
+                  btagsf = mt.vf(pref+"_eigenvars_C_down")->at(eig);
                 }
               } else if (suffix.find("btaglSF_") != std::string::npos) {
                 size_t first = std::string("btaglSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
                 if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.vf(pref+"eigenvars_Light_up")->at(eig);
+                  btagsf = mt.vf(pref+"_eigenvars_Light_up")->at(eig);
                 } else {
-                  btagsf = mt.vf(pref+"eigenvars_Light_down")->at(eig);
+                  btagsf = mt.vf(pref+"_eigenvars_Light_down")->at(eig);
+                }
+              } else if (suffix.find("btageSF_0") != std::string::npos) {
+                if (suffix.find("1up") != std::string::npos) {
+                  btagsf = mt.f(pref+"_extrapolation_up");
+                } else {
+                  btagsf = mt.f(pref+"_extrapolation_down");
+                }
+              } else if (suffix.find("btageSF_1") != std::string::npos) {
+                if (suffix.find("1up") != std::string::npos) {
+                  btagsf = mt.f(pref+"_extrapolation_from_charm_up");
+                } else {
+                  btagsf = mt.f(pref+"_extrapolation_from_charm_down");
                 }
               } else {
-                btagsf = sel.weight_bTagSF();
+                btagsf = mt.f(pref);
               }
             //} else if (_btags < 0) {
             //  if (suffix.find("bsf_") != std::string::npos) {
@@ -429,49 +521,50 @@ int main(int argc, char **argv) {
             //}
 
             weight *= btagsf;
-            weight *= sel.weight_leptonSF();
-            if (suffix == "lepSF__1up" || suffix == "lepSF__1up_Loose") {
-              double trig_elvar = mt.f("weight_indiv_SF_EL_Trigger_UP") - mt.f("weight_indiv_SF_EL_Trigger");
-              double reco_elvar = mt.f("weight_indiv_SF_EL_Reco_UP") - mt.f("weight_indiv_SF_EL_Reco");
-              double id_elvar = mt.f("weight_indiv_SF_EL_ID_UP") - mt.f("weight_indiv_SF_EL_ID");
-              double isol_elvar = mt.f("weight_indiv_SF_EL_Isol_UP") - mt.f("weight_indiv_SF_EL_Isol");
-              double total_el = std::sqrt(std::pow(trig_elvar, 2) + std::pow(reco_elvar, 2) + std::pow(id_elvar, 2) + std::pow(isol_elvar, 2));
-              if (sel.electron().size() > 0)
-                weight *= (1+total_el);
-
-              double trig1_muvar = mt.f("weight_indiv_SF_MU_Trigger_SYST_UP") - mt.f("weight_indiv_SF_MU_Trigger");
-              double trig2_muvar = mt.f("weight_indiv_SF_MU_Trigger_STAT_UP") - mt.f("weight_indiv_SF_MU_Trigger");
-              double id1_muvar = mt.f("weight_indiv_SF_MU_ID_SYST_UP") - mt.f("weight_indiv_SF_MU_ID");
-              double id2_muvar = mt.f("weight_indiv_SF_MU_ID_STAT_UP") - mt.f("weight_indiv_SF_MU_ID");
-
-              double isol1_muvar = mt.f("weight_indiv_SF_MU_Isol_SYST_UP") - mt.f("weight_indiv_SF_MU_Isol");
-              double isol2_muvar = mt.f("weight_indiv_SF_MU_Isol_STAT_UP") - mt.f("weight_indiv_SF_MU_Isol");
-              double total_mu = std::sqrt(std::pow(trig1_muvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2) + std::pow(isol1_muvar, 2) + std::pow(isol2_muvar, 2));
-
-              //double total_mu = std::sqrt(std::pow(trig1_muvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2));
-              if (sel.muon().size() > 0)
-                weight *= (1+total_mu);
-            } else if (suffix == "lepSF__1down" || suffix == "lepSF__1down_Loose") {
-              double trig_elvar = mt.f("weight_indiv_SF_EL_Trigger_DOWN") - mt.f("weight_indiv_SF_EL_Trigger");
-              double reco_elvar = mt.f("weight_indiv_SF_EL_Reco_DOWN") - mt.f("weight_indiv_SF_EL_Reco");
-              double id_elvar = mt.f("weight_indiv_SF_EL_ID_DOWN") - mt.f("weight_indiv_SF_EL_ID");
-              double isol_elvar = mt.f("weight_indiv_SF_EL_Isol_DOWN") - mt.f("weight_indiv_SF_EL_Isol");
-              double total_el = std::sqrt(std::pow(trig_elvar, 2) + std::pow(reco_elvar, 2) + std::pow(id_elvar, 2) + std::pow(isol_elvar, 2));
-              if (sel.electron().size() > 0)
-                weight *= (1-total_el);
-
-              double trig1_muvar = mt.f("weight_indiv_SF_MU_Trigger_SYST_DOWN") - mt.f("weight_indiv_SF_MU_Trigger");
-              double trig2_muvar = mt.f("weight_indiv_SF_MU_Trigger_STAT_DOWN") - mt.f("weight_indiv_SF_MU_Trigger");
-              double id1_muvar = mt.f("weight_indiv_SF_MU_ID_SYST_DOWN") - mt.f("weight_indiv_SF_MU_ID");
-              double id2_muvar = mt.f("weight_indiv_SF_MU_ID_STAT_DOWN") - mt.f("weight_indiv_SF_MU_ID");
-
-              double isol1_muvar = mt.f("weight_indiv_SF_MU_Isol_SYST_DOWN") - mt.f("weight_indiv_SF_MU_Isol");
-              double isol2_muvar = mt.f("weight_indiv_SF_MU_Isol_STAT_DOWN") - mt.f("weight_indiv_SF_MU_Isol");
-              double total_mu = std::sqrt(std::pow(trig1_muvar, 2) + std::pow(trig2_muvar, 2) + std::pow(id1_muvar, 2) + std::pow(id2_muvar, 2) + std::pow(isol1_muvar, 2) + std::pow(isol2_muvar, 2));
-              if (sel.muon().size() > 0)
-                weight *= (1-total_mu);
+            if (suffix == "eTrigSF__1up" || suffix == "eTrigSF__1up_Loose") {
+              weight *= mt.f("weight_leptonSF_EL_SF_Trigger_UP");
+            } else if (suffix == "eTrigSF__1down" || suffix == "eTrigSF__1down_Loose") {
+              weight *= mt.f("weight_leptonSF_EL_SF_Trigger_DOWN");
+            } else if (suffix == "eRecoSF__1up" || suffix == "eRecoSF__1up_Loose") {
+              weight *= mt.f("weight_leptonSF_EL_SF_Reco_UP");
+            } else if (suffix == "eRecoSF__1down" || suffix == "eRecoSF__1down_Loose") {
+              weight *= mt.f("weight_leptonSF_EL_SF_Reco_DOWN");
+            } else if (suffix == "eIDSF__1up" || suffix == "eIDSF__1up_Loose") {
+              weight *= mt.f("weight_leptonSF_EL_SF_ID_UP");
+            } else if (suffix == "eIDSF__1down" || suffix == "eIDSF__1down_Loose") {
+              weight *= mt.f("weight_leptonSF_EL_SF_ID_DOWN");
+            } else if (suffix == "eIsolSF__1up" || suffix == "eIsolSF__1up_Loose") {
+              weight *= mt.f("weight_leptonSF_EL_SF_Isol_UP");
+            } else if (suffix == "eIsolSF__1down" || suffix == "eIsolSF__1down_Loose") {
+              weight *= mt.f("weight_leptonSF_EL_SF_Isol_DOWN");
+            } else if (suffix == "muTrigStatSF__1up" || suffix == "muTrigStatSF__1up_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_Trigger_STAT_UP");
+            } else if (suffix == "muTrigStatSF__1down" || suffix == "muTrigStatSF__1down_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_Trigger_STAT_DOWN");
+            } else if (suffix == "muIDStatSF__1up" || suffix == "muIDStatSF__1up_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_ID_STAT_UP");
+            } else if (suffix == "muIDStatSF__1down" || suffix == "muIDStatSF__1down_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_ID_STAT_DOWN");
+            } else if (suffix == "muIsolStatSF__1up" || suffix == "muIsolStatSF__1up_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_Isol_STAT_UP");
+            } else if (suffix == "muIsolStatSF__1down" || suffix == "muIsolStatSF__1down_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_Isol_STAT_DOWN");
+            } else if (suffix == "muTrigSystSF__1up" || suffix == "muTrigSystSF__1up_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_Trigger_SYST_UP");
+            } else if (suffix == "muTrigSystSF__1down" || suffix == "muTrigSystSF__1down_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_Trigger_SYST_DOWN");
+            } else if (suffix == "muIDSystSF__1up" || suffix == "muIDSystSF__1up_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_ID_SYST_UP");
+            } else if (suffix == "muIDSystSF__1down" || suffix == "muIDSystSF__1down_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_ID_SYST_DOWN");
+            } else if (suffix == "muIsolSystSF__1up" || suffix == "muIsolSystSF__1up_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_Isol_SYST_UP");
+            } else if (suffix == "muIsolSystSF__1down" || suffix == "muIsolSystSF__1down_Loose") {
+              weight *= mt.f("weight_leptonSF_MU_SF_Isol_SYST_DOWN");
+            } else {
+              weight *= sel.weight_leptonSF();
             }
-          
+
             if (sumOfWeights[channel] != 0)
               weight /= sumOfWeights[channel];
               //std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" << btagsf  << "\t" << sel.weight_leptonSF() << "\t" << sel.weight_pileup() << "\t" << sumOfWeights[channel]  << std::endl;          

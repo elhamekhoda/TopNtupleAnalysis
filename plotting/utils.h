@@ -12,6 +12,11 @@ void dumpTrace();
 void handler(int sig);
 
 extern int _stamp;
+extern std::map<std::string, std::string> name;
+extern std::map<std::string, std::pair<std::string, std::string> > syst;
+extern float lumi_scale;
+
+void loadConfig(const std::string &file = "config.txt");
 
 shared_ptr<TGraphErrors> TH1toGraph(TH1D *Data);
 SampleSetConfiguration makeConfigurationPlots(const string &prefix, const string &channel, bool isMcOnly = false);

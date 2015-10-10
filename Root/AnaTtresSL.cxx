@@ -224,10 +224,13 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     h->h1D("closeJetPt", "", s)->Fill(sj.Perp()*1e-3, weight);
     
     size_t goodljet_idx = 0;
-    for (; goodljet_idx < evt.largeJet().size(); ++goodljet_idx)
+    for (; goodljet_idx < evt.largeJet().size(); ++goodljet_idx) {
+      //std::cout << "jet " << goodljet_idx << " pt = " << evt.largeJet()[goodljet_idx].mom().Perp() << ", good = " << evt.largeJet()[goodljet_idx].good() << std::endl;
       if (evt.largeJet()[goodljet_idx].good())
         break;
+    }
     
+    //std::cout << "idx = " << goodljet_idx << "/" << evt.largeJet().size() << std::endl;
     const TLorentzVector &lj = evt.largeJet()[goodljet_idx].mom();
     h->h1D("largeJetPt", "", s)->Fill(lj.Perp()*1e-3, weight);
     h->h1D("largeJetM", "", s)->Fill(lj.M()*1e-3, weight);
