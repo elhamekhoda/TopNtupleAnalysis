@@ -143,7 +143,7 @@ int main(int argc, char **argv) {
       vector<string> extraText;
       string outfile = _outfile;
       if (outfile == "") {
-        outfile = histogram;
+        outfile = prefix+"_"+histogram;
         outfile += string("_");
         if (channel == "e") {
           outfile += "e";
@@ -284,7 +284,7 @@ int main(int argc, char **argv) {
       for (vector<string>::iterator i = split_extraText.begin(); i!=split_extraText.end();++i) extraText.push_back(*i);
       string outfile = _outfile;
       if (outfile == "") {
-        outfile = string("sf_")+histogram_num+string("_")+histogram_den+string("_");
+        outfile = string("sf_")+prefix+"_"+histogram_num+string("_")+histogram_den+string("_");
         if (channel == "e") {
           outfile += "e";
         } else if (channel == "mu") {

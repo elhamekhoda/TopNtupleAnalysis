@@ -311,7 +311,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
 
   MC->Draw();
   if (yTitle != "") MC->GetYaxis()->SetTitle(yTitle.c_str());
-  if (!ratio) {
+  if (!ratio || !Data) {
     if (xTitle == "")
       MC->GetXaxis()->SetTitle(vechist[0]->GetXaxis()->GetTitle());
     else
@@ -429,19 +429,19 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
   else if (_stamp == 2)
     _stampText = "";
   if (posLegend != 2 && posLegend != 5 && posLegend != 6) {
-    stampATLAS(_stampText, 0.20, 0.88);
+    stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
     stampLumiText(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   } else if (posLegend == 5) {
-    stampATLAS(_stampText, 0.20, 0.88);
+    stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
     stampLumiText(lumi, 0.20, 0.75, "#sqrt{s} = 13 TeV", 0.05);
   } else if (posLegend == 6 || posLegend == 7) {
-    stampATLAS(_stampText, 0.20, 0.88);
+    stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
     stampLumiText(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   } else if (posLegend == 8) {
-    stampATLAS(_stampText, 0.30, 0.88);
+    stampATLAS(_stampText, 0.30, 0.88, (bool) Data);
     stampLumiText(lumi, 0.30, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   } else {
-    stampATLAS(_stampText, 0.25, 0.88);
+    stampATLAS(_stampText, 0.25, 0.88, (bool) Data);
     stampLumiText(lumi, 0.25, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   }
   if (posLegend < 2 || posLegend == 6) {
@@ -900,7 +900,7 @@ void drawEff(SampleSet *ssMC, const vector<std::string> &extraText, const std::s
   c->SaveAs(outfile.c_str());
 }
 
-void stampATLAS(const std::string &text, float x, float y) {
+void stampATLAS(const std::string &text, float x, float y, bool hasRatio) {
   TLatex l;
   l.SetNDC();
   l.SetTextFont(72);
@@ -916,6 +916,7 @@ void stampATLAS(const std::string &text, float x, float y) {
   p.SetTextColor(1);
 
   p.SetTextSize(0.06);
+  if (!hasRatio) delx += 0.05;
   p.DrawLatex(x+delx, y, text.c_str());
 
 }
@@ -1155,8 +1156,8 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &channe
   vector<string> only_ttbar;
   only_ttbar.push_back("ttbar");
 
-  systCalc.add("00luminosity", new NotData(new HistNorm(0.03)));
-  systCalc.add("00ttbar cross section", new NotData(new Symm(new HistNorm(0.10, only_ttbar), new HistNorm(-0.10, only_ttbar))));
+  systCalc.add("00luminosity", new NotData(new HistNorm(0.09)));
+  systCalc.add("00ttbar cross section", new NotData(new Symm(new HistNorm(0.056, only_ttbar), new HistNorm(-0.061, only_ttbar))));
 
   for (std::map<std::string, std::pair<std::string, std::string> >::iterator it = syst.begin(); it != syst.end(); ++it) {
     std::string name = it->first;
