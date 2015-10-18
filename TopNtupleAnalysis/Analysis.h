@@ -12,6 +12,7 @@
 #include "TFile.h"
 #include "TopNtupleAnalysis/Event.h"
 #include "TopNtupleAnalysis/HistogramService.h"
+#include <set>
 
 class Analysis {
   public:
@@ -28,7 +29,7 @@ class Analysis {
   protected:
     std::string m_filename;
     HistogramService m_hSvc;
-    std::set<std::pair<unsigned int, unsigned int>> m_runEventPair;
+    std::set< std::pair<unsigned int, unsigned int> > m_runEventPair;
     bool isDuplicateEvent(unsigned int runNumber, unsigned int eventNumber);
     
     unsigned int m_Nduplicate;
