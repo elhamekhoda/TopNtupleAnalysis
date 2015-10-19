@@ -65,7 +65,7 @@ def Rebin_2D(h1, ngx, ngy):
 
 	return h1
 
-def efficiency(channels):
+def effRates(channels):
 
 	channels  = []
 	channels += [('resolved','e' )]
@@ -165,7 +165,7 @@ def efficiency(channels):
 	
 def fakeRates(inputDir, lumi):
 
-	merge = 0
+	merge = 1
 	
 	channels  = []
 	channels += [('resolved','e' )]
@@ -179,39 +179,47 @@ def fakeRates(inputDir, lumi):
 	
 		hadd_in= []		
 		
-		for ibkg in ["ttbar", "Wjets", "Zjets"]:#, "st"]:			
+		# --> Merging the bkg
+		for ibkg in ["ttbar", "Wjets", "Zjets", "st"]:			
 			
 			if ibkg=="ttbar":				
-				for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_ttbar*root ").readlines():
+				for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_ttbar.root ").readlines():
 					hadd_in.append(File[:-1])
 			elif ibkg=="Wjets":
-				for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_W*root ").readlines():
+				for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_W*root ").readlines():
 					hadd_in.append(File[:-1])
 			elif ibkg=="Zjets":
-				for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_Z*root ").readlines():
+				for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_Z*root ").readlines():
 					hadd_in.append(File[:-1])
 			elif ibkg=="st":
-				for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_st*root ").readlines():
+				for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_st.root ").readlines():
 					hadd_in.append(File[:-1])	
+
 
 		hadd_bkgPath = ichan[0]+"_BKG_"+ichan[1]+".root"
 		if merge:	MergeFiles(hadd_bkgPath, hadd_in)
 		
-	
+		# --> Merging the datasets
 		hadd_in=[]
+		'''
 		for idata in ["DTD", "DTE"]:			
 			
 			if idata=="DTD":
-				for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_DTD*root ").readlines():
+				for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_DTD*root ").readlines():
 					hadd_in.append(File[:-1])
 			elif idata=="DTE":
-				for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_DTE*root ").readlines():
+				for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_DTE*root ").readlines():
 					hadd_in.append(File[:-1])
 			
 		hadd_dataPath =  ichan[0]+"_DATA_"+ichan[1]+".root"
 		if merge:	MergeFiles(hadd_dataPath, hadd_in)
+		'''
 		
-		#print hadd_in
+		for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_DT*root ").readlines():
+			hadd_in.append(File[:-1])
+		
+		hadd_dataPath =  ichan[0]+"_DATA_"+ichan[1]+".root"
+		if merge:	MergeFiles(hadd_dataPath, hadd_in)
 		
 		# --> Check QCD at low MWT
 		
@@ -312,11 +320,12 @@ def fakeRates(inputDir, lumi):
 		# ---> 1D fake rates: 
 		#lept Pt
 		h1 = h_leptPt_t[1]
-		h1.Scale(lumi)
+		h1.Scale(lumi)		
 		h1.Add(h_leptPt_t[0],-1)
+		
 		h2 = h_leptPt_l[1]
-		h2.Scale(lumi)
-		h2.Add(h_leptPt_l[0],-1)
+		h2.Scale(lumi)		
+		h2.Add(h_leptPt_l[0],-1)		
 		
 		h_ratio_leptPt = h1
 		h_ratio_leptPt.Divide(h1, h2, 1.0, 1.0, "B")
@@ -336,12 +345,12 @@ def fakeRates(inputDir, lumi):
 				
 		#pT of the closest jet to the lepton
 		
-		h1 = h_closeJL_pt_t[1]
+		h1 = h_closeJL_pt_t[1]		
 		h1.Scale(lumi)
-		h1.Add(h_closeJL_pt_t[0],-1)
+		h1.Add(h_closeJL_pt_t[0],-1)		
 		h2 = h_closeJL_pt_l[1]
-		h2.Scale(lumi)
-		h2.Add(h_closeJL_pt_l[0],-1)		
+		h2.Scale(lumi)			
+		h2.Add(h_closeJL_pt_l[0],-1)			
 		
 		h_ratio_closeJL_pt = h1
 		h_ratio_closeJL_pt.Divide(h1, h2, 1.0, 1.0, "B")	
@@ -362,11 +371,11 @@ def fakeRates(inputDir, lumi):
 		# ---> 2D fake rates
 
 		h12D = h2D_fakeParam_t[1]
-		h12D.Scale(lumi)
-		h12D.Add(h2D_fakeParam_t[0],-1)
+		h12D.Scale(lumi)		
+		h12D.Add(h2D_fakeParam_t[0],-1)		
 		h22D = h2D_fakeParam_l[1]
-		h22D.Scale(lumi)
-		h22D.Add(h2D_fakeParam_l[0],-1) 
+		h22D.Scale(lumi)		
+		h22D.Add(h2D_fakeParam_l[0],-1) 		
 		
 		h_ratio_fake = h12D
 		h_ratio_fake.Divide(h12D, h22D, 1.0, 1.0, "B")
@@ -391,10 +400,9 @@ def fakeRates(inputDir, lumi):
 		h_ratio_closeJL_pt.Write('fake_closeJL_pt_'+ichan[0]+'_'+ichan[1])
 		h_ratio_leptPt.Write('fake_leptPt_'+ichan[0]+'_'+ichan[1])
 
+
 	return
-	
-	
-	
+			
 #--------------------------------#
 #         QCD estimation         #
 #--------------------------------#
@@ -402,15 +410,15 @@ def fakeRates(inputDir, lumi):
 lumi = 523.3 #pb-1
 
 #Produce eff rate plots
-inputDir = '/AtlasDisk/users/romano/SAMPLES2.3.23c/EXOT4_MC15_25ns_FakeRate/25ns/'
-if 0:
-	efficiency(inputDir)
 
+#inputDir = path/to/files/processed/with/TopNtupleAnalysis
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.23c/TopNtupleAnalysis/effSave/'
+
+if 0:
+	effRates(inputDir)
 
 #Produce fake rate plots
-inputDir = '/AtlasDisk/users/romano/offline25ng/EXOT4_dataMC15_25ns_all_1btag_2/25ns/'
+
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.23c/TopNtupleAnalysis/25ns_fake/'
 if 1:	
 	fakeRates(inputDir, lumi)
-
-
-

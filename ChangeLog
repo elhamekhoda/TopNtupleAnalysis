@@ -1,3 +1,7 @@
+2015-10-19 Marino Romano <sromanos@cern.ch>
+	* Adding MMUtils class, for the implementation of the weights from the MM
+	* TopNtupleAnalysis-00-02-02
+
 2015-10-10 Marino Romano <sromanos@cern.ch>
 	* Updated plotting code after tests.
 	* Added latest SF systematics as in 2.3.30 setup.

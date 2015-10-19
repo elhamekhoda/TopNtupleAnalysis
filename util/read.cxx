@@ -24,6 +24,7 @@
 #include "TopDataPreparation/SampleXsection.h"
 
 #include "TopNtupleAnalysis/ParseUtils.h"
+#include "TopNtupleAnalysis/MMUtils.h"
 
 #include <fstream>
 
@@ -52,6 +53,7 @@ int main(int argc, char **argv) {
   int loose = 0;
   int _nentries = -1;
   int _btags = 1;
+  int runMM = 0;
 
   static struct extendedOption extOpt[] = {
         {"help",          no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -64,7 +66,7 @@ int main(int argc, char **argv) {
         {"loose",   required_argument,     0, 'l', "Should I run over the loose TTree too?", &loose, extendedOption::eOTInt},
         {"nentries",   required_argument,     0, 'N', "Run over only the first entries if > 0.", &_nentries, extendedOption::eOTInt},
         {"btags",   required_argument,     0, 'B', "Add cut on b-tagged jets >= abs(X). If negative use track-jet b-tagging.", &_btags, extendedOption::eOTInt},
-
+        {"runMM",   required_argument,     0, 'M', "Implement the QCD weiths to data", &runMM, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -142,6 +144,9 @@ int main(int argc, char **argv) {
     }
   }
 
+  MMUtils * MMfiles = NULL;
+  if (runMM)	MMfiles = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
+  
   int n_eigenvars_b = 0;
   int n_eigenvars_c = 0;
   int n_eigenvars_l = 0;
@@ -568,7 +573,14 @@ int main(int argc, char **argv) {
             if (sumOfWeights[channel] != 0)
               weight /= sumOfWeights[channel];
               //std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" << btagsf  << "\t" << sel.weight_leptonSF() << "\t" << sel.weight_pileup() << "\t" << sumOfWeights[channel]  << std::endl;          
-          }
+          }//!isData
+	  
+	  if (runMM) {
+	     
+	     weight = MMfiles->getMMweights(sel, suffix);
+	     //std::cout << "weight: " << weight << std::endl;	     
+	  
+	  }//runMM
       
           // this applies b-tagging early
           int nBtagged = 0; 

@@ -20,6 +20,7 @@ LDFLAGS   += $(ROOTLIB)
 
 OBJS       = Root/Event.o Root/LargeJet.o Root/Muon.o Root/Electron.o Root/Jet.o Root/MObject.o
 OBJS      += Root/ParseUtils.o
+OBJS      += Root/MMUtils.o
 OBJS      += Root/MiniTree.o
 OBJS      += Root/UserFunktions.o
 OBJS      += Root/KinematicUtils.o

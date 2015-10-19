@@ -200,19 +200,16 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
   	float closejl_deltaR  = 99;
   	float deltaR_tmp      = 99;
   	int closejl_idx       = -1;
-	double deltaRapidity2  = 99;
-        double deltaPhi2       = 99;
+	float deltaRapidity2  = 99;
+        float deltaPhi2       = 99;
 
   	size_t jet_idx = 0;
   	for (; jet_idx < evt.jet().size(); ++jet_idx){  
 	
-	  deltaRapidity2 = evt.jet()[jet_idx].mom().Rapidity() - lept.Eta();
-          deltaRapidity2 = pow(deltaRapidity2, 2);
+          deltaRapidity2 = pow(evt.jet()[jet_idx].mom().Rapidity() - lept.Eta(), 2);
           
-          deltaPhi2 = evt.jet()[jet_idx].mom().Phi() - lept.Phi();
-          deltaPhi2 = pow(deltaPhi2, 2);
+          deltaPhi2 = pow(evt.jet()[jet_idx].mom().DeltaPhi(lept), 2);
            
-          //deltaR_tmp = lept.DeltaR(evt.jet()[jet_idx].mom());
           deltaR_tmp = sqrt(deltaPhi2 + deltaRapidity2);
 	  
     	  if (deltaR_tmp < closejl_deltaR){
@@ -273,8 +270,8 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
   
      //deltaR between lepton and the closest narrow jet
   
-     double deltaRapidity2  = 99;
-     double deltaPhi2       = 99;
+     float deltaRapidity2  = 99;
+     float deltaPhi2       = 99;
      float closejl_deltaR   = 99;
      float deltaR_tmp       = 99;
      int closejl_idx        = -1;
@@ -282,13 +279,11 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
   
      size_t jet_idx = 0;
      for (; jet_idx < evt.jet().size(); ++jet_idx){  	
-       deltaRapidity2 = evt.jet()[jet_idx].mom().Rapidity() - lept.Eta();
-       deltaRapidity2 = pow(deltaRapidity2, 2);
-     
-       deltaPhi2 = evt.jet()[jet_idx].mom().Phi() - lept.Phi();
-       deltaPhi2 = pow(deltaPhi2, 2);
+
+       deltaRapidity2 = pow(evt.jet()[jet_idx].mom().Rapidity() - lept.Eta(), 2); 
+           
+       deltaPhi2 = pow(evt.jet()[jet_idx].mom().DeltaPhi(lept), 2);
       
-       //deltaR_tmp = lept.DeltaR(evt.jet()[jet_idx].mom());
        deltaR_tmp = sqrt(deltaPhi2 + deltaRapidity2);
 
         if (deltaR_tmp < closejl_deltaR){
