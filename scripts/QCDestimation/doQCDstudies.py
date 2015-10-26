@@ -9,7 +9,7 @@ gStyle.SetPaintTextFormat('4.2f')
 gStyle.SetPalette(1)
 gStyle.SetTextSize(3)
 
-doprint = ".pdf"
+doprint = ".png,.eps"
 
 def saveCanvas(canvas, name, File, OUTDIR):
         File.cd()
@@ -367,7 +367,7 @@ def fakeRates(inputDir, lumi):
 		# ---> 2D fake rates
 
 		h12D = h2D_fakeParam_t[1]
-		h12D.Add(h2D_fakeParam_t[0.Scale(lumi),-1)		
+		h12D.Add(h2D_fakeParam_t[0].Scale(lumi),-1)		
 		h22D = h2D_fakeParam_l[1]
 		h22D.Add(h2D_fakeParam_l[0].Scale(lumi),-1) 		
 		
@@ -401,8 +401,6 @@ def fakeRates(inputDir, lumi):
 #         QCD estimation         #
 #--------------------------------#
 
-lumi = 523.3 #pb-1
-
 #Produce eff rate plots
 
 #inputDir = path/to/files/processed/with/TopNtupleAnalysis
@@ -413,6 +411,30 @@ if 0:
 
 #Produce fake rate plots
 
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.23c/TopNtupleAnalysis/25ns_fake/'
+#new
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/25ns_fake/' 
+lumi = 1037.23 #pb-1
+
+#old
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/save_523/25ns_fake/4j1bj/' 
+#lumi = 523.3 #pb-1
+
 if 1:	
 	fakeRates(inputDir, lumi)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

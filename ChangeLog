@@ -1,3 +1,8 @@
+2015-10-26 Marino Romano <sromanos@cern.ch>
+	* Fixing typo bug in doQCDstudies.py
+	* Improving getMMWeights code
+	* TopNtupleAnalysis-00-02-03
+
 2015-10-19 Marino Romano <sromanos@cern.ch>
 	* Adding MMUtils class, for the implementation of the weights from the MM
 	* TopNtupleAnalysis-00-02-02

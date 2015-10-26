@@ -5,9 +5,12 @@
 #ifndef MMUTILS_H
 #define MMUTILS_H
 
+#include "TopNtupleAnalysis/Event.h"
+#include "TopNtupleAnalysis/HistogramService.h"
+
 #include <string>
 #include <getopt.h>
-#include "TopNtupleAnalysis/Event.h"
+
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -20,7 +23,7 @@ class MMUtils{
     MMUtils(const std::string &eff_filename="eff.root", const std::string &fake_filename="fake.root"); 
     ~MMUtils();
 
-    float getMMweights(const Event &evt);
+    float getMMweights(const Event &evt, const std::string &s);
 
   private:
 
@@ -36,6 +39,8 @@ class MMUtils{
 
     TH2F * eff_map;
     TH2F * fake_map;
+    
+    HistogramService m_hSvc;
 };
 
 #endif

@@ -573,11 +573,12 @@ int main(int argc, char **argv) {
             if (sumOfWeights[channel] != 0)
               weight /= sumOfWeights[channel];
               //std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" << btagsf  << "\t" << sel.weight_leptonSF() << "\t" << sel.weight_pileup() << "\t" << sumOfWeights[channel]  << std::endl;          
-          }//!isData
+
+	  }//!isData
 	  
 	  if (runMM) {
 	     
-	     weight = MMfiles->getMMweights(sel);
+	     weight = MMfiles->getMMweights(sel, suffix);
 	     //std::cout << "weight: " << weight << std::endl;	     
 	  
 	  }//runMM
