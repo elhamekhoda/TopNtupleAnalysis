@@ -28,7 +28,7 @@ Hist::Hist(const string &name, const string &syst, const string &file) {
   if (!h) {
     throw string("Failed to get histogram in file ")+file+string(", trying to get ")+name+string("for syst ")+syst;
   }
-  if (file.find("data") == std::string::npos) h->Scale(lumi_scale*1000);
+  if (file.find("data") == std::string::npos && file.find("Data") == std::string::npos) h->Scale(lumi_scale*1000);
   _size = 0;
   for (int i = 0; i <= h->GetNbinsX()+1; ++i) {
     _size++;

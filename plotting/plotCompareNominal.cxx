@@ -55,6 +55,7 @@ int main(int argc, char **argv) {
     float xMin = -9999;
     float lumi = 5;
     std::string config = "";
+    int mcOnly = 0;
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -74,6 +75,7 @@ int main(int argc, char **argv) {
         {"xMin",            required_argument,     0, 'x', "Limit X minimum value.", &xMin, extendedOption::eOTFloat},
         {"lumi",            required_argument,     0, 'l', "Luminosity value to show.", &lumi, extendedOption::eOTFloat},
         {"config",          required_argument,     0, 'C', "Configuration file.", &config, extendedOption::eOTString},
+        {"mcOnly",          required_argument,     0, 'm', "Do not include data? (0/1)", &mcOnly, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -112,12 +114,12 @@ int main(int argc, char **argv) {
     cout.precision(1);
 
     // for Data/MC comparison
-    SampleSetConfiguration stackConfig = makeConfigurationPlotsCompare(prefix, channel, other_items, other_titles);
+    SampleSetConfiguration stackConfig = makeConfigurationPlotsCompare(prefix, channel, other_items, other_titles, mcOnly);
     SystematicCalculator systCalc(stackConfig);
     for (int z = 0; z < syst_items.size(); ++z) {
       systCalc.add(syst_items[z], new NotData(new HistDiff(syst_items[z].c_str(), "")));
     }
-    //addAllSystematics(systCalc, channel, false);
+    //addAllSystematics(systCalc, prefix, channel, false);
     systCalc.calculate(histogram);
 
     if (underflow) stackConfig.showUnderflow();
@@ -130,23 +132,24 @@ int main(int argc, char **argv) {
     vector<string> extraText;
     string outfile = _outfile;
     if (outfile == "") {
-      outfile = histogram+string("_");
-      if (channel == "e.root") {
-        outfile += "e.pdf";
-      } else if (channel == "mu.root") {
-        outfile += "mu.pdf";
-      } else if (channel == "comb.root") {
-        outfile += "comb.pdf";
+      outfile = prefix+"_"+histogram;
+      outfile += string("_");
+      if (channel == "e") {
+        outfile += "e";
+      } else if (channel == "mu") {
+        outfile += "mu";
+      } else if (channel == "comb") {
+        outfile += "comb";
       } else {
-        outfile += "ukn.pdf";
+        outfile += "ukn";
       }
+      outfile += ".pdf";
     }
-    if (channel == "e.root") {
+    if (channel == "e") {
       extraText.push_back("e channel");
-    } else if (channel == "mu.root") {
+    } else if (channel == "mu") {
       extraText.push_back("#mu channel");
-    } else if (channel == "comb.root") {
-      extraText.push_back("e,#mu-channel");
+    } else if (channel == "comb") {
     }
     vector<string> split_extraText;
     split(_extraText, ';', split_extraText);

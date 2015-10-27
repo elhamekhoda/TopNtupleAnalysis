@@ -28,23 +28,69 @@
 int _stamp = 0;
 std::map<std::string, std::string> name = std::map<std::string, std::string>();
 std::map<std::string, std::pair<std::string, std::string> > syst = std::map<std::string, std::pair<std::string, std::string> >();
+
+std::map<std::string, std::string> title = std::map<std::string, std::string>();
+std::map<std::string, std::string> latex = std::map<std::string, std::string>();
+std::map<std::string, int> fillColor = std::map<std::string, int>();
+
+
+std::map<std::string, std::vector<std::string> > syst_model = std::map<std::string, std::vector<std::string> >();
+std::map<std::string, std::vector<std::string> > syst_flat = std::map<std::string, std::vector<std::string> >();
+
 float lumi_scale = 1.0;
 
 using namespace std;
+
+std::vector<std::string> parse(const std::string& line) {
+  std::vector<std::string> result;
+  std::string item;
+  std::stringstream ss(line);
+  while(ss >> item){
+    if (item[0]=='"') {
+      if (item[item.length() - 1]=='"') {
+        result.push_back(item.substr(1, item.length()-2));
+      } else {
+        std::string restOfItem;
+        std::getline(ss, restOfItem, '"');
+        result.push_back(item.substr(1) + restOfItem);
+      }
+    } else {
+      result.push_back(item);
+    }
+  }
+  return result;
+}
 
 void loadConfig(const std::string &file) {
   std::ifstream fi(file.c_str());
   std::string line;
   while (std::getline(fi, line)) {
-    std::istringstream iss(line);
+    //std::istringstream iss(line);
+    //if (!(iss >> a)) { break; } // error
     std::string a, b, c, d;
-    if (!(iss >> a)) { break; } // error
-    if (a == "sample") {
-      iss >> b >> c;
-      name[b] = c;
-    } else if (a == "syst") {
-      iss >> b >> c >> d;
-      syst[b] = std::pair<std::string, std::string>(c, d);
+    std::string tit, lat;
+    int col;
+    std::vector<std::string> el = parse(line.c_str());
+    if (el[0] == "sample") {
+      name[el[1]] = el[2];
+      title[el[1]] = el[3];
+      latex[el[1]] = el[4];
+      fillColor[el[1]] = std::atoi(el[5].c_str());
+    } else if (el[0] == "syst") {
+      if (el.size() >= 4)
+        syst[el[1]] = std::pair<std::string, std::string>(el[2], el[3]);
+      else
+        syst[el[1]] = std::pair<std::string, std::string>(el[2], "");
+    } else if (el[0] == "syst_model") {
+      syst_model[el[1]] = std::vector<std::string>();
+      syst_model[el[1]].push_back(el[2]);
+      syst_model[el[1]].push_back(el[3]);
+      syst_model[el[1]].push_back(el[4]);
+    } else if (el[0] == "syst_flat") {
+      syst_flat[el[1]] = std::vector<std::string>();
+      syst_flat[el[1]].push_back(el[2]);
+      syst_flat[el[1]].push_back(el[3]);
+      syst_flat[el[1]].push_back(el[4]);
     }
   }
 }
@@ -340,7 +386,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
     arrow.reset(new TGraph(Data->GetNbinsX()+1));
     arrowdw.reset(new TGraph(Data->GetNbinsX()+1));
 
-    rat->Divide(Data.get(), MC_sum, 1, 1, "B");
+    rat->Divide(Data.get(), MC_sum);//, 1, 1, "B");
     rat_band = normaliseBand(band, MC_sum);
 
     double theMax = 1.6;
@@ -478,7 +524,7 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
 
   // do ratio?
   TPad *pad_ratio = 0;
-  if (ratio && stackConfig._stack.find("Data") != stackConfig._stack.end()) {
+  if (ratio) {
     c->Divide(1, 2, 0.015, 0.01);
     pad_ratio = (TPad *) c->cd(2);
     pad_ratio->SetPad(0,0,1,0.30);
@@ -496,7 +542,7 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
   band->SetFillColorAlpha(kGreen-8, 0.5);
 
   // make legend
-  shared_ptr<TLegend> leg(new TLegend(0.65, 0.5, 0.95, 0.92));
+  shared_ptr<TLegend> leg(new TLegend(0.60, 0.5, 0.90, 0.92));
   //leg->SetNColumns(2);
   leg->SetFillStyle(0);
   leg->SetBorderSize(0);
@@ -507,6 +553,8 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
   shared_ptr<THStack> MC = stackConfig["MC"].makeStack("MC", leg, vechist);
   vector<shared_ptr<THStack> > MCO;
   int no = stackConfig.n()-2;
+  if (stackConfig._stack.find("Data") == stackConfig._stack.end()) no++;
+
   for (int z = 0; z < no; ++z) {
     vechisto.push_back(vector<shared_ptr<TH1D> >());
     MCO.push_back(stackConfig[Form("MC%d", z)].makeStack(Form("MC%d", z), leg, vechisto[z]));
@@ -558,12 +606,14 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
   vector<shared_ptr<TH1D> > ratExtra;
   shared_ptr<TGraphAsymmErrors> rat_band;
   shared_ptr<TLine> lin;
-  if (ratio && Data) {
+  if (ratio) {
     TH1D *MC_sum = (TH1D *) MC->GetStack()->At(MC->GetStack()->LastIndex());
     vector<TH1D *> MCO_sum;
     for (int z = 0; z < no; ++z) MCO_sum.push_back((TH1D *) MCO[z]->GetStack()->At(MCO[z]->GetStack()->LastIndex()));
 
-    rat.reset((TH1D *) Data->Clone("ratio"));
+    if (Data) rat.reset((TH1D *) Data->Clone("ratio"));
+    else rat.reset((TH1D *) MC_sum->Clone("ratio"));
+
     for (int z = 0; z < no; ++z) {
       rato.push_back(shared_ptr<TH1D>());
       //rato[z].reset((TH1D *) Data->Clone(Form("ratio_o_%d", z)));
@@ -574,15 +624,19 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
       ratExtra[z].reset((TH1D *) MC_sum->Clone(Form("ratioExtra_%d", z)));
       ratExtra[z]->SetLineColor(ExtraSyst[z]->GetLineColor());
     }
-    rat->Divide(Data.get(), MC_sum, 1, 1, "B");
+    if (Data)
+      rat->Divide(Data.get(), MC_sum);//, 1, 1, "B");
+    else
+      rat->Divide(MC_sum, MC_sum);//, 1, 1, "B");
+
     for (int z = 0; z < no; ++z) {
-      rato[z]->Divide(MCO_sum[z], MC_sum, 1, 1, "B");
+      rato[z]->Divide(MCO_sum[z], MC_sum);//, 1, 1, "B");
       rato[z]->SetStats(0);
       rato[z]->GetYaxis()->SetRangeUser(0.3, 1.7);
       rato[z]->SetTitle("");
     }
     for (int z = 0; z < ExtraSyst.size(); ++z) {
-      ratExtra[z]->Divide(ExtraSyst[z].get(), MC_sum, 1, 1, "B");
+      ratExtra[z]->Divide(ExtraSyst[z].get(), MC_sum);//, 1, 1, "B");
       ratExtra[z]->SetStats(0);
       ratExtra[z]->GetYaxis()->SetRangeUser(0.3, 1.7);
       ratExtra[z]->SetTitle("");
@@ -1042,72 +1096,72 @@ SampleSetConfiguration makeConfigurationPlots(const string &prefix, const string
   stackConfig.addType("MC");
   if (!isMcOnly)
     stackConfig.addType("Data");
-  if (channel == "e" && !isMcOnly)
-    stackConfig.add("Data", Form("%s_e_%s.root", prefix.c_str(), name["data"].c_str()), "data", "Data", "Data",
-                        "PL", 1, kBlack, 1, 0, 20, 1, "e");
-  else if (channel == "mu" && !isMcOnly)
-    stackConfig.add("Data", Form("%s_mu_%s.root", prefix.c_str(), name["data"].c_str()), "data", "Data", "Data",
-                        "PL", 1, kBlack, 1, 0, 20, 1, "e");
-  else if (channel == "comb" && !isMcOnly)
-    stackConfig.add("Data", Form("%s_comb_%s.root", prefix.c_str(), name["data"].c_str()), "data", "Data", "Data",
-                        "PL", 1, kBlack, 1, 0, 20, 1, "e");
-
-  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["ttbar"].c_str()), "ttbar", "$t\\bar{t}$", "t#bar{t}",
-                          "F", 1, kBlack, 1001,      0, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["singletop"].c_str()), "Single Top", "single top", "Single top",
-                        "F", 1, kBlack, 1001,     62, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Wjets"].c_str()), "W+jets", "$W+$ jets", "W+jets",
-                        "F", 1, kBlack, 1001,     92, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Zjets"].c_str()), "Z+jets", "$Z+$ jets", "Z+jets",
-                        "", 1, kBlack, 1001,    807, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["VV"].c_str()), "diboson", "diboson", "diboson",
-                        "", 1, kBlack, 1001,       5, 1, 0, "hist");
+  for (std::map<std::string, std::string>::iterator it = name.begin(); it != name.end(); ++it) {
+    std::string id = it->first;
+    std::string file = it->second;
+    std::string longTitle = title[id];
+    std::string latexTitle = latex[id];
+    int fillC = fillColor[id];
+    if (it->first.find("data") != std::string::npos) {
+      if (!isMcOnly)
+        stackConfig.add("Data", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                                "PL", 1, kBlack, 1,    0, 20, 1, "e");
+    } else {
+      stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                              "F", 1, kBlack, 1001,      fillC, 1, 0, "hist");
+    }
+  }
 
   return stackConfig;
 }
 
-SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const string &channel, const vector<string> &other, const vector<string> &title) {
+SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const string &channel, const vector<string> &other, const vector<string> &title_o, bool isMcOnly) {
   SampleSetConfiguration stackConfig;
 
   stackConfig.addType("MC");
-  stackConfig.addType("Data");
+  if (!isMcOnly) stackConfig.addType("Data");
   for (int z = 0; z < other.size(); z++) {
     stackConfig.addType(Form("MC%d", z));
   }
 
-  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["ttbar"].c_str()), "ttbar", "$t\\bar{t}$", "t#bar{t}",
-                          "F", 1, kBlack, 1001,      0, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["singletop"].c_str()), "Single Top", "single top", "Single top",
-                        "F", 1, kBlack, 1001,     62, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Wjets"].c_str()), "W+jets", "$W+$ jets", "W+jets",
-                        "F", 1, kBlack, 1001,     92, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Zjets"].c_str()), "Z+jets", "$Z+$ jets", "Z+jets",
-                        "", 1, kBlack, 1001,    807, 1, 0, "hist");
-  stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["VV"].c_str()), "diboson", "diboson", "diboson",
-                        "", 1, kBlack, 1001,       5, 1, 0, "hist");
+  for (std::map<std::string, std::string>::iterator it = name.begin(); it != name.end(); ++it) {
+    std::string id = it->first;
+    std::string file = it->second;
+    std::string longTitle = title[id];
+    std::string latexTitle = latex[id];
+    int fillC = fillColor[id];
+    if (it->first.find("data") != std::string::npos) {
+      if (!isMcOnly)
+        stackConfig.add("Data", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                                "PL", 1, kBlack, 1,    0, 20, 1, "e");
+    } else {
+      stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                              "F", 1, kBlack, 1001,      fillC, 1, 0, "hist");
+    }
+  }
 
   int col[] = {kRed, kBlue, kGreen};
   for (int z = 0; z < other.size(); ++z) {
-    stackConfig.add(Form("MC%d", z), other[z], title[z], title[z], title[z],
-                          "F", 1, col[z], 1001,      0, 1, 0, "hist");
-    stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["singletop"].c_str()), Form("single top %d", z), "single top", "single top",
-                          "", 1, kBlack, 1001,     62, 1, 0, "hist");
-    stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Wjets"].c_str()), Form("W+jets %d", z), "$W+$ jets", "W + jets",
-                          "", 1, kBlack, 1001,     92, 1, 0, "hist");
-    stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["Zjets"].c_str()), Form("Z+jets %d", z), "$Z+$ jets", "Z + jets",
-                          "", 1, kBlack, 1001,    807, 1, 0, "hist");
-    stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), name["VV"].c_str()), Form("diboson %d", z), "diboson", "diboson",
-                          "", 1, kBlack, 1001,       5, 1, 0, "hist");
+    bool doneTt = false;
+    for (std::map<std::string, std::string>::iterator it = name.begin(); it != name.end(); ++it) {
+      if (it->first.find("data") != std::string::npos)
+        continue;
+
+      std::string id = it->first;
+      std::string file = it->second;
+      std::string longTitle = title[id];
+      std::string latexTitle = latex[id];
+      int fillC = fillColor[id];
+      if (it->first.find("ttbar") == std::string::npos) {
+        stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                                "", 1, kBlack, 1001,      fillC, 1, 0, "hist");
+      } else if (!doneTt) {
+        doneTt = true;
+        stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other[z].c_str()), title_o[z].c_str(), title_o[z].c_str(), title_o[z].c_str(),
+                                "F", 1, col[z], 1,      0, 1, 0, "hist");
+      }
+    }
   }
-  if (channel == "e.root")
-    stackConfig.add("Data", Form("%s_e_%s.root", prefix.c_str(), name["data"].c_str()), "data", "data", "data",
-                        "PL", 1, kBlack, 1, 0, 20, 1, "e");
-  else if (channel == "mu.root")
-    stackConfig.add("Data", Form("%s_mu_%s.root", prefix.c_str(), name["data"].c_str()), "data", "data", "data",
-                        "PL", 1, kBlack, 1, 0, 20, 1, "e");
-  else if (channel == "comb.root")
-    stackConfig.add("Data", Form("%s_comb_%s.root", prefix.c_str(), name["data"].c_str()), "data", "data", "data",
-                        "PL", 1, kBlack, 1, 0, 20, 1, "e");
 
   return stackConfig;
 }
@@ -1152,25 +1206,34 @@ SampleSetConfiguration makeConfigurationDataEff(const string &prefix, const stri
   return stackConfig;
 }
 
-void addAllSystematics(SystematicCalculator &systCalc, const std::string &channel) {
+void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, const std::string &channel) {
   vector<string> only_ttbar;
   only_ttbar.push_back("ttbar");
 
-  systCalc.add("00luminosity", new NotData(new HistNorm(0.09)));
-  systCalc.add("00ttbar cross section", new NotData(new Symm(new HistNorm(0.056, only_ttbar), new HistNorm(-0.061, only_ttbar))));
+  //systCalc.add("00luminosity", new NotData(new HistNorm(0.09)));
+  //systCalc.add("00ttbar cross section", new NotData(new Symm(new HistNorm(0.056, only_ttbar), new HistNorm(-0.061, only_ttbar))));
 
   for (std::map<std::string, std::pair<std::string, std::string> >::iterator it = syst.begin(); it != syst.end(); ++it) {
     std::string name = it->first;
-    size_t pos = 0;
-    while ((pos = name.find("_", pos)) != std::string::npos) {
-      name.replace(pos, 1, " ");
-      pos += 1;
-    }
     if (it->second.second == "")
       systCalc.add(name, new NotData(new Symm(new HistDiff(it->second.first, ""))));
     else
       systCalc.add(name, new NotData(new Symm(new HistDiff(it->second.first, ""), new HistDiff(it->second.second, ""))));
   }
+  for (std::map<std::string, std::vector<std::string> >::iterator it = syst_model.begin(); it != syst_model.end(); ++it) {
+    std::string name = it->first;
+    vector<string> pattern;
+    pattern.push_back(it->second[0]);
+    systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[1].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), pattern));
+  }
+
+  for (std::map<std::string, std::vector<std::string> >::iterator it = syst_flat.begin(); it != syst_flat.end(); ++it) {
+    std::string name = it->first;
+    vector<string> pattern;
+    pattern.push_back(it->second[0]);
+    systCalc.add(name.c_str(), new NotData(new Symm(new HistNorm(std::atof(it->second[1].c_str()), pattern), new HistNorm(std::atof(it->second[2].c_str()), pattern))));
+  }
+  //systCalc.add("(33) ISR/FSR", new RelativeISRFSR(Form("out_isr2_%s", channel.c_str()), Form("out_isr1_%s", channel.c_str()), only_allttbar));
   /*
   systCalc.add("(01) \\akt $R=0.4$ jet energy resolution", new NotData(new Symm(new HistDiff("JET_JER_SINGLE_NP__1up", ""))));
   systCalc.add("(02) \\akt $R=0.4$ jet energy scale 1", new NotData(new Symm(new HistDiff("JET_NPScenario1_JET_GroupedNP_1__1up", ""), new HistDiff("JET_NPScenario1_JET_GroupedNP_1__1down", ""))));

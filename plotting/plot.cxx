@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
       // for Data/MC comparison
       SampleSetConfiguration stackConfig = makeConfigurationPlots(prefix, channel, mcOnly);
       SystematicCalculator systCalc(stackConfig);
-      addAllSystematics(systCalc, channel);
+      addAllSystematics(systCalc, prefix, channel);
       systCalc.calculate(histogram);
 
       if (underflow) stackConfig.showUnderflow();
@@ -182,7 +182,7 @@ int main(int argc, char **argv) {
         // for data eff. numerator
         SampleSetConfiguration stackConfigNumD = makeConfigurationDataEff(prefix, channel);
         SystematicCalculator systCalcNumD(stackConfigNumD);
-        addAllSystematics(systCalcNumD, channel);
+        addAllSystematics(systCalcNumD, prefix, channel);
 
         systCalcNumD.calculate(histogram_num);
 
@@ -199,7 +199,7 @@ int main(int argc, char **argv) {
         // for data eff. denominator
         SampleSetConfiguration stackConfigDenD = makeConfigurationDataEff(prefix, channel);
         SystematicCalculator systCalcDenD(stackConfigDenD);
-        addAllSystematics(systCalcDenD, channel);
+        addAllSystematics(systCalcDenD, prefix, channel);
   
         systCalcDenD.calculate(histogram_den);
 
@@ -230,7 +230,7 @@ int main(int argc, char **argv) {
       // for MC eff. numerator using PP
       SampleSetConfiguration stackConfigNum = makeConfigurationMCEff(prefix, channel);
       SystematicCalculator systCalcNum(stackConfigNum);
-      addAllSystematics(systCalcNum, channel);
+      addAllSystematics(systCalcNum, prefix, channel);
 
       systCalcNum.calculate(histogram_num);
 
@@ -247,7 +247,7 @@ int main(int argc, char **argv) {
       // for MC eff. denominator
       SampleSetConfiguration stackConfigDen = makeConfigurationMCEff(prefix, channel);
       SystematicCalculator systCalcDen(stackConfigDen);
-      addAllSystematics(systCalcDen, channel);
+      addAllSystematics(systCalcDen, prefix, channel);
   
       systCalcDen.calculate(histogram_den);
 

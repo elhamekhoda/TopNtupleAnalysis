@@ -13,17 +13,22 @@ void handler(int sig);
 
 extern int _stamp;
 extern std::map<std::string, std::string> name;
+extern std::map<std::string, std::string> title;
+extern std::map<std::string, std::string> latex;
+extern std::map<std::string, int> fillColor;
 extern std::map<std::string, std::pair<std::string, std::string> > syst;
+extern std::map<std::string, std::vector<std::string> > syst_model;
+extern std::map<std::string, std::vector<std::string> > syst_flat;
 extern float lumi_scale;
 
 void loadConfig(const std::string &file = "config.txt");
 
 shared_ptr<TGraphErrors> TH1toGraph(TH1D *Data);
 SampleSetConfiguration makeConfigurationPlots(const string &prefix, const string &channel, bool isMcOnly = false);
-SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const string &channel, const vector<string> &other, const vector<string> &title);
+SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const string &channel, const vector<string> &other, const vector<string> &title, bool isMcOnly = false);
 SampleSetConfiguration makeConfigurationMCEff(const string &prefix, const string &channel);
 SampleSetConfiguration makeConfigurationDataEff(const string &prefix, const string &channel);
-void addAllSystematics(SystematicCalculator &systCalc, const std::string &channel);
+void addAllSystematics(SystematicCalculator &systCalc, const std::string &prefix, const std::string &channel);
 
 void split(const std::string &s, char delim, std::vector<std::string> &elems);
 

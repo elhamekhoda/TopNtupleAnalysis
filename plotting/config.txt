@@ -1,44 +1,50 @@
-sample    ttbar        MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia
-sample    singletop    MC15_13TeV_25ns_FS_EXOT4_singletop
-sample    VV           MC15_13TeV_25ns_FS_EXOT4_VV
-sample    Wjets        MC15_13TeV_25ns_FS_EXOT4_Wjets
-sample    Zjets        MC15_13TeV_25ns_FS_EXOT4_Zjets
-sample    data         DTE
-syst      01anti-kt4_JER                   JET_JER_SINGLE_NP__1up
-syst      02anti-kt4_JES1                  JET_NPScenario1_JET_GroupedNP_1__1up       JET_NPScenario1_JET_GroupedNP_1__1down
-syst      03anti-kt4_JES2                  JET_NPScenario1_JET_GroupedNP_2__1up       JET_NPScenario1_JET_GroupedNP_2__1down
-syst      04anti-kt4_JES3                  JET_NPScenario1_JET_GroupedNP_3__1up       JET_NPScenario1_JET_GroupedNP_3__1down
-syst      05muon_res._(MS)                 MUONS_MS__1up                              MUONS_MS__1down
-syst      06muon_res._(ID)                 MUONS_ID__1up                              MUONS_ID__1down
-syst      07muon_scale                     MUONS_SCALE__1up                           MUONS_SCALE__1down
-syst      08electron_res.                  EG_RESOLUTION_ALL__1up                     EG_RESOLUTION_ALL__1down
-syst      09electron_scale                 EG_SCALE_ALL__1up                          EG_SCALE_ALL__1down
-syst      10MET_res._para.                 MET_SoftTrk_ResoPara
-syst      11MET_res._perp.                 MET_SoftTrk_ResoPerp
-syst      12MET_scale                      MET_SoftTrk_ScaleUp                        MET_SoftTrk_ScaleDown
-syst      13b-tagging_eff._(E0)            btagbSF_0__1up                             btagbSF_0__1down
-syst      14b-tagging_eff._(E1)            btagbSF_1__1up                             btagbSF_1__1down
-syst      15b-tagging_eff._(E2)            btagbSF_2__1up                             btagbSF_2__1down
-syst      16b-tagging_eff._(E3)            btagbSF_3__1up                             btagbSF_3__1down
-syst      17b-tagging_eff._(E4)            btagbSF_4__1up                             btagbSF_4__1down
-syst      18b-tagging_eff._(E5)            btagbSF_5__1up                             btagbSF_5__1down
-syst      19b-tagging_c_mistag_(E0)        btagcSF_0__1up                             btagcSF_0__1down
-syst      20b-tagging_c_mistag_(E1)        btagcSF_1__1up                             btagcSF_1__1down
-syst      21b-tagging_c_mistag_(E2)        btagcSF_2__1up                             btagcSF_2__1down
-syst      22b-tagging_c_mistag_(E3)        btagcSF_3__1up                             btagcSF_3__1down
-syst      23b-tagging_l_mistag_(E0)        btaglSF_0__1up                             btaglSF_0__1down
-syst      24b-tagging_l_mistag_(E1)        btaglSF_1__1up                             btaglSF_1__1down
-syst      25b-tagging_l_mistag_(E2)        btaglSF_2__1up                             btaglSF_2__1down
-syst      26b-tagging_l_mistag_(E3)        btaglSF_3__1up                             btaglSF_3__1down
-syst      27electron_trigger               eTrigSF__1up                               eTrigSF__1down
-syst      28electron_reconstruction        eRecoSF__1up                               eRecoSF__1down
-syst      29electron_ID                    eIDSF__1up                                 eIDSF__1down
-syst      30electron_isolation             eIsolSF__1up                               eIsolSF__1down
-syst      31muon_trigger_(stat)            muTrigStatSF__1up                          muTrigStatSF__1down
-syst      32muon_trigger_(syst)            muTrigSystSF__1up                          muTrigSystSF__1down
-syst      33muon_ID_(stat)                 muIDStatSF__1up                            muIDStatSF__1down
-syst      34muon_ID_(syst)                 muIDSystSF__1up                            muIDSystSF__1down
-syst      35muon_isolation_(stat)          muIsolStatSF__1up                          muIsolStatSF__1down
-syst      36muon_isolation_(syst)          muIsolSystSF__1up                          muIsolSystSF__1down
-syst      37b-tagging_extrap._(charm)      btageSF_0__1up                             btageSF_0__1down
-syst      38b-tagging_extrap.              btageSF_1__1up                             btageSF_1__1down
+sample    0data         Data15_13TeV_25ns_FS_EXOT4_1_4fb                              "data"             "data"               1
+sample    1ttbar        MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia                    "t#bar{t}"         "$t\bar{t}$"         0
+sample    2ttbarHM      MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced          "t#bar{t} (HM)"    "$t\bar{t}$ (HM)"    920
+sample    3Wjets        MC15_13TeV_25ns_FS_EXOT4_Wjets                                "W+jets"           "W+jets"             92
+sample    4singletop    MC15_13TeV_25ns_FS_EXOT4_singletop                            "single top"       "single top"         62
+sample    5Zjets        MC15_13TeV_25ns_FS_EXOT4_Zjets                                "Z+jets"           "Z+jets"             95
+sample    6VV           MC15_13TeV_25ns_FS_EXOT4_VV                                   "diboson"          "diboson"            5
+syst      "01 anti-$k_t$ R=0.4 JER"           JET_JER_SINGLE_NP__1up
+syst      "02 anti-$k_t$ R=0.4 JES1"          JET_NPScenario1_JET_GroupedNP_1__1up       JET_NPScenario1_JET_GroupedNP_1__1down
+syst      "03 anti-$k_t$ R=0.4 JES2"          JET_NPScenario1_JET_GroupedNP_2__1up       JET_NPScenario1_JET_GroupedNP_2__1down
+syst      "04 anti-$k_t$ R=0.4 JES3"          JET_NPScenario1_JET_GroupedNP_3__1up       JET_NPScenario1_JET_GroupedNP_3__1down
+syst      "05 muon res. (MS)"                 MUONS_MS__1up                              MUONS_MS__1down
+syst      "06 muon res. (ID)"                 MUONS_ID__1up                              MUONS_ID__1down
+syst      "07 muon scale"                     MUONS_SCALE__1up                           MUONS_SCALE__1down
+syst      "08 electron res."                  EG_RESOLUTION_ALL__1up                     EG_RESOLUTION_ALL__1down
+syst      "09 electron scale"                 EG_SCALE_ALL__1up                          EG_SCALE_ALL__1down
+syst      "10 MET res. para."                 MET_SoftTrk_ResoPara
+syst      "11 MET res. perp."                 MET_SoftTrk_ResoPerp
+syst      "12 MET scale"                      MET_SoftTrk_ScaleUp                        MET_SoftTrk_ScaleDown
+syst      "13 b-tagging eff. (E0)"            btagbSF_0__1up                             btagbSF_0__1down
+syst      "14 b-tagging eff. (E1)"            btagbSF_1__1up                             btagbSF_1__1down
+syst      "15 b-tagging eff. (E2)"            btagbSF_2__1up                             btagbSF_2__1down
+syst      "16 b-tagging eff. (E3)"            btagbSF_3__1up                             btagbSF_3__1down
+syst      "17 b-tagging eff. (E4)"            btagbSF_4__1up                             btagbSF_4__1down
+syst      "18 b-tagging eff. (E5)"            btagbSF_5__1up                             btagbSF_5__1down
+syst      "19 b-tagging c mistag (E0)"        btagcSF_0__1up                             btagcSF_0__1down
+syst      "20 b-tagging c mistag (E1)"        btagcSF_1__1up                             btagcSF_1__1down
+syst      "21 b-tagging c mistag (E2)"        btagcSF_2__1up                             btagcSF_2__1down
+syst      "22 b-tagging c mistag (E3)"        btagcSF_3__1up                             btagcSF_3__1down
+syst      "23 b-tagging l mistag (E0)"        btaglSF_0__1up                             btaglSF_0__1down
+syst      "24 b-tagging l mistag (E1)"        btaglSF_1__1up                             btaglSF_1__1down
+syst      "25 b-tagging l mistag (E2)"        btaglSF_2__1up                             btaglSF_2__1down
+syst      "26 b-tagging l mistag (E3)"        btaglSF_3__1up                             btaglSF_3__1down
+syst      "27 electron trigger"               eTrigSF__1up                               eTrigSF__1down
+syst      "28 electron reconstruction"        eRecoSF__1up                               eRecoSF__1down
+syst      "29 electron ID"                    eIDSF__1up                                 eIDSF__1down
+syst      "30 electron isolation"             eIsolSF__1up                               eIsolSF__1down
+syst      "31 muon trigger (stat)"            muTrigStatSF__1up                          muTrigStatSF__1down
+syst      "32 muon trigger (syst)"            muTrigSystSF__1up                          muTrigSystSF__1down
+syst      "33 muon ID (stat)"                 muIDStatSF__1up                            muIDStatSF__1down
+syst      "34 muon ID (syst)"                 muIDSystSF__1up                            muIDSystSF__1down
+syst      "35 muon isolation (stat)"          muIsolStatSF__1up                          muIsolStatSF__1down
+syst      "36 muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down
+syst      "37 b-tagging extrap. (charm)"      btageSF_0__1up                             btageSF_0__1down
+syst      "38 b-tagging extrap."              btageSF_1__1up                             btageSF_1__1down
+syst_flat "39 luminosity"                     ""                     0.09                                       -0.09
+syst_flat "40 ttbar cross section"            "ttbar"                0.056                                      -0.061
+syst_model "41 ttbar gen."                    "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2
+syst_model "42 ttbar p. shower"               "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2
+syst_model "43 ttbar ISR/FSR"                 "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo                          MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi
