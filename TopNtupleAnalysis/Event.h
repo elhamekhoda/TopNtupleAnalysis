@@ -23,10 +23,14 @@ class Event {
     std::vector<Jet> &jet();
     std::vector<LargeJet> &largeJet();
 
+    std::vector<Jet> &tjet();
+
     const std::vector<Electron> &electron() const;
     const std::vector<Muon> &muon() const;
     const std::vector<Jet> &jet() const;
     const std::vector<LargeJet> &largeJet() const;
+
+    const std::vector<Jet> &tjet() const;
 
     void met(float met_x, float met_y);
     TLorentzVector met() const;
@@ -147,6 +151,8 @@ class Event {
     std::vector<LargeJet> m_largeJet;
 
     TLorentzVector m_met;
+
+    std::vector<Jet> m_tjet;
     
     TLorentzVector m_MC_w1h;
     int m_MC_w1h_pdgId;

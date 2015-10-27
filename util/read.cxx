@@ -48,24 +48,28 @@ int main(int argc, char **argv) {
   int isAtlFastII = 0;
   std::string outFile = "hist_re.root,hist_rmu.root,hist_be.root,hist_bmu.root";
   std::string files = "output.root";
+  std::string input_fullFileList = "";
   std::string analysis = "AnaTtresSL";
   std::string systs = "nominal";
   int loose = 0;
   int _nentries = -1;
   int _btags = 1;
+  int removeOverlapHighMtt = 0;
   int runMM = 0;
 
   static struct extendedOption extOpt[] = {
         {"help",          no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
         {"data",         required_argument,     0, 'd', "Is this data?", &isData, extendedOption::eOTInt},
         {"atlFastII",         required_argument,     0, 'a', "Is this AtlFastII? (0/1)", &isAtlFastII, extendedOption::eOTInt},
-        {"files",         required_argument,     0, 'f', "Input list of comma-separated D3PD files to apply the selection on", &files, extendedOption::eOTString},
+        {"files",         required_argument,     0, 'f', "Input list of comma-separated files to apply the selection on. If argument has input_ and .txt in the name, it is assumed that a file list is inside the text file provided as argument.", &files, extendedOption::eOTString},
+        {"fullFiles",         required_argument,     0, 'F', "Full list of input files in this sample to be used to calculate the sum of weights for the normalisation. If left untouched, the contents of --files will be assumed to represent the full sample.", &input_fullFileList, extendedOption::eOTString},
         {"analysis",   required_argument,     0, 'A', "Analysis to run. Choices: AnaTtresSL", &analysis, extendedOption::eOTString},
         {"output",   required_argument,     0, 'o', "Comma-separated list of output files.", &outFile, extendedOption::eOTString},
         {"systs",   required_argument,     0, 's', "Comma-separated list of systematics.", &systs, extendedOption::eOTString},
         {"loose",   required_argument,     0, 'l', "Should I run over the loose TTree too?", &loose, extendedOption::eOTInt},
         {"nentries",   required_argument,     0, 'N', "Run over only the first entries if > 0.", &_nentries, extendedOption::eOTInt},
         {"btags",   required_argument,     0, 'B', "Add cut on b-tagged jets >= abs(X). If negative use track-jet b-tagging.", &_btags, extendedOption::eOTInt},
+        {"removeOverlapHighMtt",   required_argument,     0, 'R', "Veto events with true mtt > 1.1 TeV in the 410000 sample only (to be activated if one wnats to use the mtt sliced samples).", &removeOverlapHighMtt, extendedOption::eOTInt},
         {"runMM",   required_argument,     0, 'M', "Implement the QCD weiths to data", &runMM, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
@@ -81,6 +85,7 @@ int main(int argc, char **argv) {
 
   // parse file list
   std::vector<std::string> fileList;
+  std::vector<std::string> fullFileList;
   if ( ((files.find("input") != std::string::npos) && (files.find(".txt") != std::string::npos)) ) {
     std::cout << "Using file given as text list." << std::endl;
     ifstream f(files.c_str());
@@ -114,6 +119,40 @@ int main(int argc, char **argv) {
   if (fileList.size() == 0) {
     std::cout << "ERROR: You must input at least one file." << std::endl;
     std::exit(-1);
+  }
+  if (input_fullFileList == "") {
+    fullFileList = fileList;
+  } else {
+    if ( ((input_fullFileList.find("input") != std::string::npos) && (input_fullFileList.find(".txt") != std::string::npos)) ) {
+      std::cout << "Using file given as text list." << std::endl;
+      ifstream f(input_fullFileList.c_str());
+      if (!f) {
+        std::cout << "Cannot open " << input_fullFileList << std::endl;
+        std::exit(-2);
+      }
+      std::string thePathStr;
+      while (std::getline(f, thePathStr)) {
+        if (thePathStr != "") {
+          size_t idx = std::string::npos;
+          idx = thePathStr.find("\n");
+          std::string aFile = thePathStr.substr(0, idx);
+          fullFileList.push_back(aFile);
+        }
+      }
+      for (std::vector<std::string>::const_iterator it = fullFileList.begin(); it != fullFileList.end(); ++it) {
+        std::cout << "(full input for norm.) Input file \""<<*it<<"\""<< std::endl;
+      }
+    } else {
+      // split by ','
+      std::string argStr = input_fullFileList;
+      for (size_t i = 0,n; i <= argStr.length(); i=n+1) {
+        n = argStr.find_first_of(',',i);
+        if (n == std::string::npos)
+          n = argStr.length();
+        std::string tmp = argStr.substr(i,n-i);
+        fullFileList.push_back(tmp);
+      }
+    }
   }
 
   // get output files
@@ -327,8 +366,8 @@ int main(int argc, char **argv) {
   std::map<int, float> sumOfWeights;
   TChain t_sumWeights("sumWeights");
   if(!isData) {
-    for (int k = 0; k < fileList.size(); ++k) {
-      t_sumWeights.Add(fileList[k].c_str());
+    for (int k = 0; k < fullFileList.size(); ++k) {
+      t_sumWeights.Add(fullFileList[k].c_str());
     }
     int dsid;
     float value;
@@ -404,6 +443,11 @@ int main(int argc, char **argv) {
         // read the event into an Event object to be sent to the Analysis code later
         mt.read(k, sel);
         int channel = sel.channelNumber();
+
+        if (channel == 410000 && removeOverlapHighMtt) // for SM ttbar, we have mtt sliced samples above 1.1 TeV
+          if (sel.MC_ttbar_beforeFSR().M() > 1.1e6)
+            continue;
+  
     
         // this is list just contains systSuffixForHistograms for all systematics
         // except for the nominal and nominal_Loose, on which it contains
@@ -600,7 +644,7 @@ int main(int argc, char **argv) {
             //}
             for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
               if (mt.vf("tjet_mv2c20")->at(bidx) > -0.3098 && mt.vf("tjet_pt")->at(bidx) > 10e3 &&
-                  std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5) {
+                  std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                 nBtagged += 1;	
               }
             }

@@ -33,6 +33,7 @@ void Event::clear() {
   m_electron.clear();
   m_muon.clear();
   m_jet.clear();
+  m_tjet.clear();
   m_largeJet.clear();
   m_met.SetPxPyPzE(0,0,0,0);
   m_passes.clear();
@@ -81,6 +82,10 @@ std::vector<Jet> &Event::jet() {
   return m_jet;
 }
 
+std::vector<Jet> &Event::tjet() {
+  return m_tjet;
+}
+
 std::vector<LargeJet> &Event::largeJet() {
   return m_largeJet;
 }
@@ -103,6 +108,10 @@ const std::vector<Muon> &Event::muon() const {
 
 const std::vector<Jet> &Event::jet() const {
   return m_jet;
+}
+
+const std::vector<Jet> &Event::tjet() const {
+  return m_tjet;
 }
 
 const std::vector<LargeJet> &Event::largeJet() const {

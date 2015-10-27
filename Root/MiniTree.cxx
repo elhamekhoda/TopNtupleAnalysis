@@ -17,7 +17,7 @@
 MiniTree::MiniTree(bool toWrite, const std::string &file, const std::string &name)
   : m_file(0), m_chain(0), m_name(name) {
 
-  m_file = new TFile(file.c_str());
+  //m_file = TFile::Open(file.c_str());
   m_chain = new TChain(name.c_str());
   ((TChain *) m_chain)->Add(file.c_str());
   m_sumWeights = 0;
@@ -121,12 +121,24 @@ void MiniTree::read(int event, Event &e) {
   for (int k = 0; k < vf("jet_pt")->size(); ++k) {
     e.jet().push_back(Jet());
     e.jet()[k].mom().SetPtEtaPhiE(vf("jet_pt")->at(k), vf("jet_eta")->at(k), vf("jet_phi")->at(k), vf("jet_e")->at(k));
-    e.jet()[k].trueFlavour() = 0; // TODO jet_trueflav==0?-99:jet_trueflav->at(k);
+    e.jet()[k].trueFlavour() = vi("jet_trueflav")->at(k); // TODO jet_trueflav==0?-99:jet_trueflav->at(k);
     e.jet()[k].mv1() = vf("jet_mv1")==0?-99:vf("jet_mv1")->at(k);
     e.jet()[k].ip3dsv1() = vf("jet_ip3dsv1")==0?-99:vf("jet_ip3dsv1")->at(k);
     e.jet()[k].mv2c20() = vf("jet_mv2c20")==0?-99:vf("jet_mv2c20")->at(k);
     e.jet()[k].jvt() = vf("jet_jvt")==0?-99:vf("jet_jvt")->at(k);
     e.jet()[k].closeToLepton() = vi("jet_closeToLepton")==0?-99:vi("jet_closeToLepton")->at(k);
+  }
+
+  for (int k = 0; k < vf("tjet_pt")->size(); ++k) {
+    e.tjet().push_back(Jet());
+    e.tjet()[k].mom().SetPtEtaPhiE(vf("tjet_pt")->at(k), vf("tjet_eta")->at(k), vf("tjet_phi")->at(k), vf("tjet_e")->at(k));
+    e.tjet()[k].trueFlavour() = vi("tjet_label")->at(k);
+    e.tjet()[k].mv1() = -99;
+    e.tjet()[k].ip3dsv1() = -99;
+    e.tjet()[k].mv2c20() = vf("tjet_mv2c20")==0?-99:vf("tjet_mv2c20")->at(k);
+    e.tjet()[k].jvt() = -99;
+    e.tjet()[k].closeToLepton() = -99;
+    e.tjet()[k].numConstituents() = vi("tjet_numConstituents")->at(k);
   }
    
   for (int k = 0; k < vf("ljet_pt")->size(); ++k) {
@@ -135,6 +147,10 @@ void MiniTree::read(int event, Event &e) {
     e.largeJet()[k].split12() = vf("ljet_sd12")->at(k);
     e.largeJet()[k].setGood((vi("ljet_good")->at(k) == 1)?true:false);
     e.largeJet()[k].trueFlavour() = 0; //TODO ljet_trueflav==0?-99:ljet_trueflav->at(k);
+    e.largeJet()[k].subs("tau32") = vf("ljet_tau32")->at(k);
+    e.largeJet()[k].subs("tau32_wta") = vf("ljet_tau32_wta")->at(k);
+    e.largeJet()[k].subs("tau21") = vf("ljet_tau21")->at(k);
+    e.largeJet()[k].subs("tau21_wta") = vf("ljet_tau21_wta")->at(k);
   }
   
   e.met(f("met_met")*std::cos(f("met_phi")), f("met_met")*std::sin(f("met_phi")));

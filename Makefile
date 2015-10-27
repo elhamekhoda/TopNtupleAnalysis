@@ -73,6 +73,9 @@ endif
 
 read: $(OBJS_READ)
 	g++ $(CXXFLAGS) -o read $(OBJS_READ) $(LDFLAGS)
+
+read2: $(OBJS_READ)
+	g++ $(CXXFLAGS) -o read2 $(OBJS_READ) $(LDFLAGS)
 	
 readTuDo: $(OBJS_READTUDO)
 	g++ $(CXXFLAGS) -o readTuDo $(OBJS_READTUDO) $(LDFLAGS)

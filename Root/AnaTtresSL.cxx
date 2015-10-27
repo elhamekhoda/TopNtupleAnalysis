@@ -17,73 +17,100 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
 
   m_chi2.Init(TtresChi2::DATA2015_MC15);
 
-  m_hSvc.create1D("lepPt", "; Lepton p_{T} [GeV]; Events", 40, 0, 500);
-  m_hSvc.create1D("lepEta", "; Lepton #eta ; Events", 24, -3.0, 3.0);
-  m_hSvc.create1D("lepPhi", "; Lepton #phi ; Events", 40, -4.0, 4.0);
+  m_hSvc.m_tree->Branch("truemtt",    &_tree_truemtt);
+  m_hSvc.m_tree->Branch("mtt",    &_tree_mtt);
+  m_hSvc.m_tree->Branch("weight", &_tree_weight);
+  m_hSvc.m_tree->Branch("cat",    &_tree_cat);
+  m_hSvc.m_tree->Branch("syst",   &_tree_syst);
 
-  m_hSvc.create1D("leadJetPt", "; Leading Jet p_{T} [GeV]; Events", 30, 0, 900);  
-  m_hSvc.create1D("nJets", "; number of jets ; Events", 10, 0, 10);
+  double varBin1[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500};
+  int varBinN1 = sizeof(varBin1)/sizeof(double) - 1;
+  double varBin2[] = {300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800};
+  int varBinN2 = sizeof(varBin2)/sizeof(double) - 1;
+  double varBin3[] = {0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500};
+  int varBinN3 = sizeof(varBin3)/sizeof(double) - 1;
+  double varBin4[] = {80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500};
+  int varBinN4 = sizeof(varBin4)/sizeof(double) - 1;
+
+  double varBin5[] = {0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000};
+  int varBinN5 = sizeof(varBin5)/sizeof(double) - 1;
+
+  m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN1, varBin1);
+  m_hSvc.create1D("lepEta", "; lepton #eta ; Events", 20, -2.5, 2.5);
+  m_hSvc.create1D("lepPhi", "; lepton #phi [rd] ; Events", 32, -3.2, 3.2);
+
+  m_hSvc.create1DVar("leadJetPt", "; leading Jet p_{T} [GeV]; Events", varBinN1, varBin1);  
+  m_hSvc.create1D("nJets", "; number of jets ; Events", 10, -0.5, 9.5);
   
-  m_hSvc.create1D("leadbJetPt", "; Leading b-jet p_{T} [GeV]; Events", 40, 0, 500);
+  m_hSvc.create1DVar("leadbJetPt", "; leading b-jet p_{T} [GeV]; Events", varBinN1, varBin1);
+  m_hSvc.create1DVar("leadTrkbJetPt", "; leading b-jet p_{T} [GeV]; Events", varBinN1, varBin1);
   m_hSvc.create1D("nBtagJets", "; number of b-tagged jets ; Events", 10, 0, 10);  
+  m_hSvc.create1D("nTrkBtagJets", "; number of b-tagged track jets ; Events", 10, 0, 10);  
 
-  m_hSvc.create1D("MET", "; Missing E_{T} [GeV]; Events", 50, 0, 500);
-  m_hSvc.create1D("MET_phi", "; Missing E_{T} #phi; Events", 40, -4.0, 4.0);
+  m_hSvc.create1DVar("MET", "; missing E_{T} [GeV]; Events", varBinN1, varBin1);
+  m_hSvc.create1D("MET_phi", "; missing E_{T} #phi [rd] ; Events", 32, -3.2, 3.2);
     
-  m_hSvc.create1D("mwt", "; W transverse mass [GeV]; Events", 50, 0, 500);
+  m_hSvc.create1D("mwt", "; W transverse mass [GeV]; Events", 20, 0, 200);
   m_hSvc.create1D("mu", "; <mu>; Events", 100, 0, 100);
   m_hSvc.create1D("mu_original", "; <mu_origianl>; Events", 100, 0, 100);
   m_hSvc.create1D("vtxz", ";Z position of truth primary vertex; Events", 40, -400, 400);
   m_hSvc.create1D("npv", "; npv; Events", 50, 0, 50);
 
-  m_hSvc.create1D("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 40, 0, 4);
-  m_hSvc.create1D("closejl_pt", "; Pt of closest jet to lep [GeV]; Events", 40, 0, 500);
+  m_hSvc.create1DVar("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", varBinN1, varBin1);
+  m_hSvc.create1DVar("closejl_pt", "; Pt of closest jet to lep [GeV]; Events", varBinN1, varBin1);
  
-  m_hSvc.create1D("jet0_m", "; mass of the jet[0] [GeV]; Events", 50, 0, 500); 
-  m_hSvc.create1D("jet1_m", "; mass of the jet[1] [GeV]; Events", 50, 0, 500); 
-  m_hSvc.create1D("jet2_m", "; mass of the jet[2] [GeV]; Events", 50, 0, 500); 
-  m_hSvc.create1D("jet3_m", "; mass of the jet[3] [GeV]; Events", 50, 0, 500); 
-  m_hSvc.create1D("jet4_m", "; mass of the jet[4] [GeV]; Events", 50, 0, 500); 
-  m_hSvc.create1D("jet5_m", "; mass of the jet[5] [GeV]; Events", 50, 0, 500); 
+  m_hSvc.create1D("jet0_m", "; mass of the leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
+  m_hSvc.create1D("jet1_m", "; mass of the sub-leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
+  m_hSvc.create1D("jet2_m", "; mass of the third leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
+  m_hSvc.create1D("jet3_m", "; mass of the fourth leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
+  m_hSvc.create1D("jet4_m", "; mass of the fifth leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
+  m_hSvc.create1D("jet5_m", "; mass of the sixth leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
   
-  m_hSvc.create1D("jet0_pt", "; pt of the jet[0] [GeV]; Events", 40, 0, 500); 
-  m_hSvc.create1D("jet1_pt", "; pt of the jet[1] [GeV]; Events", 40, 0, 500); 
-  m_hSvc.create1D("jet2_pt", "; pt of the jet[2] [GeV]; Events", 40, 0, 500); 
-  m_hSvc.create1D("jet3_pt", "; pt of the jet[3] [GeV]; Events", 40, 0, 500); 
-  m_hSvc.create1D("jet4_pt", "; pt of the jet[4] [GeV]; Events", 40, 0, 500); 
-  m_hSvc.create1D("jet5_pt", "; pt of the jet[5] [GeV]; Events", 40, 0, 500); 
+  m_hSvc.create1DVar("jet0_pt", "; p_{T} of the leading R=0.4 calo jet [GeV]; Events", varBinN3, varBin3);
+  m_hSvc.create1DVar("jet1_pt", "; p_{T} of the sub-leading R=0.4 calo jet [GeV]; Events", varBinN3, varBin3); 
+  m_hSvc.create1DVar("jet2_pt", "; p_{T} of the third leading R=0.4 calo jet [GeV]; Events", varBinN3, varBin3); 
+  m_hSvc.create1DVar("jet3_pt", "; p_{T} of the fourth leading R=0.4 calo jet [GeV]; Events", varBinN3, varBin3); 
+  m_hSvc.create1DVar("jet4_pt", "; p_{T} of the fifth leading R=0.4 calo jet [GeV]; Events", varBinN3, varBin3); 
+  m_hSvc.create1DVar("jet5_pt", "; p_{T} of the sixth leading R=0.4 calo jet [GeV]; Events", varBinN3, varBin3); 
   
-  m_hSvc.create1D("jet0_eta", "; #eta of the jet[0]; Events", 20, -10, 10); 
-  m_hSvc.create1D("jet1_eta", "; #eta of the jet[1]; Events", 20, -10, 10); 
-  m_hSvc.create1D("jet2_eta", "; #eta of the jet[2]; Events", 20, -10, 10); 
-  m_hSvc.create1D("jet3_eta", "; #eta of the jet[3]; Events", 20, -10, 10); 
-  m_hSvc.create1D("jet4_eta", "; #eta of the jet[4]; Events", 20, -10, 10); 
-  m_hSvc.create1D("jet5_eta", "; #eta of the jet[5]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet0_eta", "; #eta of the leading R=0.4 calo jet ; Events", 25, -2.5, 2.5); 
+  m_hSvc.create1D("jet1_eta", "; #eta of the sub-leading R=0.4 calo jet ; Events", 25, -2.5, 2.5); 
+  m_hSvc.create1D("jet2_eta", "; #eta of the third leading R=0.4 calo jet ; Events", 25, -2.5, 2.5); 
+  m_hSvc.create1D("jet3_eta", "; #eta of the fourth leading R=0.4 calo jet ; Events", 25, -2.5, 2.5); 
+  m_hSvc.create1D("jet4_eta", "; #eta of the fifth leading R=0.4 calo jet ; Events", 25, -2.5, 2.5); 
+  m_hSvc.create1D("jet5_eta", "; #eta of the sixth leading R=0.4 calo jet ; Events", 25, -2.5, 2.5); 
   
-  m_hSvc.create1D("jet0_phi", "; #phi of the jet[0]; Events", 20, -10, 10); 
-  m_hSvc.create1D("jet1_phi", "; #phi of the jet[1]; Events", 20, -10, 10); 
-  m_hSvc.create1D("jet2_phi", "; #phi of the jet[2]; Events", 20, -10, 10); 
-  m_hSvc.create1D("jet3_phi", "; #phi of the jet[3]; Events", 20, -10, 10); 
-  m_hSvc.create1D("jet4_phi", "; #phi of the jet[4]; Events", 20, -10, 10); 
-  m_hSvc.create1D("jet5_phi", "; #phi of the jet[5]; Events", 20, -10, 10); 
+  m_hSvc.create1D("jet0_phi", "; #phi of the leading R=0.4 calo jet ; Events", 32, -3.2, 3.2); 
+  m_hSvc.create1D("jet1_phi", "; #phi of the sub-leading R=0.4 calo jet ; Events", 32, -3.2, 3.2); 
+  m_hSvc.create1D("jet2_phi", "; #phi of the third leading R=0.4 calo jet ; Events", 32, -3.2, 3.2); 
+  m_hSvc.create1D("jet3_phi", "; #phi of the fourth leading R=0.4 calo jet ; Events", 32, -3.2, 3.2); 
+  m_hSvc.create1D("jet4_phi", "; #phi of the fifth leading R=0.4 calo jet ; Events", 32, -3.2, 3.2); 
+  m_hSvc.create1D("jet5_phi", "; #phi of the sixth leading R=0.4 calo jet ; Events", 32, -3.2, 3.2); 
   
   if (m_boosted) {
-    m_hSvc.create1D("closeJetPt", "; Selected Jet p_{T} ; Events", 40, 0, 500);
-    m_hSvc.create1D("largeJetPt", "; Large jet p_{T} ; Events", 40, 0, 800);
-    m_hSvc.create1D("largeJetM", "; Large jet M ; Events", 30, 0, 300);
-    m_hSvc.create1D("largeJetEta", "; Large jet eta ; Events", 24, -3., 3.);
-    m_hSvc.create1D("largeJetPhi", "; Large jet phi ; Events", 40, -4., 4.);
-    m_hSvc.create1D("largeJetSd12", "; Large jet #sqrt{d_{12}} ; Events", 30, 0, 300);
-    m_hSvc.create1D("mtlep_boo", "; m_{t,lep} ; Events", 70, 0, 700);
+    m_hSvc.create1DVar("closeJetPt", "; selected Jet p_{T} [GeV] ; Events", varBinN1, varBin1);
+    m_hSvc.create1DVar("largeJetPt", "; large jet p_{T} [GeV] ; Events", varBinN2, varBin2);
+    m_hSvc.create1D("largeJetM", "; large jet mass [GeV] ; Events", 30, 0, 300);
+    m_hSvc.create1D("largeJetEta", "; large jet #eta ; Events", 20, -2., 2.);
+    m_hSvc.create1D("largeJetPhi", "; large jet #phi [rd] ; Events", 32, -3.2, 3.2);
+    m_hSvc.create1D("largeJetSd12", "; large jet #sqrt{d_{12}} [GeV] ; Events", 20, 0, 200);
+    m_hSvc.create1DVar("mtlep_boo", "; leptonic top mass [GeV] ; Events", varBinN4, varBin4);
   } else {
-    m_hSvc.create1D("mtlep_res", "; m_{t,lep} [GeV]; Events", 40, 0, 400);
-    m_hSvc.create1D("mthad_res", "; m_{t,had} [GeV]; Events", 40, 0, 400);
-    m_hSvc.create1D("mwhad_res", "; m_{W,had} [GeV]; Events", 40, 0, 400);
+    m_hSvc.create1DVar("mtlep_res", "; leptonic top mass [GeV]; Events", varBinN4, varBin4);
+    m_hSvc.create1DVar("mthad_res", "; hadronic top mass [GeV]; Events", varBinN4, varBin4);
+    m_hSvc.create1DVar("mwhad_res", "; hadronic W boson mass [GeV]; Events", 40, 0, 400);
     m_hSvc.create1D("chi2", "; log(#chi^{2}) ; Events", 50, -3, 7);
   }
 
-  m_hSvc.create1D("mtt", "; m_{t#bar{t}} [GeV]; Events", 60, 0, 6000);
-  
+  m_hSvc.create1DVar("mtt", "; mass of the top-antitop system [GeV]; Events", varBinN5, varBin5);
+  m_hSvc.create1DVar("trueMtt", "; mass of the top-antitop system [GeV]; Events", varBinN5, varBin5);
+
+  m_hSvc.create1D("largeJet_tau32", "; #tau_{32}; Events", 20, 0, 1);
+  m_hSvc.create1D("largeJet_tau32_wta", "; #tau_{32} wta; Events", 20, 0, 1);
+
+  m_hSvc.create1D("largeJet_tau21", "; #tau_{21}; Events", 20, 0, 1);
+  m_hSvc.create1D("largeJet_tau21_wta", "; #tau_{21} wta; Events", 20, 0, 1);
+
 }
 
 AnaTtresSL::~AnaTtresSL() {
@@ -105,7 +132,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   if (!m_boosted)
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
-  
+
   if (s=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber()) ){
       m_Nduplicate++;
       return;
@@ -138,6 +165,14 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
       nBtagged += 1;
     }
   h->h1D("nBtagJets", "", s)->Fill(nBtagged, weight);
+
+  int nTrkBtagged = 0; //nB-tagged jets 
+  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
+    if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk()){
+      if(nTrkBtagged==0)h->h1D("leadTrkbJetPt", "", s)->Fill(evt.tjet()[bidx].mom().Perp()*1e-3, weight);
+      nTrkBtagged += 1;
+    }
+  h->h1D("nTrkBtagJets", "", s)->Fill(nTrkBtagged, weight);
 
   // Jet kinematics  
   
@@ -214,6 +249,8 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   h->h1D("closejl_minDeltaR", "", s)->Fill(closejl_deltaR, weight); 
   h->h1D("closejl_pt", "", s)->Fill(closejl_pt*1e-3, weight);
 
+  h->h1D("trueMtt", "", s)->Fill(evt.MC_ttbar_beforeFSR().M()*1e-3, weight);
+  _tree_truemtt = evt.MC_ttbar_beforeFSR().M()*1e-3;
   if (m_boosted && (evt.passes("bejets") || evt.passes("bmujets"))) {
     
     size_t close_idx = 0;
@@ -237,6 +274,12 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     h->h1D("largeJetEta", "", s)->Fill(lj.Eta(), weight);
     h->h1D("largeJetPhi", "", s)->Fill(lj.Phi(), weight);
     h->h1D("largeJetSd12", "", s)->Fill(evt.largeJet()[goodljet_idx].split12()*1e-3, weight);
+
+    h->h1D("largeJet_tau32", "", s)->Fill(evt.largeJet()[goodljet_idx].subs("tau32"), weight);
+    h->h1D("largeJet_tau32_wta", "", s)->Fill(evt.largeJet()[goodljet_idx].subs("tau32_wta"), weight);
+
+    h->h1D("largeJet_tau21", "", s)->Fill(evt.largeJet()[goodljet_idx].subs("tau21"), weight);
+    h->h1D("largeJet_tau21_wta", "", s)->Fill(evt.largeJet()[goodljet_idx].subs("tau21_wta"), weight);
     
     // recalc. mtt
     // lepton = l
@@ -254,6 +297,14 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     if (evt.largeJet().size()!=0)    mtt = (lj+sj+nu+l).M();
     h->h1D("mtt", "", s)->Fill(mtt*1e-3, weight);
     h->h1D("mtlep_boo", "", s)->Fill((sj+nu+l).M()*1e-3, weight);
+
+    _tree_mtt = mtt*1e-3;
+    _tree_weight = weight;
+    _tree_cat = -1;
+    if (evt.passes("bejets") && m_boosted && m_electron) _tree_cat = 0;
+    if (evt.passes("bmujets") && m_boosted && !m_electron) _tree_cat = 1;
+    _tree_syst = s;
+    h->m_tree->Fill();
     
   }else if (!m_boosted && (evt.passes("rejets") || evt.passes("rmujets"))) {
     
@@ -306,6 +357,14 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     h->h1D("mthad_res", "", s)->Fill(mth*1e-3, weight);
     h->h1D("mwhad_res", "", s)->Fill(mwh*1e-3, weight);
     h->h1D("chi2", "", s)->Fill(log10(chi2Value), weight);
+
+    _tree_mtt = mtt*1e-3;
+    _tree_weight = weight;
+    _tree_syst = s;
+    _tree_cat = -1;
+    if (evt.passes("rejets") && !m_boosted && m_electron) _tree_cat = 2;
+    if (evt.passes("rmujets") && !m_boosted && !m_electron) _tree_cat = 3;
+    h->m_tree->Fill();
   }
 
 }

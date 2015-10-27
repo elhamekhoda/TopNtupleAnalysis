@@ -21,6 +21,7 @@ LargeJet::LargeJet(const LargeJet &l)
   m_split12 = l.m_split12;
   m_trueFlavour = l.m_trueFlavour;
   m_good = l.m_good;
+  m_subs = l.m_subs;
 }
 
 LargeJet::~LargeJet() {
@@ -65,4 +66,11 @@ const double LargeJet::split12() const {
   return m_split12;
 }
 
+float &LargeJet::subs(const std::string &s) {
+  return m_subs[s];
+}
+
+const float LargeJet::subs(const std::string &s) const {
+  return m_subs.at(s);
+}
 

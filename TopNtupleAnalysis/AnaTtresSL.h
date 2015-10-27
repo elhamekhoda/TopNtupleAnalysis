@@ -30,6 +30,12 @@ class AnaTtresSL : public Analysis {
 
     TtresNeutrinoBuilder m_neutrinoBuilder;
     TtresChi2 m_chi2;
+
+    double _tree_truemtt;
+    double _tree_mtt;
+    double _tree_weight;
+    int     _tree_cat;
+    std::string _tree_syst;
 };
 
 #endif
