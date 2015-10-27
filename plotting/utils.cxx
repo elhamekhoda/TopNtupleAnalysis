@@ -277,7 +277,7 @@ void drawCompare(SampleSetConfiguration &stackConfig, const vector<std::string> 
   c->SaveAs(outfile.c_str());
 }
 
-void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, const std::string &xTitle, const std::string &yTitle, bool mustBeBigger, int posLegend, float yMax, int useArrow, double lumi) {
+void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, const std::string &xTitle, const std::string &yTitle, bool mustBeBigger, int posLegend, float yMin, float yMax, int useArrow, double lumi) {
   TStyle *atlasStyle = AtlasStyle();
   gROOT->SetStyle("ATLAS");
   gROOT->ForceStyle();
@@ -344,16 +344,19 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
   double maximum = MC->GetMaximum();
   if (Data) maximum = std::max(Data->GetBinContent(Data->GetMaximumBin()), MC->GetMaximum());
   maximum *= 1.8;
+  double minimum = 0.001;
   if (yMax > 0)
     maximum = yMax;
+  if (yMin > 0)
+    minimum = yMin;
 
   MC->SetMaximum(maximum);
   if (Data) {
     Data->SetMaximum(maximum);
     if (yTitle != "") Data->GetYaxis()->SetTitle(yTitle.c_str());
-    Data->SetMinimum(0.001);
+    Data->SetMinimum(minimum);
   }
-  MC->SetMinimum(0.001);
+  MC->SetMinimum(minimum);
 
   MC->Draw();
   if (yTitle != "") MC->GetYaxis()->SetTitle(yTitle.c_str());

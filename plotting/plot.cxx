@@ -55,6 +55,7 @@ int main(int argc, char **argv) {
     int posLegend = 0;
     int rebin = 1;
     float yMax = -1;
+    float yMin = -1;
     int arrow = 0;
     int stamp = 0;
     float lumi = 5;
@@ -70,7 +71,7 @@ int main(int argc, char **argv) {
         {"verbose",         required_argument,     0, 'v', "Verbose. (0/1)", &verbose, extendedOption::eOTInt},
         {"underflow",       required_argument,     0, 'U', "Include underflow (0/1)", &underflow, extendedOption::eOTInt},
         {"extraText",       required_argument,     0, 'T', "Extra text to add in the plot.", &_extraText, extendedOption::eOTString},
-        {"yTitle",          required_argument,     0, 'y', "Y title.", &yTitle, extendedOption::eOTString},
+        {"yTitle",          required_argument,     0, 'E', "Y title.", &yTitle, extendedOption::eOTString},
         {"xTitle",          required_argument,     0, 't', "X title.", &xTitle, extendedOption::eOTString},
         {"xMax",            required_argument,     0, 'X', "Limit X maximum value.", &xMax, extendedOption::eOTFloat},
         {"xMin",            required_argument,     0, 'x', "Limit X minimum value.", &xMin, extendedOption::eOTFloat},
@@ -78,6 +79,7 @@ int main(int argc, char **argv) {
         {"posLegend",       required_argument,     0, 'L', "Move legend to the left.", &posLegend, extendedOption::eOTInt},
         {"rebin",           required_argument,     0, 'r', "Rebin by this factor.", &rebin, extendedOption::eOTInt},
         {"yMax",            required_argument,     0, 'Y', "Maximum of the Y axis.", &yMax, extendedOption::eOTFloat},
+        {"yMin",            required_argument,     0, 'y', "Minimum of the Y axis.", &yMax, extendedOption::eOTFloat},
         {"arrow",           required_argument,     0, 'a', "Draw arrow.", &arrow, extendedOption::eOTInt},
         {"stamp",           required_argument,     0, 's', "0 = ATLAS Internal, 1 = ATLAS Preliminary.", &stamp, extendedOption::eOTInt},
         {"lumi",            required_argument,     0, 'l', "Luminosity value to show", &lumi, extendedOption::eOTFloat},
@@ -168,7 +170,7 @@ int main(int argc, char **argv) {
       vector<string> split_extraText;
       split(_extraText, ';', split_extraText);
       for (vector<string>::iterator i = split_extraText.begin(); i!=split_extraText.end();++i) extraText.push_back(*i);
-      drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMax, arrow, lumi);
+      drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
 
     } else { // if it is a ratio plot
 
