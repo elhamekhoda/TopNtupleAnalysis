@@ -1,3 +1,13 @@
+2015-10-27 Danilo Ferreira de Lima <dferreir@cern.ch>
+	* Added track jets in Event class. Added nTrk cut for track jets when
+	applying track jet b-tagging. Added tau32 information in large jets.
+	Added missing cross section information in XSection file. Added helper
+	scripts to run code in lxbatch. Added option in read to remove high
+	mtt events in the ttbar 410000 sample to avoid overlap with the
+	mttsliced samples.
+	* Added configurable setup for plotting scripts in plotting/.
+	* TopNtupleAnalysis-00-02-05
+
 2015-10-26 Marino Romano <sromanos@cern.ch>
 	* Fixing typo bug in doQCDstudies.py
 	* Improving getMMWeights code
