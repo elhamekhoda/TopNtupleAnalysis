@@ -53,10 +53,6 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
        
   }
   
-  m_hSvc.create1D("lepPt", "; Pt of lepton [GeV]; Events", 40, 0, 500);
-  m_hSvc.create1D("weights", "; weights; Events", 100000, -1, 1); 
-  
-
 }
   
 MMUtils::~MMUtils(){
@@ -76,8 +72,6 @@ MMUtils::~MMUtils(){
 } 
 
 float MMUtils::getMMweights(const Event &evt, const std::string &s) {
-   
-   HistogramService *h = &m_hSvc;
    
    float lepPt(0);
    float closejl_pT(0); 
@@ -101,7 +95,6 @@ float MMUtils::getMMweights(const Event &evt, const std::string &s) {
    }
    
    lepPt = lepP4.Perp()*1e-3; 
-   h->h1D("lepPt", "", s)->Fill(lepPt*1e-3); 
    
    float deltaRapidity2 = 99;
    float deltaPhi2	= 99;
@@ -154,9 +147,6 @@ float MMUtils::getMMweights(const Event &evt, const std::string &s) {
    //--> Implementing weights
    float Weight = 1;
 
-   std::cout << "isTight: " << isTight << std::endl;
-   std::cout << "eff: " << effRate << " - fake: " << fakeRate << std::endl;
-
    if (isTight){
      	if((effRate - fakeRate) !=0.)	Weight = fakeRate*(effRate - 1)/(effRate - fakeRate); 
 	else				std::cerr << "Error: effRate - fakeRate == 0";
@@ -167,7 +157,6 @@ float MMUtils::getMMweights(const Event &evt, const std::string &s) {
    
    }//isTight
    
-   h->h1D("weights", "", s)	   ->Fill(Weight);
    return Weight;  
 
 }//getMMweights

@@ -194,6 +194,7 @@ int main(int argc, char **argv) {
   //size_t trackjet_presize = std::string("trackjet_btagSF_70_eigenvars").size();
 
   if (systs != "nominal") { // if there are other systematics, include SF systs. too
+    std::cout << "adding more systematics" << std::endl;
     systsListWithBlankNominal.push_back("eTrigSF__1up");
     systsListWithBlankNominal.push_back("eTrigSF__1down");
     systsListWithBlankNominal.push_back("eRecoSF__1up");
@@ -454,7 +455,7 @@ int main(int argc, char **argv) {
         // the electron SF, muon SF and b-tagging SF systematics
         // these systematics do not show up as separate TTrees, so they need special treatment
         std::vector<std::string> weightSystematics;
-        if (systSuffixForHistograms != "" && systSuffixForHistograms != "_Loose") {
+        if ( (systs == "nominal") || (systSuffixForHistograms != "" && systSuffixForHistograms != "_Loose") ) {
           weightSystematics.push_back(systSuffixForHistograms);
         } else { // apply variations on the nominal
           weightSystematics.push_back(systSuffixForHistograms);

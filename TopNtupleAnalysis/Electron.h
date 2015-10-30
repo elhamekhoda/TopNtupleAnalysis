@@ -29,6 +29,13 @@ class Electron : public MObject {
     TLorentzVector &trkMom();
     const float z0() const;
     float &z0();
+    
+    const float d0() const;
+    float &d0();
+
+    const float sd0() const;
+    float &sd0();
+    
     const int author() const;
     int &author();
 
@@ -52,6 +59,8 @@ class Electron : public MObject {
     TLorentzVector m_mom_calo;
     TLorentzVector m_mom_trk;
     float m_z0;
+    float m_d0;
+    float m_sd0;
     int m_author;
 
     int m_nSiHits;

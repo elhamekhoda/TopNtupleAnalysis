@@ -69,6 +69,21 @@ float &Electron::z0() {
   return m_z0;
 }
 
+const float Electron::d0() const {
+  return m_d0;
+}
+
+float &Electron::d0() {
+  return m_d0;
+}
+
+const float Electron::sd0() const {
+  return m_sd0;
+}
+float &Electron::sd0() {
+  return m_sd0;
+}
+
 const int Electron::author() const {
   return m_author;
 }
