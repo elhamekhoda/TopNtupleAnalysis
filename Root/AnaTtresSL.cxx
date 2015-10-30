@@ -241,7 +241,10 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   
   size_t jet_idx = 0;
   for (; jet_idx < evt.jet().size(); ++jet_idx){    
-    deltaR_tmp = l.DeltaR(evt.jet()[jet_idx].mom());
+    deltaR_tmp = 99;
+    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
+    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
+    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
     if (deltaR_tmp < closejl_deltaR){
         closejl_deltaR = deltaR_tmp;
         closejl_idx = jet_idx;
