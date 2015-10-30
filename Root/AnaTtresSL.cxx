@@ -35,6 +35,8 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   double varBin5[] = {0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000};
   int varBinN5 = sizeof(varBin5)/sizeof(double) - 1;
 
+  m_hSvc.create1D("yields", "; One ; Events", 1, 0.5, 1.5);
+
   m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN1, varBin1);
   m_hSvc.create1D("lepEta", "; lepton #eta ; Events", 20, -2.5, 2.5);
   m_hSvc.create1D("lepPhi", "; lepton #phi [rd] ; Events", 32, -3.2, 3.2);
@@ -56,7 +58,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.create1D("vtxz", ";Z position of truth primary vertex; Events", 40, -400, 400);
   m_hSvc.create1D("npv", "; npv; Events", 50, 0, 50);
 
-  m_hSvc.create1DVar("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", varBinN1, varBin1);
+  m_hSvc.create1DVar("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 30, 0, 1.5);
   m_hSvc.create1DVar("closejl_pt", "; Pt of closest jet to lep [GeV]; Events", varBinN1, varBin1);
  
   m_hSvc.create1D("jet0_m", "; mass of the leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
@@ -219,6 +221,8 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
 
   //transverse W mass  
   h->h1D("mwt", "", s)->Fill(sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(l.Phi() - evt.met().Phi())))*1e-3, weight); 
+
+  h->h1D("yields", "", s)->Fill(1, weight);
   
   //mu
   h->h1D("mu", "", s)->Fill(evt.mu(), weight); 
