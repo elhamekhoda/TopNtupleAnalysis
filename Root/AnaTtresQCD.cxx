@@ -220,7 +220,7 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
   	size_t jet_idx = 0;
   	for (; jet_idx < evt.jet().size(); ++jet_idx){  
 	
-          deltaRapidity2 = pow(evt.jet()[jet_idx].mom().Rapidity() - lept.Eta(), 2);
+          deltaRapidity2 = pow(evt.jet()[jet_idx].mom().Rapidity() - lept.Rapidity(), 2);
           
           deltaPhi2 = pow(evt.jet()[jet_idx].mom().DeltaPhi(lept), 2);
            
@@ -315,7 +315,7 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
      size_t jet_idx = 0;
      for (; jet_idx < evt.jet().size(); ++jet_idx){  	
 
-       deltaRapidity2 = pow(evt.jet()[jet_idx].mom().Rapidity() - lept.Eta(), 2); 
+       deltaRapidity2 = pow(evt.jet()[jet_idx].mom().Rapidity() - lept.Rapidity(), 2); 
            
        deltaPhi2 = pow(evt.jet()[jet_idx].mom().DeltaPhi(lept), 2);
       
