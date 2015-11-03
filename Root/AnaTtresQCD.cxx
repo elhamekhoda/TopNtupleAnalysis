@@ -17,21 +17,20 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
 
   m_chi2.Init(TtresChi2::DATA2015_MC15);
   
-  Double_t pT_bins_r[5] = {25, 40, 60, 100,500};
-  Double_t pT_bins_b[5] = {25, 40, 60, 100,500}; 
-  Double_t DR_bins_r[8] = {0.,0.2, 0.4, 0.6, 0.8, 1.0, 1.7, 5.0};
-  Double_t DR_bins_b[8] = {0.,0.2, 0.4, 0.6, 0.8, 1.0, 1.7, 5.0};
-  Double_t closeLJpT_bins_r[5] = {25, 40, 60, 100, 500};
-  Double_t closeLJpT_bins_b[5] = {25, 40, 60, 100, 500}; 
-    
-  int N_pT_bins_r = sizeof(pT_bins_r)/sizeof(pT_bins_r[0]) -1;
-  int N_pT_bins_b = sizeof(pT_bins_b)/sizeof(pT_bins_b[0]) -1;
+  Double_t DR_bins[8] = {0.,0.2, 0.4, 0.6, 0.8, 1.0, 1.7, 5.0};
+  int N_DR_bins = sizeof(DR_bins)/sizeof(DR_bins[0]) -1;
   
-  int N_DR_bins_r = sizeof(DR_bins_r)/sizeof(DR_bins_r[0]) -1;
-  int N_DR_bins_b = sizeof(DR_bins_b)/sizeof(DR_bins_b[0]) -1;
+  Double_t pT_bins_re[3]  	 = {25, 60, 500};
+  Double_t closeLJpT_bins_re[3]  = {25, 60, 500};
   
-  int N_closeLJpT_bins_r = sizeof(closeLJpT_bins_r)/sizeof(closeLJpT_bins_r[0]) -1;
-  int N_closeLJpT_bins_b = sizeof(closeLJpT_bins_b)/sizeof(closeLJpT_bins_b[0]) -1;
+  Double_t pT_bins_rmu[3] 	 = {25, 50, 500};
+  Double_t closeLJpT_bins_rmu[3] = {25, 50, 500};
+  
+  Double_t pT_bins_be[3]  	 = {25, 60, 500};
+  Double_t closeLJpT_bins_be[3]  = {25, 60, 500};
+  
+  Double_t pT_bins_bmu[3] 	 = {25, 50, 500};
+  Double_t closeLJpT_bins_bmu[3] = {25, 50, 500};
   
   //****Efficiency studies  
   //MC variables: electrons
@@ -66,29 +65,78 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   m_hSvc.create1D("eventN", "; N event; Events", 10000, 0, 1e10);
   m_hSvc.create1D("runN", "; N run; Events", 1000, 0, 1e10);
 
-  if (!boosted)	{
-     //Eff
-     m_hSvc.create2DVar("LepMa_pt_vs_DR", 	"; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", N_pT_bins_r, pT_bins_r, N_DR_bins_r, DR_bins_r);
-     m_hSvc.create1DVar("minDeltaR_jet_lept", 	"; min #Delta R(lep, jet); Events", N_DR_bins_r, DR_bins_r);
-     m_hSvc.create1DVar("lepMadR_pt",    	"; Pt of Matched lept [GeV]; Events", N_pT_bins_r, pT_bins_r);
-     //Fake      
-     m_hSvc.create2DVar("lepPt_vs_closeJL_pt", 	"; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", N_pT_bins_r, pT_bins_r, N_closeLJpT_bins_r, closeLJpT_bins_r);
-     m_hSvc.create1DVar("closeLepJet_pt",    	"; Pt of closest jet to the lept [GeV]; Events", N_closeLJpT_bins_r, closeLJpT_bins_r);
-     m_hSvc.create1DVar("lep_pt",    		"; Pt of lept [GeV]; Events", N_pT_bins_r, pT_bins_r); 
-     
-  }else	{
-     //Eff
-     m_hSvc.create2DVar("LepMa_pt_vs_DR", 	"; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", N_pT_bins_b, pT_bins_b, N_DR_bins_b, DR_bins_b);
-     m_hSvc.create1DVar("minDeltaR_jet_lept", 	"; min #Delta R(lep, jet); Events", N_DR_bins_b, DR_bins_b);
-     m_hSvc.create1DVar("lepMadR_pt",    	"; Pt of Matched lept [GeV]; Events", N_pT_bins_b, pT_bins_b);
-     //Fake      
-     m_hSvc.create2DVar("lepPt_vs_closeJL_pt", 	"; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", N_pT_bins_b, pT_bins_b, N_closeLJpT_bins_b, closeLJpT_bins_b);
-     m_hSvc.create1DVar("closeLepJet_pt",    	"; Pt of closest jet to the lept [GeV]; Events", N_closeLJpT_bins_b, closeLJpT_bins_b);     
-     m_hSvc.create1DVar("lep_pt",    		"; Pt of lept [GeV]; Events", N_pT_bins_b, pT_bins_b);
-     
-  }
+  m_hSvc.create1DVar("minDeltaR_jet_lept",   "; min #Delta R(lep, jet); Events", N_DR_bins, DR_bins);
+  
 
-}
+  int N_pT_bins(0);
+  int N_closeLJpT_bins(0);
+  
+  if (m_boosted){
+    
+     if (m_electron)  	{
+     
+        N_pT_bins = sizeof(pT_bins_be)/sizeof(pT_bins_be[0]) -1;
+        N_closeLJpT_bins = sizeof(closeLJpT_bins_be)/sizeof(closeLJpT_bins_be[0]) -1;
+
+     	//Eff
+  	m_hSvc.create2DVar("LepMa_pt_vs_DR",       "; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", N_pT_bins, pT_bins_be, N_DR_bins, DR_bins);
+  	m_hSvc.create1DVar("lepMadR_pt",	   "; Pt of Matched lept [GeV]; Events", N_pT_bins, pT_bins_be);
+  
+  	//Fake      
+  	m_hSvc.create2DVar("lepPt_vs_closeJL_pt",  "; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", N_pT_bins, pT_bins_be, N_closeLJpT_bins, closeLJpT_bins_be);
+	m_hSvc.create1DVar("closeLepJet_pt",       "; Pt of closest jet to the lept [GeV]; Events", N_closeLJpT_bins, closeLJpT_bins_be);
+ 	m_hSvc.create1DVar("lep_pt",  	           "; Pt of lept [GeV]; Events", N_pT_bins, pT_bins_be); 
+
+     }else{
+     
+        N_pT_bins = sizeof(pT_bins_bmu)/sizeof(pT_bins_bmu[0]) -1;
+	N_closeLJpT_bins = sizeof(closeLJpT_bins_bmu)/sizeof(closeLJpT_bins_bmu[0]) -1;
+	
+     	//Eff
+  	m_hSvc.create2DVar("LepMa_pt_vs_DR",       "; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", N_pT_bins, pT_bins_bmu, N_DR_bins, DR_bins);
+  	m_hSvc.create1DVar("lepMadR_pt",	     "; Pt of Matched lept [GeV]; Events", N_pT_bins, pT_bins_bmu);
+  
+  	//Fake      
+  	m_hSvc.create2DVar("lepPt_vs_closeJL_pt",  "; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", N_pT_bins, pT_bins_bmu, N_closeLJpT_bins, closeLJpT_bins_bmu);
+	m_hSvc.create1DVar("closeLepJet_pt",       "; Pt of closest jet to the lept [GeV]; Events", N_closeLJpT_bins, closeLJpT_bins_bmu);
+  	m_hSvc.create1DVar("lep_pt",  	           "; Pt of lept [GeV]; Events", N_pT_bins, pT_bins_bmu); 
+
+     }
+  }else{
+  
+    if (m_electron){
+     
+        N_pT_bins = sizeof(pT_bins_re)/sizeof(pT_bins_re[0]) -1;
+	N_closeLJpT_bins = sizeof(closeLJpT_bins_re)/sizeof(closeLJpT_bins_re[0]) -1;
+     
+       	//Eff
+ 	m_hSvc.create2DVar("LepMa_pt_vs_DR",       "; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", N_pT_bins, pT_bins_re, N_DR_bins, DR_bins);
+  	m_hSvc.create1DVar("lepMadR_pt",	   "; Pt of Matched lept [GeV]; Events", N_pT_bins, pT_bins_re);
+  
+  	//Fake      
+  	m_hSvc.create2DVar("lepPt_vs_closeJL_pt",  "; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", N_pT_bins, pT_bins_re, N_closeLJpT_bins, closeLJpT_bins_re);
+	m_hSvc.create1DVar("closeLepJet_pt",       "; Pt of closest jet to the lept [GeV]; Events", N_closeLJpT_bins, closeLJpT_bins_re);
+  	m_hSvc.create1DVar("lep_pt",  	     	   "; Pt of lept [GeV]; Events", N_pT_bins, pT_bins_re); 
+	
+     }else{
+     
+        N_pT_bins = sizeof(pT_bins_rmu)/sizeof(pT_bins_rmu[0]) -1;
+	N_closeLJpT_bins = sizeof(closeLJpT_bins_rmu)/sizeof(closeLJpT_bins_rmu[0]) -1;
+     
+     	//Eff
+  	m_hSvc.create2DVar("LepMa_pt_vs_DR",       "; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", N_pT_bins, pT_bins_rmu, N_DR_bins, DR_bins);
+  	m_hSvc.create1DVar("lepMadR_pt",	   "; Pt of Matched lept [GeV]; Events", N_pT_bins, pT_bins_rmu);
+  
+  	//Fake      
+  	m_hSvc.create2DVar("lepPt_vs_closeJL_pt",  "; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", N_pT_bins, pT_bins_rmu, N_closeLJpT_bins, closeLJpT_bins_rmu);
+	m_hSvc.create1DVar("closeLepJet_pt",       "; Pt of closest jet to the lept [GeV]; Events", N_closeLJpT_bins, closeLJpT_bins_rmu);
+  	m_hSvc.create1DVar("lep_pt",  	           "; Pt of lept [GeV]; Events", N_pT_bins, pT_bins_rmu); 
+
+     }	
+  }//if (m_boosted) 
+
+
+}//AnaTtresQCD::AnaTtresQCD
 
 AnaTtresQCD::~AnaTtresQCD() {
 }
@@ -259,7 +307,6 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
       return;
   
   if (s=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber()) ){
-      //std::cout << "evt.runNumber()" << evt.runNumber() << "  evt.eventNumber()" << evt.eventNumber() << std::endl;
       m_Nduplicate++;
       return;
   }

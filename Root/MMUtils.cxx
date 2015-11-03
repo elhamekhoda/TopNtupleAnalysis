@@ -80,7 +80,7 @@ float MMUtils::getMMweights(const Event &evt, const std::string &s) {
    bool isTight;
 
    bool isBoosted(0);
-   if (!(evt.passes("rejets") || evt.passes("rmujets")))      isBoosted = true;	    
+   if (!(evt.passes("rejets")) || !(evt.passes("rmujets")))      isBoosted = true;	    
    
    TLorentzVector lepP4; 
    bool isElectron(0);   
@@ -134,19 +134,22 @@ float MMUtils::getMMweights(const Event &evt, const std::string &s) {
 	}
    }//isBoosted	
    	
+   
+   if(lepPt>eff_map->GetXaxis()->GetXmax() || lepPt>fake_map->GetXaxis()->GetXmax())  	    
+   	lepPt = 0.95*eff_map->GetXaxis()->GetXmax(); 
+   
+   if(closejl_DR>eff_map->GetYaxis()->GetXmax() || closejl_pT>fake_map->GetYaxis()->GetXmax())    
+   	closejl_DR = 0.95*eff_map->GetYaxis()->GetXmax(); 
+   
    // --> Getting eff rate  
-   if(lepPt>eff_map->GetXaxis()->GetXmax())  	    lepPt = eff_map->GetXaxis()->GetXmax(); 
-   if(closejl_DR>eff_map->GetYaxis()->GetXmax())    closejl_DR = eff_map->GetYaxis()->GetXmax(); 
    float effRate = eff_map->GetBinContent(eff_map->FindBin(lepPt, closejl_DR));
 
    //--> Getting fake rate
-   if(lepPt>fake_map->GetXaxis()->GetXmax())  	        lepPt = fake_map->GetXaxis()->GetXmax(); 
-   if(closejl_pT>fake_map->GetYaxis()->GetXmax())	closejl_pT = fake_map->GetYaxis()->GetXmax();
    float fakeRate = fake_map->GetBinContent(fake_map->FindBin(lepPt, closejl_pT));
-
+      
    //--> Implementing weights
    float Weight = 1;
-
+     
    if (isTight){
      	if((effRate - fakeRate) !=0.)	Weight = fakeRate*(effRate - 1)/(effRate - fakeRate); 
 	else				std::cerr << "Error: effRate - fakeRate == 0";
@@ -156,7 +159,7 @@ float MMUtils::getMMweights(const Event &evt, const std::string &s) {
    	else				std::cerr << "Error: effRate - fakeRate == 0";
    
    }//isTight
-   
+
    return Weight;  
 
 }//getMMweights

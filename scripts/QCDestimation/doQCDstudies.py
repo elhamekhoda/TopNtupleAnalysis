@@ -329,12 +329,12 @@ def fakeRates(inputDir, lumi):
 		h_leptPt_t[0].Scale(lumi)
 		h1 = h_leptPt_t[1]
 		h1.Add(h_leptPt_t[0],-1)
-		h1.Write("hP_leptPt_t")
+		h1.Write("hP_leptPt_t_"+ichan[0]+'_'+ichan[1])
 		
 		h_leptPt_l[0].Scale(lumi)
 		h2 = h_leptPt_l[1]
 		h2.Add(h_leptPt_l[0],-1)		
-		h2.Write("hP_leptPt_l")
+		h2.Write("hP_leptPt_l_"+ichan[0]+'_'+ichan[1])
 		
 		h_ratio_leptPt = h1
 		h_ratio_leptPt.Divide(h1, h2, 1.0, 1.0, "B")
@@ -358,10 +358,12 @@ def fakeRates(inputDir, lumi):
 		h_closeJL_pt_t[0].Scale(lumi)
 		h1 = h_closeJL_pt_t[1]		
 		h1.Add(h_closeJL_pt_t[0],-1)
+		h1.Write("hP_closeJL_pt_t_"+ichan[0]+'_'+ichan[1])
 		
 		h_closeJL_pt_l[0].Scale(lumi)						
 		h2 = h_closeJL_pt_l[1]
 		h2.Add(h_closeJL_pt_l[0],-1)			
+		h2.Write("hP_closeJL_pt_l_"+ichan[0]+'_'+ichan[1])
 		
 		h_ratio_closeJL_pt = h1
 		h_ratio_closeJL_pt.Divide(h1, h2, 1.0, 1.0, "B")	
@@ -385,10 +387,12 @@ def fakeRates(inputDir, lumi):
 		h2D_fakeParam_t[0].Scale(lumi)
 		h1_2D = h2D_fakeParam_t[1]
 		h1_2D.Add(h2D_fakeParam_t[0],-1)	
+		h1_2D.Write("hP_fakeParam_t_"+ichan[0]+'_'+ichan[1])
 		
 		h2D_fakeParam_l[0].Scale(lumi)		
 		h2_2D = h2D_fakeParam_l[1]
 		h2_2D.Add(h2D_fakeParam_l[0],-1) 
+		h2_2D.Write("hP_fakeParam_l_"+ichan[0]+'_'+ichan[1])
 		
 		h_ratio_fake = h1_2D
 		h_ratio_fake.Divide(h1_2D, h2_2D, 1.0, 1.0, "B")
@@ -421,6 +425,7 @@ def fakeRates(inputDir, lumi):
 		h_ratio_closeJL_pt.Write('fake_closeJL_pt_'+ichan[0]+'_'+ichan[1])
 		h_ratio_leptPt.Write('fake_leptPt_'+ichan[0]+'_'+ichan[1])
 
+	outfile.Close()
 	return
 			
 #--------------------------------#
@@ -438,7 +443,10 @@ if 0:
 #Produce fake rate plots
 
 #new
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/noBUGS/' 
+
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/goodAllCh/' 
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/4bins_50forMu/' 
+
 #lumi = 1037.23 #pb-1
 lumi = 1411.26 #pb-1
 
