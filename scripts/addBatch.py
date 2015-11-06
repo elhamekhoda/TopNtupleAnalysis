@@ -6,8 +6,12 @@ import os
 
 # output directory
 #outdir = 'res_calo_batch'
-outdir = 'res_track_batch'
+#outdir = 'res_track_batch'
 #outdir = 'massonly_track'
+#outdir = 'wjets_track'
+outdir = 'extrap_track'
+outdir = 'extrap_calo'
+outdir = 'extrap_lead_track'
 
 names   = []
 #names  += ["Data15_13TeV_25ns_FS_EXOT4_1_4fb"]
@@ -35,12 +39,13 @@ names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000']
 names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi']
 
 channels = ['resolved_e', 'resolved_mu', 'boosted_e', 'boosted_mu']
+#channels = ['boosted_e', 'boosted_mu']
 
 import glob
 
 for sample in names:
     for ch in channels:
-        cmd = 'hadd -f '+outdir+"/"+ch+"_"+sample+".root"+"  "
+        cmd = 'hadd -f -k '+outdir+"/"+ch+"_"+sample+".root"+"  "
         files = glob.glob(outdir+"/"+ch+"_"+sample+"_[0-9]*.root")
         if len(files) == 0:
            print "Failed to find any result from chanel "+ch+" for sample "+sample

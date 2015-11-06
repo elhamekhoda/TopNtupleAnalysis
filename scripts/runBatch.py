@@ -18,6 +18,8 @@ nFilesPerJob = 2
 # input directory
 ntuplesDir = '/eos/user/d/dferreir/topana/20102015'
 #ntuplesDir = '/eos/atlas/user/d/dferreir/topana/24102015mass'
+#ntuplesDir = '/eos/atlas/user/d/dferreir/topana/29102015wjets'
+#ntuplesDir = '/eos/atlas/user/d/dferreir/topana/29102015boo'
 
 eosrun = '/afs/cern.ch/project/eos/installation/0.3.84-aquamarine.user/bin/eos.select'
 #eosrun='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
@@ -26,9 +28,12 @@ entry = 'root://eosuser.cern.ch/'
 
 # output directory
 #outputDir = rundir+'/TopNtupleAnalysis/res_calo_batch'
-outputDir = rundir+'/TopNtupleAnalysis/res_track_batch'
+#outputDir = rundir+'/TopNtupleAnalysis/res_track_batch'
 #outputDir = rundir+'/TopNtupleAnalysis/massonly_calo'
 #outputDir = rundir+'/TopNtupleAnalysis/massonly_track'
+#outputDir = rundir+'/TopNtupleAnalysis/wjets_track'
+#outputDir = rundir+'/TopNtupleAnalysis/extrap_track'
+outputDir = rundir+'/TopNtupleAnalysis/extrap_lead_track'
 
 # the default is AnaTtresSL, which produces many control pltos for tt res.
 # The Mtt version produces a TTree to do the limit setting
@@ -46,7 +51,9 @@ systematics = 'nominal,EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_
 loose = 0
 
 # number of btags (negative for track jet btagging)
-btags = -1
+#btags = -1
+#btags = 1
+btags = -11
 
 names   = []
 #names  += ["Data15_13TeV_25ns_FS_EXOT4_1_4fb"]
@@ -160,7 +167,7 @@ for sample in samples:
         fr.write('lsetup rcsetup\n')
         fr.write('cd TopNtupleAnalysis\n')
         fr.write('ls\n')
-        fr.write('./read --data '+str(isData)+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'_'+job+'.root,'+outputDir+'/resolved_mu_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_e_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_mu_'+outfile+'_'+job+'.root --systs '+theSysts+'\n')
+        fr.write('./read --removeOverlapHighMtt 1 --data '+str(isData)+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'_'+job+'.root,'+outputDir+'/resolved_mu_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_e_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_mu_'+outfile+'_'+job+'.root --systs '+theSysts+'\n')
         fr.close()
         os.system('chmod a+x '+runfile)
         subcmd = 'bsub -e '+errfile+' -o '+logfile+' -q '+queue+' -N -u '+email+' -J tna_'+jobName+' '+runfile
