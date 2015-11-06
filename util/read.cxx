@@ -360,8 +360,8 @@ int main(int argc, char **argv) {
   }
 
   SampleXsection sampleXsection;
-  //sampleXsection.readFromFile("scripts/XSectionFromAmi-13TeV.txt");
-  sampleXsection.readFromFile("scripts/XSection-MC15-13TeV.data");
+  sampleXsection.readFromFile("scripts/XSection-MC15-13TeV-ttres.data");
+  sampleXsection.readFromFile("../TopDataPreparation/data/XSection-MC15-13TeV-fromSusyGrp.data");
 
   // retrieve, list of sum of weights
   std::map<int, float> sumOfWeights;
