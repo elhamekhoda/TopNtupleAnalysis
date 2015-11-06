@@ -51,6 +51,7 @@ int main(int argc, char **argv) {
   std::string input_fullFileList = "";
   std::string analysis = "AnaTtresSL";
   std::string systs = "nominal";
+  int doWeightSystematics = 0;
   int loose = 0;
   int _nentries = -1;
   int _btags = 1;
@@ -70,6 +71,7 @@ int main(int argc, char **argv) {
         {"nentries",   required_argument,     0, 'N', "Run over only the first entries if > 0.", &_nentries, extendedOption::eOTInt},
         {"btags",   required_argument,     0, 'B', "Add cut on b-tagged jets >= abs(X). If negative use track-jet b-tagging.", &_btags, extendedOption::eOTInt},
         {"removeOverlapHighMtt",   required_argument,     0, 'R', "Veto events with true mtt > 1.1 TeV in the 410000 sample only (to be activated if one wnats to use the mtt sliced samples).", &removeOverlapHighMtt, extendedOption::eOTInt},
+        {"doWeightSystematics",   required_argument,     0, 'S', "Include the variation of the systematics in the SFs.", &doWeightSystematics, extendedOption::eOTInt},
         {"runMM",   required_argument,     0, 'M', "Implement the QCD weiths to data", &runMM, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
@@ -193,7 +195,7 @@ int main(int argc, char **argv) {
   //std::string trackjet_pre = "trackjet_btagSF_70_eigenvars";
   //size_t trackjet_presize = std::string("trackjet_btagSF_70_eigenvars").size();
 
-  if (systs != "nominal") { // if there are other systematics, include SF systs. too
+  if (doWeightSystematics) { // include SF systs. too
     std::cout << "adding more systematics" << std::endl;
     systsListWithBlankNominal.push_back("eTrigSF__1up");
     systsListWithBlankNominal.push_back("eTrigSF__1down");
@@ -455,7 +457,7 @@ int main(int argc, char **argv) {
         // the electron SF, muon SF and b-tagging SF systematics
         // these systematics do not show up as separate TTrees, so they need special treatment
         std::vector<std::string> weightSystematics;
-        if ( (systs == "nominal") || (systSuffixForHistograms != "" && systSuffixForHistograms != "_Loose") ) {
+        if ( !doWeightSystematics || (systSuffixForHistograms != "" && systSuffixForHistograms != "_Loose") ) {
           weightSystematics.push_back(systSuffixForHistograms);
         } else { // apply variations on the nominal
           weightSystematics.push_back(systSuffixForHistograms);
