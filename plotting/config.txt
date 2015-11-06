@@ -41,8 +41,8 @@ syst      "33 muon ID (stat)"                 muIDStatSF__1up                   
 syst      "34 muon ID (syst)"                 muIDSystSF__1up                            muIDSystSF__1down
 syst      "35 muon isolation (stat)"          muIsolStatSF__1up                          muIsolStatSF__1down
 syst      "36 muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down
-syst      "37 b-tagging extrap. (charm)"      btageSF_0__1up                             btageSF_0__1down
-syst      "38 b-tagging extrap."              btageSF_1__1up                             btageSF_1__1down
+syst      "37 b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down
+syst      "38 b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down
 syst_flat "39 luminosity"                     ""                     0.09                                       -0.09
 syst_flat "40 ttbar cross section"            "ttbar"                0.056                                      -0.061
 syst_model "41 ttbar gen."                    "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2

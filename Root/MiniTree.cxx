@@ -182,6 +182,12 @@ float                &MiniTree::f(const std::string &n) {
 char                 &MiniTree::c(const std::string &n) {
   return m_c[n];
 }
+
+std::vector<std::vector<float> > *MiniTree::vvf(const std::string &n) {
+  if (m_vvf.find(n) == m_vvf.end()) return 0;
+  return m_vvf[n];
+}
+
 std::vector<std::vector<int> > *MiniTree::vvi(const std::string &n) {
   if (m_vvi.find(n) == m_vvi.end()) return 0;
   return m_vvi[n];
@@ -242,6 +248,8 @@ void MiniTree::prepareBranches() {
       m_vi[name] = 0;
     } else if (type == "vector<vector<int> >" || type == "std::vector<std::vector<int> >" || type == "vector<vector<Int_t> >" || type == "std::vector<std::vector<Int_t> >") {
       m_vvi[name] = 0;
+    } else if (type == "vector<vector<float> >" || type == "std::vector<std::vector<float> >" || type == "vector<vector<Float_t> >" || type == "std::vector<std::vector<Float_t> >") {
+      m_vvf[name] = 0;
     } else {
       std::cout << "ERROR: I could not figure out the type of this branch! Name = " << name << ", type = " << type << std::endl;
     }
@@ -278,6 +286,10 @@ void MiniTree::prepareBranches() {
   for (auto& it : m_vvi) {
     m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
     m_brs[it.first] = mtVVInt;
+  }
+  for (auto& it : m_vvf) {
+    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
+    m_brs[it.first] = mtVVFloat;
   }
 }
 

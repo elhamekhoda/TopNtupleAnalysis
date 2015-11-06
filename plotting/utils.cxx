@@ -222,7 +222,8 @@ void drawCompare(SampleSetConfiguration &stackConfig, const vector<std::string> 
       rat[k-1].reset((TH1D *) hists[k]->Clone(Form("ratio%d", k)));
       rat[k-1]->Divide(hists[k].get(), hists[0].get(), 1, 1, "B");
       rat[k-1]->SetStats(0);
-      rat[k-1]->GetYaxis()->SetRangeUser(0.3, 1.7);
+      rat[k-1]->GetYaxis()->SetRangeUser(0.8, 1.2);
+      //rat[k-1]->GetYaxis()->SetRangeUser(0.3, 1.7);
       rat[k-1]->SetTitle("");
       //rat[k-1]->GetYaxis()->SetTitle(Form("H/%s", name_first.c_str()));
       rat[k-1]->GetYaxis()->SetTitle("#frac{Sample}{Black}");
@@ -635,20 +636,20 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
     for (int z = 0; z < no; ++z) {
       rato[z]->Divide(MCO_sum[z], MC_sum);//, 1, 1, "B");
       rato[z]->SetStats(0);
-      rato[z]->GetYaxis()->SetRangeUser(0.3, 1.7);
+      rato[z]->GetYaxis()->SetRangeUser(0.7, 1.3);
       rato[z]->SetTitle("");
     }
     for (int z = 0; z < ExtraSyst.size(); ++z) {
       ratExtra[z]->Divide(ExtraSyst[z].get(), MC_sum);//, 1, 1, "B");
       ratExtra[z]->SetStats(0);
-      ratExtra[z]->GetYaxis()->SetRangeUser(0.3, 1.7);
+      ratExtra[z]->GetYaxis()->SetRangeUser(0.7, 1.3);
       ratExtra[z]->SetTitle("");
     }
     rat_band = normaliseBand(band, MC_sum);
 
     c->cd(2);
     rat->SetStats(0);
-    rat->GetYaxis()->SetRangeUser(0.4, 1.6);
+    rat->GetYaxis()->SetRangeUser(0.7, 1.3);
     rat->SetTitle("");
     if (xTitle == "")
       rat->GetXaxis()->SetTitle(MC_sum->GetXaxis()->GetTitle());

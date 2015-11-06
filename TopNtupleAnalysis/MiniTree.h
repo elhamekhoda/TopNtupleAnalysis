@@ -44,8 +44,9 @@ class MiniTree {
     std::vector<int>     *vi(const std::string &n);
     std::vector<float>   *vf(const std::string &n);
     std::vector<std::vector<int> > *vvi(const std::string &n);
+    std::vector<std::vector<float> > *vvf(const std::string &n);
 
-    enum MTType {mtUint = 0, mtInt, mtFloat, mtChar, mtVInt, mtVFloat, mtVChar, mtVVInt};
+    enum MTType {mtUint = 0, mtInt, mtFloat, mtChar, mtVInt, mtVFloat, mtVChar, mtVVInt, mtVVFloat};
     std::map<std::string, MTType> m_brs;
     
   private:
@@ -60,6 +61,7 @@ class MiniTree {
     std::map<std::string, std::vector<float> *> m_vf;
     std::map<std::string, std::vector<int> *> m_vi;
     std::map<std::string, std::vector<std::vector<int> > *> m_vvi;
+    std::map<std::string, std::vector<std::vector<float> > *> m_vvf;
 
 };
 
