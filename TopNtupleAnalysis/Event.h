@@ -38,8 +38,8 @@ class Event {
     unsigned int &runNumber();
     const unsigned int runNumber() const;
 
-    unsigned int &eventNumber();
-    const unsigned int eventNumber() const;
+    ULong64_t &eventNumber();
+    const ULong64_t eventNumber() const;
 
     bool &isData();
     const bool isData() const;
@@ -179,7 +179,7 @@ class Event {
     TLorentzVector m_MA_bl; 
 
     unsigned int m_runNumber;
-    unsigned int m_eventNumber;
+    ULong64_t m_eventNumber;
     int m_channelNumber;
     bool m_isData;
     float m_mu;

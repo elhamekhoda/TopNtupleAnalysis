@@ -34,7 +34,7 @@ void MiniTree::read(int event, Event &e) {
   e.clear();
   m_chain->GetEntry(event);
   e.channelNumber() = ui("mcChannelNumber");
-  e.eventNumber() = ui("eventNumber"); 
+  e.eventNumber() = ul64("eventNumber"); 
   e.runNumber() = ui("runNumber"); 
 
   e.npv() = ui("npv"); 
@@ -170,6 +170,9 @@ void MiniTree::read(int event, Event &e) {
   if (i("mumu")) e.passes().push_back("mumu");
 }
 
+ULong64_t          &MiniTree::ul64(const std::string &n) {
+  return m_ul64[n];
+}
 unsigned int         &MiniTree::ui(const std::string &n) {
   return m_ui[n];
 }
@@ -236,6 +239,8 @@ void MiniTree::prepareBranches() {
       m_f[name] = -50000;
     } else if (type == "Int_t" || type == "int") {
       m_i[name] = -50000;
+    } else if (type == "ULong64_t") {
+      m_ul64[name] = 0;
     } else if (type == "UInt_t" || type == "unsigned int") {
       m_ui[name] = 0;
     } else if (type == "char" || type == "Char_t") {
@@ -262,6 +267,10 @@ void MiniTree::prepareBranches() {
   for (auto& it : m_ui) {
     m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
     m_brs[it.first] = mtUint;
+  }
+  for (auto& it : m_ul64) {
+    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
+    m_brs[it.first] = mtULong64;
   }
   for (auto& it : m_i) {
     m_chain->SetBranchAddress(it.first.c_str(), &(it.second));

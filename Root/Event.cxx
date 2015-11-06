@@ -126,11 +126,11 @@ const unsigned int Event::runNumber() const {
   return m_runNumber;
 }
 
-unsigned int &Event::eventNumber() {
+ULong64_t &Event::eventNumber() {
   return m_eventNumber;
 }
 
-const unsigned int Event::eventNumber() const {
+const ULong64_t Event::eventNumber() const {
   return m_eventNumber;
 }
 
