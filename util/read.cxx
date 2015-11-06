@@ -516,10 +516,20 @@ int main(int argc, char **argv) {
 
             double btagsf = 1.0;
             std::string pref = "weight_bTagSF_70";
-            if (_btags < 0)
+            //std::string prefe = "weight_bTagSF_70_env";
+            std::string prefe = "weight_bTagSF_70";
+            if (_btags < 0 && _btags > -10) {
               pref = "weight_trackjet_bTagSF_70";
-
-            //if (_btags > 0) {
+              //prefe = "weight_trackjet_bTagSF_70_env";
+              prefe = "weight_trackjet_bTagSF_70";
+            } else if (_btags < 0 && _btags <= -10) { // tag leading track jet only
+              pref = "tjet_bTagSF_70";
+              prefe = "tjet_bTagSF_70";
+            } else if (_btags > 0 && _btags >= 10) { // tag leading calo jet only
+              pref = "jet_bTagSF_70";
+              prefe = "jet_bTagSF_70";
+            }
+            if (std::fabs(_btags) < 10) {
               size_t last = suffix.find("__1");
               if (suffix.find("btagbSF_") != std::string::npos) {
                 size_t first = std::string("btagbSF_").size();
@@ -547,28 +557,63 @@ int main(int argc, char **argv) {
                 }
               } else if (suffix.find("btageSF_0") != std::string::npos) {
                 if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.f(pref+"_extrapolation_up");
+                  btagsf = mt.f(prefe+"_extrapolation_up");
                 } else {
-                  btagsf = mt.f(pref+"_extrapolation_down");
+                  btagsf = mt.f(prefe+"_extrapolation_down");
                 }
               } else if (suffix.find("btageSF_1") != std::string::npos) {
                 if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.f(pref+"_extrapolation_from_charm_up");
+                  btagsf = mt.f(prefe+"_extrapolation_from_charm_up");
                 } else {
-                  btagsf = mt.f(pref+"_extrapolation_from_charm_down");
+                  btagsf = mt.f(prefe+"_extrapolation_from_charm_down");
                 }
               } else {
                 btagsf = mt.f(pref);
               }
-            //} else if (_btags < 0) {
-            //  if (suffix.find("bsf_") != std::string::npos) {
-            //    int f = std::string("bsf_").size();
-            //    int s = suffix.size() - f;
-            //    if (systSuffixForHistograms == "_Loose") s -= std::string("_Loose").size();
-            //    std::string n = trackjet_pre + suffix.substr(f, s);
-            //    btagsf = mt.f(n);
-            //  }
-            //}
+            } else if (std::fabs(_btags) >= 10) {
+              if (mt.vf("tjet_pt")->size() > 0) {
+                size_t last = suffix.find("__1");
+                if (suffix.find("btagbSF_") != std::string::npos) {
+                  size_t first = std::string("btagbSF_").size();
+                  int eig = atoi(suffix.substr(first, last - first).c_str());
+                  if (suffix.find("1up") != std::string::npos) {
+                    btagsf = mt.vvf(pref+"_eigen_B_up")->at(0)[eig];
+                  } else {
+                    btagsf = mt.vvf(pref+"_eigen_B_down")->at(0)[eig];
+                  }
+                } else if (suffix.find("btagcSF_") != std::string::npos) {
+                  size_t first = std::string("btagcSF_").size();
+                  int eig = atoi(suffix.substr(first, last - first).c_str());
+                  if (suffix.find("1up") != std::string::npos) {
+                    btagsf = mt.vvf(pref+"_eigen_C_up")->at(0)[eig];
+                  } else {
+                    btagsf = mt.vvf(pref+"_eigen_C_down")->at(0)[eig];
+                  }
+                } else if (suffix.find("btaglSF_") != std::string::npos) {
+                  size_t first = std::string("btaglSF_").size();
+                  int eig = atoi(suffix.substr(first, last - first).c_str());
+                  if (suffix.find("1up") != std::string::npos) {
+                    btagsf = mt.vvf(pref+"_eigen_Light_up")->at(0)[eig];
+                  } else {
+                    btagsf = mt.vvf(pref+"_eigen_Light_down")->at(0)[eig];
+                  }
+                } else if (suffix.find("btageSF_0") != std::string::npos) {
+                  if (suffix.find("1up") != std::string::npos) {
+                    btagsf = mt.vf(prefe+"_syst_extrapolation_up")->at(0);
+                  } else {
+                    btagsf = mt.vf(prefe+"_syst_extrapolation_down")->at(0);
+                  }
+                } else if (suffix.find("btageSF_1") != std::string::npos) {
+                  if (suffix.find("1up") != std::string::npos) {
+                    btagsf = mt.vf(prefe+"_syst_extrapolation_from_charm_up")->at(0);
+                  } else {
+                    btagsf = mt.vf(prefe+"_syst_extrapolation_from_charm_down")->at(0);
+                  }
+                } else {
+                  btagsf = mt.vf(pref)->at(0);
+                }
+              }
+            }
 
             weight *= btagsf;
             if (suffix == "eTrigSF__1up" || suffix == "eTrigSF__1up_Loose") {
@@ -630,28 +675,33 @@ int main(int argc, char **argv) {
       
           // this applies b-tagging early
           int nBtagged = 0; 
+          int nLeadTagged = 0;
           if (_btags > 0) {
             for (size_t bidx = 0; bidx < sel.jet().size(); ++bidx) {
               if (sel.jet()[bidx].btag_mv2c20_70()) {
                 nBtagged += 1;	
               }
             }
+            if (sel.jet()[0].btag_mv2c20_70()) nLeadTagged++;
           } else if (_btags < 0) {
-            //for (size_t bidx = 0; bidx < mt.vf("trackjet_mv2c20")->size(); ++bidx) {
-            //  if (mt.vf("trackjet_mv2c20")->at(bidx) > -0.3098 && mt.vf("trackjet_pt")->at(bidx) > 10e3 &&
-            //      std::fabs(mt.vf("trackjet_eta")->at(bidx)) < 2.5) {
-            //    nBtagged += 1;	
-            //  }
-            //}
             for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
               if (mt.vf("tjet_mv2c20")->at(bidx) > -0.3098 && mt.vf("tjet_pt")->at(bidx) > 10e3 &&
                   std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
-                nBtagged += 1;	
+                nBtagged += 1;
+              }
+            }
+            if (mt.vf("tjet_pt")->size() > 0) {
+              if (mt.vf("tjet_mv2c20")->at(0) > -0.3098 && mt.vf("tjet_pt")->at(0) > 10e3 &&
+                  std::fabs(mt.vf("tjet_eta")->at(0)) < 2.5 && mt.vi("tjet_numConstituents")->at(0) >= 2) {
+                nLeadTagged += 1;
               }
             }
           }
-          if (_btags != 0) {
+          if (_btags != 0 && std::fabs(_btags) < 10) {
             if (nBtagged < abs(_btags))
+              continue;
+          } else if (_btags != 0 && std::fabs(_btags) >= 10) {
+            if (nLeadTagged == 0)
               continue;
           }
 	  	  
