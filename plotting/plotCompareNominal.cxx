@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
     SampleSetConfiguration stackConfig = makeConfigurationPlotsCompare(prefix, channel, other_items, other_titles, mcOnly);
     SystematicCalculator systCalc(stackConfig);
     for (int z = 0; z < syst_items.size(); ++z) {
-      systCalc.add(syst_items[z], new NotData(new HistDiff(syst_items[z].c_str(), "", smooth)));
+      systCalc.add(syst_items[z], new NotData(new HistDiff(syst_items[z].c_str(), "", smooth)), syst_items[z]);
     }
     //addAllSystematics(systCalc, prefix, channel, false);
     systCalc.calculate(histogram);

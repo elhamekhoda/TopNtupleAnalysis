@@ -7,8 +7,11 @@ using namespace std;
 
 SystematicCalculatorBase::SystematicCalculatorBase() { }
 
-void SystematicCalculatorBase::add(const string &name, Syst *s) {
+void SystematicCalculatorBase::add(const string &name, Syst *s, const string &title) {
   _syst.insert(make_pair<string, unique_ptr<Syst> >(string(name), unique_ptr<Syst>(s)));
+  string ntitle = title;
+  if (ntitle == "") ntitle = name;
+  _syst_title.insert(make_pair<string, string>(string(name), string(ntitle)));
 }
 
 double SystematicCalculatorBase::totalSystInSample(Sample &item) {
@@ -112,7 +115,8 @@ void SystematicCalculatorBase::printSysts(SampleSet &st) {
   for (map<string, Hist>::iterator k = st._item[0].syst.begin(); k != st._item[0].syst.end(); ++k) {
     string systName = k->first;
     double s = fabs(totalSyst(st, systName));
-    cout << setw(50) << systName << " & " << setw(20) << s*100.0/total_nom;
+    string systTitle = _syst_title[systName];
+    cout << setw(50) << systTitle << " & " << setw(20) << s*100.0/total_nom;
     cout << " \\\\" << endl;
     total_syst += s*s;
   }

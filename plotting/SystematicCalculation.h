@@ -25,13 +25,15 @@ class SystematicCalculatorBase {
     // Each implementation of this will have its own systematic map
     map<string, unique_ptr<Syst> > _syst;
 
+    map<string, string> _syst_title;
+
     /* 
      * Constructor. Does nothing
      */
     SystematicCalculatorBase();
 
     // adds syst. uncertainty
-    void add(const string &name, Syst *s);
+    void add(const string &name, Syst *s, const string &title = "");
 
     /*
      * Returns sum in quadrature of systematics  in

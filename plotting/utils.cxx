@@ -1227,22 +1227,22 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst.begin(); it != syst.end(); ++it) {
     std::string name = it->first;
     if (it->second.size() == 2)
-      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", smooth))));
+      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", smooth))), it->second[0]);
     else
-      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", smooth), new HistDiff(it->second[2], "", smooth))));
+      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", smooth), new HistDiff(it->second[2], "", smooth))), it->second[0]);
   }
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_model.begin(); it != syst_model.end(); ++it) {
     std::string name = it->first;
     vector<string> pattern;
     pattern.push_back(it->second[1]);
-    systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[3].c_str()), pattern, smooth));
+    systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[3].c_str()), pattern, smooth), it->second[0]);
   }
 
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_flat.begin(); it != syst_flat.end(); ++it) {
     std::string name = it->first;
     vector<string> pattern;
     pattern.push_back(it->second[1]);
-    systCalc.add(name.c_str(), new NotData(new Symm(new HistNorm(std::atof(it->second[2].c_str()), pattern), new HistNorm(std::atof(it->second[3].c_str()), pattern))));
+    systCalc.add(name.c_str(), new NotData(new Symm(new HistNorm(std::atof(it->second[2].c_str()), pattern), new HistNorm(std::atof(it->second[3].c_str()), pattern))), it->second[0]);
   }
 }
 

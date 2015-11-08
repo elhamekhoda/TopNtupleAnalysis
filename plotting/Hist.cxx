@@ -91,15 +91,22 @@ Hist Hist::operator -(Hist a) const {
 Hist Hist::smooth(int nbins) {
   Hist me(*this);
 
+  double pre_yield = me.yield();
+
   Double_t *xx = new Double_t[_size];
   for (unsigned int i = 0; i < _size; ++i)
     xx[i] = 100 + me[i];
 
   TH1::SmoothArray(_size, xx, nbins);
 
-  for (int i = 1; i < _size; ++i) {
+  for (int i = 0; i < _size; ++i) {
     me[i] = xx[i] - 100;
   }
+
+  // keep the normalisation fixed before and after smoothing
+  if (me.yield() != 0)
+    me *= pre_yield/me.yield();
+
   return me;
 }
 
