@@ -76,6 +76,12 @@ class SampleSet {
      * The style will be the style of the first histogram in the sample.
      */
     shared_ptr<TH1D> makeTH1(const string &name = "Data", const string &syst = "");
+
+    /*
+     *
+     * Save TH1D and variations collected in set of files named hist_[legname].root for each sub sample.
+     */
+    void saveTH1(const std::string &s);
 };
 
 class SampleSetConfiguration {

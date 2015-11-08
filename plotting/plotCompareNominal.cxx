@@ -56,6 +56,7 @@ int main(int argc, char **argv) {
     float lumi = 5;
     std::string config = "";
     int mcOnly = 0;
+    smooth = 40;
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -76,6 +77,7 @@ int main(int argc, char **argv) {
         {"lumi",            required_argument,     0, 'l', "Luminosity value to show.", &lumi, extendedOption::eOTFloat},
         {"config",          required_argument,     0, 'C', "Configuration file.", &config, extendedOption::eOTString},
         {"mcOnly",          required_argument,     0, 'm', "Do not include data? (0/1)", &mcOnly, extendedOption::eOTInt},
+        {"smoothen",        required_argument,     0, 'k', "Smoothen systematics.", &smooth, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -117,7 +119,7 @@ int main(int argc, char **argv) {
     SampleSetConfiguration stackConfig = makeConfigurationPlotsCompare(prefix, channel, other_items, other_titles, mcOnly);
     SystematicCalculator systCalc(stackConfig);
     for (int z = 0; z < syst_items.size(); ++z) {
-      systCalc.add(syst_items[z], new NotData(new HistDiff(syst_items[z].c_str(), "")));
+      systCalc.add(syst_items[z], new NotData(new HistDiff(syst_items[z].c_str(), "", smooth)));
     }
     //addAllSystematics(systCalc, prefix, channel, false);
     systCalc.calculate(histogram);

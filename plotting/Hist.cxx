@@ -87,6 +87,23 @@ Hist Hist::operator -(Hist a) const {
   }
   return me;
 }
+
+Hist Hist::smooth(int nbins) {
+  Hist me(*this);
+
+  Double_t *xx = new Double_t[_size];
+  for (unsigned int i = 0; i < _size; ++i)
+    xx[i] = 100 + me[i];
+
+  TH1::SmoothArray(_size, xx, nbins);
+
+  for (int i = 1; i < _size; ++i) {
+    me[i] = xx[i] - 100;
+  }
+  return me;
+}
+
+
 Hist Hist::operator *(Hist a) const {
   if (_size == 0) return a;
   if (a._size == 0) return *this;

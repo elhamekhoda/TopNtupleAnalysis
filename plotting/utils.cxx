@@ -27,7 +27,7 @@
 
 int _stamp = 0;
 std::map<std::string, std::string> name = std::map<std::string, std::string>();
-std::map<std::string, std::pair<std::string, std::string> > syst = std::map<std::string, std::pair<std::string, std::string> >();
+std::map<std::string, std::vector<std::string> > syst = std::map<std::string, std::vector<std::string> >();
 
 std::map<std::string, std::string> title = std::map<std::string, std::string>();
 std::map<std::string, std::string> latex = std::map<std::string, std::string>();
@@ -38,6 +38,7 @@ std::map<std::string, std::vector<std::string> > syst_model = std::map<std::stri
 std::map<std::string, std::vector<std::string> > syst_flat = std::map<std::string, std::vector<std::string> >();
 
 float lumi_scale = 1.0;
+int smooth = 1;
 
 using namespace std;
 
@@ -77,20 +78,26 @@ void loadConfig(const std::string &file) {
       latex[el[1]] = el[4];
       fillColor[el[1]] = std::atoi(el[5].c_str());
     } else if (el[0] == "syst") {
-      if (el.size() >= 4)
-        syst[el[1]] = std::pair<std::string, std::string>(el[2], el[3]);
-      else
-        syst[el[1]] = std::pair<std::string, std::string>(el[2], "");
+      syst[el[1]] = std::vector<std::string>();
+      syst[el[1]].push_back(el[2]);
+      if (el.size() >= 5) {
+        syst[el[1]].push_back(el[3]);
+        syst[el[1]].push_back(el[4]);
+      } else {
+        syst[el[1]].push_back(el[3]);
+      }
     } else if (el[0] == "syst_model") {
       syst_model[el[1]] = std::vector<std::string>();
       syst_model[el[1]].push_back(el[2]);
       syst_model[el[1]].push_back(el[3]);
       syst_model[el[1]].push_back(el[4]);
+      syst_model[el[1]].push_back(el[5]);
     } else if (el[0] == "syst_flat") {
       syst_flat[el[1]] = std::vector<std::string>();
       syst_flat[el[1]].push_back(el[2]);
       syst_flat[el[1]].push_back(el[3]);
       syst_flat[el[1]].push_back(el[4]);
+      syst_flat[el[1]].push_back(el[5]);
     }
   }
 }
@@ -1217,71 +1224,26 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
   //systCalc.add("00luminosity", new NotData(new HistNorm(0.09)));
   //systCalc.add("00ttbar cross section", new NotData(new Symm(new HistNorm(0.056, only_ttbar), new HistNorm(-0.061, only_ttbar))));
 
-  for (std::map<std::string, std::pair<std::string, std::string> >::iterator it = syst.begin(); it != syst.end(); ++it) {
+  for (std::map<std::string, std::vector<std::string> >::iterator it = syst.begin(); it != syst.end(); ++it) {
     std::string name = it->first;
-    if (it->second.second == "")
-      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second.first, ""))));
+    if (it->second.size() == 2)
+      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", smooth))));
     else
-      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second.first, ""), new HistDiff(it->second.second, ""))));
+      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", smooth), new HistDiff(it->second[2], "", smooth))));
   }
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_model.begin(); it != syst_model.end(); ++it) {
     std::string name = it->first;
     vector<string> pattern;
-    pattern.push_back(it->second[0]);
-    systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[1].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), pattern));
+    pattern.push_back(it->second[1]);
+    systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[3].c_str()), pattern, smooth));
   }
 
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_flat.begin(); it != syst_flat.end(); ++it) {
     std::string name = it->first;
     vector<string> pattern;
-    pattern.push_back(it->second[0]);
-    systCalc.add(name.c_str(), new NotData(new Symm(new HistNorm(std::atof(it->second[1].c_str()), pattern), new HistNorm(std::atof(it->second[2].c_str()), pattern))));
+    pattern.push_back(it->second[1]);
+    systCalc.add(name.c_str(), new NotData(new Symm(new HistNorm(std::atof(it->second[2].c_str()), pattern), new HistNorm(std::atof(it->second[3].c_str()), pattern))));
   }
-  //systCalc.add("(33) ISR/FSR", new RelativeISRFSR(Form("out_isr2_%s", channel.c_str()), Form("out_isr1_%s", channel.c_str()), only_allttbar));
-  /*
-  systCalc.add("(01) \\akt $R=0.4$ jet energy resolution", new NotData(new Symm(new HistDiff("JET_JER_SINGLE_NP__1up", ""))));
-  systCalc.add("(02) \\akt $R=0.4$ jet energy scale 1", new NotData(new Symm(new HistDiff("JET_NPScenario1_JET_GroupedNP_1__1up", ""), new HistDiff("JET_NPScenario1_JET_GroupedNP_1__1down", ""))));
-  systCalc.add("(03) \\akt $R=0.4$ jet energy scale 2", new NotData(new Symm(new HistDiff("JET_NPScenario1_JET_GroupedNP_2__1up", ""), new HistDiff("JET_NPScenario1_JET_GroupedNP_2__1down", ""))));
-  systCalc.add("(04) \\akt $R=0.4$ jet energy scale 3", new NotData(new Symm(new HistDiff("JET_NPScenario1_JET_GroupedNP_3__1up", ""), new HistDiff("JET_NPScenario1_JET_GroupedNP_3__1down", ""))));
-  //systCalc.add("(05) \\akt $R=1.0$ jet energy resolution", new NotData(new HistDiff("", "")));
-  //systCalc.add("(06) \\akt $R=1.0$ jet energy scale", new NotData(new Symm(new HistDiff("", ""), new HistDiff("", ""))));
-
-  systCalc.add("(07) Muon res. (MS)", new NotData(new Symm(new HistDiff("MUONS_MS__1up", ""), new HistDiff("MUONS_MS__1down", ""))));
-  systCalc.add("(08) Muon res. (ID)", new NotData(new Symm(new HistDiff("MUONS_ID__1up", ""), new HistDiff("MUONS_ID__1down", ""))));
-  systCalc.add("(09) Muon scale", new NotData(new Symm(new HistDiff("MUONS_SCALE__1up", ""), new HistDiff("MUONS_SCALE__1down", ""))));
-  systCalc.add("(10) Electron res.", new NotData(new Symm(new HistDiff("EG_RESOLUTION_ALL__1up", ""), new HistDiff("EG_RESOLUTION_ALL__1down", ""))));
-  systCalc.add("(11) Electron scale", new NotData(new Symm(new HistDiff("EG_SCALE_ALL__1up", ""), new HistDiff("EG_SCALE_ALL__1down", ""))));
-
-  systCalc.add("(12) MET Soft Trk res. para.", new NotData(new Symm(new HistDiff("MET_SoftTrk_ResoPara", ""))));
-  systCalc.add("(13) MET Soft Trk res. perp.", new NotData(new Symm(new HistDiff("MET_SoftTrk_ResoPerp", ""))));
-  systCalc.add("(14) MET Soft Trk scale", new NotData(new Symm(new HistDiff("MET_SoftTrk_ScaleUp", ""), new HistDiff("MET_SoftTrk_ScaleDown", ""))));
-
-  systCalc.add("(15) b-tagging efficiency E0", new NotData(new Symm(new HistDiff("btagbSF_0__1up", ""), new HistDiff("btagbSF_0__1down", ""))));
-  systCalc.add("(16) b-tagging efficiency E1", new NotData(new Symm(new HistDiff("btagbSF_1__1up", ""), new HistDiff("btagbSF_1__1down", ""))));
-  systCalc.add("(17) b-tagging efficiency E2", new NotData(new Symm(new HistDiff("btagbSF_2__1up", ""), new HistDiff("btagbSF_2__1down", ""))));
-  systCalc.add("(18) b-tagging efficiency E3", new NotData(new Symm(new HistDiff("btagbSF_3__1up", ""), new HistDiff("btagbSF_3__1down", ""))));
-  systCalc.add("(19) b-tagging efficiency E4", new NotData(new Symm(new HistDiff("btagbSF_4__1up", ""), new HistDiff("btagbSF_4__1down", ""))));
-  systCalc.add("(20) b-tagging efficiency E5", new NotData(new Symm(new HistDiff("btagbSF_5__1up", ""), new HistDiff("btagbSF_5__1down", ""))));
-
-  systCalc.add("(21) c-jet mistag E0", new NotData(new Symm(new HistDiff("btagcSF_0__1up", ""), new HistDiff("btagcSF_0__1down", ""))));
-  systCalc.add("(22) c-jet mistag E1", new NotData(new Symm(new HistDiff("btagcSF_1__1up", ""), new HistDiff("btagcSF_1__1down", ""))));
-  systCalc.add("(23) c-jet mistag E2", new NotData(new Symm(new HistDiff("btagcSF_2__1up", ""), new HistDiff("btagcSF_2__1down", ""))));
-  systCalc.add("(24) c-jet mistag E3", new NotData(new Symm(new HistDiff("btagcSF_3__1up", ""), new HistDiff("btagcSF_3__1down", ""))));
-
-  systCalc.add("(25) l-jet mistag E0", new NotData(new Symm(new HistDiff("btaglSF_0__1up", ""), new HistDiff("btaglSF_0__1down", ""))));
-  systCalc.add("(26) l-jet mistag E1", new NotData(new Symm(new HistDiff("btaglSF_1__1up", ""), new HistDiff("btaglSF_1__1down", ""))));
-  systCalc.add("(27) l-jet mistag E2", new NotData(new Symm(new HistDiff("btaglSF_2__1up", ""), new HistDiff("btaglSF_2__1down", ""))));
-  systCalc.add("(28) l-jet mistag E3", new NotData(new Symm(new HistDiff("btaglSF_3__1up", ""), new HistDiff("btaglSF_3__1down", ""))));
-
-  //systCalc.add("(29) Lepton SF", new NotData(new Symm(new HistDiff("lepSF__1up", ""), new HistDiff("lepSF__1down", ""))));
-  */
-
-
-  //systCalc.add("(31) PDF", new Relative(Form("out_pdf1_%s", channel.c_str()), Form("out_pdf2_%s", channel.c_str()), only_allttbar));
-  //systCalc.add("(32) Parton shower", new Relative(Form("out_pshower4_%s", channel.c_str()), Form("out_pshower1_%s", channel.c_str()), only_allttbar));
-  //systCalc.add("(33) ISR/FSR", new RelativeISRFSR(Form("out_isr2_%s", channel.c_str()), Form("out_isr1_%s", channel.c_str()), only_allttbar));
-  //systCalc.add("(34) MC generator", new Relative(Form("out_mcgen1_%s", channel.c_str()), Form("out_mcgen4_%s", channel.c_str()), only_allttbar));
-  //systCalc.add("(35) Renormalisation scale", new NotData(new Symm(new HistDiff("_scaleUp", ""), new HistDiff("_scaleDown", ""))));
 }
 
 

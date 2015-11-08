@@ -29,7 +29,8 @@ class HistDiff : public Syst{
   public:
   string _a;
   string _b;
-  HistDiff(const string &a, const string &b);
+  int _smoothLevel;
+  HistDiff(const string &a, const string &b, int smoothLevel = 0);
   Hist get(const string &name, const string &fname);
 };
 
@@ -105,7 +106,8 @@ class Relative : public Syst{
   string _b;
   vector<string> _only;
   double _scale;
-  Relative(const string &a, const string &b, const vector<string> &only, double scale = 1.0);
+  int _smoothLevel;
+  Relative(const string &a, const string &b, const vector<string> &only, double scale = 1.0, int smoothLevel = 0);
   Hist get(const string &name, const string &fname);
 };
 
@@ -122,7 +124,8 @@ class RelativeISRFSR : public Syst{
   string _a;
   string _b;
   vector<string> _only;
-  RelativeISRFSR(const string &a, const string &b, const vector<string> &only);
+  int _smoothLevel;
+  RelativeISRFSR(const string &a, const string &b, const vector<string> &only, int smoothLevel = 0);
   Hist get(const string &name, const string &fname);
 };
 

@@ -74,6 +74,13 @@ class Hist {
     Hist &operator -=(Hist a);
     Hist &operator *=(Hist a);
 
+
+    /* 
+     * Smoothen it.
+     *
+     */
+    Hist smooth(int smoothLevel = 1);
+
     /*
      * Multiply by scalar.
      */

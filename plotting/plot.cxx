@@ -60,6 +60,7 @@ int main(int argc, char **argv) {
     int stamp = 0;
     float lumi = 5;
     std::string config = "";
+    std::string saveTH1 = "";
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -84,6 +85,8 @@ int main(int argc, char **argv) {
         {"stamp",           required_argument,     0, 's', "0 = ATLAS Internal, 1 = ATLAS Preliminary.", &stamp, extendedOption::eOTInt},
         {"lumi",            required_argument,     0, 'l', "Luminosity value to show", &lumi, extendedOption::eOTFloat},
         {"config",          required_argument,     0, 'C', "Configuration file for items.", &config, extendedOption::eOTString},
+        {"smoothen",        required_argument,     0, 'k', "Smoothen systematics.", &smooth, extendedOption::eOTInt},
+        {"saveTH1",         required_argument,     0, 'R', "Save as ROOT files called hist_[name][sufix].root with all systs. Provide the sufix.", &saveTH1, extendedOption::eOTString},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -172,6 +175,8 @@ int main(int argc, char **argv) {
       for (vector<string>::iterator i = split_extraText.begin(); i!=split_extraText.end();++i) extraText.push_back(*i);
       drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
 
+      if (saveTH1 != "")
+        stackConfig["MC"].saveTH1(saveTH1);
     } else { // if it is a ratio plot
 
       shared_ptr<SystematicRatioCalculator> systRatCalcD;

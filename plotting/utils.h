@@ -16,10 +16,11 @@ extern std::map<std::string, std::string> name;
 extern std::map<std::string, std::string> title;
 extern std::map<std::string, std::string> latex;
 extern std::map<std::string, int> fillColor;
-extern std::map<std::string, std::pair<std::string, std::string> > syst;
+extern std::map<std::string, std::vector<std::string> > syst;
 extern std::map<std::string, std::vector<std::string> > syst_model;
 extern std::map<std::string, std::vector<std::string> > syst_flat;
 extern float lumi_scale;
+extern int smooth;
 
 void loadConfig(const std::string &file = "config.txt");
 

@@ -150,6 +150,21 @@ shared_ptr<TH1D> SampleSet::makeTH1(const string &name, const string &systName) 
   return shared_ptr<TH1D>(mySum);
 }
 
+void SampleSet::saveTH1(const std::string &s) {
+  for (int j = 0; j < _item.size(); ++j) {
+    TFile f((string("hist_")+_item[j].legname+s+string(".root")).c_str(), "recreate");
+    TH1D *t = new TH1D(*_item[j].makeTH1(Form("x%d", j), "").get());
+    f.cd();
+    t->Write("x");
+    for (map<string, Hist>::const_iterator it = _item[j].syst.begin(); it != _item[j].syst.end(); ++it) {
+      TH1D *ts = new TH1D(*_item[j].makeTH1(Form("x%s%d", it->first.c_str(), j), it->first).get());
+      f.cd();
+      ts->Write(Form("x%s", it->first.c_str()));
+    }
+    f.Close();
+  }
+}
+
 
 void SampleSetConfiguration::addType(const std::string &type) {
   _stack.insert(std::make_pair(type, SampleSet()));

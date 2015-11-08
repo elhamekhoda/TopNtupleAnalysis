@@ -9,15 +9,18 @@ using namespace std;
 Syst::Syst() {
 }
 
-HistDiff::HistDiff(const string &a, const string &b) {
+HistDiff::HistDiff(const string &a, const string &b, int smoothLevel) {
   _a = a;
   _b = b;
+  _smoothLevel = smoothLevel;
 }
 
 Hist HistDiff::get(const string &name, const string &fname) {
   Hist ha(name, _a, fname);
   Hist hb(name, _b, fname);
-  return (ha - hb);
+  if (_smoothLevel <= 0)
+    return (ha - hb);
+  return (ha - hb).smooth(_smoothLevel);
 }
 
 HistNorm::HistNorm(double n) {
@@ -78,11 +81,12 @@ Hist SystCorr::get(const string &name, const string &fname) {
   return hc;
 }
 
-Relative::Relative(const string &a, const string &b, const vector<string> &only, double scale) {
+Relative::Relative(const string &a, const string &b, const vector<string> &only, double scale, int smoothLevel) {
   _a = a;
   _b = b;
   _only = only;
   _scale = scale;
+  _smoothLevel = smoothLevel;
 }
 
 Hist Relative::get(const string &name, const string &fname) {
@@ -95,14 +99,17 @@ Hist Relative::get(const string &name, const string &fname) {
   Hist ha(name, "", _a);
   Hist hb(name, "", _b);
   Hist hnom(name, "", fname);
-  return hnom - hnom*hb*_scale/ha;
+  if (_smoothLevel <= 0)
+    return hnom - hnom*hb*_scale/ha;
+  return (hnom - hnom*hb*_scale/ha).smooth(_smoothLevel);
   //return (ha-hb)*0.5;
 }
 
-RelativeISRFSR::RelativeISRFSR(const string &a, const string &b, const vector<string> &only) {
+RelativeISRFSR::RelativeISRFSR(const string &a, const string &b, const vector<string> &only, int smoothLevel) {
   _a = a;
   _b = b;
   _only = only;
+  _smoothLevel = smoothLevel;
 }
 
 Hist RelativeISRFSR::get(const string &name, const string &fname) {
@@ -117,6 +124,8 @@ Hist RelativeISRFSR::get(const string &name, const string &fname) {
   Hist hnom(name, "", fname);
   Hist hc = ha + hb;
   Hist hd = ha - hb;
+  if (_smoothLevel > 0)
+    return (hnom*hd/hc).smooth(_smoothLevel);
   //return (hnom*hd/hc).abs();
   return (hnom*hd/hc);
 }
