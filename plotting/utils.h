@@ -29,7 +29,7 @@ SampleSetConfiguration makeConfigurationPlots(const string &prefix, const string
 SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const string &channel, const vector<string> &other, const vector<string> &title, bool isMcOnly = false);
 SampleSetConfiguration makeConfigurationMCEff(const string &prefix, const string &channel);
 SampleSetConfiguration makeConfigurationDataEff(const string &prefix, const string &channel);
-void addAllSystematics(SystematicCalculator &systCalc, const std::string &prefix, const std::string &channel);
+void addAllSystematics(SystematicCalculator &systCalc, const std::string &prefix, const std::string &channel, bool updw = false);
 
 void split(const std::string &s, char delim, std::vector<std::string> &elems);
 

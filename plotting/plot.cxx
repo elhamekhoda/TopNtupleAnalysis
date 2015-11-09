@@ -129,7 +129,8 @@ int main(int argc, char **argv) {
       // for Data/MC comparison
       SampleSetConfiguration stackConfig = makeConfigurationPlots(prefix, channel, mcOnly);
       SystematicCalculator systCalc(stackConfig);
-      addAllSystematics(systCalc, prefix, channel);
+      bool splitUpDw = (saveTH1 != "");
+      addAllSystematics(systCalc, prefix, channel, splitUpDw);
       systCalc.calculate(histogram);
 
       if (underflow) stackConfig.showUnderflow();

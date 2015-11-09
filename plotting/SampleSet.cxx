@@ -155,11 +155,13 @@ void SampleSet::saveTH1(const std::string &s) {
     TFile f((string("hist_")+_item[j].legname+string(".root")).c_str(), "update");
     TH1D *t = new TH1D(*_item[j].makeTH1(Form("x%s%d", s.c_str(), j), "").get());
     f.cd();
-    t->Write(Form("x%s", s.c_str()));
+    t->Write(Form("x%s", s.c_str()), TObject::kOverwrite);
+    delete t;
     for (map<string, Hist>::const_iterator it = _item[j].syst.begin(); it != _item[j].syst.end(); ++it) {
       TH1D *ts = new TH1D(*_item[j].makeTH1(Form("x%s%s%d", s.c_str(), it->first.c_str(), j), it->first).get());
       f.cd();
-      ts->Write(Form("x%s%s", s.c_str(), it->first.c_str()));
+      ts->Write(Form("x%s%s", s.c_str(), it->first.c_str()), TObject::kOverwrite);
+      delete ts;
     }
     f.Close();
   }

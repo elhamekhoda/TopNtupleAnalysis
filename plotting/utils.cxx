@@ -80,24 +80,15 @@ void loadConfig(const std::string &file) {
     } else if (el[0] == "syst") {
       syst[el[1]] = std::vector<std::string>();
       syst[el[1]].push_back(el[2]);
-      if (el.size() >= 5) {
-        syst[el[1]].push_back(el[3]);
-        syst[el[1]].push_back(el[4]);
-      } else {
-        syst[el[1]].push_back(el[3]);
-      }
+      for (int l = 3; l < el.size(); ++l) syst[el[1]].push_back(el[l]);
     } else if (el[0] == "syst_model") {
       syst_model[el[1]] = std::vector<std::string>();
       syst_model[el[1]].push_back(el[2]);
-      syst_model[el[1]].push_back(el[3]);
-      syst_model[el[1]].push_back(el[4]);
-      syst_model[el[1]].push_back(el[5]);
+      for (int l = 3; l < el.size(); ++l) syst_model[el[1]].push_back(el[l]);
     } else if (el[0] == "syst_flat") {
       syst_flat[el[1]] = std::vector<std::string>();
       syst_flat[el[1]].push_back(el[2]);
-      syst_flat[el[1]].push_back(el[3]);
-      syst_flat[el[1]].push_back(el[4]);
-      syst_flat[el[1]].push_back(el[5]);
+      for (int l = 3; l < el.size(); ++l) syst_flat[el[1]].push_back(el[l]);
     }
   }
 }
@@ -1217,7 +1208,7 @@ SampleSetConfiguration makeConfigurationDataEff(const string &prefix, const stri
   return stackConfig;
 }
 
-void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, const std::string &channel) {
+void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, const std::string &channel, bool updw) {
   vector<string> only_ttbar;
   only_ttbar.push_back("ttbar");
 
@@ -1226,23 +1217,39 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
 
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst.begin(); it != syst.end(); ++it) {
     std::string name = it->first;
-    if (it->second.size() == 2)
+    int this_smooth = smooth;
+    if (it->second.size() == 3) {
+      if (this_smooth > 0) this_smooth = it->second[2] == "S";
       systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", smooth))), it->second[0]);
-    else
-      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", smooth), new HistDiff(it->second[2], "", smooth))), it->second[0]);
+    } else if (!updw && it->second.size() == 4) {
+      if (this_smooth > 0) this_smooth = it->second[3] == "S";
+      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", this_smooth), new HistDiff(it->second[2], "", smooth))), it->second[0]);
+    } else if (updw && it->second.size() == 4) {
+      if (this_smooth > 0) this_smooth = it->second[3] == "S";
+      systCalc.add(name+"up", new NotData(new HistDiff(it->second[1], "", this_smooth)), it->second[0]+std::string(" up"));
+      systCalc.add(name+"dw", new NotData(new HistDiff(it->second[2], "", this_smooth)), it->second[0]+std::string(" dw"));
+    }
   }
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_model.begin(); it != syst_model.end(); ++it) {
     std::string name = it->first;
     vector<string> pattern;
     pattern.push_back(it->second[1]);
-    systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[3].c_str()), pattern, smooth), it->second[0]);
+    int this_smooth = smooth;
+    if (this_smooth > 0 && it->second.size() == 5) this_smooth = it->second[4] == "S";
+
+    systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[3].c_str()), pattern, this_smooth), it->second[0]);
   }
 
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_flat.begin(); it != syst_flat.end(); ++it) {
     std::string name = it->first;
     vector<string> pattern;
     pattern.push_back(it->second[1]);
-    systCalc.add(name.c_str(), new NotData(new Symm(new HistNorm(std::atof(it->second[2].c_str()), pattern), new HistNorm(std::atof(it->second[3].c_str()), pattern))), it->second[0]);
+    if (!updw) {
+      systCalc.add(name.c_str(), new NotData(new Symm(new HistNorm(std::atof(it->second[2].c_str()), pattern), new HistNorm(std::atof(it->second[3].c_str()), pattern))), it->second[0]);
+    } else {
+      systCalc.add(name+"up", new NotData(new HistNorm(std::atof(it->second[2].c_str()), pattern)), it->second[0]+std::string(" up"));
+      systCalc.add(name+"dw", new NotData(new HistNorm(std::atof(it->second[3].c_str()), pattern)), it->second[0]+std::string(" dw"));
+    }
   }
 }
 
