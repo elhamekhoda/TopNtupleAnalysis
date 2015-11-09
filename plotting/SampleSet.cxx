@@ -152,14 +152,14 @@ shared_ptr<TH1D> SampleSet::makeTH1(const string &name, const string &systName) 
 
 void SampleSet::saveTH1(const std::string &s) {
   for (int j = 0; j < _item.size(); ++j) {
-    TFile f((string("hist_")+_item[j].legname+s+string(".root")).c_str(), "recreate");
-    TH1D *t = new TH1D(*_item[j].makeTH1(Form("x%d", j), "").get());
+    TFile f((string("hist_")+_item[j].legname+string(".root")).c_str(), "update");
+    TH1D *t = new TH1D(*_item[j].makeTH1(Form("x%s%d", s.c_str(), j), "").get());
     f.cd();
-    t->Write("x");
+    t->Write(Form("x%s", s.c_str()));
     for (map<string, Hist>::const_iterator it = _item[j].syst.begin(); it != _item[j].syst.end(); ++it) {
-      TH1D *ts = new TH1D(*_item[j].makeTH1(Form("x%s%d", it->first.c_str(), j), it->first).get());
+      TH1D *ts = new TH1D(*_item[j].makeTH1(Form("x%s%s%d", s.c_str(), it->first.c_str(), j), it->first).get());
       f.cd();
-      ts->Write(Form("x%s", it->first.c_str()));
+      ts->Write(Form("x%s%s", s.c_str(), it->first.c_str()));
     }
     f.Close();
   }

@@ -89,8 +89,10 @@ Hist Hist::operator -(Hist a) const {
 }
 
 Hist Hist::smooth(int nbins) {
-  Hist me(*this);
+  //if (_size-2 < 3) return *this;
+  // need at least 3 bins to smoothen it
 
+  Hist me(*this);
   double pre_yield = me.yield();
 
   Double_t *xx = new Double_t[_size];
@@ -102,12 +104,168 @@ Hist Hist::smooth(int nbins) {
   for (int i = 0; i < _size; ++i) {
     me[i] = xx[i] - 100;
   }
+  delete [] xx;
 
   // keep the normalisation fixed before and after smoothing
+  //double nb = _size;
+  //double perbin = (pre_yield - me.yield())/nb;
+  //for (unsigned int i = 0; i < _size; ++i)
+  //  me[i] += perbin;
   if (me.yield() != 0)
     me *= pre_yield/me.yield();
 
   return me;
+}
+
+int Hist::GetMaxStatErrBin(Hist &h0, Hist &h1,  double thr, bool skipZero) {
+  int iMin = -999;
+  double vStatMax = 0;
+  for (unsigned int i = 1; i < h0._size-1; ++i) {   // ignore under/overflow bins for now
+    double val = h0[i];
+    if (skipZero && val == 0)
+      continue;
+
+    double err0 = h0.e(i);
+    double err1 = h1.e(i);
+    double errR = std::fabs(std::sqrt(err0*err0+err1*err1)/val);
+    if (errR < thr && errR > vStatMax) {
+      vStatMax = errR;
+      iMin = i;
+    }
+  }
+  return iMin;
+}
+
+/*
+ * Start from the bin with lowest stat. 
+ * If the syst variation is smaller than stat uncertainty, merge it with the adjacent bin with lower stat.
+ * Else check the next lowest bin.
+ * Restart after merging is done, until no more merging is needed (either single-bin or all bins with syst larger than stat)
+ */
+Hist Hist::smoothRun1(Hist &nom, int smoothLevel) {
+  if (smoothLevel <= 0) return *this;
+
+  Hist var = *this;
+
+  const float systOverStatThreshold = 2.;
+  bool verbose = true;
+  verbose = false;
+  Hist nom_merged = nom;
+  Hist var_merged = var;
+  while (nom_merged._size-2 > 1) {    // iterate until single-bin, or nothing to merge
+    int nbins = nom_merged._size-1;
+
+    int binToMerge = -999;
+    int iMerge = -999;
+    double maxErrR = 1e9;
+    while (iMerge == -999) {  // Loop over all bins, starting from the one with largest stat error. Stop if merge happens.
+
+      int iMin = Hist::GetMaxStatErrBin(nom_merged, var_merged, maxErrR);
+      if (verbose)
+        std::cout << "Check " << iMin << "-th bin out of "<< var_merged._size-2 << " bins" << std::endl;
+      if (iMin<0)
+        break;
+      double var = var_merged[iMin];
+      double nom = nom_merged[iMin];
+      double stat = std::sqrt(std::pow(var_merged.e(iMin), 2) + std::pow(nom_merged.e(iMin), 2));
+      maxErrR = stat/std::fabs(nom);
+      if (verbose)
+        std::cout << Form("yields=%f(%f)\tRelSyst=%f\tRelStat=%f", nom, nom_merged.e(iMin), (var - nom)/nom, maxErrR) << std::endl;
+
+      if (std::fabs(var-nom)/stat < systOverStatThreshold) {
+        
+        double nomL  = nom_merged[iMin-1];
+        double systL = var_merged[iMin-1] - nomL;
+        double statL = std::sqrt(std::pow(var_merged.e(iMin-1), 2) + std::pow(nom_merged.e(iMin-1), 2));
+        double nomR  = nom_merged[iMin+1];
+        double systR = var_merged[iMin+1] - nomR;
+        double statR = std::sqrt(std::pow(var_merged.e(iMin+1), 2) + std::pow(nom_merged.e(iMin+1), 2));
+
+        //if (systL*systR<0) continue; // Skip the bins where systematics turning opposite signs (these bins are often merged by following criteria, which remove the shape information)
+
+        bool  mergeL = (iMin != 1 && nomL != 0);
+        bool  mergeR = (iMin != nbins && nomR != 0);
+        // The neighbor bin is considered not good for merge, if its systematics is statistically significant enough, and can get this bin's systematics over-estimated after merging.
+        if (std::fabs(systL)/statL > systOverStatThreshold && std::fabs(systL + var - nom)/(nomL+nom)*nom/stat > systOverStatThreshold) mergeL = false;
+        if (std::fabs(systR)/statR > systOverStatThreshold && std::fabs(systR + var - nom)/(nomR+nom)*nom/stat > systOverStatThreshold) mergeR = false;
+
+        if (!mergeL && !mergeR)
+          continue;  // Skip bin if both side not appropriate for merge
+
+        iMerge=iMin; // else this bin will be marked as to be merged
+
+        if (mergeL && mergeR) {  // Choose the side with worse statistics to merge, if both sides are appropriate
+          double vL = statL/nomL;
+          double vR = statR/nomR;
+          if (vR > vL) mergeL=false;
+          else mergeR=false;
+        }
+
+        if (verbose) {
+          std::cout << Form("L:%d\tN=%f\tsyst=%f\tstat=%f\tR:%d\tN=%f\tsyst=%f\tstat=%f", mergeL, nomL, systL/nomL, statL/nomL, mergeR, nomR, systR/nomR, statR/nomR) << std::endl;
+        }
+
+        
+        if (mergeR) binToMerge = iMerge;
+        if (mergeL) binToMerge = iMerge-1;
+      }
+    }
+    if (iMerge == -999) break;
+
+    // Rebin and replace 
+    Hist nom_new(nom_merged._size-1);
+    Hist var_new(nom_merged._size-1);
+    int ol = 1;
+    nom_new[0] = nom_merged[0];
+    nom_new.x(0) = nom_merged.x(0);
+    var_new[0] = var_merged[0];
+    var_new.x(0) = var_merged.x(0);
+    for (int l = 1; l < nom_merged._size; ++l) {
+      if (l == binToMerge) {
+        nom_new[ol] = nom_merged[l] + nom_merged[l+1];
+        nom_new.e(ol) = std::sqrt(std::pow(nom_merged.e(l), 2) + std::pow(nom_merged.e(l+1), 2));
+        nom_new.x(ol) = nom_merged.x(l);
+        var_new[ol] = var_merged[l] + var_merged[l+1];
+        var_new.e(ol) = std::sqrt(std::pow(var_merged.e(l), 2) + std::pow(var_merged.e(l+1), 2));
+        var_new.x(ol) = var_merged.x(l);
+        l++;
+      } else {
+        nom_new[ol] = nom_merged[l];
+        nom_new.e(ol) = nom_merged.e(l);
+        nom_new.x(ol) = nom_merged.x(l);
+        var_new[ol] = var_merged[l];
+        var_new.e(ol) = var_merged.e(l);
+        var_new.x(ol) = var_merged.x(l);
+      }
+      ol++;
+    }
+    nom_merged = nom_new;
+    var_merged = var_new;
+
+  }
+  // Take relative variation from merged hists
+  var_merged -= nom_merged;
+  var_merged /= nom_merged;
+
+  std::cout << Form("Merged %d bins into %d bins.", var._size-2, nom_merged._size-2)<<endl;
+  
+  for (int i = 1; i < var._size-1; ++i) {
+    double vN = nom[i];
+    double vX = var.x(i)+0.5*(var.x(i+1)-var.x(i));
+    int    iX = 0;
+    for (iX = 1; iX < var_merged._size; ++iX) {
+      if (var_merged.x(iX) > vX) {
+        iX--;
+        break;
+      }
+    }
+    if (iX >= var_merged._size) iX = var_merged._size-1;
+    double vY = var_merged[iX];
+    if (verbose)
+      std::cout<< Form("bin %d (%d-th in merged binning): vN=%.3f vOld=%.3f vNew=%.3f relU=%.5f", i, iX, vN, var[i], (1+vY)*vN, vY) << std::endl;
+    var[i] = (1+vY)*vN;
+  }
+  return var;
 }
 
 
@@ -130,6 +288,7 @@ Hist Hist::operator /(Hist a) const {
   for (int i = 0; i < _size; ++i) {
     if (a[i] != 0) {
       me[i] /= a[i];
+      // binomial if using a/b
       me.e(i) = sqrt(fabs(((1.-2.*me[i])*me.e(i)*me.e(i) + me[i]*me[i]*a.e(i)*a.e(i) )/(a[i]*a[i]) ));
       //me.e(i) = sqrt(pow((me[i]/pow(a[i], 2))*a.e(i), 2) + pow(me.e(i)/a[i], 2));
     } else if (a[i] == 0 && me[i] == 0) {
@@ -189,6 +348,33 @@ Hist &Hist::operator *=(Hist a) {
   for (int i = 0; i < _size; ++i) {
     (*this).e(i) = sqrt((*this).e(i)*(*this).e(i) + a.e(i)*a.e(i));
     (*this)[i] *= a[i];
+    (*this).e(i) = sqrt((*this).e(i)*(*this).e(i) + a.e(i)*a.e(i));
+    (*this)[i] *= a[i];
+  }
+  return *this;
+}
+
+Hist &Hist::operator /=(Hist a) {
+  if (_size == 0) {
+    (*this) = a;
+    return *this;
+  }
+  if (a._size == 0) {
+    return *this;
+  }
+  
+  if (a._size != _size) throw string("Trying to add histograms with different sizes.");
+  for (int i = 0; i < _size; ++i) {
+    // not binomial if using /=!
+    double b1sq = std::pow((*this)[i], 2);
+    double b2sq = std::pow(a[i], 2);
+    double e1sq = std::pow((*this)[i], 2);
+    double e2sq = std::pow(a[i], 2);
+    (*this).e(i) = b2sq!=0?std::sqrt((e1sq * b2sq + e2sq * b1sq)/(b2sq * b2sq)):0;
+    if (a[i] != 0)
+      (*this)[i] /= a[i];
+    else
+      (*this)[i] = 0;
   }
   return *this;
 }

@@ -73,6 +73,7 @@ class Hist {
     Hist &operator +=(Hist a);
     Hist &operator -=(Hist a);
     Hist &operator *=(Hist a);
+    Hist &operator /=(Hist a);
 
 
     /* 
@@ -80,6 +81,9 @@ class Hist {
      *
      */
     Hist smooth(int smoothLevel = 1);
+    Hist smoothRun1(Hist &nominal, int smoothLevel = 1);
+
+    static int GetMaxStatErrBin(Hist &h0, Hist &h1,  double thr, bool skipZero = true);
 
     /*
      * Multiply by scalar.
