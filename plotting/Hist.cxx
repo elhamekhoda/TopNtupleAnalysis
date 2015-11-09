@@ -247,7 +247,8 @@ Hist Hist::smoothRun1(Hist &nom, int smoothLevel) {
   var_merged -= nom_merged;
   var_merged /= nom_merged;
 
-  std::cout << Form("Merged %d bins into %d bins.", var._size-2, nom_merged._size-2)<<endl;
+  if (verbose)
+    std::cout << Form("Merged %d bins into %d bins.", var._size-2, nom_merged._size-2)<<endl;
   
   for (int i = 1; i < var._size-1; ++i) {
     double vN = nom[i];
