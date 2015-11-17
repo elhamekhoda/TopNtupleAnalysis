@@ -139,6 +139,12 @@ class Event {
     TLorentzVector &MA_bl();
     const TLorentzVector &MA_bl() const;
 
+    TLorentzVector &MC_t();
+    const TLorentzVector &MC_t() const;
+
+    TLorentzVector &MC_tbar();
+    const TLorentzVector &MC_tbar() const;
+
   protected:
 
     std::vector<std::string> m_passes;
@@ -166,6 +172,9 @@ class Event {
     TLorentzVector m_MC_bl;    
     
     TLorentzVector m_MC_ttbar_beforeFSR;
+
+    TLorentzVector m_MC_t;
+    TLorentzVector m_MC_tbar;
     
     TLorentzVector m_MA_w1h;
     int m_MA_w1h_pdgId;

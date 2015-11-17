@@ -266,6 +266,20 @@ const TLorentzVector &Event::MC_ttbar_beforeFSR() const {
   return m_MC_ttbar_beforeFSR;
 }
 
+TLorentzVector &Event::MC_t() {
+  return m_MC_t;
+}
+const TLorentzVector &Event::MC_t() const {
+  return m_MC_t;
+}
+
+TLorentzVector &Event::MC_tbar() {
+  return m_MC_tbar;
+}
+const TLorentzVector &Event::MC_tbar() const {
+  return m_MC_tbar;
+}
+
 //MA
 //hadronic top decay
 

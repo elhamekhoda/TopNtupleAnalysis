@@ -71,6 +71,12 @@ void MiniTree::read(int event, Event &e) {
   
   if (f("MC_ttbar_beforeFSR_pt") > 0)	e.MC_ttbar_beforeFSR().SetPtEtaPhiM(f("MC_ttbar_beforeFSR_pt"), f("MC_ttbar_beforeFSR_eta"), f("MC_ttbar_beforeFSR_phi"), f("MC_ttbar_beforeFSR_m"));
   else				e.MC_ttbar_beforeFSR().SetPtEtaPhiM(2000, -9., 0., 0.);
+
+  if (f("MC_t_pt") > 0)	e.MC_t().SetPtEtaPhiM(f("MC_t_pt"), f("MC_t_eta"), f("MC_t_phi"), f("MC_t_m"));
+  else				e.MC_t().SetPtEtaPhiM(2000, -9., 0., 0.);
+
+  if (f("MC_tbar_pt") > 0)	e.MC_tbar().SetPtEtaPhiM(f("MC_tbar_pt"), f("MC_tbar_eta"), f("MC_tbar_phi"), f("MC_tbar_m"));
+  else				e.MC_tbar().SetPtEtaPhiM(2000, -9., 0., 0.);
   
   // adding the matched objets into the event 
   if (f("MA_w1h_pt") > 0)	e.MA_w1h().SetPtEtaPhiM(f("MA_w1h_pt"), f("MA_w1h_eta"), f("MA_w1h_phi"), f("MA_w1h_m"));
