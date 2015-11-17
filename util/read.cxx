@@ -33,6 +33,38 @@
 
 #include <sstream>
 
+double ttWeight(Event &sel) {
+  double w1 = 1;
+  double w2 = 1;
+
+  TLorentzVector t    = sel.MC_t(); 
+  TLorentzVector tbar = sel.MC_tbar(); 
+
+  float pT_ttbar = (t + tbar).Perp();
+  float pT_top = t.Perp();
+  static Float_t ttbarPt_NOMINAL[4] = { 0.0409119,  -0.0121258,  -0.188448,  -0.316183 };
+  static Float_t ttbarPtUpBins[4]= { 40.e3, 170.e3, 340.e3, 1000.e3 };
+  int index = 3;
+  for (unsigned int i = 0; i < 4; i++) {
+    if (pT_ttbar < ttbarPtUpBins[i]) {
+      index = i;
+      break;
+    }
+  }
+  w1 = 1 + ttbarPt_NOMINAL[index];
+  static Float_t sequential_topPt_NOMINAL[7] = { 0.0139729, 0.0128711, 0.00951743, 0.00422323, -0.0352631, -0.0873852, -0.120025, };
+  static Float_t sequential_topPtUpBins[7]= { 50.e3, 100.e3, 150.e3, 200.e3, 250.e3, 350.e3, 800.e3 };
+  int index2 = 6;
+  for (unsigned int i = 0; i < 7; i++) {
+    if (pT_top < sequential_topPtUpBins[i]) {
+      index2=i;
+      break;
+    }
+  }
+  w2 = 1 + sequential_topPt_NOMINAL[index2];
+  return w1*w2;
+}
+
 int main(int argc, char **argv) {
 
   //ROOT::Cintex::Cintex::Enable();
@@ -57,6 +89,8 @@ int main(int argc, char **argv) {
   int _btags = 1;
   int removeOverlapHighMtt = 0;
   int runMM = 0;
+  int applyPtRew = 0;
+  std::string pdf = "";
 
   static struct extendedOption extOpt[] = {
         {"help",          no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -73,6 +107,8 @@ int main(int argc, char **argv) {
         {"removeOverlapHighMtt",   required_argument,     0, 'R', "Veto events with true mtt > 1.1 TeV in the 410000 sample only (to be activated if one wnats to use the mtt sliced samples).", &removeOverlapHighMtt, extendedOption::eOTInt},
         {"doWeightSystematics",   required_argument,     0, 'S', "Include the variation of the systematics in the SFs.", &doWeightSystematics, extendedOption::eOTInt},
         {"runMM",   required_argument,     0, 'M', "Implement the QCD weiths to data", &runMM, extendedOption::eOTInt},
+        {"applyPtRew",   required_argument,     0, 'P', "Apply pt reweighting.", &applyPtRew, extendedOption::eOTInt},
+        {"pdf",   required_argument,     0, 'p', "Only run PDF variations.", &pdf, extendedOption::eOTString},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -187,6 +223,59 @@ int main(int argc, char **argv) {
 
   MMUtils * MMfiles = NULL;
   if (runMM)	MMfiles = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
+
+  std::vector<std::string> pdfList;
+  for (size_t i = 0,n; i <= pdf.length(); i=n+1) {
+    n = pdf.find_first_of(',',i);
+    if (n == std::string::npos)
+      n = pdf.length();
+    std::string tmp = pdf.substr(i,n-i);
+    pdfList.push_back(tmp);
+  }
+
+
+  // retrieve, list of sum of weights
+  std::map<int, float> sumOfWeights;
+  std::map<int, std::map<std::string, std::vector<float> > > PDFsumOfWeights;
+  TChain t_sumWeights("sumWeights");
+  TChain t_PDFsumWeights("PDFsumWeights");
+  if(!isData) {
+    for (int k = 0; k < fullFileList.size(); ++k) {
+      t_sumWeights.Add(fullFileList[k].c_str());
+      if (pdf != "") t_PDFsumWeights.Add(fullFileList[k].c_str());
+    }
+    int dsid;
+    float value;
+    int dsidPdf;
+    std::map<std::string, std::vector<float> *> valuePdf;
+    t_sumWeights.SetBranchAddress("dsid", &dsid);
+    t_sumWeights.SetBranchAddress("totalEventsWeighted", &value);
+    t_PDFsumWeights.SetBranchAddress("dsid", &dsidPdf);
+    for (int k = 0; k < pdfList.size(); ++k) {
+      valuePdf[pdfList[k].c_str()] = 0;
+    }
+    for (int k = 0; k < pdfList.size(); ++k) {
+      t_PDFsumWeights.SetBranchAddress(pdfList[k].c_str(), &valuePdf[pdfList[k]]);
+    }
+    for (int k = 0; k < t_sumWeights.GetEntries(); ++k) {
+      t_sumWeights.GetEntry(k);
+      if (sumOfWeights.find(dsid) == sumOfWeights.end()) sumOfWeights[dsid] = 0;
+        sumOfWeights[dsid] += value;
+    }
+    for (int k = 0; k < t_PDFsumWeights.GetEntries(); ++k) {
+      t_PDFsumWeights.GetEntry(k);
+      if (PDFsumOfWeights.find(dsid) == PDFsumOfWeights.end()) PDFsumOfWeights[dsid] = std::map<std::string, std::vector<float> >();
+      for (int l = 0; l < pdfList.size(); ++l) {
+        if (PDFsumOfWeights[dsid].find(pdfList[l]) == PDFsumOfWeights[dsid].end()) PDFsumOfWeights[dsid][pdfList[l]] = std::vector<float>();
+        if (PDFsumOfWeights[dsid][pdfList[l]].size() == 0)
+          PDFsumOfWeights[dsid][pdfList[l]].resize(valuePdf[pdfList[l]]->size());
+
+        for (int m = 0; m < PDFsumOfWeights[dsid][pdfList[l]].size(); ++m)
+          PDFsumOfWeights[dsid][pdfList[l]][m] += valuePdf[pdfList[l]]->at(m);
+      }
+    }
+  }
+
   
   int n_eigenvars_b = 0;
   int n_eigenvars_c = 0;
@@ -195,7 +284,7 @@ int main(int argc, char **argv) {
   //std::string trackjet_pre = "trackjet_btagSF_70_eigenvars";
   //size_t trackjet_presize = std::string("trackjet_btagSF_70_eigenvars").size();
 
-  if (doWeightSystematics) { // include SF systs. too
+  if (doWeightSystematics && pdf == "") { // include SF systs. too
     std::cout << "adding more systematics" << std::endl;
     systsListWithBlankNominal.push_back("eTrigSF__1up");
     systsListWithBlankNominal.push_back("eTrigSF__1down");
@@ -340,6 +429,17 @@ int main(int argc, char **argv) {
       systsListWithBlankNominal.push_back("muIsolSystSF__1up_Loose");
       systsListWithBlankNominal.push_back("muIsolSystSF__1down_Loose");
     }
+  } else if (pdf != "") {
+    for (int m = 0; m < pdfList.size(); ++m) {
+      int nvar = (*PDFsumOfWeights.begin()).second[pdfList[m]].size();
+      for (int l = 0; l < nvar; ++l) {
+        std::string s = "pdf_";
+        s += pdfList[m];
+        s += "_";
+        s += std::to_string(l);
+        systsListWithBlankNominal.push_back(s);
+      }
+    }
   }
 
   std::vector<Analysis *> vec_analysis;
@@ -365,23 +465,6 @@ int main(int argc, char **argv) {
   sampleXsection.readFromFile("scripts/XSection-MC15-13TeV-ttres.data");
   sampleXsection.readFromFile("../TopDataPreparation/data/XSection-MC15-13TeV-fromSusyGrp.data");
 
-  // retrieve, list of sum of weights
-  std::map<int, float> sumOfWeights;
-  TChain t_sumWeights("sumWeights");
-  if(!isData) {
-    for (int k = 0; k < fullFileList.size(); ++k) {
-      t_sumWeights.Add(fullFileList[k].c_str());
-    }
-    int dsid;
-    float value;
-    t_sumWeights.SetBranchAddress("dsid", &dsid);
-    t_sumWeights.SetBranchAddress("totalEventsWeighted", &value);
-    for (int k = 0; k < t_sumWeights.GetEntries(); ++k) {
-      t_sumWeights.GetEntry(k);
-      if (sumOfWeights.find(dsid) == sumOfWeights.end()) sumOfWeights[dsid] = 0;
-        sumOfWeights[dsid] += value;
-    }
-  }
 
   // systsList contains the list of TTrees representing systematics
   // given by the user
@@ -450,15 +533,29 @@ int main(int argc, char **argv) {
         if (channel == 410000 && removeOverlapHighMtt) // for SM ttbar, we have mtt sliced samples above 1.1 TeV
           if (sel.MC_ttbar_beforeFSR().M() > 1.1e6)
             continue;
-  
+
     
         // this is list just contains systSuffixForHistograms for all systematics
         // except for the nominal and nominal_Loose, on which it contains
         // the electron SF, muon SF and b-tagging SF systematics
         // these systematics do not show up as separate TTrees, so they need special treatment
         std::vector<std::string> weightSystematics;
-        if ( !doWeightSystematics || (systSuffixForHistograms != "" && systSuffixForHistograms != "_Loose") ) {
+        if ( !(doWeightSystematics || pdf != "") || (systSuffixForHistograms != "" && systSuffixForHistograms != "_Loose") ) {
           weightSystematics.push_back(systSuffixForHistograms);
+        } else if (pdf != "") {
+          weightSystematics.push_back(systSuffixForHistograms);
+          if (pdfList.size() != 0) {
+            for (int m = 0; m < pdfList.size(); ++m) {
+              int nvar = (*PDFsumOfWeights.begin()).second[pdfList[m]].size();
+              for (int l = 0; l < nvar; ++l) {
+                std::string s = "pdf_";
+                s += pdfList[m];
+                s += "_";
+                s += std::to_string(l);
+                weightSystematics.push_back(s);
+              }
+            }
+          }
         } else { // apply variations on the nominal
           weightSystematics.push_back(systSuffixForHistograms);
           weightSystematics.push_back(std::string("eTrigSF__1up")+systSuffixForHistograms);
@@ -515,6 +612,25 @@ int main(int argc, char **argv) {
           if (!isData) {
             weight *= sel.weight_mc()*sel.weight_pileup();
             weight *= sampleXsection.getXsection(channel);
+
+            double pdfw = 1.0;
+            bool isPdf = false;
+            std::string pdfname = "";
+            int pdfvar = -1;
+            if (suffix.find("pdf_") != std::string::npos) {
+              isPdf = true;
+              size_t last = suffix.rfind("_");
+              size_t first = std::string("pdf_").size();
+              pdfname = suffix.substr(first, last - first);
+              pdfvar = atoi(suffix.substr(last+1).c_str());
+              pdfw = mt.vf(pdfname)->at(pdfvar);
+            }
+            weight *= pdfw;
+
+            if ( ( (channel == 410000) || (channel == 301528) || (channel == 301529) ||
+                   (channel == 301530) || (channel == 301531) || (channel == 301532) ) && applyPtRew) {
+              weight *= ttWeight(sel);
+            }
 
             double btagsf = 1.0;
             std::string pref = "weight_bTagSF_70";
@@ -662,9 +778,11 @@ int main(int argc, char **argv) {
               weight *= sel.weight_leptonSF();
             }
 
-            if (sumOfWeights[channel] != 0)
+            if (sumOfWeights[channel] != 0 && !isPdf) {
               weight /= sumOfWeights[channel];
-              //std::cout << "weight: " << weight << "\t"<< sel.weight_mc() << "\t" << sampleXsection.getXsection(channel) << "\t" << btagsf  << "\t" << sel.weight_leptonSF() << "\t" << sel.weight_pileup() << "\t" << sumOfWeights[channel]  << std::endl;          
+            } else if (isPdf) {
+              weight /= PDFsumOfWeights[channel][pdfname][pdfvar];
+            }
 
 	  }//!isData
 	  
