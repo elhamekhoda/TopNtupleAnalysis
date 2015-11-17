@@ -1,4 +1,4 @@
-sample    0data         Data15_13TeV_25ns_FS_EXOT4_1_4fb                              "data"             "data"               1
+sample    0data         Data15_13TeV_25ns_FS_EXOT4_3_3fb                              "data"             "data"               1
 sample    1ttbar        MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia                    "t#bar{t}"         "$t\bar{t}$"         0
 sample    2ttbarHM      MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced          "t#bar{t} (HM)"    "$t\bar{t}$ (HM)"    920
 sample    3Wjets        MC15_13TeV_25ns_FS_EXOT4_Wjets                                "W+jets"           "W+jets"             92
@@ -53,6 +53,7 @@ syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up            
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     N
 syst_flat lumi       "luminosity"                     ""                     0.09                                       -0.09
 syst_flat ttxsec     "ttbar cross section"            "ttbar"                0.056                                      -0.061
+syst_flat wmodel     "W model"                        "Wjets"                1.000                                      -1.000
 syst_model ttgen     "ttbar gen."                    "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2  S
 syst_model ttps      "ttbar p. shower"               "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2   S
 syst_model ttisrfsr  "ttbar ISR/FSR"                 "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo                          MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi             S

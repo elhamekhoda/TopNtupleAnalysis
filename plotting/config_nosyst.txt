@@ -1,4 +1,4 @@
-sample    0data         Data15_13TeV_25ns_FS_EXOT4_1_4fb                              "data"             "data"               1
+sample    0data         Data15_13TeV_25ns_FS_EXOT4_3_3fb                              "data"             "data"               1
 sample    1ttbar        MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia                    "t#bar{t}"         "$t\bar{t}$"         0
 sample    2ttbarHM      MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced          "t#bar{t} (HM)"    "$t\bar{t}$ (HM)"    920
 sample    3Wjets        MC15_13TeV_25ns_FS_EXOT4_Wjets                                "W+jets"           "W+jets"             92
