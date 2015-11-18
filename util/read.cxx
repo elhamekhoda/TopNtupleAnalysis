@@ -33,6 +33,38 @@
 
 #include <sstream>
 
+// type = 0 for nominal
+// type = 1 for up
+// type = 2 for down
+double applyBoostedWSF(int type, bool isElectron) {
+  static const double nominal_e = 0.8108;
+  static const double err_e = 0.215;
+  static const double nominal_mu = 0.94122;
+  static const double err_mu = 0.1583;
+  if (isElectron) {
+    if (type == 2) {
+      return nominal_e - err_e;
+    } else if (type == 1) {
+      return nominal_e + err_e;
+    }
+    return nominal_e;
+  } else {
+    if (type == 2) {
+      return nominal_mu - err_mu;
+    } else if (type == 1) {
+      return nominal_mu + err_mu;
+    }
+    return nominal_mu;
+  }
+
+  return 1.0;
+}
+
+bool isWjets(int channel) {
+  if (channel >= 361300 && channel <= 361371) return true;
+  return false;
+}
+
 double ttWeight(Event &sel) {
   double w1 = 1;
   double w2 = 1;
@@ -91,24 +123,26 @@ int main(int argc, char **argv) {
   int runMM = 0;
   int applyPtRew = 0;
   std::string pdf = "";
+  int applyWSF = 1;
 
   static struct extendedOption extOpt[] = {
-        {"help",          no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
-        {"data",         required_argument,     0, 'd', "Is this data?", &isData, extendedOption::eOTInt},
-        {"atlFastII",         required_argument,     0, 'a', "Is this AtlFastII? (0/1)", &isAtlFastII, extendedOption::eOTInt},
-        {"files",         required_argument,     0, 'f', "Input list of comma-separated files to apply the selection on. If argument has input_ and .txt in the name, it is assumed that a file list is inside the text file provided as argument.", &files, extendedOption::eOTString},
-        {"fullFiles",         required_argument,     0, 'F', "Full list of input files in this sample to be used to calculate the sum of weights for the normalisation. If left untouched, the contents of --files will be assumed to represent the full sample.", &input_fullFileList, extendedOption::eOTString},
-        {"analysis",   required_argument,     0, 'A', "Analysis to run. Choices: AnaTtresSL", &analysis, extendedOption::eOTString},
-        {"output",   required_argument,     0, 'o', "Comma-separated list of output files.", &outFile, extendedOption::eOTString},
-        {"systs",   required_argument,     0, 's', "Comma-separated list of systematics.", &systs, extendedOption::eOTString},
-        {"loose",   required_argument,     0, 'l', "Should I run over the loose TTree too?", &loose, extendedOption::eOTInt},
-        {"nentries",   required_argument,     0, 'N', "Run over only the first entries if > 0.", &_nentries, extendedOption::eOTInt},
-        {"btags",   required_argument,     0, 'B', "Add cut on b-tagged jets >= abs(X). If negative use track-jet b-tagging.", &_btags, extendedOption::eOTInt},
-        {"removeOverlapHighMtt",   required_argument,     0, 'R', "Veto events with true mtt > 1.1 TeV in the 410000 sample only (to be activated if one wnats to use the mtt sliced samples).", &removeOverlapHighMtt, extendedOption::eOTInt},
+        {"help",                  no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
+        {"data",                  required_argument,     0, 'd', "Is this data?", &isData, extendedOption::eOTInt},
+        {"atlFastII",             required_argument,     0, 'a', "Is this AtlFastII? (0/1)", &isAtlFastII, extendedOption::eOTInt},
+        {"files",                 required_argument,     0, 'f', "Input list of comma-separated files to apply the selection on. If argument has input_ and .txt in the name, it is assumed that a file list is inside the text file provided as argument.", &files, extendedOption::eOTString},
+        {"fullFiles",             required_argument,     0, 'F', "Full list of input files in this sample to be used to calculate the sum of weights for the normalisation. If left untouched, the contents of --files will be assumed to represent the full sample.", &input_fullFileList, extendedOption::eOTString},
+        {"analysis",              required_argument,     0, 'A', "Analysis to run. Choices: AnaTtresSL", &analysis, extendedOption::eOTString},
+        {"output",                required_argument,     0, 'o', "Comma-separated list of output files.", &outFile, extendedOption::eOTString},
+        {"systs",                 required_argument,     0, 's', "Comma-separated list of systematics.", &systs, extendedOption::eOTString},
+        {"loose",                 required_argument,     0, 'l', "Should I run over the loose TTree too?", &loose, extendedOption::eOTInt},
+        {"nentries",              required_argument,     0, 'N', "Run over only the first entries if > 0.", &_nentries, extendedOption::eOTInt},
+        {"btags",                 required_argument,     0, 'B', "Add cut on b-tagged jets >= abs(X). If negative use track-jet b-tagging.", &_btags, extendedOption::eOTInt},
+        {"removeOverlapHighMtt",  required_argument,     0, 'R', "Veto events with true mtt > 1.1 TeV in the 410000 sample only (to be activated if one wnats to use the mtt sliced samples).", &removeOverlapHighMtt, extendedOption::eOTInt},
         {"doWeightSystematics",   required_argument,     0, 'S', "Include the variation of the systematics in the SFs.", &doWeightSystematics, extendedOption::eOTInt},
-        {"runMM",   required_argument,     0, 'M', "Implement the QCD weiths to data", &runMM, extendedOption::eOTInt},
-        {"applyPtRew",   required_argument,     0, 'P', "Apply pt reweighting.", &applyPtRew, extendedOption::eOTInt},
-        {"pdf",   required_argument,     0, 'p', "Only run PDF variations.", &pdf, extendedOption::eOTString},
+        {"runMM",                 required_argument,     0, 'M', "Implement the QCD weiths to data", &runMM, extendedOption::eOTInt},
+        {"applyPtRew",            required_argument,     0, 'P', "Apply pt reweighting.", &applyPtRew, extendedOption::eOTInt},
+        {"pdf",                   required_argument,     0, 'p', "Only run PDF variations.", &pdf, extendedOption::eOTString},
+        {"applyWSF",              required_argument,     0, 'W', "Apply W SF.", &applyWSF, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -309,6 +343,9 @@ int main(int argc, char **argv) {
     systsListWithBlankNominal.push_back("muIsolSystSF__1up");
     systsListWithBlankNominal.push_back("muIsolSystSF__1down");
 
+    systsListWithBlankNominal.push_back("boostedWSF__1up");
+    systsListWithBlankNominal.push_back("boostedWSF__1down");
+
     // count b-tagging variations
     MiniTree mt(false, fileList[0].c_str(), "nominal");
     Event sel;
@@ -428,6 +465,9 @@ int main(int argc, char **argv) {
       systsListWithBlankNominal.push_back("muIDSystSF__1down_Loose");
       systsListWithBlankNominal.push_back("muIsolSystSF__1up_Loose");
       systsListWithBlankNominal.push_back("muIsolSystSF__1down_Loose");
+
+      systsListWithBlankNominal.push_back("boostedWSF__1up_Loose");
+      systsListWithBlankNominal.push_back("boostedWSF__1down_Loose");
     }
   } else if (pdf != "") {
     for (int m = 0; m < pdfList.size(); ++m) {
@@ -580,6 +620,9 @@ int main(int argc, char **argv) {
           weightSystematics.push_back(std::string("muIDSystSF__1down")+systSuffixForHistograms);
           weightSystematics.push_back(std::string("muIsolSystSF__1up")+systSuffixForHistograms);
           weightSystematics.push_back(std::string("muIsolSystSF__1down")+systSuffixForHistograms);
+
+          weightSystematics.push_back(std::string("boostedWSF__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("boostedWSF__1down")+systSuffixForHistograms);
 
           //if (_btags > 0) {
             for (int i = 0; i < n_eigenvars_b; ++i) {
@@ -782,6 +825,17 @@ int main(int argc, char **argv) {
               weight /= sumOfWeights[channel];
             } else if (isPdf) {
               weight /= PDFsumOfWeights[channel][pdfname][pdfvar];
+            }
+
+            // boosted W SF
+            if ( (sel.passes("bejets") || sel.passes("bmujets")) && isWjets(channel) && applyWSF ) {
+              if (suffix == "boostedWSF__1down" || suffix == "boostedWSF__1down_Loose") {
+                weight *= applyBoostedWSF(2, sel.passes("bejets"));
+              } else if (suffix == "boostedWSF__1up" || suffix == "boostedWSF__1up_Loose") {
+                weight *= applyBoostedWSF(1, sel.passes("bejets"));
+              } else {
+                weight *= applyBoostedWSF(0, sel.passes("bejets"));
+              }
             }
 
 	  }//!isData
