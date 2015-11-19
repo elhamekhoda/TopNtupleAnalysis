@@ -2,9 +2,10 @@ from os import system
 
 from ttres33.inputs import *
 
-def fixFile(template, final, i, doBOnlyFit)
+def fixFile(template, final, i, doBOnlyFit):
   fr = open(template, 'r')
   f = open(final, 'w')
+
   for line in fr:
     if '% SIGNAL' in line:
       f.write('''
@@ -23,7 +24,7 @@ Sample: "Signal"
     if 'JobTtres' in nline:
       nline = nline.replace('JobTtres', 'JobTtres_'+i)
     if 'FitType' in nline and doBOnlyFit:
-      nline = nline.replace('SPLUSB', #BONLY')
+      nline = nline.replace('SPLUSB', 'BONLY')
     f.write(nline)
 
   f.close()
@@ -31,7 +32,7 @@ Sample: "Signal"
 
 
 # B ONLY fit
-fixFile('ttres33/ttres_template.config', 'ttres33/ttres_bkg.config', i, False)
+fixFile('ttres33/ttres_template.config', 'ttres33/ttres_bkg.config', "tmp", True)
 system('./myFit.exe h ttres33/ttres_bkg.config')
 system('./myFit.exe d ttres33/ttres_bkg.config')
 system('./myFit.exe w ttres33/ttres_bkg.config')

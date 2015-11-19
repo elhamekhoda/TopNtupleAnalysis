@@ -2,9 +2,17 @@
 # run as 
 
 from ROOT import *
-from numpy import *
+import numpy
+#from numpy import *
 
 class FitRes:
+
+    name = []
+    pull = []
+    errup = []
+    errdw = []
+    corr = numpy.matrix([])
+
     def __init__(self):
         name = []
         pull = []
@@ -23,14 +31,18 @@ def loadSpectrum(sampleName, histName, syst):
         return h
     # it is == bkg, so sum all backgrounds
     h = None
-    for i in ["ttbar", "Zjets", "Wjets", "VV", "singletop"]
+    for i in ["ttbar", "Zjets", "Wjets", "VV", "singletop"]:
         if h == None:
-            h = loadSpectrum(i, histName, syst).Clone("bkg{:}{:}".format(histName, syst))
+            h1 = loadSpectrum(i, histName, syst)
+            if not h1:
+               return h1
+            h = h1.Clone("bkg{:}{:}".format(histName, syst))
             continue
         h.Add(loadSpectrum(i, histName, syst))
     return h
 
 def copySpectrum(sampleName, histName, syst, newname):
+    print sampleName, histName, syst
     h = loadSpectrum(sampleName, histName, syst).Clone(newname)
     return h
 
@@ -94,8 +106,13 @@ def MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF):
             h_up = loadSpectrum(sampleName, histName, systLabel+"up")
             h_dw = loadSpectrum(sampleName, histName, systLabel+"dw")
 
-        h_up_PF = copySpectrum(sampleName, histName, systLabel+"up", "{:}{:}PFup".format(histName, systLabel))
-        h_dw_PF = copySpectrum(sampleName, histName, systLabel+"dw", "{:}{:}PFdw".format(histName, systLabel))
+        h_var_PF = loadSpectrum(sampleName, histName, systLabel)
+        if h_var_PF:
+            h_up_PF = h_var_PF.Clone("{:}{:}PFup".format(histName, systLabel))
+            h_dw_PF = h_var_PF.Clone("{:}{:}PFdw".format(histName, systLabel))
+        else:
+            h_up_PF = copySpectrum(sampleName, histName, systLabel+"up", "{:}{:}PFup".format(histName, systLabel))
+            h_dw_PF = copySpectrum(sampleName, histName, systLabel+"dw", "{:}{:}PFdw".format(histName, systLabel))
 
         h_correction = nom_PF.Clone("{:}corr{:}".format(histName, systLabel))
         if pull > 0:
@@ -111,38 +128,38 @@ def MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF):
         for oneBin in xrange(nom.GetNbinsX()+1):
             v0 = nom.GetBinContent(oneBin)
             e0 = nom.GetBinError(oneBin)
-            vUp = h_up.GetBinContent(i)-v0
-            vDw = h_dw.GetBinContent(i)-v0
+            vUp = h_up.GetBinContent(oneBin)-v0
+            vDw = h_dw.GetBinContent(oneBin)-v0
             if vUp < vDw:
                 v0 = vUp
                 vUp = vDw
                 vDw = v0
-            all_up.SetBinContent(oneBin, all_up.GetBinContent(i)+vUp**2)
-            all_dw.SetBinContent(oneBin, all_dw.GetBinContent(i)+vDw**2)
+            all_up.SetBinContent(oneBin, all_up.GetBinContent(oneBin)+vUp**2)
+            all_dw.SetBinContent(oneBin, all_dw.GetBinContent(oneBin)+vDw**2)
 
         # do the same for the post fit histogram without correlations
         # but rescale up/dw amount by pull error
         for oneBin in xrange(nom.GetNbinsX()+1):
             v0 = nom.GetBinContent(oneBin)
             e0 = nom.GetBinError(oneBin)
-            vUp = h_up.GetBinContent(i)-v0
-            vDw = h_dw.GetBinContent(i)-v0
+            vUp = h_up.GetBinContent(oneBin)-v0
+            vDw = h_dw.GetBinContent(oneBin)-v0
             vUp = vUp * pull_error
             vDw = vDw * pull_error
             if vUp < vDw:
                 v0 = vUp
                 vUp = vDw
                 vDw = v0
-            all_up_PF_uncorr.SetBinContent(oneBin, all_up_PF_uncorr.GetBinContent(i)+vUp**2)
-            all_dw_PF_uncorr.SetBinContent(oneBin, all_dw_PF_uncorr.GetBinContent(i)+vDw**2)
+            all_up_PF_uncorr.SetBinContent(oneBin, all_up_PF_uncorr.GetBinContent(oneBin)+vUp**2)
+            all_dw_PF_uncorr.SetBinContent(oneBin, all_dw_PF_uncorr.GetBinContent(oneBin)+vDw**2)
 
         # calculate all_up = stat^2 + \sum_{syst = i} \Delta_i^2
         # for now it is already stat^2
         for oneBin in xrange(nom.GetNbinsX()+1):
             v0 = nom.GetBinContent(oneBin)
             e0 = nom.GetBinError(oneBin)
-            vUp = h_up.GetBinContent(i)-v0
-            vDw = h_dw.GetBinContent(i)-v0
+            vUp = h_up.GetBinContent(oneBin)-v0
+            vDw = h_dw.GetBinContent(oneBin)-v0
             vUp = vUp * pull_error
             vDw = vDw * pull_error
             if vUp < vDw:
@@ -237,8 +254,10 @@ def readParams(inputFile):
             corrNext = True
             linesIn = 0
             continue
+        lsplit = line.split()
+        if len(lsplit) < 2:
+            continue
         if nuipNext:
-            lsplit = line.split(' ')
             fr.name.append(lsplit[0])
             fr.pull.append(float(lsplit[1]))
             fr.errup.append(float(lsplit[2]))
@@ -247,11 +266,10 @@ def readParams(inputFile):
             if linesIn == 0:
                 size = int(lsplit[0])
                 fr.corr = numpy.matrix(numpy.zeros([size, size]))
-                linesIn = linesIn + 1
             else:
                 idx = linesIn - 1
                 for col in xrange(len(lsplit)):
-                    fr.corr[linesIn, col] = float(lsplit[col])
+                    fr.corr[idx, col] = float(lsplit[col])
         linesIn = linesIn + 1
     return fr
 
@@ -266,4 +284,4 @@ def MakeAllPostfitPlots(inputFile, sampleList, output, outputPF):
     outputFilePF.Close()
 
 if __name__ == "__main__":
-    MakeAllPostfitPlots("JobTtres_Zprime2000/Fits/JobTtres_Zprime2000.txt", ["ttbar", "Wjets", "Zjets", "singletop", "VV", "Zprime2000", "bkg"], "spectrum_prefit.root", "spectrum_postfit.root")
+    MakeAllPostfitPlots("params_bonly.txt", ["ttbar", "Wjets", "Zjets", "singletop", "VV", "Zprime2000", "bkg"], "spectrum_prefit.root", "spectrum_postfit.root")
