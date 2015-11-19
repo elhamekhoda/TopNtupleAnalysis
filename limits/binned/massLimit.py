@@ -1,5 +1,5 @@
 
-from ttres_config.inputs import *
+from ttres33.inputs import *
 
 from ROOT import *
 
@@ -9,7 +9,7 @@ clim = TCanvas("clim", "", 800, 600);
 l = TLegend(0.5,0.5,0.89,0.89)
 l.SetBorderSize(0)
 
-h = TH1F("h", "", 40, 0, 4.0);
+h = TH1F("h", "", 50, 0, 5.0);
 h.GetYaxis().SetRangeUser(1e-2, 60);
 h.GetYaxis().SetTitle("95% CL upper limit on #sigma #times BR [pb]");
 h.GetXaxis().SetTitle("m_{Z'} [TeV]");
@@ -20,7 +20,7 @@ obs = TGraph(len(xs));
 sigma1 = TGraphAsymmErrors(len(xs));
 sigma2 = TGraphAsymmErrors(len(xs));
 for i in range(0, len(xs)):
-  f = TFile("FitTtres_"+signalList[i]+"/Limits/FitTtres_"+signalList[i]+".root")
+  f = TFile("JobTtres_"+signalList[i]+"/Limits/JobTtres_"+signalList[i]+".root")
   hi = f.Get("limit")
   muobs = hi.GetBinContent(1)
   muexp = hi.GetBinContent(2)
@@ -28,6 +28,15 @@ for i in range(0, len(xs)):
   muexp_p1 = abs(-muexp + hi.GetBinContent(4))
   muexp_m1 = abs(-muexp + hi.GetBinContent(5))
   muexp_m2 = abs(-muexp + hi.GetBinContent(6))
+  ftxt = open('ttres33/lim_'+signalList[i]+'.txt', 'w')
+  ftxt.write('muobs     '+str(muobs)+'\n')
+  ftxt.write('muexp     '+str(muexp)+'\n')
+  ftxt.write('muexp_p2  '+str(muexp_p2)+'\n')
+  ftxt.write('muexp_p1  '+str(muexp_p1)+'\n')
+  ftxt.write('muexp_m1  '+str(muexp_m1)+'\n')
+  ftxt.write('muexp_m2  '+str(muexp_m2)+'\n')
+  ftxt.write('xsec      '+str(xs[i])+'\n')
+  ftxt.close()
 
   sigma1.SetPoint(i, mass[i], muexp*xs[i])
   sigma1.SetPointError(i, 0, 0, muexp_m1*xs[i], muexp_p1*xs[i])
@@ -70,8 +79,8 @@ clim.SetLogy(1)
 
 t = TLatex()
 t.SetNDC()
-t.DrawLatex(0.15,0.8, "#int L dt = 10 fb^{-1}")
+t.DrawLatex(0.15,0.8, "#int L dt = 3.34 fb^{-1}")
 
-clim.SaveAs("ttres_config/mass_limit.eps")
+clim.SaveAs("ttres33/mass_limit.eps")
 
   
