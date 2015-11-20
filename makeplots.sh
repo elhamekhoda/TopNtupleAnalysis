@@ -77,6 +77,8 @@ for ch in boosted ; do
     ../plotting/plotCompareNominal --mcOnly 1 --syst muIsolSystSF__1up,muIsolSystSF__1down --systTitles "mu isol syst. up,mu isol syst. down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_muisolsyst.pdf --smoothen 0
 
     ../plotting/plotCompareNominal --mcOnly 1 --syst btageSF_0__1up,btageSF_0__1down --systTitles "btag extrap up,btag extrap down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btage0.pdf -C ../plotting/config_sig.txt --smoothen 0
+
+    ../plotting/plotCompareNominal --mcOnly 1 --syst boostedWSF__1up,boostedWSF__1down --systTitles "boosted W C/A SF up,boosted W C/A SF down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_wmodel.pdf -C ../plotting/config_sig.txt --smoothen 0
   done
 done
 
