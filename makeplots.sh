@@ -1,10 +1,18 @@
 
 S=1
 LUMI=3.34
-for hist in largeJetM largeJetPt closeJetPt largeJetEta largeJetPhi largeJetSd12 largeJet_tau32 largeJet_tau32_wta largeJet_tau21 largeJet_tau21_wta chi2 mwhad_res mthad_res mtlep_res mtlep_boo jet0_pt jet0_m jet1_pt jet1_m jet2_pt jet2_m closejl_pt  closejl_minDeltaR MET MET_phi nBtagJets leadbJetPt lepPt lepEta lepPhi mwt  mtt nTrkBtagJets ; do
+for hist in largeJetM largeJetEta largeJetPhi largeJetSd12 largeJet_tau32 largeJet_tau32_wta largeJet_tau21 largeJet_tau21_wta chi2 mwhad_res mthad_res mtlep_res jet0_m jet1_pt jet1_m jet2_pt jet2_m closejl_pt  closejl_minDeltaR MET_phi nBtagJets leadbJetPt lepEta lepPhi mwt  mtt nTrkBtagJets ; do
 for ch in boosted ; do
   for lep in e mu ; do
     ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI -T $ch --smoothen 0
+  done
+done
+done
+
+for hist in lepPt MET largeJetPt mtlep_boo jet0_pt closeJetPt ; do
+for ch in boosted ; do
+  for lep in e mu ; do
+    ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI -T $ch --smoothen 0 --normBinWidth 1
   done
 done
 done
@@ -76,9 +84,14 @@ for ch in boosted ; do
     ../plotting/plotCompareNominal --mcOnly 1 --syst muIsolStatSF__1up,muIsolStatSF__1down --systTitles "mu isol. stat. up,mu isol. stat. down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_muisolstat.pdf --smoothen 0
     ../plotting/plotCompareNominal --mcOnly 1 --syst muIsolSystSF__1up,muIsolSystSF__1down --systTitles "mu isol syst. up,mu isol syst. down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_muisolsyst.pdf --smoothen 0
 
+    ../plotting/plotCompareNominal --mcOnly 1 --syst boostedWSF__1up,boostedWSF__1down --systTitles "boosted W C/A SF up,boosted W C/A SF down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_wmodel.pdf --smoothen 0
+
     ../plotting/plotCompareNominal --mcOnly 1 --syst btageSF_0__1up,btageSF_0__1down --systTitles "btag extrap up,btag extrap down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btage0.pdf -C ../plotting/config_sig.txt --smoothen 0
 
-    ../plotting/plotCompareNominal --mcOnly 1 --syst boostedWSF__1up,boostedWSF__1down --systTitles "boosted W C/A SF up,boosted W C/A SF down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_wmodel.pdf -C ../plotting/config_sig.txt --smoothen 0
+    ../plotting/plotCompareNominal --mcOnly 1 --syst btagbSF_0__1up,btagbSF_0__1down --systTitles "btag eff. E0 up,btag eff. E0 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btagb0.pdf -C ../plotting/config_sig.txt --smoothen 0
+    ../plotting/plotCompareNominal --mcOnly 1 --syst btagcSF_0__1up,btagcSF_0__1down --systTitles "btag mistag c E0 up,btag mistag c E0 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btagc0.pdf -C ../plotting/config_sig.txt --smoothen 0
+    ../plotting/plotCompareNominal --mcOnly 1 --syst btaglSF_0__1up,btaglSF_0__1down --systTitles "btag mistag l E0 up,btag mistag l E0 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btagl0.pdf -C ../plotting/config_sig.txt --smoothen 0
+
   done
 done
 
