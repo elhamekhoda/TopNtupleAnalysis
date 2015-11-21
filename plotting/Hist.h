@@ -142,6 +142,11 @@ class Hist {
     void rebin(int r);
 
     /*
+     * Normalise by bin width.
+     */
+    void normBinWidth();
+
+    /*
      * Clip error bars at 1.
      */
     void clipErrorForEfficiency();

@@ -61,6 +61,7 @@ int main(int argc, char **argv) {
     float lumi = 5;
     std::string config = "";
     std::string saveTH1 = "";
+    int normBinWidth = 0;
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -87,6 +88,7 @@ int main(int argc, char **argv) {
         {"config",          required_argument,     0, 'C', "Configuration file for items.", &config, extendedOption::eOTString},
         {"smoothen",        required_argument,     0, 'k', "Smoothen systematics.", &smooth, extendedOption::eOTInt},
         {"saveTH1",         required_argument,     0, 'R', "Save as ROOT files called hist_[name][sufix].root with all systs. Provide the sufix.", &saveTH1, extendedOption::eOTString},
+        {"normBinWidth",    required_argument,     0, 'b', "Divide bin content by bin width?", &normBinWidth, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -137,6 +139,7 @@ int main(int argc, char **argv) {
       if (xMax > -998.0) stackConfig.limitMaxX(xMax, true);
       if (xMin > -998.0) stackConfig.limitMinX(xMin);
       if (rebin != 1) stackConfig.rebin(rebin);
+      if (normBinWidth) stackConfig.normBinWidth();
 
       if (verbose) {
         systCalc.printBigTable(stackConfig);

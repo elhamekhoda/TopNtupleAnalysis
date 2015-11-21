@@ -112,6 +112,11 @@ class SampleSetConfiguration {
     void rebin(int r);
 
     /*
+     * Normalise by bin width.
+     */
+    void normBinWidth();
+
+    /*
      * Assume two SampleSets exist: MC and Data.
      * Normalise all MC histograms (nominal and systs.) to the data yield.
      */

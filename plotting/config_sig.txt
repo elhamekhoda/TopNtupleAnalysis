@@ -1,4 +1,4 @@
-sample    Zprime     MC15_13TeV_25ns_FS_EXOT4_Zprime3000                    "Signal"         "Signal"         1
+sample    Zprime     MC15_13TeV_25ns_FS_EXOT4_Zprime3000                    "Signal"         "Signal"         0
 syst      akt4jer    "anti-$k_t$ R=0.4 JER"           JET_JER_SINGLE_NP__1up                                                                          S
 syst      akt4jes1   "anti-$k_t$ R=0.4 JES1"          JET_NPScenario1_JET_GroupedNP_1__1up       JET_NPScenario1_JET_GroupedNP_1__1down               S
 syst      akt4jes2   "anti-$k_t$ R=0.4 JES2"          JET_NPScenario1_JET_GroupedNP_2__1up       JET_NPScenario1_JET_GroupedNP_2__1down               S
