@@ -24,6 +24,33 @@ Hist HistDiff::get(const string &name, const string &fname) {
   return (ha_smooth - hb);
 }
 
+HistDiffMany::HistDiffMany(const std::string &file, std::vector<string> &list, const string &sample, int smoothLevel) {
+  _file = file;
+  _list = list;
+  _sample = sample;
+  _smoothLevel = smoothLevel;
+}
+
+Hist HistDiffMany::get(const string &name, const string &fname) {
+  if (fname.find(_sample) == std::string::npos)
+    return Hist();
+
+  Hist hb(name, _list[0], _file);
+  Hist ret = hb;
+  ret *= 0;
+  for (size_t z = 1; z < _list.size(); ++z) {
+    Hist ha(name, _list[z], _file);
+    if (_smoothLevel <= 0) {
+      ret += (ha - hb).power(2.0);
+    } else {
+      Hist ha_smooth = ha.smoothRun1(hb, _smoothLevel);
+      ret += (ha_smooth - hb).power(2.0);
+    }
+  }
+  ret.squareRoot();
+  return ret;
+}
+
 HistNorm::HistNorm(double n) {
   _n = n;
 }

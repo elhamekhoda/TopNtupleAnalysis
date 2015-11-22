@@ -51,3 +51,5 @@ syst_flat ttxsec     "ttbar cross section"            "ttbar"                0.0
 syst_model ttgen     "ttbar gen."                    "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2  S
 syst_model ttps      "ttbar p. shower"               "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2   S
 syst_model ttisrfsr  "ttbar ISR/FSR"                 "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo                          MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi             S
+syst_pdf   ttpdf     "ttbar PDF"                     "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF                   PDF4LHC15_nlo_30           30
+syst_pdf   sigpdf    "sig PDF"                       "Zprime"               MC15_13TeV_25ns_FS_EXOT4_Zprime3000_PDF                      PDF4LHC15_nlo_30           30

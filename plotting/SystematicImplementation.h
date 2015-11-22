@@ -35,6 +35,21 @@ class HistDiff : public Syst{
 };
 
 /*
+ * Calculates the syst. var. caused by taking the difference between N-1 histograms and a reference histogram.
+ * The constructor receives the N histograms suffixes to be concatenated to histogram name
+ * when trying to find the syst. variations in the file. The first histogram is the reference.
+ */
+class HistDiffMany : public Syst{
+  public:
+  string _file;
+  vector<string> _list;
+  string _sample;
+  int _smoothLevel;
+  HistDiffMany(const string &_file, vector<string> &list, const std::string &sample, int smoothLevel = 0);
+  Hist get(const string &name, const string &fname);
+};
+
+/*
  * Calculates the syst. var. caused by a flat normalisation
  * applied to the nominal histogram.
  * The constructor receives the fractional normalisation uncertainty.

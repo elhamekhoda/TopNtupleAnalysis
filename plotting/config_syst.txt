@@ -50,3 +50,18 @@ syst_flat ttxsec     "ttbar cross section"            "ttbar"                0.0
 syst_model ttgen     "ttbar gen."                    "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2  S
 syst_model ttps      "ttbar p. shower"               "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2   S
 syst_model ttisrfsr  "ttbar ISR/FSR"                 "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo                          MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi             S
+syst_pdf   ttpdf     "ttbar PDF"                     "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF                   PDF4LHC15_nlo_30           30
+syst_pdf   zp400pdf  "zp400 PDF"                     "Zprime400"            MC15_13TeV_25ns_FS_EXOT4_Zprime400_PDF                      PDF4LHC15_nlo_30           30
+syst_pdf   zp500pdf  "zp500 PDF"                     "Zprime500"            MC15_13TeV_25ns_FS_EXOT4_Zprime500_PDF                      PDF4LHC15_nlo_30           30
+syst_pdf   zp750pdf  "zp750 PDF"                     "Zprime750"            MC15_13TeV_25ns_FS_EXOT4_Zprime750_PDF                      PDF4LHC15_nlo_30           30
+syst_pdf   zp1000pdf "zp1000 PDF"                    "Zprime1000"           MC15_13TeV_25ns_FS_EXOT4_Zprime1000_PDF                     PDF4LHC15_nlo_30           30
+syst_pdf   zp1250pdf "zp1250 PDF"                    "Zprime1250"           MC15_13TeV_25ns_FS_EXOT4_Zprime1250_PDF                     PDF4LHC15_nlo_30           30
+syst_pdf   zp1500pdf "zp1500 PDF"                    "Zprime1500"           MC15_13TeV_25ns_FS_EXOT4_Zprime1500_PDF                     PDF4LHC15_nlo_30           30
+syst_pdf   zp1750pdf "zp1750 PDF"                    "Zprime1750"           MC15_13TeV_25ns_FS_EXOT4_Zprime1750_PDF                     PDF4LHC15_nlo_30           30
+syst_pdf   zp2000pdf "zp2000 PDF"                    "Zprime2000"           MC15_13TeV_25ns_FS_EXOT4_Zprime2000_PDF                     PDF4LHC15_nlo_30           30
+syst_pdf   zp2250pdf "zp2250 PDF"                    "Zprime2250"           MC15_13TeV_25ns_FS_EXOT4_Zprime2250_PDF                     PDF4LHC15_nlo_30           30
+syst_pdf   zp2500pdf "zp2500 PDF"                    "Zprime2500"           MC15_13TeV_25ns_FS_EXOT4_Zprime2500_PDF                     PDF4LHC15_nlo_30           30
+syst_pdf   zp2750pdf "zp2750 PDF"                    "Zprime2750"           MC15_13TeV_25ns_FS_EXOT4_Zprime2750_PDF                     PDF4LHC15_nlo_30           30
+syst_pdf   zp3000pdf "zp3000 PDF"                    "Zprime3000"           MC15_13TeV_25ns_FS_EXOT4_Zprime3000_PDF                     PDF4LHC15_nlo_30           30
+syst_pdf   zp4000pdf "zp4000 PDF"                    "Zprime4000"           MC15_13TeV_25ns_FS_EXOT4_Zprime4000_PDF                     PDF4LHC15_nlo_30           30
+syst_pdf   zp5000pdf "zp5000 PDF"                    "Zprime5000"           MC15_13TeV_25ns_FS_EXOT4_Zprime5000_PDF                     PDF4LHC15_nlo_30           30

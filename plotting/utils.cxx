@@ -36,6 +36,7 @@ std::map<std::string, int> fillColor = std::map<std::string, int>();
 
 std::map<std::string, std::vector<std::string> > syst_model = std::map<std::string, std::vector<std::string> >();
 std::map<std::string, std::vector<std::string> > syst_flat = std::map<std::string, std::vector<std::string> >();
+std::map<std::string, std::vector<std::string> > syst_pdf = std::map<std::string, std::vector<std::string> >();
 
 float lumi_scale = 1.0;
 int smooth = 1;
@@ -89,6 +90,10 @@ void loadConfig(const std::string &file) {
       syst_flat[el[1]] = std::vector<std::string>();
       syst_flat[el[1]].push_back(el[2]);
       for (int l = 3; l < el.size(); ++l) syst_flat[el[1]].push_back(el[l]);
+    } else if (el[0] == "syst_pdf") {
+      syst_pdf[el[1]] = std::vector<std::string>();
+      syst_pdf[el[1]].push_back(el[2]);
+      for (int l = 3; l < el.size(); ++l) syst_pdf[el[1]].push_back(el[l]);
     }
   }
 }
@@ -1238,6 +1243,22 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     if (this_smooth > 0 && it->second.size() == 5) this_smooth = it->second[4] == "S";
 
     systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[3].c_str()), pattern, this_smooth), it->second[0]);
+  }
+
+  // HistDiffMany
+  for (std::map<std::string, std::vector<std::string> >::iterator it = syst_pdf.begin(); it != syst_pdf.end(); ++it) {
+    std::string name = it->first;
+    std::string sample = it->second[1];
+    std::string filesuf = it->second[2];
+    std::string pdfpre = it->second[3];
+    int pdfmax = atoi(it->second[4].c_str());
+    vector<string> patterns;
+    for (int i = 0; i <= pdfmax; ++i) {
+      patterns.push_back(pdfpre+std::string("_")+std::to_string(i));
+    }
+    int this_smooth = smooth;
+
+    systCalc.add(name.c_str(), new HistDiffMany(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), filesuf.c_str()), patterns, sample, this_smooth), it->second[0]);
   }
 
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_flat.begin(); it != syst_flat.end(); ++it) {
