@@ -29,9 +29,13 @@ for ch in boosted ; do
     ../plotting/plotCompareNominal --syst btageSF_0__1up,btageSF_0__1down --systTitles "btag extrap up,btag extrap down" -l $LUMI -c $lep -p $ch -h leadTrkbJetPt -o syst_${ch}_leadTrkbJetPt_${lep}_btage0.pdf --smoothen 0
 
     # systematics in mtt
-    ../plotting/plotCompareNominal --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI -T $ch --other MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2,MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2 --titles "Powheg+Herwig(AF2),MC@NLO+Herwig(AF2)" -o systmodel_${ch}_mtt_${lep}_mcgen.pdf --smoothen $S
-    ../plotting/plotCompareNominal --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI -T $ch --other MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2,MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2 --titles "Powheg+Pythia(AF2),Powheg+Herwig(AF2)" -o systmodel_${ch}_mtt_${lep}_pshower.pdf --smoothen $S
-    ../plotting/plotCompareNominal --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI -T $ch --other MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo,MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi --titles "ISR/FSR(low),ISR/FSR(high)" -o systmodel_${ch}_mtt_${lep}_isrfsr.pdf --smoothen $S
+    #../plotting/plotCompareNominal --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI -T $ch --other MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2,MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2 --titles "Powheg+Herwig(AF2),MC@NLO+Herwig(AF2)" -o systmodel_${ch}_mtt_${lep}_mcgen.pdf --smoothen $S
+    #../plotting/plotCompareNominal --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI -T $ch --other MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2,MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2 --titles "Powheg+Pythia(AF2),Powheg+Herwig(AF2)" -o systmodel_${ch}_mtt_${lep}_pshower.pdf --smoothen $S
+    #../plotting/plotCompareNominal --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI -T $ch --other MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo,MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi --titles "ISR/FSR(low),ISR/FSR(high)" -o systmodel_${ch}_mtt_${lep}_isrfsr.pdf --smoothen $S
+
+    ../plotting/plotCompareNominal --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI -T $ch --other MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2,MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2 --titles "MC gen up,MC gen dw" -o systmodel_${ch}_mtt_${lep}_mcgen.pdf --smoothen $S
+    ../plotting/plotCompareNominal --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI -T $ch --other MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2,MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2 --titles "p. shower up,p. shower dw" -o systmodel_${ch}_mtt_${lep}_pshower.pdf --smoothen $S
+    ../plotting/plotCompareNominal --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI -T $ch --other MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo,MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi --titles "ISR/FSR(up),ISR/FSR(dw)" -o systmodel_${ch}_mtt_${lep}_isrfsr.pdf --smoothen $S
 
     ../plotting/plotCompareNominal --mcOnly 1 --syst JET_JER_SINGLE_NP__1up --systTitles "akt4 JER" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_akt4jer.pdf --smoothen $S
     ../plotting/plotCompareNominal --mcOnly 1 --syst JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_1__1down --systTitles "akt4 JES 1 up,akt4 JES 1 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_akt4jes1.pdf --smoothen $S
