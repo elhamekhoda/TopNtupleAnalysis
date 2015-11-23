@@ -153,6 +153,7 @@ Hist RelativeISRFSR::get(const string &name, const string &fname) {
   Hist hnom(name, "", fname);
   Hist hc = ha + hb;
   Hist hd = ha - hb;
+  hd *= 0.5;
   if (_smoothLevel <= 0)
     return (hnom*hd/hc); // == (hnom*hd/hc + hnom) - hnom, where the first term can be seen as the variation histogram
   //return (hnom*hd/hc).abs();
