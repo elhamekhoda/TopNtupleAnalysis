@@ -579,6 +579,9 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
   int myColours[] = {kRed, kBlue, kGreen, kMagenta, kPink};
   for (int z = 0; z < syst_items.size(); ++z) {
     ExtraSyst.push_back(stackConfig["MC"].makeTH1(Form("ExtraSyst%d", z), syst_items[z]));
+    if (syst_items[z].find("smooth") == std::string::npos)
+      ExtraSyst[z]->SetLineStyle(2);
+
     ExtraSyst[z]->SetStats(0);
     ExtraSyst[z]->SetLineColor(myColours[z]);
     leg->AddEntry(ExtraSyst[z].get(), syst_titles[z].c_str(), "F");

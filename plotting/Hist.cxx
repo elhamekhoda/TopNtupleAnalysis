@@ -430,12 +430,13 @@ void Hist::squareRoot() {
   }
 }
 
-Hist Hist::power(double e) {
-  Hist ret(*this);
+Hist Hist::power(double ex) {
+  Hist ret = *this;
   for (int i = 0; i < _size; ++i) {
-    ret.e(i) = pow(ret.e(i), e);
-    ret[i] = pow(ret[i], e);
+    ret.e(i) = pow(ret.e(i), ex);
+    ret[i] = pow(ret[i], ex);
   }
+  return ret;
 }
 
 void Hist::showUnderflow() {

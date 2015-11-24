@@ -121,17 +121,24 @@ int main(int argc, char **argv) {
     SampleSetConfiguration stackConfig = makeConfigurationPlotsCompare(prefix, channel, n, n, mcOnly);
     SystematicCalculator systCalc(stackConfig);
     for (int z = 0; z < syst_items.size(); ++z) {
-      systCalc.add(syst_items[z], new NotData(new HistDiff(syst_items[z].c_str(), "", smooth)), syst_items[z]);
+      systCalc.add(syst_items[z]+std::string("_smooth"), new NotData(new HistDiff(syst_items[z].c_str(), "", true)), syst_items[z]+std::string(" smooth"));
+      systCalc.add(syst_items[z], new NotData(new HistDiff(syst_items[z].c_str(), "", false)), syst_items[z]);
     }
     if (other_items.size() == 2) {
       std::vector<std::string> pat;
       pat.push_back("ttbar");
       systCalc.add(other_items[0], new NotData(new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
                                                                   Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
-                                                                  pat, smooth) ), other_titles[0]);
+                                                                  pat, false) ), other_titles[0]);
       systCalc.add(other_items[1], new NotData(new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
                                                                   Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
-                                                                  pat, smooth) ), other_titles[1]);
+                                                                  pat, false) ), other_titles[1]);
+      systCalc.add(other_items[0]+std::string("_smooth"), new NotData(new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
+                                                                  Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
+                                                                  pat, true) ), other_titles[0]+std::string(" smooth"));
+      systCalc.add(other_items[1]+std::string("_smooth"), new NotData(new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
+                                                                  Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
+                                                                  pat, true) ), other_titles[1]+std::string(" smooth"));
     }
     //addAllSystematics(systCalc, prefix, channel, false);
     systCalc.calculate(histogram);

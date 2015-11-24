@@ -37,7 +37,7 @@ Hist HistDiffMany::get(const string &name, const string &fname) {
 
   Hist hb(name, _list[0], _file);
   Hist ret = hb;
-  ret *= 0;
+  for (size_t i = 0; i < ret._size; ++i) ret[i] = 0;
   for (size_t z = 1; z < _list.size(); ++z) {
     Hist ha(name, _list[z], _file);
     if (_smoothLevel <= 0) {
