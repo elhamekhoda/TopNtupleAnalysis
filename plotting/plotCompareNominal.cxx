@@ -120,25 +120,48 @@ int main(int argc, char **argv) {
     std::vector<std::string> n;
     SampleSetConfiguration stackConfig = makeConfigurationPlotsCompare(prefix, channel, n, n, mcOnly);
     SystematicCalculator systCalc(stackConfig);
+    std::vector<std::string> nsyst_items,nsyst_titles;
     for (int z = 0; z < syst_items.size(); ++z) {
-      systCalc.add(syst_items[z]+std::string("_smooth"), new NotData(new HistDiff(syst_items[z].c_str(), "", true)), syst_items[z]+std::string(" smooth"));
+      if (smooth) {
+        nsyst_items.push_back(syst_items[z]+std::string("_smooth")); nsyst_titles.push_back(syst_titles[z]+std::string(" smooth"));
+      }
+      nsyst_items.push_back(syst_items[z]); nsyst_titles.push_back(syst_titles[z]);
+      if (smooth) {
+        systCalc.add(syst_items[z]+std::string("_smooth"), new NotData(new HistDiff(syst_items[z].c_str(), "", true)), syst_items[z]+std::string(" smooth"));
+      }
       systCalc.add(syst_items[z], new NotData(new HistDiff(syst_items[z].c_str(), "", false)), syst_items[z]);
     }
     if (other_items.size() == 2) {
       std::vector<std::string> pat;
       pat.push_back("ttbar");
-      systCalc.add(other_items[0], new NotData(new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
-                                                                  Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
-                                                                  pat, false) ), other_titles[0]);
-      systCalc.add(other_items[1], new NotData(new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
-                                                                  Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
-                                                                  pat, false) ), other_titles[1]);
-      systCalc.add(other_items[0]+std::string("_smooth"), new NotData(new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
-                                                                  Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
-                                                                  pat, true) ), other_titles[0]+std::string(" smooth"));
-      systCalc.add(other_items[1]+std::string("_smooth"), new NotData(new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
-                                                                  Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
-                                                                  pat, true) ), other_titles[1]+std::string(" smooth"));
+      nsyst_items.push_back(other_items[0]); nsyst_titles.push_back(other_titles[0]);
+      systCalc.add(other_items[0], new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
+                                                      Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
+                                                      pat, false), other_titles[0]);
+      if (smooth) {
+        std::string s = other_items[0];
+        s += std::string("_smooth");
+        std::string st = other_titles[0];
+        st += std::string(" smooth");
+        nsyst_items.push_back(s); nsyst_titles.push_back(st);
+        systCalc.add(s, new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
+                                           Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
+                                           pat, true), st);
+      }
+      nsyst_items.push_back(other_items[1]); nsyst_titles.push_back(other_titles[1]);
+      systCalc.add(other_items[1], new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
+                                                      Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
+                                                      pat, false), other_titles[1]);
+      if (smooth) {
+        std::string s = other_items[1];
+        s += std::string("_smooth");
+        std::string st = other_titles[1];
+        st += std::string(" smooth");
+        nsyst_items.push_back(s); nsyst_titles.push_back(st);
+        systCalc.add(s, new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
+                                           Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
+                                           pat, true), st);
+      }
     }
     //addAllSystematics(systCalc, prefix, channel, false);
     systCalc.calculate(histogram);
@@ -175,7 +198,7 @@ int main(int argc, char **argv) {
     vector<string> split_extraText;
     split(_extraText, ';', split_extraText);
     for (vector<string>::iterator i = split_extraText.begin(); i!=split_extraText.end();++i) extraText.push_back(*i);
-    drawDataMCCompare(stackConfig, extraText, outfile, true, xTitle, syst_items, syst_titles, lumi);
+    drawDataMCCompare(stackConfig, extraText, outfile, true, xTitle, nsyst_items, nsyst_titles, lumi);
   } catch (string s) {
     cout << "Crashed with exception: " << s << endl;
     dumpTrace();

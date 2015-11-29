@@ -632,6 +632,8 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
     for (int z = 0; z < ExtraSyst.size(); ++z) {
       ratExtra.push_back(shared_ptr<TH1D>());
       ratExtra[z].reset((TH1D *) MC_sum->Clone(Form("ratioExtra_%d", z)));
+      if (syst_items[z].find("smooth") == std::string::npos)
+        ratExtra[z]->SetLineStyle(2);
       ratExtra[z]->SetLineColor(ExtraSyst[z]->GetLineColor());
     }
     if (Data)
