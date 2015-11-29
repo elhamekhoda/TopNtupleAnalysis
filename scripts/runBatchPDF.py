@@ -16,15 +16,15 @@ rundir = '/afs/cern.ch/work/d/dferreir/private/topana/Top2335'
 nFilesPerJob = 2
 
 # input directory
-ntuplesDir = '/eos/atlas/user/d/dferreir/topana/22112015v2'
+ntuplesDir = '/eos/atlas/user/d/dferreir/topana/22112015PDF'
 
 #eosrun = '/afs/cern.ch/project/eos/installation/0.3.84-aquamarine.user/bin/eos.select'
 eosrun='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
-#entry = 'root://eosuser.cern.ch/'
 entry = 'root://eosatlas.cern.ch/'
 
 # output directory
 outputDir = rundir+'/TopNtupleAnalysis/ttres33'
+
 
 # the default is AnaTtresSL, which produces many control pltos for tt res.
 # The Mtt version produces a TTree to do the limit setting
@@ -35,8 +35,7 @@ outputDir = rundir+'/TopNtupleAnalysis/ttres33'
 analysisType='AnaTtresSL'
 
 # leave it for nominal to run only the nominal
-#systematics = 'nominal'
-systematics = 'nominal,EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up,JET_JER_SINGLE_NP__1up,JET_NPScenario1_JET_GroupedNP_1__1down,JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_2__1down,JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_3__1down,JET_NPScenario1_JET_GroupedNP_3__1up,MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleDown,MET_SoftTrk_ScaleUp,MUONS_ID__1down,MUONS_ID__1up,MUONS_MS__1down,MUONS_MS__1up,MUONS_SCALE__1down,MUONS_SCALE__1up,LARGERJET_JET_Top_CrossCalib__1down,LARGERJET_JET_Top_CrossCalib__1up,LARGERJET_JET_Top_Run1__1down,LARGERJET_JET_Top_Run1__1up'
+systematics = 'nominal'
 
 # set to 1 to run the loose selection for QCD
 loose = 0
@@ -45,27 +44,21 @@ loose = 0
 btags = -1
 
 names   = []
-# 25 ns datasets
-names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_singletop']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_Wjets']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_Zjets']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_VV']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime400']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime500']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime750']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1000']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1250']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1500']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1750']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2000']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2250']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2500']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2750']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000']
+names += ['MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime400_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime500_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime750_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1000_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1250_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1500_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1750_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2000_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2250_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2500_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2750_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000_PDF']
 
 import TopExamples.grid
 
@@ -155,7 +148,7 @@ for sample in samples:
         fr.write('lsetup rcsetup\n')
         fr.write('cd TopNtupleAnalysis\n')
         fr.write('ls\n')
-        fr.write('./read --doWeightSystematics 1 --removeOverlapHighMtt 1 --data '+str(isData)+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'_'+job+'.root,'+outputDir+'/resolved_mu_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_e_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_mu_'+outfile+'_'+job+'.root --systs '+theSysts+'\n')
+        fr.write('./read --pdf PDF4LHC15_nlo_30 --removeOverlapHighMtt 1 --data '+str(isData)+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'_'+job+'.root,'+outputDir+'/resolved_mu_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_e_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_mu_'+outfile+'_'+job+'.root --systs '+theSysts+'\n')
         fr.close()
         os.system('chmod a+x '+runfile)
         subcmd = 'bsub -e '+errfile+' -o '+logfile+' -q '+queue+' -N -u '+email+' -J tna_'+jobName+' '+runfile

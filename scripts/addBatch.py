@@ -5,16 +5,9 @@ from subprocess import Popen,PIPE
 import os
 
 # output directory
-#outdir = 'res_calo_batch'
-#outdir = 'res_track_batch'
-#outdir = 'massonly_track'
-#outdir = 'wjets_track'
-outdir = 'extrap_track'
-outdir = 'extrap_calo'
-outdir = 'extrap_lead_track'
+outdir = 'ttres33'
 
 names   = []
-#names  += ["Data15_13TeV_25ns_FS_EXOT4_1_4fb"]
 # 25 ns datasets
 names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
 names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
@@ -37,6 +30,22 @@ names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000']
 names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000']
 names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000']
 names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi']
+names += ['MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime400_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime500_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime750_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1000_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1250_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1500_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1750_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2000_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2250_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2500_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2750_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarSherpaAF2']
 
 channels = ['resolved_e', 'resolved_mu', 'boosted_e', 'boosted_mu']
 #channels = ['boosted_e', 'boosted_mu']

@@ -3,27 +3,16 @@ import HQTTtResonancesTools.DC15MC13TeV_25ns_EXOT4
 import HQTTtResonancesTools.DC15Data13TeV_25ns_EXOT4
 
 # input directory
-ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/cernbox/user/d/dferreir/topana/20102015'
-#ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/24102015mass'
-#ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/29102015wjets'
-#ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/29102015boo'
+ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/22112015v2'
 
 # output directory
-#outputDir = 'res_calo_batch'
-#outputDir = 'res_track_batch'
-#outputDir = 'massonly_calo'
-#outputDir = 'massonly_track'
-#outputDir = 'wjets_track'
-outputDir = 'extrap_track'
-outputDir = 'extrap_calo'
-#outputDir = 'extrap_lead_track'
+outputDir = 'ttres33'
 
 # the default is AnaTtresSL, which produces many control pltos for tt res.
 # The Mtt version produces a TTree to do the limit setting
 # the QCD version aims at plots for QCD studies using the matrix method
 # look into read.cxx to see what is available
 # create yours, if you wish
-#analysisType='AnaTtresSLMtt'
 analysisType='AnaTtresSL'
 
 # leave it for nominal to run only the nominal
@@ -33,11 +22,11 @@ systematics = 'nominal'
 # set to 1 to run the loose selection for QCD
 loose = 0
 
-#btags = -1
-btags = 1
+btags = -1
+#btags = 1
 
 names   = []
-names  += ["Data15_13TeV_25ns_FS_EXOT4_1_4fb"]
+names  += ["Data15_13TeV_25ns_FS_EXOT4_3_3fb"]
 # 25 ns datasets
 #names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
 #names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']

@@ -10,25 +10,20 @@ queue = '1nd'
 email = 'dferreir@cern.ch'
 
 # directory with the base of the RootCore stuff
-rundir = '/afs/cern.ch/work/d/dferreir/private/topana/Top2330'
+rundir = '/afs/cern.ch/work/d/dferreir/private/topana/Top2335'
 
 # number of files per job
 nFilesPerJob = 2
 
 # input directory
-ntuplesDir = '/eos/atlas/user/d/dferreir/topana/23102015TTSyst'
+ntuplesDir = '/eos/atlas/user/d/dferreir/topana/22112015TT'
 
 #eosrun = '/afs/cern.ch/project/eos/installation/0.3.84-aquamarine.user/bin/eos.select'
 eosrun='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
 entry = 'root://eosatlas.cern.ch/'
 
 # output directory
-#outputDir = rundir+'/TopNtupleAnalysis/res_calo_batch'
-#outputDir = rundir+'/TopNtupleAnalysis/res_track_batch'
-#outputDir = rundir+'/TopNtupleAnalysis/massonly_calo'
-outputDir = rundir+'/TopNtupleAnalysis/extrap_track'
-outputDir = rundir+'/TopNtupleAnalysis/extrap_calo'
-outputDir = rundir+'/TopNtupleAnalysis/extrap_lead_track'
+outputDir = rundir+'/TopNtupleAnalysis/ttres33'
 
 
 # the default is AnaTtresSL, which produces many control pltos for tt res.
@@ -41,18 +36,16 @@ analysisType='AnaTtresSL'
 
 # leave it for nominal to run only the nominal
 systematics = 'nominal'
-#systematics = 'nominal,EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up,JET_JER_SINGLE_NP__1up,JET_NPScenario1_JET_GroupedNP_1__1down,JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_2__1down,JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_3__1down,JET_NPScenario1_JET_GroupedNP_3__1up,MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleDown,MET_SoftTrk_ScaleUp,MUONS_ID__1down,MUONS_ID__1up,MUONS_MS__1down,MUONS_MS__1up,MUONS_SCALE__1down,MUONS_SCALE__1up'
 
 # set to 1 to run the loose selection for QCD
 loose = 0
 
 # number of btags (negative for track jet btagging)
-#btags = -1
-btags = 1
-btags = -11
+btags = -1
 
 names   = []
 names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi']
+names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarSherpaAF2']
 
 import TopExamples.grid
 
