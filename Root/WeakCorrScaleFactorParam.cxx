@@ -6,7 +6,7 @@
 
 // #include "LHAPDF/LHAPDF.h"
 // #include "Hathor.h"
-#include "TtResonancesTools/WeakCorrScaleFactorParam.h"
+#include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
 
 #include "TLorentzVector.h"
 #include "TFile.h"
