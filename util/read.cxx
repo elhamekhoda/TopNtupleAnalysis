@@ -33,6 +33,8 @@
 
 #include <sstream>
 
+#include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
+
 // type = 0 for nominal
 // type = 1 for up
 // type = 2 for down
@@ -124,6 +126,7 @@ int main(int argc, char **argv) {
   int applyPtRew = 0;
   std::string pdf = "";
   int applyWSF = 1;
+  int applyEWK = 1;
 
   static struct extendedOption extOpt[] = {
         {"help",                  no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -143,6 +146,7 @@ int main(int argc, char **argv) {
         {"applyPtRew",            required_argument,     0, 'P', "Apply pt reweighting.", &applyPtRew, extendedOption::eOTInt},
         {"pdf",                   required_argument,     0, 'p', "Only run PDF variations.", &pdf, extendedOption::eOTString},
         {"applyWSF",              required_argument,     0, 'W', "Apply W SF.", &applyWSF, extendedOption::eOTInt},
+        {"applyEWK",              required_argument,     0, 'E', "Apply electroweak correction.", &applyEWK, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -505,6 +509,7 @@ int main(int argc, char **argv) {
   sampleXsection.readFromFile("scripts/XSection-MC15-13TeV-ttres.data");
   sampleXsection.readFromFile("../TopDataPreparation/data/XSection-MC15-13TeV-fromSusyGrp.data");
 
+  WeakCorr::WeakCorrScaleFactorParam ewkTool("share/EWcorr_param.root");
 
   // systsList contains the list of TTrees representing systematics
   // given by the user
@@ -673,6 +678,22 @@ int main(int argc, char **argv) {
             if ( ( (channel == 410000) || (channel == 301528) || (channel == 301529) ||
                    (channel == 301530) || (channel == 301531) || (channel == 301532) ) && applyPtRew) {
               weight *= ttWeight(sel);
+            }
+
+            if ( ( (channel == 410000) || (channel == 301528) || (channel == 301529) ||
+                   (channel == 301530) || (channel == 301531) || (channel == 301532) ) && applyEWK) {
+              float MC_t_pt = sel.MC_t().Perp();
+              float MC_t_eta = sel.MC_t().Eta();
+              float MC_t_phi = sel.MC_t().Phi();
+              float MC_t_m = sel.MC_t().M();
+              float MC_tbar_pt = sel.MC_tbar().Perp();
+              float MC_tbar_eta = sel.MC_tbar().Eta();
+              float MC_tbar_phi = sel.MC_tbar().Phi();
+              float MC_tbar_m = sel.MC_tbar().M();
+              int initial_type = mt.i("initial_type");
+              weight *= ewkTool.getWeight(MC_t_pt,    MC_t_eta,    MC_t_phi,    MC_t_m, \
+                                          MC_tbar_pt, MC_tbar_eta, MC_tbar_phi, MC_tbar_m, \
+                                          initial_type);
             }
 
             double btagsf = 1.0;
