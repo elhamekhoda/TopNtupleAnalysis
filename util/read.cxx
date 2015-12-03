@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
   int runMM = 0;
   int applyPtRew = 0;
   std::string pdf = "";
-  int applyWSF = 1;
+  int applyWSF = 0;
   int applyEWK = 1;
 
   static struct extendedOption extOpt[] = {
@@ -510,6 +510,8 @@ int main(int argc, char **argv) {
   sampleXsection.readFromFile("../TopDataPreparation/data/XSection-MC15-13TeV-fromSusyGrp.data");
 
   WeakCorr::WeakCorrScaleFactorParam ewkTool("share/EWcorr_param.root");
+
+  unsigned long procEvents = 0;
 
   // systsList contains the list of TTrees representing systematics
   // given by the user
@@ -899,7 +901,9 @@ int main(int argc, char **argv) {
             if (nLeadTagged == 0)
               continue;
           }
-	  	  
+
+          procEvents++;
+
           if (analysis=="AnaTtresSL") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
                 vec_analysis[iAna]->run(sel, weight, suffix);
@@ -926,6 +930,8 @@ int main(int argc, char **argv) {
   }
 
   vec_analysis.clear();
+
+  std::cout << "Called analysis code " << procEvents << " times." << std::endl;
 
   return 0;
 }

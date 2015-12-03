@@ -14,6 +14,8 @@
 #include "TLeaf.h"
 #include <algorithm>
 
+#include "TTree.h"
+
 MiniTree::MiniTree(bool toWrite, const std::string &file, const std::string &name)
   : m_file(0), m_chain(0), m_name(name) {
 
@@ -231,7 +233,7 @@ void MiniTree::addFileToRead(const std::string &fname) {
 }
 
 void MiniTree::addFileToRead(const std::string &fname, const std::string &treeName) {
-  ((TChain *) m_chain)->Add((fname+"/"+treeName).c_str());
+  ((TChain *) m_chain)->AddFile(fname.c_str(), -1, treeName.c_str());
 }
 
 double MiniTree::getSumWeights() {
