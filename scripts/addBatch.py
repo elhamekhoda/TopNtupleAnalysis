@@ -47,8 +47,8 @@ names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000_PDF']
 names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000_PDF']
 names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarSherpaAF2']
 
-channels = ['resolved_e', 'resolved_mu', 'boosted_e', 'boosted_mu']
-#channels = ['boosted_e', 'boosted_mu']
+#channels = ['resolved_e', 'resolved_mu', 'boosted_e', 'boosted_mu']
+channels = ['boosted_e', 'boosted_mu']
 
 import glob
 

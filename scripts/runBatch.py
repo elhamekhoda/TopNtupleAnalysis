@@ -10,13 +10,13 @@ queue = '1nd'
 email = 'dferreir@cern.ch'
 
 # directory with the base of the RootCore stuff
-rundir = '/afs/cern.ch/work/d/dferreir/private/topana/Top2335'
+rundir = '/afs/cern.ch/work/d/dferreir/private/topana/Top2337'
 
 # number of files per job
 nFilesPerJob = 2
 
 # input directory
-ntuplesDir = '/eos/atlas/user/d/dferreir/topana/22112015v2'
+ntuplesDir = '/eos/atlas/user/d/dferreir/topana/01122015v1'
 
 #eosrun = '/afs/cern.ch/project/eos/installation/0.3.84-aquamarine.user/bin/eos.select'
 eosrun='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
@@ -43,6 +43,9 @@ loose = 0
 
 # number of btags (negative for track jet btagging)
 btags = -1
+
+# apply electroweak correction in ttbar?
+applyEWK = 0
 
 names   = []
 # 25 ns datasets
@@ -155,7 +158,7 @@ for sample in samples:
         fr.write('lsetup rcsetup\n')
         fr.write('cd TopNtupleAnalysis\n')
         fr.write('ls\n')
-        fr.write('./read --doWeightSystematics 1 --removeOverlapHighMtt 1 --data '+str(isData)+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'_'+job+'.root,'+outputDir+'/resolved_mu_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_e_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_mu_'+outfile+'_'+job+'.root --systs '+theSysts+'\n')
+        fr.write('./read --doWeightSystematics 1 --applyEWK '+str(applyEWK)+' --removeOverlapHighMtt 1 --data '+str(isData)+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'_'+job+'.root,'+outputDir+'/resolved_mu_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_e_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_mu_'+outfile+'_'+job+'.root --systs '+theSysts+'\n')
         fr.close()
         os.system('chmod a+x '+runfile)
         subcmd = 'bsub -e '+errfile+' -o '+logfile+' -q '+queue+' -N -u '+email+' -J tna_'+jobName+' '+runfile

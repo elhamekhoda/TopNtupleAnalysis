@@ -3,7 +3,7 @@ import HQTTtResonancesTools.DC15MC13TeV_25ns_EXOT4
 import HQTTtResonancesTools.DC15Data13TeV_25ns_EXOT4
 
 # input directory
-ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/22112015v2'
+ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/01122015v1'
 
 # output directory
 outputDir = 'ttres33'
