@@ -47,7 +47,22 @@ class Electron : public MObject {
 
     int &isEM();
     const int isEM() const;
-
+    
+    const bool HLT_e24_lhmedium_iloose_L1EM20VH() const;
+    bool &HLT_e24_lhmedium_iloose_L1EM20VH();
+    
+    const bool HLT_e24_lhmedium_L1EM18VH() const;
+    bool &HLT_e24_lhmedium_L1EM18VH();
+    
+    const bool HLT_e24_lhmedium_L1EM20VH() const;
+    bool &HLT_e24_lhmedium_L1EM20VH();
+    
+    const bool HLT_e60_lhmedium() const;
+    bool &HLT_e60_lhmedium();
+    
+    const bool HLT_e120_lhloose() const;  
+    bool &HLT_e120_lhloose();
+    
     bool pass() const;
     bool passLoose() const;
 
@@ -66,6 +81,13 @@ class Electron : public MObject {
     int m_nSiHits;
     int m_oq;
     int m_isEM;
+    
+    bool m_HLT_e24_lhmedium_iloose_L1EM20VH;    
+    bool m_HLT_e24_lhmedium_L1EM18VH;
+    bool m_HLT_e24_lhmedium_L1EM20VH;
+    bool m_HLT_e60_lhmedium;
+    bool m_HLT_e120_lhloose;
+    
     int m_GSF_trk_index;
 };
 

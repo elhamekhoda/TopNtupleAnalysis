@@ -66,6 +66,30 @@ float &Muon::sd0() {
   return m_sd0;
 }
 
+//Triggers
+
+const bool Muon::HLT_mu50() const {
+  return m_HLT_mu50;
+}
+bool &Muon::HLT_mu50() {
+  return m_HLT_mu50;
+}
+
+const bool Muon::HLT_mu20_iloose_L1MU15() const {
+  return m_HLT_mu20_iloose_L1MU15;
+}
+bool &Muon::HLT_mu20_iloose_L1MU15() {
+  return m_HLT_mu20_iloose_L1MU15;
+}
+
+const bool Muon::HLT_mu20_L1MU15() const {
+  return m_HLT_mu20_L1MU15;
+}
+bool &Muon::HLT_mu20_L1MU15() {
+  return m_HLT_mu20_L1MU15;
+}
+
+
 const int Muon::author() const {
   return m_author;
 }

@@ -116,6 +116,53 @@ int &Electron::isEM() {
   return m_isEM;
 }
 
+//Triggers
+
+const bool Electron::HLT_e24_lhmedium_iloose_L1EM20VH() const {
+  return m_HLT_e24_lhmedium_iloose_L1EM20VH;
+}
+
+bool &Electron::HLT_e24_lhmedium_iloose_L1EM20VH(){
+  return m_HLT_e24_lhmedium_iloose_L1EM20VH;
+}
+
+
+const bool Electron::HLT_e24_lhmedium_L1EM18VH() const {
+  return m_HLT_e24_lhmedium_L1EM18VH;
+}
+
+bool &Electron::HLT_e24_lhmedium_L1EM18VH() {
+  return m_HLT_e24_lhmedium_L1EM18VH;
+}
+
+
+const bool Electron::HLT_e24_lhmedium_L1EM20VH() const {
+  return m_HLT_e24_lhmedium_L1EM20VH;
+}
+
+bool &Electron::HLT_e24_lhmedium_L1EM20VH() {
+  return m_HLT_e24_lhmedium_L1EM20VH;
+}
+
+
+const bool Electron::HLT_e60_lhmedium() const {
+  return m_HLT_e60_lhmedium;
+}
+
+bool &Electron::HLT_e60_lhmedium() {
+  return m_HLT_e60_lhmedium;
+}
+
+
+const bool Electron::HLT_e120_lhloose() const {
+  return m_HLT_e120_lhloose;
+}
+
+bool &Electron::HLT_e120_lhloose() {
+  return m_HLT_e120_lhloose;
+}
+
+
 bool Electron::pass() const {
   if (mom().Perp() < 25e3) return false;
   if ( (author() != 1) && (author() != 3) ) return false;

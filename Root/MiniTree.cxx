@@ -105,23 +105,30 @@ void MiniTree::read(int event, Event &e) {
     e.electron().push_back(Electron());
     e.electron()[k].mom().SetPtEtaPhiE(vf("el_pt")->at(k), vf("el_eta")->at(k), vf("el_phi")->at(k), vf("el_e")->at(k));
     //e.electron()[k].setMI(vf("el_miniiso")->at(k));
-    (vc("el_isTight")) ? e.electron()[k].setTightPP(vc("el_isTight")->at(k)) : e.electron()[k].setTightPP(true);
+    e.electron()[k].setTightPP(vc("el_isTight")->at(k));
     e.electron()[k].caloMom() = e.electron()[k].mom();
     e.electron()[k].trkMom() = e.electron()[k].mom();
     e.electron()[k].z0() = vf("el_z0")->at(k);
     e.electron()[k].d0() = vf("el_d0")->at(k);
-    e.electron()[k].sd0() = vf("el_d0sig")->at(k);    
+    e.electron()[k].sd0() = vf("el_d0sig")->at(k); 
+    if (vc("el_trigMatch_HLT_e24_lhmedium_iloose_L1EM20VH"))	e.electron()[k].HLT_e24_lhmedium_iloose_L1EM20VH()= vc("el_trigMatch_HLT_e24_lhmedium_iloose_L1EM20VH")->at(k);
+    e.electron()[k].HLT_e24_lhmedium_L1EM18VH() = vc("el_trigMatch_HLT_e24_lhmedium_L1EM18VH")->at(k); 
+    e.electron()[k].HLT_e24_lhmedium_L1EM20VH() = vc("el_trigMatch_HLT_e24_lhmedium_L1EM20VH")->at(k); 
+    e.electron()[k].HLT_e60_lhmedium() 		= vc("el_trigMatch_HLT_e60_lhmedium")->at(k); 
+    e.electron()[k].HLT_e120_lhloose() 		= vc("el_trigMatch_HLT_e120_lhloose")->at(k); 
     e.electron()[k].author() = 1;
   }
   for (int k = 0; k < vf("mu_pt")->size(); ++k) {
     e.muon().push_back(Muon());
     e.muon()[k].mom().SetPtEtaPhiE(vf("mu_pt")->at(k), vf("mu_eta")->at(k), vf("mu_phi")->at(k), vf("mu_e")->at(k));
     e.muon()[k].setMI(0);
-    e.muon()[k].setTight(true);
-    (vc("mu_isTight")) ? e.muon()[k].setTight(vc("mu_isTight")->at(k)) : e.muon()[k].setTight(true);
+    e.muon()[k].setTight(vc("mu_isTight")->at(k));
     e.muon()[k].z0() = vf("mu_z0")->at(k);
     e.muon()[k].d0() = vf("mu_d0")->at(k);
     e.muon()[k].sd0() = vf("mu_d0sig")->at(k);
+    if (vc("mu_trigMatch_HLT_mu20_L1MU15"))	e.muon()[k].HLT_mu20_L1MU15() 	 = vc("mu_trigMatch_HLT_mu20_L1MU15")->at(k);
+    e.muon()[k].HLT_mu50() 		 = vc("mu_trigMatch_HLT_mu50")->at(k);
+    e.muon()[k].HLT_mu20_iloose_L1MU15() = vc("mu_trigMatch_HLT_mu20_iloose_L1MU15")->at(k);    
     e.muon()[k].author() = 0;
     e.muon()[k].passTrkCuts() = true;
   }

@@ -71,7 +71,7 @@ MMUtils::~MMUtils(){
   delete fake_map;
 } 
 
-float MMUtils::getMMweights(const Event &evt, const std::string &s) {
+float MMUtils::getMMweights(const Event &evt) {
    
    float lepPt(0);
    float closejl_pT(0); 

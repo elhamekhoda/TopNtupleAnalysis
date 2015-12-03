@@ -23,7 +23,7 @@ class MMUtils{
     MMUtils(const std::string &eff_filename="eff.root", const std::string &fake_filename="fake.root"); 
     ~MMUtils();
 
-    float getMMweights(const Event &evt, const std::string &s);
+    float getMMweights(const Event &evt);
 
   private:
 

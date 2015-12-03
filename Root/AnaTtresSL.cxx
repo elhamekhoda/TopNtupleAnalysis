@@ -36,7 +36,8 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   int varBinN5 = sizeof(varBin5)/sizeof(double) - 1;
 
   m_hSvc.create1D("yields", "; One ; Events", 1, 0.5, 1.5);
-
+  
+  //m_hSvc.create1D("lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
   m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN1, varBin1);
   m_hSvc.create1D("lepEta", "; lepton #eta ; Events", 20, -2.5, 2.5);
   m_hSvc.create1D("lepPhi", "; lepton #phi [rd] ; Events", 32, -3.2, 3.2);
@@ -60,7 +61,9 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
 
   m_hSvc.create1DVar("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 30, 0, 1.5);
   m_hSvc.create1DVar("closejl_pt", "; Pt of closest jet to lep [GeV]; Events", varBinN1, varBin1);
- 
+  
+  m_hSvc.create1D("weight", "; QCD weights; Events", 1000, -1, 2);
+  
   m_hSvc.create1D("jet0_m", "; mass of the leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
   m_hSvc.create1D("jet1_m", "; mass of the sub-leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
   m_hSvc.create1D("jet2_m", "; mass of the third leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
@@ -112,7 +115,6 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
 
   m_hSvc.create1D("largeJet_tau21", "; #tau_{21}; Events", 20, 0, 1);
   m_hSvc.create1D("largeJet_tau21_wta", "; #tau_{21} wta; Events", 20, 0, 1);
-
 }
 
 AnaTtresSL::~AnaTtresSL() {
@@ -139,42 +141,88 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
       m_Nduplicate++;
       return;
   }
-  
+    
+  std::string suffix = s;
+  if (s=="_Loose") suffix = "";
+    
   HistogramService *h = &m_hSvc;
+  
+  bool trig1(0); 
+  bool trig2(0); 
+  bool trig3(0);
+  bool trig4(0);
+  bool trig5(0);
+  
+  bool trig_prescaled(0);
+  bool trig_unprescaled(0);
+  
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
+    trig1 = evt.electron()[0].HLT_e24_lhmedium_iloose_L1EM20VH();	//prescaled
+    trig2 = evt.electron()[0].HLT_e60_lhmedium();
+    trig3 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH(); // MC
+    trig4 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH(); // data	
+    trig5 = evt.electron()[0].HLT_e120_lhloose();
+    
+    trig_prescaled   = trig1;	
+    trig_unprescaled = trig2 || trig3 || trig4 || trig5;
+    
+    if (s=="_Loose")	{
+      if (trig_prescaled && !trig_unprescaled)					weight *= 2.3;      
+    }
+    else {
+      if (!trig_unprescaled)	return;
+    }   
+    
   } else {
     l = evt.muon()[0].mom();
-  }
-  h->h1D("lepPt", "", s)->Fill(l.Perp()*1e-3, weight);
-  h->h1D("lepEta", "", s)->Fill(l.Eta(), weight);
-  h->h1D("lepPhi", "", s)->Fill(l.Phi(), weight);
+    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
+    trig2 = evt.muon()[0].HLT_mu50();
+    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
+    
+    trig_prescaled   = trig1;
+    trig_unprescaled = trig2 || trig3;
+    
+    if (s=="_Loose"){      
+       if (trig_prescaled && !trig_unprescaled)	 				weight *= 10.;
+    }
+    else{
+      if (!trig_unprescaled)	return;
+    }
+           
+  }//m_electron
+  
+  h->h1D("weight", "", suffix)->Fill(weight);
+    
+  h->h1D("lepPt", "", suffix)->Fill(l.Perp()*1e-3, weight);
+  h->h1D("lepEta", "", suffix)->Fill(l.Eta(), weight);
+  h->h1D("lepPhi", "", suffix)->Fill(l.Phi(), weight);
 
-  h->h1D("MET_phi", "", s)->Fill(evt.met().Phi(), weight);
+  h->h1D("MET_phi", "", suffix)->Fill(evt.met().Phi(), weight);
 
   const TLorentzVector &j = evt.jet()[0].mom();
-  h->h1D("leadJetPt", "", s)->Fill(j.Perp()*1e-3, weight);
+  h->h1D("leadJetPt", "", suffix)->Fill(j.Perp()*1e-3, weight);
   
   // for now
   int nJets = evt.jet().size(); //njets 
-  h->h1D("nJets", "", s)->Fill(nJets, weight);
+  h->h1D("nJets", "", suffix)->Fill(nJets, weight);
   
   int nBtagged = 0; //nB-tagged jets 
   for (size_t bidx = 0; bidx < evt.jet().size(); ++bidx)
     if (evt.jet()[bidx].btag_mv2c20_70()){
-      if(nBtagged==0)h->h1D("leadbJetPt", "", s)->Fill(evt.jet()[bidx].mom().Perp()*1e-3, weight);
+      if(nBtagged==0)h->h1D("leadbJetPt", "", suffix)->Fill(evt.jet()[bidx].mom().Perp()*1e-3, weight);
       nBtagged += 1;
     }
-  h->h1D("nBtagJets", "", s)->Fill(nBtagged, weight);
+  h->h1D("nBtagJets", "", suffix)->Fill(nBtagged, weight);
 
   int nTrkBtagged = 0; //nB-tagged jets 
   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
     if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk()){
-      if(nTrkBtagged==0)h->h1D("leadTrkbJetPt", "", s)->Fill(evt.tjet()[bidx].mom().Perp()*1e-3, weight);
+      if(nTrkBtagged==0)h->h1D("leadTrkbJetPt", "", suffix)->Fill(evt.tjet()[bidx].mom().Perp()*1e-3, weight);
       nTrkBtagged += 1;
     }
-  h->h1D("nTrkBtagJets", "", s)->Fill(nTrkBtagged, weight);
+  h->h1D("nTrkBtagJets", "", suffix)->Fill(nTrkBtagged, weight);
 
   // Jet kinematics  
   
@@ -201,38 +249,38 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   for (int i = 0; i < maxNjet; ++i){  
      
      std::string nameJet_m = "jet" + std::to_string(i)+"_m";
-     h->h1D(nameJet_m, "", s)->Fill(jetMass_vector[i]*1e-3, weight);
+     h->h1D(nameJet_m, "", suffix)->Fill(jetMass_vector[i]*1e-3, weight);
      
      std::string nameJet_pt = "jet" + std::to_string(i)+"_pt";
-     h->h1D(nameJet_pt, "", s)->Fill(jetPt_vector[i]*1e-3, weight);
+     h->h1D(nameJet_pt, "", suffix)->Fill(jetPt_vector[i]*1e-3, weight);
      
      std::string nameJet_eta = "jet" + std::to_string(i)+"_eta";
-     h->h1D(nameJet_eta, "", s)->Fill(jetEta_vector[i], weight);
+     h->h1D(nameJet_eta, "", suffix)->Fill(jetEta_vector[i], weight);
      
      std::string nameJet_phi = "jet" + std::to_string(i)+"_phi";
-     h->h1D(nameJet_phi, "", s)->Fill(jetPhi_vector[i], weight);    
+     h->h1D(nameJet_phi, "", suffix)->Fill(jetPhi_vector[i], weight);    
   
   }//for
   
   float mtt = -1;
   
   //missing et
-  h->h1D("MET", "", s)->Fill(evt.met().Perp()*1e-3, weight);
-
+  h->h1D("MET", "", suffix)->Fill(evt.met().Perp()*1e-3, weight);
+ 
   //transverse W mass  
-  h->h1D("mwt", "", s)->Fill(sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(l.Phi() - evt.met().Phi())))*1e-3, weight); 
+  h->h1D("mwt", "", suffix)->Fill(sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(l.Phi() - evt.met().Phi())))*1e-3, weight); 
 
-  h->h1D("yields", "", s)->Fill(1, weight);
+  h->h1D("yields", "", suffix)->Fill(1, weight);
   
   //mu
-  h->h1D("mu", "", s)->Fill(evt.mu(), weight); 
-  h->h1D("mu_original", "", s)->Fill(evt.mu_original(), weight); 
+  h->h1D("mu", "", suffix)->Fill(evt.mu()*1.16, weight); 
+  h->h1D("mu_original", "", suffix)->Fill(evt.mu_original(), weight); 
     
   //npv
-  h->h1D("npv", "", s)->Fill(evt.npv(), weight);
+  h->h1D("npv", "", suffix)->Fill(evt.npv(), weight);
   
   //z prosition of primary vertex
-  h->h1D("vtxz", "", s)->Fill(evt.vtxz(), weight);
+  h->h1D("vtxz", "", suffix)->Fill(evt.vtxz(), weight);
 
   //deltaR between lepton and the closest narrow jet
   float closejl_deltaR  = 99;
@@ -253,10 +301,10 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   
   float closejl_pt = -1;
   if (closejl_idx>0)    closejl_pt = evt.jet()[closejl_idx].mom().Perp();  
-  h->h1D("closejl_minDeltaR", "", s)->Fill(closejl_deltaR, weight); 
-  h->h1D("closejl_pt", "", s)->Fill(closejl_pt*1e-3, weight);
+  h->h1D("closejl_minDeltaR", "", suffix)->Fill(closejl_deltaR, weight); 
+  h->h1D("closejl_pt", "", suffix)->Fill(closejl_pt*1e-3, weight);
 
-  h->h1D("trueMtt", "", s)->Fill(evt.MC_ttbar_beforeFSR().M()*1e-3, weight);
+  h->h1D("trueMtt", "", suffix)->Fill(evt.MC_ttbar_beforeFSR().M()*1e-3, weight);
   _tree_truemtt = evt.MC_ttbar_beforeFSR().M()*1e-3;
   if (m_boosted && (evt.passes("bejets") || evt.passes("bmujets"))) {
     
@@ -265,7 +313,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
       if (evt.jet()[close_idx].closeToLepton())
         break;
     const TLorentzVector &sj = evt.jet()[close_idx].mom();
-    h->h1D("closeJetPt", "", s)->Fill(sj.Perp()*1e-3, weight);
+    h->h1D("closeJetPt", "", suffix)->Fill(sj.Perp()*1e-3, weight);
     
     size_t goodljet_idx = 0;
     for (; goodljet_idx < evt.largeJet().size(); ++goodljet_idx) {
@@ -276,17 +324,17 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     
     //std::cout << "idx = " << goodljet_idx << "/" << evt.largeJet().size() << std::endl;
     const TLorentzVector &lj = evt.largeJet()[goodljet_idx].mom();
-    h->h1D("largeJetPt", "", s)->Fill(lj.Perp()*1e-3, weight);
-    h->h1D("largeJetM", "", s)->Fill(lj.M()*1e-3, weight);
-    h->h1D("largeJetEta", "", s)->Fill(lj.Eta(), weight);
-    h->h1D("largeJetPhi", "", s)->Fill(lj.Phi(), weight);
-    h->h1D("largeJetSd12", "", s)->Fill(evt.largeJet()[goodljet_idx].split12()*1e-3, weight);
+    h->h1D("largeJetPt", "", suffix)->Fill(lj.Perp()*1e-3, weight);
+    h->h1D("largeJetM", "", suffix)->Fill(lj.M()*1e-3, weight);
+    h->h1D("largeJetEta", "", suffix)->Fill(lj.Eta(), weight);
+    h->h1D("largeJetPhi", "", suffix)->Fill(lj.Phi(), weight);
+    h->h1D("largeJetSd12", "", suffix)->Fill(evt.largeJet()[goodljet_idx].split12()*1e-3, weight);
 
-    h->h1D("largeJet_tau32", "", s)->Fill(evt.largeJet()[goodljet_idx].subs("tau32"), weight);
-    h->h1D("largeJet_tau32_wta", "", s)->Fill(evt.largeJet()[goodljet_idx].subs("tau32_wta"), weight);
+    h->h1D("largeJet_tau32", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau32"), weight);
+    h->h1D("largeJet_tau32_wta", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau32_wta"), weight);
 
-    h->h1D("largeJet_tau21", "", s)->Fill(evt.largeJet()[goodljet_idx].subs("tau21"), weight);
-    h->h1D("largeJet_tau21_wta", "", s)->Fill(evt.largeJet()[goodljet_idx].subs("tau21_wta"), weight);
+    h->h1D("largeJet_tau21", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau21"), weight);
+    h->h1D("largeJet_tau21_wta", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau21_wta"), weight);
     
     // recalc. mtt
     // lepton = l
@@ -302,8 +350,8 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     }
     
     if (evt.largeJet().size()!=0)    mtt = (lj+sj+nu+l).M();
-    h->h1D("mtt", "", s)->Fill(mtt*1e-3, weight);
-    h->h1D("mtlep_boo", "", s)->Fill((sj+nu+l).M()*1e-3, weight);
+    h->h1D("mtt", "", suffix)->Fill(mtt*1e-3, weight);
+    h->h1D("mtlep_boo", "", suffix)->Fill((sj+nu+l).M()*1e-3, weight);
 
     _tree_mtt = mtt*1e-3;
     _tree_weight = weight;
@@ -359,11 +407,11 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     vjets_btagged.clear();
 
     //Fill histograms
-    h->h1D("mtt", "", s)->Fill(mtt*1e-3, weight);
-    h->h1D("mtlep_res", "", s)->Fill(mtl*1e-3, weight);
-    h->h1D("mthad_res", "", s)->Fill(mth*1e-3, weight);
-    h->h1D("mwhad_res", "", s)->Fill(mwh*1e-3, weight);
-    h->h1D("chi2", "", s)->Fill(log10(chi2Value), weight);
+    h->h1D("mtt", "", suffix)->Fill(mtt*1e-3, weight);
+    h->h1D("mtlep_res", "", suffix)->Fill(mtl*1e-3, weight);
+    h->h1D("mthad_res", "", suffix)->Fill(mth*1e-3, weight);
+    h->h1D("mwhad_res", "", suffix)->Fill(mwh*1e-3, weight);
+    h->h1D("chi2", "", suffix)->Fill(log10(chi2Value), weight);
 
     _tree_mtt = mtt*1e-3;
     _tree_weight = weight;
