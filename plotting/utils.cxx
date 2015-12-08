@@ -988,6 +988,7 @@ void stampATLAS(const std::string &text, float x, float y, bool hasRatio) {
 }
 void stampLumi(float lumi, float x, float y) {
   std::stringstream ss;
+  ss.precision(2);
   ss << "#int L dt = " << lumi << " fb^{-1}";
   TLatex l;
   l.SetNDC();
@@ -1007,6 +1008,7 @@ void stampText(const std::string &text, float x, float y, float size) {
 
 void stampLumiText(float lumi, float x, float y, const std::string &text, float size) {
   std::stringstream ss;
+  ss.precision(2);
   ss << "#int L dt = " << lumi << " fb^{-1}, " << text;
   TLatex l;
   l.SetNDC();

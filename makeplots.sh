@@ -17,6 +17,18 @@ for ch in boosted ; do
 done
 done
 
+for hist in largeJetPt largeJetM largeJet_tau32_wta ; do
+for ch in boosted ; do
+  for lep in e mu ; do
+    #../plotting/plot -c $lep -p $ch -h $hist -l $LUMI -T $ch --smoothen 1 --normBinWidth 0 -o ${ch}_${hist}_${lep}_smooth.pdf
+
+    ../plotting/plotCompareNominal --syst LARGERJET_JET_Top_CrossCalib__1up,LARGERJET_JET_Top_CrossCalib__1down --systTitles "akt10 cross calib. up,akt10 cross calib. down" -l $LUMI -c $lep -p $ch -h $hist -o syst_${ch}_${hist}_${lep}_akt10xcalib.pdf --smoothen 1
+    ../plotting/plotCompareNominal --syst LARGERJET_JET_Top_Run1__1up,LARGERJET_JET_Top_Run1__1down --systTitles "akt10 run 1 up,akt10 run 1 down" -l $LUMI -c $lep -p $ch -h $hist -o syst_${ch}_${hist}_${lep}_akt10run1.pdf --smoothen 1
+
+  done
+done
+done
+
 for ch in boosted ; do
   for lep in e mu ; do
 
@@ -89,6 +101,9 @@ for ch in boosted ; do
     ../plotting/plotCompareNominal --mcOnly 1 --syst muIsolSystSF__1up,muIsolSystSF__1down --systTitles "mu isol syst. up,mu isol syst. down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_muisolsyst.pdf --smoothen 1
 
     ../plotting/plotCompareNominal --mcOnly 1 --syst boostedWSF__1up,boostedWSF__1down --systTitles "boosted W C/A SF up,boosted W C/A SF down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_wmodel.pdf --smoothen 1
+
+    ../plotting/plotCompareNominal --mcOnly 1 --syst LARGERJET_JET_Top_CrossCalib__1up,LARGERJET_JET_Top_CrossCalib__1down --systTitles "akt10 cross calib. up,akt10 cross calib. down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_akt10xcalib.pdf --smoothen 1
+    ../plotting/plotCompareNominal --mcOnly 1 --syst LARGERJET_JET_Top_Run1__1up,LARGERJET_JET_Top_Run1__1down --systTitles "akt10 run 1 up,akt10 run 1 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_akt10run1.pdf --smoothen 1
 
     ../plotting/plotCompareNominal --mcOnly 1 --syst btageSF_0__1up,btageSF_0__1down --systTitles "btag extrap up,btag extrap down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btage0.pdf -C ../plotting/config_sig.txt --smoothen 0
 
