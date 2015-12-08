@@ -865,8 +865,7 @@ int main(int argc, char **argv) {
 	  
 	  if (runMM) {
 	     
-	     weight = MMfiles->getMMweights(sel, suffix);
-	     //std::cout << "weight: " << weight << std::endl;	     
+	     weight = MMfiles->getMMweights(sel);
 	  
 	  }//runMM
       
