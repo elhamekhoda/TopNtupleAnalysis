@@ -48,6 +48,7 @@ syst      muisolsyst "muon isolation (syst)"          muIsolSystSF__1up         
 syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     N
 syst      wmodel     "W C/A SF"                       boostedWSF__1up                            boostedWSF__1down                                    N
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     N
+syst_flat singletop  "single top cross sec."          "singletop"            0.047                                      -0.037
 syst_flat lumi       "luminosity"                     ""                     0.09                                       -0.09
 syst_flat ttxsec     "ttbar cross section"            "ttbar"                0.056                                      -0.061
 syst_model ttgen     "ttbar gen."                    "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2  S
