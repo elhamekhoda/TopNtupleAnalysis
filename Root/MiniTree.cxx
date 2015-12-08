@@ -107,7 +107,10 @@ void MiniTree::read(int event, Event &e) {
     e.electron().push_back(Electron());
     e.electron()[k].mom().SetPtEtaPhiE(vf("el_pt")->at(k), vf("el_eta")->at(k), vf("el_phi")->at(k), vf("el_e")->at(k));
     //e.electron()[k].setMI(vf("el_miniiso")->at(k));
-    e.electron()[k].setTightPP(vc("el_isTight")->at(k));
+    e.electron()[k].setTightPP(false);
+    if (vc("el_isTight")) {
+      e.electron()[k].setTightPP(vc("el_isTight")->at(k));
+    }
     e.electron()[k].caloMom() = e.electron()[k].mom();
     e.electron()[k].trkMom() = e.electron()[k].mom();
     e.electron()[k].z0() = vf("el_z0")->at(k);
@@ -124,7 +127,10 @@ void MiniTree::read(int event, Event &e) {
     e.muon().push_back(Muon());
     e.muon()[k].mom().SetPtEtaPhiE(vf("mu_pt")->at(k), vf("mu_eta")->at(k), vf("mu_phi")->at(k), vf("mu_e")->at(k));
     e.muon()[k].setMI(0);
-    e.muon()[k].setTight(vc("mu_isTight")->at(k));
+    e.muon()[k].setTight(false);
+    if (vc("mu_isTight")) {
+      e.muon()[k].setTight(vc("mu_isTight")->at(k));
+    }
     e.muon()[k].z0() = vf("mu_z0")->at(k);
     e.muon()[k].d0() = vf("mu_d0")->at(k);
     e.muon()[k].sd0() = vf("mu_d0sig")->at(k);
