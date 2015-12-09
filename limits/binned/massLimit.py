@@ -1,5 +1,5 @@
 
-from ttres33.inputs import *
+from ttres33_ewk.inputs import *
 
 from ROOT import *
 
@@ -28,7 +28,7 @@ for i in range(0, len(xs)):
   muexp_p1 = abs(-muexp + hi.GetBinContent(4))
   muexp_m1 = abs(-muexp + hi.GetBinContent(5))
   muexp_m2 = abs(-muexp + hi.GetBinContent(6))
-  ftxt = open('ttres33/lim_'+signalList[i]+'.txt', 'w')
+  ftxt = open('ttres33_ewk/lim_'+signalList[i]+'.txt', 'w')
   ftxt.write('muobs     '+str(muobs)+'\n')
   ftxt.write('muexp     '+str(muexp)+'\n')
   ftxt.write('muexp_p2  '+str(muexp_p2)+'\n')
@@ -77,10 +77,29 @@ xsec.Draw("L")
 l.Draw()
 clim.SetLogy(1)
 
-t = TLatex()
-t.SetNDC()
-t.DrawLatex(0.15,0.8, "#int L dt = 3.34 fb^{-1}")
+def stampATLAS(text, x, y):
+  t = TLatex()
+  t.SetNDC()
+  t.SetTextFont(72)
+  t.SetTextColor(1)
+  delx = 0.115*696*gPad.GetWh()/(472*gPad.GetWw()) + 0.05
+  t.SetTextSize(0.06)
+  t.DrawLatex(x,y,"ATLAS")
+  t.SetTextFont(42)
+  t.SetTextSize(0.06)
+  t.DrawLatex(x+delx, y, text)
 
-clim.SaveAs("ttres33/mass_limit.eps")
+def stampLumiText(lumi, x, y, text, size):
+  t = TLatex()
+  t.SetNDC()
+  t.SetTextFont(42)
+  t.SetTextColor(1)
+  t.SetTextSize(size)
+  t.DrawLatex(x,y,"#int L dt = "+str(lumi)+" fb^{-1}, "+text)
+
+stampATLAS("Internal", 0.15, 0.80)
+stampLumiText(3.3, 0.15, 0.70, "#sqrt{s} = 13 TeV", 0.04)
+
+clim.SaveAs("ttres33_ewk/mass_limit.eps")
 
   

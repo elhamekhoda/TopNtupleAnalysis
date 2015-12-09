@@ -1,6 +1,6 @@
 from os import system
 
-from ttres33.inputs import *
+from ttres33_ewk.inputs import *
 
 def fixFile(template, final, i, doBOnlyFit):
   fr = open(template, 'r')
@@ -32,22 +32,22 @@ Sample: "Signal"
 
 
 # B ONLY fit
-fixFile('ttres33/ttres_template.config', 'ttres33/ttres_bkg.config', "tmp", True)
-system('./myFit.exe h ttres33/ttres_bkg.config')
-system('./myFit.exe d ttres33/ttres_bkg.config')
-system('./myFit.exe w ttres33/ttres_bkg.config')
-system('./myFit.exe f ttres33/ttres_bkg.config')
-system('./myFit.exe p ttres33/ttres_bkg.config')
+fixFile('ttres33_ewk/ttres_template.config', 'ttres33_ewk/ttres_bkg.config', "tmp", True)
+system('./myFit.exe h ttres33_ewk/ttres_bkg.config')
+system('./myFit.exe d ttres33_ewk/ttres_bkg.config')
+system('./myFit.exe w ttres33_ewk/ttres_bkg.config')
+system('./myFit.exe f ttres33_ewk/ttres_bkg.config')
+system('./myFit.exe p ttres33_ewk/ttres_bkg.config')
 
 # now go over to signal
 for i in signalList:
-  fixFile('ttres33/ttres_template.config', 'ttres33/ttres_'+i+'.config', i, False)
+  fixFile('ttres33_ewk/ttres_template.config', 'ttres33_ewk/ttres_'+i+'.config', i, False)
 
-  system('./myFit.exe h ttres33/ttres_'+i+'.config')
-  system('./myFit.exe d ttres33/ttres_'+i+'.config')
-  system('./myFit.exe w ttres33/ttres_'+i+'.config')
-  system('./myFit.exe p ttres33/ttres_'+i+'.config')
-  system('./myFit.exe f ttres33/ttres_'+i+'.config')
-  system('./myFit.exe l ttres33/ttres_'+i+'.config')
+  system('./myFit.exe h ttres33_ewk/ttres_'+i+'.config')
+  system('./myFit.exe d ttres33_ewk/ttres_'+i+'.config')
+  system('./myFit.exe w ttres33_ewk/ttres_'+i+'.config')
+  system('./myFit.exe p ttres33_ewk/ttres_'+i+'.config')
+  system('./myFit.exe f ttres33_ewk/ttres_'+i+'.config')
+  system('./myFit.exe l ttres33_ewk/ttres_'+i+'.config')
 
 

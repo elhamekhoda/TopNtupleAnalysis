@@ -42,7 +42,6 @@ def loadSpectrum(sampleName, histName, syst):
     return h
 
 def copySpectrum(sampleName, histName, syst, newname):
-    print sampleName, histName, syst
     h = loadSpectrum(sampleName, histName, syst).Clone(newname)
     return h
 
@@ -58,6 +57,9 @@ def loadZero(h):
 
 def histSqrt(h):
     for i in xrange(h.GetNbinsX()+1):
+        if h.GetBinContent(i) < 0:
+            print "Bin ",i," has negative content: ", h.GetBinContent(i)
+            h.SetBinContent(i,0)
         h.SetBinContent(i, (h.GetBinContent(i))**0.5)
 
 def MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF):
@@ -279,9 +281,10 @@ def MakeAllPostfitPlots(inputFile, sampleList, output, outputPF):
     outputFilePF = TFile(outputPF, "RECREATE")
     for sampleName in sampleList:
         for histName in ["xe", "xmu"]:
+            print "Sample", sampleName," hist",histName
             MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF)
     outputFile.Close()
     outputFilePF.Close()
 
 if __name__ == "__main__":
-    MakeAllPostfitPlots("params_bonly.txt", ["ttbar", "Wjets", "Zjets", "singletop", "VV", "Zprime2000", "bkg"], "spectrum_prefit.root", "spectrum_postfit.root")
+    MakeAllPostfitPlots("params_bonly.txt", ["ttbar", "Wjets", "Zjets", "singletop", "VV", "Zprime1000", "Zprime1250", "Zprime1500", "Zprime1750", "Zprime2000", "Zprime2250", "Zprime2500", "Zprime2750", "Zprime3000", "Zprime4000", "Zprime5000", "bkg"], "spectrum_prefit.root", "spectrum_postfit.root")
