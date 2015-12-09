@@ -33,9 +33,11 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &prefix
 
 void split(const std::string &s, char delim, std::vector<std::string> &elems);
 
+void addStatToSyst(TH1D *Data, shared_ptr<TGraphAsymmErrors> band);
 void addSystToStat(shared_ptr<TH1D> Data, shared_ptr<TGraphAsymmErrors> band);
 
 void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile = "plot.eps", bool ratio = true, const std::string &xTitle = "", const std::string &yTitle = "", bool mustBeBigger = false, int posLegend = 0, float yMin = -1, float yMax = -1, int arrow = 0, double lumi = 5);
+void drawDataMC2(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile = "plot.eps", bool ratio = true, const std::string &xTitle = "", const std::string &yTitle = "", bool mustBeBigger = false, int posLegend = 0, float yMin = -1, float yMax = -1, int arrow = 0, double lumi = 5);
 void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, const std::string &xTitle, const vector<string> &syst_items, const vector<string> &syst_titles, double lumi = 5);
 void drawEff(SampleSet *ssMC, const vector<std::string> &extraText, const std::string &outfile = "eff.eps", const std::string &yTitle = "", SampleSet *ssData = 0, bool mcError = false, int mustBeBigger = 0, float yMax = -1, const std::string &xTitle = "", SampleSet *ssRatRat = 0, double lumi = 5);
 
@@ -45,9 +47,9 @@ void stampLumi(float lumi, float x, float y);
 void stampATLAS(const std::string &text, float x, float y, bool hasRatio = true);
 void stampLumiText(float lumi, float x, float y, const std::string &text, float size = 0.06);
 
-shared_ptr<TGraphErrors> normaliseBand(shared_ptr<TGraphErrors> band, TH1D *MC_sum);
-shared_ptr<TGraphErrors> normaliseBandFkr(shared_ptr<TGraphErrors> band, TH1D *MC_sum, TH1D *Data);
-shared_ptr<TH1D> normaliseBand(shared_ptr<TH1D> band, TH1D *MC_sum);
+shared_ptr<TGraphErrors> normaliseBand(shared_ptr<TGraphErrors> band, TH1D *MC_sum, TH1D *ratio = 0);
+//shared_ptr<TGraphErrors> normaliseBandFkr(shared_ptr<TGraphErrors> band, TH1D *MC_sum, TH1D *Data);
+//shared_ptr<TH1D> normaliseBand(shared_ptr<TH1D> band, TH1D *MC_sum, TH1D *ratio = 0);
 
 void drawCompare(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, double lumi);
 

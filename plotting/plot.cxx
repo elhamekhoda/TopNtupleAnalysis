@@ -62,6 +62,7 @@ int main(int argc, char **argv) {
     std::string config = "";
     std::string saveTH1 = "";
     int normBinWidth = 0;
+    int alternateStyle = 0;
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -89,6 +90,7 @@ int main(int argc, char **argv) {
         {"smoothen",        required_argument,     0, 'k', "Smoothen systematics.", &smooth, extendedOption::eOTInt},
         {"saveTH1",         required_argument,     0, 'R', "Save as ROOT files called hist_[name][sufix].root with all systs. Provide the sufix.", &saveTH1, extendedOption::eOTString},
         {"normBinWidth",    required_argument,     0, 'b', "Divide bin content by bin width?", &normBinWidth, extendedOption::eOTInt},
+        {"alternateStyle",  required_argument,     0, 'A', "Alternative style", &alternateStyle, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -177,7 +179,11 @@ int main(int argc, char **argv) {
       vector<string> split_extraText;
       split(_extraText, ';', split_extraText);
       for (vector<string>::iterator i = split_extraText.begin(); i!=split_extraText.end();++i) extraText.push_back(*i);
-      drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
+      if (alternateStyle) {
+        drawDataMC2(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
+      } else {
+        drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
+      }
 
       if (saveTH1 != "")
         stackConfig["MC"].saveTH1(saveTH1);

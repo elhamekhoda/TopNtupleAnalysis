@@ -98,13 +98,17 @@ void loadConfig(const std::string &file) {
   }
 }
 
-shared_ptr<TGraphAsymmErrors> normaliseBand(shared_ptr<TGraphAsymmErrors> band, TH1D *MC_sum) {
+shared_ptr<TGraphAsymmErrors> normaliseBand(shared_ptr<TGraphAsymmErrors> band, TH1D *MC_sum, TH1D *ratio) {
   shared_ptr<TGraphAsymmErrors> rat((TGraphAsymmErrors *) band->Clone("ratio_band"));
   for (int k = 1; k < MC_sum->GetNbinsX()+1; ++k) {
     double mx, my;
     band->GetPoint(k-1, mx, my);
     if (MC_sum->GetBinContent(k) != 0) {
-      rat->SetPoint(k-1, MC_sum->GetBinCenter(k), my/MC_sum->GetBinContent(k));
+      if (ratio) {
+        rat->SetPoint(k-1, MC_sum->GetBinCenter(k), ratio->GetBinContent(k) );
+      } else {
+        rat->SetPoint(k-1, MC_sum->GetBinCenter(k), my/MC_sum->GetBinContent(k));
+      }
       rat->SetPointEXhigh(k-1, band->GetErrorXhigh(k-1));
       rat->SetPointEXlow(k-1, band->GetErrorXlow(k-1));
       rat->SetPointEYhigh(k-1, band->GetErrorYhigh(k-1)/MC_sum->GetBinContent(k));
@@ -112,7 +116,11 @@ shared_ptr<TGraphAsymmErrors> normaliseBand(shared_ptr<TGraphAsymmErrors> band, 
       if (ll > 1) ll = 1;
       rat->SetPointEYlow(k-1, ll);
     } else {
-      rat->SetPoint(k-1, MC_sum->GetBinCenter(k), 1);
+      if (ratio) {
+        rat->SetPoint(k-1, MC_sum->GetBinCenter(k), ratio->GetBinContent(k) );
+      } else {
+        rat->SetPoint(k-1, MC_sum->GetBinCenter(k), 1);
+      }
       rat->SetPointEXhigh(k-1, band->GetErrorXhigh(k-1));
       rat->SetPointEXlow(k-1, band->GetErrorXlow(k-1));
       rat->SetPointEYhigh(k-1, 0);
@@ -142,6 +150,20 @@ shared_ptr<TGraphErrors> TH1toGraph(TH1D *Data) {
   rat->SetLineWidth(Data->GetLineWidth());
 
   return rat;
+}
+
+void addStatToSyst(TH1D *Data, shared_ptr<TGraphAsymmErrors> band) {
+  for (int k = 1; k < Data->GetNbinsX()+1; ++k) {
+    double mx, my;
+    band->GetPoint(k-1, mx, my);
+    double ehy = band->GetErrorYlow(k-1);
+    double ely = band->GetErrorYhigh(k-1);
+    double sy = Data->GetBinError(k);
+    double ly = sqrt(sy*sy + ely*ely);
+    double hy = sqrt(sy*sy + ehy*ehy);
+    band->SetPointEYhigh(k-1, hy);
+    band->SetPointEYlow(k-1, ly);
+  }
 }
 
 void addSystToStat(shared_ptr<TH1D> Data, shared_ptr<TGraphAsymmErrors> band) {
@@ -281,6 +303,251 @@ void drawCompare(SampleSetConfiguration &stackConfig, const vector<std::string> 
   c->SaveAs(outfile.c_str());
 }
 
+void drawDataMC2(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, const std::string &xTitle, const std::string &yTitle, bool mustBeBigger, int posLegend, float yMin, float yMax, int useArrow, double lumi) {
+  TStyle *atlasStyle = AtlasStyle();
+  gROOT->SetStyle("ATLAS");
+  gROOT->ForceStyle();
+
+  shared_ptr<TCanvas> c(new TCanvas("c", "", 800, 600));
+
+  // do ratio?
+  TPad *pad_ratio = 0;
+  if (ratio && stackConfig._stack.find("Data") != stackConfig._stack.end()) {
+    c->Divide(1, 2, 0.015, 0.01);
+    pad_ratio = (TPad *) c->cd(2);
+    pad_ratio->SetPad(0,0,1,0.30);
+    pad_ratio->SetTopMargin(0.01);
+    pad_ratio->SetBottomMargin(0.45);
+    c->cd(1)->SetPad(0,0.2,1,1);
+    c->cd(1)->SetBottomMargin(0.13);
+  }
+
+  c->cd(1);
+
+  // make syst. band
+  shared_ptr<TGraphAsymmErrors> band = stackConfig["MC"].makeBand();
+  //band->SetFillStyle(3354);
+  band->SetFillStyle(1001);
+  band->SetFillColorAlpha(kGreen-8, 0.5);
+
+  // make legend
+  //shared_ptr<TLegend> leg(new TLegend(0.55, 0.6, 0.85, 0.92));
+  shared_ptr<TLegend> leg;
+  if (posLegend == 0)
+    leg.reset(new TLegend(0.62, 0.5, 0.88, 0.92));
+  else if (posLegend == 1)
+    leg.reset(new TLegend(0.18, 0.25, 0.45, 0.65));
+  else if (posLegend == 2 || posLegend == 5)
+    leg.reset(new TLegend(0.62, 0.3, 0.88, 0.72));
+  else if (posLegend == 3)
+    leg.reset(new TLegend(0.18, 0.32, 0.45, 0.74));
+  else if (posLegend == 6)
+    leg.reset(new TLegend(0.62, 0.5, 0.88, 0.92));
+  else if (posLegend == 7)
+    leg.reset(new TLegend(0.62, 0.5, 0.88, 0.92));
+  else if (posLegend == 8)
+    leg.reset(new TLegend(0.62, 0.3, 0.88, 0.72));
+  //leg->SetNColumns(2);
+  leg->SetFillStyle(0);
+  leg->SetBorderSize(0);
+
+  shared_ptr<TH1D> Data;
+  if (stackConfig._stack.find("Data") != stackConfig._stack.end())
+    Data = stackConfig["Data"].makeTH1("Data");
+  if (Data) {
+    Data->SetStats(0);
+    leg->AddEntry(Data.get(), "Data", "LP");
+  }
+
+  // make MC stack and add entries in legend
+  vector<shared_ptr<TH1D> > vechist;
+  shared_ptr<THStack> MC = stackConfig["MC"].makeStack("MC", leg, vechist);
+
+  // add MC stat in syst band for top plot
+  TH1D *MC_sum = (TH1D *) MC->GetStack()->At(MC->GetStack()->LastIndex());
+
+  if (band) {
+    addStatToSyst(MC_sum, band);
+    leg->AddEntry(band.get(), "syst. #oplus stat. unc.", "F");
+  }
+
+  double maximum = MC->GetMaximum();
+  if (Data) maximum = std::max(Data->GetBinContent(Data->GetMaximumBin()), MC->GetMaximum());
+  maximum *= 1.8;
+  double minimum = 0.001;
+  if (yMax > 0)
+    maximum = yMax;
+  if (yMin > 0)
+    minimum = yMin;
+
+  MC->SetMaximum(maximum);
+  if (Data) {
+    Data->SetMaximum(maximum);
+    if (yTitle != "") Data->GetYaxis()->SetTitle(yTitle.c_str());
+    Data->SetMinimum(minimum);
+  }
+  MC->SetMinimum(minimum);
+
+  MC->Draw();
+  if (yTitle != "") MC->GetYaxis()->SetTitle(yTitle.c_str());
+  if (!ratio || !Data) {
+    if (xTitle == "")
+      MC->GetXaxis()->SetTitle(vechist[0]->GetXaxis()->GetTitle());
+    else
+      MC->GetXaxis()->SetTitle(xTitle.c_str());
+    if (yTitle != "")
+      MC->GetYaxis()->SetTitle(yTitle.c_str());
+    else
+      MC->GetYaxis()->SetTitle(vechist[0]->GetYaxis()->GetTitle());
+  }
+  c->Update();
+  MC->Draw("same");
+  band->Draw("2 ][ same");
+  if (Data)
+    Data->Draw("e same");
+  leg->Draw();
+  gPad->RedrawAxis();
+
+  shared_ptr<TGraph> arrow;
+  shared_ptr<TGraph> arrowdw;
+  shared_ptr<TH1D> rat;
+  shared_ptr<TGraphAsymmErrors> rat_band;
+  shared_ptr<TLine> lin;
+  if (ratio && Data) {
+    rat.reset((TH1D *) Data->Clone("ratio"));
+    arrow.reset(new TGraph(Data->GetNbinsX()+1));
+    arrowdw.reset(new TGraph(Data->GetNbinsX()+1));
+
+    rat->Divide(Data.get(), MC_sum);//, 1, 1, "B");
+    rat_band = normaliseBand(band, MC_sum, rat.get());
+    addStatToSyst(rat.get(), rat_band);
+
+    double theMax = 1.6;
+    double theMin = 0.4;
+    c->cd(2);
+    rat->SetStats(0);
+    if (!mustBeBigger) {
+      rat->GetYaxis()->SetRangeUser(0.3, 1.7);
+      theMax = 1.7;
+      theMin = 0.3;
+    } else {
+      rat->GetYaxis()->SetRangeUser(0.0, 2.3);
+      theMax = 2.3;
+      theMin = 0.0;
+    }
+    rat->SetTitle("");
+    if (xTitle == "")
+      rat->GetXaxis()->SetTitle(MC_sum->GetXaxis()->GetTitle());
+    else
+      rat->GetXaxis()->SetTitle(xTitle.c_str());
+    rat->GetYaxis()->SetTitle("Data/Sim.");
+    rat->GetYaxis()->SetNdivisions(3, 0, 5);
+    rat->GetXaxis()->SetLabelFont(42);
+    rat->GetXaxis()->SetTitleFont(42);
+    rat->GetYaxis()->SetLabelFont(42);
+    rat->GetYaxis()->SetTitleFont(42);
+    rat->GetYaxis()->SetLabelSize(0.18);
+    rat->GetYaxis()->SetTitleOffset(0.45);
+    rat->GetYaxis()->SetLabelOffset(0.02);
+    rat->GetYaxis()->SetTitleSize(0.18);
+    rat->GetXaxis()->SetTitleSize(0.2);
+    rat->GetXaxis()->SetLabelSize(0.18);
+    rat->GetXaxis()->SetTitleSize(0.18);
+    rat->GetXaxis()->SetTitleOffset(1.1);
+    rat->SetTitle("");
+
+    arrow->SetMarkerSize(2.0);
+    arrow->SetMarkerStyle(26);
+    arrow->SetMarkerColor(kBlack);
+    arrowdw->SetMarkerSize(2.0);
+    arrowdw->SetMarkerStyle(32);
+    arrowdw->SetMarkerColor(kBlack);
+    for (int z = 0; z < rat->GetNbinsX()+1; ++z) {
+      //if (rat->GetBinContent(z) > theMax || (rat->GetBinContent(z) == 0 && MC_sum->GetBinContent(z) != 0)) {
+      if (rat->GetBinContent(z) > theMax) {
+        arrow->SetPoint(z, rat->GetBinCenter(z), theMax-0.15);
+      } else {
+        arrow->SetPoint(z, rat->GetBinCenter(z), -1);
+      }
+      if (rat->GetBinContent(z) < theMin) {
+        arrowdw->SetPoint(z, rat->GetBinCenter(z), theMin+0.15);
+      } else {
+        arrowdw->SetPoint(z, rat->GetBinCenter(z), theMax+10);
+      }
+      //if (rat->GetBinContent(z) == 0 && MC_sum->GetBinContent(z) != 0) {
+      //  float myx = rat->GetBinCenter(z);
+      //  rat->Fill(myx, 0.001);
+      //}
+    }
+    rat->Draw("e");
+    rat_band->Draw("2 ][ same");
+    rat->Draw("e same");
+    if (useArrow) {
+      arrow->Draw("p same");
+      arrowdw->Draw("p same");
+    }
+    gPad->RedrawAxis();
+    lin.reset(new TLine(rat->GetXaxis()->GetBinLowEdge(1), 1, rat->GetXaxis()->GetBinUpEdge(rat->GetNbinsX()), 1));
+    lin->SetLineColor(kBlack);
+    lin->SetLineWidth(3);
+    lin->SetLineStyle(2);
+    lin->Draw();
+  }
+
+  // major hack to remove the zero label in the main plot, which is cut in half by the ratio pad
+  if (ratio) {
+    TPad *pe = new TPad("pe", "pe", 0, 0, 0.99*c->cd(1)->GetLeftMargin(), 0.18);
+    pe->SetFillColor(c->cd(1)->GetFillColor());
+    pe->SetBorderMode(0);
+    //pe->Draw();
+  }
+
+  string _stampText = "Internal";
+  if (_stamp == 1)
+    _stampText = "Preliminary";
+  else if (_stamp == 2)
+    _stampText = "";
+  if (posLegend != 2 && posLegend != 5 && posLegend != 6) {
+    stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
+    stampLumiText(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+  } else if (posLegend == 5) {
+    stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
+    stampLumiText(lumi, 0.20, 0.75, "#sqrt{s} = 13 TeV", 0.05);
+  } else if (posLegend == 6 || posLegend == 7) {
+    stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
+    stampLumiText(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+  } else if (posLegend == 8) {
+    stampATLAS(_stampText, 0.30, 0.88, (bool) Data);
+    stampLumiText(lumi, 0.30, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+  } else {
+    stampATLAS(_stampText, 0.25, 0.88, (bool) Data);
+    stampLumiText(lumi, 0.25, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+  }
+  if (posLegend < 2 || posLegend == 6) {
+    for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
+      double pos = (double) ((int) (i - extraText.begin()));
+      stampText(*i, 0.20, 0.66-0.06*pos, 0.06*0.9);
+    }
+  } else if (posLegend == 7) {
+    for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
+      double pos = (double) ((int) (i - extraText.begin()));
+      stampText(*i, 0.60, 0.40-0.06*pos, 0.06*0.9);
+    }
+  } else if (posLegend == 8) {
+    for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
+      double pos = (double) ((int) (i - extraText.begin()));
+      stampText(*i, 0.55, 0.88-0.06*pos, 0.06*0.9);
+    }
+  } else {
+    for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
+      double pos = (double) ((int) (i - extraText.begin()));
+      stampText(*i, 0.55, 0.88-0.06*pos, 0.06*0.9);
+    }
+  }
+
+  c->SaveAs(outfile.c_str());
+}
+
 void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, const std::string &xTitle, const std::string &yTitle, bool mustBeBigger, int posLegend, float yMin, float yMax, int useArrow, double lumi) {
   TStyle *atlasStyle = AtlasStyle();
   gROOT->SetStyle("ATLAS");
@@ -394,7 +661,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
     arrowdw.reset(new TGraph(Data->GetNbinsX()+1));
 
     rat->Divide(Data.get(), MC_sum);//, 1, 1, "B");
-    rat_band = normaliseBand(band, MC_sum);
+    rat_band = normaliseBand(band, MC_sum, 0);
 
     double theMax = 1.6;
     double theMin = 0.4;
@@ -577,14 +844,18 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
 
   vector<shared_ptr<TH1D> > ExtraSyst;
   int myColours[] = {kRed, kBlue, kGreen, kMagenta, kPink};
+  int colZ = 0;
   for (int z = 0; z < syst_items.size(); ++z) {
     ExtraSyst.push_back(stackConfig["MC"].makeTH1(Form("ExtraSyst%d", z), syst_items[z]));
     if (syst_items[z].find("smooth") == std::string::npos)
       ExtraSyst[z]->SetLineStyle(2);
 
     ExtraSyst[z]->SetStats(0);
-    ExtraSyst[z]->SetLineColor(myColours[z]);
+    ExtraSyst[z]->SetLineColor(myColours[colZ]);
     leg->AddEntry(ExtraSyst[z].get(), syst_titles[z].c_str(), "F");
+
+    if (syst_items[z].find("smooth") == std::string::npos)
+      colZ++;
   }
 
   double maximum = MC->GetMaximum();
@@ -653,7 +924,7 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
       ratExtra[z]->GetYaxis()->SetRangeUser(0.7, 1.3);
       ratExtra[z]->SetTitle("");
     }
-    rat_band = normaliseBand(band, MC_sum);
+    rat_band = normaliseBand(band, MC_sum, 0);
 
     c->cd(2);
     rat->SetStats(0);
@@ -863,7 +1134,7 @@ void drawEff(SampleSet *ssMC, const vector<std::string> &extraText, const std::s
       rat.reset((TH1D *) Data->Clone("ratio_std"));
       rat->Divide(Data.get(), MC.get(), 1, 1, "B");
       if (band) {
-        rat_band = normaliseBand(band, MC.get());
+        rat_band = normaliseBand(band, MC.get(), 0);
       }
     }
   }
