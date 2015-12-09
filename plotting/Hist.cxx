@@ -397,8 +397,8 @@ Hist &Hist::operator *=(double f) {
 void Hist::max(Hist a, Hist b) {
   *this = a;
   for (int i = 0; i < _size; ++i) {
-    if (std::fabs(b[i]) > std::fabs(a[i])) (*this)[i] = b[i];
-    else (*this)[i] = a[i];
+    if (std::fabs(b[i]) > std::fabs(a[i])) (*this)[i] = std::fabs(b[i]);
+    else (*this)[i] = std::fabs(a[i]);
   }
 }
 
