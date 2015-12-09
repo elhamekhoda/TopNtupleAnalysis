@@ -350,6 +350,9 @@ int main(int argc, char **argv) {
     systsListWithBlankNominal.push_back("boostedWSF__1up");
     systsListWithBlankNominal.push_back("boostedWSF__1down");
 
+    systsListWithBlankNominal.push_back("ttEWK__1up");
+    systsListWithBlankNominal.push_back("ttEWK__1down");
+
     // count b-tagging variations
     MiniTree mt(false, fileList[0].c_str(), "nominal");
     Event sel;
@@ -472,6 +475,9 @@ int main(int argc, char **argv) {
 
       systsListWithBlankNominal.push_back("boostedWSF__1up_Loose");
       systsListWithBlankNominal.push_back("boostedWSF__1down_Loose");
+
+      systsListWithBlankNominal.push_back("ttEWK__1up_Loose");
+      systsListWithBlankNominal.push_back("ttEWK__1down_Loose");
     }
   } else if (pdf != "") {
     for (int m = 0; m < pdfList.size(); ++m) {
@@ -631,6 +637,9 @@ int main(int argc, char **argv) {
           weightSystematics.push_back(std::string("boostedWSF__1up")+systSuffixForHistograms);
           weightSystematics.push_back(std::string("boostedWSF__1down")+systSuffixForHistograms);
 
+          weightSystematics.push_back(std::string("ttEWK__1up")+systSuffixForHistograms);
+          weightSystematics.push_back(std::string("ttEWK__1down")+systSuffixForHistograms);
+
           //if (_btags > 0) {
             for (int i = 0; i < n_eigenvars_b; ++i) {
               weightSystematics.push_back(std::string("btagbSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
@@ -693,9 +702,15 @@ int main(int argc, char **argv) {
               float MC_tbar_phi = sel.MC_tbar().Phi();
               float MC_tbar_m = sel.MC_tbar().M();
               int initial_type = mt.i("initial_type");
-              weight *= ewkTool.getWeight(MC_t_pt,    MC_t_eta,    MC_t_phi,    MC_t_m, \
+              double ewkW = ewkTool.getWeight(MC_t_pt,    MC_t_eta,    MC_t_phi,    MC_t_m, \
                                           MC_tbar_pt, MC_tbar_eta, MC_tbar_phi, MC_tbar_m, \
                                           initial_type);
+              if (suffix == "ttEWK__1down" || suffix == "ttEWK__1down_Loose") {
+                ewkW *= 0.9;
+              } else if (suffix == "ttEWK__1up" || suffix == "ttEWK__1up_Loose") {
+                ewkW *= 1.1;
+              }
+              weight *= ewkW;
             }
 
             double btagsf = 1.0;
