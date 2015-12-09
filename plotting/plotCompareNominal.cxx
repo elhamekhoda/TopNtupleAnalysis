@@ -122,14 +122,29 @@ int main(int argc, char **argv) {
     SystematicCalculator systCalc(stackConfig);
     std::vector<std::string> nsyst_items,nsyst_titles;
     for (int z = 0; z < syst_items.size(); ++z) {
-      if (smooth) {
-        nsyst_items.push_back(syst_items[z]+std::string("_smooth")); nsyst_titles.push_back(syst_titles[z]+std::string(" smooth"));
+      if (syst_items[z].find("pdf_") == 0) {
+        if (smooth) {
+          nsyst_items.push_back(syst_items[z]+std::string("_smooth")); nsyst_titles.push_back(syst_titles[z]+std::string(" smooth"));
+        }
+        nsyst_items.push_back(syst_items[z]); nsyst_titles.push_back(syst_titles[z]);
+
+        std::vector<std::string> patterns;
+        patterns.push_back("pdf_PDF4LHC15_nlo_30_0");
+        patterns.push_back(syst_items[z]);
+        if (smooth) {
+          systCalc.add(syst_items[z], new NotData(new HistDiffMany(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), "MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF"), patterns, "ttbar", true)), syst_items[z]+std::string(" smooth"));
+        }
+        systCalc.add(syst_items[z], new NotData(new HistDiffMany(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), "MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF"), patterns, "ttbar", false)), syst_items[z]);
+      } else {
+        if (smooth) {
+          nsyst_items.push_back(syst_items[z]+std::string("_smooth")); nsyst_titles.push_back(syst_titles[z]+std::string(" smooth"));
+        }
+        nsyst_items.push_back(syst_items[z]); nsyst_titles.push_back(syst_titles[z]);
+        if (smooth) {
+          systCalc.add(syst_items[z]+std::string("_smooth"), new NotData(new HistDiff(syst_items[z].c_str(), "", true)), syst_items[z]+std::string(" smooth"));
+        }
+        systCalc.add(syst_items[z], new NotData(new HistDiff(syst_items[z].c_str(), "", false)), syst_items[z]);
       }
-      nsyst_items.push_back(syst_items[z]); nsyst_titles.push_back(syst_titles[z]);
-      if (smooth) {
-        systCalc.add(syst_items[z]+std::string("_smooth"), new NotData(new HistDiff(syst_items[z].c_str(), "", true)), syst_items[z]+std::string(" smooth"));
-      }
-      systCalc.add(syst_items[z], new NotData(new HistDiff(syst_items[z].c_str(), "", false)), syst_items[z]);
     }
     if (other_items.size() == 2) {
       std::vector<std::string> pat;
