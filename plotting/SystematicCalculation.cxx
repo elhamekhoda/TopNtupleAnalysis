@@ -75,7 +75,7 @@ void SystematicCalculatorBase::printYields(SampleSetConfiguration &sc) {
   cout << "\\begin{tabular}{|c|c|c|c|}" << endl;
   cout << "\\hline" << endl;
   cout << "\\hline" << endl;
-  cout << setw(30) << "Sample"<< " & " << setw(20) << "Yield" <<  " & " << setw(20) << "Stat." << " & " << setw(20) << "Syst." << "\\\\" << endl;
+  cout << setw(30) << "Sample"<< " & " << setw(20) << "Yield" <<  " & " << setw(20) << "MC Stat." << " & " << setw(20) << "Syst." << "\\\\" << endl;
   cout << "\\hline" << endl;
   
   float nData(0.);
