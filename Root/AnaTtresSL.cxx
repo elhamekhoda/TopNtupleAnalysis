@@ -62,7 +62,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.create1DVar("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 30, 0, 1.5);
   m_hSvc.create1DVar("closejl_pt", "; Pt of closest jet to lep [GeV]; Events", varBinN1, varBin1);
   
-  m_hSvc.create1D("weight", "; QCD weights; Events", 1000, -1, 2);
+  m_hSvc.create1D("weight", "; QCD weights; Events", 2000, -100, 100);
   
   m_hSvc.create1D("jet0_m", "; mass of the leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
   m_hSvc.create1D("jet1_m", "; mass of the sub-leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
@@ -141,6 +141,8 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
       m_Nduplicate++;
       return;
   }
+  
+  if (!m_boosted)	if (evt.jet().size()<4)		return;
     
   std::string suffix = s;
   if (s=="_Loose") suffix = "";
@@ -159,21 +161,21 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_iloose_L1EM20VH();	//prescaled
-    trig2 = evt.electron()[0].HLT_e60_lhmedium();
-    trig3 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH(); // MC
-    trig4 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH(); // data	
-    trig5 = evt.electron()[0].HLT_e120_lhloose();
-    
-    trig_prescaled   = trig1;	
-    trig_unprescaled = trig2 || trig3 || trig4 || trig5;
-    
-    if (s=="_Loose")	{
-      if (trig_prescaled && !trig_unprescaled)					weight *= 2.3;      
+
+    //Electron trigers
+    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();          // MC / data prescaled
+    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();          // data only
+    trig3 = evt.electron()[0].HLT_e60_lhmedium();
+    trig4 = evt.electron()[0].HLT_e120_lhloose();
+                
+    bool trig_MC = trig1 || trig3 || trig4; 
+    bool trig_DT = trig2 || trig3 || trig4;
+        
+    if (evt.channelNumber()!=0){
+        if (!trig_MC)return;
+    }else{
+        if (!trig_DT)return;
     }
-    else {
-      if (!trig_unprescaled)	return;
-    }   
     
   } else {
     l = evt.muon()[0].mom();
@@ -184,12 +186,8 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     trig_prescaled   = trig1;
     trig_unprescaled = trig2 || trig3;
     
-    if (s=="_Loose"){      
-       if (trig_prescaled && !trig_unprescaled)	 				weight *= 10.;
-    }
-    else{
-      if (!trig_unprescaled)	return;
-    }
+    if (s=="")
+	if (trig_prescaled && !trig_unprescaled)	return;
            
   }//m_electron
   

@@ -134,9 +134,9 @@ void MiniTree::read(int event, Event &e) {
     e.muon()[k].z0() = vf("mu_z0")->at(k);
     e.muon()[k].d0() = vf("mu_d0")->at(k);
     e.muon()[k].sd0() = vf("mu_d0sig")->at(k);
-    if (vc("mu_trigMatch_HLT_mu20_L1MU15"))	e.muon()[k].HLT_mu20_L1MU15() 	 = vc("mu_trigMatch_HLT_mu20_L1MU15")->at(k);
-    e.muon()[k].HLT_mu50() 		 = vc("mu_trigMatch_HLT_mu50")->at(k);
-    e.muon()[k].HLT_mu20_iloose_L1MU15() = vc("mu_trigMatch_HLT_mu20_iloose_L1MU15")->at(k);    
+    if (vc("mu_trigMatch_HLT_mu20_L1MU15"))		e.muon()[k].HLT_mu20_L1MU15() 	 = vc("mu_trigMatch_HLT_mu20_L1MU15")->at(k);
+    if (vc("mu_trigMatch_HLT_mu20_iloose_L1MU15"))	e.muon()[k].HLT_mu20_iloose_L1MU15() = vc("mu_trigMatch_HLT_mu20_iloose_L1MU15")->at(k); 
+    e.muon()[k].HLT_mu50() 		 = vc("mu_trigMatch_HLT_mu50")->at(k);   
     e.muon()[k].author() = 0;
     e.muon()[k].passTrkCuts() = true;
   }

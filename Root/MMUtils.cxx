@@ -79,17 +79,17 @@ float MMUtils::getMMweights(const Event &evt) {
    
    bool isTight;
 
-   bool isBoosted(0);
-   if (!(evt.passes("rejets")) || !(evt.passes("rmujets")))      isBoosted = true;	    
+   bool isBoosted(1);
+   if (evt.passes("rejets") || evt.passes("rmujets"))      isBoosted = false;	    
    
    TLorentzVector lepP4; 
    bool isElectron(0);   
-   if (evt.electron().size() == 1)    {
+   if (evt.electron().size() == 1 && evt.muon().size() == 0)    {
        isElectron = true;
        lepP4 = evt.electron()[0].mom();
        isTight = evt.electron()[0].isTightPP();
        
-   }else if (evt.muon().size() == 1){	       
+   }else if (evt.electron().size() == 0 && evt.muon().size() == 1){	       
        lepP4 = evt.muon()[0].mom();
        isTight = evt.muon()[0].isTight();
    }
@@ -136,10 +136,14 @@ float MMUtils::getMMweights(const Event &evt) {
    	
    
    if(lepPt>eff_map->GetXaxis()->GetXmax() || lepPt>fake_map->GetXaxis()->GetXmax())  	    
-   	lepPt = 0.95*eff_map->GetXaxis()->GetXmax(); 
+   	lepPt = 0.95*eff_map->GetXaxis()->GetXmax();
+	//lepPt = 450*1e-3; 
    
-   if(closejl_DR>eff_map->GetYaxis()->GetXmax() || closejl_pT>fake_map->GetYaxis()->GetXmax())    
+   if(closejl_DR>eff_map->GetYaxis()->GetXmax())    
    	closejl_DR = 0.95*eff_map->GetYaxis()->GetXmax(); 
+	
+   if(closejl_pT>fake_map->GetYaxis()->GetXmax())
+        closejl_pT = 0.95*fake_map->GetYaxis()->GetXmax();
    
    // --> Getting eff rate  
    float effRate = eff_map->GetBinContent(eff_map->FindBin(lepPt, closejl_DR));
@@ -152,11 +156,17 @@ float MMUtils::getMMweights(const Event &evt) {
      
    if (isTight){
      	if((effRate - fakeRate) !=0.)	Weight = fakeRate*(effRate - 1)/(effRate - fakeRate); 
-	else				std::cerr << "Error: effRate - fakeRate == 0";
+	else{
+		std::cerr << "Error: effRate - fakeRate == 0";
+		Weight = 0;
+	}
    }
    else {	   
    	if((effRate - fakeRate) !=0.)	Weight = fakeRate*effRate/(effRate - fakeRate);
-   	else				std::cerr << "Error: effRate - fakeRate == 0";
+   	else{
+		std::cerr << "Error: effRate - fakeRate == 0";
+		Weight = 0;
+	}	
    
    }//isTight
 

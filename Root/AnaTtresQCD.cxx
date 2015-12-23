@@ -19,13 +19,13 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
     
   //****Efficiency studies   
   
-  Double_t eff_pT_bins_re[5]  	 = {25, 60, 100, 250, 500}; 
-  Double_t eff_pT_bins_rmu[7] 	 = {25, 30, 35, 50, 100, 250, 500};
-  Double_t eff_pT_bins_be[5]  	 = {25, 60, 100, 250, 500}; 
-  Double_t eff_pT_bins_bmu[5] 	 = {25, 50, 100, 250, 500};
+  Double_t eff_pT_bins_re[4]  	 = {25, 60, 100, 500}; 
+  Double_t eff_pT_bins_rmu[4] 	 = {25, 50, 100, 500};
+  Double_t eff_pT_bins_be[4]  	 = {25, 60, 100, 500}; 
+  Double_t eff_pT_bins_bmu[4] 	 = {25, 50, 100, 500};
   
   //Double_t DR_bins[8] = {0.,0.2, 0.4, 0.6, 0.8, 1.0, 1.7, 5.0};
-  Double_t DR_bins[6] = {0.,0.2, 0.4, 0.8, 1.0, 5.0};
+  Double_t DR_bins[5] = {0., 0.4, 1.0, 1.7, 5.0};
   int N_DR_bins = sizeof(DR_bins)/sizeof(DR_bins[0]) -1;
   
   //MC variables:  
@@ -38,27 +38,28 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   //****Fake studies  
    
   Double_t fake_pT_bins_re[6]  	 = {30, 35, 40, 50, 60, 500};
-  Double_t fake_closeLJpT_bins_re[4]  = {25, 40, 60, 500};
+  Double_t fake_closeLJpT_bins_re[4]  = {25, 50, 100, 500};
   
   Double_t fake_pT_bins_rmu[6] 	 = {25, 30, 35, 40, 50, 500};  
-  Double_t fake_closeLJpT_bins_rmu[4] = {25, 40, 60, 500};
+  Double_t fake_closeLJpT_bins_rmu[4] = {25, 50, 100, 500};
   
   Double_t fake_pT_bins_be[4]  	 = {30, 40, 60, 500};
-  Double_t fake_closeLJpT_bins_be[3]  = {25, 40, 500};
+  Double_t fake_closeLJpT_bins_be[3]  = {25, 50, 500};
   
   Double_t fake_pT_bins_bmu[3] 	 = {25, 50, 500};
-  Double_t fake_closeLJpT_bins_bmu[3] = {25, 40, 500}; 
+  Double_t fake_closeLJpT_bins_bmu[3] = {25, 50, 500}; 
   
   m_hSvc.create1D("fake_z0sin", "; z0*sin(#theta); Events", 50, -1, 1);
   m_hSvc.create1D("fake_z0", "; z0; Events", 25, -2, 2);
   m_hSvc.create1D("fake_d0", "; d0; Events", 25, -0.5, 0.5);
-  m_hSvc.create1D("fake_d0sig", "; d0sig; Events", 25, -15, 15);
+  m_hSvc.create1D("fake_d0sig", "; d0sig; Events", 30, -15, 15);
   m_hSvc.create1D("fake_MET", "; Missing E_{T} [GeV]; Events", 25, 0, 50);
   m_hSvc.create1D("fake_MET_phi", "; Missing E_{T} #phi; Events", 20, -4.0, 4.0);    
   m_hSvc.create1D("fake_mwt", "; W transverse mass [GeV]; Events", 15, 0, 150); 
   
   m_hSvc.create1D("fake_lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
   m_hSvc.create1D("fake_minDeltaR",   "; min #Delta R(lep, jet); Events", 25, 0, 5);
+  m_hSvc.create1D("fake_closJetPt",    "; Pt of closest jet to lepton [GeV]; Events", 100, 25, 525);
   
   m_hSvc.create1D("fake_jvt_lowLepPt",   "; JVT (low lept Pt); Events",  25, -1.5, 1);
   m_hSvc.create1D("fake_jvt_highLepPt",   "; JVT (high lept Pt); Events", 25, -1.5, 1);
@@ -67,7 +68,8 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   m_hSvc.create1D("fake_trig2",   "; trig1; Events", 2, 0, 2);
   m_hSvc.create1D("fake_trig3",   "; trig1; Events", 2, 0, 2);
   m_hSvc.create1D("fake_trig4",   "; trig1; Events", 2, 0, 2);
-      
+  m_hSvc.create1D("fake_trig5",   "; trig1; Events", 2, 0, 2);
+  
   m_hSvc.create1D("eventN", "; N event; Events", 10000, 0, 1e10);
   m_hSvc.create1D("runN", "; N run; Events", 1000, 0, 1e10);
   
@@ -284,7 +286,7 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
       return;
   }
   
-  //if (evt.jet().size()<4)	return;
+  if (!m_boosted)	if (evt.jet().size()<4)		return;
  
   HistogramService *h = &m_hSvc;
   
@@ -302,10 +304,7 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
   bool trig3(0);
   bool trig4(0);
   bool trig5(0);
-  
-  bool trig_prescaled(0);
-  bool trig_unprescaled(0);
-  
+    
   float mWt(0);  
   float mWt_threshold(100000);
   
@@ -315,23 +314,23 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
 	z0    = evt.electron()[0].z0();
 	d0    = evt.electron()[0].d0();
 	d0sig = evt.electron()[0].sd0();
+	theta = 2*atan(exp(-lept.Eta()));
 	
 	//Electron trigers
-	trig1 = evt.electron()[0].HLT_e24_lhmedium_iloose_L1EM20VH();	//prescaled
-	trig2 = evt.electron()[0].HLT_e60_lhmedium();
-	trig3 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH(); // MC
-	trig4 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH(); // data	
-	trig5 = evt.electron()[0].HLT_e120_lhloose();
+	trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH(); 		// MC / data prescaled
+	trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH(); 		// data	only
+	trig3 = evt.electron()[0].HLT_e60_lhmedium();
+	trig4 = evt.electron()[0].HLT_e120_lhloose();
 		
-	trig_prescaled   = trig1;	
-	trig_unprescaled = trig2 || trig3 || trig4 || trig5;
+	bool trig_MC = trig1 || trig3 || trig4;	
+	bool trig_DT = trig2 || trig3 || trig4;
 	
-	if (suffix=="_Loose"){
-	  if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)	 	weight *= 1/2.368;
+	if (evt.channelNumber()!=0){
+	  if (!trig_MC)return;
+	}else{
+	  if (!trig_DT)return;
 	}
-	else{
-	  if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)		return;
-	}
+	
 			
   }	
   else{			
@@ -346,8 +345,8 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
 	trig2 = evt.muon()[0].HLT_mu50();
 	trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
 	
-	trig_prescaled   = trig1;
-	trig_unprescaled = trig2 || trig3;
+	bool trig_prescaled   = trig1;
+	bool trig_unprescaled = trig2 || trig3;
 	
 	if (suffix=="_Loose"){
 	 if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)		weight *= 1/10.;
@@ -403,6 +402,7 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
         closejl_pT  = evt.jet().at(closejl_idx).mom().Pt();
 	h->h1D("fake_minDeltaR", "", suffix)	    ->Fill(closejl_deltaR, weight);         
 	h->h1D("fake_lepPt", "", suffix)	    ->Fill(lept.Pt()*1e-3, weight);
+	h->h1D("fake_closJetPt", "", suffix)	    ->Fill(closejl_pT*1e-3, weight);
 	
 	h->h2D("fake_lepPt_jetPt", "", suffix)->Fill(lept.Perp()*1e-3, closejl_pT*1e-3, weight); 
 	

@@ -169,7 +169,7 @@ def effRates(channels):
 def fakeRates(inputDir, lumi):
 
 	merge = 1
-	extraPlots = 0
+	extraPlots = 1
 	
 	channels  = []
 	channels += [('resolved','e' )]
@@ -205,7 +205,7 @@ def fakeRates(inputDir, lumi):
 		
 		# --> Merging the datasets
 		hadd_in=[]		
-		print "ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_DT*root "
+		#print "ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_DT*root "
 		
 		for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_DT*root ").readlines():
 			hadd_in.append(File[:-1])
@@ -218,7 +218,7 @@ def fakeRates(inputDir, lumi):
 		bkgFile  = TFile(hadd_bkgPath,'READ')
 		dataFile = TFile(hadd_dataPath,'READ')
 		
-		for var in ['mwt','lepPt','minDeltaR', 'MET', 'z0sin', 'd0', 'd0sig']:#, 'jvt_lowLepPt', 'jvt_highLepPt']:
+		for var in ['mwt','lepPt','minDeltaR','closJetPt','MET', 'z0sin', 'd0sig', 'jvt_lowLepPt', 'jvt_highLepPt']:
 		
 			#tight
 			c_t = TCanvas("c_"+ichan[0]+'_'+var+'_tight_'+ichan[1])
@@ -231,10 +231,12 @@ def fakeRates(inputDir, lumi):
 			h_data.Draw("e")
 			h_data.SetMarkerStyle(20)
 			h_data.SetStats(0)
-			#h_data.Rebin(2)
+			if (ichan[0]=='boosted'):	
+				#h_data.Rebin(2)
+				if (var=='lepPt' or var=='closJetPt'):	h_data.Rebin(4)
 			leg.AddEntry(h_data, "Data: "+`h_data.Integral()`[:7], "P")
-			#print ichan, "tight:"
-			#print 'data &' , `h_data.Integral()`[:7], '\\\ \\hline'
+			print ichan, "tight:"
+			print 'data &' , `h_data.Integral()`[:7], '\\\ \\hline'
 			
 			pallete   = [2, 3, 3, 3, 6, 6, 6, 7]
 			styleLine = [1, 1 ,2, 3, 1, 2, 3, 1]
@@ -249,10 +251,12 @@ def fakeRates(inputDir, lumi):
 				h_ibkg[i].SetDirectory(0)
 				h_ibkg[i].Scale(lumi)
 				if h_ibkg[i].Integral()>0:	
-					if h_ibkg[i].Integral()>0.1: #for better visualization
-						#print ibkg, '&' , `h_ibkg[i].Integral()`[:7], '\\\ \\hline'	
+					if h_ibkg[i].Integral()>0.0001: #for better visualization
+						print ibkg, '&' , `h_ibkg[i].Integral()`[:7], '\\\ \\hline'	
 						h_ibkg[i].Draw("histo SAME")
-						#h_ibkg[i].Rebin()
+						if (ichan[0]=='boosted'):
+							#h_ibkg[i].Rebin()	
+							if (var=='lepPt' or var=='closJetPt'):	h_ibkg[i].Rebin(4)
 						h_ibkg[i].SetStats(0)
 					h_ibkg[i].SetLineColor(pallete[i]) 
 					h_ibkg[i].SetLineStyle(styleLine[i])
@@ -267,18 +271,20 @@ def fakeRates(inputDir, lumi):
 			h_bkg.SetLineColor(4) 
 			h_bkg.SetLineWidth(3)
 			h_bkg.SetStats(0)
-			#h_bkg.Rebin(2)
+			if (ichan[0]=='boosted'):
+				#h_bkg.Rebin(2)	
+				if (var=='lepPt' or var=='closJetPt'):	h_bkg.Rebin(4)
 			
 			leg.AddEntry(h_bkg,  "total bkg: "+`h_bkg.Integral()`[:7], "L")
 			leg.Draw()
-			#print 'total bkg &' , `h_bkg.Integral()`[:7], '\\\ \\hline'
+			print 'total bkg &' , `h_bkg.Integral()`[:7], '\\\ \\hline'
 			
 			
 			if h_data.GetMaximum()>h_bkg.GetMaximum():	h_data.SetMaximum(h_data.GetMaximum()*1.3)
 			else: 						h_data.SetMaximum(h_bkg.GetMaximum()*1.3)
 		
 			c_t.SetLogy(1)
-			if var=='lepPt':	c_t.SetLogx(1)
+			#if var=='lepPt':	c_t.SetLogx(1)
 			c_t.SetGridy(1)
 			c_t.Update()
                 	c_t.Modified()  	    
@@ -295,10 +301,12 @@ def fakeRates(inputDir, lumi):
 			h_data.Draw("e")
 			h_data.SetMarkerStyle(20)
 			h_data.SetStats(0)
-			#h_data.Rebin(2)
+			if (ichan[0]=='boosted'):
+				#h_data.Rebin(2)	
+				if (var=='lepPt' or var=='closJetPt'):	h_data.Rebin(4)
 			leg.AddEntry(h_data, "Data: "+`h_data.Integral()`[:7], "P")
-			#print ichan, "Loose:"
-			#print 'data &' , `h_data.Integral()`[:7], '\\\ \\hline'
+			print ichan, "Loose:"
+			print 'data &' , `h_data.Integral()`[:7], '\\\ \\hline'
 			
 			pallete   = [2, 3, 3, 3, 6, 6, 6, 7]
 			styleLine = [1, 1 ,2, 3, 1, 2, 3, 1]
@@ -312,10 +320,12 @@ def fakeRates(inputDir, lumi):
 				h_ibkg[i].SetDirectory(0)
 				h_ibkg[i].Scale(lumi)
 				if h_ibkg[i].Integral()>0:	
-					if h_ibkg[i].Integral()>0.1:	
+					if h_ibkg[i].Integral()>0.0001:	
 						h_ibkg[i].Draw("histo SAME")
-						#print ibkg, '&' , `h_ibkg[i].Integral()`[:7], '\\\ \\hline'
-						#h_ibkg[i].Rebin()
+						print ibkg, '&' , `h_ibkg[i].Integral()`[:7], '\\\ \\hline'
+						if (ichan[0]=='boosted'):
+							#h_ibkg[i].Rebin()	
+							if (var=='lepPt' or var=='closJetPt'):	h_ibkg[i].Rebin(4)
 						h_ibkg[i].SetStats(0)
 					h_ibkg[i].SetLineColor(pallete[i]) 
 					h_ibkg[i].SetLineStyle(styleLine[i])
@@ -333,7 +343,9 @@ def fakeRates(inputDir, lumi):
 			h_bkg.SetLineColor(4) 
 			h_bkg.SetLineWidth(3)
 			h_bkg.SetStats(0)		
-			#h_bkg.Rebin(2)
+			if (ichan[0]=='boosted'):	
+				#h_bkg.Rebin(2)
+				if (var=='lepPt' or var=='closJetPt'):	h_bkg.Rebin(4)
 		
                 	if h_data.GetMaximum()>h_bkg.GetMaximum():	h_data.SetMaximum(h_data.GetMaximum()*1.3)
 			else: 						h_data.SetMaximum(h_bkg.GetMaximum()*1.3)
@@ -341,9 +353,9 @@ def fakeRates(inputDir, lumi):
 			
 			leg.AddEntry(h_bkg,  "bkg: "+`h_bkg.Integral()`[:7], "L")
 			leg.Draw()
-			#print 'total bkg &' , `h_bkg.Integral()`[:7], '\\\ \\hline'
+			print 'total bkg &' , `h_bkg.Integral()`[:7], '\\\ \\hline'
 			c_l.SetLogy(1)
-			if var=='lepPt':	c_l.SetLogx(1)
+			#if var=='lepPt':	c_l.SetLogx(1)
 			c_l.SetGridy(1)
 			c_l.Update()
         	        c_l.Modified()  	    
@@ -481,7 +493,29 @@ def fakeRates(inputDir, lumi):
 	dataFile.Close()	
 	outfile.Close()
 	return
-			
+
+def plot_multijet_weights():
+
+        channels  = []
+        channels += [('resolved','e' )]
+        channels += [('resolved','mu')]
+        channels += [('boosted', 'e' )]
+        channels += [('boosted', 'mu')]
+
+        outfile = TFile("QCDweigths.root","RECREATE")
+
+        for ichan in channels:
+		inFile = TFile('../../fakeCR_v2.0_weights_'+ichan[0]+'_QCD/'+ichan[0]+'_'+ichan[1]+'_QCD.root',"READ")
+		h = inFile.Get("weight")
+		h.GetXaxis().SetRangeUser(-5, 5)
+		gStyle.SetOptStat(1111111111)
+		print h.GetEntries()
+		c = TCanvas("w_"+ichan[0]+'_'+ichan[1],"w_"+ichan[0]+'_'+ichan[1])		
+		h.Draw("histo")
+		c.SetLogy(1)
+		saveCanvas(c, 'QCDweiths_'+ichan[0]+'_'+ichan[1], outfile, 'QCDweiths')
+
+	return	
 #--------------------------------#
 #       Multijet estimation      #
 #--------------------------------#
@@ -491,7 +525,10 @@ def fakeRates(inputDir, lumi):
 #inputDir = path/to/files/processed/with/TopNtupleAnalysis
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.23c/TopNtupleAnalysis/effSave/'
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/effReal_2/'
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/effReal_3/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/effReal_3/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/realEff_real/'
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/realEff_real/'
 
 if 0:
 	effRates(inputDir)
@@ -499,16 +536,35 @@ if 0:
 #Produce fake rate plots
 
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.33/TopNtupleAnalysis/wPresTrigg_d0sig_z0sin4/' 
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.33/TopNtupleAnalysis/wPresTrigg_d0sig_noz0sin4/' 
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.33/TopNtupleAnalysis/wPresTrigg_d0sig_noz0sin4/' 
 
-lumi = 3300 #pb-1
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_141215_16h30_fake/' 
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_151215_10h00_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_151215_12h00_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_161215_17h30_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_161215_18h00_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_161215_19h00_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_171215_16h30_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_171215_19h30_caloBtag2_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_181215_09h30_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_181215_09h30_v3.0_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_181215_19h20_v2.0_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_211215_18h00_v4.0_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_11h00_v2.0_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_12h00_v4.0_fake/'
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_11h00_v2.0_fake_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_12h00_v4.0_fake_fake/'
+
+lumi = 3200 #pb-1
 
 if 1:	
 	fakeRates(inputDir, lumi)
 
 
-
-
+if 0:
+	plot_multijet_weights()
 
 
 
