@@ -39,6 +39,7 @@ std::map<std::string, std::vector<std::string> > syst_flat = std::map<std::strin
 std::map<std::string, std::vector<std::string> > syst_pdf = std::map<std::string, std::vector<std::string> >();
 
 float lumi_scale = 1.0;
+int logY = 0;
 int smooth = 1;
 
 using namespace std;
@@ -356,7 +357,7 @@ void drawDataMC2(SampleSetConfiguration &stackConfig, const vector<std::string> 
     Data = stackConfig["Data"].makeTH1("Data");
   if (Data) {
     Data->SetStats(0);
-    leg->AddEntry(Data.get(), "Data", "LP");
+    leg->AddEntry(Data.get(), "data", "LP");
   }
 
   // make MC stack and add entries in legend
@@ -447,7 +448,7 @@ void drawDataMC2(SampleSetConfiguration &stackConfig, const vector<std::string> 
     rat->GetYaxis()->SetLabelFont(42);
     rat->GetYaxis()->SetTitleFont(42);
     rat->GetYaxis()->SetLabelSize(0.18);
-    rat->GetYaxis()->SetTitleOffset(0.45);
+    rat->GetYaxis()->SetTitleOffset(0.35);
     rat->GetYaxis()->SetLabelOffset(0.02);
     rat->GetYaxis()->SetTitleSize(0.18);
     rat->GetXaxis()->SetTitleSize(0.2);
@@ -509,19 +510,19 @@ void drawDataMC2(SampleSetConfiguration &stackConfig, const vector<std::string> 
     _stampText = "";
   if (posLegend != 2 && posLegend != 5 && posLegend != 6) {
     stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
-    stampLumiText(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    stampLumiText2(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   } else if (posLegend == 5) {
     stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
-    stampLumiText(lumi, 0.20, 0.75, "#sqrt{s} = 13 TeV", 0.05);
+    stampLumiText2(lumi, 0.20, 0.75, "#sqrt{s} = 13 TeV", 0.05);
   } else if (posLegend == 6 || posLegend == 7) {
     stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
-    stampLumiText(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    stampLumiText2(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   } else if (posLegend == 8) {
     stampATLAS(_stampText, 0.30, 0.88, (bool) Data);
-    stampLumiText(lumi, 0.30, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    stampLumiText2(lumi, 0.30, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   } else {
     stampATLAS(_stampText, 0.25, 0.88, (bool) Data);
-    stampLumiText(lumi, 0.25, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    stampLumiText2(lumi, 0.25, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   }
   if (posLegend < 2 || posLegend == 6) {
     for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
@@ -616,6 +617,9 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
   if (Data) maximum = std::max(Data->GetBinContent(Data->GetMaximumBin()), MC->GetMaximum());
   maximum *= 1.8;
   double minimum = 0.001;
+  if (logY) {
+    maximum *= 1000;
+  }
   if (yMax > 0)
     maximum = yMax;
   if (yMin > 0)
@@ -640,6 +644,9 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
       MC->GetYaxis()->SetTitle(yTitle.c_str());
     else
       MC->GetYaxis()->SetTitle(vechist[0]->GetYaxis()->GetTitle());
+  }
+  if (logY) {
+    c->SetLogy();
   }
   c->Update();
   MC->Draw("same");
@@ -1281,6 +1288,18 @@ void stampLumiText(float lumi, float x, float y, const std::string &text, float 
   std::stringstream ss;
   ss.precision(2);
   ss << "#int L dt = " << lumi << " fb^{-1}, " << text;
+  TLatex l;
+  l.SetNDC();
+  l.SetTextFont(42);
+  l.SetTextColor(1);
+  l.SetTextSize(size);
+  l.DrawLatex(x, y, ss.str().c_str());
+}
+
+void stampLumiText2(float lumi, float x, float y, const std::string &text, float size) {
+  std::stringstream ss;
+  ss.precision(2);
+  ss << text << ", " << lumi << " fb^{-1}";
   TLatex l;
   l.SetNDC();
   l.SetTextFont(42);

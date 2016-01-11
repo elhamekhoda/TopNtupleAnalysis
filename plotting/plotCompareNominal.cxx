@@ -132,7 +132,7 @@ int main(int argc, char **argv) {
         patterns.push_back("pdf_PDF4LHC15_nlo_30_0");
         patterns.push_back(syst_items[z]);
         if (smooth) {
-          systCalc.add(syst_items[z], new NotData(new HistDiffMany(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), "MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF"), patterns, "ttbar", true)), syst_items[z]+std::string(" smooth"));
+          systCalc.add(syst_items[z]+std::string("_smooth"), new NotData(new HistDiffMany(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), "MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF"), patterns, "ttbar", true)), syst_items[z]+std::string(" smooth"));
         }
         systCalc.add(syst_items[z], new NotData(new HistDiffMany(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), "MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF"), patterns, "ttbar", false)), syst_items[z]);
       } else {

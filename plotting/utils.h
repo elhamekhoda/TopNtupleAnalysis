@@ -21,6 +21,7 @@ extern std::map<std::string, std::vector<std::string> > syst_model;
 extern std::map<std::string, std::vector<std::string> > syst_flat;
 extern float lumi_scale;
 extern int smooth;
+extern int logY;
 
 void loadConfig(const std::string &file = "config.txt");
 
@@ -46,6 +47,7 @@ void stampText(const std::string &text, float x, float y, float size = 0.06);
 void stampLumi(float lumi, float x, float y);
 void stampATLAS(const std::string &text, float x, float y, bool hasRatio = true);
 void stampLumiText(float lumi, float x, float y, const std::string &text, float size = 0.06);
+void stampLumiText2(float lumi, float x, float y, const std::string &text, float size = 0.06);
 
 shared_ptr<TGraphErrors> normaliseBand(shared_ptr<TGraphErrors> band, TH1D *MC_sum, TH1D *ratio = 0);
 //shared_ptr<TGraphErrors> normaliseBandFkr(shared_ptr<TGraphErrors> band, TH1D *MC_sum, TH1D *Data);
