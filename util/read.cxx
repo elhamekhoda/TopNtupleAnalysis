@@ -39,10 +39,14 @@
 // type = 1 for up
 // type = 2 for down
 double applyBoostedWSF(int type, bool isElectron) {
-  static const double nominal_e = 0.8108;
-  static const double err_e = 0.215;
-  static const double nominal_mu = 0.94122;
-  static const double err_mu = 0.1583;
+  //static const double nominal_e = 0.8108;
+  //static const double err_e = 0.215;
+  //static const double nominal_mu = 0.94122;
+  //static const double err_mu = 0.1583;
+  static const double nominal_e = 0.72;
+  static const double err_e = 0.17;
+  static const double nominal_mu = 0.76;
+  static const double err_mu = 0.13;
   if (isElectron) {
     if (type == 2) {
       return nominal_e - err_e;
@@ -245,6 +249,26 @@ int main(int argc, char **argv) {
   // split systs by comma
   std::vector<std::string> systsList;
   std::vector<std::string> systsListWithBlankNominal;
+  if (systs.find(".txt") != std::string::npos) {
+    // systs is a file with the list of systematics
+    ifstream f(systs.c_str());
+    if (!f) {
+      std::cout << "Cannot open " << systs << std::endl;
+      std::exit(-2);
+    }
+    std::string finalSysts = "";
+    std::string theLineStr;
+    while (std::getline(f, theLineStr)) {
+      if (theLineStr != "") {
+        size_t idx = std::string::npos;
+        idx = theLineStr.find("\n");
+        std::string aLine = theLineStr.substr(0, idx);
+        if (finalSysts.size() != 0 && finalSysts[finalSysts.size()-1] != ',') finalSysts += ",";
+        finalSysts += aLine;
+      }
+    }
+    systs = finalSysts;
+  }
   for (size_t i = 0,n; i <= systs.length(); i=n+1) {
     n = systs.find_first_of(',',i);
     if (n == std::string::npos)
