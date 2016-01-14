@@ -124,7 +124,9 @@ class SystematicRatioCalculator : public SystematicCalculatorBase {
 
     SampleSetConfiguration _sr; // ratio setup
 
-    SystematicRatioCalculator(SystematicCalculator &sca, SystematicCalculator &scb);
+    bool _binomial; // use binomial errors?
+
+    SystematicRatioCalculator(SystematicCalculator &sca, SystematicCalculator &scb, bool binomial = true);
 
     /*
      * Starts from the full data+MC setup in the SampleSetConfiguration s
@@ -146,7 +148,9 @@ class SystematicRatioRatioCalculator : public SystematicCalculatorBase {
 
     SampleSetConfiguration _sr; // ratio setup
 
-    SystematicRatioRatioCalculator(SystematicRatioCalculator &sca, SystematicRatioCalculator &scb);
+    bool _binomial; // use binomial errors
+
+    SystematicRatioRatioCalculator(SystematicRatioCalculator &sca, SystematicRatioCalculator &scb, bool binomial = true);
 
     /*
      * Starts from the full data+MC setup in the SampleSetConfiguration s

@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -175,7 +176,9 @@ void SystematicCalculatorBase::printBinSysts(SampleSet &st) {
     string systName = k->first;
     cout << setw(50) << systName << " & ";
     for (int z = 1; z < st._item[0].nominal._size-1; ++z) {
-      double s = fabs(st._item[0].syst[systName][z]/st._item[0].nominal[z]);
+      double s = 0;
+      if (st._item[0].nominal[z] != 0)
+        s = fabs(st._item[0].syst[systName][z]/st._item[0].nominal[z]);
       cout << setw(15) << s*100.0;
       if (z != st._item[0].nominal._size-1-1) cout << " & ";
       total_syst[z] += pow(st._item[0].syst[systName][z], 2);
@@ -186,7 +189,10 @@ void SystematicCalculatorBase::printBinSysts(SampleSet &st) {
   cout << "\\hline" << endl;
   cout << setw(50) << "Total" << " & ";
   for (int z = 1; z < st._item[0].nominal._size-1; ++z) {
-    cout << setw(15) << total_syst[z]*100/st._item[0].nominal[z];
+    double s = 0;
+    if (st._item[0].nominal[z] != 0)
+      s = total_syst[z]/st._item[0].nominal[z];
+    cout << setw(15) << s*100.0;
     if (z != st._item[0].nominal._size-1-1) cout << " & ";
   }
   cout << "\\\\" << endl;
@@ -280,8 +286,8 @@ void SystematicCalculator::calculate(const std::string &histogram) {
 
 
 
-SystematicRatioCalculator::SystematicRatioCalculator(SystematicCalculator &sca, SystematicCalculator &scb)
-  :_sca(sca), _scb(scb) {
+SystematicRatioCalculator::SystematicRatioCalculator(SystematicCalculator &sca, SystematicCalculator &scb, bool binomial)
+  :_sca(sca), _scb(scb), _binomial(binomial) {
   _sr.addType("Ratio");
   _sr.add("Ratio", "", "", "", "");
 }
@@ -339,25 +345,23 @@ void SystematicRatioCalculator::calculate(const std::string &hnum, const string 
     systNames.push_back(k->first);
   }
   //ratio.nominal and ratio.syst(map of string, Hist)
-  ratio.nominal = numerator.nominal/denominator.nominal;
-  ratio.nominal.clipErrorForEfficiency();
+  if (_binomial) {
+    ratio.nominal = numerator.nominal/denominator.nominal;
+  } else {
+    ratio.nominal = numerator.nominal;
+    ratio.nominal /= denominator.nominal;
+  }
+  //ratio.nominal.clipErrorForEfficiency();
   for (int k = 0; k < systNames.size(); ++k) {
     string name = systNames[k];
-    Hist am = numerator.nominal - numerator.syst[name];
-    Hist bm = denominator.nominal - denominator.syst[name];
     Hist ap = numerator.nominal + numerator.syst[name];
     Hist bp = denominator.nominal + denominator.syst[name];
-    Hist c = (am/bm) - ratio.nominal;
-    Hist d = (ap/bp) - ratio.nominal;
-    //if (name == "(06) MC generator") cout << "nom = " << ratio.nominal.yield() << ", Up = " << c.yield() << ", Down = " << d.yield() << ", numUp = " << am.yield() << ", denUp = " << bm.yield() << ", nomNum = " << numerator.nominal.yield() << ", nomDen = " << denominator.nominal.yield() << endl;
-    // DANILO
-    ratio.syst[name] = ratio.nominal;
-    ratio.syst[name].max(c,d);
+    ratio.syst[name] = (ap/bp) - ratio.nominal;
   }
 }
 
-SystematicRatioRatioCalculator::SystematicRatioRatioCalculator(SystematicRatioCalculator &sca, SystematicRatioCalculator &scb)
-  :_sca(sca), _scb(scb) {
+SystematicRatioRatioCalculator::SystematicRatioRatioCalculator(SystematicRatioCalculator &sca, SystematicRatioCalculator &scb, bool binomial)
+  :_sca(sca), _scb(scb), _binomial(binomial) {
   _sr.addType("Ratio");
   _sr.add("Ratio", "", "", "", "");
 }
@@ -410,20 +414,24 @@ void SystematicRatioRatioCalculator::calculate(const std::string &hnum, const st
   for (map<string, Hist>::const_iterator k = numerator.syst.begin(); k != numerator.syst.end(); ++k) {
     systNames.push_back(k->first);
   }
+  for (map<string, Hist>::const_iterator k = denominator.syst.begin(); k != denominator.syst.end(); ++k) {
+    if (std::find(systNames.begin(), systNames.end(), k->first) == systNames.end()) {
+      systNames.push_back(k->first);
+    }
+  }
   //ratio.nominal and ratio.syst(map of string, Hist)
-  ratio.nominal = numerator.nominal/denominator.nominal;
+  if (_binomial) {
+    ratio.nominal = numerator.nominal/denominator.nominal;
+  } else {
+    ratio.nominal = numerator.nominal;
+    ratio.nominal /= denominator.nominal;
+  }
   //ratio.nominal.clipErrorForEfficiency();
   for (int k = 0; k < systNames.size(); ++k) {
     string name = systNames[k];
-    Hist am = numerator.nominal - numerator.syst[name];
-    Hist bm = denominator.nominal - denominator.syst[name];
     Hist ap = numerator.nominal + numerator.syst[name];
     Hist bp = denominator.nominal + denominator.syst[name];
-    Hist c = (am/bm) - ratio.nominal;
-    Hist d = (ap/bp) - ratio.nominal;
-    //if (name == "(06) MC generator") cout << "nom = " << ratio.nominal.yield() << ", Up = " << c.yield() << ", Down = " << d.yield() << ", numUp = " << am.yield() << ", denUp = " << bm.yield() << ", nomNum = " << numerator.nominal.yield() << ", nomDen = " << denominator.nominal.yield() << endl;
-    ratio.syst[name] = ratio.nominal;
-    ratio.syst[name].max(c,d);
+    ratio.syst[name] = (ap/bp) - ratio.nominal;
   }
 }
 

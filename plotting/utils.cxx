@@ -1013,6 +1013,239 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
   c->SaveAs(outfile.c_str());
 }
 
+void drawChannelRatio(SampleSet *ssMC, const vector<std::string> &extraText, const std::string &outfile, const std::string &yTitle, SampleSet *ssData, bool mcError, int mustBeBigger, float yMax, const std::string &xTitle, SampleSet *ssRat, double lumi) {
+  TStyle *atlasStyle = AtlasStyle();
+  gROOT->SetStyle("ATLAS");
+  gROOT->ForceStyle();
+  gStyle->SetOptStat(0);
+  gStyle->SetLabelSize(0.1);
+
+  shared_ptr<TCanvas> c(new TCanvas("c", "", 800, 600));
+
+  // do ratio?
+  TPad *pad_ratio = 0;
+  TPad *pad_ratio2 = 0;
+  c->Divide(1, 2, 0.015, 0.01);
+  pad_ratio = (TPad *) c->cd(2);
+  pad_ratio->SetPad(0.01,0,1,0.30);
+  pad_ratio->SetTopMargin(0.01);
+  pad_ratio->SetBottomMargin(0.45);
+  pad_ratio->SetLeftMargin(0.16);
+  c->cd(1)->SetPad(0.01,0.2,1,0.99);
+  c->cd(1)->SetBottomMargin(0.13);
+
+  c->cd(1);
+
+  // make syst. band
+  shared_ptr<TGraphAsymmErrors> band;
+  if (ssData)
+    band = ssData->makeBand(true);
+  if (band) {
+    band->SetFillStyle(3354);
+    band->SetLineStyle(1);
+    band->SetLineColor(kBlack);
+    band->SetFillColor(kBlack);
+  }
+
+  shared_ptr<TGraphAsymmErrors> bandMC = ssMC->makeBand(false);
+  bandMC->SetFillStyle(3354);
+  bandMC->SetLineStyle(1);
+  bandMC->SetLineColor(kRed);
+  bandMC->SetFillColor(kRed);
+
+  // make legend
+  shared_ptr<TLegend> leg;
+  leg.reset(new TLegend(0.40,0.15,0.65,0.35));
+  //leg->SetNColumns(1);
+  leg->SetFillStyle(0);
+  leg->SetBorderSize(0);
+  leg->SetTextSize(0.045);
+
+  // make MC stack and add entries in legend
+  shared_ptr<TH1D> MC = ssMC->makeTH1("MC");
+  MC->SetStats(0);
+  MC->SetMarkerStyle(22);
+  MC->SetMarkerColor(kRed);
+  MC->SetMarkerSize(1.0);
+  MC->SetLineColor(kRed);
+
+  shared_ptr<TH1D> Data;
+  if (ssData)
+    Data = ssData->makeTH1("Data");
+  if (Data) {
+    Data->SetStats(0);
+    Data->SetMarkerStyle(20);
+    Data->SetMarkerSize(1.0);
+    Data->SetMarkerColor(kBlack);
+    Data->SetLineColor(kBlack);
+    leg->AddEntry(Data.get(), "Data", "LP");
+  }
+  leg->AddEntry(MC.get(), "MC", "LP");
+
+  TLegend *leg2;
+  leg2 = new TLegend(0.65,0.18,0.85,0.26);
+  //leg2->SetNColumns(1);
+  leg2->SetFillStyle(0);
+  leg2->SetBorderSize(0);
+  leg2->SetTextSize(0.045);
+  if (mcError) leg2->AddEntry(bandMC.get(), "Syst. uncertainty", "F");
+  // data error
+  else leg2->AddEntry(band.get(), "Syst. uncertainty", "F");
+
+  double maximum = MC->GetBinContent(MC->GetMaximumBin());
+  if (Data) maximum = std::max(Data->GetBinContent(Data->GetMaximumBin()), MC->GetBinContent(MC->GetMaximumBin()));
+  maximum *= 1.7;
+  if (yMax > 0) maximum = yMax;
+  MC->SetMaximum(maximum);
+  if (Data) {
+    Data->SetMaximum(maximum);
+    if (yTitle != "") Data->GetYaxis()->SetTitle(yTitle.c_str());
+  }
+
+  MC->SetMinimum(0.0001);
+  if (Data)
+    Data->SetMinimum(0.0001);
+
+  MC->GetXaxis()->SetTitleOffset(2.0);
+  MC->GetYaxis()->SetTitleOffset(1.0); //1.7
+
+  if (Data) {
+    Data->GetXaxis()->SetTitleOffset(2.0);
+    Data->GetYaxis()->SetTitleOffset(1.0);
+  }
+  if (yTitle != "") MC->GetYaxis()->SetTitle(yTitle.c_str());
+
+  MC->Draw("e");
+  if (Data)
+    Data->Draw("e same");
+
+  if (mcError) {
+    bandMC->Draw("2 ][ same");
+  } else if (!mcError && band) band->Draw("2 ][ same");
+  leg->Draw();
+  leg2->Draw();
+
+  shared_ptr<TH1D> rat;
+  shared_ptr<TGraphAsymmErrors> rat_band;
+  if (Data && MC) {
+    if (ssRat) {
+      rat = ssRat->makeTH1("ratrat");
+      rat->SetStats(0);
+      rat->SetMarkerStyle(20);
+      rat->SetMarkerSize(1.0);
+      rat->SetMarkerColor(kBlack);
+      rat->SetLineColor(kBlack);
+      rat_band = ssRat->makeBand(false);
+    } else {
+      rat.reset((TH1D *) Data->Clone("ratio_std"));
+      rat->Divide(Data.get(), MC.get(), 1, 1, "B");
+      if (band) {
+        rat_band = normaliseBand(band, MC.get(), 0);
+      }
+    }
+  } else if (MC && bandMC) {
+    rat.reset((TH1D *) MC->Clone("ratio_std"));
+    rat->Divide(MC.get(), MC.get(), 1, 1, "");
+    rat_band = normaliseBand(bandMC, MC.get(), 0);
+  }
+
+  c->cd(2);
+  shared_ptr<TLegend> legSFerr;
+  shared_ptr<TLine> lin;
+  if (rat) {
+    rat->SetStats(0);
+    if (mustBeBigger == 0)
+      rat->GetYaxis()->SetRangeUser(0.3, 1.7);
+    else if (mustBeBigger == 1)
+      rat->GetYaxis()->SetRangeUser(0.1, 1.9);
+    else if (mustBeBigger == 2)
+      rat->GetYaxis()->SetRangeUser(0.8, 1.2);
+    rat->SetTitle("");
+    rat->GetXaxis()->SetTitle(MC->GetXaxis()->GetTitle());
+    if (xTitle != "") {
+      rat->GetXaxis()->SetTitle(xTitle.c_str());
+    }
+    rat->GetYaxis()->SetTitle("Data/Sim.");
+    rat->GetYaxis()->SetNdivisions(405, true);
+    rat->GetXaxis()->SetLabelFont(42);
+    rat->GetXaxis()->SetTitleFont(42);
+    rat->GetYaxis()->SetLabelFont(42);
+    rat->GetYaxis()->SetTitleFont(42);
+    rat->GetYaxis()->SetLabelOffset(0.02);
+    //rat->GetXaxis()->SetTitleSize(0.14);
+    //rat->GetXaxis()->SetLabelSize(0.14);
+    //rat->GetXaxis()->SetTitleOffset(1.0);
+    rat->GetXaxis()->SetTitleSize(0.18);
+    rat->GetXaxis()->SetLabelSize(0.18);
+    rat->GetXaxis()->SetTitleOffset(1.1);
+
+    //rat->GetYaxis()->SetLabelSize(0.14);
+    //rat->GetYaxis()->SetTitleSize(0.14);
+    //rat->GetYaxis()->SetTitleOffset(0.5);
+    rat->GetYaxis()->SetLabelSize(0.18);
+    rat->GetYaxis()->SetTitleSize(0.18);
+    rat->GetYaxis()->SetTitleOffset(0.45);
+    rat->SetTitle("");
+
+    rat->Draw("e");
+    if (rat_band) rat_band->Draw("2 ][ same");
+    if (!mcError && rat_band)
+      rat_band->SetFillColor(kBlue);
+    else if (rat_band)
+      rat_band->SetFillColor(kRed);
+    if (rat_band)
+      rat_band->SetFillStyle(3345);
+
+    lin.reset(new TLine(rat->GetXaxis()->GetBinLowEdge(1), 1, rat->GetXaxis()->GetBinUpEdge(rat->GetNbinsX()), 1));
+    lin->SetLineColor(kBlack);
+    lin->SetLineWidth(3);
+    lin->SetLineStyle(2);
+    lin->Draw();
+
+    c->cd(2)->SetGridy();
+    c->cd(1);
+
+    legSFerr.reset(new TLegend(0.18,0.68,0.48,0.75));
+    if (!mcError && rat_band) {
+      legSFerr->AddEntry(rat_band.get(),"Systematic uncertainty","f");
+    } else {
+      //legSFerr->AddEntry(rat_band.get(),"MC systematic error","f");
+    }
+    legSFerr->SetTextSize(0.04);
+    if (!mcError) legSFerr->Draw();
+
+  }
+
+  c->cd(1);
+  double xstart = 0.2;
+  double ystart = 0.88;
+
+  string _stampText = "Internal";
+  if (_stamp == 1)
+    _stampText = "Preliminary";
+  else if (_stamp == 2)
+    _stampText = "";
+  stampATLAS(_stampText, xstart, ystart);
+  stampLumiText(lumi, xstart, ystart-0.10, "#sqrt{s} = 13 TeV", 0.05);
+
+  vector<double> xx;
+  vector<double> yy;
+  xx.push_back(xstart+0.42);
+  yy.push_back(ystart);
+  xx.push_back(xstart+0.42);
+  yy.push_back(ystart-0.06*1);
+  xx.push_back(xstart);
+  yy.push_back(ystart-0.25 - 0.06*0);
+  xx.push_back(xstart);
+  yy.push_back(ystart-0.25 - 0.06*1);
+  for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
+    size_t pos = ((size_t) (i - extraText.begin()));
+    stampText(*i, xx[pos], yy[pos], 0.05);
+  }
+
+  c->SaveAs(outfile.c_str());
+}
+
 void drawEff(SampleSet *ssMC, const vector<std::string> &extraText, const std::string &outfile, const std::string &yTitle, SampleSet *ssData, bool mcError, int mustBeBigger, float yMax, const std::string &xTitle, SampleSet *ssRat, double lumi) {
   TStyle *atlasStyle = AtlasStyle();
   gROOT->SetStyle("ATLAS");
@@ -1411,6 +1644,44 @@ SampleSetConfiguration makeConfigurationPlots(const string &prefix, const string
         stackConfig.add("Data", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
                                 "PL", 1, kBlack, 1,    0, 20, 1, "e");
     } else {
+      stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                              "F", 1, kBlack, 1001,      fillC, 1, 0, "hist");
+    }
+  }
+
+  return stackConfig;
+}
+
+SampleSetConfiguration makeConfigurationDataOnly(const string &prefix, const string &channel) {
+  SampleSetConfiguration stackConfig;
+
+  stackConfig.addType("Data");
+  for (std::map<std::string, std::string>::iterator it = name.begin(); it != name.end(); ++it) {
+    std::string id = it->first;
+    std::string file = it->second;
+    std::string longTitle = title[id];
+    std::string latexTitle = latex[id];
+    int fillC = fillColor[id];
+    if (it->first.find("data") != std::string::npos) {
+      stackConfig.add("Data", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                              "PL", 1, kBlack, 1,    0, 20, 1, "e");
+    }
+  }
+
+  return stackConfig;
+}
+
+SampleSetConfiguration makeConfigurationMCOnly(const string &prefix, const string &channel) {
+  SampleSetConfiguration stackConfig;
+
+  stackConfig.addType("MC");
+  for (std::map<std::string, std::string>::iterator it = name.begin(); it != name.end(); ++it) {
+    std::string id = it->first;
+    std::string file = it->second;
+    std::string longTitle = title[id];
+    std::string latexTitle = latex[id];
+    int fillC = fillColor[id];
+    if (it->first.find("data") == std::string::npos) {
       stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
                               "F", 1, kBlack, 1001,      fillC, 1, 0, "hist");
     }

@@ -7,7 +7,7 @@ LDFLAGS = -g -std=c++11 -rdynamic $(ROOTLIB)
 
 DEPS = ParseUtils.o utils.o Hist.o SystematicImplementation.o SampleSet.o SystematicCalculation.o
 
-all: plot compare plotCompareNominal
+all: plot compare plotCompareNominal plotChannelRatio
 
 %.o:%.cxx
 	g++ $(CXXFLAGS) -o $@ $<
@@ -15,6 +15,9 @@ all: plot compare plotCompareNominal
 
 plot: $(DEPS) plot.o
 	g++ -o $@ $(DEPS) plot.o $(LDFLAGS)
+
+plotChannelRatio: $(DEPS) plotChannelRatio.o
+	g++ -o $@ $(DEPS) plotChannelRatio.o $(LDFLAGS)
 
 plotCompareNominal: $(DEPS) plotCompareNominal.o
 	g++ -o $@ $(DEPS) plotCompareNominal.o $(LDFLAGS)
