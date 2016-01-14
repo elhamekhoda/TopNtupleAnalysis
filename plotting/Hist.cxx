@@ -369,8 +369,8 @@ Hist &Hist::operator /=(Hist a) {
     // not binomial if using /=!
     double b1sq = std::pow((*this)[i], 2);
     double b2sq = std::pow(a[i], 2);
-    double e1sq = std::pow((*this)[i], 2);
-    double e2sq = std::pow(a[i], 2);
+    double e1sq = std::pow((*this).e(i), 2);
+    double e2sq = std::pow(a.e(i), 2);
     (*this).e(i) = b2sq!=0?std::sqrt((e1sq/b2sq + e2sq*b1sq/(b2sq*b2sq))):0;
     if (a[i] != 0)
       (*this)[i] /= a[i];
