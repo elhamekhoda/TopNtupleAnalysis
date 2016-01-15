@@ -127,6 +127,7 @@ int main(int argc, char **argv) {
   int _btags = 1;
   int removeOverlapHighMtt = 0;
   int runMM = 0;
+  int runMM_StatErr = 0;
   int applyPtRew = 0;
   std::string pdf = "";
   int applyWSF = 0;
@@ -147,6 +148,7 @@ int main(int argc, char **argv) {
         {"removeOverlapHighMtt",  required_argument,     0, 'R', "Veto events with true mtt > 1.1 TeV in the 410000 sample only (to be activated if one wnats to use the mtt sliced samples).", &removeOverlapHighMtt, extendedOption::eOTInt},
         {"doWeightSystematics",   required_argument,     0, 'S', "Include the variation of the systematics in the SFs.", &doWeightSystematics, extendedOption::eOTInt},
         {"runMM",                 required_argument,     0, 'M', "Implement the QCD weiths to data", &runMM, extendedOption::eOTInt},
+	{"runMM_StatErr",         required_argument,     0, 'm', "Shift the real/fake efficiencies to estimate the stattistical error", &runMM_StatErr, extendedOption::eOTInt},
         {"applyPtRew",            required_argument,     0, 'P', "Apply pt reweighting.", &applyPtRew, extendedOption::eOTInt},
         {"pdf",                   required_argument,     0, 'p', "Only run PDF variations.", &pdf, extendedOption::eOTString},
         {"applyWSF",              required_argument,     0, 'W', "Apply W SF.", &applyWSF, extendedOption::eOTInt},
@@ -546,7 +548,7 @@ int main(int argc, char **argv) {
   // systsList contains the list of TTrees representing systematics
   // given by the user
   for (size_t systIdx = 0; systIdx < systsList.size(); ++systIdx) {
-
+    std::cout<< "* Running on syst: " << systIdx << std::endl;
     // it does not have the xxx_Loose TTrees, so we add it ourselves and run over it too
     std::vector<std::string> lepton_modes;
     lepton_modes.push_back(systsList[systIdx]);
@@ -554,6 +556,7 @@ int main(int argc, char **argv) {
       lepton_modes.push_back(systsList[systIdx]+std::string("_Loose"));
     }
     for (size_t lmodeIdx = 0; lmodeIdx < lepton_modes.size(); ++lmodeIdx) {
+      std::cout<< "** Running on lepton mode: " << lmodeIdx << std::endl;
 
       // now we are looping over all possible TTrees with all systematic uncertainties
       // Call MiniTree to open the files and read that TTree
@@ -694,6 +697,10 @@ int main(int argc, char **argv) {
           double weight = 1;
           if (!isData) {
             weight *= sel.weight_mc()*sel.weight_pileup();
+
+	    //if (channel >= 361300 && channel <= 361368) weight *= sel.weight_mc();
+            //else                                        weight *= sel.weight_mc()*sel.weight_pileup();
+            
             weight *= sampleXsection.getXsection(channel);
 
             double pdfw = 1.0;
@@ -904,7 +911,7 @@ int main(int argc, char **argv) {
 	  
 	  if (runMM) {
 	     
-	     weight = MMfiles->getMMweights(sel);
+	     weight *= MMfiles->getMMweights(sel, runMM_StatErr);
 	  
 	  }//runMM
       
@@ -950,8 +957,9 @@ int main(int argc, char **argv) {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
                 (dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runEfficiency(sel, weight, suffix);
           } else if (analysis=="AnaTtresQCDfake") {
-            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-                (dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runFakeRate(sel, weight, suffix);
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runFakeRate(sel, weight, suffix);
+	    }
           } else if (analysis=="AnaTtresSLMtt") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
                 vec_analysis[iAna]->run(sel, weight, suffix);

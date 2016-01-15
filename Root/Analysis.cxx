@@ -28,8 +28,9 @@ void Analysis::clearDuplicateList(){
    m_runEventPair.clear();
 }
 
-bool Analysis::isDuplicateEvent(unsigned int runNumber, unsigned int eventNumber){
-  std::pair<unsigned int, unsigned int> runEvent(runNumber, eventNumber);
+bool Analysis::isDuplicateEvent(unsigned int runNumber, unsigned int eventNumber, double leptPt){
+  std::pair<unsigned int, unsigned int>  temp( eventNumber, leptPt);
+  std::pair<unsigned int, std::pair<unsigned int, unsigned int> > runEvent(runNumber, temp);
   if( m_runEventPair.end() == m_runEventPair.find(runEvent) ) { 
     m_runEventPair.insert(runEvent);
     return false;

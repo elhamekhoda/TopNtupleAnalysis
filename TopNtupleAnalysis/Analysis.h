@@ -29,8 +29,9 @@ class Analysis {
   protected:
     std::string m_filename;
     HistogramService m_hSvc;
-    std::set< std::pair<unsigned int, unsigned int> > m_runEventPair;
-    bool isDuplicateEvent(unsigned int runNumber, unsigned int eventNumber);
+    //std::set< std::pair<unsigned int, unsigned int> > m_runEventPair;
+    std::set< std::pair<unsigned int,  std::pair<unsigned int,unsigned int> > > m_runEventPair;
+    bool isDuplicateEvent(unsigned int runNumber, unsigned int eventNumber, double leptPt);
     
     unsigned int m_Nduplicate;
 };

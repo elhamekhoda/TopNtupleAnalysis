@@ -23,7 +23,7 @@ class MMUtils{
     MMUtils(const std::string &eff_filename="eff.root", const std::string &fake_filename="fake.root"); 
     ~MMUtils();
 
-    float getMMweights(const Event &evt);
+    float getMMweights(const Event &evt, int runMM_StatErr);
 
   private:
 
@@ -32,15 +32,25 @@ class MMUtils{
     TH2F * eff_map_boosted_e;
     TH2F * eff_map_boosted_mu;
     
-    TH2F * fake_map_resolved_e;
-    TH2F * fake_map_resolved_mu;
-    TH2F * fake_map_boosted_e;
-    TH2F * fake_map_boosted_mu;
-
     TH2F * eff_map;
-    TH2F * fake_map;
+	
+    TH1F * fake_pt_resolved_e;
+    TH1F * fake_pt_resolved_mu;
+    TH1F * fake_pt_boosted_e;
+    TH1F * fake_pt_boosted_mu;
+    
+    TH1F * fake_dr_resolved_e;
+    TH1F * fake_dr_resolved_mu;
+    TH1F * fake_dr_boosted_e;
+    TH1F * fake_dr_boosted_mu;
+    
+    TH1F * fake_dr;;
+    TH1F * fake_pt;
     
     HistogramService m_hSvc;
+    
+    bool fake_1Dparam_dr;
+    
 };
 
 #endif

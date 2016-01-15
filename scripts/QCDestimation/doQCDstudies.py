@@ -169,8 +169,8 @@ def effRates(channels):
 def fakeRates(inputDir, lumi):
 
 	merge = 1
-	extraPlots = 1
-	
+	extraPlots = 0
+		
 	channels  = []
 	channels += [('resolved','e' )]
 	channels += [('resolved','mu')]
@@ -368,6 +368,8 @@ def fakeRates(inputDir, lumi):
 		h_leptPt_l 	= []
 		h_closeJL_pt_t	= []
 		h_closeJL_pt_l  = []
+		h_closeJL_dr_t	= []
+		h_closeJL_dr_l  = []
 		h2D_fakeParam_t = []
 		h2D_fakeParam_l = []
 		
@@ -383,11 +385,51 @@ def fakeRates(inputDir, lumi):
 			#pT of the closest jet to the lepton
 			h_closeJL_pt_t.append( inputfile.Get("fake_lepPt_jetPt").ProjectionY().Clone() )			
 			h_closeJL_pt_l.append( inputfile.Get("fake_lepPt_jetPt_Loose").ProjectionY().Clone() )
+			
+			#dr between the closest jet to the lepton
+			h_closeJL_dr_t.append( inputfile.Get("fake_DR_jetPt").ProjectionX().Clone() )			
+			h_closeJL_dr_l.append( inputfile.Get("fake_DR_jetPt_Loose").ProjectionX().Clone() )
 				
 			#lept pT vs pT of the closest jet to the lepton
 			h2D_fakeParam_t.append( inputfile.Get("fake_lepPt_jetPt").Clone() )		      
 			h2D_fakeParam_l.append( inputfile.Get("fake_lepPt_jetPt_Loose").Clone() )
 			
+		
+		#antiTight
+		mc1 = h_leptPt_t[0].Clone()
+		mc1.Scale(lumi)
+		mc2 = h_leptPt_l[0].Clone()
+		mc2.Scale(lumi)
+		
+		#print h1.GetEntries(), h2.GetEntries()
+		
+		mc2.Add(mc1,-1)
+		
+		d1 = h_leptPt_t[1].Clone()
+		d2 = h_leptPt_l[1].Clone()
+		
+		d2.Add(d1,-1)		
+		
+		c = TCanvas("c_"+'fake_antiTight_Pt_'+ichan[0]+'_'+ichan[1])
+                maxi = 0
+                mini = 0
+                d2.Draw("histoE")
+		d2.SetLineColor(2)
+		d2.SetLineWidth(2)
+		
+		mc2.Draw("EhistoSAME")
+		mc2.SetLineColor(4)
+		mc2.SetLineWidth(2)
+                #maxi = h_antiTight_leptPt.GetMaximum()
+                #mini = h_antiTight_leptPt.GetMinimum()
+                #h_antiTight_leptPt.SetMaximum(maxi*1.3)
+                #h_antiTight_leptPt.SetMinimum(mini*0.7)
+                d2.SetStats(0)
+		mc2.SetStats(0)
+                c.SetGridy(1)
+                c.Update()
+                c.Modified()
+                saveCanvas(c, 'h_fake_antiTight_leptPt_'+ichan[0]+'_'+ichan[1], outfile, 'fake_plots')
 			
 		# ---> 1D fake rates: 
 		#lept Pt
@@ -408,16 +450,17 @@ def fakeRates(inputDir, lumi):
 		c = TCanvas("c_"+'fake_leptPt_'+ichan[0]+'_'+ichan[1])
                 maxi = 0
 		mini = 0
-		h_ratio_leptPt.Draw("e")			               	
+		h_ratio_leptPt.Draw("e")
 		#maxi = h_ratio_leptPt.GetMaximum()
 		#mini = h_ratio_leptPt.GetMinimum()
                 #h_ratio_leptPt.SetMaximum(maxi*1.3)
 		#h_ratio_leptPt.SetMinimum(mini*0.7)
-		h_ratio_leptPt.SetStats(0)		
+		#h_ratio_leptPt.SetStats(0)		
 		c.SetGridy(1)
 		c.Update()
-                c.Modified()		
-		if extraPlots:	saveCanvas(c, 'h_fake_leptPt_'+ichan[0]+'_'+ichan[1], outfile, 'fake_plots')
+                c.Modified()
+		h_ratio_leptPt.Write()	               			
+		saveCanvas(c, 'h_fake_leptPt_'+ichan[0]+'_'+ichan[1], outfile, 'fake_plots')
 
 		#pT of the closest jet to the lepton
 		
@@ -448,7 +491,39 @@ def fakeRates(inputDir, lumi):
                 c1.Modified()
 		if extraPlots:	saveCanvas(c1, 'h_fake_closeJL_pt_'+ichan[0]+'_'+ichan[1], outfile, 'fake_plots')
 		
-		# ---> 2D fake rates
+		
+		#dr between the closest jet to the lepton
+		
+		h_closeJL_dr_t[0].Scale(lumi)
+		h1 = h_closeJL_dr_t[1]		
+		h1.Add(h_closeJL_dr_t[0],-1)
+		if extraPlots:	h1.Write("hP_closeJL_dr_tight_"+ichan[0]+'_'+ichan[1])
+		
+		h_closeJL_dr_l[0].Scale(lumi)						
+		h2 = h_closeJL_dr_l[1]
+		h2.Add(h_closeJL_dr_l[0],-1)			
+		if extraPlots:	h2.Write("hP_closeJL_dr_loose_"+ichan[0]+'_'+ichan[1])
+		
+		h_ratio_closeJL_dr = h1
+		h_ratio_closeJL_dr.Divide(h1, h2, 1.0, 1.0, "B")	
+		
+		c1 = TCanvas("c_"+'fake_closeJL_dr_'+ichan[0]+'_'+ichan[1])
+                maxi = 0
+		mini = 0
+		h_ratio_closeJL_dr.Draw("e")			               	
+		#maxi = h_ratio_closeJL_pt.GetMaximum()
+		#mini = h_ratio_closeJL_pt.GetMinimum()
+                #h_ratio_closeJL_pt.SetMaximum(maxi*1.3)
+		#h_ratio_closeJL_pt.SetMinimum(0.5)
+		#h_ratio_closeJL_pt.SetStats(0)
+		c1.SetGridy(1)
+		c1.Update()
+                c1.Modified()
+		saveCanvas(c1, 'h_fake_closeJL_dr_'+ichan[0]+'_'+ichan[1], outfile, 'fake_plots')		
+		outfile.cd()	
+		h_ratio_closeJL_dr.Write('h_fake_closeJL_dr_'+ichan[0]+'_'+ichan[1])
+		
+		# ---> 2D fake rates: lept Pt
 
 		h2D_fakeParam_t[0].Scale(lumi)
 		h1_2D = h2D_fakeParam_t[1]
@@ -488,10 +563,218 @@ def fakeRates(inputDir, lumi):
 			
 		outfile.cd()	
 		h_ratio_fake.Write('2Dfake_'+ichan[0]+'_'+ichan[1])
+		
+	
 	
 	bkgFile.Close()
 	dataFile.Close()	
 	outfile.Close()
+	return
+
+
+def real_fake_eff(inputDir_real, inputDir_fake, lumi):
+
+	channels  = []
+	channels += [('resolved','e' )]
+	channels += [('resolved','mu')]
+	channels += [('boosted', 'e' )]
+	channels += [('boosted', 'mu')]
+
+	outfile = TFile('real_fake_eff.root','RECREATE')
+	
+	for ichan in channels:
+		
+		#########################################
+		#### real eff as function of lept Pt ####
+		#########################################
+		
+		hadd_in_real = ""
+		hadd_in_real = inputDir_real+ichan[0]+"_"+ichan[1]+"_ttbar*root"
+	
+		ttbarFile = ichan[0]+"_ttbar_"+ichan[1]+".root "
+		
+		print "hadd -f " + ttbarFile + hadd_in_real
+		os.system("hadd -f " + ttbarFile + hadd_in_real)
+		
+		inputfile_real = TFile(ttbarFile,'READ')
+
+		#pT
+		hReal_t_pt = inputfile_real.Get("eff_LepPt_DR").ProjectionX().Clone()
+		hReal_l_pt = inputfile_real.Get("eff_LepPt_DR_Loose").ProjectionX().Clone()
+		
+		#eff using TH1 lepton pT
+		hReal_ratio_pt = hReal_t_pt
+		hReal_ratio_pt.Divide(hReal_t_pt, hReal_l_pt, 1.0, 1.0, "B")
+		
+		#########################################
+		#### fake eff as function of lept Pt ####
+		#########################################
+
+		hadd_in_fake = []
+		
+		for File in os.popen("ls "+inputDir_fake+ichan[0]+"_fake_"+ichan[1]+"_ttbar.root ").readlines():
+			print File[:-1]
+			hadd_in_fake.append(File[:-1])
+		
+		for File in os.popen("ls "+inputDir_fake+ichan[0]+"_fake_"+ichan[1]+"_W*root ").readlines():
+			hadd_in_fake.append(File[:-1])
+		
+		for File in os.popen("ls "+inputDir_fake+ichan[0]+"_fake_"+ichan[1]+"_Z*root ").readlines():
+			hadd_in_fake.append(File[:-1])
+
+		for File in os.popen("ls "+inputDir_fake+ichan[0]+"_fake_"+ichan[1]+"_st.root ").readlines():
+			hadd_in_fake.append(File[:-1])	
+
+
+		hadd_bkgPath = ichan[0]+"_BKG_"+ichan[1]+".root"
+		MergeFiles(hadd_bkgPath, hadd_in_fake)
+
+		# --> Merging the datasets
+		hadd_in_fake=[]		
+		
+		for File in os.popen("ls "+inputDir_fake+ichan[0]+"_fake_"+ichan[1]+"_DT*root ").readlines():
+			hadd_in_fake.append(File[:-1])
+		
+		hadd_dataPath =  ichan[0]+"_DATA_"+ichan[1]+".root"
+		MergeFiles(hadd_dataPath, hadd_in_fake)
+		
+		# --> Check QCD at low MWT
+		
+		bkgFile  = TFile(hadd_bkgPath,'READ')
+		dataFile = TFile(hadd_dataPath,'READ')
+		
+		hFake_t_pt = []
+		hFake_l_pt = []
+
+		for item in ["BKG","DATA"]:	
+			
+			if item=="BKG":		inputfile_fake = bkgFile
+			elif item=="DATA":	inputfile_fake = dataFile
+								
+			#lept pT
+			hFake_t_pt.append( inputfile_fake.Get("fake_lepPt_jetPt").ProjectionX().Clone() )		  	  
+			hFake_l_pt.append( inputfile_fake.Get("fake_lepPt_jetPt_Loose").ProjectionX().Clone() )
+			
+		# ---> 1D fake rates: 
+		#lept Pt
+
+		hFake_t_pt[0].Scale(lumi)
+		h1 = hFake_t_pt[1]
+		h1.Add(hFake_t_pt[0],-1)
+		
+		hFake_l_pt[0].Scale(lumi)
+		h2 = hFake_l_pt[1]
+		h2.Add(hFake_l_pt[0],-1)		
+		
+		hFake_ratio_pt = h1
+		hFake_ratio_pt.Divide(h1, h2, 1.0, 1.0, "B")
+
+		##################################################
+		#### real and fake eff as function of lept Pt ####
+		##################################################
+		
+		c = TCanvas("c_"+'fake_leptPt_'+ichan[0]+'_'+ichan[1])
+		leg = TLegend(0.7, 0.78, 0.85, 0.88, ichan[0]+" "+ichan[1]+" channel:")
+		leg.SetTextSize(0.028)
+		leg.SetFillColor(10)
+		leg.SetBorderSize(0)
+			
+		#hReal_ratio_pt.Draw("e")
+		hReal_ratio_pt.SetMarkerStyle(20)
+		hReal_ratio_pt.SetMarkerColor(4)
+		hReal_ratio_pt.GetYaxis().SetRangeUser(0., 1.0)
+		hReal_ratio_pt.GetXaxis().SetTitle("Pt of lepton [GeV]")
+		hReal_ratio_pt.GetYaxis().SetTitle("Efficiency")
+		hReal_ratio_pt.SetStats(0)
+
+		hFake_ratio_pt.Draw("eSAME")
+		hFake_ratio_pt.SetMarkerStyle(24)
+		hFake_ratio_pt.SetMarkerColor(4)
+		hFake_ratio_pt.SetStats(0)
+		hFake_ratio_pt.GetYaxis().SetRangeUser(0., 1.0)
+		hFake_ratio_pt.GetXaxis().SetTitle("Pt of lepton [GeV]")
+		hFake_ratio_pt.GetYaxis().SetTitle("fake eff.")
+		outfile.cd()
+		hFake_ratio_pt.Write('histo_rates_leptPt_'+ichan[0]+'_'+ichan[1])
+		'''
+		if (hReal_ratio_pt.GetMaximum()>hFake_ratio_pt.GetMaximum()):
+			maxi = hReal_ratio_pt.GetMaximum()
+		else:
+			maxi = hFake_ratio_pt.GetMaximum()	
+			
+		if (hReal_ratio_pt.GetMinimum()>hFake_ratio_pt.GetMinimum()):
+			mini = hFake_ratio_pt.GetMinimum()
+		else:
+			mini = hReal_ratio_pt.GetMinimum()		
+		
+		hReal_ratio_pt.SetMaximum(maxi*1.3)
+		hReal_ratio_pt.SetMinimum(mini*0.3)
+		'''
+		leg.AddEntry(hReal_ratio_pt, "real eff.", "P")
+		leg.AddEntry(hFake_ratio_pt, "fake eff.", "P")
+		
+		#leg.Draw()
+		
+		c.SetLogx(1)
+		c.SetGridy(1)
+		c.Update()
+                c.Modified()		
+		saveCanvas(c, 'h_rates_leptPt_'+ichan[0]+'_'+ichan[1], outfile, 'real_fake_eff')
+
+	return	
+
+def get_MM_StatErr(inputDir, lumi):
+
+	merge = 1
+	extraPlots = 1
+	
+	channels  = []
+	channels += [('resolved','e' )]
+	channels += [('resolved','mu')]
+	channels += [('boosted', 'e' )]
+	channels += [('boosted', 'mu')]
+	
+	outfile = TFile("MM_StatErr.root","RECREATE")
+	
+	for ichan in channels:
+		
+		inFile_std  = TFile(inputDir+"StatErr_QCD/"+ichan[0]+"_"+ichan[1]+"_QCD.root",'READ')
+		inFile_up   = TFile(inputDir+"StatErr_QCD/"+ichan[0]+"_"+ichan[1]+"_QCD_up.root",'READ')
+		inFile_down = TFile(inputDir+"StatErr_QCD/"+ichan[0]+"_"+ichan[1]+"_QCD_down.root",'READ')
+		
+		for var in ['mtt','lepPt']:
+		
+			c   = TCanvas("c_"+ichan[0]+'_'+var+'_tight_'+ichan[1])
+			leg = TLegend(0.6, 0.6, 0.8, 0.88, ichan[0]+" "+ichan[1]+" channel:")
+                	leg.SetTextSize(0.028)
+                	leg.SetFillColor(10)
+                	leg.SetBorderSize(0)
+		
+			h_QCD_std  = inFile_std.Get(var).Clone()
+			h_QCD_up   = inFile_up.Get(var).Clone()
+			h_QCD_down = inFile_down.Get(var).Clone()
+			
+			h_QCD_std.Draw("histo")
+			h_QCD_std.SetLineColor(2)
+			h_QCD_std.SetLineStyle(1)
+			h_QCD_std.SetLineWidth(3)
+			#leg.AddEntry(h_QCD_std,  "total bkg: "+`h_bkg.Integral()`[:7], "L")
+			
+			h_QCD_up.Draw("histoSAME")
+			h_QCD_up.SetLineColor(4)
+			h_QCD_up.SetLineStyle(2)
+			h_QCD_up.SetLineWidth(3)
+			leg.AddEntry(h_QCD_up,  "realRate + #sigma and fakeRate - #sigma", "L")
+			
+			h_QCD_down.Draw("histoSAME")
+			h_QCD_down.SetLineColor(4)
+			h_QCD_down.SetLineStyle(2)
+			h_QCD_down.SetLineWidth(3)
+			leg.AddEntry(h_QCD_down,  "realRate - #sigma and fakeRate + #sigma", "L")
+			
+			leg.Draw()
+			saveCanvas(c, ichan[0]+'_'+ichan[1]+'_'+var, outfile, 'MM_StatErr')
+
 	return
 
 def plot_multijet_weights():
@@ -516,6 +799,185 @@ def plot_multijet_weights():
 		saveCanvas(c, 'QCDweiths_'+ichan[0]+'_'+ichan[1], outfile, 'QCDweiths')
 
 	return	
+	
+def storeFakeRates():
+
+        channels  = []
+        channels += [('resolved','e' )]
+        channels += [('resolved','mu')]
+        channels += [('boosted', 'e' )]
+        channels += [('boosted', 'mu')]
+
+	outfile = TFile("fake_merged.root","RECREATE")
+	
+	for ichan in channels:
+		
+		if (ichan[1]=='e'):	path = 'forNote_v4.0/'
+		if (ichan[1]=='mu'):	path = 'forNote_v2.0/'
+	
+		inFile_fake = TFile(path + 'real_fake_eff.root','READ')
+		#inFile_fake = TFile(path + 'fake.root','READ')
+		
+		h = inFile_fake.Get("h_rates_leptPt_"+ichan[0]+"_"+ichan[1]).Clone()
+		#h = inFile_fake.Get("2Dfake_"+ichan[0]+"_"+ichan[1]).Clone()
+		
+		h.Draw()
+		
+		saveCanvas(h, 'fakeRates_'+ichan[0]+'_'+ichan[1], outfile, 'fakeRates_1D')
+		
+		#outfile_fake.cd()		
+		#h.Write("2Dfake_"+ichan[0]+"_"+ichan[1])
+		#inFile_fake.Close()
+	
+	#outfile_fake.Close()
+		
+	return	
+	
+def FakeRatesInSameCanvas():
+
+        channels  = []
+        channels += [('resolved','e' )]
+        channels += [('resolved','mu')]
+        channels += [('boosted', 'e' )]
+        channels += [('boosted', 'mu')]
+	
+	path = ''
+	inFile_fake_leptPt = TFile(path + 'real_fake_eff.root','READ')
+	outfile = TFile("fake.root","RECREATE")
+	
+	histo = []
+	i=0
+	inFile_fake_leptPt.ls()
+	for ilep in ['e','mu']:
+
+		for ichan in ['resolved','boosted']:
+			print "fakeRates_"+ichan+"_"+ilep
+			print inFile_fake_leptPt.Get("histo_rates_leptPt_"+ichan+"_"+ilep)			
+			histo.append( inFile_fake_leptPt.Get("histo_rates_leptPt_"+ichan+"_"+ilep).Clone() )
+			histo[i].SetDirectory(0)
+			outfile.cd()
+			histo[i].Write("fakeRate_pt_"+ichan+"_"+ilep)
+			i+=1
+
+		
+	c = TCanvas("fake_leptPt_e","fake_leptPt_e")
+	
+	leg = TLegend(0.6, 0.2, 0.8, 0.4, "e channel (leptPt param.):")
+	leg.SetTextSize(0.028)
+	leg.SetFillColor(10)
+	leg.SetBorderSize(0)
+	
+	histo[0].Draw()
+	histo[0].SetMarkerStyle(20)
+	histo[0].SetMarkerColor(4)
+	histo[0].GetYaxis().SetRangeUser(0., 1.0)
+	leg.AddEntry(histo[0], "resolved", "P")
+	
+	histo[1].Draw("SAME")
+	histo[1].SetMarkerStyle(21)
+	histo[1].SetMarkerColor(2)
+	leg.AddEntry(histo[1], "boosted", "P")
+	
+	leg.Draw()	
+	c.SetLogx(1)
+	saveCanvas(c, 'fakeRates_leptPt_e', outfile, 'fake_resolve_boosted_LeptPt')
+		
+		
+	c = TCanvas("fake_leptPt_mu","fake_leptPt_mu")
+	leg = TLegend(0.6, 0.2, 0.8, 0.4, "mu channel (leptPt param.):")
+	leg.SetTextSize(0.028)
+	leg.SetFillColor(10)
+	leg.SetBorderSize(0)
+	
+	histo[2].Draw()
+	histo[2].SetMarkerStyle(20)
+	histo[2].SetMarkerColor(4)
+	histo[2].GetYaxis().SetRangeUser(0., 1.0)
+	leg.AddEntry(histo[2], "resolved", "P")
+	
+	histo[3].Draw("SAME")
+	histo[3].SetMarkerStyle(21)
+	histo[3].SetMarkerColor(2)
+	leg.AddEntry(histo[3], "boosted", "P")
+	
+	leg.Draw()	
+	c.SetLogx(1)
+		
+	saveCanvas(c, 'fakeRates_leptPt_mu', outfile, 'fake_resolve_boosted_LeptPt')	
+		
+        channels  = []
+        channels += [('resolved','e' )]
+        channels += [('resolved','mu')]
+        channels += [('boosted', 'e' )]
+        channels += [('boosted', 'mu')]
+	
+	path = 'dr_fakeRate/'
+	
+	inFile_fake_leptPt = TFile(path + 'fake.root','READ')
+	#outfile = TFile("fakes1D.root","RECREATE")
+	
+	histo = []
+	i=0
+	for ilep in ['e','mu']:
+
+		for ichan in ['resolved','boosted']:
+			outfile.cd()			
+			histo.append( inFile_fake_leptPt.Get("h_fake_closeJL_dr_"+ichan+"_"+ilep).Clone() )		
+			histo[i].Write("fakeRate_dr_"+ichan+"_"+ilep)
+			i+=1
+	
+	c = TCanvas("fake_DR_e","fake_DR_e")
+	leg = TLegend(0.6, 0.2, 0.8, 0.4, "e channel (dr param.):")
+	leg.SetTextSize(0.028)
+	leg.SetFillColor(10)
+	leg.SetBorderSize(0)
+	
+	histo[0].Draw()
+	histo[0].SetMarkerStyle(20)
+	histo[0].SetMarkerColor(4)
+	histo[0].GetYaxis().SetRangeUser(0., 1.0)
+	histo[0].SetStats(0)
+	leg.AddEntry(histo[0], "resolved", "P")
+	
+	histo[1].Draw("SAME")
+	histo[1].SetMarkerStyle(21)
+	histo[1].SetMarkerColor(2)
+	histo[1].SetStats(0)
+	leg.AddEntry(histo[1], "boosted", "P")
+	
+	leg.Draw()	
+	#c.SetLogx(1)
+	saveCanvas(c, 'fakeRates_dr_e', outfile, 'fake_resolve_boosted_DR')
+		
+		
+	c = TCanvas("fake_leptPt_mu","fake_leptPt_mu")
+	leg = TLegend(0.6, 0.2, 0.8, 0.4, "mu channel (dr param.):")
+	leg.SetTextSize(0.028)
+	leg.SetFillColor(10)
+	leg.SetBorderSize(0)
+	
+	histo[2].Draw()
+	histo[2].SetMarkerStyle(20)
+	histo[2].SetMarkerColor(4)
+	histo[2].GetYaxis().SetRangeUser(0., 1.0)
+	histo[2].SetStats(0)
+	leg.AddEntry(histo[2], "resolved", "P")
+	
+	histo[3].Draw("SAME")
+	histo[3].SetMarkerStyle(21)
+	histo[3].SetMarkerColor(2)
+	histo[3].SetStats(0)
+	leg.AddEntry(histo[3], "boosted", "P")
+	
+	leg.Draw()	
+	#c.SetLogx(1)
+		
+	saveCanvas(c, 'fakeRates_dr_mu', outfile, 'fake_resolve_boosted_DR')		
+	outfile.Close()	
+				
+	return		
+	
+	
 #--------------------------------#
 #       Multijet estimation      #
 #--------------------------------#
@@ -528,6 +990,9 @@ def plot_multijet_weights():
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/effReal_3/'
 
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/realEff_real/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/realEff_real/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/realEff_moreBins_real/'
 inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/realEff_real/'
 
 if 0:
@@ -554,27 +1019,51 @@ if 0:
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_211215_18h00_v4.0_fake/'
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_11h00_v2.0_fake/'
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_12h00_v4.0_fake/'
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_11h00_v2.0_fake_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_11h00_v2.0_fake_fake/'
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_12h00_v4.0_fake_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_050116_10h30_v2.0_fake/' # cut on MWT<40GeV
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_050116_18h30_v4.0_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_050116_19h20_v2.0_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_060116_16h00_v2.0_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_060116_18h00_v2.0_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_16h00_v2.0_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_17h30_v4.0_fake/'
+
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_110116_19h00_v2.0_fake/'
 
 lumi = 3200 #pb-1
 
-if 1:	
+if 0:	
 	fakeRates(inputDir, lumi)
 
 
+# Draw real/fake eff
+inputDir_real = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/realEff_moreBins_real/'
+#inputDir_fake = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_16h00_v2.0_fake/'
+
+#fornote
+inputDir_fake = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_16h00_v2.0_fake/'
+#inputDir_fake = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_17h30_v4.0_fake/'
+
+lumi = 3200 #pb-1
+
+if 0:
+	real_fake_eff(inputDir_real, inputDir_fake, lumi)
+
+
+#Plot the QCD weiths
 if 0:
 	plot_multijet_weights()
 
+#get stat bands
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/'
+lumi = 3200 #pb-1
 
+if 0:	get_MM_StatErr(inputDir, lumi)
 
-
-
-
-
-
-
-
-
-
-
+if 0:	storeFakeRates()
+	
+if 1:	FakeRatesInSameCanvas()

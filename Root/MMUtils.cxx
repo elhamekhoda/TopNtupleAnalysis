@@ -23,6 +23,9 @@
 MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filename) {
 
   if (eff_filename!="" && fake_filename!=""){
+  
+    fake_1Dparam_dr = true;
+    
     TFile m_eff_rootfile(eff_filename.c_str(), "r");
     
     eff_map_resolved_e = (TH2F*)m_eff_rootfile.Get("eff_pTdr_resolved_e")->Clone();
@@ -39,18 +42,32 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
       
     TFile m_fake_rootfile(fake_filename.c_str(), "r");
     
-    fake_map_resolved_e = (TH2F*)m_fake_rootfile.Get("2Dfake_resolved_e")->Clone();
-    fake_map_resolved_e->SetDirectory(0);
+    m_fake_rootfile.ls();
     
-    fake_map_resolved_mu = (TH2F*)m_fake_rootfile.Get("2Dfake_resolved_mu")->Clone();
-    fake_map_resolved_mu->SetDirectory(0);
+    fake_pt_resolved_e = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_resolved_e")->Clone();
+    fake_pt_resolved_e->SetDirectory(0);
     
-    fake_map_boosted_e = (TH2F*)m_fake_rootfile.Get("2Dfake_boosted_e")->Clone();
-    fake_map_boosted_e->SetDirectory(0);
+    fake_pt_resolved_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_resolved_mu")->Clone();
+    fake_pt_resolved_mu->SetDirectory(0);
     
-    fake_map_boosted_mu = (TH2F*)m_fake_rootfile.Get("2Dfake_boosted_mu")->Clone();    
-    fake_map_boosted_mu->SetDirectory(0);  
-       
+    fake_pt_boosted_e = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_e")->Clone();
+    fake_pt_boosted_e->SetDirectory(0);
+    
+    fake_pt_boosted_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_mu")->Clone();    
+    fake_pt_boosted_mu->SetDirectory(0); 
+
+    fake_dr_resolved_e  = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_resolved_e")->Clone();
+    fake_dr_resolved_e->SetDirectory(0); 
+    
+    fake_dr_resolved_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_resolved_mu")->Clone();
+    fake_dr_resolved_mu->SetDirectory(0); 
+    
+    fake_dr_boosted_e   = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_e")->Clone();
+    fake_dr_boosted_e->SetDirectory(0); 
+    
+    fake_dr_boosted_mu  = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_mu")->Clone();
+    fake_dr_boosted_mu->SetDirectory(0); 
+
   }
   
 }
@@ -58,20 +75,26 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
 MMUtils::~MMUtils(){
   
   delete eff_map_resolved_e  ;
-  delete eff_map_resolved_e  ;
-  delete eff_map_resolved_mu ;
-  delete eff_map_resolved_mu ;
+  delete eff_map_resolved_mu  ;
+  delete eff_map_boosted_e ;
+  delete eff_map_boosted_mu ;
   
-  delete fake_map_resolved_e ;
-  delete fake_map_resolved_e ;
-  delete fake_map_resolved_mu;
-  delete fake_map_resolved_mu;
+  delete fake_pt_resolved_e ;
+  delete fake_pt_resolved_mu ;
+  delete fake_pt_boosted_e;
+  delete fake_pt_boosted_mu;
+  
+  delete fake_dr_resolved_e ;
+  delete fake_dr_resolved_mu ;
+  delete fake_dr_boosted_e;
+  delete fake_dr_boosted_mu;
   
   delete eff_map;
-  delete fake_map;
+  delete fake_pt;
+  delete fake_dr;
 } 
 
-float MMUtils::getMMweights(const Event &evt) {
+float MMUtils::getMMweights(const Event &evt, int runMM_StatErr) {
    
    float lepPt(0);
    float closejl_pT(0); 
@@ -115,60 +138,100 @@ float MMUtils::getMMweights(const Event &evt) {
 
    if (isBoosted){
    	if (isElectron)	{
-	   eff_map  = eff_map_boosted_e;
-	   fake_map = fake_map_boosted_e;
+	   eff_map  = eff_map_resolved_e;
+	   fake_pt = fake_pt_resolved_e;
+	   fake_dr = fake_dr_resolved_e;
 	}
 	else{
-	   eff_map = eff_map_boosted_mu;
-	   fake_map = fake_map_boosted_mu;
+	   eff_map = eff_map_resolved_mu;
+	   fake_pt = fake_pt_resolved_mu;
+	   fake_dr = fake_dr_resolved_mu;
 	}
    }
    else{
    	if (isElectron){
 	   eff_map = eff_map_resolved_e;
-	   fake_map = fake_map_resolved_e;
+	   fake_dr = fake_dr_resolved_e;
+	   fake_pt = fake_pt_resolved_e; 
 	}	
 	else{
 	   eff_map = eff_map_resolved_mu;
-	   fake_map = fake_map_resolved_mu;
+	   fake_dr = fake_dr_resolved_mu; 
+	   fake_pt = fake_pt_resolved_mu;
 	}
    }//isBoosted	
    	
+   float realRate(0.); 
+   float realRate_err(0.);
    
-   if(lepPt>eff_map->GetXaxis()->GetXmax() || lepPt>fake_map->GetXaxis()->GetXmax())  	    
-   	lepPt = 0.95*eff_map->GetXaxis()->GetXmax();
-	//lepPt = 450*1e-3; 
-   
-   if(closejl_DR>eff_map->GetYaxis()->GetXmax())    
-   	closejl_DR = 0.95*eff_map->GetYaxis()->GetXmax(); 
-	
-   if(closejl_pT>fake_map->GetYaxis()->GetXmax())
-        closejl_pT = 0.95*fake_map->GetYaxis()->GetXmax();
-   
+   float fakeRate(0.); 
+   float fakeRate_err(0.);
+ 
    // --> Getting eff rate  
-   float effRate = eff_map->GetBinContent(eff_map->FindBin(lepPt, closejl_DR));
-
-   //--> Getting fake rate
-   float fakeRate = fake_map->GetBinContent(fake_map->FindBin(lepPt, closejl_pT));
-      
+   
+   if(lepPt>eff_map->GetXaxis()->GetXmax()){ 
+        realRate    = eff_map->GetBinContent(eff_map->FindBin(0.95*lepPt, closejl_DR)); 
+	realRate_err = eff_map->GetBinError(eff_map->FindBin(0.95*lepPt, closejl_DR)); 	    
+   }else if(closejl_DR>eff_map->GetYaxis()->GetXmax()){
+        realRate    = eff_map->GetBinContent(eff_map->FindBin(lepPt, 0.95*closejl_DR)); 
+	realRate_err = eff_map->GetBinError(eff_map->FindBin(lepPt, 0.95*closejl_DR)); 
+   }else if(lepPt>eff_map->GetXaxis()->GetXmax() && closejl_DR>eff_map->GetYaxis()->GetXmax()){
+        realRate     = eff_map->GetBinContent(eff_map->FindBin(0.95*lepPt, 0.95*closejl_DR));
+	realRate_err = eff_map->GetBinError(eff_map->FindBin(0.95*lepPt, 0.95*closejl_DR)); 		    
+   }else{
+        realRate     = eff_map->GetBinContent(eff_map->FindBin(lepPt, closejl_DR));
+	realRate_err = eff_map->GetBinError(eff_map->FindBin(lepPt, closejl_DR)); 
+   }
+   
+   
+   if(fake_1Dparam_dr){
+     if(closejl_DR>fake_dr->GetXaxis()->GetXmax()){     
+   	fakeRate     = fake_dr->GetBinContent(fake_dr->FindBin(closejl_DR));
+   	fakeRate_err = fake_dr->GetBinError(fake_dr->FindBin(closejl_DR));
+     }else{
+        fakeRate     = fake_dr->GetBinContent(fake_dr->FindBin(closejl_DR));
+        fakeRate_err = fake_dr->GetBinError(fake_dr->FindBin(closejl_DR));
+     }
+   } else {
+     if(lepPt>fake_pt->GetXaxis()->GetXmax()){
+	fakeRate     = fake_pt->GetBinContent(fake_pt->FindBin(0.95*lepPt));
+	fakeRate_err = fake_pt->GetBinError(fake_pt->FindBin(0.95*lepPt));
+     } else {
+	fakeRate     = fake_pt->GetBinContent(fake_pt->FindBin(lepPt));
+        fakeRate_err = fake_pt->GetBinError(fake_pt->FindBin(lepPt));
+     }
+   }//fake_1Dparam_dr
+   
+   
    //--> Implementing weights
    float Weight = 1;
-     
-   if (isTight){
-     	if((effRate - fakeRate) !=0.)	Weight = fakeRate*(effRate - 1)/(effRate - fakeRate); 
-	else{
-		std::cerr << "Error: effRate - fakeRate == 0";
-		Weight = 0;
-	}
+
+   //Maximazing the stat error for runMM_StatErr==1 || runMM_StatErr==2
+   if (runMM_StatErr==1){
+     realRate += realRate_err;
+     fakeRate -= fakeRate_err;
+   } else if (runMM_StatErr==2){
+     realRate -= realRate_err;
+     fakeRate += fakeRate_err;
    }
-   else {	   
-   	if((effRate - fakeRate) !=0.)	Weight = fakeRate*effRate/(effRate - fakeRate);
-   	else{
-		std::cerr << "Error: effRate - fakeRate == 0";
-		Weight = 0;
-	}	
+   	
+   if (isTight){
+     if((realRate - fakeRate) !=0.)  Weight = fakeRate*(realRate - 1)/(realRate - fakeRate); 
+     else{
+     	     std::cerr << "Error: realRate - fakeRate == 0";
+     	     Weight = 0;
+     }
+   }
+   else {	
+     if((realRate - fakeRate) !=0.)  Weight = fakeRate*realRate/(realRate - fakeRate);
+     else{
+     	     std::cerr << "Error: realRate - fakeRate == 0";
+     	     Weight = 0;
+     }       
    
    }//isTight
+   
+   //if (!isElectron)	if (lepPt>70 && lepPt<100)	if(!isTight)	std::cout << "lepPt: " << lepPt << " - isTight: " << isTight << " - Weight: " << Weight << std::endl;
 
    return Weight;  
 

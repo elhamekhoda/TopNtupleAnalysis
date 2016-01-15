@@ -18,13 +18,12 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   m_chi2.Init(TtresChi2::DATA2015_MC15);
     
   //****Efficiency studies   
+
+  Double_t eff_pT_bins_re[7]     = {30, 35, 40, 50, 60, 120, 500};
+  Double_t eff_pT_bins_rmu[8]    = {25, 30, 35, 40, 50, 70, 100, 500};
+  Double_t eff_pT_bins_be[5]     = {30, 40, 60, 120, 500};
+  Double_t eff_pT_bins_bmu[5]    = {25, 30, 40, 50, 500};
   
-  Double_t eff_pT_bins_re[4]  	 = {25, 60, 100, 500}; 
-  Double_t eff_pT_bins_rmu[4] 	 = {25, 50, 100, 500};
-  Double_t eff_pT_bins_be[4]  	 = {25, 60, 100, 500}; 
-  Double_t eff_pT_bins_bmu[4] 	 = {25, 50, 100, 500};
-  
-  //Double_t DR_bins[8] = {0.,0.2, 0.4, 0.6, 0.8, 1.0, 1.7, 5.0};
   Double_t DR_bins[5] = {0., 0.4, 1.0, 1.7, 5.0};
   int N_DR_bins = sizeof(DR_bins)/sizeof(DR_bins[0]) -1;
   
@@ -37,17 +36,17 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
 
   //****Fake studies  
    
-  Double_t fake_pT_bins_re[6]  	 = {30, 35, 40, 50, 60, 500};
-  Double_t fake_closeLJpT_bins_re[4]  = {25, 50, 100, 500};
+  Double_t fake_pT_bins_re[7]  	 = {30, 35, 40, 50, 60, 120, 500};
+  Double_t fake_closeLJpT_bins_re[2]  = {25, 500};
+   
+  Double_t fake_pT_bins_rmu[8] 	 = {25, 30, 35, 40, 50, 70, 100, 500};  
+  Double_t fake_closeLJpT_bins_rmu[2] = {25, 500};
   
-  Double_t fake_pT_bins_rmu[6] 	 = {25, 30, 35, 40, 50, 500};  
-  Double_t fake_closeLJpT_bins_rmu[4] = {25, 50, 100, 500};
+  Double_t fake_pT_bins_be[5]  	 = {30, 40, 60, 120, 500};
+  Double_t fake_closeLJpT_bins_be[2]  = {25, 500};
   
-  Double_t fake_pT_bins_be[4]  	 = {30, 40, 60, 500};
-  Double_t fake_closeLJpT_bins_be[3]  = {25, 50, 500};
-  
-  Double_t fake_pT_bins_bmu[3] 	 = {25, 50, 500};
-  Double_t fake_closeLJpT_bins_bmu[3] = {25, 50, 500}; 
+  Double_t fake_pT_bins_bmu[5] 	 = {25, 30, 40, 50, 500};
+  Double_t fake_closeLJpT_bins_bmu[2] = {25, 500}; 
   
   m_hSvc.create1D("fake_z0sin", "; z0*sin(#theta); Events", 50, -1, 1);
   m_hSvc.create1D("fake_z0", "; z0; Events", 25, -2, 2);
@@ -63,7 +62,7 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   
   m_hSvc.create1D("fake_jvt_lowLepPt",   "; JVT (low lept Pt); Events",  25, -1.5, 1);
   m_hSvc.create1D("fake_jvt_highLepPt",   "; JVT (high lept Pt); Events", 25, -1.5, 1);
-  
+    
   m_hSvc.create1D("fake_trig1",   "; trig1; Events", 2, 0, 2);
   m_hSvc.create1D("fake_trig2",   "; trig1; Events", 2, 0, 2);
   m_hSvc.create1D("fake_trig3",   "; trig1; Events", 2, 0, 2);
@@ -91,6 +90,10 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   
   	//Fake      
   	m_hSvc.create2DVar("fake_lepPt_jetPt",  "; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", fake_N_pT_bins, fake_pT_bins_be, fake_N_closeLJpT_bins, fake_closeLJpT_bins_be);
+	
+	//Fake 1D
+	m_hSvc.create2DVar("fake_DR_jetPt",   "; min #Delta R(lep, jet); Pt of closest jet to lepton [GeV]", N_DR_bins, DR_bins, fake_N_closeLJpT_bins, fake_closeLJpT_bins_be);
+
 
      }else{
      
@@ -104,6 +107,9 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   
   	//Fake      
   	m_hSvc.create2DVar("fake_lepPt_jetPt",  "; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", fake_N_pT_bins, fake_pT_bins_bmu, fake_N_closeLJpT_bins, fake_closeLJpT_bins_bmu);
+
+	//Fake 1D
+	m_hSvc.create2DVar("fake_DR_jetPt",   "; min #Delta R(lep, jet); Pt of closest jet to lepton [GeV]", N_DR_bins, DR_bins, fake_N_closeLJpT_bins, fake_closeLJpT_bins_bmu);
 
      }
   }else{
@@ -120,6 +126,9 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   	//Fake      
   	m_hSvc.create2DVar("fake_lepPt_jetPt",  "; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", fake_N_pT_bins, fake_pT_bins_re, fake_N_closeLJpT_bins, fake_closeLJpT_bins_re);
 	
+	//Fake 1D
+	m_hSvc.create2DVar("fake_DR_jetPt",   "; min #Delta R(lep, jet); Pt of closest jet to lepton [GeV]", N_DR_bins, DR_bins, fake_N_closeLJpT_bins, fake_closeLJpT_bins_re);
+	
      }else{
      
         eff_N_pT_bins = sizeof(eff_pT_bins_rmu)/sizeof(eff_pT_bins_rmu[0]) -1;
@@ -132,6 +141,9 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   
   	//Fake      
   	m_hSvc.create2DVar("fake_lepPt_jetPt",  "; Pt of lepton [GeV]; Pt of closest jet to the lept [GeV]", fake_N_pT_bins, fake_pT_bins_rmu, fake_N_closeLJpT_bins, fake_closeLJpT_bins_rmu);
+
+	//Fake 1D
+	m_hSvc.create2DVar("fake_DR_jetPt",   "; min #Delta R(lep, jet); Pt of closest jet to lepton [GeV]", N_DR_bins, DR_bins, fake_N_closeLJpT_bins, fake_closeLJpT_bins_rmu);
 
      }	
   }//if (m_boosted) 
@@ -161,7 +173,7 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
   
-  if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber()) ){
+  if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), 0.) ){
       m_Nduplicate++;
       return;
   }
@@ -267,6 +279,7 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
 
 void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string &suffix){
   // check channel
+    
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
 
@@ -280,11 +293,6 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
   if (!m_boosted)
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
-  
-  if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber()) ){
-      m_Nduplicate++;
-      return;
-  }
   
   if (!m_boosted)	if (evt.jet().size()<4)		return;
  
@@ -306,15 +314,19 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
   bool trig5(0);
     
   float mWt(0);  
-  float mWt_threshold(100000);
+  float mWt_threshold(100*1e3);
+  
+  bool isTight;
   
   //lepton
   if (m_electron) {	
-  	lept  = evt.electron()[0].mom(); 
+  	lept  = evt.electron()[0].mom();
+	//if(lept.Pt()>355000 && lept.Pt()<365000)	std::cout << "1) lept: " << lept.Pt() << " - weight: " << weight << std::endl; 
 	z0    = evt.electron()[0].z0();
 	d0    = evt.electron()[0].d0();
 	d0sig = evt.electron()[0].sd0();
 	theta = 2*atan(exp(-lept.Eta()));
+	isTight = evt.electron()[0].isTightPP();
 	
 	//Electron trigers
 	trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH(); 		// MC / data prescaled
@@ -329,16 +341,15 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
 	  if (!trig_MC)return;
 	}else{
 	  if (!trig_DT)return;
-	}
-	
-			
-  }	
-  else{			
+	}			
+  
+  } else{			
   	lept  = evt.muon()[0].mom();
 	z0    = evt.muon()[0].z0();	   
 	d0    = evt.muon()[0].d0();	   
 	d0sig = evt.muon()[0].sd0();
 	theta = 2*atan(exp(-lept.Eta()));
+	isTight = evt.muon()[0].isTight();
 	
 	//Muon triggers
 	trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
@@ -356,13 +367,19 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
 	}	
 	
   }//m_electron
-    
+  
+  if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), lept.Perp()) ){
+      m_Nduplicate++;
+      return;
+  }
+  
+  
   h->h1D("fake_trig1", "", suffix)  ->Fill(trig1);
   h->h1D("fake_trig2", "", suffix)  ->Fill(trig2);
   h->h1D("fake_trig3", "", suffix)  ->Fill(trig3);
   h->h1D("fake_trig4", "", suffix)  ->Fill(trig4);
   h->h1D("fake_trig5", "", suffix)  ->Fill(trig5);
-   
+      
   // Transverse W mass 
   mWt = sqrt(2. * lept.Perp() * evt.met().Perp() * (1. - cos(lept.Phi() - evt.met().Phi()) )); 
     
@@ -374,7 +391,7 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
      h->h1D("fake_MET", "", suffix)    ->Fill(evt.met().Perp()*1e-3, weight);
      h->h1D("fake_MET_phi", "", suffix)->Fill(evt.met().Phi(), weight);  
      h->h1D("fake_mwt", "", suffix)    ->Fill(mWt*1e-3, weight); 
-  
+           
      //deltaR between lepton and the closest narrow jet
   
      float deltaRapidity2   = 99;
@@ -404,7 +421,9 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
 	h->h1D("fake_lepPt", "", suffix)	    ->Fill(lept.Pt()*1e-3, weight);
 	h->h1D("fake_closJetPt", "", suffix)	    ->Fill(closejl_pT*1e-3, weight);
 	
-	h->h2D("fake_lepPt_jetPt", "", suffix)->Fill(lept.Perp()*1e-3, closejl_pT*1e-3, weight); 
+	h->h2D("fake_lepPt_jetPt", "", suffix)->Fill(lept.Perp()*1e-3, closejl_pT*1e-3, weight);
+	//std::cout << closejl_deltaR << " - " << closejl_pT*1e-3 << std::endl;
+	h->h2D("fake_DR_jetPt", "", suffix)   ->Fill(closejl_deltaR, closejl_pT*1e-3, weight);
 	
 	if (closejl_deltaR < 0.4){	
 		if (lept.Pt()<50000) h->h1D("fake_jvt_lowLepPt", "", suffix)->Fill(evt.jet().at(closejl_idx).jvt(), weight);
