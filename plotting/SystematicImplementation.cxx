@@ -9,13 +9,24 @@ using namespace std;
 Syst::Syst() {
 }
 
-HistDiff::HistDiff(const string &a, const string &b, int smoothLevel) {
+HistDiff::HistDiff(const string &a, const string &b, int smoothLevel, const std::vector<std::string> toExclude) {
   _a = a;
   _b = b;
   _smoothLevel = smoothLevel;
+  _toExclude = toExclude;
 }
 
 Hist HistDiff::get(const string &name, const string &fname) {
+  bool excluded = false;
+  for (int k = 0; k < _toExclude.size(); ++k) {
+    if (fname.find(_toExclude[k]) != std::string::npos) {
+      excluded = true;
+      break;
+    }
+  }
+  if (excluded) {
+    return Hist();
+  }
   Hist ha(name, _a, fname);
   Hist hb(name, _b, fname);
   if (_smoothLevel <= 0)

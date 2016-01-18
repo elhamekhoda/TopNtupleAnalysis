@@ -30,7 +30,8 @@ class HistDiff : public Syst{
   string _a;
   string _b;
   int _smoothLevel;
-  HistDiff(const string &a, const string &b, int smoothLevel = 0);
+  std::vector<std::string> _toExclude;
+  HistDiff(const string &a, const string &b, int smoothLevel = 0, const std::vector<std::string> toExclude = std::vector<std::string>());
   Hist get(const string &name, const string &fname);
 };
 

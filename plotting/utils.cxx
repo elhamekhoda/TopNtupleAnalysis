@@ -1788,19 +1788,38 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
   //systCalc.add("00luminosity", new NotData(new HistNorm(0.09)));
   //systCalc.add("00ttbar cross section", new NotData(new Symm(new HistNorm(0.056, only_ttbar), new HistNorm(-0.061, only_ttbar))));
 
+  // format:
+  // syst      "short name"    "latex name"           sufix_up         sufix_dw          [S|N]     excludebkg1,excludebk2
+  // or:
+  // syst      "short name"    "latex name"           sufix            -                 [S|N]     excludebkg1,excludebkg2
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst.begin(); it != syst.end(); ++it) {
     std::string name = it->first;
     int this_smooth = smooth;
-    if (it->second.size() == 3) {
-      if (this_smooth > 0) this_smooth = it->second[2] == "S";
-      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", smooth))), it->second[0]);
-    } else if (!updw && it->second.size() == 4) {
-      if (this_smooth > 0) this_smooth = it->second[3] == "S";
-      systCalc.add(name, new NotData(new Symm(new HistDiff(it->second[1], "", this_smooth), new HistDiff(it->second[2], "", smooth))), it->second[0]);
-    } else if (updw && it->second.size() == 4) {
-      if (this_smooth > 0) this_smooth = it->second[3] == "S";
-      systCalc.add(name+"up", new NotData(new HistDiff(it->second[1], "", this_smooth)), it->second[0]+std::string(" up"));
-      systCalc.add(name+"dw", new NotData(new HistDiff(it->second[2], "", this_smooth)), it->second[0]+std::string(" dw"));
+    if (this_smooth > 0) this_smooth = it->second[3] == "S";
+    std::vector<std::string> toExclude;
+    if (it->second.size() == 5) {
+      split(it->second[4], ',', toExclude);
+      std::cout << "Syst. unc. " << name << " set to exclude backgrounds containing the following substring in their file names ";
+      for (int k = 0; k < toExclude.size(); ++k) std::cout << toExclude[k] << ", ";
+      std::cout << std::endl;
+    }
+    std::string up = it->second[1];
+    std::string dw = it->second[2];
+    if (!updw) {
+      if (dw != "-") {
+        systCalc.add(name, new NotData(new Symm(new HistDiff(up, "", this_smooth, toExclude), new HistDiff(dw, "", smooth, toExclude))), it->second[0]);
+      } else {
+        systCalc.add(name, new NotData(new Symm(new HistDiff(up, "", this_smooth, toExclude))), it->second[0]);
+      }
+    } else if (updw) {
+      systCalc.add(name+"up", new NotData(new HistDiff(up, "", this_smooth, toExclude)), it->second[0]+std::string(" up"));
+      if (dw != "-") {
+        systCalc.add(name+"dw", new NotData(new HistDiff(dw, "", this_smooth, toExclude)), it->second[0]+std::string(" dw"));
+      }
+    } else {
+      std::cout << "Ignoring systematic unc. " << name << ": incorrect syntax. Note that the syntax has changed. The format should be:" << std::endl;
+      std::cout << "syst      \"short name\"    \"latex name\"        sufix_up        sufix_dw             S|N        [excludebkg1,excludebkg2]" << std::endl;
+      std::cout << "To ignore the down sufix variation, just use sufix_dw = - (the hyphen symbol)." << std::endl;
     }
   }
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_model.begin(); it != syst_model.end(); ++it) {
