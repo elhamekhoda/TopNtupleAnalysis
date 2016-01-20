@@ -73,26 +73,34 @@ double SystematicCalculatorBase::totalYield(SampleSet &st) {
 }
 
 void SystematicCalculatorBase::printYields(SampleSetConfiguration &sc) {
-  cout << "\\begin{tabular}{|c|c|c|c|}" << endl;
+  cout << "\\begin{tabular}{c|c}" << endl;
   cout << "\\hline" << endl;
   cout << "\\hline" << endl;
-  cout << setw(30) << "Sample"<< " & " << setw(20) << "Yield" <<  " & " << setw(20) << "MC Stat." << " & " << setw(20) << "Syst." << "\\\\" << endl;
+  cout << setw(30) << "Type"<< " & " << setw(20) << "Yield" << "\\\\" << endl;
   cout << "\\hline" << endl;
   
   float nData(0.);
+  float nDataErr(0.);
   
   for (map<string, SampleSet>::iterator i = sc._stack.begin(); i != sc._stack.end(); ++i) { // for every element in the stack (one for data, one for MC)
     double total = 0;
     double total_stat = 0;
     double total_syst = 0;
+
+    std::string lcaseName = i->first;
+    std::transform(lcaseName.begin(), lcaseName.end(), lcaseName.begin(), ::tolower);
     // i->second is a stack
     // i->second._item is the list of items of the stack
     bool isLast = (next(i) == sc._stack.end());
     for (int j = 0; j < i->second._item.size(); ++j) {
       Sample &one_item = i->second._item[j];
       bool lastItem = (isLast && (j == i->second._item.size()-1));
-      if (i->first == "Data"){nData=one_item.nominal.yield(); break;}
-      cout << setw(30) << one_item.name_latex << " & " << setw(20)  << one_item.nominal.yield() << " & " << setw(20)  << one_item.nominal.yieldstat() << " & " << setw(20)  << fabs(totalSystInSample(one_item)) << " \\\\" << endl;
+      if (lcaseName.find("data") != std::string::npos) {
+        nData=one_item.nominal.yield();
+        nDataErr=one_item.nominal.yieldstat();
+        break;
+      }
+      cout << setw(30) << one_item.name_latex << " & " << setw(20)  << one_item.nominal.yield() << " $\\pm$ " << setw(20)  << std::sqrt(std::pow(one_item.nominal.yieldstat(), 2) + std::pow(totalSystInSample(one_item), 2)) << " \\\\ \\hline" << endl;
       total += one_item.nominal.yield();
       total_stat += pow(one_item.nominal.yieldstat(), 2);
     }
@@ -101,13 +109,10 @@ void SystematicCalculatorBase::printYields(SampleSetConfiguration &sc) {
       double s = fabs(totalSyst(i->second, systName));
       total_syst += s*s;
     }
-    if (i->first != "Data") {
-      cout << "\\hline" << endl;
-      cout << setw(30) << "Expectation" << " & " << setw(20)  << total<< " & " << setw(20)  << sqrt(total_stat) << " & " << setw(20)  << sqrt(total_syst) << " \\\\" << endl;
+    if (lcaseName.find("data") != std::string::npos) {
+      cout << setw(30) << "Total" << " & " << setw(20)  << total<< " $\\pm$ " << setw(20)  << sqrt(total_stat + total_syst) << " \\\\ \\hline" << endl;
     }
-    cout << setw(30) << "Data:" << " & " << setw(20)  << nData  << " &  &  \\\\" << endl;   
-    cout << "\\hline" << endl;
-    cout << "\\hline" << endl;
+    cout << setw(30) << "Data" << " & " << setw(20)  << nData  << " $\\pm$ " << setw(20) << nDataErr <<  " \\\\ \\hline" << endl;   
   }
   cout << "\\end{tabular}" << endl;
 }
