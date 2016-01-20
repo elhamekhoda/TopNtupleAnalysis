@@ -173,9 +173,9 @@ int main(int argc, char **argv) {
         outfile += ".pdf";
       }
       if (channel == "e") {
-        extraText.push_back("e channel");
+        extraText.push_back("e+jets");
       } else if (channel == "mu") {
-        extraText.push_back("#mu channel");
+        extraText.push_back("#mu+jets");
       } else if (channel == "comb") {
         //extraText.push_back("e,#mu-channel");
       }
