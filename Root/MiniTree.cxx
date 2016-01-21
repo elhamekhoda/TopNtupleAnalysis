@@ -116,9 +116,14 @@ void MiniTree::read(int event, Event &e) {
     e.electron()[k].z0() = vf("el_z0")->at(k);
     e.electron()[k].d0() = vf("el_d0")->at(k);
     e.electron()[k].sd0() = vf("el_d0sig")->at(k); 
+    e.electron()[k].HLT_e24_lhmedium_iloose_L1EM20VH()= 0;
+    e.electron()[k].HLT_e24_lhmedium_L1EM18VH() = 0;
+    e.electron()[k].HLT_e24_lhmedium_L1EM20VH() = 0;
+    e.electron()[k].HLT_e60_lhmedium() 		= 0;
+    e.electron()[k].HLT_e120_lhloose() 		= 0;
     if (vc("el_trigMatch_HLT_e24_lhmedium_iloose_L1EM20VH"))	e.electron()[k].HLT_e24_lhmedium_iloose_L1EM20VH()= vc("el_trigMatch_HLT_e24_lhmedium_iloose_L1EM20VH")->at(k);
-    e.electron()[k].HLT_e24_lhmedium_L1EM18VH() = vc("el_trigMatch_HLT_e24_lhmedium_L1EM18VH")->at(k); 
-    e.electron()[k].HLT_e24_lhmedium_L1EM20VH() = vc("el_trigMatch_HLT_e24_lhmedium_L1EM20VH")->at(k); 
+    if (vc("el_trigMatch_HLT_e24_lhmedium_L1EM18VH"))		e.electron()[k].HLT_e24_lhmedium_L1EM18VH() = vc("el_trigMatch_HLT_e24_lhmedium_L1EM18VH")->at(k); 
+    if (vc("el_trigMatch_HLT_e24_lhmedium_L1EM20VH"))		e.electron()[k].HLT_e24_lhmedium_L1EM20VH() = vc("el_trigMatch_HLT_e24_lhmedium_L1EM20VH")->at(k); 
     e.electron()[k].HLT_e60_lhmedium() 		= vc("el_trigMatch_HLT_e60_lhmedium")->at(k); 
     e.electron()[k].HLT_e120_lhloose() 		= vc("el_trigMatch_HLT_e120_lhloose")->at(k); 
     e.electron()[k].author() = 1;
