@@ -5,7 +5,7 @@ from subprocess import Popen,PIPE
 import os
 
 # output directory
-outdir = 'ttres33'
+outdir = 'ttres32_2339'
 
 names   = []
 # 25 ns datasets
@@ -31,24 +31,24 @@ names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000']
 names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000']
 names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi']
 names += ['MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime400_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime500_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime750_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1000_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1250_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1500_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1750_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2000_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2250_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2500_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2750_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000_PDF']
-names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarSherpaAF2']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime400_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime500_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime750_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1000_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1250_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1500_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1750_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2000_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2250_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2500_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2750_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarSherpaAF2']
 
-#channels = ['resolved_e', 'resolved_mu', 'boosted_e', 'boosted_mu']
-channels = ['boosted_e', 'boosted_mu']
+channels = ['resolved_e', 'resolved_mu', 'boosted_e', 'boosted_mu']
+#channels = ['boosted_e', 'boosted_mu']
 
 import glob
 
@@ -64,4 +64,8 @@ for sample in names:
 
         print(cmd)
         os.system(cmd)
+
+
+for ch in channels:
+    os.system('hadd -f -k '+ch+'_MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_all.root '+ch+'_MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia.root '+ch+'_MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced.root')
 
