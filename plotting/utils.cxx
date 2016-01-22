@@ -37,6 +37,7 @@ std::map<std::string, int> fillColor = std::map<std::string, int>();
 std::map<std::string, std::vector<std::string> > syst_model = std::map<std::string, std::vector<std::string> >();
 std::map<std::string, std::vector<std::string> > syst_flat = std::map<std::string, std::vector<std::string> >();
 std::map<std::string, std::vector<std::string> > syst_pdf = std::map<std::string, std::vector<std::string> >();
+std::map<std::string, std::vector<std::string> > syst_pdf_simple = std::map<std::string, std::vector<std::string> >();
 
 float lumi_scale = 1.0;
 int logY = 0;
@@ -95,6 +96,10 @@ void loadConfig(const std::string &file) {
       syst_pdf[el[1]] = std::vector<std::string>();
       syst_pdf[el[1]].push_back(el[2]);
       for (int l = 3; l < el.size(); ++l) syst_pdf[el[1]].push_back(el[l]);
+    } else if (el[0] == "syst_pdf_simple") {
+      syst_pdf_simple[el[1]] = std::vector<std::string>();
+      syst_pdf_simple[el[1]].push_back(el[2]);
+      for (int l = 3; l < el.size(); ++l) syst_pdf_simple[el[1]].push_back(el[l]);
     }
   }
 }
@@ -1843,6 +1848,20 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     for (int i = 0; i <= pdfmax; ++i) {
       patterns.push_back(pdfpre+std::string("_")+std::to_string(i));
     }
+    int this_smooth = smooth;
+
+    systCalc.add(name.c_str(), new HistDiffMany(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), filesuf.c_str()), patterns, sample, this_smooth), it->second[0]);
+  }
+
+  for (std::map<std::string, std::vector<std::string> >::iterator it = syst_pdf_simple.begin(); it != syst_pdf_simple.end(); ++it) {
+    std::string name = it->first;
+    std::string sample = it->second[1];
+    std::string filesuf = it->second[2];
+    std::string pdfpre = it->second[3];
+    int pdfmax = atoi(it->second[4].c_str());
+    vector<string> patterns;
+    patterns.push_back(pdfpre+std::string("_")+std::to_string(0));
+    patterns.push_back(pdfpre+std::string("_")+std::to_string(pdfmax));
     int this_smooth = smooth;
 
     systCalc.add(name.c_str(), new HistDiffMany(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), filesuf.c_str()), patterns, sample, this_smooth), it->second[0]);
