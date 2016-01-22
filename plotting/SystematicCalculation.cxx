@@ -109,10 +109,11 @@ void SystematicCalculatorBase::printYields(SampleSetConfiguration &sc) {
       double s = fabs(totalSyst(i->second, systName));
       total_syst += s*s;
     }
-    if (lcaseName.find("data") != std::string::npos) {
+    if (lcaseName.find("data") == std::string::npos) {
       cout << setw(30) << "Total" << " & " << setw(20)  << total<< " $\\pm$ " << setw(20)  << sqrt(total_stat + total_syst) << " \\\\ \\hline" << endl;
+    } else {
+      cout << setw(30) << "Data" << " & " << setw(20)  << nData  << " $\\pm$ " << setw(20) << nDataErr <<  " \\\\ \\hline" << endl;   
     }
-    cout << setw(30) << "Data" << " & " << setw(20)  << nData  << " $\\pm$ " << setw(20) << nDataErr <<  " \\\\ \\hline" << endl;   
   }
   cout << "\\end{tabular}" << endl;
 }
