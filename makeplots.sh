@@ -1,6 +1,7 @@
 
 S=1
-LUMI=3.31668
+#LUMI=3.31668
+LUMI=3.20905
 for hist in largeJetM largeJetEta largeJetPhi largeJetSd12 largeJet_tau32 largeJet_tau32_wta largeJet_tau21 largeJet_tau21_wta chi2 mwhad_res mthad_res mtlep_res jet0_m jet1_pt jet1_m jet2_pt jet2_m closejl_pt  closejl_minDeltaR MET_phi nBtagJets leadbJetPt lepEta lepPhi mwt  mtt nTrkBtagJets ; do
 for ch in boosted ; do
   for lep in e mu ; do
@@ -110,6 +111,10 @@ for ch in boosted ; do
     ../plotting/plotCompareNominal --mcOnly 1 --syst btagbSF_0__1up,btagbSF_0__1down --systTitles "btag eff. E0 up,btag eff. E0 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btagb0.pdf -C ../plotting/config_sig.txt --smoothen 0
     ../plotting/plotCompareNominal --mcOnly 1 --syst btagcSF_0__1up,btagcSF_0__1down --systTitles "btag mistag c E0 up,btag mistag c E0 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btagc0.pdf -C ../plotting/config_sig.txt --smoothen 0
     ../plotting/plotCompareNominal --mcOnly 1 --syst btaglSF_0__1up,btaglSF_0__1down --systTitles "btag mistag l E0 up,btag mistag l E0 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btagl0.pdf -C ../plotting/config_sig.txt --smoothen 0
+
+    for eig in $(seq 1 30) ; do
+        ../plotting/plotCompareNominal --mcOnly 1 --syst pdf_PDF4LHC15_nlo_30_${eig} --systTitles "PDF4LHC15_nlo_30 E${eig}" -l $LUMI -c $lep -p $ch -h mtt -o systpdf_${ch}_mtt_${lep}_pdf${eig}.pdf --smoothen 1
+    done
 
   done
 done
