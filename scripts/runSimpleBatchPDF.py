@@ -18,11 +18,11 @@ useLxbatch = False
 cmds = {}
 
 # number of files per job
-nFilesPerJob = 4
+nFilesPerJob = 2
 
 # input directory
 #ntuplesDir = '/eos/atlas/user/d/dferreir/topana/01122015v1'
-ntuplesDir = '/data/atlas/danilo/std_2340'
+ntuplesDir = '/data/atlas/danilo/pdf_2340'
 
 #eosrun = '/afs/cern.ch/project/eos/installation/0.3.84-aquamarine.user/bin/eos.select'
 #eosrun='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
@@ -55,33 +55,22 @@ btags = -1
 #applyEWK = 1
 applyEWK = 0
 
-names   = []
-# 25 ns datasets
-names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_singletop']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_Wjets']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_Zjets']
-names  += ['MC15_13TeV_25ns_FS_EXOT4_VV']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime400']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime500']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime750']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1000']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1250']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1500']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1750']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2000']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2250']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2500']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2750']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000']
-names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000']
-doWeightSystematics = 1
-
 names = []
-names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi']
-doWeightSystematics = 0
+names += ['MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime400_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime500_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime750_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1000_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1250_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1500_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime1750_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2000_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2250_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2500_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2750_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000_PDF']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000_PDF']
 
 import TopExamples.grid
 
@@ -171,7 +160,7 @@ for sample in samples:
         fr.write('lsetup rcsetup\n')
         fr.write('cd TopNtupleAnalysis\n')
         fr.write('ls\n')
-        fr.write('./read --doWeightSystematics '+str(doWeightSystematics)+' --applyEWK '+str(applyEWK)+' --removeOverlapHighMtt 1 --data '+str(isData)+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'_'+job+'.root,'+outputDir+'/resolved_mu_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_e_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_mu_'+outfile+'_'+job+'.root --systs '+theSysts+'\n')
+        fr.write('./read --pdf PDF4LHC15_nlo_30 --applyEWK '+str(applyEWK)+' --data '+str(isData)+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'_'+job+'.root,'+outputDir+'/resolved_mu_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_e_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_mu_'+outfile+'_'+job+'.root --systs '+theSysts+'\n')
         if not useLxbatch:
             fr.write('ERR=$?\n')
         #    fr.write('mail -s "Job '+jobName+'(code=$ERR)"  -r no-reply@cern.ch '+email+' <<EOF')

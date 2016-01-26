@@ -4,9 +4,11 @@ import HQTTtResonancesTools.DC15Data13TeV_25ns_EXOT4
 
 # input directory
 ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/01122015v1'
+ntuplesDir = '/data/atlas/danilo/std_2340'
+#ntuplesDir = '/data/atlas/danilo/qcd_2340'
 
 # output directory
-outputDir = 'ttres33'
+outputDir = 'ttres32'
 
 # the default is AnaTtresSL, which produces many control pltos for tt res.
 # The Mtt version produces a TTree to do the limit setting
@@ -19,14 +21,12 @@ analysisType='AnaTtresSL'
 systematics = 'nominal'
 #systematics = 'nominal,EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up,JET_JER_SINGLE_NP__1up,JET_NPScenario1_JET_GroupedNP_1__1down,JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_2__1down,JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_3__1down,JET_NPScenario1_JET_GroupedNP_3__1up,MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleDown,MET_SoftTrk_ScaleUp,MUONS_ID__1down,MUONS_ID__1up,MUONS_MS__1down,MUONS_MS__1up,MUONS_SCALE__1down,MUONS_SCALE__1up'
 
-# set to 1 to run the loose selection for QCD
-loose = 0
-
 btags = -1
 #btags = 1
 
 names   = []
 names  += ["Data15_13TeV_25ns_FS_EXOT4_3_3fb"]
+#names  += ["QCD15_13TeV_25ns_FS_EXOT4_3_3fb"]
 # 25 ns datasets
 #names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
 #names  += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
@@ -96,8 +96,13 @@ for sample in samples:
     f.close()
     theSysts = systematics
     isData = '0'
+    qcdPar = ''
     if "Data" in sample.name:
         theSysts = "nominal"
         isData = '1'
-    os.system('./read --removeOverlapHighMtt 1 --data '+isData+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+outputDir+"/input_"+sample.name+'.txt'+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'.root,'+outputDir+'/resolved_mu_'+outfile+'.root,'+outputDir+'/boosted_e_'+outfile+'.root,'+outputDir+'/boosted_mu_'+outfile+'.root --systs '+theSysts)
+    elif "QCD" in sample.name:
+        theSysts = "nominal"
+        isData = '1'
+        qcdPar = ' --runMM 1 --loose 1 '
+    os.system('./read --removeOverlapHighMtt 1 --data '+isData+' '+qcdPar+' --btags '+str(btags)+' --files '+outputDir+"/input_"+sample.name+'.txt'+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'.root,'+outputDir+'/resolved_mu_'+outfile+'.root,'+outputDir+'/boosted_e_'+outfile+'.root,'+outputDir+'/boosted_mu_'+outfile+'.root --systs '+theSysts)
 

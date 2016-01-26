@@ -29,8 +29,10 @@ names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime2750']
 names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000']
 names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000']
 names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000']
+
+names = []
 #names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi']
-#names += ['MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF']
+names += ['MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF']
 #names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime400_PDF']
 #names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime500_PDF']
 #names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime750_PDF']
@@ -66,6 +68,6 @@ for sample in names:
         os.system(cmd)
 
 
-for ch in channels:
-    os.system('hadd -f -k '+outdir+"/"+ch+'_MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_all.root '+outdir+"/"+ch+'_MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia.root '+outdir+"/"+ch+'_MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced.root')
+#for ch in channels:
+#    os.system('hadd -f -k '+outdir+"/"+ch+'_MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_all.root '+outdir+"/"+ch+'_MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia.root '+outdir+"/"+ch+'_MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced.root')
 
