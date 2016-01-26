@@ -81,12 +81,11 @@ void SystematicCalculatorBase::printYields(SampleSetConfiguration &sc) {
   
   float nData(0.);
   float nDataErr(0.);
+  double total = 0;
+  double total_stat = 0;
+  double total_syst = 0;
   
   for (map<string, SampleSet>::iterator i = sc._stack.begin(); i != sc._stack.end(); ++i) { // for every element in the stack (one for data, one for MC)
-    double total = 0;
-    double total_stat = 0;
-    double total_syst = 0;
-
     std::string lcaseName = i->first;
     std::transform(lcaseName.begin(), lcaseName.end(), lcaseName.begin(), ::tolower);
     // i->second is a stack
@@ -109,12 +108,9 @@ void SystematicCalculatorBase::printYields(SampleSetConfiguration &sc) {
       double s = fabs(totalSyst(i->second, systName));
       total_syst += s*s;
     }
-    if (lcaseName.find("data") == std::string::npos) {
-      cout << setw(30) << "Total" << " & " << setw(20)  << total<< " $\\pm$ " << setw(20)  << sqrt(total_stat + total_syst) << " \\\\ \\hline" << endl;
-    } else {
-      cout << setw(30) << "Data" << " & " << setw(20)  << nData  << " $\\pm$ " << setw(20) << nDataErr <<  " \\\\ \\hline" << endl;   
-    }
   }
+  cout << setw(30) << "Total" << " & " << setw(20)  << total<< " $\\pm$ " << setw(20)  << sqrt(total_stat + total_syst) << " \\\\ \\hline" << endl;
+  cout << setw(30) << "Data" << " & " << setw(20)  << nData  << " $\\pm$ " << setw(20) << nDataErr <<  " \\\\ \\hline" << endl;   
   cout << "\\end{tabular}" << endl;
 }
 

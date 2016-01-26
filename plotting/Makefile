@@ -2,8 +2,11 @@
 ROOTINC = $(shell root-config --cflags)
 ROOTLIB = $(shell root-config --libs)
 
-CXXFLAGS = -c -g -std=c++11 $(ROOTINC)
-LDFLAGS = -g -std=c++11 -rdynamic $(ROOTLIB)
+#CXXFLAGS = -c -g -std=c++11 $(ROOTINC)
+#LDFLAGS = -g -std=c++11 -rdynamic $(ROOTLIB)
+
+CXXFLAGS = -c -O4 -std=c++11 $(ROOTINC)
+LDFLAGS = -O4 -std=c++11 -rdynamic $(ROOTLIB)
 
 DEPS = ParseUtils.o utils.o Hist.o SystematicImplementation.o SampleSet.o SystematicCalculation.o
 
