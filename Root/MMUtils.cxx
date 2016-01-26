@@ -43,26 +43,26 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     fake_pt_resolved_e = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_resolved_e")->Clone();
     fake_pt_resolved_e->SetDirectory(0);
     
-    fake_pt_resolved_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_resolved_mu")->Clone();
-    fake_pt_resolved_mu->SetDirectory(0);
+    //fake_pt_resolved_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_resolved_mu")->Clone();
+    //fake_pt_resolved_mu->SetDirectory(0);
     
-    fake_pt_boosted_e = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_e")->Clone();
-    fake_pt_boosted_e->SetDirectory(0);
+    //fake_pt_boosted_e = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_e")->Clone();
+    //fake_pt_boosted_e->SetDirectory(0);
     
-    fake_pt_boosted_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_mu")->Clone();    
-    fake_pt_boosted_mu->SetDirectory(0); 
+    //fake_pt_boosted_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_mu")->Clone();    
+    //fake_pt_boosted_mu->SetDirectory(0); 
 
-    fake_dr_resolved_e  = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_resolved_e")->Clone();
-    fake_dr_resolved_e->SetDirectory(0); 
+    //fake_dr_resolved_e  = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_resolved_e")->Clone();
+    //fake_dr_resolved_e->SetDirectory(0); 
     
     fake_dr_resolved_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_resolved_mu")->Clone();
     fake_dr_resolved_mu->SetDirectory(0); 
     
-    fake_dr_boosted_e   = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_e")->Clone();
-    fake_dr_boosted_e->SetDirectory(0); 
+    //fake_dr_boosted_e   = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_e")->Clone();
+    //fake_dr_boosted_e->SetDirectory(0); 
     
-    fake_dr_boosted_mu  = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_mu")->Clone();
-    fake_dr_boosted_mu->SetDirectory(0); 
+    //fake_dr_boosted_mu  = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_mu")->Clone();
+    //fake_dr_boosted_mu->SetDirectory(0); 
 
   }
   
@@ -76,14 +76,14 @@ MMUtils::~MMUtils(){
   delete eff_map_boosted_mu ;
   
   delete fake_pt_resolved_e ;
-  delete fake_pt_resolved_mu ;
-  delete fake_pt_boosted_e;
-  delete fake_pt_boosted_mu;
+  //delete fake_pt_resolved_mu ;
+  //delete fake_pt_boosted_e;
+  //delete fake_pt_boosted_mu;
   
-  delete fake_dr_resolved_e ;
+  //delete fake_dr_resolved_e ;
   delete fake_dr_resolved_mu ;
-  delete fake_dr_boosted_e;
-  delete fake_dr_boosted_mu;
+  //delete fake_dr_boosted_e;
+  //delete fake_dr_boosted_mu;
   
   delete eff_map;
   delete fake_pt;
@@ -110,7 +110,11 @@ float MMUtils::getMMweights(const Event &evt, int runMM_StatErr) {
        
    }else if (evt.electron().size() == 0 && evt.muon().size() == 1){	       
        lepP4 = evt.muon()[0].mom();
+       
+       bool trig_unprescaled = evt.muon()[0].HLT_mu20_iloose_L1MU15() || evt.muon()[0].HLT_mu50();
+       
        isTight = evt.muon()[0].isTight();
+       if( !trig_unprescaled )	isTight = false;
    }
    
    lepPt = lepP4.Perp()*1e-3; 
@@ -136,24 +140,24 @@ float MMUtils::getMMweights(const Event &evt, int runMM_StatErr) {
    	if (isElectron)	{
 	   eff_map  = eff_map_boosted_e;
 	   fake_pt = fake_pt_resolved_e;
-	   fake_dr = fake_dr_resolved_e;
+	   //fake_dr = fake_dr_resolved_e;
 	}
 	else{
 	   eff_map = eff_map_boosted_mu;
-	   fake_pt = fake_pt_resolved_mu;
+	   //fake_pt = fake_pt_resolved_mu;
 	   fake_dr = fake_dr_resolved_mu;
 	}
    }
    else{
    	if (isElectron){
 	   eff_map = eff_map_resolved_e;
-	   fake_dr = fake_dr_resolved_e;
+	   //fake_dr = fake_dr_resolved_e;
 	   fake_pt = fake_pt_resolved_e; 
 	}	
 	else{
 	   eff_map = eff_map_resolved_mu;
 	   fake_dr = fake_dr_resolved_mu; 
-	   fake_pt = fake_pt_resolved_mu;
+	   //fake_pt = fake_pt_resolved_mu;
 	}
    }//isBoosted	
    	
@@ -230,14 +234,14 @@ float MMUtils::getMMweights(const Event &evt, int runMM_StatErr) {
    }
    	
    if (isTight){
-     if(realRate!=0 && fakeRate!=0.)  Weight = fakeRate*(realRate - 1)/(realRate - fakeRate); 
+     if(realRate>0 && fakeRate>0)  Weight = fakeRate*(realRate - 1)/(realRate - fakeRate); 
      else{
      	     std::cerr << "Error: realRate or fakeRate equal to 0 " << std::endl;	     
 	     Weight = 0;
      }
    }
    else {	
-     if(realRate!=0 && fakeRate!=0.)  Weight = fakeRate*realRate/(realRate - fakeRate);
+     if(realRate>0 && fakeRate>0)  Weight = fakeRate*realRate/(realRate - fakeRate);
      else{
      	     std::cerr << "Error: realRate or fakeRate equal to 0 " << std::endl;
      	     Weight = 0;
