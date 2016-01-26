@@ -623,7 +623,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
   maximum *= 1.8;
   double minimum = 0.001;
   if (logY) {
-    maximum *= 1000;
+    maximum *= 10000;
   }
   if (yMax > 0)
     maximum = yMax;
@@ -650,14 +650,14 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
     else
       MC->GetYaxis()->SetTitle(vechist[0]->GetYaxis()->GetTitle());
   }
-  if (logY) {
-    c->SetLogy();
-  }
   c->Update();
   MC->Draw("same");
   band->Draw("2 ][ same");
   if (Data)
     Data->Draw("e same");
+  if (logY) {
+    c->cd(1)->SetLogy();
+  }
   leg->Draw();
   gPad->RedrawAxis();
 
@@ -779,7 +779,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
   if (posLegend < 2 || posLegend == 6) {
     for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
       double pos = (double) ((int) (i - extraText.begin()));
-      stampText(*i, 0.20, 0.66-0.06*pos, 0.06*0.9);
+      stampText(*i, 0.20, 0.70-0.06*pos, 0.06*0.9);
     }
   } else if (posLegend == 7) {
     for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
@@ -871,10 +871,16 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
   }
 
   double maximum = MC->GetMaximum();
+  double minimum = 0.001;
   if (Data) maximum = std::max(Data->GetBinContent(Data->GetMaximumBin()), MC->GetMaximum());
-  MC->SetMaximum(1.7*maximum);
+  maximum *= 1.7;
+  if (logY) {
+    maximum *= 10000;
+  }
+  MC->SetMaximum(maximum);
   if (Data)
-    Data->SetMaximum(1.7*maximum);
+    Data->SetMaximum(maximum);
+  MC->SetMinimum(minimum);
 
   MC->Draw();
   for (int z = 0; z < no; ++z) {
@@ -892,6 +898,9 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
   if (Data)
     Data->Draw("e same");
   //band->Draw("2 ][ same");
+  if (logY) {
+    c->cd(1)->SetLogy();
+  }
   leg->Draw();
 
   shared_ptr<TH1D> rat;

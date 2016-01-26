@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
     std::string config = "";
     int mcOnly = 0;
     smooth = 40;
+    int _logY = 0;
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -78,6 +79,7 @@ int main(int argc, char **argv) {
         {"config",          required_argument,     0, 'C', "Configuration file.", &config, extendedOption::eOTString},
         {"mcOnly",          required_argument,     0, 'm', "Do not include data? (0/1)", &mcOnly, extendedOption::eOTInt},
         {"smoothen",        required_argument,     0, 'k', "Smoothen systematics.", &smooth, extendedOption::eOTInt},
+        {"logY",            required_argument,     0, 'g', "Y axis in log?", &_logY, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -91,6 +93,7 @@ int main(int argc, char **argv) {
       dumpOptions(extOpt);
     }
 
+    logY = _logY;
     lumi_scale = lumi;
     if (config != "")
       loadConfig(config.c_str());
