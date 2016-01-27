@@ -20,12 +20,14 @@ class FitRes:
         errdw = []
         corr = numpy.matrix([])
 
-systList = [['lumiup','lumidw']]
-
 def loadSpectrum(sampleName, histName, syst):
     if sampleName != "bkg":
+        print "hist_{:}.root".format(sampleName)
         f = TFile("hist_{:}.root".format(sampleName))
+        print f
+        print "{:}{:}".format(histName, syst)
         h = f.Get("{:}{:}".format(histName, syst))
+        print h
         if h:
             h.SetDirectory(0)
         return h
@@ -42,8 +44,12 @@ def loadSpectrum(sampleName, histName, syst):
     return h
 
 def copySpectrum(sampleName, histName, syst, newname):
-    h = loadSpectrum(sampleName, histName, syst).Clone(newname)
-    return h
+    h = loadSpectrum(sampleName, histName, syst)
+    if h == None:
+        if 'dw' in syst:
+            h = loadSpectrum(sampleName, histName, syst.replace('dw', 'up', 1))
+    hc = h.Clone(newname)
+    return hc
 
 def loadStatsSq(h):
     for i in xrange(h.GetNbinsX()+1):
@@ -107,6 +113,8 @@ def MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF):
         else:
             h_up = loadSpectrum(sampleName, histName, systLabel+"up")
             h_dw = loadSpectrum(sampleName, histName, systLabel+"dw")
+            if h_dw == None:
+                h_dw = loadSpectrum(sampleName, histName, systLabel+"up")
 
         h_var_PF = loadSpectrum(sampleName, histName, systLabel)
         if h_var_PF:
