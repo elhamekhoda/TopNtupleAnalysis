@@ -188,8 +188,10 @@ int main(int argc, char **argv) {
         drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
       }
 
-      if (saveTH1 != "")
+      if (saveTH1 != "") {
         stackConfig["MC"].saveTH1(saveTH1);
+        stackConfig["Data"].saveTH1(saveTH1);
+      }
     } else { // if it is a ratio plot
 
       shared_ptr<SystematicRatioCalculator> systRatCalcD;
