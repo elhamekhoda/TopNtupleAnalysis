@@ -145,7 +145,7 @@ sample    VV           MC15_13TeV_25ns_FS_EXOT4_VV                              
 EOF
 cat ../plotting/config_syst.txt >>config_tmp.txt
 
-for ch in boosted resolved ; do
+for ch in boosted ; do
   for lep in e mu ; do
     ../plotting/plot  -c $lep -p $ch -h mtt -l $LUMI --saveTH1 $lep  --smoothen $S -C config_tmp.txt
     ../plotting/plot --logY 1 --mcOnly 0 -c $lep -p $ch -h mtt -l $LUMI  --smoothen $S

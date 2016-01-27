@@ -28,6 +28,6 @@ for ch in boosted ; do
 done
 
 for ch in boosted ; do
-  ../plotting/plotChannelRatio --mcOnly 1 -c e/mu -p $ch -h mtt -l $LUMI -T $ch  --smoothen 1 --yTitle "e/#mu" -C config.txt
+  ../plotting/plotChannelRatio -c e/mu -p $ch -h mtt -l $LUMI -T $ch  --smoothen 1 --yTitle "e/#mu" -C config.txt
 done
 
