@@ -83,6 +83,7 @@ syst_pdf_simple   ttpdf26   "ttbar PDF26"            "ttbar"                MC15
 syst_pdf_simple   ttpdf27   "ttbar PDF27"            "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF                   pdf_PDF4LHC15_nlo_30           27
 syst_pdf_simple   ttpdf28   "ttbar PDF28"            "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF                   pdf_PDF4LHC15_nlo_30           28
 syst_pdf_simple   ttpdf29   "ttbar PDF29"            "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF                   pdf_PDF4LHC15_nlo_30           29
+syst_pdf_simple   ttpdf30   "ttbar PDF30"            "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF                   pdf_PDF4LHC15_nlo_30           30
 #syst_pdf   zp400pdf  "zp400 PDF"                     "Zprime400"            MC15_13TeV_25ns_FS_EXOT4_Zprime400_PDF                      PDF4LHC15_nlo_30           30
 #syst_pdf   zp500pdf  "zp500 PDF"                     "Zprime500"            MC15_13TeV_25ns_FS_EXOT4_Zprime500_PDF                      PDF4LHC15_nlo_30           30
 #syst_pdf   zp750pdf  "zp750 PDF"                     "Zprime750"            MC15_13TeV_25ns_FS_EXOT4_Zprime750_PDF                      PDF4LHC15_nlo_30           30
