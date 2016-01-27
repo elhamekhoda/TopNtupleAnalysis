@@ -78,10 +78,13 @@ names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime3000']
 names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime4000']
 names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime5000']
 doWeightSystematics = 1
+removeOverlapHighMtt = 1
 
 names = []
-names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi']
+#names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo', 'MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi']
+names += ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2', 'MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2']
 doWeightSystematics = 0
+removeOverlapHighMtt = 0
 
 import TopExamples.grid
 
@@ -171,7 +174,7 @@ for sample in samples:
         fr.write('lsetup rcsetup\n')
         fr.write('cd TopNtupleAnalysis\n')
         fr.write('ls\n')
-        fr.write('./read --doWeightSystematics '+str(doWeightSystematics)+' --applyEWK '+str(applyEWK)+' --removeOverlapHighMtt 1 --data '+str(isData)+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'_'+job+'.root,'+outputDir+'/resolved_mu_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_e_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_mu_'+outfile+'_'+job+'.root --systs '+theSysts+'\n')
+        fr.write('./read --doWeightSystematics '+str(doWeightSystematics)+' --applyEWK '+str(applyEWK)+' --removeOverlapHighMtt '+str(removeOverlapHighMtt)+' --data '+str(isData)+' --btags '+str(btags)+' --loose '+str(loose)+' --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+outputDir+'/resolved_e_'+outfile+'_'+job+'.root,'+outputDir+'/resolved_mu_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_e_'+outfile+'_'+job+'.root,'+outputDir+'/boosted_mu_'+outfile+'_'+job+'.root --systs '+theSysts+'\n')
         if not useLxbatch:
             fr.write('ERR=$?\n')
         #    fr.write('mail -s "Job '+jobName+'(code=$ERR)"  -r no-reply@cern.ch '+email+' <<EOF')
