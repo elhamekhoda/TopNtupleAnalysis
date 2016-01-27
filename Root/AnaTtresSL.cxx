@@ -35,34 +35,30 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   double varBin5[] = {0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000};
   int varBinN5 = sizeof(varBin5)/sizeof(double) - 1;
 
-/*
   if (m_electron){
      if(m_boosted){
-        double varBin6[5] = {30, 40, 60, 120, 500};
+        double varBin6[5] = {30, 40, 60, 120, 700};
         int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
-        m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
 
      }else{
-        double varBin6[7] = {30, 35, 40, 50, 60, 120, 500};
+        double varBin6[7] = {30, 35, 40, 50, 60, 120, 700};
         int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
-        m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
      }//m_boosted
 
   }else{
      if(m_boosted){
-        double varBin6[5] = {25, 30, 40, 50, 500};
+        double varBin6[5] = {25, 30, 40, 50, 700};
         int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
-        m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
      }else{
-        double varBin6[8] = {25, 30, 35, 40, 50, 70, 100, 500};
+        double varBin6[8] = {25, 30, 35, 40, 50, 70, 100, 700};
         int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
-        m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
      }//m_boosted
 
   }//m_electron
-*/
+
   m_hSvc.create1D("yields", "; One ; Events", 1, 0.5, 1.5);
   
+  //m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
   m_hSvc.create1D("lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
   m_hSvc.create1D("lepEta", "; lepton #eta ; Events", 20, -2.5, 2.5);
   m_hSvc.create1D("lepPhi", "; lepton #phi [rd] ; Events", 32, -3.2, 3.2);
@@ -88,7 +84,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.create1DVar("closejl_pt", "; Pt of closest jet to lep [GeV]; Events", varBinN1, varBin1);
   
   m_hSvc.create1D("weight", "; QCD weights; Events", 2000, -100, 100);
-  m_hSvc.create2D("weight_leptPt", "lept Pt (GeV); QCD weights",100, 25, 525, 2000, -100, 100);
+  m_hSvc.create2D("weight_leptPt", ";lept Pt (GeV); QCD weights",100, 25, 525, 2000, -100, 100);
   
   m_hSvc.create1D("jet0_m", "; mass of the leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
   m_hSvc.create1D("jet1_m", "; mass of the sub-leading R=0.4 calo jet [GeV]; Events", 20, 0, 100); 
@@ -162,9 +158,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   if (!m_boosted)
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
-  
-  if (!m_boosted)	if (evt.jet().size()<4)		return;
-        
+          
   HistogramService *h = &m_hSvc;
   
   bool trig1(0); 
@@ -181,7 +175,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     l = evt.electron()[0].mom();
 
     //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();          // MC / data prescaled
+    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();          // MC
     trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();          // data only
     trig3 = evt.electron()[0].HLT_e60_lhmedium();
     trig4 = evt.electron()[0].HLT_e120_lhloose();
@@ -207,7 +201,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     trig_prescaled   = trig1;
     trig_unprescaled = trig2 || trig3;
     
-    if (s=="_Loose")
+    if (s!="_Loose")
 	if (trig_prescaled && !trig_unprescaled)	return;
            
   }//m_electron
