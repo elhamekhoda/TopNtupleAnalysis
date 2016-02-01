@@ -733,13 +733,15 @@ int main(int argc, char **argv) {
               float MC_tbar_phi = sel.MC_tbar().Phi();
               float MC_tbar_m = sel.MC_tbar().M();
               int initial_type = mt.i("initial_type");
-              double ewkW = ewkTool.getWeight(MC_t_pt,    MC_t_eta,    MC_t_phi,    MC_t_m, \
+              WeakCorr::ScaleFactor sf; 
+              sf = ewkTool.getScaleFactor(MC_t_pt,    MC_t_eta,    MC_t_phi,    MC_t_m, \
                                           MC_tbar_pt, MC_tbar_eta, MC_tbar_phi, MC_tbar_m, \
                                           initial_type);
+              double ewkW = sf.nominal;
               if (suffix == "ttEWK__1down" || suffix == "ttEWK__1down_Loose") {
-                ewkW *= 0.9;
+                ewkW = sf.down;
               } else if (suffix == "ttEWK__1up" || suffix == "ttEWK__1up_Loose") {
-                ewkW *= 1.1;
+                ewkW = sf.up;
               }
               weight *= ewkW;
             }
