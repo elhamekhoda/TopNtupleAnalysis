@@ -152,3 +152,10 @@ for ch in boosted ; do
   done
 done
 
+for ch in resolved ; do
+  for lep in e mu ; do
+    ../plotting/plot --logY 1 --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI  --smoothen $S
+  done
+done
+
+

@@ -680,9 +680,9 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
     c->cd(2);
     rat->SetStats(0);
     if (!mustBeBigger) {
-      rat->GetYaxis()->SetRangeUser(0.3, 1.7);
-      theMax = 1.7;
-      theMin = 0.3;
+      rat->GetYaxis()->SetRangeUser(0.7, 1.3);
+      theMax = 1.3;
+      theMin = 0.7;
     } else {
       rat->GetYaxis()->SetRangeUser(0.0, 2.3);
       theMax = 2.3;
