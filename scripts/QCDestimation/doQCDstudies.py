@@ -76,9 +76,12 @@ def effRates(channels):
 	outfile = TFile('eff_ttbar.root','RECREATE')
 	
 	for ichan in channels:
+
+		if(ichan[0]=='resolved'):	regime = "r";
+		elif(ichan[0]=='boosted'):	regime = "b";
 				
 		hadd_in=""
-		hadd_in = inputDir+ichan[0]+"_"+ichan[1]+"_ttbar*root"
+		hadd_in = inputDir+regime+ichan[1]+"_nom_ttbar*root"
 	
 		ttbarFile = ichan[0]+"_ttbar_"+ichan[1]+".root "
 		
@@ -145,7 +148,9 @@ def effRates(channels):
 		
 		h_ratio_pTdr.GetZaxis().SetRangeUser(0.5, 1.0)
 		
-		h_ratio_pTdr.GetYaxis().SetRangeUser(0., 5.0)
+		if(ichan[0]=='boosted'):	h_ratio_pTdr.GetYaxis().SetRangeUser(0., 1.5)
+		else:				h_ratio_pTdr.GetYaxis().SetRangeUser(0., 5.0)
+		
 		h_ratio_pTdr.SetStats(0)
 		#h_ratio_pTdr[i].GetYaxis().SetMoreLogLabels(1)	
 		#h_ratio_pTdr[i].GetXaxis().SetMoreLogLabels(1)	
@@ -169,17 +174,26 @@ def effRates(channels):
 def fakeRates(inputDir, lumi):
 
 	merge = 1
-	extraPlots = 0
+	extraPlots = 1
 		
 	channels  = []
-	channels += [('resolved','e' )]
-	channels += [('resolved','mu')]
-	channels += [('boosted', 'e' )]
-	channels += [('boosted', 'mu')]
+	channels += [('r','e' )]
+	channels += [('r','mu')]
+	channels += [('b', 'e' )]
+	channels += [('b', 'mu')]
+	
+	regime  = []
+	regime += ['resolved']
+	regime += ['boosted']
+	
+	iPad = 0
 	
 	outfile = TFile("fake.root","RECREATE")
 		
 	for ichan in channels:
+	
+		if(ichan[0]=='r'):	regime = 'resolved'
+		if(ichan[0]=='b'):	regime = 'boosted'
 	
 		hadd_in= []		
 		
@@ -187,16 +201,16 @@ def fakeRates(inputDir, lumi):
 		for ibkg in ["ttbar", "Wjets", "Zjets", "st"]:			
 			
 			if ibkg=="ttbar":				
-				for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_ttbar.root ").readlines():
+				for File in os.popen("ls "+inputDir+ichan[0]+ichan[1]+"_nom_ttbar.root ").readlines():
 					hadd_in.append(File[:-1])
 			elif ibkg=="Wjets":
-				for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_W*root ").readlines():
+				for File in os.popen("ls "+inputDir+ichan[0]+ichan[1]+"_nom_W*root ").readlines():
 					hadd_in.append(File[:-1])
 			elif ibkg=="Zjets":
-				for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_Z*root ").readlines():
+				for File in os.popen("ls "+inputDir+ichan[0]+ichan[1]+"_nom_Z*root ").readlines():
 					hadd_in.append(File[:-1])
 			elif ibkg=="st":
-				for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_st.root ").readlines():
+				for File in os.popen("ls "+inputDir+ichan[0]+ichan[1]+"_nom_st.root ").readlines():
 					hadd_in.append(File[:-1])	
 
 
@@ -207,7 +221,7 @@ def fakeRates(inputDir, lumi):
 		hadd_in=[]		
 		#print "ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_DT*root "
 		
-		for File in os.popen("ls "+inputDir+ichan[0]+"_fake_"+ichan[1]+"_DT*root ").readlines():
+		for File in os.popen("ls "+inputDir+ichan[0]+ichan[1]+"_nom_DT*root ").readlines():
 			hadd_in.append(File[:-1])
 		
 		hadd_dataPath =  ichan[0]+"_DATA_"+ichan[1]+".root"
@@ -218,11 +232,11 @@ def fakeRates(inputDir, lumi):
 		bkgFile  = TFile(hadd_bkgPath,'READ')
 		dataFile = TFile(hadd_dataPath,'READ')
 		
-		for var in ['mwt','lepPt','minDeltaR','closJetPt','MET', 'z0sin', 'd0sig', 'jvt_lowLepPt', 'jvt_highLepPt']:
+		for var in ['mwt','lepPt','minDeltaR','closJetPt','MET', 'z0sin', 'd0sig']:
 		
 			#tight
 			c_t = TCanvas("c_"+ichan[0]+'_'+var+'_tight_'+ichan[1])
-			leg = TLegend(0.6, 0.6, 0.8, 0.88, ichan[0]+" "+ichan[1]+" channel (tight):")
+			leg = TLegend(0.6, 0.6, 0.8, 0.88, regime+" "+ichan[1]+" channel (tight):")
                 	leg.SetTextSize(0.028)
                 	leg.SetFillColor(10)
                 	leg.SetBorderSize(0)
@@ -231,9 +245,6 @@ def fakeRates(inputDir, lumi):
 			h_data.Draw("e")
 			h_data.SetMarkerStyle(20)
 			h_data.SetStats(0)
-			if (ichan[0]=='boosted'):	
-				#h_data.Rebin(2)
-				if (var=='lepPt' or var=='closJetPt'):	h_data.Rebin(4)
 			leg.AddEntry(h_data, "Data: "+`h_data.Integral()`[:7], "P")
 			print ichan, "tight:"
 			print 'data &' , `h_data.Integral()`[:7], '\\\ \\hline'
@@ -244,9 +255,7 @@ def fakeRates(inputDir, lumi):
 			i=0
 			
 			for ibkg in ["ttbar", "Wev", "Wmv", "Wtv", "Zee", "Zmm", "Ztt", "st"]:
-				
-				#print inputDir+ichan[0]+"_fake_"+ichan[1]+"_"+ibkg+".root"
-				tmp_bkgFile  = TFile(inputDir+ichan[0]+"_fake_"+ichan[1]+"_"+ibkg+".root",'READ')
+				tmp_bkgFile  = TFile(inputDir+ichan[0]+ichan[1]+"_nom_"+ibkg+".root",'READ')
 				h_ibkg.append(tmp_bkgFile.Get("fake_"+var).Clone())
 				h_ibkg[i].SetDirectory(0)
 				h_ibkg[i].Scale(lumi)
@@ -254,9 +263,6 @@ def fakeRates(inputDir, lumi):
 					if h_ibkg[i].Integral()>0.0001: #for better visualization
 						print ibkg, '&' , `h_ibkg[i].Integral()`[:7], '\\\ \\hline'	
 						h_ibkg[i].Draw("histo SAME")
-						if (ichan[0]=='boosted'):
-							#h_ibkg[i].Rebin()	
-							if (var=='lepPt' or var=='closJetPt'):	h_ibkg[i].Rebin(4)
 						h_ibkg[i].SetStats(0)
 					h_ibkg[i].SetLineColor(pallete[i]) 
 					h_ibkg[i].SetLineStyle(styleLine[i])
@@ -271,10 +277,7 @@ def fakeRates(inputDir, lumi):
 			h_bkg.SetLineColor(4) 
 			h_bkg.SetLineWidth(3)
 			h_bkg.SetStats(0)
-			if (ichan[0]=='boosted'):
-				#h_bkg.Rebin(2)	
-				if (var=='lepPt' or var=='closJetPt'):	h_bkg.Rebin(4)
-			
+						
 			leg.AddEntry(h_bkg,  "total bkg: "+`h_bkg.Integral()`[:7], "L")
 			leg.Draw()
 			print 'total bkg &' , `h_bkg.Integral()`[:7], '\\\ \\hline'
@@ -288,11 +291,11 @@ def fakeRates(inputDir, lumi):
 			c_t.SetGridy(1)
 			c_t.Update()
                 	c_t.Modified()  	    
-			saveCanvas(c_t, 'h_'+ichan[0]+'_'+var+'_tight_'+ichan[1], outfile, 'fake_plots')
+			saveCanvas(c_t, 'h_'+regime+'_'+var+'_tight_'+ichan[1], outfile, 'fake_plots')
 			
 			#loose
 			c_l = TCanvas("c_"+ichan[0]+'_'+var+'_loose_'+ichan[1])
-			leg = TLegend(0.6, 0.6, 0.8, 0.88, ichan[0]+" "+ichan[1]+" channel (loose):")
+			leg = TLegend(0.6, 0.6, 0.8, 0.88, regime+" "+ichan[1]+" channel (loose):")
                 	leg.SetTextSize(0.028)
 	                leg.SetFillColor(10)
         	        leg.SetBorderSize(0)
@@ -301,9 +304,6 @@ def fakeRates(inputDir, lumi):
 			h_data.Draw("e")
 			h_data.SetMarkerStyle(20)
 			h_data.SetStats(0)
-			if (ichan[0]=='boosted'):
-				#h_data.Rebin(2)	
-				if (var=='lepPt' or var=='closJetPt'):	h_data.Rebin(4)
 			leg.AddEntry(h_data, "Data: "+`h_data.Integral()`[:7], "P")
 			print ichan, "Loose:"
 			print 'data &' , `h_data.Integral()`[:7], '\\\ \\hline'
@@ -313,9 +313,7 @@ def fakeRates(inputDir, lumi):
 			h_ibkg = []
 			i=0
 			for ibkg in ["ttbar", "Wev", "Wmv", "Wtv", "Zee", "Zmm", "Ztt", "st"]:
-				
-				#print inputDir+ichan[0]+"_fake_"+ichan[1]+"_"+ibkg+".root"
-				tmp_bkgFile  = TFile(inputDir+ichan[0]+"_fake_"+ichan[1]+"_"+ibkg+".root",'READ')
+				tmp_bkgFile  = TFile(inputDir+ichan[0]+ichan[1]+"_nom_"+ibkg+".root",'READ')
 				h_ibkg.append(tmp_bkgFile.Get("fake_"+var+'_Loose').Clone())
 				h_ibkg[i].SetDirectory(0)
 				h_ibkg[i].Scale(lumi)
@@ -323,9 +321,6 @@ def fakeRates(inputDir, lumi):
 					if h_ibkg[i].Integral()>0.0001:	
 						h_ibkg[i].Draw("histo SAME")
 						print ibkg, '&' , `h_ibkg[i].Integral()`[:7], '\\\ \\hline'
-						if (ichan[0]=='boosted'):
-							#h_ibkg[i].Rebin()	
-							if (var=='lepPt' or var=='closJetPt'):	h_ibkg[i].Rebin(4)
 						h_ibkg[i].SetStats(0)
 					h_ibkg[i].SetLineColor(pallete[i]) 
 					h_ibkg[i].SetLineStyle(styleLine[i])
@@ -343,23 +338,18 @@ def fakeRates(inputDir, lumi):
 			h_bkg.SetLineColor(4) 
 			h_bkg.SetLineWidth(3)
 			h_bkg.SetStats(0)		
-			if (ichan[0]=='boosted'):	
-				#h_bkg.Rebin(2)
-				if (var=='lepPt' or var=='closJetPt'):	h_bkg.Rebin(4)
 		
                 	if h_data.GetMaximum()>h_bkg.GetMaximum():	h_data.SetMaximum(h_data.GetMaximum()*1.3)
-			else: 						h_data.SetMaximum(h_bkg.GetMaximum()*1.3)
-		
+			else: 						h_data.SetMaximum(h_bkg.GetMaximum()*1.3)	
 			
 			leg.AddEntry(h_bkg,  "bkg: "+`h_bkg.Integral()`[:7], "L")
 			leg.Draw()
 			print 'total bkg &' , `h_bkg.Integral()`[:7], '\\\ \\hline'
 			c_l.SetLogy(1)
-			#if var=='lepPt':	c_l.SetLogx(1)
 			c_l.SetGridy(1)
 			c_l.Update()
         	        c_l.Modified()  	    
-			saveCanvas(c_l, 'h_'+ichan[0]+'_'+var+'_loose_'+ichan[1], outfile, 'fake_plots')
+			saveCanvas(c_l, 'h_'+regime+'_'+var+'_loose_'+ichan[1], outfile, 'fake_plots')
 			
 			
 		# --> Fake rate
@@ -379,20 +369,20 @@ def fakeRates(inputDir, lumi):
 			elif item=="DATA":	inputfile = dataFile
 								
 			#lept pT
-			h_leptPt_t.append( inputfile.Get("fake_lepPt_jetPt").ProjectionX().Clone() )		  	  
-			h_leptPt_l.append( inputfile.Get("fake_lepPt_jetPt_Loose").ProjectionX().Clone() )
+			h_leptPt_t.append( inputfile.Get("fake_lepPt").Clone() )		  	  
+			h_leptPt_l.append( inputfile.Get("fake_lepPt_Loose").Clone() )
 			
 			#pT of the closest jet to the lepton
-			h_closeJL_pt_t.append( inputfile.Get("fake_lepPt_jetPt").ProjectionY().Clone() )			
-			h_closeJL_pt_l.append( inputfile.Get("fake_lepPt_jetPt_Loose").ProjectionY().Clone() )
+			#h_closeJL_pt_t.append( inputfile.Get("fake_lepPt_jetPt").ProjectionY().Clone() )			
+			#h_closeJL_pt_l.append( inputfile.Get("fake_lepPt_jetPt_Loose").ProjectionY().Clone() )
 			
 			#dr between the closest jet to the lepton
-			h_closeJL_dr_t.append( inputfile.Get("fake_DR_jetPt").ProjectionX().Clone() )			
-			h_closeJL_dr_l.append( inputfile.Get("fake_DR_jetPt_Loose").ProjectionX().Clone() )
+			h_closeJL_dr_t.append( inputfile.Get("fake_minDeltaR").Clone() )			
+			h_closeJL_dr_l.append( inputfile.Get("fake_minDeltaR_Loose").Clone() )
 				
 			#lept pT vs pT of the closest jet to the lepton
-			h2D_fakeParam_t.append( inputfile.Get("fake_lepPt_jetPt").Clone() )		      
-			h2D_fakeParam_l.append( inputfile.Get("fake_lepPt_jetPt_Loose").Clone() )
+			#h2D_fakeParam_t.append( inputfile.Get("fake_lepPt_jetPt").Clone() )		      
+			#h2D_fakeParam_l.append( inputfile.Get("fake_lepPt_jetPt_Loose").Clone() )
 			
 		
 		#antiTight
@@ -429,7 +419,7 @@ def fakeRates(inputDir, lumi):
                 c.SetGridy(1)
                 c.Update()
                 c.Modified()
-                saveCanvas(c, 'h_fake_antiTight_leptPt_'+ichan[0]+'_'+ichan[1], outfile, 'fake_plots')
+                saveCanvas(c, 'h_fake_antiTight_leptPt_'+regime+'_'+ichan[1], outfile, 'fake_plots')
 			
 		# ---> 1D fake rates: 
 		#lept Pt
@@ -457,22 +447,24 @@ def fakeRates(inputDir, lumi):
 		#h_ratio_leptPt.SetMinimum(mini*0.7)
 		#h_ratio_leptPt.SetStats(0)		
 		c.SetGridy(1)
+		c.SetLogx(0)
+		c.SetLogy(0)
 		c.Update()
                 c.Modified()
-		h_ratio_leptPt.Write()	               			
-		saveCanvas(c, 'h_fake_leptPt_'+ichan[0]+'_'+ichan[1], outfile, 'fake_plots')
+		h_ratio_leptPt.Write("fakeRate_pt_"+regime+'_'+ichan[1])	               			
+		saveCanvas(c, 'h_fake_leptPt_'+regime+'_'+ichan[1], outfile, 'fake_plots')
 
 		#pT of the closest jet to the lepton
-		
+		'''
 		h_closeJL_pt_t[0].Scale(lumi)
 		h1 = h_closeJL_pt_t[1]		
 		h1.Add(h_closeJL_pt_t[0],-1)
-		if extraPlots:	h1.Write("hP_closeJL_pt_tight_"+ichan[0]+'_'+ichan[1])
+		if extraPlots:	h1.Write("hP_closeJL_pt_tight_"+regime+'_'+ichan[1])
 		
 		h_closeJL_pt_l[0].Scale(lumi)						
 		h2 = h_closeJL_pt_l[1]
 		h2.Add(h_closeJL_pt_l[0],-1)			
-		if extraPlots:	h2.Write("hP_closeJL_pt_loose_"+ichan[0]+'_'+ichan[1])
+		if extraPlots:	h2.Write("hP_closeJL_pt_loose_"+regime+'_'+ichan[1])
 		
 		h_ratio_closeJL_pt = h1
 		h_ratio_closeJL_pt.Divide(h1, h2, 1.0, 1.0, "B")	
@@ -487,53 +479,53 @@ def fakeRates(inputDir, lumi):
 		#h_ratio_closeJL_pt.SetMinimum(0.5)
 		#h_ratio_closeJL_pt.SetStats(0)
 		c1.SetGridy(1)
+		c.SetLogx(0)
+		c.SetLogy(0)
 		c1.Update()
                 c1.Modified()
-		if extraPlots:	saveCanvas(c1, 'h_fake_closeJL_pt_'+ichan[0]+'_'+ichan[1], outfile, 'fake_plots')
-		
+		if extraPlots:	saveCanvas(c1, 'h_fake_closeJL_pt_'+regime+'_'+ichan[1], outfile, 'fake_plots')
+		'''
 		
 		#dr between the closest jet to the lepton
 		
 		h_closeJL_dr_t[0].Scale(lumi)
 		h1 = h_closeJL_dr_t[1]		
 		h1.Add(h_closeJL_dr_t[0],-1)
-		if extraPlots:	h1.Write("hP_closeJL_dr_tight_"+ichan[0]+'_'+ichan[1])
+		if extraPlots:	h1.Write("hP_closeJL_dr_tight_"+regime+'_'+ichan[1])
 		
 		h_closeJL_dr_l[0].Scale(lumi)						
 		h2 = h_closeJL_dr_l[1]
 		h2.Add(h_closeJL_dr_l[0],-1)			
-		if extraPlots:	h2.Write("hP_closeJL_dr_loose_"+ichan[0]+'_'+ichan[1])
+		if extraPlots:	h2.Write("hP_closeJL_dr_loose_"+regime+'_'+ichan[1])
 		
 		h_ratio_closeJL_dr = h1
 		h_ratio_closeJL_dr.Divide(h1, h2, 1.0, 1.0, "B")	
 		
-		c1 = TCanvas("c_"+'fake_closeJL_dr_'+ichan[0]+'_'+ichan[1])
+		c1 = TCanvas("c_"+'fake_closeJL_dr_'+regime+'_'+ichan[1])
                 maxi = 0
 		mini = 0
 		h_ratio_closeJL_dr.Draw("e")			               	
-		#maxi = h_ratio_closeJL_pt.GetMaximum()
-		#mini = h_ratio_closeJL_pt.GetMinimum()
-                #h_ratio_closeJL_pt.SetMaximum(maxi*1.3)
-		#h_ratio_closeJL_pt.SetMinimum(0.5)
-		#h_ratio_closeJL_pt.SetStats(0)
 		c1.SetGridy(1)
+		c1.SetLogy(0)
+		c1.SetLogx(0)
 		c1.Update()
                 c1.Modified()
-		saveCanvas(c1, 'h_fake_closeJL_dr_'+ichan[0]+'_'+ichan[1], outfile, 'fake_plots')		
+		saveCanvas(c1, 'h_fake_closeJL_dr_'+regime+'_'+ichan[1], outfile, 'fake_plots')		
 		outfile.cd()	
-		h_ratio_closeJL_dr.Write('h_fake_closeJL_dr_'+ichan[0]+'_'+ichan[1])
+		h_ratio_closeJL_dr.Write('fakeRate_dr_'+regime+'_'+ichan[1])
 		
 		# ---> 2D fake rates: lept Pt
-
+		
+		'''
 		h2D_fakeParam_t[0].Scale(lumi)
 		h1_2D = h2D_fakeParam_t[1]
 		h1_2D.Add(h2D_fakeParam_t[0],-1)	
-		if extraPlots:	h1_2D.Write("hP_fakeParam_tight_"+ichan[0]+'_'+ichan[1])
+		if extraPlots:	h1_2D.Write("hP_fakeParam_tight_"+regime+'_'+ichan[1])
 		
 		h2D_fakeParam_l[0].Scale(lumi)		
 		h2_2D = h2D_fakeParam_l[1]
 		h2_2D.Add(h2D_fakeParam_l[0],-1) 
-		if extraPlots:	h2_2D.Write("hP_fakeParam_loose_"+ichan[0]+'_'+ichan[1])
+		if extraPlots:	h2_2D.Write("hP_fakeParam_loose_"+regime+'_'+ichan[1])
 		
 		h_ratio_fake = h1_2D.Clone()
 		h_ratio_fake.Divide(h1_2D, h2_2D, 1.0, 1.0, "B")
@@ -559,11 +551,11 @@ def fakeRates(inputDir, lumi):
 		l.SetTextColor(kBlack)
 		l.DrawLatex(0.1,0.92, "#intLdt ="+`lumi/1000.`[:3]+" fb^{-1}")	
 		
-		saveCanvas(c2, '2Dh_fake_'+ichan[0]+'_'+ichan[1], outfile, 'fake_plots')
+		saveCanvas(c2, '2Dh_fake_'+regime+'_'+ichan[1], outfile, 'fake_plots')
 			
 		outfile.cd()	
-		h_ratio_fake.Write('2Dfake_'+ichan[0]+'_'+ichan[1])
-		
+		h_ratio_fake.Write('2Dfake_'+regime+'_'+ichan[1])
+		'''
 	
 	
 	bkgFile.Close()
@@ -847,12 +839,9 @@ def FakeRatesInSameCanvas():
 	
 	histo = []
 	i=0
-	inFile_fake_leptPt.ls()
 	for ilep in ['e','mu']:
 
 		for ichan in ['resolved','boosted']:
-			print "fakeRates_"+ichan+"_"+ilep
-			print inFile_fake_leptPt.Get("histo_rates_leptPt_"+ichan+"_"+ilep)			
 			histo.append( inFile_fake_leptPt.Get("histo_rates_leptPt_"+ichan+"_"+ilep).Clone() )
 			histo[i].SetDirectory(0)
 			outfile.cd()
@@ -871,11 +860,15 @@ def FakeRatesInSameCanvas():
 	histo[0].SetMarkerStyle(20)
 	histo[0].SetMarkerColor(4)
 	histo[0].GetYaxis().SetRangeUser(0., 1.0)
+	histo[0].SetLineColor(4)
 	leg.AddEntry(histo[0], "resolved", "P")
 	
 	histo[1].Draw("SAME")
 	histo[1].SetMarkerStyle(21)
 	histo[1].SetMarkerColor(2)
+	histo[1].SetLineColor(2)
+	histo[1].SetLineWidth(2)
+	histo[1].SetLineStyle(2)
 	leg.AddEntry(histo[1], "boosted", "P")
 	
 	leg.Draw()	
@@ -893,11 +886,15 @@ def FakeRatesInSameCanvas():
 	histo[2].SetMarkerStyle(20)
 	histo[2].SetMarkerColor(4)
 	histo[2].GetYaxis().SetRangeUser(0., 1.0)
+	histo[2].SetLineColor(4)
 	leg.AddEntry(histo[2], "resolved", "P")
 	
 	histo[3].Draw("SAME")
 	histo[3].SetMarkerStyle(21)
 	histo[3].SetMarkerColor(2)
+	histo[3].SetLineColor(2)
+	histo[3].SetLineWidth(2)
+	histo[3].SetLineStyle(2)
 	leg.AddEntry(histo[3], "boosted", "P")
 	
 	leg.Draw()	
@@ -937,12 +934,17 @@ def FakeRatesInSameCanvas():
 	histo[0].SetMarkerColor(4)
 	histo[0].GetYaxis().SetRangeUser(0., 1.0)
 	histo[0].SetStats(0)
+	histo[0].SetLineColor(4)
 	leg.AddEntry(histo[0], "resolved", "P")
 	
 	histo[1].Draw("SAME")
 	histo[1].SetMarkerStyle(21)
 	histo[1].SetMarkerColor(2)
 	histo[1].SetStats(0)
+	histo[1].SetLineColor(2)
+	histo[1].SetLineWidth(2)
+	histo[1].SetLineStyle(2)
+	
 	leg.AddEntry(histo[1], "boosted", "P")
 	
 	leg.Draw()	
@@ -961,12 +963,16 @@ def FakeRatesInSameCanvas():
 	histo[2].SetMarkerColor(4)
 	histo[2].GetYaxis().SetRangeUser(0., 1.0)
 	histo[2].SetStats(0)
+	histo[2].SetLineColor(4)
 	leg.AddEntry(histo[2], "resolved", "P")
 	
 	histo[3].Draw("SAME")
 	histo[3].SetMarkerStyle(21)
 	histo[3].SetMarkerColor(2)
 	histo[3].SetStats(0)
+	histo[3].SetLineColor(2)
+	histo[3].SetLineWidth(2)
+	histo[3].SetLineStyle(2)
 	leg.AddEntry(histo[3], "boosted", "P")
 	
 	leg.Draw()	
@@ -975,7 +981,7 @@ def FakeRatesInSameCanvas():
 	saveCanvas(c, 'fakeRates_dr_mu', outfile, 'fake_resolve_boosted_DR')		
 	outfile.Close()	
 				
-	return		
+	return		real_fake_eff
 	
 	
 #--------------------------------#
@@ -984,55 +990,29 @@ def FakeRatesInSameCanvas():
 
 #Produce eff rate plots
 
-#inputDir = path/to/files/processed/with/TopNtupleAnalysis
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.23c/TopNtupleAnalysis/effSave/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/effReal_2/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/effReal_3/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/200116_v4.0_exactly2jets_real/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/200116_v4.0_atLeast2jets_real/'
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/afterChanges1.2_nom_real/'
 
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.30/TopNtupleAnalysis/realEff_real/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/realEff_real/'
 
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/realEff_moreBins_real/'
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/realEff_real/'
-
-if 0:
+if 1:
 	effRates(inputDir)
 
 #Produce fake rate plots
 
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.33/TopNtupleAnalysis/wPresTrigg_d0sig_z0sin4/' 
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.33/TopNtupleAnalysis/wPresTrigg_d0sig_noz0sin4/' 
-
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_141215_16h30_fake/' 
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_151215_10h00_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_151215_12h00_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_161215_17h30_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_161215_18h00_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_161215_19h00_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_171215_16h30_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_171215_19h30_caloBtag2_fake/'
-
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_181215_09h30_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_181215_09h30_v3.0_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_181215_19h20_v2.0_fake/'
-
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_211215_18h00_v4.0_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_11h00_v2.0_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_12h00_v4.0_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_11h00_v2.0_fake_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_221215_12h00_v4.0_fake_fake/'
-
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_050116_10h30_v2.0_fake/' # cut on MWT<40GeV
-
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_050116_18h30_v4.0_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_050116_19h20_v2.0_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_060116_16h00_v2.0_fake/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_060116_18h00_v2.0_fake/'
-
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_16h00_v2.0_fake/'
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_17h30_v4.0_fake/'
 
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_110116_19h00_v2.0_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_110116_19h00_v2.0_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/170116_v2.0_atleast2jets_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/170116_v2.0_exactly2jets_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/200116_v6.0_atLeast4jets_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/al2jets_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/al4jets_fake/'
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/afterChanges1.1_nom_fake/'
 
 lumi = 3200 #pb-1
 
@@ -1045,10 +1025,13 @@ inputDir_real = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/re
 #inputDir_fake = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_16h00_v2.0_fake/'
 
 #fornote
-inputDir_fake = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_16h00_v2.0_fake/'
+#inputDir_fake = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_16h00_v2.0_fake/'
 #inputDir_fake = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/fakeRates_070116_17h30_v4.0_fake/'
 
 lumi = 3200 #pb-1
+
+inputDir_real = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/v5_nom_real/'
+inputDir_fake = '/AtlasDisk/users/romano/fakeStudies/2.3.37/TopNtupleAnalysis/afterChanges_nom_fake/'
 
 if 0:
 	real_fake_eff(inputDir_real, inputDir_fake, lumi)
@@ -1066,4 +1049,4 @@ if 0:	get_MM_StatErr(inputDir, lumi)
 
 if 0:	storeFakeRates()
 	
-if 1:	FakeRatesInSameCanvas()
+if 0:	FakeRatesInSameCanvas()
