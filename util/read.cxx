@@ -285,8 +285,11 @@ int main(int argc, char **argv) {
     }
   }
 
-  MMUtils * MMfiles = NULL;
-  if (runMM)	MMfiles = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
+  MMUtils * MM_nominal      = NULL;
+    
+  if (runMM){	
+  	MM_nominal      = new MMUtils("scripts/QCDestimation/MMrates_nominal/eff_ttbar.root", "scripts/QCDestimation/MMrates_nominal/fake.root");
+  }//runMM
 
   std::vector<std::string> pdfList;
   for (size_t i = 0,n; i <= pdf.length(); i=n+1) {
@@ -551,10 +554,13 @@ int main(int argc, char **argv) {
     std::cout<< "* Running on syst: " << systIdx << std::endl;
     // it does not have the xxx_Loose TTrees, so we add it ourselves and run over it too
     std::vector<std::string> lepton_modes;
-    lepton_modes.push_back(systsList[systIdx]);
-    if (loose) {
-      lepton_modes.push_back(systsList[systIdx]+std::string("_Loose"));
-    }
+    
+    if(!runMM){
+        lepton_modes.push_back(systsList[systIdx]);
+        if (loose)	lepton_modes.push_back(systsList[systIdx]+std::string("_Loose"));
+    }else
+        lepton_modes.push_back(systsList[systIdx]+std::string("_Loose"));
+    
     for (size_t lmodeIdx = 0; lmodeIdx < lepton_modes.size(); ++lmodeIdx) {
       std::cout<< "** Running on lepton mode: " << lmodeIdx << std::endl;
 
@@ -572,9 +578,7 @@ int main(int argc, char **argv) {
       if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos)   { // run on both nominal and nominal_loose for the loose sample
           mt.addFileToRead(fileList[0], (systsList[systIdx]+std::string("_Loose")).c_str());
       }
-      
-      
-      
+                  
       for (int k = 1; k < fileList.size(); ++k) {
         
 	if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos){
@@ -910,12 +914,6 @@ int main(int argc, char **argv) {
             }
 
 	  }//!isData
-	  
-	  if (runMM) {
-	     
-	     weight *= MMfiles->getMMweights(sel, runMM_StatErr);
-	  
-	  }//runMM
       
           // this applies b-tagging early
           int nBtagged = 0; 
@@ -950,18 +948,21 @@ int main(int argc, char **argv) {
           }
 
           procEvents++;
+	 
+	  if (runMM) {
+	     weight = 1.;
+	     weight = MM_nominal->getMMweights(sel, runMM_StatErr);
+	  }//runMM
 
           if (analysis=="AnaTtresSL") {
-            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
                 vec_analysis[iAna]->run(sel, weight, suffix);
-            }
           } else if (analysis=="AnaTtresQCDreal") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-                (dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runEfficiency(sel, weight, suffix);
+		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runEfficiency(sel, weight, suffix);
           } else if (analysis=="AnaTtresQCDfake") {
-            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
 		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runFakeRate(sel, weight, suffix);
-	    }
           } else if (analysis=="AnaTtresSLMtt") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
                 vec_analysis[iAna]->run(sel, weight, suffix);

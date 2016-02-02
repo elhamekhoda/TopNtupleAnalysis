@@ -35,34 +35,52 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   double varBin5[] = {0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000};
   int varBinN5 = sizeof(varBin5)/sizeof(double) - 1;
 
+  //Plots for QCD validation
   if (m_electron){
      if(m_boosted){
         double varBin6[5] = {30, 40, 60, 120, 700};
-        int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
-
+	double varBin7[5]  = {0., 0.4, 0.6, 1.0, 1.5}; 
+	int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
+	int varBinN7 = sizeof(varBin7)/sizeof(double) - 1;	
+	m_hSvc.create1DVar("lepPt_effBins", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
+	m_hSvc.create1DVar("closejl_minDeltaR_effBins", "; min #Delta R(lep, jet); Events", varBinN7, varBin7);
+	
      }else{
         double varBin6[7] = {30, 35, 40, 50, 60, 120, 700};
-        int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
+	double varBin7[6]  = {0., 0.4, 0.6, 1.0, 1.5, 5.0};
+	int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
+	int varBinN7 = sizeof(varBin7)/sizeof(double) - 1;	
+	m_hSvc.create1DVar("lepPt_effBins", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
+	m_hSvc.create1DVar("closejl_minDeltaR_effBins", "; min #Delta R(lep, jet); Events", varBinN7, varBin7);
+	
      }//m_boosted
 
   }else{
      if(m_boosted){
         double varBin6[5] = {25, 30, 40, 50, 700};
-        int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
+	double varBin7[5] = {0., 0.4, 0.6, 1.0, 1.5};
+	int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
+	int varBinN7 = sizeof(varBin7)/sizeof(double) - 1;	
+	m_hSvc.create1DVar("lepPt_effBins", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
+	m_hSvc.create1DVar("closejl_minDeltaR_effBins", "; min #Delta R(lep, jet); Events", varBinN7, varBin7);
+
      }else{
         double varBin6[8] = {25, 30, 35, 40, 50, 70, 100, 700};
-        int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
+	double varBin7[6] = {0., 0.4, 0.6, 1.0, 1.5, 5.0};
+	int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
+	int varBinN7 = sizeof(varBin7)/sizeof(double) - 1;
+	m_hSvc.create1DVar("lepPt_effBins", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
+	m_hSvc.create1DVar("closejl_minDeltaR_effBins", "; min #Delta R(lep, jet); Events", varBinN7, varBin7);
+	
      }//m_boosted
-
   }//m_electron
 
   m_hSvc.create1D("yields", "; One ; Events", 1, 0.5, 1.5);
-  
-  //m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
+
+  //m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);  
   m_hSvc.create1D("lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
   m_hSvc.create1D("lepEta", "; lepton #eta ; Events", 20, -2.5, 2.5);
   m_hSvc.create1D("lepPhi", "; lepton #phi [rd] ; Events", 32, -3.2, 3.2);
-
   m_hSvc.create1DVar("leadJetPt", "; leading Jet p_{T} [GeV]; Events", varBinN1, varBin1);  
   m_hSvc.create1D("nJets", "; number of jets ; Events", 10, -0.5, 9.5);
   
@@ -80,7 +98,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.create1D("vtxz", ";Z position of truth primary vertex; Events", 40, -400, 400);
   m_hSvc.create1D("npv", "; npv; Events", 50, 0, 50);
 
-  m_hSvc.create1DVar("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 50, 0, 5);
+  m_hSvc.create1D("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 50, 0, 5);
   m_hSvc.create1DVar("closejl_pt", "; Pt of closest jet to lep [GeV]; Events", varBinN1, varBin1);
   
   m_hSvc.create1D("weight", "; QCD weights; Events", 2000, -100, 100);
@@ -158,6 +176,8 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   if (!m_boosted)
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
+  
+  if (!m_boosted)	if(evt.jet().size()<4)	return;
           
   HistogramService *h = &m_hSvc;
   
@@ -166,26 +186,20 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   bool trig3(0);
   bool trig4(0);
   bool trig5(0);
-  
-  bool trig_prescaled(0);
-  bool trig_unprescaled(0);
-  
+    
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
 
     //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();          // MC
-    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();          // data only
+    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
+    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
     trig3 = evt.electron()[0].HLT_e60_lhmedium();
     trig4 = evt.electron()[0].HLT_e120_lhloose();
                 
     bool trig_MC = trig1 || trig3 || trig4; 
     bool trig_DT = trig2 || trig3 || trig4;
-    
-    trig_prescaled   = trig1;
-    trig_unprescaled = trig2 || trig3 || trig4;
-        
+            
     if (evt.channelNumber()!=0){
         if (!trig_MC)return;
     }else{
@@ -194,12 +208,14 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     
   } else {
     l = evt.muon()[0].mom();
+    
+    //Muon trigers
     trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
     trig2 = evt.muon()[0].HLT_mu50();
     trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
     
-    trig_prescaled   = trig1;
-    trig_unprescaled = trig2 || trig3;
+    bool trig_prescaled   = trig1;
+    bool trig_unprescaled = trig2 || trig3;
     
     if (s!="_Loose")
 	if (trig_prescaled && !trig_unprescaled)	return;
@@ -213,12 +229,13 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   }
   
   std::string suffix = s;
-  if (s=="_Loose") suffix = "";
+  if (s=="_Loose")	suffix = "";
   
   h->h1D("weight", "", suffix)->Fill(weight);
   h->h2D("weight_leptPt", "", suffix)->Fill(l.Perp()*1e-3, weight);
     
   h->h1D("lepPt", "", suffix)->Fill(l.Perp()*1e-3, weight);
+  h->h1D("lepPt_effBins", "", suffix)->Fill(l.Perp()*1e-3, weight);
   h->h1D("lepEta", "", suffix)->Fill(l.Eta(), weight);
   h->h1D("lepPhi", "", suffix)->Fill(l.Phi(), weight);
 
@@ -324,7 +341,8 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   
   float closejl_pt = -1;
   if (closejl_idx>0)    closejl_pt = evt.jet()[closejl_idx].mom().Perp();  
-  h->h1D("closejl_minDeltaR", "", suffix)->Fill(closejl_deltaR, weight); 
+  h->h1D("closejl_minDeltaR", "", suffix)->Fill(closejl_deltaR, weight);
+  h->h1D("closejl_minDeltaR_effBins", "", suffix)->Fill(closejl_deltaR, weight);
   h->h1D("closejl_pt", "", suffix)->Fill(closejl_pt*1e-3, weight);
 
   h->h1D("trueMtt", "", suffix)->Fill(evt.MC_ttbar_beforeFSR().M()*1e-3, weight);
