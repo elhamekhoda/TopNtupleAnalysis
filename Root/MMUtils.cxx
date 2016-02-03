@@ -46,8 +46,8 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     //fake_pt_resolved_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_resolved_mu")->Clone();
     //fake_pt_resolved_mu->SetDirectory(0);
     
-    //fake_pt_boosted_e = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_e")->Clone();
-    //fake_pt_boosted_e->SetDirectory(0);
+    fake_pt_boosted_e = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_e")->Clone();
+    fake_pt_boosted_e->SetDirectory(0);
     
     //fake_pt_boosted_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_mu")->Clone();    
     //fake_pt_boosted_mu->SetDirectory(0); 
@@ -61,8 +61,8 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     //fake_dr_boosted_e   = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_e")->Clone();
     //fake_dr_boosted_e->SetDirectory(0); 
     
-    //fake_dr_boosted_mu  = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_mu")->Clone();
-    //fake_dr_boosted_mu->SetDirectory(0); 
+    fake_dr_boosted_mu  = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_mu")->Clone();
+    fake_dr_boosted_mu->SetDirectory(0); 
 
   }
   
@@ -77,13 +77,13 @@ MMUtils::~MMUtils(){
   
   delete fake_pt_resolved_e ;
   //delete fake_pt_resolved_mu ;
-  //delete fake_pt_boosted_e;
+  delete fake_pt_boosted_e;
   //delete fake_pt_boosted_mu;
   
   //delete fake_dr_resolved_e ;
   delete fake_dr_resolved_mu ;
   //delete fake_dr_boosted_e;
-  //delete fake_dr_boosted_mu;
+  delete fake_dr_boosted_mu;
   
   delete eff_map;
   delete fake_pt;
@@ -139,13 +139,13 @@ float MMUtils::getMMweights(const Event &evt, int runMM_StatErr) {
    if (isBoosted){
    	if (isElectron)	{
 	   eff_map  = eff_map_boosted_e;
-	   fake_pt = fake_pt_resolved_e;
+	   fake_pt = fake_pt_boosted_e;
 	   //fake_dr = fake_dr_resolved_e;
 	}
 	else{
 	   eff_map = eff_map_boosted_mu;
 	   //fake_pt = fake_pt_resolved_mu;
-	   fake_dr = fake_dr_resolved_mu;
+	   fake_dr = fake_dr_boosted_mu;
 	}
    }
    else{
