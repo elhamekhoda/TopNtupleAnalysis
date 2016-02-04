@@ -160,9 +160,7 @@ float MMUtils::getMMweights(const Event &evt, int runMM_StatErr) {
 	   //fake_pt = fake_pt_resolved_mu;
 	}
    }//isBoosted	
-   	
-   float realRate(0.); 
-   float realRate_err(0.);
+   
    
    float fakeRate(0.); 
    float fakeRate_err(0.);
@@ -171,35 +169,21 @@ float MMUtils::getMMweights(const Event &evt, int runMM_StatErr) {
 
    int binx(0);
    int biny(0);
-   int bin(0);
    
-   if(lepPt>eff_map->GetXaxis()->GetXmax()){  
-       
-       if(closejl_DR>eff_map->GetYaxis()->GetXmax()){
+   if(lepPt>eff_map->GetXaxis()->GetXmax()){
           binx = eff_map->GetXaxis()->FindBin(0.95*eff_map->GetXaxis()->GetXmax());
-	  biny = eff_map->GetYaxis()->FindBin(0.95*eff_map->GetYaxis()->GetXmax());
-	  
-       } else {
-          binx = eff_map->GetXaxis()->FindBin(0.95*eff_map->GetXaxis()->GetXmax());
-	  biny = eff_map->GetYaxis()->FindBin(closejl_DR);
-       	  
-       }
    }else{
-   
-       if(closejl_DR>eff_map->GetYaxis()->GetXmax()){
           binx = eff_map->GetXaxis()->FindBin(lepPt);
+   }
+   if(closejl_DR>eff_map->GetYaxis()->GetXmax()){
 	  biny = eff_map->GetYaxis()->FindBin(0.95*eff_map->GetYaxis()->GetXmax());
-          
-       } else{
-          binx = eff_map->GetXaxis()->FindBin(lepPt);
+   }else{
 	  biny = eff_map->GetYaxis()->FindBin(closejl_DR);
-	  
-       }  
-   }//lepPt>eff_map->GetXaxis()->GetXmax()
+   }
    
-   bin          = eff_map->GetBin(binx, biny, 0);
-   realRate     = eff_map->GetBinContent(bin);
-   realRate_err = eff_map->GetBinError(bin); 
+   int bin            = eff_map->GetBin(binx, biny, 0);
+   float realRate     = eff_map->GetBinContent(bin);
+   float realRate_err = eff_map->GetBinError(bin); 
 	     
    binx = 0;
    

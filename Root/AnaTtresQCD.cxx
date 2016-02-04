@@ -223,11 +223,11 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
   if (m_electron) {  
     lept = evt.electron()[0].mom();       
     
-    if (evt.MC_w1l_pdgId()==11){
+    if (evt.MC_w1l_pdgId()==11 || evt.MC_w1l_pdgId()==15){
     	dr = lept.DeltaR(evt.MC_w1l());
 	if (dr<drMax)	leptMa_pdgId = evt.MC_w1l_pdgId();
 	
-    }else if (evt.MC_w2l_pdgId()==-11){
+    }else if (evt.MC_w2l_pdgId()==-11 || evt.MC_w2l_pdgId()==-15){
     	dr = lept.DeltaR(evt.MC_w2l());
     	if (dr<drMax)	leptMa_pdgId = evt.MC_w2l_pdgId();
 	
@@ -236,11 +236,11 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
   } else {
     lept = evt.muon()[0].mom();   
     
-    if (evt.MC_w1l_pdgId()==13){
+    if (evt.MC_w1l_pdgId()==13 || evt.MC_w1l_pdgId()==15){
     	dr = lept.DeltaR(evt.MC_w1l());
 	if (dr<drMax)	leptMa_pdgId = evt.MC_w1l_pdgId();
 	
-    }else if (evt.MC_w2l_pdgId()==-13){
+    }else if (evt.MC_w2l_pdgId()==-13 || evt.MC_w2l_pdgId()==-15){
     	dr = lept.DeltaR(evt.MC_w2l());
 	if (dr<drMax)	leptMa_pdgId = evt.MC_w2l_pdgId();
 	
