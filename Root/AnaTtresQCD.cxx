@@ -70,7 +70,7 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   
   m_hSvc.create1D("eventN", "; N event; Events", 10000, 0, 1e10);
   m_hSvc.create1D("runN",   "; N run; Events", 1000, 0, 1e10);
-  
+
   int eff_N_pT_bins(0);
   int N_DR_bins(0);
   int fake_N_pT_bins(0);
@@ -247,14 +247,13 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
     }else if (abs(evt.MC_w1l_pdgId())==11 || abs(evt.MC_w2l_pdgId())==11)    	std::cout << "reco muon and truth electron" << std::endl;    
   
   }//m_electron
- 
+
   // Duplicated event removal after the selection  
   if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), lept.Perp()) ){
       m_Nduplicate++;
       return;
   }
- 
- 
+   
   if (leptMa_pdgId!=0){
   		  
   	h->h2D("eff_MaLep_pt_eta", "", suffix)->Fill(lept.Perp()*1e-3, lept.Eta());  
@@ -279,7 +278,7 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
     	  }   
   	}//for    
 	 
-	if (closejl_deltaR<99)	   h->h2D("eff_LepPt_DR", "", suffix)    ->Fill(lept.Perp()*1e-3, closejl_deltaR);
+	if (closejl_deltaR<99)	h->h2D("eff_LepPt_DR", "", suffix)    ->Fill(lept.Perp()*1e-3, closejl_deltaR, weight);
 
   }//(leptMa_pdgId!=0)
   
@@ -370,11 +369,11 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
 	 if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)		weight *= 1/10.;
 	}
 	else{
-	 if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)		return;	 
+	 if (trig_prescaled && !trig_unprescaled)		return;	 
 	}	
 	
   }//m_electron
-  
+    
   // Duplicated event removal after the selection  
   if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), lept.Perp()) ){
       m_Nduplicate++;

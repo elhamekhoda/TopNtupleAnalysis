@@ -570,21 +570,22 @@ int main(int argc, char **argv) {
       /*
       MiniTree mt(false, fileList[0].c_str(), tname.c_str());
       */
+      
       std::string temp1 = tname;
       if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos)   { // run on both nominal and nominal_loose for the loose sample
          temp1 = systsList[systIdx];
       }
-      MiniTree mt(false, fileList[0], temp1.c_str());
+      MiniTree mt(false, fileList[0], (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos) ? systsList[systIdx]+std::string("_Loose") : temp1.c_str());
       if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos)   { // run on both nominal and nominal_loose for the loose sample
-          mt.addFileToRead(fileList[0], (systsList[systIdx]+std::string("_Loose")).c_str());
+	  mt.addFileToRead(fileList[0], (systsList[systIdx]).c_str());
       }
                   
       for (int k = 1; k < fileList.size(); ++k) {
         
 	if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos){
   	  // run on both nominal and nominal_loose for the loose sample
-          mt.addFileToRead(fileList[k], (systsList[systIdx]).c_str());
           mt.addFileToRead(fileList[k], (systsList[systIdx]+std::string("_Loose")).c_str());
+          mt.addFileToRead(fileList[k], (systsList[systIdx]).c_str());
 	}
 	else{
 	  mt.addFileToRead(fileList[k], tname.c_str());
@@ -701,7 +702,8 @@ int main(int argc, char **argv) {
           double weight = 1;
           if (!isData) {
             weight *= sel.weight_mc()*sel.weight_pileup();
-
+		
+	    // Switching off the PWR for fake estimates
 	    //if (channel >= 361300 && channel <= 361368) weight *= sel.weight_mc();
             //else                                        weight *= sel.weight_mc()*sel.weight_pileup();
             
@@ -901,7 +903,7 @@ int main(int argc, char **argv) {
             } else if (isPdf) {
               weight /= PDFsumOfWeights[channel][pdfname][pdfvar];
             }
-
+		
             // boosted W SF
             if ( (sel.passes("bejets") || sel.passes("bmujets")) && isWjets(channel) && applyWSF ) {
               if (suffix == "boostedWSF__1down" || suffix == "boostedWSF__1down_Loose") {
