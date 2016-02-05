@@ -38,7 +38,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   //Plots for QCD validation
   if (m_electron){
      if(m_boosted){
-        double varBin6[5] = {30, 40, 60, 120, 700};
+        double varBin6[6] = {30, 40, 60, 120, 400, 700};
 	double varBin7[5]  = {0., 0.4, 0.6, 1.0, 1.5}; 
 	int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
 	int varBinN7 = sizeof(varBin7)/sizeof(double) - 1;	
@@ -46,8 +46,8 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
 	m_hSvc.create1DVar("closejl_minDeltaR_effBins", "; min #Delta R(lep, jet); Events", varBinN7, varBin7);
 	
      }else{
-        double varBin6[7] = {30, 35, 40, 50, 60, 120, 700};
-	double varBin7[6]  = {0., 0.4, 0.6, 1.0, 1.5, 5.0};
+        double varBin6[8] = {30, 35, 40, 50, 60, 120, 400, 700};
+	double varBin7[7]  = {0., 0.4, 0.6, 1.0, 1.5, 2.5, 7.0};
 	int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
 	int varBinN7 = sizeof(varBin7)/sizeof(double) - 1;	
 	m_hSvc.create1DVar("lepPt_effBins", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
@@ -57,16 +57,16 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
 
   }else{
      if(m_boosted){
-        double varBin6[5] = {25, 30, 40, 50, 700};
-	double varBin7[5] = {0., 0.4, 0.6, 1.0, 1.5};
+        double varBin6[7] = {25, 30, 40, 50, 100, 400, 700};
+	double varBin7[6] = {0., 0.4, 0.6, 0.8, 1.0, 1.5};
 	int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
 	int varBinN7 = sizeof(varBin7)/sizeof(double) - 1;	
 	m_hSvc.create1DVar("lepPt_effBins", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
 	m_hSvc.create1DVar("closejl_minDeltaR_effBins", "; min #Delta R(lep, jet); Events", varBinN7, varBin7);
 
      }else{
-        double varBin6[8] = {25, 30, 35, 40, 50, 70, 100, 700};
-	double varBin7[6] = {0., 0.4, 0.6, 1.0, 1.5, 5.0};
+        double varBin6[9] = {25, 30, 35, 40, 50, 70, 100, 400, 700};
+	double varBin7[7] = {0., 0.4, 0.6, 1.0, 1.5, 2.5, 7.0};
 	int varBinN6 = sizeof(varBin6)/sizeof(double) - 1;
 	int varBinN7 = sizeof(varBin7)/sizeof(double) - 1;
 	m_hSvc.create1DVar("lepPt_effBins", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);
@@ -77,8 +77,8 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
 
   m_hSvc.create1D("yields", "; One ; Events", 1, 0.5, 1.5);
 
-  //m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN6, varBin6);  
-  m_hSvc.create1D("lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
+  m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN1, varBin1);  
+  //m_hSvc.create1D("lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
   m_hSvc.create1D("lepEta", "; lepton #eta ; Events", 20, -2.5, 2.5);
   m_hSvc.create1D("lepPhi", "; lepton #phi [rd] ; Events", 32, -3.2, 3.2);
   m_hSvc.create1DVar("leadJetPt", "; leading Jet p_{T} [GeV]; Events", varBinN1, varBin1);  
@@ -101,6 +101,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.create1D("closejl_minDeltaR", "; min #Delta R(lep, jet); Events", 50, 0, 5);
   m_hSvc.create1DVar("closejl_pt", "; Pt of closest jet to lep [GeV]; Events", varBinN1, varBin1);
   
+  m_hSvc.create1D("weight_leptSF", "; QCD weights; Events", 200, 0, 2);
   m_hSvc.create1D("weight", "; QCD weights; Events", 2000, -100, 100);
   m_hSvc.create2D("weight_leptPt", ";lept Pt (GeV); QCD weights",100, 25, 525, 2000, -100, 100);
   
@@ -221,7 +222,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
 	if (trig_prescaled && !trig_unprescaled)	return;
            
   }//m_electron
-  
+    
   // Duplicated event removal after the selection  
   if (s=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), l.Perp()) ){
       m_Nduplicate++;
@@ -231,6 +232,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   std::string suffix = s;
   if (s=="_Loose")	suffix = "";
   
+  h->h1D("weight_leptSF", "", suffix)->Fill(evt.weight_leptonSF());
   h->h1D("weight", "", suffix)->Fill(weight);
   h->h2D("weight_leptPt", "", suffix)->Fill(l.Perp()*1e-3, weight);
     
