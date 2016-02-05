@@ -1879,12 +1879,13 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_flat.begin(); it != syst_flat.end(); ++it) {
     std::string name = it->first;
     vector<string> pattern;
-    pattern.push_back(it->second[1]);
+    //pattern.push_back(it->second[1]);
+    split(it->second[1], '/', pattern);
     if (!updw) {
-      systCalc.add(name.c_str(), new NotData(new Symm(new HistNorm(std::atof(it->second[2].c_str()), pattern), new HistNorm(std::atof(it->second[3].c_str()), pattern))), it->second[0]);
+      systCalc.add(name.c_str(), new Symm(new HistNorm(std::atof(it->second[2].c_str()), pattern), new HistNorm(std::atof(it->second[3].c_str()), pattern)), it->second[0]);
     } else {
-      systCalc.add(name+"up", new NotData(new HistNorm(std::atof(it->second[2].c_str()), pattern)), it->second[0]+std::string(" up"));
-      systCalc.add(name+"dw", new NotData(new HistNorm(std::atof(it->second[3].c_str()), pattern)), it->second[0]+std::string(" dw"));
+      systCalc.add(name+"up", new HistNorm(std::atof(it->second[2].c_str()), pattern)), it->second[0]+std::string(" up");
+      systCalc.add(name+"dw", new HistNorm(std::atof(it->second[3].c_str()), pattern)), it->second[0]+std::string(" dw");
     }
   }
 }
