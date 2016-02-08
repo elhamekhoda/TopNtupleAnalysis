@@ -288,7 +288,8 @@ int main(int argc, char **argv) {
   MMUtils * MM_nominal      = NULL;
     
   if (runMM){	
-  	MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
+  	//MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
+  	MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "ttrescr/fake.root");
   }//runMM
 
   std::vector<std::string> pdfList;
@@ -555,11 +556,14 @@ int main(int argc, char **argv) {
     // it does not have the xxx_Loose TTrees, so we add it ourselves and run over it too
     std::vector<std::string> lepton_modes;
     
-    if(!runMM){
-        lepton_modes.push_back(systsList[systIdx]);
-        if (loose)	lepton_modes.push_back(systsList[systIdx]+std::string("_Loose"));
-    }else
+    if (!runMM && loose){
         lepton_modes.push_back(systsList[systIdx]+std::string("_Loose"));
+    } else if (!runMM && !loose){
+        lepton_modes.push_back(systsList[systIdx]);
+    } else {
+        //lepton_modes.push_back(systsList[systIdx]);
+        lepton_modes.push_back(systsList[systIdx]+std::string("_Loose"));
+    }
     
     for (size_t lmodeIdx = 0; lmodeIdx < lepton_modes.size(); ++lmodeIdx) {
       std::cout<< "** Running on lepton mode: " << lmodeIdx << std::endl;
@@ -567,30 +571,9 @@ int main(int argc, char **argv) {
       // now we are looping over all possible TTrees with all systematic uncertainties
       // Call MiniTree to open the files and read that TTree
       std::string tname = lepton_modes[lmodeIdx];
-      /*
-      MiniTree mt(false, fileList[0].c_str(), tname.c_str());
-      */
-      
-      std::string temp1 = tname;
-      if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos)   { // run on both nominal and nominal_loose for the loose sample
-         temp1 = systsList[systIdx];
-      }
-      MiniTree mt(false, fileList[0], (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos) ? systsList[systIdx]+std::string("_Loose") : temp1.c_str());
-      if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos)   { // run on both nominal and nominal_loose for the loose sample
-	  mt.addFileToRead(fileList[0], (systsList[systIdx]).c_str());
-      }
-                  
+      MiniTree mt(false, fileList[0], tname.c_str());
       for (int k = 1; k < fileList.size(); ++k) {
-        
-	if (loose && lepton_modes[lmodeIdx].find("_Loose")!=std::string::npos){
-  	  // run on both nominal and nominal_loose for the loose sample
-          mt.addFileToRead(fileList[k], (systsList[systIdx]+std::string("_Loose")).c_str());
-          mt.addFileToRead(fileList[k], (systsList[systIdx]).c_str());
-	}
-	else{
-	  mt.addFileToRead(fileList[k], tname.c_str());
-	}
-        //mt.addFileToRead(fileList[k]);
+        mt.addFileToRead(fileList[k], tname.c_str());
       }
 
       // for the nominal "systematic unc.", use an empty string as suffix to be backward compatible
@@ -610,10 +593,27 @@ int main(int argc, char **argv) {
       for (int k = 0; k < nentries; ++k) {
         if (k % 1000 == 0)
           std::cout << "("<< tname << ") Entry " << k << "/" << nentries << std::endl;
+
+        bool isTight = false;
     
         // read the event into an Event object to be sent to the Analysis code later
         mt.read(k, sel);
         int channel = sel.channelNumber();
+
+        if (sel.electron().size() == 1 && sel.muon().size() == 0)
+            isTight = sel.electron()[0].isTightPP();
+        else if (sel.electron().size() == 0 && sel.muon().size() == 1)
+            isTight = sel.muon()[0].isTight();
+
+        if (!runMM && loose) {
+            // for the fake rate or efficiency estimate, just separate loose and tight
+            if (isTight)
+                systSuffixForHistograms = "";
+            else
+                systSuffixForHistograms = "_Loose";
+        } else if (runMM && loose) { // run the QCD matrix method in the SR adding weights
+            systSuffixForHistograms = "";
+        }
 
         if (channel == 410000 && removeOverlapHighMtt) // for SM ttbar, we have mtt sliced samples above 1.1 TeV
           if (sel.MC_ttbar_beforeFSR().M() > 1.1e6)

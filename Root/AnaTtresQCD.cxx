@@ -38,7 +38,8 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   Double_t DR_bins_re[6]  = {0., 0.4, 0.6, 1.0, 1.5, 5.0};
   Double_t DR_bins_rmu[7] = {0., 0.4, 0.6, 1.0, 1.5, 2.5, 5.0};
   Double_t DR_bins_be[5]  = {0., 0.4, 0.6, 1.0, 1.5};
-  Double_t DR_bins_bmu[5] = {0., 0.4, 0.6, 1.0, 1.5};
+  Double_t DR_bins_bmu[5] = {0., 0.2, 0.4, 1.0, 1.5};
+  //Double_t DR_bins_bmu[2] = {0., 1.5};
     
   //MC variables:  
   m_hSvc.create2D("eff_MCe_pt_eta", "; pt of electron(truth) [GeV]; #eta of electron(truth)", 40, 0, 500, 24, -3.5, 3.5);
@@ -189,13 +190,14 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
   if (!m_boosted)
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
-  
+
   if (!m_boosted)	if(evt.jet().size()<4)	return; 
   
   HistogramService *h = &m_hSvc;
 	  
   //Pre-selection: 
   ///Objects from the truth (MC) with (pT < 25GeV && |eta|<2.5)  
+  bool isTight;
   
   if(evt.channelNumber()!=0){
   
@@ -251,6 +253,8 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
 	  trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();	      // data only
 	  trig3 = evt.electron()[0].HLT_e60_lhmedium();
 	  trig4 = evt.electron()[0].HLT_e120_lhloose();
+
+	  isTight = evt.electron()[0].isTightPP();
 	              
 	  bool trig_MC = trig1 || trig3 || trig4;     
 	  bool trig_DT = trig2 || trig3 || trig4;
@@ -280,10 +284,13 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
 	  trig2 = evt.muon()[0].HLT_mu50();
 	  trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
 
+	  isTight = evt.muon()[0].isTight();
+
 	  bool trig_prescaled	= trig1;
 	  bool trig_unprescaled = trig2 || trig3;
 
-	  if (suffix=="_Loose"){
+	  //if (suffix=="_Loose"){
+	  if (!isTight) {
 	       if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)	      weight *= 1/10.;
 	  }
 	  else{
@@ -303,10 +310,10 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
 	}//m_electron
 
 	// Duplicated event removal after the selection  
-	if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), lept.Perp()) ){
-	    m_Nduplicate++;
-	    return;
-	}
+	//if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), lept.Perp()) ){
+	//    m_Nduplicate++;
+	//    return;
+	//}
 
 	h->h1D("trig1", "", suffix)  ->Fill(trig1);
 	h->h1D("trig2", "", suffix)  ->Fill(trig2);
@@ -373,6 +380,8 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
 	  bool trig_MC = trig1 || trig3 || trig4;     
 	  bool trig_DT = trig2 || trig3 || trig4;
 
+	  isTight = evt.electron()[0].isTightPP();
+
 	  if (evt.channelNumber()!=0){
 	        if (!trig_MC)return;
 	  }else{
@@ -388,10 +397,12 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
 	  trig2 = evt.muon()[0].HLT_mu50();
 	  trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
 
+	  isTight = evt.muon()[0].isTight();
+
 	  bool trig_prescaled	= trig1;
 	  bool trig_unprescaled = trig2 || trig3;
 
-	  if (suffix=="_Loose"){
+	  if (!isTight){
 	       if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)	      weight *= 1/10.;
 	  }
 	  else{
@@ -401,10 +412,10 @@ void AnaTtresQCD::runEfficiency(const Event &evt, double weight, const std::stri
 	}//m_electron
 
 	// Duplicated event removal after the selection  
-	if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), lept.Perp()) ){
-	    m_Nduplicate++;
-	    return;
-	}
+	//if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), lept.Perp()) ){
+	//    m_Nduplicate++;
+	//    return;
+	//}
 
 	h->h1D("trig1", "", suffix)  ->Fill(trig1);
 	h->h1D("trig2", "", suffix)  ->Fill(trig2);
@@ -535,8 +546,8 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
 	bool trig_prescaled   = trig1;
 	bool trig_unprescaled = trig2 || trig3;
 	
-	if (suffix=="_Loose"){
-	 if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)		weight *= 1/10.;
+	if (!isTight) {
+	 if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)		weight *= 1.0/10.;
 	}
 	else{
 	 if (trig_prescaled && !trig_unprescaled)		return;	 
@@ -545,10 +556,10 @@ void AnaTtresQCD::runFakeRate(const Event &evt, double weight, const std::string
   }//m_electron
     
   // Duplicated event removal after the selection  
-  if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), lept.Perp()) ){
-      m_Nduplicate++;
-      return;
-  }
+  //if (suffix=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), lept.Perp()) ){
+  //    m_Nduplicate++;
+  //    return;
+  //}
   
   h->h1D("fake_trig1", "", suffix)  ->Fill(trig1);
   h->h1D("fake_trig2", "", suffix)  ->Fill(trig2);

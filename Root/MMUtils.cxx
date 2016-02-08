@@ -114,7 +114,7 @@ float MMUtils::getMMweights(const Event &evt, int runMM_StatErr) {
        bool trig_unprescaled = evt.muon()[0].HLT_mu20_iloose_L1MU15() || evt.muon()[0].HLT_mu50();
        
        isTight = evt.muon()[0].isTight();
-       if( !trig_unprescaled )	isTight = false;
+       if( !trig_unprescaled && isTight)	return 0;
    }
    
    lepPt = lepP4.Perp()*1e-3; 

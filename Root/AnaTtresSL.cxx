@@ -170,9 +170,15 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
 
-  if (m_boosted)
+  if (m_boosted) {
     if (!(evt.passes("bejets") || evt.passes("bmujets")))
       return;
+    // this vetoes the resolved channel
+    // to be applied when the resolved channel
+    // is included in the limit setting, for the combination
+    //if (evt.passes("rejets") || evt.passes("rmujets"))
+    //  return;
+  }
 
   if (!m_boosted)
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
@@ -187,10 +193,14 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   bool trig3(0);
   bool trig4(0);
   bool trig5(0);
+
+  bool isTight = false;
     
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
+
+    isTight = evt.electron()[0].isTightPP();
 
     //Electron trigers
     trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
@@ -209,6 +219,8 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     
   } else {
     l = evt.muon()[0].mom();
+
+    isTight = evt.muon()[0].isTight();
     
     //Muon trigers
     trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
@@ -218,19 +230,21 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     bool trig_prescaled   = trig1;
     bool trig_unprescaled = trig2 || trig3;
     
-    if (s!="_Loose")
-	if (trig_prescaled && !trig_unprescaled)	return;
+    //if (s!="_Loose")
+    if (isTight)
+       if (trig_prescaled && !trig_unprescaled)	return;
            
   }//m_electron
     
   // Duplicated event removal after the selection  
-  if (s=="_Loose" && isDuplicateEvent(evt.runNumber(), evt.eventNumber(), l.Perp()) ){
-      m_Nduplicate++;
-      return;
-  }
+  //if (isDuplicateEvent(evt.runNumber(), evt.eventNumber(), l.Perp()) ){
+  //    std::cout << "isTight = " << isTight << std::endl;
+  //    m_Nduplicate++;
+  //    return;
+  //}
   
   std::string suffix = s;
-  if (s=="_Loose")	suffix = "";
+  //if (s=="_Loose")	suffix = "";
   
   h->h1D("weight_leptSF", "", suffix)->Fill(evt.weight_leptonSF());
   h->h1D("weight", "", suffix)->Fill(weight);
