@@ -1,5 +1,5 @@
 
-from ttres33_ewk.inputs import *
+from inputs import *
 
 from ROOT import *
 
@@ -28,7 +28,7 @@ for i in range(0, len(xs)):
   muexp_p1 = abs(-muexp + hi.GetBinContent(4))
   muexp_m1 = abs(-muexp + hi.GetBinContent(5))
   muexp_m2 = abs(-muexp + hi.GetBinContent(6))
-  ftxt = open('ttres33_ewk/lim_'+signalList[i]+'.txt', 'w')
+  ftxt = open('lim_'+signalList[i]+'.txt', 'w')
   ftxt.write('muobs     '+str(muobs)+'\n')
   ftxt.write('muexp     '+str(muexp)+'\n')
   ftxt.write('muexp_p2  '+str(muexp_p2)+'\n')
@@ -98,8 +98,8 @@ def stampLumiText(lumi, x, y, text, size):
   t.DrawLatex(x,y,"#int L dt = "+str(lumi)+" fb^{-1}, "+text)
 
 stampATLAS("Internal", 0.15, 0.80)
-stampLumiText(3.3, 0.15, 0.70, "#sqrt{s} = 13 TeV", 0.04)
+stampLumiText(3.3, 0.15, 0.70, "#sqrt{s} = 13 TeV", 0.03)
 
-clim.SaveAs("ttres33_ewk/mass_limit.eps")
+clim.SaveAs("mass_limit.eps")
 
   
