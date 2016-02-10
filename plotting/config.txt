@@ -19,27 +19,27 @@ syst      escale     "electron scale"                 EG_SCALE_ALL__1up         
 syst      metrespara "MET res. para."                 MET_SoftTrk_ResoPara                       -                                                    S
 syst      metresperp "MET res. perp."                 MET_SoftTrk_ResoPerp                       -                                                    S
 syst      metscale   "MET scale"                      MET_SoftTrk_ScaleUp                        MET_SoftTrk_ScaleDown                                S
-syst      btagb0     "b-tagging eff. (E0)"            btagbSF_0__1up                             btagbSF_0__1down                                     N
-syst      btagb1     "b-tagging eff. (E1)"            btagbSF_1__1up                             btagbSF_1__1down                                     N
-syst      btagb2     "b-tagging eff. (E2)"            btagbSF_2__1up                             btagbSF_2__1down                                     N
-syst      btagb3     "b-tagging eff. (E3)"            btagbSF_3__1up                             btagbSF_3__1down                                     N
-syst      btagb4     "b-tagging eff. (E4)"            btagbSF_4__1up                             btagbSF_4__1down                                     N
-syst      btagc0     "b-tagging c mistag (E0)"        btagcSF_0__1up                             btagcSF_0__1down                                     N
-syst      btagc1     "b-tagging c mistag (E1)"        btagcSF_1__1up                             btagcSF_1__1down                                     N
-syst      btagc2     "b-tagging c mistag (E2)"        btagcSF_2__1up                             btagcSF_2__1down                                     N
-syst      btagc3     "b-tagging c mistag (E3)"        btagcSF_3__1up                             btagcSF_3__1down                                     N
-syst      btagl0     "b-tagging l mistag (E0)"        btaglSF_0__1up                             btaglSF_0__1down                                     N
-syst      btagl1     "b-tagging l mistag (E1)"        btaglSF_1__1up                             btaglSF_1__1down                                     N
-syst      btagl2     "b-tagging l mistag (E2)"        btaglSF_2__1up                             btaglSF_2__1down                                     N
-syst      btagl3     "b-tagging l mistag (E3)"        btaglSF_3__1up                             btaglSF_3__1down                                     N
-syst      btagl4     "b-tagging l mistag (E4)"        btaglSF_4__1up                             btaglSF_4__1down                                     N
-syst      btagl5     "b-tagging l mistag (E5)"        btaglSF_5__1up                             btaglSF_5__1down                                     N
-syst      btagl6     "b-tagging l mistag (E6)"        btaglSF_6__1up                             btaglSF_6__1down                                     N
-syst      btagl7     "b-tagging l mistag (E7)"        btaglSF_7__1up                             btaglSF_7__1down                                     N
-syst      btagl8     "b-tagging l mistag (E8)"        btaglSF_8__1up                             btaglSF_8__1down                                     N
-syst      btagl9     "b-tagging l mistag (E9)"        btaglSF_9__1up                             btaglSF_9__1down                                     N
-syst      btagl10    "b-tagging l mistag (E10)"       btaglSF_10__1up                            btaglSF_10__1down                                    N
-syst      btagl11    "b-tagging l mistag (E11)"       btaglSF_11__1up                            btaglSF_11__1down                                    N
+syst      btagb0     "b-tagging eff. (E0)"            btagbSF_0__1up                             btagbSF_0__1down                                     S
+syst      btagb1     "b-tagging eff. (E1)"            btagbSF_1__1up                             btagbSF_1__1down                                     S
+syst      btagb2     "b-tagging eff. (E2)"            btagbSF_2__1up                             btagbSF_2__1down                                     S
+syst      btagb3     "b-tagging eff. (E3)"            btagbSF_3__1up                             btagbSF_3__1down                                     S
+syst      btagb4     "b-tagging eff. (E4)"            btagbSF_4__1up                             btagbSF_4__1down                                     S
+syst      btagc0     "b-tagging c mistag (E0)"        btagcSF_0__1up                             btagcSF_0__1down                                     S
+syst      btagc1     "b-tagging c mistag (E1)"        btagcSF_1__1up                             btagcSF_1__1down                                     S
+syst      btagc2     "b-tagging c mistag (E2)"        btagcSF_2__1up                             btagcSF_2__1down                                     S
+syst      btagc3     "b-tagging c mistag (E3)"        btagcSF_3__1up                             btagcSF_3__1down                                     S
+syst      btagl0     "b-tagging l mistag (E0)"        btaglSF_0__1up                             btaglSF_0__1down                                     S
+syst      btagl1     "b-tagging l mistag (E1)"        btaglSF_1__1up                             btaglSF_1__1down                                     S
+syst      btagl2     "b-tagging l mistag (E2)"        btaglSF_2__1up                             btaglSF_2__1down                                     S
+syst      btagl3     "b-tagging l mistag (E3)"        btaglSF_3__1up                             btaglSF_3__1down                                     S
+syst      btagl4     "b-tagging l mistag (E4)"        btaglSF_4__1up                             btaglSF_4__1down                                     S
+syst      btagl5     "b-tagging l mistag (E5)"        btaglSF_5__1up                             btaglSF_5__1down                                     S
+syst      btagl6     "b-tagging l mistag (E6)"        btaglSF_6__1up                             btaglSF_6__1down                                     S
+syst      btagl7     "b-tagging l mistag (E7)"        btaglSF_7__1up                             btaglSF_7__1down                                     S
+syst      btagl8     "b-tagging l mistag (E8)"        btaglSF_8__1up                             btaglSF_8__1down                                     S
+syst      btagl9     "b-tagging l mistag (E9)"        btaglSF_9__1up                             btaglSF_9__1down                                     S
+syst      btagl10    "b-tagging l mistag (E10)"       btaglSF_10__1up                            btaglSF_10__1down                                    S
+syst      btagl11    "b-tagging l mistag (E11)"       btaglSF_11__1up                            btaglSF_11__1down                                    S
 syst      etrig      "electron trigger"               eTrigSF__1up                               eTrigSF__1down                                       N
 syst      erec       "electron reconstruction"        eRecoSF__1up                               eRecoSF__1down                                       N
 syst      eid        "electron ID"                    eIDSF__1up                                 eIDSF__1down                                         N
@@ -50,8 +50,8 @@ syst      muidstat   "muon ID (stat)"                 muIDStatSF__1up           
 syst      muidsyst   "muon ID (syst)"                 muIDSystSF__1up                            muIDSystSF__1down                                    N
 syst      muisolstat "muon isolation (stat)"          muIsolStatSF__1up                          muIsolStatSF__1down                                  N
 syst      muisolsyst "muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down                                  N
-syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     N
-syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     N
+syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     S
+syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     S
 syst      wmodel     "W C/A SF"                       boostedWSF__1up                            boostedWSF__1down                                    N
 syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N
 syst_flat singletop  "single top cross sec."          "singletop"            0.047                                      -0.037
