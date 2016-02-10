@@ -82,14 +82,75 @@ python scripts/run.py
 svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk TopDataPreparation
 There is no need to compile it, since the current Makefile includes it directly only for the C++ file needed.
 
-The output files will be stored in the outputDir and can be plot using the scripts/plot.C macro. You may prefer to
-write your own macro, but if you use this one, it can be used as follows (from the directory on which the files are):
-  root -l -b -q '../scripts/plot.C+("lepPt","./","_rmu.root",false)'
 
-where "_rmu.root" is the ending of the ROOT file (which in this case indicates the channel of the analysis) nad "lepPt" is the
-histoggram name, while "./" is the directory on which to find the input file. You might need to change the plot.C macro in the
-initStackConfig function to point to the correct input files, so the stack plot can be correctly made.
+Plotting and limit setting preparation code
+------------------------------
 
+A C++ code has been written which can calculate all systematic uncertainties, plot them, smoothen them and also
+output the smoothened results.
+
+To compile it, go to the plotting directory and do make first:
+$ cd plotting
+$ make
+
+You can then move to the directory in which your output files are and run the plotting code, however the following
+conventions must be observed. The name of the ROOT files must follow the standard '[prefix]_[channel]_[sample].root'
+and each ROOT file must contain the histogram to be plotted with the same binning. The systematic variations and sample names
+can be configured in a configuration file described below.
+
+The plotting code can be run, for example, as follows:
+$ cd directoryWithOutput
+$ /path/to/plotting/code/plot -p prefix -c channel -h histogramName -l 3.209 --smoothen 1 -C configuration.txt
+
+This will look for files called prefix_channel_[sample].root (where "[sample]" is specified in the configuration file) and it
+expects the histogram "histogramName" to be in those files. The samples that do not have "Data" or "QCD" in the name will be scaled
+by the argument of -l (the luminosity). You can set the "luminosity" to 0 if the input files are already normalised, but this is used to
+show the luminosity in the plots (if a negative value is used, the luminosity is not used to normalise the MC samples, but it is shown in the plots in absolute value).
+The --smoothen flag indicates whether smoothening should be enabled (it can be forcefully
+disabled in the configuration file if it should not be applied to a specific systematic uncertainty).
+
+An example of the configuration file can be seen in plotting/config.txt.
+
+The lines beginning with "sample" indicate a sample to be considered when making the stack plot. Its format is the following:
+
+sample      InternalName            fileSuffix                "Name to show in plot legend"                   "Name to show in LaTeX table output"             colorNumber
+
+The internal name is only used internally as an identifier, while fileSuffix is the ending of the file name. In the example above,
+the file used for this sample would be prefix_channel_fileSuffix.root. The color number indicates the color used when filling the histogram in the stack plot.
+The names in columns 4 and 5 need to be in double quotes if they include spaces (otherwise the double quotes are optional).
+
+The systematic uncertainties can be included in different ways. A flat systematic uncertainty to be applied in only
+a subset of the samples can be added with lines beginning with "syst_flat"). For example:
+
+syst_flat lumi             "luminosity"                     "ttbar,singletop,Zjets,VV"        0.05                                       -0.05
+
+This adds an uncertainty called internally "lumi", but shown in the output LaTeX tables as "luminosity". This uncertainty will be a flat +/- 5%
+uncertainy applied only in the samples with suffixes including either ttbar, singletop, Zjets or VV in their name.
+
+An uncertainty that comes from the difference between the histograms (the histogram name is given by the -h parameter in the plot call above)
+can be included as with a line beginning with "syst_model". For example:
+
+syst_model ttgen           "ttbar gen."                     "ttbar"                           suffixA                suffixB          S
+
+This line adds an uncertainty internally called "ttgen", but shown in the output LaTeX tables as "ttbar gen." (notice the double quotes due to the space).
+It will be calculated as the bin-by-bin quantity taken from the histograms in prefix_channel_suffixA.root and prefix_channel_suffixB.root . The final letter "S" indicates
+this systematic uncerrtainty should be smoothened, if the --smooth option in the command line has been activated. A letter "N" can be used instead if smoothing is not desired.
+The uncertainty is calculated as (A-B)/(0.5*(A+B)), bin by bin.
+
+Finally, if the systematic uncertainty variation histograms are available in the same original file (that is, prefix_channel_sampleName.root)
+but just in a different histogram, one can use the "syst" line to include that systematic variation. For example, if the nominal result is
+in a histogram called histogramName and the systematic variation up is in histogram histogramName_varUp and the down variation is
+in histogram histogramName_varDw, you can use the following line to include this systematic variation:
+
+syst      myvariation      "Name to show in LaTeX"          _varUp                            _varDw                 S                 sampleZ,sampleW
+
+The column with "S" can also have "N" to avoid smoothing this systematic uncertainty. The last column has a comma-separated list of
+samples on which this uncertainty should not be applied. It can be ignored if this is to be applied to all samples.
+
+
+Finally, note that one other option in plot is --saveTH1 channel. If this option is provided, a set of output files called hist_[internalSampleName].root are created.
+These files will have the histogram and all its systematic variations after smoothing and including the uncertainties in syst_flat and syst_model.
+This file can be used to be fed to the TRexFitter for limit setting.
 
 For more information, contact:
 Danilo Enoque Ferreira de Lima
