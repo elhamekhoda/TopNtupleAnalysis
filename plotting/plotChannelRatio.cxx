@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
     float yMin = -1;
     int arrow = 0;
     int stamp = 0;
-    float lumi = 5;
+    float lumi = 0;
     std::string config = "";
     std::string saveTH1 = "";
     int normBinWidth = 0;

@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
     float yMin = -1;
     int arrow = 0;
     int stamp = 0;
-    float lumi = 5;
+    float lumi = 0;
     std::string config = "";
     std::string saveTH1 = "";
     int normBinWidth = 0;
@@ -307,15 +307,7 @@ int main(int argc, char **argv) {
       string outfile = _outfile;
       if (outfile == "") {
         outfile = string("sf_")+prefix+"_"+histogram_num+string("_")+histogram_den+string("_");
-        if (channel == "e") {
-          outfile += "e";
-        } else if (channel == "mu") {
-          outfile += "mu";
-        } else if (channel == "comb") {
-          outfile += "comb";
-        } else {
-          outfile += "ukn";
-        }
+        outfile += channel;
         if (stamp == 1) outfile += "_ATLASPrelim";
         if (stamp == 2) outfile += "_ATLAS";
         outfile += ".pdf";

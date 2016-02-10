@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
     string xTitle = "";
     float xMax = -9999;
     float xMin = -9999;
-    float lumi = 5;
+    float lumi = 0;
     std::string config = "";
     int mcOnly = 0;
     smooth = 40;
@@ -196,22 +196,13 @@ int main(int argc, char **argv) {
     if (outfile == "") {
       outfile = prefix+"_"+histogram;
       outfile += string("_");
-      if (channel == "e") {
-        outfile += "e";
-      } else if (channel == "mu") {
-        outfile += "mu";
-      } else if (channel == "comb") {
-        outfile += "comb";
-      } else {
-        outfile += "ukn";
-      }
+      outfile += channel;
       outfile += ".pdf";
     }
     if (channel == "e") {
       extraText.push_back("e channel");
     } else if (channel == "mu") {
       extraText.push_back("#mu channel");
-    } else if (channel == "comb") {
     }
     vector<string> split_extraText;
     split(_extraText, ';', split_extraText);

@@ -39,7 +39,7 @@ std::map<std::string, std::vector<std::string> > syst_flat = std::map<std::strin
 std::map<std::string, std::vector<std::string> > syst_pdf = std::map<std::string, std::vector<std::string> >();
 std::map<std::string, std::vector<std::string> > syst_pdf_simple = std::map<std::string, std::vector<std::string> >();
 
-float lumi_scale = 1.0;
+float lumi_scale = -0.0;
 int logY = 0;
 int smooth = 1;
 
@@ -75,6 +75,8 @@ void loadConfig(const std::string &file) {
     std::string tit, lat;
     int col;
     std::vector<std::string> el = parse(line.c_str());
+    if (el.size() == 0)
+      continue;
     if (el[0] == "sample") {
       name[el[1]] = el[2];
       title[el[1]] = el[3];
@@ -1512,9 +1514,10 @@ void stampATLAS(const std::string &text, float x, float y, bool hasRatio) {
 
 }
 void stampLumi(float lumi, float x, float y) {
+  if (lumi == 0) return;
   std::stringstream ss;
   ss.precision(2);
-  ss << "#int L dt = " << lumi << " fb^{-1}";
+  ss << "#int L dt = " << std::fabs(lumi) << " fb^{-1}";
   TLatex l;
   l.SetNDC();
   l.SetTextFont(42);
@@ -1532,9 +1535,10 @@ void stampText(const std::string &text, float x, float y, float size) {
 }
 
 void stampLumiText(float lumi, float x, float y, const std::string &text, float size) {
+  if (lumi == 0) return;
   std::stringstream ss;
   ss.precision(2);
-  ss << "#int L dt = " << lumi << " fb^{-1}, " << text;
+  ss << "#int L dt = " << std::fabs(lumi) << " fb^{-1}, " << text;
   TLatex l;
   l.SetNDC();
   l.SetTextFont(42);
