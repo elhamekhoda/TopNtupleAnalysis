@@ -3,15 +3,21 @@ S=1
 #LUMI=3.31668
 LUMI=3.20905
 for hist in largeJetM largeJetEta largeJetPhi largeJetSd12 largeJet_tau32 largeJet_tau32_wta largeJet_tau21 largeJet_tau21_wta chi2 mwhad_res mthad_res mtlep_res jet0_m jet1_pt jet1_m jet2_pt jet2_m closejl_pt  closejl_minDeltaR MET_phi nBtagJets leadbJetPt lepEta lepPhi mwt  mtt nTrkBtagJets ; do
-for ch in boosted resolved ; do
+for ch in resolved boosted ; do
   for lep in e mu ; do
     ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0
   done
 done
 done
 
-for hist in lepPt MET largeJetPt mtlep_boo jet0_pt closeJetPt ; do
-for ch in boosted resolved ; do
+for ch in resolved boosted ; do
+  for lep in e mu ; do
+    ../plotting/plot -c $lep -p $ch -h lepPt -l $LUMI --smoothen 0 --rebin 5
+done
+done
+
+for hist in MET largeJetPt mtlep_boo jet0_pt closeJetPt ; do
+for ch in resolved boosted ; do
   for lep in e mu ; do
     ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0 --normBinWidth 1
   done
@@ -101,6 +107,7 @@ for ch in boosted resolved ; do
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst muIsolSystSF__1up,muIsolSystSF__1down --systTitles "mu isol syst. up,mu isol syst. down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_muisolsyst.pdf --smoothen 1
 
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst boostedWSF__1up,boostedWSF__1down --systTitles "boosted W C/A SF up,boosted W C/A SF down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_wmodel.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst ttEWK__1up,ttEWK__1down --systTitles "tt EWK corr up,tt EWK corr down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_ttewk.pdf --smoothen 1
 
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst LARGERJET_JET_Top_CrossCalib__1up,LARGERJET_JET_Top_CrossCalib__1down --systTitles "akt10 cross calib. up,akt10 cross calib. down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_akt10xcalib.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst LARGERJET_JET_Top_Run1__1up,LARGERJET_JET_Top_Run1__1down --systTitles "akt10 run 1 up,akt10 run 1 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_akt10run1.pdf --smoothen 1
@@ -118,36 +125,17 @@ for ch in boosted resolved ; do
   done
 done
 
-rm -f config_tmp.txt
+rm -f hist_*.root
 
-cat >config_tmp.txt <<EOF
-sample    Zprime400    MC15_13TeV_25ns_FS_EXOT4_Zprime400                            "Signal400"        "Signal400"          1
-sample    Zprime500    MC15_13TeV_25ns_FS_EXOT4_Zprime500                            "Signal500"        "Signal500"          1
-sample    Zprime750    MC15_13TeV_25ns_FS_EXOT4_Zprime750                            "Signal750"        "Signal750"          1
-sample    Zprime1000   MC15_13TeV_25ns_FS_EXOT4_Zprime1000                           "Signal1000"       "Signal1000"         1
-sample    Zprime1250   MC15_13TeV_25ns_FS_EXOT4_Zprime1250                           "Signal1250"       "Signal1250"         1
-sample    Zprime1500   MC15_13TeV_25ns_FS_EXOT4_Zprime1500                           "Signal1500"       "Signal1500"         1
-sample    Zprime1750   MC15_13TeV_25ns_FS_EXOT4_Zprime1750                           "Signal1750"       "Signal1750"         1
-sample    Zprime2000   MC15_13TeV_25ns_FS_EXOT4_Zprime2000                           "Signal2000"       "Signal2000"         1
-sample    Zprime2250   MC15_13TeV_25ns_FS_EXOT4_Zprime2250                           "Signal2250"       "Signal2250"         1
-sample    Zprime2500   MC15_13TeV_25ns_FS_EXOT4_Zprime2500                           "Signal2500"       "Signal2500"         1
-sample    Zprime2750   MC15_13TeV_25ns_FS_EXOT4_Zprime2750                           "Signal2750"       "Signal2750"         1
-sample    Zprime3000   MC15_13TeV_25ns_FS_EXOT4_Zprime3000                           "Signal3000"       "Signal3000"         1
-sample    Zprime4000   MC15_13TeV_25ns_FS_EXOT4_Zprime4000                           "Signal4000"       "Signal4000"         1
-sample    Zprime5000   MC15_13TeV_25ns_FS_EXOT4_Zprime5000                           "Signal5000"       "Signal5000"         1
-sample    data         Data15_13TeV_25ns_FS_EXOT4_3_3fb                              "data"             "data"               1
-sample    ttbar        MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_all                "t#bar{t}"         "tt"                 0
-sample    Wjets        MC15_13TeV_25ns_FS_EXOT4_Wjets                                "W+jets"           "W+jets"             92
-sample    singletop    MC15_13TeV_25ns_FS_EXOT4_singletop                            "single top"       "single top"         62
-sample    Zjets        MC15_13TeV_25ns_FS_EXOT4_Zjets                                "Z+jets"           "Z+jets"             95
-sample    VV           MC15_13TeV_25ns_FS_EXOT4_VV                                   "diboson"          "diboson"            5
-#sample    QCD          QCD15_13TeV_25ns_FS_EXOT4_3_3fb                               "multi-jet"        "multi-jet"          9
-EOF
-cat ../plotting/config_syst.txt >>config_tmp.txt
+for ch in boosted resolved ; do
+  for lep in e mu ; do
+    ../plotting/plot  -c $lep -p $ch -h mtt -l $LUMI --saveTH1 ${ch}${lep}  --smoothen $S -C ../plotting/config_limit.txt
+  done
+done
+
 
 for ch in boosted ; do
   for lep in e mu ; do
-    ../plotting/plot  -c $lep -p $ch -h mtt -l $LUMI --saveTH1 $lep  --smoothen $S -C config_tmp.txt
     ../plotting/plot --logY 1 --mcOnly 0 -c $lep -p $ch -h mtt -l $LUMI  --smoothen $S
   done
 done
