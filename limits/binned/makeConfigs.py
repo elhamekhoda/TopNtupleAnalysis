@@ -33,6 +33,7 @@ Sample: "Signal"
 
 # B ONLY fit
 fixFile('ttres_template.config', 'ttres_bkg.config', "tmp", True)
+system('cp -f hist_Zprime2000.root hist_tmp.root') ## use a dummy signal for the background only fit
 system('./myFit.exe h ttres_bkg.config')
 system('./myFit.exe d ttres_bkg.config')
 system('./myFit.exe w ttres_bkg.config')
