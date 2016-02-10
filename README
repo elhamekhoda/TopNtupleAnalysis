@@ -152,6 +152,70 @@ Finally, note that one other option in plot is --saveTH1 channel. If this option
 These files will have the histogram and all its systematic variations after smoothing and including the uncertainties in syst_flat and syst_model.
 This file can be used to be fed to the TRexFitter for limit setting.
 
+Note as well, that running plot with the --saveTH1 [channel] multiple times will update the output hist_[sample].root files with the different channels.
+So it is recommended to remove any hist_*.root files in the current directory when calling this. This is done in such a way, so that the different
+signal regions can be added in the output files.
+
+
+Limit setting
+-------------------------------------
+
+The limit setting can be done using TRexFitter. The input files used in the limit setting will be following the format dumped by the
+--saveTH1 option mentioned in the previous section. The files are called hist_[sampleName].root and they have the nominal histogram in them with the name
+"x[channel]", where [channel] is the option sent to the --saveTH1 option. The systematic variations are appended to the end of the
+histogram name. For example, the nominal spectrum in the electron channel would be in the histogram "xe" and the ttbar generator uncetainty for this channel
+would be in histogram "xettgenup" and "xettgendw".
+
+These names are, of course configurable, but this is the format of the histograms dumped by the --saveTH1 option above, which also smoothens the
+histograms correctly. The standard configuration below will be following these guidelines and it should be compatible with the configuration
+in plotting/config_limit.txt.
+
+The TRexFitter can be downloaded and compiled as:
+$ cd limits/binned
+$ svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasinst/Institutes/UdineICTP/TtHFitter/trunk  TRexFitter
+$ cd TRexFitter
+$ make
+
+At this stage you can copy the inputs.py, ttres_template.config and makeConfigs.py, as well as the hist_*.root files generated previously with the spectra
+in the TRexFitter directory. The ttres_template.config has the configuration for the ttbar boosted channel limit setting, but with the signal line commented out.
+As the limit setting has to be done separately for each of the signal mass points, the script makeConfigs.py can be used to loop over the signal points and do the
+limit setting automatically.
+
+Therefore, assuming the ttres_template.config sample names and the files (hist_XXX) are compatible with your output, you can simply do now:
+$ python makeConfigs.py
+
+This will add the signal configuration lines for each signal sample and produce copies of ttres_template.config for each sample. It will then do the
+background only fit and the limit setting for each mass point.
+
+Alternatively, you can uncomment the signal lines in ttres_template.config yourself (preferably use a different name for this file), and then call TRexFitter for
+the limit setting:
+
+./myFit.exe h ttres_myConfig.config
+./myFit.exe w ttres_myConfig.config
+./myFit.exe l ttres_myConfig.config
+
+If data is not available or it is blind, you can create the pseudo-data file with:
+hadd -f hist_data.root hist_ttbar.root hist_singletop.root hist_Zjets.root hist_Wjets.root hist_VV.root
+
+The output file showing the upper limit in mu will be in JobTtres*/Limits/JobTtres*.root.
+You can produce correlation matrices and the nuisance parameter pulls using this:
+
+./myFit.exe f ttres_myConfig.config
+
+Notice that for the last command you still need to specify a signal sample, but if you change the FitType option from SPLUSB to BONLY, only the background
+fit is done. The output nuisance parameter fit is done in JobTtres*/NuisPar.png. The correlation matrix is in JobTtres*/CorrMatrix.png.
+
+Please look for more information on TRexFitter here:
+https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/TtHFitter
+
+The final mass limit plot can be produced using the massLimit.py script:
+
+python massLimit.py
+
+It generates the mass limit in mass_limit.py.
+
+
+-------------------------------
 For more information, contact:
 Danilo Enoque Ferreira de Lima
 dferreir@mail.cern.ch
