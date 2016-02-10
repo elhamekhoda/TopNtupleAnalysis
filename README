@@ -170,6 +170,16 @@ These names are, of course configurable, but this is the format of the histogram
 histograms correctly. The standard configuration below will be following these guidelines and it should be compatible with the configuration
 in plotting/config_limit.txt.
 
+One example of the standard way of generating the input files for the limit setting using the output of read and AnaTtresSL, would be:
+rm -f hist*.root
+
+for ch in boosted resolved ; do
+  for lep in e mu ; do
+    ../plotting/plot  -c $lep -p $ch -h mtt -l 3.209 --saveTH1 ${ch}${lep}  --smoothen 1 -C ../plotting/config_limit.txt
+  done
+done
+
+
 The TRexFitter can be downloaded and compiled as:
 $ cd limits/binned
 $ svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasinst/Institutes/UdineICTP/TtHFitter/trunk  TRexFitter
