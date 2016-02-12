@@ -288,8 +288,8 @@ int main(int argc, char **argv) {
   MMUtils * MM_nominal      = NULL;
     
   if (runMM){	
-  	//MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
-  	MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "ttrescr/fake.root");
+  	MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
+  	//MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "ttrescr_invsd0/fake.root");
   }//runMM
 
   std::vector<std::string> pdfList;

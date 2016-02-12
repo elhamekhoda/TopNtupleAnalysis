@@ -213,7 +213,8 @@ You can produce correlation matrices and the nuisance parameter pulls using this
 ./myFit.exe f ttres_myConfig.config
 
 Notice that for the last command you still need to specify a signal sample, but if you change the FitType option from SPLUSB to BONLY, only the background
-fit is done. The output nuisance parameter fit is done in JobTtres*/NuisPar.png. The correlation matrix is in JobTtres*/CorrMatrix.png.
+fit is done.
+The output nuisance parameter fit is done in JobTtres*/NuisPar.png. The correlation matrix is in JobTtres*/CorrMatrix.png.
 
 Please look for more information on TRexFitter here:
 https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/TtHFitter
