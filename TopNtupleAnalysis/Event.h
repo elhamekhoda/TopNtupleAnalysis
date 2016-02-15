@@ -25,6 +25,9 @@ class Event {
 
     std::vector<Jet> &tjet();
 
+    const bool trigger(const std::string &t) const;
+    void setTrigger(const std::string &t, bool passes);
+
     const std::vector<Electron> &electron() const;
     const std::vector<Muon> &muon() const;
     const std::vector<Jet> &jet() const;
@@ -147,6 +150,7 @@ class Event {
 
   protected:
 
+    std::vector<std::string> m_trigger;
     std::vector<std::string> m_passes;
 
     int m_hfor;

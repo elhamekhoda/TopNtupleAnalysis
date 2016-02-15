@@ -17,6 +17,19 @@ std::vector<std::string> &Event::passes() {
   return m_passes;
 }
 
+const bool Event::trigger(const std::string &t) const {
+  return (std::find(m_trigger.begin(), m_trigger.end(), t) != m_trigger.end());
+}
+
+void Event::setTrigger(const std::string &t, bool passes) {
+  std::vector<std::string>::iterator it = std::find(m_trigger.begin(), m_trigger.end(), t);
+  if (it != m_trigger.end() && !passes) {
+    m_trigger.erase(it);
+  } else if (it == m_trigger.end() && passes) {
+    m_trigger.push_back(t);
+  }
+}
+
 const bool Event::passes(const std::string &selection) const {
   return std::find(m_passes.begin(), m_passes.end(), selection) != m_passes.end();
 }
@@ -30,6 +43,7 @@ int &Event::hfor() {
 }
 
 void Event::clear() {
+  m_trigger.clear();
   m_electron.clear();
   m_muon.clear();
   m_jet.clear();

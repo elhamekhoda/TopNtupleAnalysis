@@ -39,6 +39,12 @@ void MiniTree::read(int event, Event &e) {
   e.eventNumber() = ul64("eventNumber"); 
   e.runNumber() = ui("runNumber"); 
 
+  for (std::map<std::string, char>::iterator it = m_c.begin(); it != m_c.end(); ++it) {
+    if (it->first.find("HLT_") == 0) {
+      e.setTrigger(it->first, it->second != 0);
+    }
+  }
+
   e.npv() = ui("npv"); 
   e.vtxz() = f("vtxz");
   e.mu() = f("mu");
@@ -187,8 +193,10 @@ void MiniTree::read(int event, Event &e) {
 
   if (i("bejets")) e.passes().push_back("bejets");
   if (i("bmujets")) e.passes().push_back("bmujets");
+  if (i("bmu2jets")) e.passes().push_back("bmu2jets");
   if (i("rejets")) e.passes().push_back("rejets");
   if (i("rmujets")) e.passes().push_back("rmujets");
+  if (i("rmu2jets")) e.passes().push_back("rmu2jets");
   if (i("ejets")) e.passes().push_back("ejets");
   if (i("mujets")) e.passes().push_back("mujets");
   if (i("ee")) e.passes().push_back("ee");
