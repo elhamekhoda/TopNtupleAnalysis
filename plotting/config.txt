@@ -54,7 +54,7 @@ syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up            
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     S
 syst      wmodel     "W C/A SF"                       boostedWSF__1up                            boostedWSF__1down                                    N
 syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N
-syst_flat singletop  "single top cross sec."          "singletop"            0.047                                      -0.037
+syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
 #syst_flat qcd        "QCD unc."                       "QCD"                  0.50                                       -0.050
 syst_flat lumi       "luminosity"                     "ttbar,singletop,Zjets,VV"                     0.05                                       -0.05
 syst_flat ttxsec     "ttbar cross section"            "ttbar"                0.056                                      -0.061
