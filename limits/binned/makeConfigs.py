@@ -5,11 +5,11 @@ import socket, random, re
 
 
 
-dobatch = 0
+dobatch = 1
 site=""
-outputName="resolved"
+#outputName="resolved"
 outputName="boosted"
-outputName="boosted_resolved"
+#outputName="boosted_resolved"
 if socket.gethostname().find("clratl") != -1:
 	site="LPC"
 
@@ -45,8 +45,15 @@ def createAndSubmitJob(configName):
 	f.write('./myFit.exe h '+configName+' > log_'+configName.split('.')[0]+'_h\n')
 	f.write('./myFit.exe d '+configName+' > log_'+configName.split('.')[0]+'_d\n')
 	f.write('./myFit.exe w '+configName+' > log_'+configName.split('.')[0]+'_w\n')
-	f.write('./myFit.exe f '+configName+' > log_'+configName.split('.')[0]+'_f\n')
-	f.write('./myFit.exe p '+configName+' > log_'+configName.split('.')[0]+'_p\n')
+	if configName.find("bkg")!=-1:
+		f.write('./myFit.exe f '+configName+' > log_'+configName.split('.')[0]+'_f\n')
+		f.write('./myFit.exe p '+configName+' > log_'+configName.split('.')[0]+'_p\n')
+	else:
+		f.write('./myFit.exe p '+configName+' > log_'+configName.split('.')[0]+'_p\n')
+		f.write('./myFit.exe f '+configName+' > log_'+configName.split('.')[0]+'_f\n')
+		f.write('./myFit.exe l '+configName+' > log_'+configName.split('.')[0]+'_l\n')
+	
+	
 	
 	outDir = './JobTtres_'+configName.split('.')[0].replace('ttres_','')
 	
@@ -125,7 +132,7 @@ for i in signalList:
 
 
 if dobatch :
-	system("tar -czvf t.tar.gz . --exclude=JobTtres_* --exclude=*.tar.gz" )
+	system("tar -czvf t.tar.gz . --exclude=JobTtres_* --exclude=old* --exclude=*.tar.gz" )
 	for j in listOfJobs:
 		print j
 		system(j)
