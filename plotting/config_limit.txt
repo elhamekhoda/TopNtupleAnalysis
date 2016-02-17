@@ -18,7 +18,7 @@ sample    Wjets        MC15_13TeV_25ns_FS_EXOT4_Wjets                           
 sample    singletop    MC15_13TeV_25ns_FS_EXOT4_singletop                            "single top"       "single top"         62
 sample    Zjets        MC15_13TeV_25ns_FS_EXOT4_Zjets                                "Z+jets"           "Z+jets"             95
 sample    VV           MC15_13TeV_25ns_FS_EXOT4_VV                                   "diboson"          "diboson"            5
-#sample    QCD          QCD15_13TeV_25ns_FS_EXOT4_3_3fb                               "multi-jet"        "multi-jet"          9
+sample    QCD          QCD15_13TeV_25ns_FS_EXOT4_3_3fb                               "multi-jet"        "multi-jet"          9
 syst      akt10xcalib "anti-$k_t$ R=1.0 cross calibration" LARGERJET_JET_Top_CrossCalib__1up     LARGERJET_JET_Top_CrossCalib__1down                  S
 syst      akt10run1  "anti-$k_t$ R=1.0 run 1"         LARGERJET_JET_Top_Run1__1up                LARGERJET_JET_Top_Run1__1down                        S
 syst      akt4jer    "anti-$k_t$ R=0.4 JER"           JET_JER_SINGLE_NP__1up                     -                                                    S
@@ -70,7 +70,7 @@ syst      wmodel     "W C/A SF"                       boostedWSF__1up           
 syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
 syst_flat lumi       "luminosity"                     "ttbar,singletop,Zjets,VV"                     0.05                                       -0.05
-#syst_flat qcd        "QCD unc."                       "QCD"                  0.50                                       -0.050
+syst_flat qcd        "QCD unc."                       "QCD"                  0.50                                       -0.050
 syst_flat ttxsec     "ttbar cross section"            "ttbar"                0.056                                      -0.061
 syst_model ttgen     "ttbar gen."                    "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2  S
 syst_model ttps      "ttbar p. shower"               "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2   S
