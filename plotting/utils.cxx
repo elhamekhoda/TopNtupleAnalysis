@@ -623,7 +623,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
   double maximum = MC->GetMaximum();
   if (Data) maximum = std::max(Data->GetBinContent(Data->GetMaximumBin()), MC->GetMaximum());
   maximum *= 1.8;
-  double minimum = 0.001;
+  double minimum = 0.1;
   if (logY) {
     maximum *= 10000;
   }
