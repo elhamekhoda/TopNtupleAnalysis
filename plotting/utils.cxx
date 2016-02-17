@@ -1885,6 +1885,9 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     vector<string> pattern;
     //pattern.push_back(it->second[1]);
     split(it->second[1], ',', pattern);
+    std::cout << "Syst. unc. " << name << " set to *include* backgrounds containing the following substring in their file names ";
+    for (int k = 0; k < pattern.size(); ++k) std::cout << pattern[k] << ", ";
+    std::cout << std::endl;
     if (!updw) {
       systCalc.add(name.c_str(), new Symm(new HistNorm(std::atof(it->second[2].c_str()), pattern), new HistNorm(std::atof(it->second[3].c_str()), pattern)), it->second[0]);
     } else {
