@@ -286,9 +286,11 @@ int main(int argc, char **argv) {
   }
 
   MMUtils * MM_nominal      = NULL;
+  MMUtils * MM_nominal_e    = NULL;
     
   if (runMM){	
   	MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
+  	MM_nominal_e    = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake_CR4_be_withFJ.root");
   	//MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "ttrescr_invsd0/fake.root");
   }//runMM
 
@@ -953,7 +955,11 @@ int main(int argc, char **argv) {
 	 
 	  if (runMM) {
 	     weight = 1.;
-	     weight = MM_nominal->getMMweights(sel, runMM_StatErr);
+             if (sel.electron().size() == 1 && sel.muon().size() == 0 && sel.passes("bejets")) {
+               weight = MM_nominal_e->getMMweights(sel, runMM_StatErr);
+             } else {
+               weight = MM_nominal->getMMweights(sel, runMM_StatErr);
+             }
 	  }//runMM
 
           if (analysis=="AnaTtresSL") {
