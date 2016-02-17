@@ -132,6 +132,7 @@ int main(int argc, char **argv) {
   std::string pdf = "";
   int applyWSF = 0;
   int applyEWK = 1;
+  std::string only = "";
 
   static struct extendedOption extOpt[] = {
         {"help",                  no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -153,6 +154,7 @@ int main(int argc, char **argv) {
         {"pdf",                   required_argument,     0, 'p', "Only run PDF variations.", &pdf, extendedOption::eOTString},
         {"applyWSF",              required_argument,     0, 'W', "Apply W SF.", &applyWSF, extendedOption::eOTInt},
         {"applyEWK",              required_argument,     0, 'E', "Apply electroweak correction.", &applyEWK, extendedOption::eOTInt},
+        {"onlyChannel",           required_argument,     0, 'O', "Run code only for comma-separated channels.", &only, extendedOption::eOTString},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -163,6 +165,16 @@ int main(int argc, char **argv) {
   } else {
     std::cout << "Dumping options:" << std::endl;
     dumpOptions(extOpt);
+  }
+
+  std::vector<int> onlyChannelList;
+  std::string ocStr = only;
+  for (size_t i = 0,n; i <= ocStr.length(); i=n+1) {
+    n = ocStr.find_first_of(',',i);
+    if (n == std::string::npos)
+      n = ocStr.length();
+    std::string tmp = ocStr.substr(i,n-i);
+    onlyChannelList.push_back(std::atoi(tmp.c_str()));
   }
 
   // parse file list
@@ -963,8 +975,15 @@ int main(int argc, char **argv) {
 	  }//runMM
 
           if (analysis=="AnaTtresSL") {
-            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-                vec_analysis[iAna]->run(sel, weight, suffix);
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+                bool good = false;
+                if (onlyChannelList.size() == 0) good = true;
+                for (size_t iChannel = 0; iChannel < onlyChannelList.size(); ++iChannel) {
+                  if (iAna == onlyChannelList[iChannel]) good = true;
+                }
+                if (good)
+                  vec_analysis[iAna]->run(sel, weight, suffix);
+            }
           } else if (analysis=="AnaTtresQCDreal") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
 		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runEfficiency(sel, weight, suffix);
