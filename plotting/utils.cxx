@@ -1884,7 +1884,7 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     std::string name = it->first;
     vector<string> pattern;
     //pattern.push_back(it->second[1]);
-    split(it->second[1], '/', pattern);
+    split(it->second[1], ',', pattern);
     if (!updw) {
       systCalc.add(name.c_str(), new Symm(new HistNorm(std::atof(it->second[2].c_str()), pattern), new HistNorm(std::atof(it->second[3].c_str()), pattern)), it->second[0]);
     } else {
