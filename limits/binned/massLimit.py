@@ -1,4 +1,3 @@
-
 from inputs import *
 
 from ROOT import *
@@ -37,7 +36,7 @@ for i in range(0, len(xs)):
   ftxt.write('muexp_m2  '+str(muexp_m2)+'\n')
   ftxt.write('xsec      '+str(xs[i])+'\n')
   ftxt.close()
-
+  print mass[i]*1000,"GeV\t", muexp*xs[i], "pb"
   sigma1.SetPoint(i, mass[i], muexp*xs[i])
   sigma1.SetPointError(i, 0, 0, muexp_m1*xs[i], muexp_p1*xs[i])
   sigma2.SetPoint(i, mass[i], muexp*xs[i])
