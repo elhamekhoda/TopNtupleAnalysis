@@ -3,8 +3,8 @@ sample    1ttbar        MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_all          
 sample    4singletop    MC15_13TeV_25ns_FS_EXOT4_singletop                            "single top"       "single top"         62
 sample    3Wjets        MC15_13TeV_25ns_FS_EXOT4_Wjets                                "W+jets"           "$W$+jets"           92
 sample    5Zjets        MC15_13TeV_25ns_FS_EXOT4_Zjets                                "Z+jets"           "$Z$+jets"           95
-sample    6VV           MC15_13TeV_25ns_FS_EXOT4_VV                                   "diboson"          "diboson"            5
-sample    7QCD          QCD15_13TeV_25ns_FS_EXOT4_3_3fb                               "multi-jet"        "multi-jet"          9
+sample    6QCD          QCD15_13TeV_25ns_FS_EXOT4_3_3fb                               "multi-jet"        "multi-jet"          9
+sample    7VV           MC15_13TeV_25ns_FS_EXOT4_VV                                   "diboson"          "diboson"            5
 syst      akt10xcalib "anti-$k_t$ R=1.0 cross calibration" LARGERJET_JET_Top_CrossCalib__1up     LARGERJET_JET_Top_CrossCalib__1down                  S
 syst      akt10run1  "anti-$k_t$ R=1.0 run 1"         LARGERJET_JET_Top_Run1__1up                LARGERJET_JET_Top_Run1__1down                        S
 syst      akt4jer    "anti-$k_t$ R=0.4 JER"           JET_JER_SINGLE_NP__1up                     -                                                    S
