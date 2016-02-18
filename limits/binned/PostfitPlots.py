@@ -33,7 +33,7 @@ def loadSpectrum(sampleName, histName, syst):
         return h
     # it is == bkg, so sum all backgrounds
     h = None
-    for i in ["ttbar", "Zjets", "Wjets", "VV", "singletop"]:
+    for i in ["ttbar", "Zjets", "Wjets", "VV", "singletop", "QCDe", "QCDmu"]:
         if h == None:
             h1 = loadSpectrum(i, histName, syst)
             if not h1:
@@ -68,7 +68,7 @@ def histSqrt(h):
             h.SetBinContent(i,0)
         h.SetBinContent(i, (h.GetBinContent(i))**0.5)
 
-def MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF):
+def MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF, shortName):
     # TODO: escape code for data
 
     # nominal
@@ -106,81 +106,114 @@ def MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF):
         pull = fr.pull[idx]
         pull_error = fr.errup[idx]
 
-        h_var = loadSpectrum(sampleName, histName, systLabel)
-        if h_var:
-            h_up = h_var
-            h_dw = h_var
+        # first the gamma
+        if "gamma_stat_"+shortName in systLabel:
+            theBin = int(systLabel.split('_')[-1])
+            nom_PF.SetBinContent(theBin, nom_PF.GetBinContent(theBin)*pull)
+            # calculate all_up = stat^2 + \sum_{syst = i} \Delta_i^2 + ((1 - gamma)*v0)^2
+            v0 = nom.GetBinContent(theBin)
+            all_up_PF_uncorr.SetBinContent(theBin, all_up_PF_uncorr.GetBinContent(theBin)+(v0*(pull+pull_error))**2)
+            all_dw_PF_uncorr.SetBinContent(theBin, all_dw_PF_uncorr.GetBinContent(theBin)+(v0*(pull+pull_error))**2)
+
+            h_up_PF = nom_PF.Clone("{:}{:}PFup".format(histName, systLabel))
+            h_dw_PF = nom_PF.Clone("{:}{:}PFdw".format(histName, systLabel))
+
+            for b in xrange(0, h_up_PF.GetNbinsX()+1):
+                if b != theBin:
+                    h_up_PF.SetBinContent(b, 0)
+                    h_dw_PF.SetBinContent(b, 0)
+                else:
+                    h_up_PF.SetBinContent(theBin, h_up_PF.GetBinContent(theBin)*(pull_error))
+                    h_dw_PF.SetBinContent(theBin, h_up_PF.GetBinContent(theBin)*(pull_error))
+
+            h_list_up_PF.append(h_up_PF)
+            h_list_dw_PF.append(h_dw_PF)
+        elif "gamma_stat_" in systLabel:
+            h_up_PF = nom_PF.Clone("{:}{:}PFup".format(histName, systLabel))
+            h_dw_PF = nom_PF.Clone("{:}{:}PFdw".format(histName, systLabel))
+            for b in xrange(0, h_up_PF.GetNbinsX()+1):
+                h_up_PF.SetBinContent(b, 0)
+                h_dw_PF.SetBinContent(b, 0)
+            h_list_up_PF.append(h_up_PF)
+            h_list_dw_PF.append(h_dw_PF)
+        # now normal uncertainties
         else:
-            h_up = loadSpectrum(sampleName, histName, systLabel+"up")
-            h_dw = loadSpectrum(sampleName, histName, systLabel+"dw")
-            if h_dw == None:
-                h_dw = loadSpectrum(sampleName, histName, systLabel+"up")
+            h_var = loadSpectrum(sampleName, histName, systLabel)
+            if h_var:
+                h_up = h_var
+                h_dw = h_var
+            else:
+                h_up = loadSpectrum(sampleName, histName, systLabel+"up")
+                h_dw = loadSpectrum(sampleName, histName, systLabel+"dw")
+                if h_dw == None:
+                    h_dw = loadSpectrum(sampleName, histName, systLabel+"up")
 
-        h_var_PF = loadSpectrum(sampleName, histName, systLabel)
-        if h_var_PF:
-            h_up_PF = h_var_PF.Clone("{:}{:}PFup".format(histName, systLabel))
-            h_dw_PF = h_var_PF.Clone("{:}{:}PFdw".format(histName, systLabel))
-        else:
-            h_up_PF = copySpectrum(sampleName, histName, systLabel+"up", "{:}{:}PFup".format(histName, systLabel))
-            h_dw_PF = copySpectrum(sampleName, histName, systLabel+"dw", "{:}{:}PFdw".format(histName, systLabel))
+            h_var_PF = loadSpectrum(sampleName, histName, systLabel)
+            if h_var_PF:
+                h_up_PF = h_var_PF.Clone("{:}{:}PFup".format(histName, systLabel))
+                h_dw_PF = h_var_PF.Clone("{:}{:}PFdw".format(histName, systLabel))
+            else:
+                h_up_PF = copySpectrum(sampleName, histName, systLabel+"up", "{:}{:}PFup".format(histName, systLabel))
+                h_dw_PF = copySpectrum(sampleName, histName, systLabel+"dw", "{:}{:}PFdw".format(histName, systLabel))
 
-        h_correction = nom_PF.Clone("{:}corr{:}".format(histName, systLabel))
-        if pull > 0:
-            h_correction.Add(h_up, nom, 1 , -1) # up - nom
-        else:
-            h_correction.Add(h_dw, nom, -1 , 1) # nom - dw
+            h_correction = nom_PF.Clone("{:}corr{:}".format(histName, systLabel))
+            if pull > 0:
+                h_correction.Add(h_up, nom, 1 , -1) # up - nom
+            else:
+                h_correction.Add(h_dw, nom, -1 , 1) # nom - dw
 
-        nom_PF.Add(h_correction, pull) # nominal PF = nom + \sum_{i=syst} pull_i \times \Delta_i
-                                       # where \Delta_i = (up - nom) if pull > 0 or (nom - dw) if pull <= 0
+            nom_PF.Add(h_correction, pull) # nominal PF = nom(bin)*gamma(bin) + \sum_{i=syst} pull_i \times \Delta_i
+                                           # where \Delta_i = (up - nom) if pull > 0 or (nom - dw) if pull <= 0
 
-        # calculate all_up = stat^2 + \sum_{syst = i} \Delta_i^2
-        # for now it is already stat^2
-        for oneBin in xrange(nom.GetNbinsX()+1):
-            v0 = nom.GetBinContent(oneBin)
-            e0 = nom.GetBinError(oneBin)
-            vUp = h_up.GetBinContent(oneBin)-v0
-            vDw = h_dw.GetBinContent(oneBin)-v0
-            if vUp < vDw:
-                v0 = vUp
-                vUp = vDw
-                vDw = v0
-            all_up.SetBinContent(oneBin, all_up.GetBinContent(oneBin)+vUp**2)
-            all_dw.SetBinContent(oneBin, all_dw.GetBinContent(oneBin)+vDw**2)
+            # calculate all_up = stat^2 + \sum_{syst = i} \Delta_i^2 + ((1 - gamma)*v0)^2
+            # for now it is already stat^2
+            for oneBin in xrange(nom.GetNbinsX()+1):
+                v0 = nom.GetBinContent(oneBin)
+                e0 = nom.GetBinError(oneBin)
+                vUp = h_up.GetBinContent(oneBin)-v0
+                vDw = h_dw.GetBinContent(oneBin)-v0
+                if vUp < vDw:
+                    v0 = vUp
+                    vUp = vDw
+                    vDw = v0
+                all_up.SetBinContent(oneBin, all_up.GetBinContent(oneBin)+vUp**2)
+                all_dw.SetBinContent(oneBin, all_dw.GetBinContent(oneBin)+vDw**2)
 
-        # do the same for the post fit histogram without correlations
-        # but rescale up/dw amount by pull error
-        for oneBin in xrange(nom.GetNbinsX()+1):
-            v0 = nom.GetBinContent(oneBin)
-            e0 = nom.GetBinError(oneBin)
-            vUp = h_up.GetBinContent(oneBin)-v0
-            vDw = h_dw.GetBinContent(oneBin)-v0
-            vUp = vUp * pull_error
-            vDw = vDw * pull_error
-            if vUp < vDw:
-                v0 = vUp
-                vUp = vDw
-                vDw = v0
-            all_up_PF_uncorr.SetBinContent(oneBin, all_up_PF_uncorr.GetBinContent(oneBin)+vUp**2)
-            all_dw_PF_uncorr.SetBinContent(oneBin, all_dw_PF_uncorr.GetBinContent(oneBin)+vDw**2)
+            # do the same for the post fit histogram without correlations
+            # but rescale up/dw amount by pull error
+            for oneBin in xrange(nom.GetNbinsX()+1):
+                v0 = nom.GetBinContent(oneBin)
+                e0 = nom.GetBinError(oneBin)
+                vUp = h_up.GetBinContent(oneBin)-v0
+                vDw = h_dw.GetBinContent(oneBin)-v0
+                vUp = vUp * pull_error
+                vDw = vDw * pull_error
+                if vUp < vDw:
+                    v0 = vUp
+                    vUp = vDw
+                    vDw = v0
+                all_up_PF_uncorr.SetBinContent(oneBin, all_up_PF_uncorr.GetBinContent(oneBin)+vUp**2)
+                all_dw_PF_uncorr.SetBinContent(oneBin, all_dw_PF_uncorr.GetBinContent(oneBin)+vDw**2)
 
-        # calculate all_up = stat^2 + \sum_{syst = i} \Delta_i^2
-        # for now it is already stat^2
-        for oneBin in xrange(nom.GetNbinsX()+1):
-            v0 = nom.GetBinContent(oneBin)
-            e0 = nom.GetBinError(oneBin)
-            vUp = h_up.GetBinContent(oneBin)-v0
-            vDw = h_dw.GetBinContent(oneBin)-v0
-            vUp = vUp * pull_error
-            vDw = vDw * pull_error
-            if vUp < vDw:
-                v0 = vUp
-                vUp = vDw
-                vDw = v0
-            h_up_PF.SetBinContent(oneBin, vUp)
-            h_dw_PF.SetBinContent(oneBin, vDw)
+            # calculate all_up = stat^2 + \sum_{syst = i} \Delta_i^2
+            # for now it is already stat^2
+            for oneBin in xrange(nom.GetNbinsX()+1):
+                v0 = nom.GetBinContent(oneBin)
+                e0 = nom.GetBinError(oneBin)
+                vUp = h_up.GetBinContent(oneBin)-v0
+                vDw = h_dw.GetBinContent(oneBin)-v0
+                vUp = vUp * pull_error
+                vDw = vDw * pull_error
+                if vUp < vDw:
+                    v0 = vUp
+                    vUp = vDw
+                    vDw = v0
+                h_up_PF.SetBinContent(oneBin, vUp)
+                h_dw_PF.SetBinContent(oneBin, vDw)
 
-        h_list_up_PF.append(h_up_PF)
-        h_list_dw_PF.append(h_dw_PF)
+            h_list_up_PF.append(h_up_PF)
+            h_list_dw_PF.append(h_dw_PF)
+        # end of if about gamma
     # end of systs loop
 
     # add stat errors in post fit quadrature sum and nominal
@@ -287,12 +320,13 @@ def MakeAllPostfitPlots(inputFile, sampleList, output, outputPF):
     fr = readParams(inputFile)
     outputFile = TFile(output, "RECREATE")
     outputFilePF = TFile(outputPF, "RECREATE")
+    shortNameForGamma = {'xboostede':'be', 'xboostedmu':'bmu'}
     for sampleName in sampleList:
-        for histName in ["xe", "xmu"]:
+        for histName in ["xboostede", "xboostedmu"]:
             print "Sample", sampleName," hist",histName
-            MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF)
+            MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF, shortNameForGamma[histName])
     outputFile.Close()
     outputFilePF.Close()
 
 if __name__ == "__main__":
-    MakeAllPostfitPlots("params_bonly.txt", ["ttbar", "Wjets", "Zjets", "singletop", "VV", "Zprime1000", "Zprime1250", "Zprime1500", "Zprime1750", "Zprime2000", "Zprime2250", "Zprime2500", "Zprime2750", "Zprime3000", "Zprime4000", "Zprime5000", "bkg"], "spectrum_prefit.root", "spectrum_postfit.root")
+    MakeAllPostfitPlots("params_bonly.txt", ["ttbar", "Wjets", "Zjets", "singletop", "VV", "QCDe", "QCDmu", "Zprime400", "Zprime500", "Zprime750", "Zprime1000", "Zprime1250", "Zprime1500", "Zprime1750", "Zprime2000", "Zprime2250", "Zprime2500", "Zprime2750", "Zprime3000", "Zprime4000", "Zprime5000", "bkg"], "spectrum_prefit.root", "spectrum_postfit.root")
