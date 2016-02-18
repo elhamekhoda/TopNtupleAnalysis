@@ -77,8 +77,8 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
 
   m_hSvc.create1D("yields", "; One ; Events", 1, 0.5, 1.5);
 
-  m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN1, varBin1);  
-  //m_hSvc.create1D("lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
+  //m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN1, varBin1);  
+  m_hSvc.create1D("lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
   m_hSvc.create1D("lepEta", "; lepton #eta ; Events", 20, -2.5, 2.5);
   m_hSvc.create1D("lepPhi", "; lepton #phi [rd] ; Events", 32, -3.2, 3.2);
   m_hSvc.create1DVar("leadJetPt", "; leading Jet p_{T} [GeV]; Events", varBinN1, varBin1);  
@@ -163,7 +163,7 @@ AnaTtresSL::~AnaTtresSL() {
 
 void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   // check channel
-  
+  //
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
 
@@ -183,9 +183,9 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   if (!m_boosted)
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
-  
+
   if (!m_boosted)	if(evt.jet().size()<4)	return;
-          
+
   HistogramService *h = &m_hSvc;
   
   bool trig1(0); 
@@ -235,13 +235,14 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
        if (trig_prescaled && !trig_unprescaled)	return;
            
   }//m_electron
-    
+
   // Duplicated event removal after the selection  
   //if (isDuplicateEvent(evt.runNumber(), evt.eventNumber(), l.Perp()) ){
   //    std::cout << "isTight = " << isTight << std::endl;
   //    m_Nduplicate++;
   //    return;
   //}
+  //
   
   std::string suffix = s;
   //if (s=="_Loose")	suffix = "";
@@ -249,7 +250,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   h->h1D("weight_leptSF", "", suffix)->Fill(evt.weight_leptonSF());
   h->h1D("weight", "", suffix)->Fill(weight);
   h->h2D("weight_leptPt", "", suffix)->Fill(l.Perp()*1e-3, weight);
-    
+
   h->h1D("lepPt", "", suffix)->Fill(l.Perp()*1e-3, weight);
   h->h1D("lepPt_effBins", "", suffix)->Fill(l.Perp()*1e-3, weight);
   h->h1D("lepEta", "", suffix)->Fill(l.Eta(), weight);

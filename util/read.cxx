@@ -174,7 +174,8 @@ int main(int argc, char **argv) {
     if (n == std::string::npos)
       n = ocStr.length();
     std::string tmp = ocStr.substr(i,n-i);
-    onlyChannelList.push_back(std::atoi(tmp.c_str()));
+    if (tmp.length() > 0)
+      onlyChannelList.push_back(std::atoi(tmp.c_str()));
   }
 
   // parse file list
