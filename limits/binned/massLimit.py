@@ -1,15 +1,19 @@
+#!/usr/bin/env python
+from os import path
 from inputs import *
 
 from ROOT import *
 
 gStyle.SetOptStat(0)
+gStyle.SetPadTickX(1)
+gStyle.SetPadTickY(1)
 
 clim = TCanvas("clim", "", 800, 600);
 l = TLegend(0.5,0.5,0.89,0.89)
 l.SetBorderSize(0)
 
 h = TH1F("h", "", 50, 0, 5.0);
-h.GetYaxis().SetRangeUser(1e-2, 60);
+h.GetYaxis().SetRangeUser(1e-2, 2000);
 h.GetYaxis().SetTitle("95% CL upper limit on #sigma #times BR [pb]");
 h.GetXaxis().SetTitle("m_{Z'} [TeV]");
 h.Draw("hist");
@@ -18,8 +22,11 @@ nom = TGraph(len(xs));
 obs = TGraph(len(xs));
 sigma1 = TGraphAsymmErrors(len(xs));
 sigma2 = TGraphAsymmErrors(len(xs));
-for i in range(0, len(xs)):
-  f = TFile("JobTtres_"+signalList[i]+"/Limits/JobTtres_"+signalList[i]+".root")
+i=0
+for I in range(0,len(xs)):
+  if path.exists("JobTtres_"+signalList[I]+"/Limits/JobTtres_"+signalList[I]+".root")==0:
+  	continue
+  f = TFile("JobTtres_"+signalList[I]+"/Limits/JobTtres_"+signalList[I]+".root")
   hi = f.Get("limit")
   muobs = hi.GetBinContent(1)
   muexp = hi.GetBinContent(2)
@@ -44,6 +51,7 @@ for i in range(0, len(xs)):
   xsec.SetPoint(i, mass[i], xs[i])
   nom.SetPoint(i, mass[i], muexp*xs[i])
   obs.SetPoint(i, mass[i], muobs*xs[i])
+  i+=1
 nom.SetLineWidth(2);
 nom.SetLineStyle(kDashed);
 obs.SetLineWidth(2);
@@ -76,6 +84,8 @@ xsec.Draw("L")
 l.Draw()
 clim.SetLogy(1)
 
+gPad.RedrawAxis()
+
 def stampATLAS(text, x, y):
   t = TLatex()
   t.SetNDC()
@@ -96,8 +106,8 @@ def stampLumiText(lumi, x, y, text, size):
   t.SetTextSize(size)
   t.DrawLatex(x,y,"#int L dt = "+str(lumi)+" fb^{-1}, "+text)
 
-stampATLAS("Internal", 0.15, 0.80)
-stampLumiText(3.3, 0.15, 0.70, "#sqrt{s} = 13 TeV", 0.03)
+stampATLAS("Internal", 0.15, 0.83)
+stampLumiText(3.3, 0.15, 0.78, "#sqrt{s} = 13 TeV", 0.03)
 
 clim.SaveAs("mass_limit.eps")
 
