@@ -43,10 +43,14 @@ double applyBoostedWSF(int type, bool isElectron) {
   //static const double err_e = 0.215;
   //static const double nominal_mu = 0.94122;
   //static const double err_mu = 0.1583;
-  static const double nominal_e = 0.72;
-  static const double err_e = 0.17;
-  static const double nominal_mu = 0.76;
-  static const double err_mu = 0.13;
+  //static const double nominal_e = 0.72;
+  //static const double err_e = 0.17;
+  //static const double nominal_mu = 0.76;
+  //static const double err_mu = 0.13;
+  static const double nominal_e = 0.82;
+  static const double err_e = 0.18;
+  static const double nominal_mu = 0.73;
+  static const double err_mu = 0.12;
   if (isElectron) {
     if (type == 2) {
       return nominal_e - err_e;
