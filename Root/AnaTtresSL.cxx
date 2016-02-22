@@ -25,7 +25,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
 
   double varBin1[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500};
   int varBinN1 = sizeof(varBin1)/sizeof(double) - 1;
-  double varBin2[] = {300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3 1.5e3};
+  double varBin2[] = {300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3};
   int varBinN2 = sizeof(varBin2)/sizeof(double) - 1;
   double varBin3[] = {0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500};
   int varBinN3 = sizeof(varBin3)/sizeof(double) - 1;
