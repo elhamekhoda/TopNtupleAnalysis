@@ -25,7 +25,8 @@ sigma2 = TGraphAsymmErrors(len(xs));
 i=0
 for I in range(0,len(xs)):
   if path.exists("JobTtres_"+signalList[I]+"/Limits/JobTtres_"+signalList[I]+".root")==0:
-  	continue
+  	print "missing JobTtres_"+signalList[I]+"/Limits/JobTtres_"+signalList[I]+".root"
+	continue
   f = TFile("JobTtres_"+signalList[I]+"/Limits/JobTtres_"+signalList[I]+".root")
   hi = f.Get("limit")
   muobs = hi.GetBinContent(1)

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from os import system,getcwd
 from time import time
 from inputs import *
@@ -45,13 +46,14 @@ def createAndSubmitJob(configName):
 	f.write('./myFit.exe h '+configName+' > log_'+configName.split('.')[0]+'_h\n')
 	f.write('./myFit.exe d '+configName+' > log_'+configName.split('.')[0]+'_d\n')
 	f.write('./myFit.exe w '+configName+' > log_'+configName.split('.')[0]+'_w\n')
+	f.write('./myFit.exe f '+configName+' > log_'+configName.split('.')[0]+'_f\n')
+	f.write('./myFit.exe p '+configName+' > log_'+configName.split('.')[0]+'_p\n')
 	if configName.find("bkg")!=-1:
-		f.write('./myFit.exe f '+configName+' > log_'+configName.split('.')[0]+'_f\n')
-		f.write('./myFit.exe p '+configName+' > log_'+configName.split('.')[0]+'_p\n')
+		#do nothing
+		a=1
 	else:
-		f.write('./myFit.exe p '+configName+' > log_'+configName.split('.')[0]+'_p\n')
-		f.write('./myFit.exe f '+configName+' > log_'+configName.split('.')[0]+'_f\n')
 		f.write('./myFit.exe l '+configName+' > log_'+configName.split('.')[0]+'_l\n')
+		#f.write('./myFit.exe r '+configName+' > log_'+configName.split('.')[0]+'_r\n')
 	
 	
 	
@@ -65,6 +67,7 @@ def createAndSubmitJob(configName):
 	com=""
 	if site=="LPC":
 		com = 'qsub -N '+outDir.split('_')[1]+' -q multi64sl6@clratlserv05  -e '+here+'/'+outputName+' -o '+here+'/'+outputName+' script_'+configName.split('.')[0]+'.sh'
+		
 	#print com
 	global listOfJobs
 	listOfJobs+=[com,]
@@ -124,8 +127,8 @@ for i in signalList:
      system('./myFit.exe h ttres_'+i+'.config')
      system('./myFit.exe d ttres_'+i+'.config')
      system('./myFit.exe w ttres_'+i+'.config')
-     system('./myFit.exe p ttres_'+i+'.config')
      system('./myFit.exe f ttres_'+i+'.config')
+     system('./myFit.exe p ttres_'+i+'.config')
      system('./myFit.exe l ttres_'+i+'.config')
 
 
