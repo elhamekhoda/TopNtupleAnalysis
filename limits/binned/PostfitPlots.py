@@ -74,6 +74,15 @@ def MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF, shortNam
     # nominal
     nom  = loadSpectrum(sampleName, histName, "")
 
+    if 'data' in sampleName.lower():
+        outputFile.cd()
+        nom.Write("{:}{:}".format(sampleName, histName))
+
+        outputFilePF.cd()
+        nom.Write("{:}{:}".format(sampleName, histName))
+        return
+
+
     # nominal post fit
     nom_PF = copySpectrum(sampleName, histName, "", "{:}PF".format(histName))
 
