@@ -12,7 +12,7 @@ done
 
 for ch in resolved boosted ; do
   for lep in e mu ; do
-    ../plotting/plot -c $lep -p $ch -h lepPt -l $LUMI --smoothen 0 --rebin 5
+    ../plotting/plot -c $lep -p $ch -h lepPt -l $LUMI --smoothen 0 --rebin 9
 done
 done
 
@@ -23,6 +23,13 @@ for ch in resolved boosted ; do
   done
 done
 done
+
+ch=boosted
+hist=largeJetPt
+for lep in e mu ; do
+  ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0 --normBinWidth 1 --logY 1 --yMax 1e4 -o ${ch}_${hist}_${lep}_log.pdf
+done
+
 
 for hist in largeJetPt largeJetM largeJet_tau32_wta ; do
 for ch in boosted resolved ; do
