@@ -59,6 +59,16 @@ bool LargeJet::passLoose() const {
   return true;
 }
 
+bool LargeJet::passFakeSelection(const TLorentzVector &lept, const TLorentzVector &selJet) const {
+  if (std::fabs(mom().Eta()) > 2.0) 			return false;
+  if (mom().Perp() < 200e3) 				return false;
+  if (mom().M() > 70e3) 				return false;  
+  if(std::fabs(mom().DeltaPhi(lept)) < 2.3)		return false;  
+  if(mom().DeltaR(selJet) < 1.5)			return false;
+        
+  return true;
+}
+
 double &LargeJet::split12() {
   return m_split12;
 }

@@ -20,7 +20,8 @@ class LargeJet : public MObject {
 
     bool pass() const;
     bool passLoose() const;
-
+    bool passFakeSelection(const TLorentzVector &lept, const TLorentzVector &selJet) const;
+    
     double &split12();
     const double split12() const;
 
