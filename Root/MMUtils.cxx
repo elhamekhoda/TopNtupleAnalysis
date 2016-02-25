@@ -40,8 +40,8 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
       
     TFile m_fake_rootfile(fake_filename.c_str(), "r");
         
-    fake_pt_resolved_e = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_resolved_e")->Clone();
-    fake_pt_resolved_e->SetDirectory(0);
+    //fake_pt_resolved_e = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_resolved_e")->Clone();
+    //fake_pt_resolved_e->SetDirectory(0);
     
     //fake_pt_resolved_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_resolved_mu")->Clone();
     //fake_pt_resolved_mu->SetDirectory(0);
@@ -55,8 +55,8 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     //fake_dr_resolved_e  = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_resolved_e")->Clone();
     //fake_dr_resolved_e->SetDirectory(0); 
     
-    fake_dr_resolved_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_resolved_mu")->Clone();
-    fake_dr_resolved_mu->SetDirectory(0); 
+    //fake_dr_resolved_mu = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_resolved_mu")->Clone();
+    //fake_dr_resolved_mu->SetDirectory(0); 
     
     //fake_dr_boosted_e   = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_e")->Clone();
     //fake_dr_boosted_e->SetDirectory(0); 
@@ -76,13 +76,13 @@ MMUtils::~MMUtils(){
   delete eff_map_boosted_mu ;
   
   delete fake_pt_resolved_e ;
-  //delete fake_pt_resolved_mu ;
+  delete fake_pt_resolved_mu ;
   delete fake_pt_boosted_e;
-  //delete fake_pt_boosted_mu;
+  delete fake_pt_boosted_mu;
   
-  //delete fake_dr_resolved_e ;
+  delete fake_dr_resolved_e ;
   delete fake_dr_resolved_mu ;
-  //delete fake_dr_boosted_e;
+  delete fake_dr_boosted_e;
   delete fake_dr_boosted_mu;
   
   delete eff_map;
@@ -197,8 +197,8 @@ float MMUtils::getMMweights(const Event &evt, int runMM_StatErr) {
      
    } else {
      
-     if(lepPt>fake_pt->GetXaxis()->GetXmax())	binx = fake_pt->GetXaxis()->FindBin(0.95*fake_pt->GetXaxis()->GetXmax());
-     else					binx = fake_pt->GetXaxis()->FindBin(lepPt);
+     if(lepPt>120)		binx = fake_pt->GetXaxis()->FindBin(119);
+     else			binx = fake_pt->GetXaxis()->FindBin(lepPt);
      
      fakeRate     = fake_pt->GetBinContent(binx);
      fakeRate_err = fake_pt->GetBinError(binx);
