@@ -12,7 +12,7 @@ clim = TCanvas("clim", "", 800, 600);
 l = TLegend(0.5,0.5,0.89,0.89)
 l.SetBorderSize(0)
 
-h = TH1F("h", "", 50, 0, 5.0);
+h = TH1F("h", "", 50, 0, 3.0);
 h.GetYaxis().SetRangeUser(1e-2, 2000);
 h.GetYaxis().SetTitle("95% CL upper limit on #sigma #times BR [pb]");
 h.GetXaxis().SetTitle("m_{Z'} [TeV]");

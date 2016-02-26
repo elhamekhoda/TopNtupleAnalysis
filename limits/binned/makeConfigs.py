@@ -66,7 +66,7 @@ def createAndSubmitJob(configName):
 	
 	com=""
 	if site=="LPC":
-		com = 'qsub -N '+outDir.split('_')[1]+' -q multi64sl6@clratlserv05  -e '+here+'/'+outputName+' -o '+here+'/'+outputName+' script_'+configName.split('.')[0]+'.sh'
+		com = 'qsub -N '+outDir.split('_')[1]+' -q multi64sl6@clratlserv05  -e '+here+'/'+outputName+' -o '+here+'/'+outputName+' '+scriptName
 		
 	#print com
 	global listOfJobs
@@ -135,7 +135,7 @@ for i in signalList:
 
 
 if dobatch :
-	system("tar -czvf t.tar.gz . --exclude=JobTtres_* --exclude=old* --exclude=*.tar.gz" )
+	system("tar -czvf t.tar.gz . --exclude=boosted* --exclude=resolved* --exclude=old* --exclude=*.tar.gz" )
 	for j in listOfJobs:
 		print j
 		system(j)
