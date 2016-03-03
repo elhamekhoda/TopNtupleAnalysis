@@ -764,19 +764,19 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
     _stampText = "";
   if (posLegend != 2 && posLegend != 5 && posLegend != 6) {
     stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
-    stampLumiText(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    stampLumiText2(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   } else if (posLegend == 5) {
     stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
-    stampLumiText(lumi, 0.20, 0.75, "#sqrt{s} = 13 TeV", 0.05);
+    stampLumiText2(lumi, 0.20, 0.75, "#sqrt{s} = 13 TeV", 0.05);
   } else if (posLegend == 6 || posLegend == 7) {
     stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
-    stampLumiText(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    stampLumiText2(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   } else if (posLegend == 8) {
     stampATLAS(_stampText, 0.30, 0.88, (bool) Data);
-    stampLumiText(lumi, 0.30, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    stampLumiText2(lumi, 0.30, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   } else {
     stampATLAS(_stampText, 0.25, 0.88, (bool) Data);
-    stampLumiText(lumi, 0.25, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    stampLumiText2(lumi, 0.25, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   }
   if (posLegend < 2 || posLegend == 6) {
     for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
