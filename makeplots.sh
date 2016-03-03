@@ -2,7 +2,7 @@
 S=1
 #LUMI=3.31668
 LUMI=3.20905
-for hist in largeJetM largeJetEta largeJetPhi largeJetSd12 largeJet_tau32 largeJet_tau32_wta largeJet_tau21 largeJet_tau21_wta chi2 mwhad_res mthad_res mtlep_res jet0_m jet1_pt jet1_m jet2_pt jet2_m closejl_pt  closejl_minDeltaR MET_phi nBtagJets leadbJetPt lepEta lepPhi mwt  mtt nTrkBtagJets ; do
+for hist in largeJetM largeJetEta largeJetPhi largeJetSd12 largeJet_tau32 largeJet_tau32_wta largeJet_tau21 largeJet_tau21_wta chi2 mwhad_res mthad_res mtlep_res jet0_m jet1_pt jet1_m jet2_pt jet2_m closejl_pt  closejl_minDeltaR MET_phi nBtagJets leadbJetPt lepEta lepPhi mwt  mtt nTrkBtagJets tjet1_pt tjet2_pt tjet3_pt ; do
 for ch in resolved boosted ; do
   for lep in e mu ; do
     ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0
@@ -16,7 +16,7 @@ for ch in resolved boosted ; do
 done
 done
 
-for hist in MET largeJetPt mtlep_boo jet0_pt closeJetPt ; do
+for hist in MET largeJetPt mtlep_boo jet0_pt tjet0_pt closeJetPt ; do
 for ch in resolved boosted ; do
   for lep in e mu ; do
     ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0 --normBinWidth 1
@@ -38,6 +38,10 @@ for ch in boosted resolved ; do
 
     ../plotting/plotCompareNominal --syst LARGERJET_JET_Top_CrossCalib__1up,LARGERJET_JET_Top_CrossCalib__1down --systTitles "akt10 cross calib. up,akt10 cross calib. down" -l $LUMI -c $lep -p $ch -h $hist -o syst_${ch}_${hist}_${lep}_akt10xcalib.pdf --smoothen 1
     ../plotting/plotCompareNominal --syst LARGERJET_JET_Top_Run1__1up,LARGERJET_JET_Top_Run1__1down --systTitles "akt10 run 1 up,akt10 run 1 down" -l $LUMI -c $lep -p $ch -h $hist -o syst_${ch}_${hist}_${lep}_akt10run1.pdf --smoothen 1
+
+    ../plotting/plotCompareNominal --syst CORRELATED_LARGERJET_CORR1__1up,CORRELATED_LARGERJET_CORR1__1down --systTitles "akt10 run 1 and akt4 JES up,akt10 run 1 and akt4 JES down" -l $LUMI -c $lep -p $ch -h $hist -o syst_${ch}_${hist}_${lep}_corr1.pdf --smoothen 1
+    ../plotting/plotCompareNominal --syst CORRELATED_LARGERJET_CORR2A__1up,CORRELATED_LARGERJET_CORR2A__1down --systTitles "akt10 run 1 JES and akt4 JES up,akt10 run 1 JES and akt4 JES down" -l $LUMI -c $lep -p $ch -h $hist -o syst_${ch}_${hist}_${lep}_corr2a.pdf --smoothen 1
+    ../plotting/plotCompareNominal --syst CORRELATED_LARGERJET_CORR2B__1up,CORRELATED_LARGERJET_CORR2B__1down --systTitles "akt10 run 1 JMS+Tau32 up,akt10 run 1 JMS+Tau32 down" -l $LUMI -c $lep -p $ch -h $hist -o syst_${ch}_${hist}_${lep}_corr2b.pdf --smoothen 1
 
   done
 done
@@ -77,15 +81,24 @@ for ch in boosted resolved ; do
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst MET_SoftTrk_ResoPerp --systTitles "MET res. perp." -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_metresperp.pdf --smoothen $S
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst MET_SoftTrk_ScaleUp,MET_SoftTrk_ScaleDown --systTitles "MET scale up,MET scale down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_metscale.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagbSF_0__1up,btagbSF_0__1down --systTitles "btag eff E0 up,btag eff E0 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagb0.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagbSF_0_pt1__1up,btagbSF_0_pt1__1down --systTitles "btag eff E0 pt1 up,btag eff E0 pt1 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagb0_pt1.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagbSF_0_pt2__1up,btagbSF_0_pt2__1down --systTitles "btag eff E0 pt2 up,btag eff E0 pt2 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagb0_pt2.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagbSF_0_pt3__1up,btagbSF_0_pt3__1down --systTitles "btag eff E0 pt3 up,btag eff E0 pt3 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagb0_pt3.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagbSF_1__1up,btagbSF_1__1down --systTitles "btag eff E1 up,btag eff E1 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagb1.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagbSF_2__1up,btagbSF_2__1down --systTitles "btag eff E2 up,btag eff E2 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagb2.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagbSF_3__1up,btagbSF_3__1down --systTitles "btag eff E3 up,btag eff E3 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagb3.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagbSF_4__1up,btagbSF_4__1down --systTitles "btag eff E4 up,btag eff E4 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagb4.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagcSF_0__1up,btagcSF_0__1down --systTitles "btag c mistag E0 up,btag c mistag E0 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagc0.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagcSF_0_pt1__1up,btagcSF_0_pt1__1down --systTitles "btag c mistag E0 pt1 up,btag c mistag E0 pt1 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagc0_pt1.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagcSF_0_pt2__1up,btagcSF_0_pt2__1down --systTitles "btag c mistag E0 pt2 up,btag c mistag E0 pt2 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagc0_pt2.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagcSF_0_pt3__1up,btagcSF_0_pt3__1down --systTitles "btag c mistag E0 pt3 up,btag c mistag E0 pt3 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagc0_pt3.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagcSF_1__1up,btagcSF_1__1down --systTitles "btag c mistag E1 up,btag c mistag E1 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagc1.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagcSF_2__1up,btagcSF_2__1down --systTitles "btag c mistag E2 up,btag c mistag E2 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagc2.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btagcSF_3__1up,btagcSF_3__1down --systTitles "btag c mistag E3 up,btag c mistag E3 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagc3.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btaglSF_0__1up,btaglSF_0__1down --systTitles "btag l mistag E0 up,btag l mistag E0 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagl0.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btaglSF_0_pt1__1up,btaglSF_0_pt1__1down --systTitles "btag l mistag E0 pt1 up,btag l mistag E0 pt1 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagl0_pt1.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btaglSF_0_pt2__1up,btaglSF_0_pt2__1down --systTitles "btag l mistag E0 pt2 up,btag l mistag E0 pt2 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagl0_pt2.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btaglSF_0_pt3__1up,btaglSF_0_pt3__1down --systTitles "btag l mistag E0 pt3 up,btag l mistag E0 pt3 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagl0_pt3.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btaglSF_1__1up,btaglSF_1__1down --systTitles "btag l mistag E1 up,btag l mistag E1 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagl1.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btaglSF_2__1up,btaglSF_2__1down --systTitles "btag l mistag E2 up,btag l mistag E2 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagl2.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst btaglSF_3__1up,btaglSF_3__1down --systTitles "btag l mistag E3 up,btag l mistag E3 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_btagl3.pdf --smoothen 1
@@ -119,6 +132,10 @@ for ch in boosted resolved ; do
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst LARGERJET_JET_Top_CrossCalib__1up,LARGERJET_JET_Top_CrossCalib__1down --systTitles "akt10 cross calib. up,akt10 cross calib. down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_akt10xcalib.pdf --smoothen 1
     ../plotting/plotCompareNominal --logY 1 --mcOnly 1 --syst LARGERJET_JET_Top_Run1__1up,LARGERJET_JET_Top_Run1__1down --systTitles "akt10 run 1 up,akt10 run 1 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_akt10run1.pdf --smoothen 1
 
+    ../plotting/plotCompareNominal --logY 1 --syst CORRELATED_LARGERJET_CORR1__1up,CORRELATED_LARGERJET_CORR1__1down --systTitles "akt10 run 1 and akt4 JES up,akt10 run 1 and akt4 JES down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_corr1.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --syst CORRELATED_LARGERJET_CORR2A__1up,CORRELATED_LARGERJET_CORR2A__1down --systTitles "akt10 run 1 JES and akt4 JES up,akt10 run 1 JES and akt4 JES down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_corr2a.pdf --smoothen 1
+    ../plotting/plotCompareNominal --logY 1 --syst CORRELATED_LARGERJET_CORR2B__1up,CORRELATED_LARGERJET_CORR2B__1down --systTitles "akt10 run 1 JMS+Tau32 up,akt10 run 1 JMS+Tau32 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_${lep}_corr2b.pdf --smoothen 1
+
     ../plotting/plotCompareNominal --mcOnly 1 --syst btageSF_0__1up,btageSF_0__1down --systTitles "btag extrap up,btag extrap down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btage0.pdf -C ../plotting/config_sig.txt --smoothen 0
 
     ../plotting/plotCompareNominal --mcOnly 1 --syst btagbSF_0__1up,btagbSF_0__1down --systTitles "btag eff. E0 up,btag eff. E0 down" -l $LUMI -c $lep -p $ch -h mtt -o syst_${ch}_mtt_signal_${lep}_btagb0.pdf -C ../plotting/config_sig.txt --smoothen 0
@@ -132,18 +149,9 @@ for ch in boosted resolved ; do
   done
 done
 
-rm -f hist_*.root
-
-for ch in boosted resolved ; do
-  for lep in e mu ; do
-    ../plotting/plot  -c $lep -p $ch -h mtt -l $LUMI --saveTH1 ${ch}${lep}  --smoothen $S -C ../plotting/config_limit.txt
-  done
-done
-
-
 for ch in boosted ; do
   for lep in e mu ; do
-    ../plotting/plot --logY 1 --mcOnly 0 -c $lep -p $ch -h mtt -l $LUMI  --smoothen $S
+    ../plotting/plot --logY 1 --mcOnly 0 -c $lep -p $ch -h mtt -l $LUMI  --smoothen $S --xMax 3500
   done
 done
 

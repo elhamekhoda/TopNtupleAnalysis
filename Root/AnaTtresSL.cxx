@@ -132,6 +132,13 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.create1D("jet3_phi", "; #phi of the fourth leading R=0.4 calo jet ; Events", 32, -3.2, 3.2); 
   m_hSvc.create1D("jet4_phi", "; #phi of the fifth leading R=0.4 calo jet ; Events", 32, -3.2, 3.2); 
   m_hSvc.create1D("jet5_phi", "; #phi of the sixth leading R=0.4 calo jet ; Events", 32, -3.2, 3.2); 
+
+  m_hSvc.create1DVar("tjet0_pt", "; p_{T} of the leading R=0.2 track jet [GeV]; Events", varBinN3, varBin3);
+  m_hSvc.create1DVar("tjet1_pt", "; p_{T} of the sub-leading R=0.2 track jet [GeV]; Events", varBinN3, varBin3); 
+  m_hSvc.create1DVar("tjet2_pt", "; p_{T} of the third leading R=0.2 track jet [GeV]; Events", varBinN3, varBin3); 
+  m_hSvc.create1DVar("tjet3_pt", "; p_{T} of the fourth leading R=0.2 track jet [GeV]; Events", varBinN3, varBin3); 
+  m_hSvc.create1DVar("tjet4_pt", "; p_{T} of the fifth leading R=0.2 track jet [GeV]; Events", varBinN3, varBin3); 
+  m_hSvc.create1DVar("tjet5_pt", "; p_{T} of the sixth leading R=0.2 track jet [GeV]; Events", varBinN3, varBin3); 
   
   if (m_boosted) {
     m_hSvc.create1DVar("closeJetPt", "; selected Jet p_{T} [GeV] ; Events", varBinN1, varBin1);
@@ -273,13 +280,22 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     }
   h->h1D("nBtagJets", "", suffix)->Fill(nBtagged, weight);
 
+  std::vector<float> tjetPt_vector;
   int nTrkBtagged = 0; //nB-tagged jets 
-  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
+  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx) {
+    tjetPt_vector.push_back(evt.tjet()[bidx].mom().Perp());
     if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk()){
       if(nTrkBtagged==0)h->h1D("leadTrkbJetPt", "", suffix)->Fill(evt.tjet()[bidx].mom().Perp()*1e-3, weight);
       nTrkBtagged += 1;
     }
+  }
   h->h1D("nTrkBtagJets", "", suffix)->Fill(nTrkBtagged, weight);
+
+  int maxNtjet = (evt.tjet().size()<6) ? evt.tjet().size() : 6;
+  for (int i = 0; i < maxNtjet; ++i){ 
+     std::string nameJet_pt = "tjet" + std::to_string(i)+"_pt";
+     h->h1D(nameJet_pt, "", suffix)->Fill(tjetPt_vector[i]*1e-3, weight);
+  }
 
   // Jet kinematics  
   

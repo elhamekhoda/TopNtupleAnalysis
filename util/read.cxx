@@ -35,6 +35,8 @@
 
 #include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
 
+#define DANILO_DR 0
+
 // type = 0 for nominal
 // type = 1 for up
 // type = 2 for down
@@ -303,12 +305,13 @@ int main(int argc, char **argv) {
   }
 
   MMUtils * MM_nominal      = NULL;
-  MMUtils * MM_nominal_e    = NULL;
+  //MMUtils * MM_nominal_e    = NULL;
     
   if (runMM){	
-  	MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
-  	MM_nominal_e    = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake_CR4_be_withFJ.root");
+  	//MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
+  	//MM_nominal_e    = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake_CR4_be_withFJ.root");
   	//MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "ttrescr_invsd0/fake.root");
+  	MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake_1FJpt200.root");
   }//runMM
 
   std::vector<std::string> pdfList;
@@ -475,6 +478,30 @@ int main(int argc, char **argv) {
         systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up");
         systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down");
       }
+
+      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt1__1up");
+      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt1__1down");
+      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt2__1up");
+      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt2__1down");
+      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt3__1up");
+      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt3__1down");
+
+      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt1__1up");
+      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt1__1down");
+      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt2__1up");
+      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt2__1down");
+      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt3__1up");
+      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt3__1down");
+
+      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt1__1up");
+      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt1__1down");
+      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt2__1up");
+      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt2__1down");
+      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt3__1up");
+      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt3__1down");
+
+
+
       systsListWithBlankNominal.push_back("btageSF_0__1up");
       systsListWithBlankNominal.push_back("btageSF_0__1down");
       systsListWithBlankNominal.push_back("btageSF_1__1up");
@@ -696,14 +723,32 @@ int main(int argc, char **argv) {
               weightSystematics.push_back(std::string("btagbSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
               weightSystematics.push_back(std::string("btagbSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
             }
+            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt1__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt1__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt2__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt2__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt3__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt3__1down")+systSuffixForHistograms);
             for (int i = 0; i < n_eigenvars_c; ++i) {
               weightSystematics.push_back(std::string("btagcSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
               weightSystematics.push_back(std::string("btagcSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
             }
+            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt1__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt1__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt2__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt2__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt3__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt3__1down")+systSuffixForHistograms);
             for (int i = 0; i < n_eigenvars_l; ++i) {
               weightSystematics.push_back(std::string("btaglSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
               weightSystematics.push_back(std::string("btaglSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
             }
+            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt1__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt1__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt2__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt2__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt3__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt3__1down")+systSuffixForHistograms);
             weightSystematics.push_back(std::string("btageSF_0__1up")+systSuffixForHistograms);
             weightSystematics.push_back(std::string("btageSF_0__1down")+systSuffixForHistograms);
             weightSystematics.push_back(std::string("btageSF_1__1up")+systSuffixForHistograms);
@@ -717,6 +762,14 @@ int main(int argc, char **argv) {
         // loop over weight systematics
         for (size_t wIdx = 0; wIdx < weightSystematics.size(); ++wIdx) {
           std::string &suffix = weightSystematics[wIdx];
+
+          TLorentzVector lep;
+          if (sel.electron().size() == 1 && sel.muon().size() == 0) {
+            lep = sel.electron()[0].mom();
+          } else if (sel.electron().size() == 0 && sel.muon().size() == 1) {
+            lep = sel.muon()[0].mom();
+          }
+
 
           double weight = 1;
           if (!isData) {
@@ -773,6 +826,7 @@ int main(int argc, char **argv) {
 
             double btagsf = 1.0;
             std::string pref = "weight_bTagSF_70";
+            std::string pref_pt = "tjet_bTagSF_70";
             //std::string prefe = "weight_bTagSF_70_env";
             std::string prefe = "weight_bTagSF_70";
             if (_btags < 0 && _btags > -10) {
@@ -788,29 +842,149 @@ int main(int argc, char **argv) {
             }
             if (std::fabs(_btags) < 10) {
               size_t last = suffix.find("__1");
-              if (suffix.find("btagbSF_") != std::string::npos) {
+              btagsf = 1;
+              if (suffix.find("btag") != std::string::npos && suffix.find("pt") != std::string::npos) {
+                // split it in pt
+                if (suffix.find("btagbSF_") != std::string::npos) {
+                  size_t first = std::string("btagbSF_").size();
+                  size_t first_pt = suffix.find("pt");
+                  int eig = atoi(suffix.substr(first, last - first - 4).c_str());
+                  int ptr = atoi(suffix.substr(first_pt+2, last - first_pt - 2).c_str());
+                  for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                    TLorentzVector pb;
+                    pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                    if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
+                      std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
+                      int ptbin = 1;
+                      if (mt.vf("tjet_pt")->at(bidx) < 50e3) {
+                        ptbin = 1;
+                      } else if (mt.vf("tjet_pt")->at(bidx) < 100e3) {
+                        ptbin = 2;
+                      } else {
+                        ptbin = 3;
+                      }
+                      if (ptr == ptbin) {
+                        if (suffix.find("1up") != std::string::npos) {
+                          btagsf *= mt.vvf(pref_pt+"_eigen_B_up")->at(bidx).at(eig);
+                        } else if (suffix.find("1down") != std::string::npos) {
+                          btagsf *= mt.vvf(pref_pt+"_eigen_B_down")->at(bidx).at(eig);
+                        } else {
+                          btagsf *= mt.vf(pref_pt)->at(bidx);
+                        }
+                      }
+                    }
+                  }
+                } else if (suffix.find("btagcSF_") != std::string::npos) {
+                  size_t first = std::string("btagcSF_").size();
+                  size_t first_pt = suffix.find("pt");
+                  int eig = atoi(suffix.substr(first, last - first - 4).c_str());
+                  int ptr = atoi(suffix.substr(first_pt+2, last - first_pt - 2).c_str());
+                  for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                    TLorentzVector pb;
+                    pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                    if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
+                      std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
+                      int ptbin = 1;
+                      if (mt.vf("tjet_pt")->at(bidx) < 50e3) {
+                        ptbin = 1;
+                      } else if (mt.vf("tjet_pt")->at(bidx) < 100e3) {
+                        ptbin = 2;
+                      } else {
+                        ptbin = 3;
+                      }
+                      if (ptr == ptbin) {
+                        if (suffix.find("1up") != std::string::npos) {
+                          btagsf *= mt.vvf(pref_pt+"_eigen_C_up")->at(bidx).at(eig);
+                        } else if (suffix.find("1down") != std::string::npos) {
+                          btagsf *= mt.vvf(pref_pt+"_eigen_C_down")->at(bidx).at(eig);
+                        } else {
+                          btagsf *= mt.vf(pref_pt)->at(bidx);
+                        }
+                      }
+                    }
+                  }
+                } else if (suffix.find("btaglSF_") != std::string::npos) {
+                  size_t first = std::string("btaglSF_").size();
+                  size_t first_pt = suffix.find("pt");
+                  int eig = atoi(suffix.substr(first, last - first - 4).c_str());
+                  int ptr = atoi(suffix.substr(first_pt+2, last - first_pt - 2).c_str());
+                  for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                    TLorentzVector pb;
+                    pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                    if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
+                      std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
+                      int ptbin = 1;
+                      if (mt.vf("tjet_pt")->at(bidx) < 50e3) {
+                        ptbin = 1;
+                      } else if (mt.vf("tjet_pt")->at(bidx) < 100e3) {
+                        ptbin = 2;
+                      } else {
+                        ptbin = 3;
+                      }
+                      if (ptr == ptbin) {
+                        if (suffix.find("1up") != std::string::npos) {
+                          btagsf *= mt.vvf(pref_pt+"_eigen_Light_up")->at(bidx).at(eig);
+                        } else if (suffix.find("1down") != std::string::npos) {
+                          btagsf *= mt.vvf(pref_pt+"_eigen_Light_down")->at(bidx).at(eig);
+                        } else {
+                          btagsf *= mt.vf(pref_pt)->at(bidx);
+                        }
+                      }
+                    }
+                  }
+                } else {
+                  btagsf = 0;
+                }
+              } else if (suffix.find("btagbSF_") != std::string::npos) {
                 size_t first = std::string("btagbSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
-                if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.vf(pref+"_eigenvars_B_up")->at(eig);
-                } else {
-                  btagsf = mt.vf(pref+"_eigenvars_B_down")->at(eig);
+                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                  TLorentzVector pb;
+                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                  if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
+                    std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
+                    if (suffix.find("1up") != std::string::npos) {
+                      btagsf *= mt.vvf(pref_pt+"_eigen_B_up")->at(bidx).at(eig);
+                    } else if (suffix.find("1down") != std::string::npos) {
+                      btagsf *= mt.vvf(pref_pt+"_eigen_B_down")->at(bidx).at(eig);
+                    } else {
+                      btagsf *= mt.vf(pref_pt)->at(bidx);
+                    }
+                  }
                 }
               } else if (suffix.find("btagcSF_") != std::string::npos) {
                 size_t first = std::string("btagcSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
-                if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.vf(pref+"_eigenvars_C_up")->at(eig);
-                } else {
-                  btagsf = mt.vf(pref+"_eigenvars_C_down")->at(eig);
+                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                  TLorentzVector pb;
+                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                  if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
+                    std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
+                    if (suffix.find("1up") != std::string::npos) {
+                      btagsf *= mt.vvf(pref_pt+"_eigen_C_up")->at(bidx).at(eig);
+                    } else if (suffix.find("1down") != std::string::npos) {
+                      btagsf *= mt.vvf(pref_pt+"_eigen_C_down")->at(bidx).at(eig);
+                    } else {
+                      btagsf *= mt.vf(pref_pt)->at(bidx);
+                    }
+                  }
                 }
               } else if (suffix.find("btaglSF_") != std::string::npos) {
                 size_t first = std::string("btaglSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
-                if (suffix.find("1up") != std::string::npos) {
-                  btagsf = mt.vf(pref+"_eigenvars_Light_up")->at(eig);
-                } else {
-                  btagsf = mt.vf(pref+"_eigenvars_Light_down")->at(eig);
+                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                  TLorentzVector pb;
+                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                  if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
+                    std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
+                    if (suffix.find("1up") != std::string::npos) {
+                      btagsf *= mt.vvf(pref_pt+"_eigen_Light_up")->at(bidx).at(eig);
+                    } else if (suffix.find("1down") != std::string::npos) {
+                      btagsf *= mt.vvf(pref_pt+"_eigen_Light_down")->at(bidx).at(eig);
+                    } else {
+                      btagsf *= mt.vf(pref_pt)->at(bidx);
+                    }
+                  }
                 }
               } else if (suffix.find("btageSF_0") != std::string::npos) {
                 if (suffix.find("1up") != std::string::npos) {
@@ -825,7 +999,15 @@ int main(int argc, char **argv) {
                   btagsf = mt.f(prefe+"_extrapolation_from_charm_down");
                 }
               } else {
-                btagsf = mt.f(pref);
+                //btagsf = mt.f(pref);
+                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                  TLorentzVector pb;
+                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                  if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
+                    std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
+                    btagsf *= mt.vf(pref_pt)->at(bidx);
+                  }
+                }
               }
             } else if (std::fabs(_btags) >= 10) {
               if (mt.vf("tjet_pt")->size() > 0) {
@@ -948,7 +1130,9 @@ int main(int argc, char **argv) {
             if (sel.jet()[0].btag_mv2c20_70()) nLeadTagged++;
           } else if (_btags < 0) {
             for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
-              if (mt.vf("tjet_mv2c20")->at(bidx) > -0.3098 && mt.vf("tjet_pt")->at(bidx) > 10e3 &&
+              TLorentzVector pb;
+              pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+              if (mt.vf("tjet_mv2c20")->at(bidx) > -0.3098 && mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
                   std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                 nBtagged += 1;
               }
@@ -973,7 +1157,8 @@ int main(int argc, char **argv) {
 	  if (runMM) {
 	     weight = 1.;
              if (sel.electron().size() == 1 && sel.muon().size() == 0 && sel.passes("bejets")) {
-               weight = MM_nominal_e->getMMweights(sel, runMM_StatErr);
+               //weight = MM_nominal_e->getMMweights(sel, runMM_StatErr);
+               weight = MM_nominal->getMMweights(sel, runMM_StatErr);
              } else {
                weight = MM_nominal->getMMweights(sel, runMM_StatErr);
              }
