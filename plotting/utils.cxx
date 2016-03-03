@@ -682,9 +682,9 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
     c->cd(2);
     rat->SetStats(0);
     if (!mustBeBigger) {
-      rat->GetYaxis()->SetRangeUser(0.5, 1.5);
-      theMax = 1.3;
-      theMin = 0.7;
+      rat->GetYaxis()->SetRangeUser(0.5, 1.6);
+      theMax = 1.6;
+      theMin = 0.5;
     } else {
       rat->GetYaxis()->SetRangeUser(0.0, 2.3);
       theMax = 2.3;
@@ -695,7 +695,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
       rat->GetXaxis()->SetTitle(MC_sum->GetXaxis()->GetTitle());
     else
       rat->GetXaxis()->SetTitle(xTitle.c_str());
-    rat->GetYaxis()->SetTitle("Data/Sim.");
+    rat->GetYaxis()->SetTitle("Data/Bkg.");
     rat->GetYaxis()->SetNdivisions(3, 0, 5);
     rat->GetXaxis()->SetLabelFont(42);
     rat->GetXaxis()->SetTitleFont(42);
