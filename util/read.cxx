@@ -35,7 +35,7 @@
 
 #include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
 
-#define DANILO_DR 0
+#define DANILO_DR -1
 
 // type = 0 for nominal
 // type = 1 for up
@@ -852,7 +852,7 @@ int main(int argc, char **argv) {
                   int ptr = atoi(suffix.substr(first_pt+2, last - first_pt - 2).c_str());
                   for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
                     TLorentzVector pb;
-                    pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                    pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                     if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
                       std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                       int ptbin = 1;
@@ -881,7 +881,7 @@ int main(int argc, char **argv) {
                   int ptr = atoi(suffix.substr(first_pt+2, last - first_pt - 2).c_str());
                   for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
                     TLorentzVector pb;
-                    pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                    pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                     if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
                       std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                       int ptbin = 1;
@@ -910,7 +910,7 @@ int main(int argc, char **argv) {
                   int ptr = atoi(suffix.substr(first_pt+2, last - first_pt - 2).c_str());
                   for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
                     TLorentzVector pb;
-                    pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                    pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                     if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
                       std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                       int ptbin = 1;
@@ -940,7 +940,7 @@ int main(int argc, char **argv) {
                 int eig = atoi(suffix.substr(first, last - first).c_str());
                 for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
                   TLorentzVector pb;
-                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                   if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
                     std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                     if (suffix.find("1up") != std::string::npos) {
@@ -957,7 +957,7 @@ int main(int argc, char **argv) {
                 int eig = atoi(suffix.substr(first, last - first).c_str());
                 for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
                   TLorentzVector pb;
-                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                   if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
                     std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                     if (suffix.find("1up") != std::string::npos) {
@@ -974,7 +974,7 @@ int main(int argc, char **argv) {
                 int eig = atoi(suffix.substr(first, last - first).c_str());
                 for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
                   TLorentzVector pb;
-                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                   if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
                     std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                     if (suffix.find("1up") != std::string::npos) {
@@ -1002,7 +1002,7 @@ int main(int argc, char **argv) {
                 //btagsf = mt.f(pref);
                 for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
                   TLorentzVector pb;
-                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+                  pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                   if (mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
                     std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                     btagsf *= mt.vf(pref_pt)->at(bidx);
@@ -1131,7 +1131,7 @@ int main(int argc, char **argv) {
           } else if (_btags < 0) {
             for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
               TLorentzVector pb;
-              pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_E")->at(bidx));
+              pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
               if (mt.vf("tjet_mv2c20")->at(bidx) > -0.3098 && mt.vf("tjet_pt")->at(bidx) > 10e3 && pb.DeltaR(lep) > DANILO_DR && 
                   std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                 nBtagged += 1;
