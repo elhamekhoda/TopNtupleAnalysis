@@ -12,18 +12,20 @@ clim = TCanvas("clim", "", 800, 600);
 l = TLegend(0.5,0.5,0.89,0.89)
 l.SetBorderSize(0)
 
-h = TH1F("h", "", 50, 0, 3.0);
+h = TH1F("h", "", 50, 0, 5.0);
 h.GetYaxis().SetRangeUser(1e-2, 2000);
 h.GetYaxis().SetTitle("95% CL upper limit on #sigma #times BR [pb]");
 h.GetXaxis().SetTitle("m_{Z'} [TeV]");
 h.Draw("hist");
-xsec = TGraph(len(xs));
-nom = TGraph(len(xs));
-obs = TGraph(len(xs));
-sigma1 = TGraphAsymmErrors(len(xs));
-sigma2 = TGraphAsymmErrors(len(xs));
+
+length =len(xs)
+xsec = TGraph(length);
+nom = TGraph(length);
+obs = TGraph(length);
+sigma1 = TGraphAsymmErrors(length);
+sigma2 = TGraphAsymmErrors(length);
 i=0
-for I in range(0,len(xs)):
+for I in range(0,length):
   if path.exists("JobTtres_"+signalList[I]+"/Limits/JobTtres_"+signalList[I]+".root")==0:
   	print "missing JobTtres_"+signalList[I]+"/Limits/JobTtres_"+signalList[I]+".root"
 	continue
@@ -44,7 +46,7 @@ for I in range(0,len(xs)):
   ftxt.write('muexp_m2  '+str(muexp_m2)+'\n')
   ftxt.write('xsec      '+str(xs[i])+'\n')
   ftxt.close()
-  print mass[i]*1000,"GeV\t", muexp*xs[i], "pb"
+  print mass[i]*1000,"GeV\texp: ", muexp*xs[i], "\tobs:",muobs*xs[i],"pb"
   sigma1.SetPoint(i, mass[i], muexp*xs[i])
   sigma1.SetPointError(i, 0, 0, muexp_m1*xs[i], muexp_p1*xs[i])
   sigma2.SetPoint(i, mass[i], muexp*xs[i])
@@ -111,5 +113,6 @@ stampATLAS("Internal", 0.15, 0.83)
 stampLumiText(3.3, 0.15, 0.78, "#sqrt{s} = 13 TeV", 0.03)
 
 clim.SaveAs("mass_limit.eps")
+clim.SaveAs("mass_limit.png")
 
   

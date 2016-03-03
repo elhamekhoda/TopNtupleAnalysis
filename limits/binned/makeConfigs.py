@@ -20,8 +20,8 @@ def createAndSubmitJob(configName):
 	system('mkdir -p '+outputName)
 	
 	here = getcwd()
-	
-	f = open("script_"+configName.split('.')[0]+".sh",'w')	
+	scriptName="script_"+configName.split('.')[0]+".sh"
+	f = open(scriptName,'w')	
 	f.write('#!/bin/bash\n')
 	f.write('echo running on $HOSTNAME\n')
 	f.write('\n')
