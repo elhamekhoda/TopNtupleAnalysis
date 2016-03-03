@@ -1853,8 +1853,14 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
   // HistDiffMany
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_pdf.begin(); it != syst_pdf.end(); ++it) {
     std::string name = it->first;
-    std::string sample = it->second[1];
-    std::string filesuf = it->second[2];
+    std::vector<std::string> sample;
+    std::vector<std::string> filesuf;
+    std::vector<std::string> filenam;
+    split(it->second[1], ',', sample);
+    split(it->second[2], ',', filesuf);
+    for (int i = 0; i < filesuf.size(); ++i) {
+        filenam.push_back(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), filesuf[i].c_str())); 
+    }
     std::string pdfpre = it->second[3];
     int pdfmax = atoi(it->second[4].c_str());
     vector<string> patterns;
@@ -1863,13 +1869,19 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     }
     int this_smooth = smooth;
 
-    systCalc.add(name.c_str(), new HistDiffMany(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), filesuf.c_str()), patterns, sample, this_smooth), it->second[0]);
+    systCalc.add(name.c_str(), new HistDiffMany(filenam, patterns, sample, this_smooth), it->second[0]);
   }
 
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_pdf_simple.begin(); it != syst_pdf_simple.end(); ++it) {
     std::string name = it->first;
-    std::string sample = it->second[1];
-    std::string filesuf = it->second[2];
+    std::vector<std::string> sample;
+    std::vector<std::string> filesuf;
+    std::vector<std::string> filenam;
+    split(it->second[1], ',', sample);
+    split(it->second[2], ',', filesuf);
+    for (int i = 0; i < filesuf.size(); ++i) {
+        filenam.push_back(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), filesuf[i].c_str())); 
+    }
     std::string pdfpre = it->second[3];
     int pdfmax = atoi(it->second[4].c_str());
     vector<string> patterns;
@@ -1877,7 +1889,7 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     patterns.push_back(pdfpre+std::string("_")+std::to_string(pdfmax));
     int this_smooth = smooth;
 
-    systCalc.add(name.c_str(), new HistDiffMany(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), filesuf.c_str()), patterns, sample, this_smooth), it->second[0]);
+    systCalc.add(name.c_str(), new HistDiffMany(filenam, patterns, sample, this_smooth), it->second[0]);
   }
 
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_flat.begin(); it != syst_flat.end(); ++it) {

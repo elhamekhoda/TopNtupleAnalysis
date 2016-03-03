@@ -42,11 +42,11 @@ class HistDiff : public Syst{
  */
 class HistDiffMany : public Syst{
   public:
-  string _file;
+  vector<string> _file;
   vector<string> _list;
-  string _sample;
+  vector<string> _sample;
   int _smoothLevel;
-  HistDiffMany(const string &_file, vector<string> &list, const std::string &sample, int smoothLevel = 0);
+  HistDiffMany(vector<string> &_file, vector<string> &list, vector<std::string> &sample, int smoothLevel = 0);
   Hist get(const string &name, const string &fname);
 };
 

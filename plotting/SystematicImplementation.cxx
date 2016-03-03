@@ -35,7 +35,7 @@ Hist HistDiff::get(const string &name, const string &fname) {
   return (ha_smooth - hb);
 }
 
-HistDiffMany::HistDiffMany(const std::string &file, std::vector<string> &list, const string &sample, int smoothLevel) {
+HistDiffMany::HistDiffMany(std::vector<std::string> &file, std::vector<string> &list, std::vector<std::string> &sample, int smoothLevel) {
   _file = file;
   _list = list;
   _sample = sample;
@@ -43,14 +43,21 @@ HistDiffMany::HistDiffMany(const std::string &file, std::vector<string> &list, c
 }
 
 Hist HistDiffMany::get(const string &name, const string &fname) {
-  if (fname.find(_sample) == std::string::npos)
+  int idx = -1;
+  for (int i = 0; i < _sample.size(); ++i) {
+    if (fname.find(_sample[i]) != std::string::npos) {
+      idx = i;
+      break;
+    }
+  }
+  if (idx < 0)
     return Hist();
 
-  Hist hb(name, _list[0], _file);
+  Hist hb(name, _list[0], _file[idx]);
   Hist ret = hb;
   for (size_t i = 0; i < ret._size; ++i) ret[i] = 0;
   for (size_t z = 1; z < _list.size(); ++z) {
-    Hist ha(name, _list[z], _file);
+    Hist ha(name, _list[z], _file[idx]);
     if (_smoothLevel <= 0) {
       ret += (ha - hb).power(2.0);
     } else {

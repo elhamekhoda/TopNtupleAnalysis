@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     string _outfile = "";
     int verbose = 0;
     int underflow = 0;
-    string _extraText = "boosted";
+    string _extraText = "";
     string yTitle = "";
     string xTitle = "";
     float xMax = -9999;
