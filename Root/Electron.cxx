@@ -117,7 +117,6 @@ int &Electron::isEM() {
 }
 
 //Triggers
-
 const bool Electron::HLT_e24_lhmedium_iloose_L1EM20VH() const {
   return m_HLT_e24_lhmedium_iloose_L1EM20VH;
 }
@@ -190,3 +189,9 @@ bool Electron::passLoose() const {
   return true;
 }
 
+int Electron::charge() const {
+  return m_charge;
+}
+int &Electron::charge() {
+  return m_charge;
+}

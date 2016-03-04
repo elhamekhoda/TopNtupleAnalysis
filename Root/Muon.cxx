@@ -89,6 +89,12 @@ bool &Muon::HLT_mu20_L1MU15() {
   return m_HLT_mu20_L1MU15;
 }
 
+const bool Muon::HLT_mu26_imedium() const {
+  return m_HLT_mu26_imedium;
+}
+bool &Muon::HLT_mu26_imedium() {
+  return m_HLT_mu26_imedium;
+}
 
 const int Muon::author() const {
   return m_author;
@@ -111,7 +117,6 @@ bool Muon::pass() const {
   float eta = std::fabs(mom().Eta());
   if (eta > 2.5) return false;
   if (!isTight()) return false;
-
   if (author() != 12) return false;
 
   if (!passTrkCuts()) return false;

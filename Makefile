@@ -21,25 +21,36 @@ LDFLAGS   += $(ROOTLIB)
 OBJS       = Root/Event.o Root/LargeJet.o Root/Muon.o Root/Electron.o Root/Jet.o Root/MObject.o
 OBJS      += Root/ParseUtils.o
 OBJS      += Root/MMUtils.o
+OBJS      += Root/MMUtils_HQT.o
 OBJS      += Root/MiniTree.o
+OBJS      += Root/MiniTree_HQT.o
 OBJS      += Root/UserFunktions.o
 OBJS      += Root/KinematicUtils.o
 
 OBJS_READ += $(OBJS)
 OBJS_READ += Root/EventCount.o
-OBJS_READ += Root/Analysis.o Root/AnaTtresSL.o Root/AnaTtresSLMtt.o Root/AnaTuDoSL.o Root/AnaTuDoTtresResolved.o Root/AnaTuDoTtresBoosted.o Root/HistogramService.o Root/AnaTtresQCD.o
+OBJS_READ += Root/Analysis.o Root/AnaHQTVLQWbX.o Root/AnaTtresSL.o Root/AnaTtresSLMtt.o Root/AnaTuDoSL.o Root/AnaTuDoTtresResolved.o Root/AnaTuDoTtresBoosted.o Root/HistogramService.o Root/AnaTtresQCD.o
 OBJS_READ += Root/WeakCorrScaleFactorParam.o
 OBJS_READ += util/read.o
 
 OBJS_READTUDO += $(OBJS)
 OBJS_READTUDO += Root/EventCount.o
-OBJS_READTUDO += Root/Analysis.o Root/AnaTtresSL.o Root/AnaTuDoSL.o Root/AnaTuDoTtresResolved.o Root/AnaTuDoTtresBoosted.o Root/HistogramService.o
+OBJS_READTUDO += Root/Analysis.o Root/AnaHQTVLQWbX.o Root/AnaTtresSL.o Root/AnaTuDoSL.o Root/AnaTuDoTtresResolved.o Root/AnaTuDoTtresBoosted.o Root/HistogramService.o
 OBJS_READTUDO += Root/WeakCorrScaleFactorParam.o
 OBJS_READTUDO += util/readTuDo.o
+
+OBJS_READ_HQT += $(OBJS)
+OBJS_READ_HQT += Root/EventCount.o
+OBJS_READ_HQT += Root/Analysis.o Root/AnaHQTVLQWbX.o Root/AnaTtresSL.o Root/AnaTtresSLMtt.o Root/AnaTuDoSL.o Root/AnaTuDoTtresResolved.o Root/AnaTuDoTtresBoosted.o Root/HistogramService.o Root/AnaTtresQCD.o
+OBJS_READ_HQT += Root/WeakCorrScaleFactorParam.o
+OBJS_READ_HQT += util/read_hqt.o
+
+
 
 # can use RootCore, but keep like this to make it portable
 #OBJS_READ += TopDataPreparation/Root/SampleXsection.o
 OBJS_READ += ../TopDataPreparation/Root/SampleXsection.o
+OBJS_READ_HQT += ../TopDataPreparation/Root/SampleXsection.o
 # CXXFLAGS += -I../RootCoreBin/include
 CXXFLAGS += -I../TopDataPreparation
 
@@ -49,8 +60,9 @@ CXXFLAGS += -I../TopDataPreparation
 
 OBJS_READ += Root/TtresChi2.o Root/TtresdRmin.o Root/TtresNeutrinoBuilder.o
 OBJS_READTUDO += Root/TtresChi2.o Root/TtresdRmin.o Root/TtresNeutrinoBuilder.o
+OBJS_READ_HQT += Root/TtresChi2.o Root/TtresdRmin.o Root/TtresNeutrinoBuilder.o Root/VLQUtils.o
 
-all: read readTuDo
+all: read readTuDo read_hqt
 
 #We don't need to clean up when we're making these targets
 NODEPS:=clean
@@ -78,11 +90,14 @@ read: $(OBJS_READ)
 
 read2: $(OBJS_READ)
 	g++ $(CXXFLAGS) -o read2 $(OBJS_READ) $(LDFLAGS)
-	
+
 readTuDo: $(OBJS_READTUDO)
 	g++ $(CXXFLAGS) -o readTuDo $(OBJS_READTUDO) $(LDFLAGS)
-	
+
+read_hqt: $(OBJS_READ_HQT)
+	g++ $(CXXFLAGS) -o read_hqt $(OBJS_READ_HQT) $(LDFLAGS)
+
 clean:
-	rm -rf *.o read readTuDo Root/*.o util/*.o
+	rm -rf *.o read readTuDo read_hqt Root/*.o util/*.o
 
 

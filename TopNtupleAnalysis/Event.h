@@ -68,6 +68,12 @@ class Event {
     float &weight_leptonSF();
     const float weight_leptonSF() const;
 
+    float &mtw();
+    const float mtw() const;
+
+    int &vlq_evtype();
+    const int vlq_evtype() const;
+    
     std::vector<std::string> &passes();
     const bool passes(const std::string &selection) const;
 
@@ -195,8 +201,10 @@ class Event {
     ULong64_t m_eventNumber;
     int m_channelNumber;
     bool m_isData;
+    int m_vlq_evtype;
     float m_mu;
     float m_mu_original;
+    float m_mtw;
 
     int m_npv;
     float m_vtxz;

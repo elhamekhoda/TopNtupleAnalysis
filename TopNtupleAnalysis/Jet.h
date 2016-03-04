@@ -22,6 +22,12 @@ class Jet : public MObject {
 
     const float mv1() const;
     float &mv1();
+
+    const float mv1b() const;
+    float &mv1b();
+
+    const float mv1c() const;
+    float &mv1c();
     
     const float mv2c20() const;
     float &mv2c20();
@@ -45,6 +51,8 @@ class Jet : public MObject {
   protected:
     int m_trueflavour;
     float m_mv1;
+    float m_mv1b;
+    float m_mv1c;
     float m_mv2c20;
     float m_ip3dsv1;
     float m_jvt;

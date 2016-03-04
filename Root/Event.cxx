@@ -84,6 +84,14 @@ const float Event::weight_leptonSF() const {
   return m_weight_leptonSF;
 }
 
+float &Event::mtw() {
+  return m_mtw;
+}
+
+const float Event::mtw() const {
+  return m_mtw;
+}
+
 std::vector<Electron> &Event::electron() {
   return m_electron;
 }
@@ -138,6 +146,14 @@ unsigned int &Event::runNumber() {
 
 const unsigned int Event::runNumber() const {
   return m_runNumber;
+}
+
+int &Event::vlq_evtype() {
+  return m_vlq_evtype;
+}
+
+const int Event::vlq_evtype() const {
+  return m_vlq_evtype;
 }
 
 ULong64_t &Event::eventNumber() {
@@ -200,7 +216,6 @@ const unsigned int Event::lbn() const {
 }
 
 //Variables from the truth: lepton+jet channel
-
 //hadronic top decay
 TLorentzVector &Event::MC_w1h() {
   return m_MC_w1h;

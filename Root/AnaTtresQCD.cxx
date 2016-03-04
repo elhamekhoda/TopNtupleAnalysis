@@ -42,7 +42,7 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   //Double_t DR_bins_bmu[2] = {0., 1.5};
     
   //MC variables:  
-  m_hSvc.create2D("eff_MCe_pt_eta", "; pt of electron(truth) [GeV]; #eta of electron(truth)", 40, 0, 500, 24, -3.5, 3.5);
+  m_hSvc.create2D("", "; pt of electron(truth) [GeV]; #eta of electron(truth)", 40, 0, 500, 24, -3.5, 3.5);
   m_hSvc.create2D("eff_MCmu_pt_eta", "; pt of muon(truth) [GeV]; #eta of muon(truth)", 40, 0, 500, 24, -3.5, 3.5);
   
   //Matched reco leptons  
