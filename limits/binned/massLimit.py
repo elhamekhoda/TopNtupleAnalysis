@@ -9,7 +9,7 @@ gStyle.SetPadTickX(1)
 gStyle.SetPadTickY(1)
 
 clim = TCanvas("clim", "", 800, 600);
-l = TLegend(0.5,0.5,0.89,0.89)
+l = TLegend(0.5,0.5,0.87,0.89)
 l.SetBorderSize(0)
 
 h = TH1F("h", "", 50, 0, 5.0);
@@ -46,15 +46,16 @@ for I in range(0,length):
   ftxt.write('muexp_m2  '+str(muexp_m2)+'\n')
   ftxt.write('xsec      '+str(xs[i])+'\n')
   ftxt.close()
-  print mass[i]*1000,"GeV\texp: ", muexp*xs[i], "\tobs:",muobs*xs[i],"pb"
-  sigma1.SetPoint(i, mass[i], muexp*xs[i])
-  sigma1.SetPointError(i, 0, 0, muexp_m1*xs[i], muexp_p1*xs[i])
-  sigma2.SetPoint(i, mass[i], muexp*xs[i])
-  sigma2.SetPointError(i, 0, 0, muexp_m2*xs[i], muexp_p2*xs[i])
-  xsec.SetPoint(i, mass[i], xs[i])
-  nom.SetPoint(i, mass[i], muexp*xs[i])
-  obs.SetPoint(i, mass[i], muobs*xs[i])
+  print mass[I]*1000,"GeV\texp: ", muexp*xs[I], "\tobs:",muobs*xs[I],"pb"
+  sigma1.SetPoint(i, mass[I], muexp*xs[I])
+  sigma1.SetPointError(i, 0, 0, muexp_m1*xs[I], muexp_p1*xs[I])
+  sigma2.SetPoint(i, mass[I], muexp*xs[I])
+  sigma2.SetPointError(i, 0, 0, muexp_m2*xs[I], muexp_p2*xs[I])
+  xsec.SetPoint(i, mass[I], xs[I])
+  nom.SetPoint(i, mass[I], muexp*xs[I])
+  obs.SetPoint(i, mass[I], muobs*xs[I])
   i+=1
+  
 nom.SetLineWidth(2);
 nom.SetLineStyle(kDashed);
 obs.SetLineWidth(2);
@@ -77,7 +78,7 @@ l.AddEntry(nom, "Expected", "L")
 l.AddEntry(obs, "Observed", "LP")
 l.AddEntry(sigma1, "#pm 1 #sigma", "F")
 l.AddEntry(sigma2, "#pm 2 #sigma", "F")
-l.AddEntry(xsec, "LO Z prime TC2 cross section #times 1.3", "L")
+l.AddEntry(xsec, "LO Z'_{TC2} cross section #times 1.3", "L")
 
 sigma2.Draw("3");
 sigma1.Draw("3");
@@ -107,10 +108,11 @@ def stampLumiText(lumi, x, y, text, size):
   t.SetTextFont(42)
   t.SetTextColor(1)
   t.SetTextSize(size)
-  t.DrawLatex(x,y,"#int L dt = "+str(lumi)+" fb^{-1}, "+text)
+  #t.DrawLatex(x,y,"#int L dt = "+str(lumi)+" fb^{-1}, "+text)
+  t.DrawLatex(x,y, text+", "+str(lumi)+" fb^{-1}")
 
 stampATLAS("Internal", 0.15, 0.83)
-stampLumiText(3.3, 0.15, 0.78, "#sqrt{s} = 13 TeV", 0.03)
+stampLumiText(3.3, 0.25, 0.75, "#sqrt{s} = 13 TeV", 0.04)
 
 clim.SaveAs("mass_limit.eps")
 clim.SaveAs("mass_limit.png")
