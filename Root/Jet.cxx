@@ -11,13 +11,11 @@ Jet::Jet()
   m_type = MObject::jet;
   m_trueflavour = 1;
   m_mv1 = 0;
-  m_mv1b = 0;
-  m_mv1b = 0;
   m_mv2c20 = 0;
   m_ip3dsv1 = 0;
   m_jvt = 1;
-  //  m_closeToLepton = 0;
-  //  m_numConstituents = 0;
+  m_closeToLepton = 0;
+  m_numConstituents = 0;
 }
 
 Jet::Jet(const TLorentzVector &v)
@@ -91,19 +89,6 @@ float &Jet::mv1() {
   return m_mv1;
 }
 
-const float Jet::mv1b() const {
-  return m_mv1b;
-}
-float &Jet::mv1b() {
-  return m_mv1b;
-}
-
-const float Jet::mv1c() const {
-  return m_mv1b;
-}
-float &Jet::mv1c() {
-  return m_mv1b;
-}
 const float Jet::mv2c20() const {
   return m_mv2c20;
 }

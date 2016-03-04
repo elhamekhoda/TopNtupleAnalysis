@@ -31,7 +31,7 @@ class Muon : public MObject {
 
     const float sd0() const;
     float &sd0();
-
+    
     const bool HLT_mu50() const;
     bool &HLT_mu50();
     
@@ -40,9 +40,6 @@ class Muon : public MObject {
     
     const bool HLT_mu20_L1MU15() const;
     bool &HLT_mu20_L1MU15();
-    
-   const bool HLT_mu26_imedium() const;
-    bool &HLT_mu26_imedium();
     
     const int author() const;
     int &author();
@@ -91,7 +88,6 @@ class Muon : public MObject {
     bool m_HLT_mu50;
     bool m_HLT_mu20_iloose_L1MU15;
     bool m_HLT_mu20_L1MU15;
-    bool m_HLT_mu26_imedium;
     
     int m_author;
     bool m_passTrkCuts;

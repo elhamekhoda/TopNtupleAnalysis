@@ -39,43 +39,6 @@ bool &LargeJet::good() {
   return m_good;
 }
 
-void LargeJet::setIsSmoothTopTagged_50(bool tagged) {
-  m_isSmoothTopTagged_50 = tagged;
-}
-
-bool LargeJet::isSmoothTopTagged_50() const {
-  return m_isSmoothTopTagged_50 ;
-}
-
-bool &LargeJet::isSmoothTopTagged_50() {
-  return m_isSmoothTopTagged_50 ;
-}
-
-void LargeJet::setIsSmoothTopTagged_80(bool tagged) {
-  m_isSmoothTopTagged_80 = tagged;
-}
-
-bool LargeJet::isSmoothTopTagged_80() const {
-  return m_isSmoothTopTagged_80 ;
-}
-
-bool &LargeJet::isSmoothTopTagged_80() {
-  return m_isSmoothTopTagged_80 ;
-}
-
-
-void LargeJet::setIsGhAssTrackJetBtagged(bool tagged) {
-  m_isGhAssTrackJetBtagged = tagged;
-}
-
-bool LargeJet::isGhAssTrackJetBtagged() const {
-  return m_isGhAssTrackJetBtagged ;
-}
-
-bool &LargeJet::isGhAssTrackJetBtagged() {
-  return m_isGhAssTrackJetBtagged ;
-}
-
 const int LargeJet::trueFlavour() const {
   return m_trueFlavour;
 }
@@ -83,40 +46,6 @@ const int LargeJet::trueFlavour() const {
 int &LargeJet::trueFlavour() {
   return m_trueFlavour;
 }
-
-const int LargeJet::isWTaggedMed() const {
-  return m_isWTaggedMed;
-}
-
-int &LargeJet::isWTaggedMed() {
-  return m_isWTaggedMed;
-}
-
-const int LargeJet::isWTaggedTight() const {
-  return m_isWTaggedTight;
-}
-
-int &LargeJet::isWTaggedTight() {
-  return m_isWTaggedTight;
-}
-
-
-const int LargeJet::isZTaggedMed() const {
-  return m_isZTaggedMed;
-}
-
-int &LargeJet::isZTaggedMed() {
-  return m_isZTaggedMed;
-}
-
-const int LargeJet::isZTaggedTight() const {
-  return m_isZTaggedTight;
-}
-
-int &LargeJet::isZTaggedTight() {
-  return m_isZTaggedTight;
-}
-
 
 bool LargeJet::pass() const {
   if (std::fabs(mom().Eta()) > 1.2) return false;

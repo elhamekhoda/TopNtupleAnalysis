@@ -1,9 +1,0 @@
-BATCH:
-------
-- Adjust runBatch.py to output in proper folders and files
-- Make it run on flashy qsub (bsub <-> qsub)
-
-OBJECTS:
---------
-- Build physical objects with grid ntuples
--- Make a new algorithm, class that can be called from the analysis

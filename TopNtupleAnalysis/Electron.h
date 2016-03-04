@@ -33,7 +33,6 @@ class Electron : public MObject {
     const float d0() const;
     float &d0();
 
-    
     const float sd0() const;
     float &sd0();
     
@@ -48,9 +47,6 @@ class Electron : public MObject {
 
     int &isEM();
     const int isEM() const;
-
-    int charge() const;
-    int &charge();
     
     const bool HLT_e24_lhmedium_iloose_L1EM20VH() const;
     bool &HLT_e24_lhmedium_iloose_L1EM20VH();
@@ -64,7 +60,7 @@ class Electron : public MObject {
     const bool HLT_e60_lhmedium() const;
     bool &HLT_e60_lhmedium();
     
-    const bool HLT_e120_lhloose() const; 
+    const bool HLT_e120_lhloose() const;  
     bool &HLT_e120_lhloose();
     
     bool pass() const;
@@ -85,9 +81,8 @@ class Electron : public MObject {
     int m_nSiHits;
     int m_oq;
     int m_isEM;
-    int m_charge;
     
-    bool m_HLT_e24_lhmedium_iloose_L1EM20VH;   
+    bool m_HLT_e24_lhmedium_iloose_L1EM20VH;    
     bool m_HLT_e24_lhmedium_L1EM18VH;
     bool m_HLT_e24_lhmedium_L1EM20VH;
     bool m_HLT_e60_lhmedium;
