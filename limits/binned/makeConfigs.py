@@ -53,6 +53,7 @@ def createAndSubmitJob(configName):
 		a=1
 	else:
 		f.write('./myFit.exe l '+configName+' > log_'+configName.split('.')[0]+'_l\n')
+		f.write('./myFit.exe s '+configName+' > log_'+configName.split('.')[0]+'_s\n')
 		#f.write('./myFit.exe r '+configName+' > log_'+configName.split('.')[0]+'_r\n')
 	
 	
@@ -130,6 +131,7 @@ for i in signalList:
      system('./myFit.exe f ttres_'+i+'.config')
      system('./myFit.exe p ttres_'+i+'.config')
      system('./myFit.exe l ttres_'+i+'.config')
+     system('./myFit.exe s ttres_'+i+'.config')
 
 
 
