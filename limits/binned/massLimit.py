@@ -16,6 +16,7 @@ h = TH1F("h", "", 50, 0, 5.0);
 h.GetYaxis().SetRangeUser(1e-2, 2000);
 h.GetYaxis().SetTitle("95% CL upper limit on #sigma #times BR [pb]");
 h.GetXaxis().SetTitle("m_{Z'} [TeV]");
+h.GetXaxis().SetLabelSize(0.05);
 h.Draw("hist");
 
 length =len(xs)
@@ -78,7 +79,7 @@ l.AddEntry(nom, "Expected", "L")
 l.AddEntry(obs, "Observed", "LP")
 l.AddEntry(sigma1, "#pm 1 #sigma", "F")
 l.AddEntry(sigma2, "#pm 2 #sigma", "F")
-l.AddEntry(xsec, "LO Z'_{TC2} cross section #times 1.3", "L")
+l.AddEntry(xsec, "LO Z'_{#it{TC2}} cross section #times 1.3", "L")
 
 sigma2.Draw("3");
 sigma1.Draw("3");
@@ -112,7 +113,7 @@ def stampLumiText(lumi, x, y, text, size):
   t.DrawLatex(x,y, text+", "+str(lumi)+" fb^{-1}")
 
 stampATLAS("Internal", 0.15, 0.83)
-stampLumiText(3.3, 0.25, 0.75, "#sqrt{s} = 13 TeV", 0.04)
+stampLumiText(3.2, 0.25, 0.75, "#sqrt{s} = 13 TeV", 0.04)
 
 clim.SaveAs("mass_limit.eps")
 clim.SaveAs("mass_limit.png")
