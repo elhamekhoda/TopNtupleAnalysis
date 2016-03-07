@@ -16,7 +16,9 @@ h = TH1F("h", "", 50, 0, 5.0);
 h.GetYaxis().SetRangeUser(1e-2, 2000);
 h.GetYaxis().SetTitle("95% CL upper limit on #sigma #times BR [pb]");
 h.GetXaxis().SetTitle("m_{Z'} [TeV]");
+h.GetXaxis().SetTitleOffset(0.9);
 h.GetXaxis().SetLabelSize(0.05);
+h.GetXaxis().SetTitleSize(0.05);
 h.Draw("hist");
 
 length =len(xs)
