@@ -22,7 +22,8 @@ h.GetXaxis().SetTitleSize(0.05);
 h.Draw("hist");
 
 length =len(xs)
-xsec = TGraph(length);
+xsec12 = TGraph(length);
+xsec3 = TGraph(length);
 nom = TGraph(length);
 obs = TGraph(length);
 sigma1 = TGraphAsymmErrors(length);
@@ -54,7 +55,8 @@ for I in range(0,length):
   sigma1.SetPointError(i, 0, 0, muexp_m1*xs[I], muexp_p1*xs[I])
   sigma2.SetPoint(i, mass[I], muexp*xs[I])
   sigma2.SetPointError(i, 0, 0, muexp_m2*xs[I], muexp_p2*xs[I])
-  xsec.SetPoint(i, mass[I], xs[I])
+  xsec12.SetPoint(i, mass[I], xs[I])
+  xsec3.SetPoint(i, mass[I], xs3[I])
   nom.SetPoint(i, mass[I], muexp*xs[I])
   obs.SetPoint(i, mass[I], muobs*xs[I])
   i+=1
@@ -67,8 +69,11 @@ obs.SetMarkerStyle(20);
 nom.SetMarkerSize(1.0);
 obs.SetMarkerSize(1.0);
 obs.SetMarkerColor(kRed);
-xsec.SetLineWidth(3);
-xsec.SetLineColor(kRed);
+xsec12.SetLineWidth(3);
+xsec12.SetLineColor(kRed);
+xsec3.SetLineWidth(3);
+xsec3.SetLineColor(kRed);
+xsec3.SetLineStyle(2);
 sigma2.SetFillStyle(1001);
 sigma2.SetFillColor(5);
 sigma2.SetLineColor(5);
@@ -81,13 +86,15 @@ l.AddEntry(nom, "Expected", "L")
 l.AddEntry(obs, "Observed", "LP")
 l.AddEntry(sigma1, "#pm 1 #sigma", "F")
 l.AddEntry(sigma2, "#pm 2 #sigma", "F")
-l.AddEntry(xsec, "LO Z'_{#it{TC2}} cross section #times 1.3", "L")
+l.AddEntry(xsec12, "LO Z'_{#it{TC2}} \Gamma=1.2% cross section #times 1.3", "L")
+l.AddEntry(xsec3, "LO Z'_{#it{TC2}} \Gamma=3% cross section #times 1.3", "L")
 
 sigma2.Draw("3");
 sigma1.Draw("3");
 nom.Draw("L")
 obs.Draw("LP")
-xsec.Draw("L")
+xsec12.Draw("L")
+xsec3.Draw("L")
 l.Draw()
 clim.SetLogy(1)
 
