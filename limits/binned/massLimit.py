@@ -9,7 +9,7 @@ gStyle.SetPadTickX(1)
 gStyle.SetPadTickY(1)
 
 clim = TCanvas("clim", "", 800, 600);
-l = TLegend(0.5,0.5,0.87,0.89)
+l = TLegend(0.5,0.45,0.87,0.89)
 l.SetBorderSize(0)
 
 h = TH1F("h", "", 50, 0, 5.0);
@@ -81,13 +81,14 @@ sigma2.SetMarkerColor(5);
 sigma1.SetFillStyle(1001);
 sigma1.SetFillColor(3);
 sigma1.SetMarkerColor(3);
+sigma1.SetLineColor(3);
 
 l.AddEntry(nom, "Expected", "L")
 l.AddEntry(obs, "Observed", "LP")
 l.AddEntry(sigma1, "#pm 1 #sigma", "F")
 l.AddEntry(sigma2, "#pm 2 #sigma", "F")
-l.AddEntry(xsec12, "LO Z'_{#it{TC2}} \Gamma=1.2% cross section #times 1.3", "L")
-l.AddEntry(xsec3, "LO Z'_{#it{TC2}} \Gamma=3% cross section #times 1.3", "L")
+l.AddEntry(xsec12, "LO Z'_{#it{TC2}} #Gamma=1.2% cross section #times 1.3", "L")
+l.AddEntry(xsec3, "LO Z'_{#it{TC2}} #Gamma=3% cross section #times 1.3", "L")
 
 sigma2.Draw("3");
 sigma1.Draw("3");
@@ -126,5 +127,6 @@ stampLumiText(3.2, 0.25, 0.75, "#sqrt{s} = 13 TeV", 0.04)
 
 clim.SaveAs("mass_limit.eps")
 clim.SaveAs("mass_limit.png")
+clim.SaveAs("mass_limit.pdf")
 
   
