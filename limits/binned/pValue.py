@@ -18,14 +18,11 @@ h.GetYaxis().SetTitle("p_{0}")
 h.GetXaxis().SetTitle("m_{Z'} [TeV]");
 h.Draw("hist");
 
-length =len(xs)-3
+length =len(xs)
 exp = TGraph(length);
 obs = TGraph(length);
 i=0
-#for I in range(0,length):
-# skip 3 first points as they are not there yet
-for Is in range(0,length):
-  I = Is+3
+for I in range(0,length):
   if path.exists("JobTtres_"+signalList[I]+"/Significance/JobTtres_"+signalList[I]+".root")==0:
   	print "missing JobTtres_"+signalList[I]+"/Significance/JobTtres_"+signalList[I]+".root"
 	continue
