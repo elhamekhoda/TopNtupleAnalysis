@@ -513,13 +513,13 @@ void Hist::limitMinX(double xMin) {
   _size = _x.size();
 }
 
-void Hist::normBinWidth() {
+void Hist::normBinWidth(float s) {
   if (_size <= 2) return;
 
   for (size_t i = 1; i < _size-1; ++i) {
     double binwidth = _x[i+1] - _x[i];
-    _y[i] /= binwidth;
-    _ye[i] /= binwidth;
+    _y[i] *= s/binwidth;
+    _ye[i] *= s/binwidth;
   }
 }
 

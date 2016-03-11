@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
     float lumi = 0;
     std::string config = "";
     std::string saveTH1 = "";
-    int normBinWidth = 0;
+    float normBinWidth = 0;
     int alternateStyle = 0;
     int _logY = 0;
 
@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
         {"config",          required_argument,     0, 'C', "Configuration file for items.", &config, extendedOption::eOTString},
         {"smoothen",        required_argument,     0, 'k', "Smoothen systematics.", &smooth, extendedOption::eOTInt},
         {"saveTH1",         required_argument,     0, 'R', "Save as ROOT files called hist_[name][sufix].root with all systs. Provide the sufix.", &saveTH1, extendedOption::eOTString},
-        {"normBinWidth",    required_argument,     0, 'b', "Divide bin content by bin width?", &normBinWidth, extendedOption::eOTInt},
+        {"normBinWidth",    required_argument,     0, 'b', "Divide bin content by bin width?", &normBinWidth, extendedOption::eOTFloat},
         {"alternateStyle",  required_argument,     0, 'A', "Alternative style", &alternateStyle, extendedOption::eOTInt},
         {"logY",            required_argument,     0, 'g', "Y axis in log?", &_logY, extendedOption::eOTInt},
 
@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
       if (xMax > -998.0) stackConfig.limitMaxX(xMax, true);
       if (xMin > -998.0) stackConfig.limitMinX(xMin);
       if (rebin != 1) stackConfig.rebin(rebin);
-      if (normBinWidth) stackConfig.normBinWidth();
+      if (normBinWidth > 0) stackConfig.normBinWidth(normBinWidth);
 
       if (verbose) {
         systCalc.printBigTable(stackConfig);

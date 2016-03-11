@@ -603,6 +603,11 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
   //leg->SetNColumns(2);
   leg->SetFillStyle(0);
   leg->SetBorderSize(0);
+  leg->SetTextFont(43);
+  leg->SetTextSize(18.9);
+  leg->SetLineColor(1);
+  leg->SetLineStyle(1);
+  leg->SetLineWidth(1);
 
   shared_ptr<TH1D> Data;
   if (stackConfig._stack.find("Data") != stackConfig._stack.end())
@@ -617,7 +622,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
   shared_ptr<THStack> MC = stackConfig["MC"].makeStack("MC", leg, vechist);
 
   if (band) {
-    leg->AddEntry(band.get(), "Syst. uncertainty", "F");
+    leg->AddEntry(band.get(), "Bkg. uncertainty", "F");
   }
 
   double maximum = MC->GetMaximum();
@@ -695,14 +700,14 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
       rat->GetXaxis()->SetTitle(MC_sum->GetXaxis()->GetTitle());
     else
       rat->GetXaxis()->SetTitle(xTitle.c_str());
-    rat->GetYaxis()->SetTitle("Data/Bkg.");
+    rat->GetYaxis()->SetTitle("Data / Bkg.");
     rat->GetYaxis()->SetNdivisions(3, 0, 5);
     rat->GetXaxis()->SetLabelFont(42);
     rat->GetXaxis()->SetTitleFont(42);
     rat->GetYaxis()->SetLabelFont(42);
     rat->GetYaxis()->SetTitleFont(42);
-    rat->GetYaxis()->SetLabelSize(0.18);
-    rat->GetYaxis()->SetTitleOffset(0.45);
+    rat->GetYaxis()->SetLabelSize(0.15);
+    rat->GetYaxis()->SetTitleOffset(0.40);
     rat->GetYaxis()->SetLabelOffset(0.02);
     rat->GetYaxis()->SetTitleSize(0.18);
     rat->GetXaxis()->SetTitleSize(0.2);
@@ -763,7 +768,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
   else if (_stamp == 2)
     _stampText = "";
   if (posLegend != 2 && posLegend != 5 && posLegend != 6) {
-    stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
+    stampATLAS(_stampText, 0.20, 0.86, (bool) Data);
     stampLumiText2(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
   } else if (posLegend == 5) {
     stampATLAS(_stampText, 0.20, 0.88, (bool) Data);

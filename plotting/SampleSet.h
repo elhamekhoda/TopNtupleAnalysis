@@ -114,7 +114,7 @@ class SampleSetConfiguration {
     /*
      * Normalise by bin width.
      */
-    void normBinWidth();
+    void normBinWidth(float s = 1.0);
 
     /*
      * Assume two SampleSets exist: MC and Data.

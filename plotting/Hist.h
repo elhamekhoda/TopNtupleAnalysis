@@ -144,7 +144,7 @@ class Hist {
     /*
      * Normalise by bin width.
      */
-    void normBinWidth();
+    void normBinWidth(float s = 1.0);
 
     /*
      * Clip error bars at 1.

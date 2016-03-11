@@ -232,17 +232,17 @@ void SampleSetConfiguration::rebin(int r) {
   }
 }
 
-void SampleSetConfiguration::normBinWidth() {
+void SampleSetConfiguration::normBinWidth(float s) {
   for (map<string, SampleSet>::iterator i = _stack.begin(); i != _stack.end(); ++i) { // for every element in the stack (one for data, one for MC)
     // i->second is a stack
     // i->second._item is the list of items of the stack
     for (int j = 0; j < i->second._item.size(); ++j) {
       Sample &one_item = i->second._item[j];
       //one_item.nominal and one_item.syst(map of string, Hist)
-      one_item.nominal.normBinWidth();
+      one_item.nominal.normBinWidth(s);
       for (map<string, Hist>::const_iterator k = one_item.syst.begin(); k != one_item.syst.end(); ++k) {
         const string &systName = k->first;
-        one_item.syst[systName].normBinWidth();
+        one_item.syst[systName].normBinWidth(s);
       }
     }
   }
