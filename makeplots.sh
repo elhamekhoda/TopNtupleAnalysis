@@ -3,15 +3,14 @@ S=1
 #LUMI=3.31668
 LUMI=3.20905
 
-
 for ch in resolved boosted ; do
   for lep in e mu ; do
-    ../plotting/plot -c $lep -p $ch -h lepPt -l $LUMI --smoothen 0 --rebin 9 --xTitle "Lepton p_{T} [GeV]" --yTitle "Events / 45 GeV"
-    ../plotting/plot -c $lep -p $ch -h MET -l $LUMI --smoothen 0 --normBinWidth 1 --yTitle "Events / GeV" --xTitle "E_{T}^{miss} [GeV]"
-    ../plotting/plot -c $lep -p $ch -h closeJetPt -l $LUMI --smoothen 0 --normBinWidth 1 --yTitle "Events / GeV" --xTitle "Selected jet p_{T} [GeV]"
-    ../plotting/plot -c $lep -p $ch -h largeJetPt -l $LUMI --smoothen 0 --normBinWidth 1 --yTitle "Events / GeV" --xTitle "Large-R jet p_{T} [GeV]"
-    ../plotting/plot -c $lep -p $ch -h mtlep_boo -l $LUMI --smoothen 0 --normBinWidth 1 --yTitle "Events / GeV" --xTitle "Mass of the leptonic top candidate [GeV]"
-    ../plotting/plot -c $lep -p $ch -h largeJetM -l $LUMI --smoothen 0 --yTitle "Events / 10 GeV" --xTitle "Large-R jet mass [GeV]"
+    ../plotting/plot -c $lep -p $ch -h largeJetM -l $LUMI --smoothen 0 --yTitle "Events / 10 GeV" --xMin 50 --yMax 850 --xTitle "Large-R jet mass [GeV]" --stamp 1
+    ../plotting/plot -c $lep -p $ch -h mtlep_boo -l $LUMI --smoothen 0 --normBinWidth 20 --xMin 0 --yTitle "Events / 20 GeV" --xTitle "Mass of the leptonic top candidate [GeV]" --stamp 1
+    ../plotting/plot -c $lep -p $ch -h MET -l $LUMI --smoothen 0 --normBinWidth 10 --xMin 20 --yTitle "Events / 10 GeV" --yMax 500 --xTitle "E_{T}^{miss} [GeV]" --stamp 1
+    ../plotting/plot -c $lep -p $ch -h lepPt -l $LUMI --smoothen 0 --rebin 4 --xTitle "Lepton p_{T} [GeV]" --yTitle "Events / 20 GeV" --stamp 1
+    ../plotting/plot -c $lep -p $ch -h closeJetPt -l $LUMI --smoothen 0 --normBinWidth 1 --yTitle "Events / GeV" --xTitle "Selected jet p_{T} [GeV]" --stamp 1
+    ../plotting/plot -c $lep -p $ch -h largeJetPt -l $LUMI --smoothen 0 --normBinWidth 20 --yTitle "Events / 20 GeV" --xTitle "Large-R jet p_{T} [GeV]" --stamp 1
 done
 done
 
@@ -137,13 +136,13 @@ done
 
 for ch in boosted ; do
   for lep in e mu ; do
-    ../plotting/plot --logY 1 --mcOnly 0 -c $lep -p $ch -h mtt -l $LUMI  --smoothen $S --xMax 3500
+    ../plotting/plot --logY 1 --mcOnly 0 -c $lep -p $ch -h mtt -l $LUMI  --smoothen $S --xMax 3500 --stamp 1
   done
 done
 
 for ch in resolved ; do
   for lep in e mu ; do
-    ../plotting/plot --logY 1 --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI  --smoothen $S
+    ../plotting/plot --logY 1 --mcOnly 1 -c $lep -p $ch -h mtt -l $LUMI  --smoothen $S --stamp 1
   done
 done
 
@@ -151,7 +150,7 @@ done
 for hist in largeJetEta largeJetPhi largeJetSd12 largeJet_tau32 largeJet_tau32_wta largeJet_tau21 largeJet_tau21_wta chi2 mwhad_res mthad_res mtlep_res jet0_m jet1_pt jet1_m jet2_pt jet2_m closejl_pt  closejl_minDeltaR MET_phi nBtagJets leadbJetPt lepEta lepPhi mwt  mtt nTrkBtagJets tjet1_pt tjet2_pt tjet3_pt ; do
 for ch in resolved boosted ; do
   for lep in e mu ; do
-    ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0
+    ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0 --stamp 1
   done
 done
 done
@@ -159,7 +158,7 @@ done
 for hist in jet0_pt tjet0_pt ; do
 for ch in resolved boosted ; do
   for lep in e mu ; do
-    ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0 --normBinWidth 1
+    ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0 --normBinWidth 1 --stamp 1
   done
 done
 done
@@ -167,7 +166,7 @@ done
 ch=boosted
 hist=largeJetPt
 for lep in e mu ; do
-  ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0 --normBinWidth 1 --logY 1 --yMax 1e4 -o ${ch}_${hist}_${lep}_log.pdf
+  ../plotting/plot -c $lep -p $ch -h $hist -l $LUMI --smoothen 0 --normBinWidth 1 --logY 1 --yMax 1e4 -o ${ch}_${hist}_${lep}_log.pdf --stamp 1
 done
 
 
