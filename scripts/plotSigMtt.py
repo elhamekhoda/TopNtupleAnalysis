@@ -4,6 +4,7 @@ from os import path
 from ROOT import *
 
 Internal = True
+Internal = False
 
 gStyle.SetOptStat(0)
 gStyle.SetPadTickX(1)
@@ -12,7 +13,7 @@ gStyle.SetPadTickY(1)
 cacc = TCanvas("cacc", "", 800, 600);
 cacc.SetBottomMargin(0.2)
 cacc.SetLeftMargin(0.14)
-l = TLegend(0.7,0.65,0.87,0.89)
+l = TLegend(0.6,0.50,0.87,0.75)
 l.SetBorderSize(0)
 
 cn10 = TChain("mini")
@@ -20,10 +21,10 @@ cn20 = TChain("mini")
 cn25 = TChain("mini")
 cn30 = TChain("mini")
 
-hn_zp10 = TH1F("hn_zp10", "", 24, 0.0, 4.8)
-hn_zp20 = TH1F("hn_zp20", "", 24, 0.0, 4.8)
-hn_zp25 = TH1F("hn_zp25", "", 24, 0.0, 4.8)
-hn_zp30 = TH1F("hn_zp30", "", 24, 0.0, 4.8)
+hn_zp10 = TH1F("hn_zp10", "", 18, 0.0, 3.6)
+hn_zp20 = TH1F("hn_zp20", "", 18, 0.0, 3.6)
+hn_zp25 = TH1F("hn_zp25", "", 18, 0.0, 3.6)
+hn_zp30 = TH1F("hn_zp30", "", 18, 0.0, 3.6)
 
 def setStyle(h, col, sty):
     h.GetYaxis().SetRangeUser(0, 0.3);
@@ -69,7 +70,7 @@ for hist in [hn_zp10, hn_zp20, hn_zp25, hn_zp30]:
     s = hist.Integral(-1, 9999)
     hist.Scale(1.0/s)
 
-hn_zp10.GetYaxis().SetRangeUser(0, 0.5)
+hn_zp10.GetYaxis().SetRangeUser(0, 0.9)
 hn_zp10.Draw("hist")
 hn_zp20.Draw("hist same")
 hn_zp25.Draw("hist same")
