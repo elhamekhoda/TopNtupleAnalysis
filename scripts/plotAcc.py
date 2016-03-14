@@ -3,7 +3,8 @@ from os import path
 
 from ROOT import *
 
-Internal = True
+#Internal = True
+Internal = False
 
 gStyle.SetOptStat(0)
 gStyle.SetPadTickX(1)
@@ -28,7 +29,7 @@ hr_mu = TH1F("hr_mu", "", 20, 0.0, 5.0)
 
 def setStyle(h, col, sty):
     h.GetYaxis().SetRangeUser(0, 10);
-    h.GetYaxis().SetTitle("Acc. #times Eff. #times BR(t#bar{t} #rightarrow e/#mu + jets) [%]");
+    h.GetYaxis().SetTitle("Acceptance #times Efficiency [%]");
     h.GetXaxis().SetTitle("m_{t#bar{t}} [TeV]");
     h.GetXaxis().SetTitleOffset(1.0);
     h.GetYaxis().SetTitleOffset(1.0);
@@ -57,15 +58,17 @@ for d in glob.glob(files+"/*"):
 
 for i in xrange(ct.GetEntries()):
     ct.GetEntry(i)
-    ht_e.Fill(ct.MC_ttbar_afterFSR_m*1e-6, ct.weight_mc)
-    ht_mu.Fill(ct.MC_ttbar_afterFSR_m*1e-6, ct.weight_mc)
+    ht_e.Fill(ct.MC_ttbar_beforeFSR_m*1e-6, ct.weight_mc)
+    ht_mu.Fill(ct.MC_ttbar_beforeFSR_m*1e-6, ct.weight_mc)
 
 for i in xrange(cn.GetEntries()):
     cn.GetEntry(i)
     if len(cn.el_pt) == 1 and len(cn.mu_pt) == 0:
-        hn_e.Fill(cn.MC_ttbar_afterFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
+        #hn_e.Fill(cn.MC_ttbar_afterFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
+        hn_e.Fill(cn.MC_ttbar_beforeFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
     elif len(cn.el_pt) == 0 and len(cn.mu_pt) == 1:
-        hn_mu.Fill(cn.MC_ttbar_afterFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
+        #hn_mu.Fill(cn.MC_ttbar_afterFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
+        hn_mu.Fill(cn.MC_ttbar_beforeFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
     else:
         print "Neither electron nor muon! Panic!"
 
