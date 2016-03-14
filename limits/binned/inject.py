@@ -2,6 +2,7 @@
 from ROOT import *
 
 from os import system
+from math import floor
 #system("cp -f hist_bkg.root hist_data_inj.root")
 
 mu = -1.0
@@ -18,5 +19,7 @@ for i in ["xmttboostede", "xmttboostedmu", "xlargeJetMboostede", "xlargeJetMboos
     for b in range(0,h.GetNbinsX()+1):
         if h.GetBinContent(b) < 0:
             h.SetBinContent(b, 0)
+        else:
+            h.SetBinContent(b, floor(h.GetBinContent(b)))
     f.cd()
     h.Write(i, TObject.kOverwrite)
