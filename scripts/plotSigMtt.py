@@ -21,13 +21,13 @@ cn20 = TChain("mini")
 cn25 = TChain("mini")
 cn30 = TChain("mini")
 
-hn_zp10 = TH1F("hn_zp10", "", 18, 0.0, 3.6)
-hn_zp20 = TH1F("hn_zp20", "", 18, 0.0, 3.6)
-hn_zp25 = TH1F("hn_zp25", "", 18, 0.0, 3.6)
-hn_zp30 = TH1F("hn_zp30", "", 18, 0.0, 3.6)
+hn_zp10 = TH1F("hn_zp10", "", 36, 0.0, 3.6)
+hn_zp20 = TH1F("hn_zp20", "", 36, 0.0, 3.6)
+hn_zp25 = TH1F("hn_zp25", "", 36, 0.0, 3.6)
+hn_zp30 = TH1F("hn_zp30", "", 36, 0.0, 3.6)
 
 def setStyle(h, col, sty):
-    h.GetYaxis().SetRangeUser(0, 0.3);
+    h.GetYaxis().SetRangeUser(0, 0.6);
     h.GetYaxis().SetTitle("Arbitrary Units")
     h.GetXaxis().SetTitle("m_{t#bar{t}}^{reco} [TeV]");
     h.GetXaxis().SetTitleOffset(1.0);
@@ -70,7 +70,7 @@ for hist in [hn_zp10, hn_zp20, hn_zp25, hn_zp30]:
     s = hist.Integral(-1, 9999)
     hist.Scale(1.0/s)
 
-hn_zp10.GetYaxis().SetRangeUser(0, 0.9)
+hn_zp10.GetYaxis().SetRangeUser(0, 0.6)
 hn_zp10.Draw("hist")
 hn_zp20.Draw("hist same")
 hn_zp25.Draw("hist same")
