@@ -16,6 +16,9 @@ for i in ["xmttboostede", "xmttboostedmu", "xlargeJetMboostede", "xlargeJetMboos
     h = hb.Clone(i+"clone")
     for b in range(1, h.GetNbinsX()):
         if h.GetXaxis().GetBinCenter(b) > firstBin and h.GetXaxis().GetBinCenter(b) < lastBin:
-            h.SetBinContent(b, h.GetBinContent(b)*(1 + stepSize))
+            if h.GetBinContent(b)*(1 + stepSize) > 0:
+                h.SetBinContent(b, h.GetBinContent(b)*(1 + stepSize))
+            else:
+                h.SetBinContent(b, 0)
     f.cd()
     h.Write(i, TObject.kOverwrite)
