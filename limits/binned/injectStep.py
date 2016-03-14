@@ -6,16 +6,22 @@ from os import system
 
 stepSizeE = -0.10 # 15% discrepancy
 stepSizeMu = -0.20 # 25% discrepancy
-firstBin = 2.3e3
-lastBin = 3.2e3
+firstBinE = 2.0e3
+lastBinE = 3.0e3
+firstBinMu = 2.3e3
+lastBinMu = 3.2e3
 
 fb = TFile("hist_bkg.root")
 f = TFile("hist_data_inj.root", "recreate")
 for i in ["xmttboostede", "xmttboostedmu", "xlargeJetMboostede", "xlargeJetMboostedmu", "xlargeJetPtboostede", "xlargeJetPtboostedmu"]:
     if 'boostede' in i:
         stepSize = stepSizeE
+        firstBin = firstBinE
+        lastBin = lastBinE
     elif 'boostedmu' in i:
         stepSize = stepSizeMu
+        firstBin = firstBinMu
+        lastBin = lastBinMu
 
     hb = fb.Get(i)
     f.cd()
