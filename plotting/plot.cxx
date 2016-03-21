@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
         {"posLegend",       required_argument,     0, 'L', "Move legend to the left.", &posLegend, extendedOption::eOTInt},
         {"rebin",           required_argument,     0, 'r', "Rebin by this factor.", &rebin, extendedOption::eOTInt},
         {"yMax",            required_argument,     0, 'Y', "Maximum of the Y axis.", &yMax, extendedOption::eOTFloat},
-        {"yMin",            required_argument,     0, 'y', "Minimum of the Y axis.", &yMax, extendedOption::eOTFloat},
+        {"yMin",            required_argument,     0, 'y', "Minimum of the Y axis.", &yMin, extendedOption::eOTFloat},
         {"arrow",           required_argument,     0, 'a', "Draw arrow.", &arrow, extendedOption::eOTInt},
         {"stamp",           required_argument,     0, 's', "0 = ATLAS Internal, 1 = ATLAS Preliminary.", &stamp, extendedOption::eOTInt},
         {"lumi",            required_argument,     0, 'l', "Luminosity value to show", &lumi, extendedOption::eOTFloat},
