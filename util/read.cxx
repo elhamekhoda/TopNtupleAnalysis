@@ -154,7 +154,7 @@ int main(int argc, char **argv) {
         {"btags",                 required_argument,     0, 'B', "Add cut on b-tagged jets >= abs(X). If negative use track-jet b-tagging.", &_btags, extendedOption::eOTInt},
         {"removeOverlapHighMtt",  required_argument,     0, 'R', "Veto events with true mtt > 1.1 TeV in the 410000 sample only (to be activated if one wnats to use the mtt sliced samples).", &removeOverlapHighMtt, extendedOption::eOTInt},
         {"doWeightSystematics",   required_argument,     0, 'S', "Include the variation of the systematics in the SFs.", &doWeightSystematics, extendedOption::eOTInt},
-        {"runMM",                 required_argument,     0, 'M', "Implement the QCD weiths to data", &runMM, extendedOption::eOTInt},
+        {"runMM",                 required_argument,     0, 'M', "Implement the QCD weiths to data: runMM 1 for nominal QCD and runMM 2 for W+Jets", &runMM, extendedOption::eOTInt},
 	{"runMM_StatErr",         required_argument,     0, 'm', "Shift the real/fake efficiencies to estimate the stattistical error", &runMM_StatErr, extendedOption::eOTInt},
         {"applyPtRew",            required_argument,     0, 'P', "Apply pt reweighting.", &applyPtRew, extendedOption::eOTInt},
         {"pdf",                   required_argument,     0, 'p', "Only run PDF variations.", &pdf, extendedOption::eOTString},
@@ -305,13 +305,42 @@ int main(int argc, char **argv) {
   }
 
   MMUtils * MM_nominal      = NULL;
-  //MMUtils * MM_nominal_e    = NULL;
     
   if (runMM){	
-  	//MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake.root");
-  	//MM_nominal_e    = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake_CR4_be_withFJ.root");
-  	//MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "ttrescr_invsd0/fake.root");
-  	MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake_1FJpt200.root");
+  	
+	//MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake_1FJpt200.root");		
+	if (runMM==2){ // >= 2 jets
+	
+	  if(_btags==0)
+	     MM_nominal      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_noBtag/eff_ttbar.root", "scripts/QCDestimation/040416_WJetsCR_noBtag/fake.root");
+	     
+	  else if(abs(_btags)==1)
+	     MM_nominal      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_Btag/eff_ttbar.root", "scripts/QCDestimation/040416_WJetsCR_Btag/fake.root");
+	  
+	  else{
+	     std::cout << "QCD estimation no suported for btags > 2" << std::endl;
+	     std::exit(-2);
+	  }//if
+	  
+	}else if (runMM==1){// >=4 jets or boosted selection
+	  
+	  if(_btags==0)
+	     MM_nominal      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_noBtag/eff_ttbar.root", "scripts/QCDestimation/040416_WJetsCR_noBtag/fake.root");
+
+	  else if(abs(_btags)==1)
+	     MM_nominal      = new MMUtils("scripts/QCDestimation/040416_nominalQCD/eff_ttbar.root", "scripts/QCDestimation/040416_nominalQCD/fake_1FJpt200.root"); //TODO resolved analysis
+
+	  else{
+	     std::cout << "QCD estimation no suported for btags > 2" << std::endl;
+	     std::exit(-2);
+	  }//if
+	
+	} else{
+	     std::cout << "Invalid runMM option" << std::endl;
+	     std::exit(-2);
+	
+	}//runMM 
+
   }//runMM
 
   std::vector<std::string> pdfList;
@@ -575,7 +604,7 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresSL(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
-  } else if(analysis == "AnaTtresQCDreal"||analysis == "AnaTtresQCDfake"){
+  } else if(analysis == "AnaTtresQCDreal"||analysis == "AnaTtresWQCDreal"||analysis == "AnaTtresQCDfake"||analysis == "AnaTtresWQCDfake"){
     vec_analysis.push_back(new AnaTtresQCD(outList[0], true,  false, systsListWithBlankNominal) ); //resolved electron
     vec_analysis.push_back(new AnaTtresQCD(outList[1], false, false, systsListWithBlankNominal) ); // resolved muon
     vec_analysis.push_back(new AnaTtresQCD(outList[2], true,  true,  systsListWithBlankNominal) ); // boosted  electron
@@ -823,7 +852,7 @@ int main(int argc, char **argv) {
               }
               weight *= ewkW;
             }
-
+		
             double btagsf = 1.0;
             std::string pref = "weight_bTagSF_70";
             std::string pref_pt = "tjet_bTagSF_70";
@@ -1154,18 +1183,13 @@ int main(int argc, char **argv) {
 
           procEvents++;
 	 
-	  if (runMM) {
-	     weight = 1.;
-             if (sel.electron().size() == 1 && sel.muon().size() == 0 && sel.passes("bejets")) {
-               //weight = MM_nominal_e->getMMweights(sel, runMM_StatErr);
-               weight = MM_nominal->getMMweights(sel, runMM_StatErr);
-             } else {
-               weight = MM_nominal->getMMweights(sel, runMM_StatErr);
-             }
-	  }//runMM
-
           if (analysis=="AnaTtresSL") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+	        
+	        if (runMM) {
+                   weight = MM_nominal->getMMweights(sel, runMM_StatErr, (dynamic_cast<AnaTtresSL*>(vec_analysis[iAna]))->isElectron(), (dynamic_cast<AnaTtresSL*>(vec_analysis[iAna]))->isBoosted());
+	        }//runMM
+	       
                 bool good = false;
                 if (onlyChannelList.size() == 0) good = true;
                 for (size_t iChannel = 0; iChannel < onlyChannelList.size(); ++iChannel) {
@@ -1176,10 +1200,16 @@ int main(int argc, char **argv) {
             }
           } else if (analysis=="AnaTtresQCDreal") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runEfficiency(sel, weight, suffix);
-          } else if (analysis=="AnaTtresQCDfake") {
+		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runRealRateQCDCR(sel, weight, suffix);
+          } else if (analysis=="AnaTtresWQCDreal") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runFakeRate(sel, weight, suffix);
+		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runRealRateWQCDCR(sel, weight, suffix);
+	  } else if (analysis=="AnaTtresQCDfake") {
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
+		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runFakeRateQCDCR(sel, weight, suffix);
+          } else if (analysis=="AnaTtresWQCDfake") {
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
+		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runFakeRateWQCDCR(sel, weight, suffix);
           } else if (analysis=="AnaTtresSLMtt") {
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
                 vec_analysis[iAna]->run(sel, weight, suffix);
