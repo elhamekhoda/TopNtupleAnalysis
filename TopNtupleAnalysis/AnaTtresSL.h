@@ -23,7 +23,10 @@ class AnaTtresSL : public Analysis {
     void run(const Event &e, double weight, const std::string &syst);
     void terminate() {};
     void setIsData(bool isData) {};
-
+   
+    inline bool isElectron(){return m_electron;};
+    inline bool isBoosted(){return m_boosted;};
+    
   protected:
     bool m_electron;
     bool m_boosted;
