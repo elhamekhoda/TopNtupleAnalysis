@@ -241,8 +241,8 @@ def fakeRates(inputDir, lumi):
 	channels  = []
 	
 	
-	channels += [('r','e' )]
-	#channels += [('r','mu')]
+	#channels += [('r','e' )]
+	channels += [('r','mu')]
 	#channels += [('b', 'e' )]
 	#channels += [('b', 'mu')]	
 	
@@ -297,8 +297,8 @@ def fakeRates(inputDir, lumi):
 		dataFile = TFile(hadd_dataPath,'READ')
 		
 		varList = [] 
-		varList += ['mwt','lepPt_effBins','lepPt','minDeltaR_effBins','minDeltaR','closJetPt','MET', 'z0sin', 'd0sig']
-		varList += ['ljet_m', 'ljet_pt', 'ljet_tau32', 'ljet_tau32_wta', 'cos_metPhi_lepPhi','lepEta','nTrkBtagJets','nJets']
+		varList += ['mwt','lepPt_effBins','lepPt','minDeltaR_effBins','minDeltaR','closJetPt','MET', 'MET_effBins', 'mwt_met', 'z0sin', 'd0sig']
+		varList += ['ljet_m', 'ljet_pt', 'ljet_tau32', 'ljet_tau32_wta', 'cos_metPhi_lepPhi','lepEta','nTrkBtagJets','nJets', 'closJetJVT']
 		#varList += ['chi2']
 		
 		for var in varList:
@@ -330,6 +330,7 @@ def fakeRates(inputDir, lumi):
 			
 			pallete   = [2, 3, 3, 3, 6, 6, 6, 7]
 			styleLine = [1, 1 ,2, 3, 1, 2, 3, 1]
+			name 	  = ["ttbar", "We#nu", "W#mu#nu", "W#tau#nu", "Zee", "Z#mu#mu", "Z#tau#tau", "st"]
 			h_ibkg = []
 			i=0
 			
@@ -357,7 +358,7 @@ def fakeRates(inputDir, lumi):
 					h_ibkg[i].SetLineStyle(styleLine[i])
 					h_ibkg[i].SetLineWidth(3)					
 					#print h_ibkg[i].Integral(), i
-					leg.AddEntry(h_ibkg[i],  ibkg+": "+`h_ibkg[i].Integral()`[:7], "L")
+					leg.AddEntry(h_ibkg[i],  name[i]+": "+`h_ibkg[i].Integral()`[:7], "L")
 				i += 1
 			
 			h_bkg = bkgFile.Get("fake_"+var).Clone()
@@ -375,7 +376,7 @@ def fakeRates(inputDir, lumi):
 			if h_data.GetMaximum()>h_bkg.GetMaximum():	h_data.SetMaximum(h_data.GetMaximum()*1.3)
 			else: 						h_data.SetMaximum(h_bkg.GetMaximum()*1.3)
 		
-			c_t.SetLogy(1)
+			c_t.SetLogy(0)
 			#if var=='lepPt':	c_t.SetLogx(1)
 			c_t.SetGridy(1)
 			c_t.Update()
@@ -399,6 +400,7 @@ def fakeRates(inputDir, lumi):
 			
 			pallete   = [2, 3, 3, 3, 6, 6, 6, 7]
 			styleLine = [1, 1 ,2, 3, 1, 2, 3, 1]
+			name 	  = ["ttbar", "We#nu", "W#mu#nu", "W#tau#nu", "Zee", "Z#mu#mu", "Z#tau#tau", "st"]
 			h_ibkg = []
 			i=0
 			for ibkg in ["ttbar", "Wev", "Wmv", "Wtv", "Zee", "Zmm", "Ztt", "st"]:
@@ -415,12 +417,10 @@ def fakeRates(inputDir, lumi):
 					h_ibkg[i].SetLineStyle(styleLine[i])
 					h_ibkg[i].SetLineWidth(3)					
 					#print h_ibkg[i].Integral(), i
-					leg.AddEntry(h_ibkg[i],  ibkg+": "+`h_ibkg[i].Integral()`[:7], "L")
+					leg.AddEntry(h_ibkg[i],  name[i]+": "+`h_ibkg[i].Integral()`[:7], "L")
 				tmp_bkgFile.Close()	
 				i += 1
-			
-			
-			
+						
 			h_bkg = bkgFile.Get('fake_'+var+'_Loose').Clone()
 			h_bkg.Scale(lumi)
 			h_bkg.Draw("histo SAME")
@@ -434,7 +434,7 @@ def fakeRates(inputDir, lumi):
 			leg.AddEntry(h_bkg,  "bkg: "+`h_bkg.Integral()`[:7], "L")
 			leg.Draw()
 			if(verbose):	print 'total bkg &' , `h_bkg.Integral()`[:7], '\\\ \\hline'
-			c_l.SetLogy(1)
+			c_l.SetLogy(0)
 			c_l.SetGridy(1)
 			c_l.Update()
         	        c_l.Modified()  	    
@@ -442,696 +442,134 @@ def fakeRates(inputDir, lumi):
 			
 			
 		# --> Fake rate
-
-		h_leptPt_t 	= []
-		h_leptPt_l 	= []
-		h_leptEta_t       = []
-		h_leptEta_l       = []
-		h_leptEta_pt60inf_t 	= []
-		h_leptEta_pt60inf_l 	= []
 		
-		h_Cdphi_t = []
-		h_Cdphi_l = []
-		h_Cdphi_pt060_t = []
-		h_Cdphi_pt060_l = []
-		h_Cdphi_pt60inf_t = []
-		h_Cdphi_pt60inf_l = []
-		
-		h_closeJL_pt_t	= []
-		h_closeJL_pt_l  = []
-		h_closeJL_dr_t	= []
-		h_closeJL_dr_l  = []
-		
-		h2D_pt060_t = []
-		h2D_pt060_l = []
-		h2D_pt60inf_t = []
-		h2D_pt60inf_l = []
-		
-		h2D_PtEta_t = []
-		h2D_PtEta_l = []
-		h2D_PtDR_t = []
-		h2D_PtDR_l = []
-		h2D_PtJPt_t = []
-		h2D_PtJPt_l = []
-		h2D_EtaCos_t = []
-		h2D_EtaCos_l = []
-		
-		h2D_PtCos_t = []
-		h2D_PtCos_l = []
-		
-		h2D_PtCos_lEta_t = []
-		h2D_PtCos_lEta_l = []
-		
-		h2D_PtCos_hEta_t = []
-		h2D_PtCos_hEta_l = []
-		
-		iPad=0
-		for item in ["BKG","DATA"]:	
-			
-			if item=="BKG":		inputfile = bkgFile
-			elif item=="DATA":	inputfile = dataFile
-
-			#lept pT
-			h_leptPt_t.append( inputfile.Get("fake_lepPt_effBins").Clone() )		  	  
-			h_leptPt_l.append( inputfile.Get("fake_lepPt_effBins_Loose").Clone() )
-			h_leptPt_l[iPad].Add(h_leptPt_t[iPad],+1)
-			
-			#lept eta
-			h_leptEta_t.append( inputfile.Get("fake_lepEta").Clone() )		  	  
-			h_leptEta_l.append( inputfile.Get("fake_lepEta_Loose").Clone() )
-			h_leptEta_l[iPad].Add(h_leptEta_t[iPad],+1)
-			
-			#dr between the closest jet to the lepton
-			h_closeJL_dr_t.append( inputfile.Get("fake_minDeltaR_effBins").Clone() )			
-			h_closeJL_dr_l.append( inputfile.Get("fake_minDeltaR_effBins_Loose").Clone() )
-			h_closeJL_dr_l[iPad].Add(h_closeJL_dr_t[iPad],+1)
-						
-			#Pt between the closest jet to the lepton
-			h_closeJL_pt_t.append( inputfile.Get("fake_closJetPt_effBins").Clone() )			
-			h_closeJL_pt_l.append( inputfile.Get("fake_closJetPt_effBins_Loose").Clone() )
-			h_closeJL_pt_l[iPad].Add(h_closeJL_pt_t[iPad],+1)
-			
-			#delta phi(met,lept)
-			h_Cdphi_t.append( inputfile.Get("fake_cos_metPhi_lepPhi").Clone() ) 		       
-			h_Cdphi_l.append( inputfile.Get("fake_cos_metPhi_lepPhi_Loose").Clone() )
-			h_Cdphi_l[iPad].Add(h_Cdphi_t[iPad],+1)
-			
-			#2D param. leptPt and leptEta
-			h2D_PtEta_t.append( inputfile.Get("fake_lepPt_lepEta").Clone() )	
-			h2D_PtEta_l.append( inputfile.Get("fake_lepPt_lepEta_Loose").Clone() )
-			h2D_PtEta_l[iPad].Add(h2D_PtEta_t[iPad],+1)
-			
-			#2D param. leptPt and dr
-			h2D_PtDR_t.append( inputfile.Get("fake_lepPt_minDeltaR").Clone() )	
-			h2D_PtDR_l.append( inputfile.Get("fake_lepPt_minDeltaR_Loose").Clone() )
-			h2D_PtDR_l[iPad].Add(h2D_PtDR_t[iPad],+1)
-			
-			#2D param. leptPt and close jet pt
-			h2D_PtJPt_t.append( inputfile.Get("fake_lepPt_closJetPt").Clone() )	
-			h2D_PtJPt_l.append( inputfile.Get("fake_lepPt_closJetPt_Loose").Clone() )
-			h2D_PtJPt_l[iPad].Add(h2D_PtJPt_t[iPad],+1)
-			
-			#2D param. leptEta and cosDPhi
-			h2D_EtaCos_t.append( inputfile.Get("fake_lepEta_cosDPhi").Clone() )	
-			h2D_EtaCos_l.append( inputfile.Get("fake_lepEta_cosDPhi_Loose").Clone() )
-			h2D_EtaCos_l[iPad].Add(h2D_EtaCos_t[iPad],+1)
-			
-			#2D param. leptPt and cosDPhi
-			h2D_PtCos_t.append( inputfile.Get("fake_lepPt_cosDPhi").Clone() )	
-			h2D_PtCos_l.append( inputfile.Get("fake_lepPt_cosDPhi_Loose").Clone() )
-			h2D_PtCos_l[iPad].Add(h2D_PtCos_t[iPad],+1)
-			
-			#2D param. leptPt and cosDPhi: low lept Eta
-			h2D_PtCos_lEta_t.append( inputfile.Get("fake_lepPt_cosDPhi_lowEta").Clone() )	
-			h2D_PtCos_lEta_l.append( inputfile.Get("fake_lepPt_cosDPhi_lowEta_Loose").Clone() )
-			h2D_PtCos_lEta_l[iPad].Add(h2D_PtCos_lEta_t[iPad],+1)
-			
-			#2D param. leptPt and cosDPhi: high lept Eta
-			h2D_PtCos_hEta_t.append( inputfile.Get("fake_lepPt_cosDPhi_highEta").Clone() )	
-			h2D_PtCos_hEta_l.append( inputfile.Get("fake_lepPt_cosDPhi_highEta_Loose").Clone() )
-			h2D_PtCos_hEta_l[iPad].Add(h2D_PtCos_hEta_t[iPad],+1)
-			
-			iPad+=1
-		
-
-		# ---> 1D fake rates: 
-		#lept Pt
-		
-		h_leptPt_t[0].Scale(lumi)
-		h1 = h_leptPt_t[1]
-		h1.Add(h_leptPt_t[0],-1)
-		if extraPlots:	h1.Write("hP_leptPt_tight_"+ichan[0]+'_'+ichan[1])
-		
-		h_leptPt_l[0].Scale(lumi)
-		h2 = h_leptPt_l[1]
-		h2.Add(h_leptPt_l[0],-1)		
-		if extraPlots:	h2.Write("hP_leptPt_loose_"+ichan[0]+'_'+ichan[1])
-		
-		h_ratio_leptPt = h1
-		h_ratio_leptPt.Divide(h1, h2, 1.0, 1.0, "B")
-		
-		c = TCanvas("c_"+'fake_leptPt_'+ichan[0]+'_'+ichan[1])
-                maxi = 0
-		mini = 0
-		h_ratio_leptPt.Draw("e")
-		h_ratio_leptPt.SetStats(0)
-		h_ratio_leptPt.GetYaxis().SetRangeUser(0,1)
-		h_ratio_leptPt.Set		
-		c.SetGridy(1)
-		c.SetLogx(1)
-		c.SetLogy(0)
-		c.Update()
-                c.Modified()
-		h_ratio_leptPt.Write("fakeRate_pt_"+regime+'_'+ichan[1])	               			
-		saveCanvas(c, 'h_fake_leptPt_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-		
-		#lept Eta
-		h_leptEta_t[0].Scale(lumi)
-		h1 = h_leptEta_t[1]
-		h1.Add(h_leptEta_t[0],-1)
-		if extraPlots:	h1.Write("hP_leptEta_tight_"+ichan[0]+'_'+ichan[1])
-		
-		h_leptEta_l[0].Scale(lumi)
-		h2 = h_leptEta_l[1]
-		h2.Add(h_leptEta_l[0],-1)		
-		if extraPlots:	h2.Write("hP_leptEta_loose_"+ichan[0]+'_'+ichan[1])
-		
-		h_ratio_leptEta = h1
-		h_ratio_leptEta.Divide(h1, h2, 1.0, 1.0, "B")
-		
-		c = TCanvas("c_"+'fake_leptEta_'+ichan[0]+'_'+ichan[1])
-                maxi = 0
-		mini = 0
-		h_ratio_leptEta.Draw("e")
-		h_ratio_leptEta.SetStats(0)
-		h_ratio_leptEta.GetYaxis().SetRangeUser(0,1)
-		h_ratio_leptEta.Set		
-		c.SetGridy(1)
-		#c.SetLogx(0)
-		c.SetLogy(0)
-		c.Update()
-                c.Modified()
-		h_ratio_leptEta.Write("fakeRate_leptEta_"+regime+'_'+ichan[1])	               			
-		saveCanvas(c, 'h_fake_leptEta_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-		
-		
-		#lept Pt < 120				
-		h_ratio_leptPt.GetXaxis().SetRangeUser(30,120)
-		
-		c = TCanvas("c_"+'fake_leptPt_120_'+ichan[0]+'_'+ichan[1])
-                maxi = 0
-		mini = 0
-		h_ratio_leptPt.Draw("e")
-		h_ratio_leptPt.SetStats(0)
-		h_ratio_leptPt.GetYaxis().SetRangeUser(0,1)			
-		c.SetGridy(1)
-		c.SetLogx(0)
-		c.SetLogy(0)
-		c.Update()
-                c.Modified()
-		h_ratio_leptPt.Write("fakeRate_pt_120_"+regime+'_'+ichan[1])	               			
-		saveCanvas(c, 'h_fake_leptPt_120_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-		
-		#pT of the closest jet to the lepton
-		h_closeJL_pt_t[0].Scale(lumi)
-		h1 = h_closeJL_pt_t[1]		
-		h1.Add(h_closeJL_pt_t[0],-1)
-		if extraPlots:	h1.Write("hP_closeJL_pt_tight_"+regime+'_'+ichan[1])
-		
-		h_closeJL_pt_l[0].Scale(lumi)						
-		h2 = h_closeJL_pt_l[1]
-		h2.Add(h_closeJL_pt_l[0],-1)			
-		if extraPlots:	h2.Write("hP_closeJL_pt_loose_"+regime+'_'+ichan[1])
-		
-		h_ratio_closeJL_pt = h1
-		h_ratio_closeJL_pt.Divide(h1, h2, 1.0, 1.0, "B")	
-		
-		c1 = TCanvas("c_"+'fake_closeJL_pt_'+ichan[0]+'_'+ichan[1])
-                maxi = 0
-		mini = 0
-		h_ratio_closeJL_pt.Draw("e")			               	
-		h_ratio_closeJL_pt.SetStats(0)
-		c1.SetGridy(1)
-		c.SetLogx(0)
-		c.SetLogy(0)
-		c1.Update()
-                c1.Modified()
-		saveCanvas(c1, 'h_fake_closeJL_pt_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-		
-		#dr between the closest jet to the lepton		
-		h_closeJL_dr_t[0].Scale(lumi)
-		h1 = h_closeJL_dr_t[1]		
-		h1.Add(h_closeJL_dr_t[0],-1)
-		if extraPlots:	h1.Write("hP_closeJL_dr_tight_"+regime+'_'+ichan[1])
-		
-		h_closeJL_dr_l[0].Scale(lumi)						
-		h2 = h_closeJL_dr_l[1]
-		h2.Add(h_closeJL_dr_l[0],-1)			
-		if extraPlots:	h2.Write("hP_closeJL_dr_loose_"+regime+'_'+ichan[1])
-		
-		h_ratio_closeJL_dr = h1
-		h_ratio_closeJL_dr.Divide(h1, h2, 1.0, 1.0, "B")	
-		
-		c1 = TCanvas("c_"+'fake_closeJL_dr_'+regime+'_'+ichan[1])
-                maxi = 0
-		mini = 0
-		h_ratio_closeJL_dr.Draw("e")
-		h_ratio_closeJL_dr.SetStats(0)
-		h_ratio_closeJL_dr.GetYaxis().SetRangeUser(0,1)		               	
-		c1.SetGridy(1)
-		c1.SetLogy(0)
-		c1.SetLogx(0)
-		c1.Update()
-                c1.Modified()
-		saveCanvas(c1, 'h_fake_closeJL_dr_'+regime+'_'+ichan[1], outfile, 'fake_plots')		
-		outfile.cd()	
-		h_ratio_closeJL_dr.Write('fakeRate_dr_'+regime+'_'+ichan[1])
+		parametrization1D =  ["lepPt_effBins","lepEta", "minDeltaR_effBins", "closJetPt_effBins", "cos_metPhi_lepPhi", "MET", "d0sig", "MET_effBins", "mwt_effBins", "mwt_met_effBins"]
 				
-		#dPhi(Inclusive)	
-		h_Cdphi_t[0].Scale(lumi)
-		h1 = h_Cdphi_t[1]		
-		h1.Add(h_Cdphi_t[0],-1)
-		if extraPlots:	h1.Write("hP_Cdphi_tight_"+regime+'_'+ichan[1])
+		for ipar in parametrization1D:
 		
-		h_Cdphi_l[0].Scale(lumi)						
-		h2 = h_Cdphi_l[1]
-		h2.Add(h_Cdphi_l[0],-1)			
-		if extraPlots:	h2.Write("hP_Cdphi_loose_"+regime+'_'+ichan[1])
-		
-		h_ratio_Cdphi = h1
-		h_ratio_Cdphi.Divide(h1, h2, 1.0, 1.0, "B")	
-		
-		c1 = TCanvas("c_"+'fake_Cdphi_'+regime+'_'+ichan[1])
-                maxi = 0
-		mini = 0
-		h_ratio_Cdphi.Draw("e")	
-		h_ratio_Cdphi.SetStats(0)		               	
-		h_ratio_Cdphi.GetYaxis().SetRangeUser(0,1)
-		c1.SetGridy(1)
-		c1.SetLogy(0)
-		c1.SetLogx(0)
-		c1.Update()
-                c1.Modified()
-		saveCanvas(c1, 'h_fake_Cdphi_'+regime+'_'+ichan[1], outfile, 'fake_plots')		
-		outfile.cd()	
-		h_ratio_Cdphi.Write('fakeRate_Cdphi_'+regime+'_'+ichan[1])
-		
-		
-		# ---> 2D fake rates: leptPt vs leptEta
-		h2D_PtEta_t[0].Scale(lumi)
-		h1_2D = h2D_PtEta_t[1].Clone()
-		h1_2D.Add(h2D_PtEta_t[0],-1)	
-		if extraPlots:	h1_2D.Write("hP_2D_leptPt_leptEta_tight_"+regime+'_'+ichan[1])
-		
-		h2D_PtEta_l[0].Scale(lumi)		
-		h2_2D = h2D_PtEta_l[1].Clone()
-		h2_2D.Add(h2D_PtEta_l[0],-1) 
-		if extraPlots:	h2_2D.Write("hP_2D_leptPt_leptEta_loose_"+regime+'_'+ichan[1])
-		
-		if extraPlots:
-			c = TCanvas("c_"+'hP_2D_leptPt_leptEta_t_'+ichan[0]+'_'+ichan[1])
-			ht_DTMC = h2D_PtEta_t[1].Clone()
-			ht_DTMC.Divide(h2D_PtEta_t[0].Clone())
-			ht_DTMC.Draw("colz TEXT e")
-			ht_DTMC.SetStats(0)
-			c.SetLogx(1)
-			ht_DTMC.Write("hP_2D_leptPt_leptEta_tight_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_leptEta_tight_'+regime+'_'+ichan[1], outfile, 'fake_plots')
+			histo_t = []
+			histo_l = []
 			
-			c = TCanvas("c_"+'hP_2D_leptPt_leptEta_l_'+ichan[0]+'_'+ichan[1])
-			hl_DTMC = h2D_PtEta_l[1].Clone()
-			hl_DTMC.Divide(h2D_PtEta_l[0].Clone())
-			hl_DTMC.Draw("colz TEXT e")
-			hl_DTMC.SetStats(0)
-			c.SetLogx(1)
-			hl_DTMC.Write("hP_2D_leptPt_leptEta_loose_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_leptEta_loose_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-		
-		h_ratio_fake = h1_2D.Clone()
-		h_ratio_fake.Divide(h1_2D, h2_2D, 1.0, 1.0, "B")
-		
-		gStyle.SetPaintTextFormat("1.2f")
-		c2 = TCanvas("c_"+'2D_leptPt_leptEta_'+ichan[0]+'_'+ichan[1])
-		c2.cd()
-		h_ratio_fake.Draw()
-		h_ratio_fake.Draw("colz TEXT e1 SAME")
-		#h_ratio_fake.GetZaxis().SetRangeUser(0.4, 1.0)
-		h_ratio_fake.SetStats(0)
-		gPad.RedrawAxis()	
-		#gStyle.SetPaintTextsize(0.04)               	
-		c2.SetLogx(1)
-		#c2.SetLogy(1)
-		c2.Update()
-                c2.Modified()	
-		
-		l = TLatex()
-		l.SetNDC()
-		l.SetTextFont(72)
-		l.SetTextSize(0.03)
-		l.SetTextColor(kBlack)
-		l.DrawLatex(0.1,0.92, "#intLdt ="+`lumi/1000.`[:3]+" fb^{-1}")	
-		
-		saveCanvas(c2, '2Dh_leptPt_leptEta_'+regime+'_'+ichan[1], outfile, 'fake_plots')
+			iPad=0
+			for item in ["BKG","DATA"]:	
 			
-		outfile.cd()	
-		h_ratio_fake.Write('2Dfake_leptPt_leptEta_'+regime+'_'+ichan[1])
-		
-		# ---> 2D fake rates: leptPt vs dr
-		h2D_PtDR_t[0].Scale(lumi)
-		h1_2D = h2D_PtDR_t[1].Clone()
-		h1_2D.Add(h2D_PtDR_t[0],-1)	
-		if extraPlots:	h1_2D.Write("hP_2D_leptPt_DR_tight_"+regime+'_'+ichan[1])
-		
-		h2D_PtDR_l[0].Scale(lumi)		
-		h2_2D = h2D_PtDR_l[1].Clone()
-		h2_2D.Add(h2D_PtDR_l[0],-1) 
-		if extraPlots:	h2_2D.Write("hP_2D_leptPt_DR_loose_"+regime+'_'+ichan[1])
-		
-		if extraPlots:
-			c = TCanvas("c_"+'hP_2D_leptPt_DR_t_'+ichan[0]+'_'+ichan[1])
-			ht_DTMC = h2D_PtDR_t[1].Clone()
-			ht_DTMC.Divide(h2D_PtDR_t[0].Clone())
-			ht_DTMC.Draw("colz TEXT e")
-			ht_DTMC.SetStats(0)
-			c.SetLogx(1)
-			ht_DTMC.Write("hP_2D_leptPt_DR_tight_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_DR_tight_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-			
-			c = TCanvas("c_"+'hP_2D_leptPt_DR_l_'+ichan[0]+'_'+ichan[1])
-			hl_DTMC = h2D_PtDR_l[1].Clone()
-			hl_DTMC.Divide(h2D_PtDR_l[0].Clone())
-			hl_DTMC.Draw("colz TEXT e")
-			hl_DTMC.SetStats(0)
-			c.SetLogx(1)
-			hl_DTMC.Write("hP_2D_leptPt_DR_loose_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_DR_loose_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-		
-		h_ratio_fake = h1_2D.Clone()
-		h_ratio_fake.Divide(h1_2D, h2_2D, 1.0, 1.0, "B")
-		
-		gStyle.SetPaintTextFormat("1.2f")
-		c2 = TCanvas("c_"+'2D_leptPt_DR_'+ichan[0]+'_'+ichan[1])
-		c2.cd()
-		h_ratio_fake.Draw()
-		h_ratio_fake.Draw("colz TEXT e1 SAME")
-		#h_ratio_fake.GetZaxis().SetRangeUser(0.4, 1.0)
-		h_ratio_fake.SetStats(0)
-		gPad.RedrawAxis()	
-		#gStyle.SetPaintTextsize(0.04)               	
-		c2.SetLogx(1)
-		#c2.SetLogy(1)
-		c2.Update()
-                c2.Modified()	
-		
-		l = TLatex()
-		l.SetNDC()
-		l.SetTextFont(72)
-		l.SetTextSize(0.03)
-		l.SetTextColor(kBlack)
-		l.DrawLatex(0.1,0.92, "#intLdt ="+`lumi/1000.`[:3]+" fb^{-1}")	
-		
-		saveCanvas(c2, '2Dh_leptPt_DR_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-			
-		outfile.cd()	
-		h_ratio_fake.Write('2Dfake_leptPt_DR_'+regime+'_'+ichan[1])
+				if item=="BKG":		inputfile = bkgFile
+				elif item=="DATA":	inputfile = dataFile
 
-		# ---> 2D fake rates: leptPt vs jet Pt
-		h2D_PtJPt_t[0].Scale(lumi)
-		h1_2D = h2D_PtJPt_t[1].Clone()
-		h1_2D.Add(h2D_PtJPt_t[0],-1)	
-		if extraPlots:	h1_2D.Write("hP_2D_leptPt_closeJetPt_tight_"+regime+'_'+ichan[1])
+				histo_t.append( inputfile.Get("fake_"+ipar).Clone() )			   
+				histo_l.append( inputfile.Get("fake_"+ipar+"_Loose").Clone() )
+				histo_l[iPad].Add(histo_t[iPad],+1)
+				
+				iPad+=1
+				
+			histo_t[0].Scale(lumi)
+			h1 = histo_t[1]
+			h1.Add(histo_t[0],-1)
+			if extraPlots:	h1.Write("hP_"+ipar+"_tight_"+ichan[0]+'_'+ichan[1])
 		
-		h2D_PtJPt_l[0].Scale(lumi)		
-		h2_2D = h2D_PtJPt_l[1].Clone()
-		h2_2D.Add(h2D_PtJPt_l[0],-1) 
-		if extraPlots:	h2_2D.Write("hP_2D_leptPt_closeJetPt_loose_"+regime+'_'+ichan[1])
-		
-		if extraPlots:
-			c = TCanvas("c_"+'hP_2D_leptPt_closeJetPt_t_'+ichan[0]+'_'+ichan[1])
-			ht_DTMC = h2D_PtJPt_t[1].Clone()
-			ht_DTMC.Divide(h2D_PtJPt_t[0].Clone())
-			ht_DTMC.Draw("colz TEXT e")
-			ht_DTMC.SetStats(0)
+			histo_l[0].Scale(lumi)
+			h2 = histo_l[1]
+			h2.Add(histo_l[0],-1)		
+			if extraPlots:	h2.Write("hP_"+ipar+"_loose_"+ichan[0]+'_'+ichan[1])
+						
+			h_ratio = h1
+			h_ratio.Divide(h1, h2, 1.0, 1.0, "B")
+				
+			c = TCanvas("c_"+"fake_"+ipar+"_"+ichan[0]+"_"+ichan[1])
+                	maxi = 0
+			mini = 0
+			h_ratio.Draw("e")
+			h_ratio.SetStats(0)
+			h_ratio.GetYaxis().SetRangeUser(0,1)
+			h_ratio.SetMarkerStyle(20)
+			h_ratio.SetMarkerSize(0.8)		 
+			c.SetGridy(1)
 			c.SetLogx(1)
-			ht_DTMC.Write("hP_2D_leptPt_closeJetPt_tight_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_closeJetPt_tight_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-			
-			c = TCanvas("c_"+'hP_2D_leptPt_closeJetPt_l_'+ichan[0]+'_'+ichan[1])
-			hl_DTMC = h2D_PtJPt_l[1].Clone()
-			hl_DTMC.Divide(h2D_PtJPt_l[0].Clone())
-			hl_DTMC.Draw("colz TEXT e")
-			hl_DTMC.SetStats(0)
-			c.SetLogx(1)
-			hl_DTMC.Write("hP_2D_leptPt_closeJetPt_loose_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_closeJetPt_loose_'+regime+'_'+ichan[1], outfile, 'fake_plots')
+			if ipar in ["lepEta", "cos_metPhi_lepPhi"]:
+				c.SetLogx(0)
+			c.SetLogy(0)
+			c.Update()
+               		c.Modified()
+			h_ratio.Write("fakeRate_"+ipar+"_"+regime+"_"+ichan[1])	               			
+			saveCanvas(c, "h_fake_"+ipar+"_"+regime+"_"+ichan[1], outfile, "fake_plots")
 		
-		h_ratio_fake = h1_2D.Clone()
-		h_ratio_fake.Divide(h1_2D, h2_2D, 1.0, 1.0, "B")
-		
-		gStyle.SetPaintTextFormat("1.2f")
-		c2 = TCanvas("c_"+'2D_leptPt_closeJetPt_'+ichan[0]+'_'+ichan[1])
-		c2.cd()
-		h_ratio_fake.Draw()
-		h_ratio_fake.Draw("colz TEXT e1 SAME")
-		#h_ratio_fake.GetZaxis().SetRangeUser(0.4, 1.0)
-		h_ratio_fake.SetStats(0)
-		gPad.RedrawAxis()	
-		#gStyle.SetPaintTextsize(0.04)               	
-		c2.SetLogx(1)
-		c2.SetLogy(1)
-		c2.Update()
-                c2.Modified()	
-		
-		l = TLatex()
-		l.SetNDC()
-		l.SetTextFont(72)
-		l.SetTextSize(0.03)
-		l.SetTextColor(kBlack)
-		l.DrawLatex(0.1,0.92, "#intLdt ="+`lumi/1000.`[:3]+" fb^{-1}")	
-		
-		saveCanvas(c2, '2Dh_leptPt_closeJetPt_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-			
-		outfile.cd()	
-		h_ratio_fake.Write('2Dfake_leptPt_closeJetPt_'+regime+'_'+ichan[1])
 
-	
-		# ---> 2D fake rates: leptEta vs cosDPhi
-		h2D_EtaCos_t[0].Scale(lumi)
-		h1_2D = h2D_EtaCos_t[1].Clone()
-		h1_2D.Add(h2D_EtaCos_t[0],-1)	
-		if extraPlots:	h1_2D.Write("hP_2D_leptEta_cosDPhi_tight_"+regime+'_'+ichan[1])
+		parametrization2D =  ["lepPt_lepEta", "lepPt_closJetPt", "lepPt_minDeltaR", "lepPt_minDeltaR_lowCos", "lepPt_minDeltaR_highCos"]
+		parametrization2D += ["lepPt_cosDPhi", "minDeltaR_cosDPhi", "lepPt_cosDPhi_lowEta", "lepPt_cosDPhi_highEta"]
+		parametrization2D += ["minDeltaR_cosDPhi_highLepPt", "minDeltaR_cosDPhi_lowLepPt", "lepPt_met", "lepPt_met_lowDR", "lepPt_met_highDR"]
+		parametrization2D += ["minDeltaR_met_highLepPt", "minDeltaR_met_lowLepPt", "lepPt_closJetPt"]
 		
-		h2D_EtaCos_l[0].Scale(lumi)		
-		h2_2D = h2D_EtaCos_l[1].Clone()
-		h2_2D.Add(h2D_EtaCos_l[0],-1) 
-		if extraPlots:	h2_2D.Write("hP_2D_leptEta_cosDPhi_loose_"+regime+'_'+ichan[1])
+		for ipar in parametrization2D:
 		
-		if extraPlots:
-			c = TCanvas("c_"+'hP_2D_leptEta_cosDPhi_t_'+ichan[0]+'_'+ichan[1])
-			ht_DTMC = h2D_EtaCos_t[1].Clone()
-			ht_DTMC.Divide(h2D_EtaCos_t[0].Clone())
-			ht_DTMC.Draw("colz TEXT e")
-			ht_DTMC.SetStats(0)
-			c.SetLogx(0)
-			ht_DTMC.Write("hP_2D_leptEta_cosDPhi_tight_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptEta_cosDPhi_tight_'+regime+'_'+ichan[1], outfile, 'fake_plots')
+			histo_t = []
+			histo_l = []
 			
-			c = TCanvas("c_"+'hP_2D_leptEta_cosDPhi_l_'+ichan[0]+'_'+ichan[1])
-			hl_DTMC = h2D_EtaCos_l[1].Clone()
-			hl_DTMC.Divide(h2D_EtaCos_l[0].Clone())
-			hl_DTMC.Draw("colz TEXT e")
-			hl_DTMC.SetStats(0)
-			c.SetLogx(0)
-			hl_DTMC.Write("hP_2D_leptEta_cosDPhi_loose_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptEta_cosDPhi_loose_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-		
-		h_ratio_fake = h1_2D.Clone()
-		h_ratio_fake.Divide(h1_2D, h2_2D, 1.0, 1.0, "B")
-		
-		gStyle.SetPaintTextFormat("1.2f")
-		c2 = TCanvas("c_"+'2D_leptEta_cosDPhi_'+ichan[0]+'_'+ichan[1])
-		c2.cd()
-		h_ratio_fake.Draw()
-		h_ratio_fake.Draw("colz TEXT e1 SAME")
-		#h_ratio_fake.GetZaxis().SetRangeUser(0.4, 1.0)
-		h_ratio_fake.SetStats(0)
-		gPad.RedrawAxis()	
-		#gStyle.SetPaintTextsize(0.04)               	
-		c2.SetLogx(0)
-		c2.SetLogy(0)
-		c2.Update()
-                c2.Modified()	
-		
-		l = TLatex()
-		l.SetNDC()
-		l.SetTextFont(72)
-		l.SetTextSize(0.03)
-		l.SetTextColor(kBlack)
-		l.DrawLatex(0.1,0.92, "#intLdt ="+`lumi/1000.`[:3]+" fb^{-1}")	
-		
-		saveCanvas(c2, '2Dh_leptEta_cosDPhi_'+regime+'_'+ichan[1], outfile, 'fake_plots')
+			iPad=0
+			for item in ["BKG","DATA"]:	
 			
-		outfile.cd()	
-		h_ratio_fake.Write('2Dfake_leptEta_cosDPhi_'+regime+'_'+ichan[1])
-		
-		# ---> 2D fake rates: leptPt vs cosDPhi (inc)
-		h2D_PtCos_t[0].Scale(lumi)
-		h1_2D = h2D_PtCos_t[1].Clone()
-		h1_2D.Add(h2D_PtCos_t[0],-1)	
-		if extraPlots:	h1_2D.Write("hP_2D_leptPt_cosDPhi_tight_"+regime+'_'+ichan[1])
-		
-		h2D_PtCos_l[0].Scale(lumi)		
-		h2_2D = h2D_PtCos_l[1].Clone()
-		h2_2D.Add(h2D_PtCos_l[0],-1) 
-		if extraPlots:	h2_2D.Write("hP_2D_leptPt_cosDPhi_loose_"+regime+'_'+ichan[1])
-		
-		if extraPlots:
-			c = TCanvas("c_"+'hP_2D_leptPt_cosDPhi_t_'+ichan[0]+'_'+ichan[1])
-			ht_DTMC = h2D_PtCos_t[1].Clone()
-			ht_DTMC.Divide(h2D_PtCos_t[0].Clone())
-			ht_DTMC.Draw("colz TEXT e")
-			ht_DTMC.SetStats(0)
-			c.SetLogx(1)
-			ht_DTMC.Write("hP_2D_leptPt_cosDPhi_tight_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_cosDPhi_tight_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-			
-			c = TCanvas("c_"+'hP_2D_leptPt_cosDPhi_l_'+ichan[0]+'_'+ichan[1])
-			hl_DTMC = h2D_PtCos_l[1].Clone()
-			hl_DTMC.Divide(h2D_PtCos_l[0].Clone())
-			hl_DTMC.Draw("colz TEXT e")
-			hl_DTMC.SetStats(0)
-			c.SetLogx(1)
-			hl_DTMC.Write("hP_2D_leptPt_cosDPhi_loose_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_cosDPhi_loose_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-		
-		h_ratio_fake = h1_2D.Clone()
-		h_ratio_fake.Divide(h1_2D, h2_2D, 1.0, 1.0, "B")
-		
-		gStyle.SetPaintTextFormat("1.2f")
-		c2 = TCanvas("c_"+'2D_leptPt_cosDPhi_'+ichan[0]+'_'+ichan[1])
-		c2.cd()
-		h_ratio_fake.Draw()
-		h_ratio_fake.Draw("colz TEXT e1 SAME")
-		#h_ratio_fake.GetZaxis().SetRangeUser(0.4, 1.0)
-		h_ratio_fake.SetStats(0)
-		gPad.RedrawAxis()	
-		#gStyle.SetPaintTextsize(0.04)               	
-		c2.SetLogx(1)
-		c2.SetLogy(0)
-		c2.Update()
-                c2.Modified()	
-		
-		l = TLatex()
-		l.SetNDC()
-		l.SetTextFont(72)
-		l.SetTextSize(0.03)
-		l.SetTextColor(kBlack)
-		l.DrawLatex(0.1,0.92, "#intLdt ="+`lumi/1000.`[:3]+" fb^{-1}")	
-		
-		saveCanvas(c2, '2Dh_leptPt_cosDPhi_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-			
-		outfile.cd()	
-		h_ratio_fake.Write('2Dfake_leptPt_cosDPhi_'+regime+'_'+ichan[1])
-		
-		# ---> 2D fake rates: leptPt vs cosDPhi (low Eta)
-		h2D_PtCos_lEta_t[0].Scale(lumi)
-		h1_2D = h2D_PtCos_lEta_t[1].Clone()
-		h1_2D.Add(h2D_PtCos_lEta_t[0],-1)	
-		if extraPlots:	h1_2D.Write("hP_2D_leptPt_cosDPhi_lowEta_tight_"+regime+'_'+ichan[1])
-		
-		h2D_PtCos_lEta_l[0].Scale(lumi)		
-		h2_2D = h2D_PtCos_lEta_l[1].Clone()
-		h2_2D.Add(h2D_PtCos_lEta_l[0],-1) 
-		if extraPlots:	h2_2D.Write("hP_2D_leptPt_cosDPhi_lowEta_loose_"+regime+'_'+ichan[1])
-		
-		if extraPlots:
-			c = TCanvas("c_"+'hP_2D_leptPt_cosDPhi_lowEta_t_'+ichan[0]+'_'+ichan[1])
-			ht_DTMC = h2D_PtCos_lEta_t[1].Clone()
-			ht_DTMC.Divide(h2D_PtCos_lEta_t[0].Clone())
-			ht_DTMC.Draw("colz TEXT e")
-			ht_DTMC.SetStats(0)
-			c.SetLogx(1)
-			ht_DTMC.Write("hP_2D_leptPt_cosDPhi_lowEta_tight_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_cosDPhi_lowEta_tight_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-			
-			c = TCanvas("c_"+'hP_2D_leptPt_cosDPhi_lowEta_l_'+ichan[0]+'_'+ichan[1])
-			hl_DTMC = h2D_PtCos_lEta_l[1].Clone()
-			hl_DTMC.Divide(h2D_PtCos_lEta_l[0].Clone())
-			hl_DTMC.Draw("colz TEXT e")
-			hl_DTMC.SetStats(0)
-			c.SetLogx(1)
-			hl_DTMC.Write("hP_2D_leptPt_cosDPhi_lowEta_loose_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_cosDPhi_lowEta_loose_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-		
-		h_ratio_fake = h1_2D.Clone()
-		h_ratio_fake.Divide(h1_2D, h2_2D, 1.0, 1.0, "B")
-		
-		gStyle.SetPaintTextFormat("1.2f")
-		c2 = TCanvas("c_"+'2D_leptPt_cosDPhi_lowEta_'+ichan[0]+'_'+ichan[1])
-		c2.cd()
-		h_ratio_fake.Draw()
-		h_ratio_fake.Draw("colz TEXT e1 SAME")
-		#h_ratio_fake.GetZaxis().SetRangeUser(0.4, 1.0)
-		h_ratio_fake.SetStats(0)
-		gPad.RedrawAxis()	
-		#gStyle.SetPaintTextsize(0.04)               	
-		c2.SetLogx(1)
-		c2.SetLogy(0)
-		c2.Update()
-                c2.Modified()	
-		
-		l = TLatex()
-		l.SetNDC()
-		l.SetTextFont(72)
-		l.SetTextSize(0.03)
-		l.SetTextColor(kBlack)
-		l.DrawLatex(0.1,0.92, "#intLdt ="+`lumi/1000.`[:3]+" fb^{-1}")	
-		
-		saveCanvas(c2, '2Dh_leptPt_cosDPhi_lowEta_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-			
-		outfile.cd()	
-		h_ratio_fake.Write('2Dfake_leptPt_cosDPhi_lowEta_'+regime+'_'+ichan[1])
-		
-		
-		# ---> 2D fake rates: leptPt vs cosDPhi (high Eta)
-		h2D_PtCos_hEta_t[0].Scale(lumi)
-		h1_2D = h2D_PtCos_hEta_t[1].Clone()
-		h1_2D.Add(h2D_PtCos_hEta_t[0],-1)	
-		if extraPlots:	h1_2D.Write("hP_2D_leptPt_cosDPhi_highEta_tight_"+regime+'_'+ichan[1])
-		
-		h2D_PtCos_hEta_l[0].Scale(lumi)		
-		h2_2D = h2D_PtCos_hEta_l[1].Clone()
-		h2_2D.Add(h2D_PtCos_hEta_l[0],-1) 
-		if extraPlots:	h2_2D.Write("hP_2D_leptPt_cosDPhi_highEta_loose_"+regime+'_'+ichan[1])
-		
-		if extraPlots:
-			c = TCanvas("c_"+'hP_2D_leptPt_cosDPhi_highEta_t_'+ichan[0]+'_'+ichan[1])
-			ht_DTMC = h2D_PtCos_hEta_t[1].Clone()
-			ht_DTMC.Divide(h2D_PtCos_hEta_t[0].Clone())
-			ht_DTMC.Draw("colz TEXT e")
-			ht_DTMC.SetStats(0)
-			c.SetLogx(1)
-			ht_DTMC.Write("hP_2D_leptPt_cosDPhi_highEta_tight_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_cosDPhi_highEta_tight_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-			
-			c = TCanvas("c_"+'hP_2D_leptPt_cosDPhi_highEta_l_'+ichan[0]+'_'+ichan[1])
-			hl_DTMC = h2D_PtCos_hEta_l[1].Clone()
-			hl_DTMC.Divide(h2D_PtCos_hEta_l[0].Clone())
-			hl_DTMC.Draw("colz TEXT e")
-			hl_DTMC.SetStats(0)
-			c.SetLogx(1)
-			hl_DTMC.Write("hP_2D_leptPt_cosDPhi_highEta_loose_"+regime+'_'+ichan[1])
-			saveCanvas(c, 'c_hP_2D_leptPt_cosDPhi_highEta_loose_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-		
-		h_ratio_fake = h1_2D.Clone()
-		h_ratio_fake.Divide(h1_2D, h2_2D, 1.0, 1.0, "B")
-		
-		gStyle.SetPaintTextFormat("1.2f")
-		c2 = TCanvas("c_"+'2D_leptPt_cosDPhi_highEta_'+ichan[0]+'_'+ichan[1])
-		c2.cd()
-		h_ratio_fake.Draw()
-		h_ratio_fake.Draw("colz TEXT e1 SAME")
-		#h_ratio_fake.GetZaxis().SetRangeUser(0.4, 1.0)
-		h_ratio_fake.SetStats(0)
-		gPad.RedrawAxis()	
-		#gStyle.SetPaintTextsize(0.04)               	
-		c2.SetLogx(1)
-		c2.SetLogy(0)
-		c2.Update()
-                c2.Modified()	
-		
-		l = TLatex()
-		l.SetNDC()
-		l.SetTextFont(72)
-		l.SetTextSize(0.03)
-		l.SetTextColor(kBlack)
-		l.DrawLatex(0.1,0.92, "#intLdt ="+`lumi/1000.`[:3]+" fb^{-1}")	
-		
-		saveCanvas(c2, '2Dh_leptPt_cosDPhi_highEta_'+regime+'_'+ichan[1], outfile, 'fake_plots')
-			
-		outfile.cd()	
-		h_ratio_fake.Write('2Dfake_leptPt_cosDPhi_highEta_'+regime+'_'+ichan[1])
+				if item=="BKG":		inputfile = bkgFile
+				elif item=="DATA":	inputfile = dataFile
 
+				histo_t.append( inputfile.Get("fake_"+ipar).Clone() )			   
+				histo_l.append( inputfile.Get("fake_"+ipar+"_Loose").Clone() )
+				histo_l[iPad].Add(histo_t[iPad],+1)
+				
+				iPad+=1
+			
+			# ---> 2D fake rates: leptPt vs leptEta
+			histo_t[0].Scale(lumi)
+			h1_2D = histo_t[1].Clone()
+			h1_2D.Add(histo_t[0],-1)	
+			if extraPlots:	h1_2D.Write("hP_2D_"+ipar+"_tight_"+regime+'_'+ichan[1])
+		
+			histo_l[0].Scale(lumi)		
+			h2_2D = histo_l[1].Clone()
+			h2_2D.Add(histo_l[0],-1) 
+			if extraPlots:	h2_2D.Write("hP_2D_"+ipar+"_loose_"+regime+'_'+ichan[1])
+		
+			if extraPlots:
+				c = TCanvas("c_"+"hP_2D_"+ipar+"_t_"+ichan[0]+"_"+ichan[1])
+				ht_DTMC = histo_t[1].Clone()
+				ht_DTMC.Divide(histo_t[0].Clone())
+				ht_DTMC.Draw("colz TEXT e")
+				ht_DTMC.SetStats(0)
+				c.SetLogx(1)
+				ht_DTMC.Write("hP_2D_"+ipar+"_tight_"+regime+"_"+ichan[1])
+				saveCanvas(c, "c_hP_2D_"+ipar+"_tight_"+regime+"_"+ichan[1], outfile, 'fake_plots')
+			
+				c = TCanvas("c_"+"hP_2D_"+ipar+"_l_"+ichan[0]+"_"+ichan[1])
+				hl_DTMC = histo_l[1].Clone()
+				hl_DTMC.Divide(histo_l[0].Clone())
+				hl_DTMC.Draw("colz TEXT e")
+				hl_DTMC.SetStats(0)
+				c.SetLogx(1)
+				hl_DTMC.Write("hP_2D_"+ipar+"_loose_"+regime+"_"+ichan[1])
+				saveCanvas(c, "c_hP_2D_"+ipar+"_loose_"+regime+"_"+ichan[1], outfile, 'fake_plots')
+		
+			h2D_ratio = h1_2D.Clone()
+			h2D_ratio.Divide(h1_2D, h2_2D, 1.0, 1.0, "B")
+		
+			gStyle.SetPaintTextFormat("1.2f")
+			c2 = TCanvas("c_"+"2D_"+ipar+"_"+ichan[0]+"_"+ichan[1])
+			c2.cd()
+			h2D_ratio.Draw()
+			h2D_ratio.Draw("colz TEXT e1 SAME")
+			h2D_ratio.SetStats(0)
+			gPad.RedrawAxis()	
+			c2.SetLogx(1)
+			if ipar in ["lepPt_met", "lepPt_met_lowDR", "lepPt_met_highDR", "minDeltaR_met_highLepPt", "minDeltaR_met_lowLepPt"]:
+				h2D_ratio.GetYaxis().SetRangeUser(20, 150)
+			c2.Update()
+               		c2.Modified()	
+		
+			l = TLatex()
+			l.SetNDC()
+			l.SetTextFont(72)
+			l.SetTextSize(0.03)
+			l.SetTextColor(kBlack)
+			l.DrawLatex(0.1,0.92, "#intLdt ="+`lumi/1000.`[:3]+" fb^{-1}")	
+			h2D_ratio.Write("2Dfake_"+ipar+"_"+regime+"_"+ichan[1])
+			saveCanvas(c2, "2Dh_"+ipar+"_"+regime+"_"+ichan[1], outfile, "fake_plots")	
 	
 	bkgFile.Close()
 	dataFile.Close()	
@@ -1696,8 +1134,8 @@ def mergeFakeRates():
 	channels  = []
         channels += [('resolved','e' )]
         channels += [('resolved','mu')]
-        channels += [('boosted', 'e' )]
-        channels += [('boosted', 'mu')]
+        #channels += [('boosted', 'e' )]
+        #channels += [('boosted', 'mu')]
 		
 	outfile = TFile("fake_merged.root","RECREATE")
 		
@@ -1710,16 +1148,42 @@ def mergeFakeRates():
 				outfile.cd()
 				h.Write('fakeRate_'+var+'_'+ichan[0]+'_'+ichan[1])
 
-		if ichan[0]=='resolved':
+		if (ichan[0]=='resolved' and ichan[1]=='e'):
+			#path   = '040416_WJetsCR_noBtag'
 			path   = '040416_WJetsCR_Btag'
 			inFile = TFile(path +'/fake.root','READ')
 			#inFile.ls()
-			for var in ["leptPt_cosDPhi", "leptPt_cosDPhi_lowEta", "leptPt_cosDPhi_highEta"]:
+			for var in ["leptPt_cosDPhi", "leptPt_cosDPhi_lowEta", "leptPt_cosDPhi_highEta"]: 
 				print '2Dfake_'+var+'_'+ichan[0]+'_'+ichan[1]
 				h   = inFile.Get('2Dfake_'+var+'_'+ichan[0]+'_'+ichan[1]).Clone()
 				outfile.cd()
-				h.Write('2Dfake_'+var+'_'+ichan[0]+'_'+ichan[1])	
-			
+				h.Write('2Dfake_'+var+'_'+ichan[0]+'_'+ichan[1])
+			'''	
+			for var in ["lepPt","lepEta", "minDeltaR_effBins", "closJetPt_effBins", "cos_metPhi_lepPhi", "MET", "d0sig", "MET_effBins", "mwt_effBins", "mwt_met_effBins"]:	
+				print 'fakeRate_'+var+'_'+ichan[0]+'_'+ichan[1]
+				h   = inFile.Get('fakeRate_'+var+'_'+ichan[0]+'_'+ichan[1]).Clone()
+				outfile.cd()
+				h.Write('fake_'+var+'_'+ichan[0]+'_'+ichan[1])
+			'''	
+				
+		if (ichan[0]=='resolved' and ichan[1]=='mu'):
+			#path   = '190416_metmwtCuts_v2.7_fakeRates'
+			path   = '190416_metmwtCuts_Btag_v2.7_fakeRates'
+			inFile = TFile(path +'/fake.root','READ')
+			#inFile.ls()
+			for var in ["lepPt_closJetPt"]:
+				print '2Dfake_'+var+'_'+ichan[0]+'_'+ichan[1]
+				h   = inFile.Get('2Dfake_'+var+'_'+ichan[0]+'_'+ichan[1]).Clone()
+				outfile.cd()
+				h.Write('fake_'+var+'_'+ichan[0]+'_'+ichan[1])	
+			'''
+			for var in ["lepPt_effBins","lepEta", "minDeltaR_effBins", "closJetPt_effBins", "cos_metPhi_lepPhi", "MET", "d0sig", "MET_effBins", "mwt_effBins", "mwt_met_effBins"]:	
+				print 'fakeRate_'+var+'_'+ichan[0]+'_'+ichan[1]
+				h   = inFile.Get('fakeRate_'+var+'_'+ichan[0]+'_'+ichan[1]).Clone()
+				outfile.cd()
+				h.Write('fake_'+var+'_'+ichan[0]+'_'+ichan[1])	
+		
+			'''
 				
 	return			
 				
@@ -1810,10 +1274,30 @@ if 0:
 
 #WJETS electron
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/040316_Wjets_pretag_v1.0_e_fake/'
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/040316_Wjets_tag_v1.0_e_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/040316_Wjets_tag_v1.0_e_fake/'
 
 #WJETS muon
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/040316_Wjets_pretag_v1.0_mu_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/040316_Wjets_pretag_v7.0_mu_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/040316_Wjets_tag_v1.1_mu_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/040316_Wjets_pretag_CR2_v1.0_mu_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/080416_Wjets_pretag_CR2_v2.0_mu_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/120416_noCuts_v2.2_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/140416_z0Inv_v1.0_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/100416_METMWT60_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/100416_MET20_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/150416_SRCuts_v1.2_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/150416_noMETMWTCuts_v1.2_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/180416_newBinning_v1.2_fake/'
+
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/180416_newBinning_metmwtCuts_v1.0_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/180416_metmwtCuts_v2.1_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/180416_NometmwtCuts_v2.1_fake/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/180416_NometmwtCuts_d0sig5_v2.1_fake/'
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/TopNtupleAnalysis_commit/190416_metmwtCuts_Btag_v2.8_fake/'
 
 lumi = 3209.05 #pb-1
 
