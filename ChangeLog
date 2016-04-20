@@ -1,8 +1,11 @@
+2016-04-20 Marino Romano <sromanos@cern.ch>
+	* Updating multijet estimation tools for the muon channel
+	* Updating the fake rates: 200416_WJetsCR_noBtag and 200416_WJetsCR_noBtag (e and mu channel)
+
 2016-04-04 Marino Romano <sromanos@cern.ch>
 	* Updating multijet estimation tools
 	* New 3D paramatrization of the fake rates
-	* Adding new 2D and 3D fake rates for W+jets (Electron channel for the moment)
-	* TopNtupleAnalysis-00-02-13
+	* Adding new 2D and 3D fake rates for W+jets (Only electron channel for the moment)
 
 2015-12-23 Marino Romano <sromanos@cern.ch>
 	* Updating multijet estimation tools

@@ -308,15 +308,13 @@ int main(int argc, char **argv) {
     
   if (runMM){	
   	
-	//MM_nominal      = new MMUtils("scripts/QCDestimation/eff_ttbar.root", "scripts/QCDestimation/fake_1FJpt200.root");		
 	if (runMM==2){ // >= 2 jets
 	
 	  if(_btags==0)
-	     MM_nominal      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_noBtag/eff_ttbar.root", "scripts/QCDestimation/040416_WJetsCR_noBtag/fake.root");
-	     
+	     MM_nominal      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_noBtag/eff_ttbar.root", "scripts/QCDestimation/200416_WJetsCR_noBtag/fake.root");//e and mu
 	  else if(abs(_btags)==1)
-	     MM_nominal      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_Btag/eff_ttbar.root", "scripts/QCDestimation/040416_WJetsCR_Btag/fake.root");
-	  
+	     MM_nominal      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_Btag/eff_ttbar.root", "scripts/QCDestimation/200416_WJetsCR_Btag/fake.root");//e and mu
+
 	  else{
 	     std::cout << "QCD estimation no suported for btags > 2" << std::endl;
 	     std::exit(-2);
@@ -339,7 +337,7 @@ int main(int argc, char **argv) {
 	     std::cout << "Invalid runMM option" << std::endl;
 	     std::exit(-2);
 	
-	}//runMM 
+	}//if 
 
   }//runMM
 

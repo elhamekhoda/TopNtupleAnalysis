@@ -30,8 +30,8 @@ class MMUtils{
     
     void getRatesBoostedMu(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR);
     void getRatesBoostedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR);
-    void getRatesResolvedMu(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float absEta, float cosDPhi);
-    void getRatesResolvedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float absEta, float cosDPhi);
+    void getRatesResolvedMu(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float absEta, float cosDPhi, float met, float mwt);
+    void getRatesResolvedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float closejl_pT, float cosDPhi);
     
     
   private:
@@ -45,7 +45,20 @@ class MMUtils{
     TH2F * fake_map_resolved_e_lEta;
     TH2F * fake_map_resolved_e_hEta;
     TH2F * fake_map_resolved_mu;
-    	
+    TH2F * fake_map_resolved_mu_lDR;
+    TH2F * fake_map_resolved_mu_hDR;
+    TH2F * fake_map_resolved_mu_lCos;
+    TH2F * fake_map_resolved_mu_hCos;
+    TH2F * fake_map_resolved_mu_lLepPt;
+    TH2F * fake_map_resolved_mu_hLepPt;
+    
+    TH1F * fake_dr_resolved_mu;
+    TH1F * fake_pt_resolved_mu;
+    TH1F * fake_cos_resolved_mu;
+    TH1F * fake_met_resolved_mu;
+    TH1F * fake_mwt_resolved_mu;
+    TH1F * fake_mwtmet_resolved_mu;
+    
     TH1F * fake_pt_boosted_e;
     TH1F * fake_dr_boosted_mu;
     
