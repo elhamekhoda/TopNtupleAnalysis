@@ -1,3 +1,7 @@
+2016-05-03 Danilo Ferreira de Lima <dferreir@cern.ch>
+	* Added Top EFT reweighting method.
+	* TopNtupleAnalysis-00-02-13
+
 2016-04-20 Marino Romano <sromanos@cern.ch>
 	* Updating multijet estimation tools for the muon channel
 	* Updating the fake rates: 200416_WJetsCR_noBtag and 200416_WJetsCR_noBtag (e and mu channel)
