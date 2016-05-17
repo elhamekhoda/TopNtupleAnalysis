@@ -45,12 +45,13 @@ def main():
         addFilesInChain(t_sumWeights, options.fullFiles)
         for k in range(0, t_sumWeights.GetEntries()):
             t_sumWeights.GetEntry(k)
-    	if not t_sumWeights.dsid in sumOfWeights:
-    	    sumOfWeights[t_sumWeights.dsid] = 0
-    	sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
+    	    if not t_sumWeights.dsid in sumOfWeights:
+    	        sumOfWeights[t_sumWeights.dsid] = 0
+    	    sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
     
     loadXsec(Xsec, "../scripts/XSection-MC15-13TeV-ttres.data")
     loadXsec(Xsec, "../../TopDataPreparation/data/XSection-MC15-13TeV.data")
+    loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
     
     # systematics list
     systList = options.systs.split(',')
@@ -102,7 +103,11 @@ def main():
     	            if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
     	                btagsf *= sel.tjet_bTagSF_70[bidx]
     	        weight *= btagsf
-    	        weight /= sumOfWeights[channel]
+		if not channel in sumOfWeights:
+		    print "Could not find DSID ",channel, " in TopDataPreparation files."
+		    weight = 0
+		else:
+    	            weight /= sumOfWeights[channel]
     	    nBtags = 0
     	    for bidx in range(0, len(sel.tjet_mv2c20)):
     	        pb = TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
