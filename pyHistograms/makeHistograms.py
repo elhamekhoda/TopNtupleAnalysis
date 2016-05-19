@@ -63,16 +63,14 @@ def main():
 	    histSuffixes.append('')
 	else:
 	    histSuffixes.append(item)
-    hSvc = {}
     channels = {}
     for k in options.output.split(','):
         channels[k.split(':')[0]] = k.split(':')[1]
-    for k in channels:
-        hSvc[k] = HistogramService(histSuffixes, channels[k])
-    director = AnalysisDirector()
     analysisCode = {}
+    import analysis
+    anaClass = getattr(analysis, options.analysis) 
     for k in channels:
-        analysisCode[k] = director.construct(options.analysis, hSvc[k], k)
+        analysisCode[k] = anaClass(k, histSuffixes, channels[k])
     
     for s in systList:
         # s is nominal, or the name of systematic
@@ -120,8 +118,8 @@ def main():
             for ana in analysisCode:
     	        analysisCode[ana].run(sel, suffix, weight)
     
-    for k in hSvc:
-        hSvc[k].write()
+    for k in analysisCode:
+        analysisCode[k].end()
 
 if __name__ == "__main__":
     main()

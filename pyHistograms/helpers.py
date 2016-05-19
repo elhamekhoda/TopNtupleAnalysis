@@ -1,5 +1,4 @@
 
-from analysis import idClasses
 import ROOT
 from array import array
 
@@ -114,44 +113,6 @@ class WrapperExtras {
 
 wrapperC = initBinds()
 
-class HistogramService:
-    fi = None
-    histSuffixes = [] # systematic copies of histograms
-    h = {} # map of histogram names to map of systematics to histograms
-
-    # outputFiles is a map of a channel to an output file name
-    # suffixes is a list of histogram suffixes to make
-    def __init__(self, suffixes, outputFile):
-	self.fi = ROOT.TFile(outputFile, "recreate")
-	self.histSuffixes = suffixes
-        pass
-    def add(self, hName, nBins, xLow, xHigh):
-        self.h[hName] = {}
-	for s in self.histSuffixes:
-	    self.h[hName][s] = ROOT.TH1D(hName+s, "", nBins, xLow, xHigh)
-    def addVar(self, hName, nBinsList):
-        ar = array("d", nBinsList)
-        self.fi.cd()
-        self.h[hName] = {}
-	for s in self.histSuffixes:
-	    self.h[hName][s] = ROOT.TH1D(hName+s, "", len(nBinsList) - 1, ar)
-
-    def write(self):
-        self.fi.cd()
-	for hName in self.h:
-	    for s in self.histSuffixes:
-	        self.h[hName][s].Write()
-
-
-class AnalysisDirector:
-    def __init__(self):
-        self.allClasses = []
-
-    def construct(self, builderName, hSvc, channel):
-        targetClass = getattr(idClasses, builderName)
-        instance = targetClass(hSvc, channel)
-        self.allClasses.append(instance)
-	return instance
 
 def loadXsec(m, fName):
     f = open(fName)
