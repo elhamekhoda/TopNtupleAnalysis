@@ -71,6 +71,7 @@ def main():
     anaClass = getattr(analysis, options.analysis) 
     for k in channels:
         analysisCode[k] = anaClass(k, histSuffixes, channels[k])
+	#print k, analysisCode[k]
     
     for s in systList:
         # s is nominal, or the name of systematic
@@ -100,7 +101,7 @@ def main():
     	            pb = TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
     	            if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
     	                btagsf *= sel.tjet_bTagSF_70[bidx]
-    	        weight *= btagsf
+    	        #weight *= btagsf
 		if not channel in sumOfWeights:
 		    print "Could not find DSID ",channel, " in TopDataPreparation files."
 		    weight = 0

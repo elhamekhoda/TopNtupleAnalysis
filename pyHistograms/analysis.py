@@ -1,6 +1,7 @@
 import helpers
 import ROOT
 import math
+from array import array
 
 class Analysis:
     ch = ''
@@ -15,14 +16,15 @@ class Analysis:
 
     def add(self, hName, nBins, xLow, xHigh):
         self.h[hName] = {}
-        self.fi.cd()
+        #self.fi.cd()
 	for s in self.histSuffixes:
+	    print "adding histogram with name ", hName+self.ch+s
 	    self.h[hName][s] = ROOT.TH1D(hName+self.ch+s, "", nBins, xLow, xHigh)
 	    self.h[hName][s].SetDirectory(0)
 
     def addVar(self, hName, nBinsList):
         ar = array("d", nBinsList)
-        self.fi.cd()
+        #self.fi.cd()
         self.h[hName] = {}
 	for s in self.histSuffixes:
 	    self.h[hName][s] = ROOT.TH1D(hName+self.ch+s, "", len(nBinsList) - 1, ar)
@@ -32,11 +34,13 @@ class Analysis:
         self.fi.cd()
 	for hName in self.h:
 	    for s in self.histSuffixes:
+	        print "writing histogram with name ", hName+s, " in file ",self.fi.GetName()
 	        self.h[hName][s].Write(hName+s)
+	self.fi.Close()
 
 class AnaTtresSL(Analysis):
     def __init__(self, channel, suf, outputFile):
-        super(AnaTtresSL, self).__init__(channel, suf, outputFile)
+        Analysis.__init__(self, channel, suf, outputFile)
         # make histograms
         self.add("yields", 1, 0.5, 1.5)
         self.add("lepPt", 100, 25, 525)
@@ -50,7 +54,6 @@ class AnaTtresSL(Analysis):
         self.add("mu", 100, 0, 100)
         self.add("vtxz", 40, -400, 400)
         self.add("npv", 50, 0, 50)
-
         self.addVar("closeJetPt", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
         self.addVar("largeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3])
         self.add("largeJetM", 30, 0, 300)
@@ -68,18 +71,23 @@ class AnaTtresSL(Analysis):
         self.add("largeJet_tau21_wta", 20, 0, 1)
 
     def run(self, sel, syst, w):
-        if self.ch == 're' or self.ch == 'be':
-            if len(sel.el_pt) != 1 or len(sel.mu_pt) != 0:
-    	        return
-        if self.ch == 'rmu' or self.ch == 'bmu':
-            if len(sel.el_pt) != 0 or len(sel.mu_pt) != 0:
-    	        return
-        if self.ch == 'bmu' or self.ch == 'be':
-            if not(sel.bejets or sel.bmujets):
-    	        return
-        if self.ch == 'rmu' or self.ch == 're':
-            if not(sel.rejets or sel.rmujets):
-    	        return
+        mapSel = {'be': 'bejets', 'bmu': 'bmujets', 're': 'rejets', 'rmu': 'rmujets'}
+	passChannel = getattr(sel, mapSel[self.ch])
+	if not passChannel:
+	    return
+
+        # veto resolved event if it passes the boosted channel
+        if self.ch == 're' or self.ch == 'rmu':
+	    if sel.bejets or sel.bmujets:
+	        return
+
+        if (sel.bmujets or sel.rmujets) and not (sel.HLT_mu50 or sel.HLT_mu20_iloose_L1MU15):
+            return
+        if (sel.bejets or sel.rejets) and (sel.mcChannelNumber != 0) and not (sel.HLT_e24_lhmedium_L1EM18VH or sel.HLT_e60_lhmedium or HLT_e120_lhloos):
+            return
+        if (sel.bejets or sel.rejets) and (sel.mcChannelNumber == 0) and not (sel.HLT_e24_lhmedium_L1EM20VH or sel.HLT_e60_lhmedium or HLT_e120_lhloos):
+            return
+
         self.h["yields"][syst].Fill(1, w)
         l = ROOT.TLorentzVector()
         if len(sel.el_pt) == 1:
