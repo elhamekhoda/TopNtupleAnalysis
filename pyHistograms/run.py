@@ -22,15 +22,15 @@ def main():
     systematics = 'all'
     
     names   = []
-    names  += ["Data15_13TeV_25ns_207_EXOT4"]
+    #names  += ["Data15_13TeV_25ns_207_EXOT4"]
     # 25 ns datasets
 
-    #names  += ['MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
+    names  += ['MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
     ##names  += ['MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
-    #names  += ['MC15c_13TeV_25ns_FS_EXOT4_singletop']
-    #names  += ['MC15c_13TeV_25ns_FS_EXOT4_Wjets22']
-    #names  += ['MC15c_13TeV_25ns_FS_EXOT4_Zjets22']
-    #names  += ['MC15c_13TeV_25ns_FS_EXOT4_VV']
+    names  += ['MC15c_13TeV_25ns_FS_EXOT4_singletop']
+    names  += ['MC15c_13TeV_25ns_FS_EXOT4_Wjets22']
+    names  += ['MC15c_13TeV_25ns_FS_EXOT4_Zjets22']
+    names  += ['MC15c_13TeV_25ns_FS_EXOT4_VV']
 
     #names += ['MC15c_13TeV_25ns_FS_EXOT4_Zprime400']
     #names += ['MC15c_13TeV_25ns_FS_EXOT4_Zprime500']

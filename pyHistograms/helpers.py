@@ -15,8 +15,8 @@ def initBinds():
 #include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
 #include "Root/WeakCorrScaleFactorParam.cxx"
 
-#include "../../PhysicsAnalysis/AnalysisCommon/PMGTools/Root/PMGCorrsAndSysts.cxx"
-#include "../../PhysicsAnalysis/AnalysisCommon/PMGTools/PMGTools/PMGCorrsAndSysts.h"
+#include "../../PMGTools/Root/PMGCorrsAndSysts.cxx"
+#include "../../PMGTools/PMGTools/PMGCorrsAndSysts.h"
 
 #include "TLorentzVector.h"
 #include <vector>
