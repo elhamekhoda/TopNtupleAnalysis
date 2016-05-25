@@ -18,7 +18,7 @@ class Analysis:
         self.h[hName] = {}
         #self.fi.cd()
 	for s in self.histSuffixes:
-	    print "adding histogram with name ", hName+self.ch+s
+	    #print "adding histogram with name ", hName+self.ch+s
 	    self.h[hName][s] = ROOT.TH1D(hName+self.ch+s, "", nBins, xLow, xHigh)
 	    self.h[hName][s].SetDirectory(0)
 
@@ -37,6 +37,30 @@ class Analysis:
 	        print "writing histogram with name ", hName+s, " in file ",self.fi.GetName()
 	        self.h[hName][s].Write(hName+s)
 	self.fi.Close()
+
+    def getWeight(self, sel, s):
+	# this applies all the weights that come out of the box
+	if sel.mcChannelNumber == 0:
+  	    return 1.0
+	k = s
+	if not s in helpers.weightSF:
+	    k = ''
+	listWeights = helpers.weightSF[k]
+	weight = 1.0
+	for item in listWeights:
+	    wItem = getattr(sel, 'weight_'+item)
+	    weight *= wItem
+	
+	# this applies the EWK weight
+    	channel = sel.mcChannelNumber
+        if channel in helpers.listEWK:
+            weight *= helpers.applyEWK(sel, s)
+
+	# this applies the W+jets Sherpa 2.2 nJets reweighting correction
+	weight *= helpers.applyWjets22Weight(sel)
+
+	return weight
+
 
 class AnaTtresSL(Analysis):
     def __init__(self, channel, suf, outputFile):
@@ -70,23 +94,58 @@ class AnaTtresSL(Analysis):
         self.add("largeJet_tau32_wta", 20, 0, 1)
         self.add("largeJet_tau21_wta", 20, 0, 1)
 
+    # only apply the reco weights
+    def getWeight(self, sel, s):
+	if sel.mcChannelNumber == 0:
+  	    return 1.0
+        weight = Analysis.getWeight(self, sel, s)
+
+        # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
+        # warning: disabled for now in mc15c
+        btagsf = 1.0 #applyBtagSF(sel, s)
+        weight *= btagsf
+	return weight
+
     def run(self, sel, syst, w):
-        mapSel = {'be': 'bejets', 'bmu': 'bmujets', 're': 'rejets', 'rmu': 'rmujets'}
-	passChannel = getattr(sel, mapSel[self.ch])
-	if not passChannel:
+        # OR all channels in the comma-separated list
+        mapSel = {'be': 'bejets', 'bmu': 'bmujets,bmujetsmet80', 're': 'rejets', 'rmu': 'rmujets,rmujetsmet80'}
+	listSel = mapSel[self.ch].split(',')
+
+	passAllChannels = False
+	for item in listSel:
+	    passChannel = getattr(sel, item)
+	    if not passChannel:
+                passAllChannels = True
+	if not passAllChannels:
 	    return
 
         # veto resolved event if it passes the boosted channel
         if self.ch == 're' or self.ch == 'rmu':
-	    if sel.bejets or sel.bmujets:
+	    if sel.bejets or sel.bmujets or sel.bmujetsmet80:
 	        return
 
-        if (sel.bmujets or sel.rmujets) and not (sel.HLT_mu50 or sel.HLT_mu20_iloose_L1MU15):
+        if ((sel.bmujets or sel.rmujets) and not (sel.HLT_mu50 or sel.HLT_mu20_iloose_L1MU15)) or ((sel.bmujetsmet80 or sel.rmujetsmet80) and not (sel.HLT_xe80_tc_lcw_L1XE50)):
             return
         if (sel.bejets or sel.rejets) and (sel.mcChannelNumber != 0) and not (sel.HLT_e24_lhmedium_L1EM18VH or sel.HLT_e60_lhmedium or HLT_e120_lhloos):
             return
         if (sel.bejets or sel.rejets) and (sel.mcChannelNumber == 0) and not (sel.HLT_e24_lhmedium_L1EM20VH or sel.HLT_e60_lhmedium or HLT_e120_lhloos):
             return
+
+        # apply b-tagging cut
+	nBtag = 0
+        for bidx in range(0, len(sel.tjet_mv2c10)):
+            pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
+            if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
+                if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
+                    nBtag += 1
+        if nBtag < 1:
+	    return
+
+	# veto events in nominal ttbar overlapping with the mtt sliced samples
+	# commented now as it is not available in mc15c
+	#if sel.mcChannelNumber == '410000':
+	#    if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+	#        return
 
         self.h["yields"][syst].Fill(1, w)
         l = ROOT.TLorentzVector()
@@ -103,12 +162,12 @@ class AnaTtresSL(Analysis):
 	nBtags = 0
         tjets = []
         tb = []
-  	for bidx in range(0, len(sel.tjet_mv2c20)):
+  	for bidx in range(0, len(sel.tjet_mv2c10)):
 	    pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
 	    if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
     	       tjets.append(pb)
     	       b = False
-               if sel.tjet_mv2c20 > helpers.MV2C20_CUT:
+               if sel.tjet_mv2c10 > helpers.MV2C10_CUT:
 	           nBtags += 1
     	           b = True
                tb.append(b)

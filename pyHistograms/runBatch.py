@@ -29,16 +29,16 @@ outputDir = rundir+'/TopNtupleAnalysis/pyHistograms/hists'
 analysisType='AnaTtresSL'
 
 # leave it for nominal to run only the nominal
-systematics = 'nominal'
-#systematics = 'nominal,EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up,JET_JER_SINGLE_NP__1up,JET_NPScenario1_JET_GroupedNP_1__1down,JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_2__1down,JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_3__1down,JET_NPScenario1_JET_GroupedNP_3__1up,MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleDown,MET_SoftTrk_ScaleUp,MUONS_ID__1down,MUONS_ID__1up,MUONS_MS__1down,MUONS_MS__1up,MUONS_SCALE__1down,MUONS_SCALE__1up,LARGERJET_JET_Top_CrossCalib__1down,LARGERJET_JET_Top_CrossCalib__1up,LARGERJET_JET_Top_Run1__1down,LARGERJET_JET_Top_Run1__1up'
+#systematics = 'nominal'
+systematics = 'all'
 
 names   = []
 # 25 ns datasets
 names  += ['MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
 #names  += ['MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
 names  += ['MC15c_13TeV_25ns_FS_EXOT4_singletop']
-names  += ['MC15c_13TeV_25ns_FS_EXOT4_Wjets']
-names  += ['MC15c_13TeV_25ns_FS_EXOT4_Zjets']
+names  += ['MC15c_13TeV_25ns_FS_EXOT4_Wjets22']
+names  += ['MC15c_13TeV_25ns_FS_EXOT4_Zjets22']
 names  += ['MC15c_13TeV_25ns_FS_EXOT4_VV']
 #names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime400']
 #names += ['MC15_13TeV_25ns_FS_EXOT4_Zprime500']

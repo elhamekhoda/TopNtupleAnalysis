@@ -27,12 +27,13 @@ def main():
     		  help="Comma-separated list of output ROOT files.", metavar="FILES")
     parser.add_option("-s", "--systs",
                       dest="systs", default="nominal",
-    		  help="Comma-separated list of systematic uncertainties in TTrees in the input file.", metavar="SYSTEMATICS")
+    		  help="Comma-separated list of systematic uncertainties in TTrees in the input file. Use 'all' to run over all the default ones.", metavar="SYSTEMATICS")
     
     (options, args) = parser.parse_args()
     
     if options.fullFiles == '':
         options.fullFiles = options.files
+
     
     Xsec = {}
     
@@ -54,7 +55,48 @@ def main():
     loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
     
     # systematics list
-    systList = options.systs.split(',')
+    if options.systs == 'all':
+        systList = []
+	systList.append('nominal')
+        systList.extend(weightChangeSystematics)
+	systList.remove('')
+	systList.append('ttEWK__1up')
+	systList.append('ttEWK__1down')
+	for i in range(0, 4):
+  	    systList.append('btagbSF_'+str(i)+'__1up')
+  	    systList.append('btagbSF_'+str(i)+'__1down')
+	    if i == 0:
+	        for j in range(1, 4):
+    	           systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1up')
+  	           systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1down')
+	for i in range(0, 4):
+  	    systList.append('btagcSF_'+str(i)+'__1up')
+  	    systList.append('btagcSF_'+str(i)+'__1down')
+	    if i == 0:
+	        for j in range(1, 4):
+    	           systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1up')
+  	           systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1down')
+	for i in range(0, 11):
+  	    systList.append('btaglSF_'+str(i)+'__1up')
+  	    systList.append('btaglSF_'+str(i)+'__1down')
+	    if i == 0:
+	        for j in range(1, 4):
+    	           systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1up')
+  	           systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1down')
+  	systList.append('btageSF_0__1up')
+  	systList.append('btageSF_0__1down')
+  	systList.append('btageSF_1__1up')
+  	systList.append('btageSF_1__1down')
+	systematics  = 'EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up'
+	systematics += ',JET_JER_SINGLE_NP__1up'
+	systematics += ',JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1down,JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1up'
+	systematics += ',JET_NPScenario1_JET_GroupedNP_2__1down,JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_3__1down,JET_NPScenario1_JET_GroupedNP_3__1up,JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_1__1down'
+	systematics += ',MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleDown,MET_SoftTrk_ScaleUp'
+	systematics += ',MUONS_ID__1down,MUONS_ID__1up,MUONS_MS__1down,MUONS_MS__1up,MUONS_SCALE__1down,MUONS_SCALE__1up'
+	systematics += ',LARGERJET_Strong_JET_Top_Run1_Tau32__1up,LARGERJET_Strong_JET_Top_Run1_Tau32__1down,LARGERJET_Strong_JET_Rtrk_ModellingAndTracking__1up,LARGERJET_Strong_JET_Rtrk_ModellingAndTracking__1down,LARGERJET_Strong_JET_Top_CrossCalib_Tau32__1up,LARGERJET_Strong_JET_Top_CrossCalib_Tau32__1down,LARGERJET_Strong_JET_Rtrk_Baseline__1down,LARGERJET_Strong_JET_Rtrk_Baseline__1up'
+	systList.extend(systematics.split(','))
+    else:
+        systList = options.systs.split(',')
     
     # load analysis code
     histSuffixes = []
@@ -76,48 +118,35 @@ def main():
     for s in systList:
         # s is nominal, or the name of systematic
         treeName = s # systematic name is the same as the TTree name
+	if treeName in weightChangeSystematics or 'btag' in treeName:
+	    treeName = 'nominal'
         mt = TChain(treeName)
 	suffix = s
 	if suffix == 'nominal':
 	    suffix = ''
         addFilesInChain(mt, options.files)
+
         for k in range(0, mt.GetEntries()):
 	    mt.GetEntry(k)
             if k % 1000 == 0:
-    	        print "(",treeName,") Entry ", k, "/", mt.GetEntries()
+    	        print "(tree = ",treeName,", syst = ",suffix,") Entry ", k, "/", mt.GetEntries()
     	    sel = readEvent(mt)
-    	    channel = sel.mcChannelNumber
-    	    weight = 1
-    	    if not options.data:
-    	        weight *= sel.weight_mc
-    	        weight *= Xsec[channel]
-		# put the remainder in a function to calculate the reweighting
-    	        weight *= sel.weight_pileup
-    	        if channel in listEWK:
-    	            weight *= applyEWK(sel)
-                    weight *= sel.weight_leptonSF
-    	        btagsf = 1.0
-    	        for bidx in range(0, len(sel.tjet_mv2c20)):
-    	            pb = TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
-    	            if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
-    	                btagsf *= sel.tjet_bTagSF_70[bidx]
-    	        #weight *= btagsf
-		if not channel in sumOfWeights:
-		    print "Could not find DSID ",channel, " in TopDataPreparation files."
-		    weight = 0
-		else:
-    	            weight /= sumOfWeights[channel]
-    	    nBtags = 0
-    	    for bidx in range(0, len(sel.tjet_mv2c20)):
-    	        pb = TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
-    	        if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
-                    if sel.tjet_mv2c20 > MV2C20_CUT:
-    	                nBtags += 1
-    
-    	    if nBtags < 1:
-    	        continue
+
+            # common part of the weight
+            weight = 1
+            if not options.data:
+                weight *= sel.weight_mc
+		channel = sel.mcChannelNumber
+                weight *= Xsec[channel]
+                if not channel in sumOfWeights:
+                    print "Could not find DSID ",channel, " in TopDataPreparation files."
+                    weight = 0
+                else:
+                    weight /= sumOfWeights[channel]
+
             for ana in analysisCode:
-    	        analysisCode[ana].run(sel, suffix, weight)
+	        weight_reco = analysisCode[ana].getWeight(sel, suffix)
+    	        analysisCode[ana].run(sel, suffix, weight*weight_reco)
     
     for k in analysisCode:
         analysisCode[k].end()
