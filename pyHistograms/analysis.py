@@ -13,6 +13,7 @@ class Analysis:
 	self.ch = channel
 	self.histSuffixes = suf
 	self.h = {}
+	self.keep = '' # can be 'bb', 'cc', 'c' or 'l' and only applies to W+jets
 
     def add(self, hName, nBins, xLow, xHigh):
         self.h[hName] = {}
@@ -57,7 +58,8 @@ class Analysis:
             weight *= helpers.applyEWK(sel, s)
 
 	# this applies the W+jets Sherpa 2.2 nJets reweighting correction
-	weight *= helpers.applyWjets22Weight(sel)
+	#weight *= helpers.applyWjets22Weight(sel)
+	weight *= sel.weight_Sherpa22_corr
 
 	return weight
 
@@ -107,6 +109,22 @@ class AnaTtresSL(Analysis):
 	return weight
 
     def run(self, sel, syst, w):
+        if sel.mcChannelNumber in helpers.listWjets22:
+	    flag = sel.Wfilter_Sherpa_nT
+            if self.keep == 'bb':
+	        if flag != 3 and flag != 4:
+	            return
+	    if self.keep == 'cc':
+	        if flag != 1:
+	            return
+	    if self.keep == 'c':
+	        if flag != 2:
+	            return
+	    if self.keep == 'l':
+	        if flag != 5:
+	            return
+
+
         # OR all channels in the comma-separated list
         mapSel = {'be': 'bejets', 'bmu': 'bmujets,bmujetsmet80', 're': 'rejets', 'rmu': 'rmujets,rmujetsmet80'}
 	listSel = mapSel[self.ch].split(',')
@@ -243,6 +261,73 @@ class AnaTest(Analysis):
         self.h["yields"][syst].Fill(1, w)
 	self.y += w
 
+    def end(self):
+        print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
+        self.write()
+
+
+class AnaWjetsCR(Analysis):
+    def __init__(self, channel, suf, outputFile):
+        Analysis.__init__(self, channel, suf, outputFile)
+        # make histograms
+        self.add("yields", 1, 0.5, 1.5)
+        self.add("lepPt", 100, 25, 525)
+        self.add("lepEta", 20, -2.5, 2.5)
+        self.add("lepPhi", 32, -3.2, 3.3)
+        self.add("nJets", 10, -0.5, 9.5)
+        self.addVar("MET", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
+        self.add("mwt", 20, 0, 200)
+
+    # only apply the reco weights
+    def getWeight(self, sel, s):
+	if sel.mcChannelNumber == 0:
+  	    return 1.0
+        weight = Analysis.getWeight(self, sel, s)
+
+        # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
+        # warning: disabled for now in mc15c
+        btagsf = 1.0 #applyBtagSF(sel, s)
+        weight *= btagsf
+	return weight
+
+    def run(self, sel, syst, w):
+        if sel.mcChannelNumber in helpers.listWjets22:
+	    flag = sel.Wfilter_Sherpa_nT
+            if self.keep == 'bb':
+	        if flag != 3 and flag != 4:
+	            return
+	    if self.keep == 'cc':
+	        if flag != 1:
+	            return
+	    if self.keep == 'c':
+	        if flag != 2:
+	            return
+	    if self.keep == 'l':
+	        if flag != 5:
+	            return
+
+        passChannel = getattr(sel, self.ch)
+	if not passChannel:
+	    return
+
+	# veto events in nominal ttbar overlapping with the mtt sliced samples
+	# commented now as it is not available in mc15c
+	#if sel.mcChannelNumber == '410000':
+	#    if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+	#        return
+
+        self.h["yields"][syst].Fill(1, w)
+        l = ROOT.TLorentzVector()
+        if len(sel.el_pt) == 1:
+            l.SetPtEtaPhiE(sel.el_pt[0], sel.el_eta[0], sel.el_phi[0], sel.el_e[0])
+        elif len(sel.mu_pt) == 1:
+            l.SetPtEtaPhiE(sel.mu_pt[0], sel.mu_eta[0], sel.mu_phi[0], sel.mu_e[0])
+        self.h["lepPt"][syst].Fill(l.Perp()*1e-3, w)
+        self.h["lepEta"][syst].Fill(l.Eta(), w)
+        self.h["lepPhi"][syst].Fill(l.Phi(), w)
+        self.h["MET"][syst].Fill(sel.met_met*1e-3, w)
+        self.h["nJets"][syst].Fill(len(sel.jet_pt), w)
+        self.h["mwt"][syst].Fill(math.sqrt(2*l.Perp()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3, w)
     def end(self):
         print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
         self.write()

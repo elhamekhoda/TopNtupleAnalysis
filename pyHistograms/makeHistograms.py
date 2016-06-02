@@ -28,6 +28,9 @@ def main():
     parser.add_option("-s", "--systs",
                       dest="systs", default="nominal",
     		  help="Comma-separated list of systematic uncertainties in TTrees in the input file. Use 'all' to run over all the default ones.", metavar="SYSTEMATICS")
+    parser.add_option("-W", "--WjetsHF",
+                      dest="WjetsHF", default="all",
+    		  help="Which W+jets HF to keep. Can be all, bb, cc, c or l.", metavar="FLAVOURS")
     
     (options, args) = parser.parse_args()
     
@@ -113,6 +116,7 @@ def main():
     anaClass = getattr(analysis, options.analysis) 
     for k in channels:
         analysisCode[k] = anaClass(k, histSuffixes, channels[k])
+	analysisCode[k].keep = options.WjetsHF
 	#print k, analysisCode[k]
     
     for s in systList:
