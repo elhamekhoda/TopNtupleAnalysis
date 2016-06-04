@@ -15,8 +15,8 @@ def initBinds():
 #include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
 #include "Root/WeakCorrScaleFactorParam.cxx"
 
-#include "../../PMGTools/Root/PMGCorrsAndSysts.cxx"
-#include "../../PMGTools/PMGTools/PMGCorrsAndSysts.h"
+//#include "../../PMGTools/Root/PMGCorrsAndSysts.cxx"
+//#include "../../PMGTools/PMGTools/PMGCorrsAndSysts.h"
 
 #include "TLorentzVector.h"
 #include <vector>
@@ -26,7 +26,7 @@ class WrapperExtras {
     TtresNeutrinoBuilder m_neutrinoBuilder;
     TtresChi2 m_chi2;
     WeakCorr::WeakCorrScaleFactorParam m_ewkTool;
-    PMGCorrsAndSysts m_pmg;
+    //PMGCorrsAndSysts m_pmg;
 
     WrapperExtras() : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root"), m_pmg() {
       m_chi2.Init(TtresChi2::DATA2015_MC15);
@@ -111,9 +111,9 @@ class WrapperExtras {
       }
       return sf.nominal;
     }
-    double getWjets22Weight(int njets) {
-      return m_pmg.Get_Sherpa22VJets_NJetCorrection(njets);
-    }
+    //double getWjets22Weight(int njets) {
+    //  return m_pmg.Get_Sherpa22VJets_NJetCorrection(njets);
+    //}
 };
 '''
     # hack to get the proper paths
@@ -233,11 +233,7 @@ def applyBtagSF(sel, s):
 # TODO
 def readEvent(mt):
     return mt
-    #sel = Event()
-    #sel.weight_mc = mt.weight_mc
-    #sel.weight_pileup = mt.weight_pileup
 
-# TODO
 listEWK = [410000, 301528, 301529, 301530, 301531, 301532]
 def applyEWK(sel, s):
     top = ROOT.TLorentzVector()
@@ -255,14 +251,14 @@ def applyEWK(sel, s):
 listWjets22 = []
 listWjets22.extend(range(363330, 363354+1))
 listWjets22.extend(range(363436, 363483+1))
-def applyWjets22Weight(sel):
-    if not sel.mcChannelNumber in listWjets22:
-        return 1.0
-    njet = 0
-    for i in range(0, len(sel.akt4truthjet_pt)):
-        if sel.akt4truthjet_pt[i] > 20e3 and fabs(sel.akt4truthjet_eta[i]) < 4.5:
-	    njet += 1
-    return wrapperC.getWjets22Weight(njet)
+#def applyWjets22Weight(sel):
+#    if not sel.mcChannelNumber in listWjets22:
+#        return 1.0
+#    njet = 0
+#    for i in range(0, len(sel.akt4truthjet_pt)):
+#        if sel.akt4truthjet_pt[i] > 20e3 and fabs(sel.akt4truthjet_eta[i]) < 4.5:
+#	    njet += 1
+#    return wrapperC.getWjets22Weight(njet)
 
 # list of systematics related to changes in the weights only
 weightSF = {'' : ['pileup', 'leptonSF', 'jvt'],

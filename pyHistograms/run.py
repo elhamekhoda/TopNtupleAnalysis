@@ -5,11 +5,11 @@ import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
 
 def main():
     # input directory
-    ntuplesDir = '/nfs/dust/atlas/user/danilo/26052016v1'
+    ntuplesDir = '/nfs/dust/atlas/user/danilo/02062016WjetsCRv1'
     
     # output directory
     outputDir = 'hists'
-    outputDir = 'hists_Wweight'
+    outputDir = 'tmp'#hists_Wweight'
     
     # the default is AnaTtresSL, which produces many control pltos for tt res.
     # The Mtt version produces a TTree to do the limit setting
@@ -17,21 +17,22 @@ def main():
     # look into read.cxx to see what is available
     # create yours, if you wish
     analysisType='AnaTtresSL'
+    analysisType='AnaWjetsCR'
     
     # leave it for nominal to run only the nominal
     systematics = 'nominal'
     #systematics = 'all'
     
     names   = []
-    names  += ["Data15_13TeV_25ns_207_EXOT4"]
+    #names  += ["Data15_13TeV_25ns_207_EXOT4"]
     # 25 ns datasets
 
     names  += ['MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia']
     ##names  += ['MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
-    names  += ['MC15c_13TeV_25ns_FS_EXOT4_singletop']
-    names  += ['MC15c_13TeV_25ns_FS_EXOT4_Wjets22']
-    names  += ['MC15c_13TeV_25ns_FS_EXOT4_Zjets22']
-    names  += ['MC15c_13TeV_25ns_FS_EXOT4_VV']
+    #names  += ['MC15c_13TeV_25ns_FS_EXOT4_singletop']
+    #names  += ['MC15c_13TeV_25ns_FS_EXOT4_Wjets22']
+    #names  += ['MC15c_13TeV_25ns_FS_EXOT4_Zjets22']
+    #names  += ['MC15c_13TeV_25ns_FS_EXOT4_VV']
 
     #names += ['MC15c_13TeV_25ns_FS_EXOT4_Zprime400']
     #names += ['MC15c_13TeV_25ns_FS_EXOT4_Zprime500']
@@ -98,7 +99,10 @@ def main():
         if "Data" in sample.name:
             theSysts = "nominal"
             isData = ' -d '
-        os.system('./makeHistograms.py - '+isData+' --files '+outputDir+"/input_"+sample.name+'.txt --analysis '+analysisType+' --output re:'+outputDir+'/resolved_e_'+outfile+'.root,rmu:'+outputDir+'/resolved_mu_'+outfile+'.root,be:'+outputDir+'/boosted_e_'+outfile+'.root,bmu:'+outputDir+'/boosted_mu_'+outfile+'.root --systs '+theSysts)
+        jobName = outfile
+        out = 'Wpre_resjets_el:'+outputDir+'/Wpre_resjets_el_'+jobName+'.root,Wpre_resjets_mu:'+outputDir+'/Wpre_resjets_mu_'+jobName+'.root,Wtag_resjets_el:'+outputDir+'/Wtag_resjets_el_'+jobName+'.root,Wtag_resjets_mu:'+outputDir+'/Wtag_resjets_mu_'+jobName+'.root'
+        #out = ' re:'+outputDir+'/resolved_e_'+outfile+'.root,rmu:'+outputDir+'/resolved_mu_'+outfile+'.root,be:'+outputDir+'/boosted_e_'+outfile+'.root,bmu:'+outputDir+'/boosted_mu_'+outfile+'.root'
+        os.system('./makeHistograms.py - '+isData+' --files '+outputDir+"/input_"+sample.name+'.txt --analysis '+analysisType+' --output '+out+' --systs '+theSysts)
     
 if __name__ == '__main__':
     main()
