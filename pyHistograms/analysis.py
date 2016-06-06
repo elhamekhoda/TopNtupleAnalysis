@@ -85,6 +85,7 @@ class AnaTtresSL(Analysis):
 		self.addVar("closeJetPt", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
 		self.addVar("largeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3])
 		self.add("largeJetM", 30, 0, 300)
+		self.add("largeJetPtMtt", 50, 0, 1)
 		self.add("largeJetEta", 20, -2., 2.)
 		self.add("largeJetPhi", 32, -3.2, 3.2)
 		self.addVar("mtlep_boo", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
@@ -188,7 +189,8 @@ class AnaTtresSL(Analysis):
 					return
 
 		# OR all channels in the comma-separated list
-		mapSel = {'be': 'bejets', 'bmu': 'bmujets,bmujetsmet80', 're': 'rejets', 'rmu': 'rmujets,rmujetsmet80'}
+		#mapSel = {'be': 'bejets', 'bmu': 'bmujets,bmujetsmet80', 're': 'rejets', 'rmu': 'rmujets,rmujetsmet80'}
+		mapSel = {'be': 'bejets', 'bmu': 'bmujets', 're': 'rejets', 'rmu': 'rmujets'}
 		listSel = mapSel[self.ch].split(',')
 
 		passAllChannels = False
@@ -201,14 +203,16 @@ class AnaTtresSL(Analysis):
 
 		# veto resolved event if it passes the boosted channel
 		if self.ch == 're' or self.ch == 'rmu':
-			if sel.bejets or sel.bmujets or sel.bmujetsmet80:
+			#if sel.bejets or sel.bmujets or sel.bmujetsmet80:
+			if sel.bejets or sel.bmujets:
 				return
 
-		if ((sel.bmujets or sel.rmujets) and not (sel.HLT_mu50 or sel.HLT_mu20_iloose_L1MU15)) or ((sel.bmujetsmet80 or sel.rmujetsmet80) and not (sel.HLT_xe80_tc_lcw_L1XE50)):
+		#if ((sel.bmujets or sel.rmujets) and not (sel.HLT_mu50 or sel.HLT_mu20_iloose_L1MU15)) or ((sel.bmujetsmet80 or sel.rmujetsmet80) and not (sel.HLT_xe80_tc_lcw_L1XE50)):
+		if ((sel.bmujets or sel.rmujets) and not (sel.HLT_mu50 or sel.HLT_mu20_iloose_L1MU15)):
 			return
-		if (sel.bejets or sel.rejets) and (sel.mcChannelNumber != 0) and not (sel.HLT_e24_lhmedium_L1EM18VH or sel.HLT_e60_lhmedium or HLT_e120_lhloos):
+		if (sel.bejets or sel.rejets) and (sel.mcChannelNumber != 0) and not (sel.HLT_e24_lhmedium_L1EM18VH or sel.HLT_e60_lhmedium or sel.HLT_e120_lhloose):
 			return
-		if (sel.bejets or sel.rejets) and (sel.mcChannelNumber == 0) and not (sel.HLT_e24_lhmedium_L1EM20VH or sel.HLT_e60_lhmedium or HLT_e120_lhloos):
+		if (sel.bejets or sel.rejets) and (sel.mcChannelNumber == 0) and not (sel.HLT_e24_lhmedium_L1EM20VH or sel.HLT_e60_lhmedium or sel.HLT_e120_lhloose):
 			return
 
 		# apply b-tagging cut
@@ -283,6 +287,7 @@ class AnaTtresSL(Analysis):
 			self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx], w)
 			self.h["mtlep_boo"][syst].Fill((closeJet+nu+l).M()*1e-3, w)
 			self.h["mtt"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
+			self.h["largeJetPtMtt"][syst].Fill(lj.Perp()/(closeJet+nu+l+lj).M(), w)
 		elif sel.rejets or sel.rmujets:
 			jets = ROOT.vector('TLorentzVector')()
 			#jets = []

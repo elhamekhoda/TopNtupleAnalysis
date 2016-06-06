@@ -129,7 +129,7 @@ def main():
 	for s in systList:
 		# s is nominal, or the name of systematic
 		treeName = s # systematic name is the same as the TTree name
-		if treeName in weightChangeSystematics or 'btag' in treeName:
+		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'wbb_' in treeName or 'wcc_' in treeName or 'wc_' in treeName or 'wl_' in treeName or 'ttEWK_' in treeName:
 			treeName = 'nominal'
 		mt = TChain(treeName)
 		suffix = s

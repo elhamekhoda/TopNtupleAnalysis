@@ -11,7 +11,7 @@ def main():
 	outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_sr'
 
 	# number of files per job
-	nFilesPerJob = 2
+	nFilesPerJob = 5
 
 	# use it to setup AnalysisTop
 	rundir = '/afs/desy.de/user/d/danilo/private/topana/Top246'
@@ -171,7 +171,7 @@ def main():
 			os.system('chmod a+x '+runfile)
 			subcmd = 'qsub '+runfile
 			os.system(subcmd)
-			#sys.exit(0)
+			sys.exit(0)
 	
 if __name__ == '__main__':
 	main()
