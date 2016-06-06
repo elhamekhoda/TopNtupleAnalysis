@@ -37,7 +37,7 @@ class Analysis:
 		self.fi.cd()
 		for hName in self.h:
 			for s in self.histSuffixes:
-				print "writing histogram with name ", hName+s, " in file ",self.fi.GetName()
+				#print "writing histogram with name ", hName+s, " in file ",self.fi.GetName()
 				self.h[hName][s].Write(hName+s)
 		self.fi.Close()
 
@@ -312,7 +312,7 @@ class AnaTtresSL(Analysis):
 			self.h["mthad_res"][syst].Fill(mth*1e-3, w)
 			self.h["mwhad_res"][syst].Fill(mwh*1e-3, w)
 	def end(self):
-		print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
+		#print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
 		self.write()
 
 class AnaTest(Analysis):
@@ -330,7 +330,7 @@ class AnaTest(Analysis):
 	self.y += w
 
     def end(self):
-        print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
+        #print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
         self.write()
 
 
@@ -411,7 +411,7 @@ class AnaWjetsCR(Analysis):
 			self.h["nJetsNeg"][syst].Fill(njets, w)
 		self.h["mwt"][syst].Fill(math.sqrt(2*l.Perp()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3, w)
 	def end(self):
-		print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
+		#print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
 		self.write()
 
 class AnaWjetsCRCheck(Analysis):
@@ -575,5 +575,5 @@ class AnaWjetsCRCheck(Analysis):
 			self.h["nJetsNeg"][syst].Fill(njets, w)
 		self.h["mwt"][syst].Fill(math.sqrt(2*l.Perp()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3, w)
 	def end(self):
-		print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
+		#print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
 		self.write()
