@@ -295,12 +295,12 @@ class AnaTtresSL(Analysis):
 			#btag = []
 			for k in range(0, len(sel.jet_pt)):
 				jets.push_back(ROOT.TLorentzVector(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k]))
-			tagged = False
-			for t in range(0, len(tjets)):
-				dr = jets[k].DeltaR(tjets[t])
-				if dr < 0.4 and tb[t]:
-					tagged = True
-				btag.push_back(tagged)
+				tagged = False
+				for t in range(0, len(tjets)):
+					dr = jets[k].DeltaR(tjets[t])
+					if dr < 0.4 and tb[t]:
+						tagged = True
+					btag.push_back(tagged)
 			met = ROOT.TLorentzVector(sel.met_met, 0, sel.met_phi, sel.met_met)
 			res_info = helpers.wrapperC.getMtt(l, jets, btag, met)
 			mtt = res_info["mtt"]
