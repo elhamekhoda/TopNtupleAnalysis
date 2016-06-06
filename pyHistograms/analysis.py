@@ -255,7 +255,7 @@ class AnaTtresSL(Analysis):
 				if sel.tjet_mv2c10 > helpers.MV2C10_CUT:
 					nBtags += 1
 					b = True
-		tb.append(b)
+				tb.append(b)
 		self.h["nTrkBtagJets"][syst].Fill(nBtags, w)
 		self.h["mwt"][syst].Fill(math.sqrt(2*l.Perp()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3, w)
 		self.h["mu"][syst].Fill(sel.mu, w)
