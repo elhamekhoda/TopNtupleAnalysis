@@ -28,7 +28,7 @@ class WrapperExtras {
     WeakCorr::WeakCorrScaleFactorParam m_ewkTool;
     //PMGCorrsAndSysts m_pmg;
 
-    WrapperExtras() : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root"), m_pmg() {
+    WrapperExtras() : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root") { //, m_pmg() {
       m_chi2.Init(TtresChi2::DATA2015_MC15);
     }
     TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {

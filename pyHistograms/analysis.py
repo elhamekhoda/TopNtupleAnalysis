@@ -21,6 +21,7 @@ class Analysis:
 		for s in self.histSuffixes:
 			#print "adding histogram with name ", hName+self.ch+s
 			self.h[hName][s] = ROOT.TH1D(hName+self.ch+s, "", nBins, xLow, xHigh)
+			self.h[hName][s].Sumw2()
 			self.h[hName][s].SetDirectory(0)
 
 	def addVar(self, hName, nBinsList):
@@ -29,6 +30,7 @@ class Analysis:
 		self.h[hName] = {}
 		for s in self.histSuffixes:
 			self.h[hName][s] = ROOT.TH1D(hName+self.ch+s, "", len(nBinsList) - 1, ar)
+			self.h[hName][s].Sumw2()
 			self.h[hName][s].SetDirectory(0)
 
 	def write(self):
@@ -273,9 +275,9 @@ class AnaWjetsCR(Analysis):
 		self.add("lepPt", 100, 25, 525)
 		self.add("lepEta", 20, -2.5, 2.5)
 		self.add("lepPhi", 32, -3.2, 3.3)
-		self.add("nJets", 4, 0.5, 4.5)
-		self.add("nJetsPos", 4, 0.5, 4.5)
-		self.add("nJetsNeg", 4, 0.5, 4.5)
+		self.add("nJets", 5, 0.5, 5.5)
+		self.add("nJetsPos", 5, 0.5, 5.5)
+		self.add("nJetsNeg", 5, 0.5, 5.5)
 		self.addVar("MET", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
 		self.add("mwt", 20, 0, 200)
 
@@ -328,8 +330,8 @@ class AnaWjetsCR(Analysis):
 		self.h["lepPhi"][syst].Fill(l.Phi(), w)
 		self.h["MET"][syst].Fill(sel.met_met*1e-3, w)
 		njets = len(sel.jet_pt)
-		if njets >= 4:
-			njets = 4
+		if njets > 4:
+			njets = 5
 		q = 0
 		if len(sel.el_pt) == 1:
 			q = sel.el_charge[0]
@@ -345,3 +347,122 @@ class AnaWjetsCR(Analysis):
 		print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
 		self.write()
 
+class AnaWjetsCRCheck(Analysis):
+	def __init__(self, channel, suf, outputFile):
+		Analysis.__init__(self, channel, suf, outputFile)
+		# make histograms
+		self.add("yields", 1, 0.5, 1.5)
+		self.add("lepPt", 100, 25, 525)
+		self.add("lepEta", 20, -2.5, 2.5)
+		self.add("lepPhi", 32, -3.2, 3.3)
+		self.add("nJets", 5, 0.5, 5.5)
+		self.add("nJetsPos", 5, 0.5, 5.5)
+		self.add("nJetsNeg", 5, 0.5, 5.5)
+		self.addVar("MET", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
+		self.add("mwt", 20, 0, 200)
+
+	# only apply the reco weights
+	def getWeight(self, sel, s):
+		if sel.mcChannelNumber == 0:
+			return 1.0
+		weight = Analysis.getWeight(self, sel, s)
+
+		# just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
+		# warning: disabled for now in mc15c
+		btagsf = 1.0 #applyBtagSF(sel, s)
+		weight *= btagsf
+		return weight
+
+	def run(self, sel, syst, w):
+		if sel.mcChannelNumber in helpers.listWjets22:
+			flag = sel.Wfilter_Sherpa_nT
+			if self.keep == 'bb':
+				if flag != 3 and flag != 4:
+					return
+			if self.keep == 'cc':
+				if flag != 1:
+					return
+			if self.keep == 'c':
+				if flag != 2:
+					return
+			if self.keep == 'l':
+				if flag != 5:
+					return
+
+		passChannel = getattr(sel, self.ch)
+		if not passChannel:
+			return
+
+		# veto events in nominal ttbar overlapping with the mtt sliced samples
+		# commented now as it is not available in mc15c
+		#if sel.mcChannelNumber == '410000':
+		#    if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+		#        return
+		
+		# Apply tight MET cut to remove the QCD
+		if sel.met_met*1e-3 < 200:
+			return
+
+		# W+jets weights to test:
+		hfweight = 1.0
+		f_ca = 1.0
+		pretag = False
+		if not "tag" in self.ch:
+			pretag = True
+		if sel.mcChannelNumber in helpers.listWjets22:
+			flag = sel.Wfilter_Sherpa_nT
+			if len(sel.el_pt) == 1:
+				f_ca = 1.074
+				if flag == 3 or flag == 4 or flag == 1 or flag == 2:
+					if pretag:
+						hfweight = 0.958
+					else:
+						hfweight = 0.993
+				elif flag == 5:
+					if pretag:
+						hfweight = 1.026
+					else:
+						hfweight = 1.063
+			elif len(sel.mu_pt) == 1:
+				f_ca = 1.147
+				if flag == 3 or flag == 4 or flag == 1 or flag == 2:
+					if pretag:
+						hfweight = 1.238
+					else:
+						hfweight = 1.030
+				elif flag == 5:
+					if pretag:
+						hfweight = 0.860
+					else:
+						hfweight = 0.715
+		hfweight = 1.0
+		f_ca = 1.0
+		w *= f_ca*hfweight
+
+		self.h["yields"][syst].Fill(1, w)
+		l = ROOT.TLorentzVector()
+		if len(sel.el_pt) == 1:
+			l.SetPtEtaPhiE(sel.el_pt[0], sel.el_eta[0], sel.el_phi[0], sel.el_e[0])
+		elif len(sel.mu_pt) == 1:
+			l.SetPtEtaPhiE(sel.mu_pt[0], sel.mu_eta[0], sel.mu_phi[0], sel.mu_e[0])
+		self.h["lepPt"][syst].Fill(l.Perp()*1e-3, w)
+		self.h["lepEta"][syst].Fill(l.Eta(), w)
+		self.h["lepPhi"][syst].Fill(l.Phi(), w)
+		self.h["MET"][syst].Fill(sel.met_met*1e-3, w)
+		njets = len(sel.jet_pt)
+		if njets > 4:
+			njets = 5
+		q = 0
+		if len(sel.el_pt) == 1:
+			q = sel.el_charge[0]
+		elif len(sel.mu_pt) == 1:
+			q = sel.mu_charge[0]
+		self.h["nJets"][syst].Fill(njets, w)
+		if q > 0:
+			self.h["nJetsPos"][syst].Fill(njets, w)
+		elif q < 0:
+			self.h["nJetsNeg"][syst].Fill(njets, w)
+		self.h["mwt"][syst].Fill(math.sqrt(2*l.Perp()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3, w)
+	def end(self):
+		print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
+		self.write()

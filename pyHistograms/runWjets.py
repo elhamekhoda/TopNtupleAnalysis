@@ -8,10 +8,11 @@ def main():
 	ntuplesDir = '/nfs/dust/atlas/user/danilo/02062016WjetsCRv1'
 	
 	# output directory
-	outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_WjetsHF'
+	outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_WjetsMETCorrHF'
+	#outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_WjetsHF'
 
 	# number of files per job
-	nFilesPerJob = 30
+	nFilesPerJob = 80
 
 	# use it to setup AnalysisTop
 	rundir = '/afs/desy.de/user/d/danilo/private/topana/Top246'
@@ -28,7 +29,7 @@ def main():
 	# the QCD version aims at plots for QCD studies using the matrix method
 	# look into read.cxx to see what is available
 	# create yours, if you wish
-	analysisType='AnaWjetsCR'
+	analysisType='AnaWjetsCRCheck'
 	
 	# leave it for nominal to run only the nominal
 	systematics = 'nominal'
@@ -39,12 +40,12 @@ def main():
 	names  += ['wccjets']
 	names  += ['wcjets']
 	names  += ['wljets']
-	names  += ['zjets']
-	names  += ['tt']
+	#names  += ['zjets']
+	#names  += ['tt']
 
-	names  += ["data"]
-	names  += ['singletop']
-	names  += ['vv']
+	#names  += ["data"]
+	#names  += ['singletop']
+	#names  += ['vv']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -52,10 +53,10 @@ def main():
 					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'data': 'Data15_13TeV_25ns_207_EXOT4',
-			'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia',
-			'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
-			'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
-			'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
+					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia',
+					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
+					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
+					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
 		   }
 	
 	import TopExamples.grid
