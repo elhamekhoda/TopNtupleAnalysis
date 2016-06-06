@@ -20,8 +20,8 @@ for ch in channels:
 	}
 
 def toHist(name, inp, ch, sample, q):
-	h = ROOT.TH1F(name, "", 4, 0.5, 4.5)
-	for njets in range(1,5):
+	h = ROOT.TH1F(name, "", 5, 0.5, 5.5)
+	for njets in range(1,6):
 		h.SetBinContent(njets, inp[ch][sample][njets][q][0])
 		h.SetBinError(njets, inp[ch][sample][njets][q][1])
 	h.SetDirectory(0)
@@ -158,7 +158,7 @@ def main():
 			histPos = oneFile.Get('nJetsPos')
 			histNeg = oneFile.Get('nJetsNeg')
 			histAll = oneFile.Get('nJets')
-			for njets in range(1,5):
+			for njets in range(1,6):
 				inp[ch][s][njets] = {}
 				inp[ch][s][njets][1] = [L*histPos.GetBinContent(njets), L*histPos.GetBinError(njets)]
 				inp[ch][s][njets][-1] = [L*histNeg.GetBinContent(njets), L*histNeg.GetBinError(njets)]
@@ -174,7 +174,7 @@ def main():
 	for ch in channels:
 		inp[ch]['datasub'] = {}
 		inp[ch]['wjets'] = {}
-		for njets in range(1, 5):
+		for njets in range(1, 6):
 			inp[ch]['datasub'][njets] = {}
 			inp[ch]['datasub'][njets][1] = inp[ch]['data'][njets][1][:]
 			inp[ch]['datasub'][njets][-1] = inp[ch]['data'][njets][-1][:]
@@ -234,6 +234,26 @@ def main():
 	wc_tag = {'el':[0,0], 'mu':[0,0]}
 	wl_tag = {'el':[0,0], 'mu':[0,0]}
 
+	wbb_3 = {'el':[0,0], 'mu':[0,0]}
+	wcc_3 = {'el':[0,0], 'mu':[0,0]}
+	wc_3 = {'el':[0,0], 'mu':[0,0]}
+	wl_3 = {'el':[0,0], 'mu':[0,0]}
+
+	wbb_3tag = {'el':[0,0], 'mu':[0,0]}
+	wcc_3tag = {'el':[0,0], 'mu':[0,0]}
+	wc_3tag = {'el':[0,0], 'mu':[0,0]}
+	wl_3tag = {'el':[0,0], 'mu':[0,0]}
+
+	wbb_4 = {'el':[0,0], 'mu':[0,0]}
+	wcc_4 = {'el':[0,0], 'mu':[0,0]}
+	wc_4 = {'el':[0,0], 'mu':[0,0]}
+	wl_4 = {'el':[0,0], 'mu':[0,0]}
+
+	wbb_4tag = {'el':[0,0], 'mu':[0,0]}
+	wcc_4tag = {'el':[0,0], 'mu':[0,0]}
+	wc_4tag = {'el':[0,0], 'mu':[0,0]}
+	wl_4tag = {'el':[0,0], 'mu':[0,0]}
+
 	pbb = {}
 	pcc = {}
 	pc = {}
@@ -264,6 +284,26 @@ def main():
 	Fracc_tag = {'el':[0,0], 'mu':[0,0]}
 	Fracl_tag = {'el':[0,0], 'mu':[0,0]}
 
+	Fracbb_3 = {'el':[0,0], 'mu':[0,0]}
+	Fraccc_3 = {'el':[0,0], 'mu':[0,0]}
+	Fracc_3 = {'el':[0,0], 'mu':[0,0]}
+	Fracl_3 = {'el':[0,0], 'mu':[0,0]}
+
+	Fracbb_3tag = {'el':[0,0], 'mu':[0,0]}
+	Fraccc_3tag = {'el':[0,0], 'mu':[0,0]}
+	Fracc_3tag = {'el':[0,0], 'mu':[0,0]}
+	Fracl_3tag = {'el':[0,0], 'mu':[0,0]}
+
+	Fracbb_4 = {'el':[0,0], 'mu':[0,0]}
+	Fraccc_4 = {'el':[0,0], 'mu':[0,0]}
+	Fracc_4 = {'el':[0,0], 'mu':[0,0]}
+	Fracl_4 = {'el':[0,0], 'mu':[0,0]}
+
+	Fracbb_4tag = {'el':[0,0], 'mu':[0,0]}
+	Fraccc_4tag = {'el':[0,0], 'mu':[0,0]}
+	Fracc_4tag = {'el':[0,0], 'mu':[0,0]}
+	Fracl_4tag = {'el':[0,0], 'mu':[0,0]}
+
 	for lep in ['el', 'mu']:
 		Fracbb[lep] = ratio(inp['Wpre_resjets_%s' % lep]['wbbjets'][2][0], inp['Wpre_resjets_%s' % lep]['wjets'][2][0])
 		Fraccc[lep] = ratio(inp['Wpre_resjets_%s' % lep]['wccjets'][2][0], inp['Wpre_resjets_%s' % lep]['wjets'][2][0])
@@ -274,6 +314,26 @@ def main():
 		Fraccc_tag[lep] = ratio(inp['Wtag_resjets_%s' % lep]['wccjets'][2][0], inp['Wtag_resjets_%s' % lep]['wjets'][2][0])
 		Fracc_tag[lep] = ratio(inp['Wtag_resjets_%s' % lep]['wcjets'][2][0], inp['Wtag_resjets_%s' % lep]['wjets'][2][0])
 		Fracl_tag[lep] = ratio(inp['Wtag_resjets_%s' % lep]['wljets'][2][0], inp['Wtag_resjets_%s' % lep]['wjets'][2][0])
+
+		Fracbb_4tag[lep] = ratio(add(inp['Wtag_resjets_%s' % lep]['wbbjets'][4][0], inp['Wtag_resjets_%s' % lep]['wbbjets'][5][0]), add(inp['Wtag_resjets_%s' % lep]['wjets'][4][0], inp['Wtag_resjets_%s' % lep]['wjets'][5][0]))
+		Fraccc_4tag[lep] = ratio(add(inp['Wtag_resjets_%s' % lep]['wccjets'][4][0], inp['Wtag_resjets_%s' % lep]['wccjets'][5][0]), add(inp['Wtag_resjets_%s' % lep]['wjets'][4][0], inp['Wtag_resjets_%s' % lep]['wjets'][5][0]))
+		Fracc_4tag[lep] = ratio(add(inp['Wtag_resjets_%s' % lep]['wcjets'][4][0], inp['Wtag_resjets_%s' % lep]['wcjets'][5][0]), add(inp['Wtag_resjets_%s' % lep]['wjets'][4][0], inp['Wtag_resjets_%s' % lep]['wjets'][5][0]))
+		Fracl_4tag[lep] = ratio(add(inp['Wtag_resjets_%s' % lep]['wljets'][4][0], inp['Wtag_resjets_%s' % lep]['wljets'][5][0]), add(inp['Wtag_resjets_%s' % lep]['wjets'][4][0], inp['Wtag_resjets_%s' % lep]['wjets'][5][0]))
+
+		Fracbb_4[lep] = ratio(add(inp['Wpre_resjets_%s' % lep]['wbbjets'][4][0], inp['Wpre_resjets_%s' % lep]['wbbjets'][5][0]), add(inp['Wpre_resjets_%s' % lep]['wjets'][4][0], inp['Wpre_resjets_%s' % lep]['wjets'][5][0]))
+		Fraccc_4[lep] = ratio(add(inp['Wpre_resjets_%s' % lep]['wccjets'][4][0], inp['Wpre_resjets_%s' % lep]['wccjets'][5][0]), add(inp['Wpre_resjets_%s' % lep]['wjets'][4][0], inp['Wpre_resjets_%s' % lep]['wjets'][5][0]))
+		Fracc_4[lep] = ratio(add(inp['Wpre_resjets_%s' % lep]['wcjets'][4][0], inp['Wpre_resjets_%s' % lep]['wcjets'][5][0]), add(inp['Wpre_resjets_%s' % lep]['wjets'][4][0], inp['Wpre_resjets_%s' % lep]['wjets'][5][0]))
+		Fracl_4[lep] = ratio(add(inp['Wpre_resjets_%s' % lep]['wljets'][4][0], inp['Wpre_resjets_%s' % lep]['wljets'][5][0]), add(inp['Wpre_resjets_%s' % lep]['wjets'][4][0], inp['Wpre_resjets_%s' % lep]['wjets'][5][0]))
+
+		Fracbb_3tag[lep] = ratio(inp['Wtag_resjets_%s' % lep]['wbbjets'][3][0], inp['Wtag_resjets_%s' % lep]['wjets'][3][0])
+		Fraccc_3tag[lep] = ratio(inp['Wtag_resjets_%s' % lep]['wccjets'][3][0], inp['Wtag_resjets_%s' % lep]['wjets'][3][0])
+		Fracc_3tag[lep] = ratio(inp['Wtag_resjets_%s' % lep]['wcjets'][3][0], inp['Wtag_resjets_%s' % lep]['wjets'][3][0])
+		Fracl_3tag[lep] = ratio(inp['Wtag_resjets_%s' % lep]['wljets'][3][0], inp['Wtag_resjets_%s' % lep]['wjets'][3][0])
+
+		Fracbb_3[lep] = ratio(inp['Wpre_resjets_%s' % lep]['wbbjets'][3][0], inp['Wpre_resjets_%s' % lep]['wjets'][3][0])
+		Fraccc_3[lep] = ratio(inp['Wpre_resjets_%s' % lep]['wccjets'][3][0], inp['Wpre_resjets_%s' % lep]['wjets'][3][0])
+		Fracc_3[lep] = ratio(inp['Wpre_resjets_%s' % lep]['wcjets'][3][0], inp['Wpre_resjets_%s' % lep]['wjets'][3][0])
+		Fracl_3[lep] = ratio(inp['Wpre_resjets_%s' % lep]['wljets'][3][0], inp['Wpre_resjets_%s' % lep]['wjets'][3][0])
 
 	nj = 2
 	for lep in ['el', 'mu']:
@@ -341,8 +401,32 @@ def main():
 		wc_tag[lep] = ratio(sfc[lep], norm_change)
 		wl_tag[lep] = ratio(sfl[lep], norm_change)
 
-		print "before weight - total, bb, cc, c, l:", inp['Wpre_resjets_%s' % lep]['wjets'][nj][0][0], inp['Wpre_resjets_%s' % lep]['wbbjets'][nj][0][0], inp['Wpre_resjets_%s' % lep]['wccjets'][nj][0][0], inp['Wpre_resjets_%s' % lep]['wcjets'][nj][0][0], inp['Wpre_resjets_%s' % lep]['wljets'][nj][0][0]
-		print "after weight  - total, bb, cc, c, l, sum:", f_ca[lep][0]*inp['Wpre_resjets_%s' % lep]['wjets'][nj][0][0], f_ca[lep][0]*wbb[lep][0]*inp['Wpre_resjets_%s' % lep]['wbbjets'][nj][0][0], f_ca[lep][0]*wcc[lep][0]*inp['Wpre_resjets_%s' % lep]['wccjets'][nj][0][0], f_ca[lep][0]*wc[lep][0]*inp['Wpre_resjets_%s' % lep]['wcjets'][nj][0][0], f_ca[lep][0]*wl[lep][0]*inp['Wpre_resjets_%s' % lep]['wljets'][nj][0][0], f_ca[lep][0]*wbb[lep][0]*inp['Wpre_resjets_%s' % lep]['wbbjets'][nj][0][0] + f_ca[lep][0]*wcc[lep][0]*inp['Wpre_resjets_%s' % lep]['wccjets'][nj][0][0] + f_ca[lep][0]*wc[lep][0]*inp['Wpre_resjets_%s' % lep]['wcjets'][nj][0][0] + f_ca[lep][0]*wl[lep][0]*inp['Wpre_resjets_%s' % lep]['wljets'][nj][0][0]
+		norm_change = add(add(add(mult(Fracbb_4[lep], sfbb[lep]), mult(Fraccc_4[lep], sfcc[lep])), mult(Fracc_4[lep], sfc[lep])), mult(Fracl_4[lep], sfl[lep]))
+		wbb_4[lep] = ratio(sfbb[lep], norm_change)
+		wcc_4[lep] = ratio(sfcc[lep], norm_change)
+		wc_4[lep] = ratio(sfc[lep], norm_change)
+		wl_4[lep] = ratio(sfl[lep], norm_change)
+
+		norm_change = add(add(add(mult(Fracbb_4tag[lep], sfbb[lep]), mult(Fraccc_4tag[lep], sfcc[lep])), mult(Fracc_4tag[lep], sfc[lep])), mult(Fracl_4tag[lep], sfl[lep]))
+		wbb_4tag[lep] = ratio(sfbb[lep], norm_change)
+		wcc_4tag[lep] = ratio(sfcc[lep], norm_change)
+		wc_4tag[lep] = ratio(sfc[lep], norm_change)
+		wl_4tag[lep] = ratio(sfl[lep], norm_change)
+
+		norm_change = add(add(add(mult(Fracbb_3[lep], sfbb[lep]), mult(Fraccc_3[lep], sfcc[lep])), mult(Fracc_3[lep], sfc[lep])), mult(Fracl_3[lep], sfl[lep]))
+		wbb_3[lep] = ratio(sfbb[lep], norm_change)
+		wcc_3[lep] = ratio(sfcc[lep], norm_change)
+		wc_3[lep] = ratio(sfc[lep], norm_change)
+		wl_3[lep] = ratio(sfl[lep], norm_change)
+
+		norm_change = add(add(add(mult(Fracbb_3tag[lep], sfbb[lep]), mult(Fraccc_3tag[lep], sfcc[lep])), mult(Fracc_3tag[lep], sfc[lep])), mult(Fracl_3tag[lep], sfl[lep]))
+		wbb_3tag[lep] = ratio(sfbb[lep], norm_change)
+		wcc_3tag[lep] = ratio(sfcc[lep], norm_change)
+		wc_3tag[lep] = ratio(sfc[lep], norm_change)
+		wl_3tag[lep] = ratio(sfl[lep], norm_change)
+
+		#print "before weight - total, bb, cc, c, l:", inp['Wpre_resjets_%s' % lep]['wjets'][nj][0][0], inp['Wpre_resjets_%s' % lep]['wbbjets'][nj][0][0], inp['Wpre_resjets_%s' % lep]['wccjets'][nj][0][0], inp['Wpre_resjets_%s' % lep]['wcjets'][nj][0][0], inp['Wpre_resjets_%s' % lep]['wljets'][nj][0][0]
+		#print "after weight  - total, bb, cc, c, l, sum:", f_ca[lep][0]*inp['Wpre_resjets_%s' % lep]['wjets'][nj][0][0], f_ca[lep][0]*wbb[lep][0]*inp['Wpre_resjets_%s' % lep]['wbbjets'][nj][0][0], f_ca[lep][0]*wcc[lep][0]*inp['Wpre_resjets_%s' % lep]['wccjets'][nj][0][0], f_ca[lep][0]*wc[lep][0]*inp['Wpre_resjets_%s' % lep]['wcjets'][nj][0][0], f_ca[lep][0]*wl[lep][0]*inp['Wpre_resjets_%s' % lep]['wljets'][nj][0][0], f_ca[lep][0]*wbb[lep][0]*inp['Wpre_resjets_%s' % lep]['wbbjets'][nj][0][0] + f_ca[lep][0]*wcc[lep][0]*inp['Wpre_resjets_%s' % lep]['wccjets'][nj][0][0] + f_ca[lep][0]*wc[lep][0]*inp['Wpre_resjets_%s' % lep]['wcjets'][nj][0][0] + f_ca[lep][0]*wl[lep][0]*inp['Wpre_resjets_%s' % lep]['wljets'][nj][0][0]
 
 		#fbb_data[lep] = ((Ntp_data - Ntn_data)/(Npp_data - Npn_data) - pl)*1.0/(pbb + kcc[lep]*(pcc-pl) + kc[lep]*(pc-pl) - pl)
 		#fbb_mc[lep] = ((Ntp_mc - Ntn_mc)/(Npp_mc - Npn_mc) - pl)*1.0/(pbb + kcc[lep]*(pcc-pl) + kc[lep]*(pc-pl) - pl)
@@ -359,7 +443,7 @@ def main():
 		print "\\hline"
 		print "\\multicolumn{2}{|c|}{%s lepton} \\\\" % lep
 		print "\\hline"
-		for var in ["pbb", "pcc", "pc", "pl", "rmc", "rmc_rat", "kcc", "kc", "fbb_data", "fbb_mc", "ca_data", "ca_mc", "N_mc", "N_data", "f_ca", "sfbb", "sfcc", "sfc", "sfl", "Fracbb", "Fraccc", "Fracc", "Fracl", "Fracbb_tag", "Fraccc_tag", "Fracc_tag", "Fracl_tag", "wbb", "wcc", "wc", "wl", "wbb_tag", "wcc_tag", "wc_tag", "wl_tag"]:
+		for var in ["pbb", "pcc", "pc", "pl", "rmc", "rmc_rat", "kcc", "kc", "fbb_data", "fbb_mc", "ca_data", "ca_mc", "N_mc", "N_data", "f_ca", "sfbb", "sfcc", "sfc", "sfl", "Fracbb", "Fraccc", "Fracc", "Fracl", "Fracbb_tag", "Fraccc_tag", "Fracc_tag", "Fracl_tag", "wbb", "wcc", "wc", "wl", "wbb_tag", "wcc_tag", "wc_tag", "wl_tag", "Fracbb_4tag", "Fraccc_4tag", "Fracc_4tag", "Fracl_4tag", "Fracbb_4", "Fraccc_4", "Fracc_4", "Fracl_4", "Fracbb_3tag", "Fraccc_3tag", "Fracc_3tag", "Fracl_3tag", "Fracbb_3", "Fraccc_3", "Fracc_3", "Fracl_3", "wbb_4", "wcc_4", "wc_4", "wl_4", "wbb_4tag", "wcc_4tag", "wc_4tag", "wl_4tag", "wbb_3", "wcc_3", "wc_3", "wl_3", "wbb_3tag", "wcc_3tag", "wc_3tag", "wl_3tag"]:
 			g = eval(var)
 			print "%20s   &   $%10.3f \\pm %10.3f$" % (var+" ("+lep+")", g[lep][0], g[lep][1])
 	print "\\hline"

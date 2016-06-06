@@ -108,6 +108,67 @@ class AnaTtresSL(Analysis):
 		# warning: disabled for now in mc15c
 		btagsf = 1.0 #applyBtagSF(sel, s)
 		weight *= btagsf
+
+		# W+jets C/A and HF syst. variations
+		# assuming b-tagging
+		hfweight = 1.0
+		f_ca = 1.0
+		if len(sel.el_pt) == 1:
+			frac_bb = 0.559
+			frac_cc = 0.136
+			frac_c = 0.221
+			frac_l = 0.084
+		elif len(sel.mu_pt) == 1:
+			frac_bb = 0.590
+			frac_cc = 0.149
+			frac_c = 0.184
+			frac_l = 0.077
+		if sel.mcChannelNumber in helpers.listWjets22:
+			flag = sel.Wfilter_Sherpa_nT
+			if len(sel.el_pt) == 1:
+				f_ca = 1.074
+			elif len(sel.mu_pt) == 1:
+				f_ca = 1.147
+			norm = 1.0
+			hfweight = 1.0
+			if s == "wbb__1up":
+				norm = 1.0/(1.5*frac_bb + frac_cc + frac_c + frac_l)
+				if flag == 3 or flag == 4:
+					hfweight = 1.5
+			elif s == "wbb__1down":
+				norm = 1.0/(0.5*frac_bb + frac_cc + frac_c + frac_l)
+				if flag == 3 or flag == 4:
+					hfweight = 0.5
+			elif s == "wcc__1up":
+				norm = 1.0/(frac_bb + 1.5*frac_cc + frac_c + frac_l)
+				if flag == 1:
+					hfweight = 1.5
+			elif s == "wcc__1down":
+				norm = 1.0/(frac_bb + 0.5*frac_cc + frac_c + frac_l)
+				if flag == 1:
+					hfweight = 0.5
+			elif s == "wc__1up":
+				norm = 1.0/(frac_bb + frac_cc + 1.5*frac_c + frac_l)
+				if flag == 2:
+					hfweight = 1.5
+			elif s == "wc__1down":
+				norm = 1.0/(frac_bb + frac_cc + 0.5*frac_c + frac_l)
+				if flag == 2:
+					hfweight = 0.5
+			elif s == "wl__1up":
+				norm = 1.0/(frac_bb + frac_cc + frac_c + 1.5*frac_l)
+				if flag == 5:
+					hfweight = 1.5
+			elif s == "wl__1down":
+				norm = 1.0/(frac_bb + frac_cc + frac_c + 0.5*frac_l)
+				if flag == 5:
+					hfweight = 0.5
+			if s == "wnorm__1up":
+				f_ca *= 1.20
+			elif s == "wnorm__1down":
+				f_ca *= 0.80
+			hfweight /= norm
+			weight *= f_ca*hfweight
 		return weight
 
 	def run(self, sel, syst, w):
@@ -159,6 +220,7 @@ class AnaTtresSL(Analysis):
 					nBtag += 1
 		if nBtag < 1:
 			return
+
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c
@@ -409,34 +471,78 @@ class AnaWjetsCRCheck(Analysis):
 		pretag = False
 		if not "tag" in self.ch:
 			pretag = True
+		nj = len(sel.jet_pt)
+		if nj < 2:
+		  nj = 2
+		if nj > 4:
+		  nj = 4
+		hfmap_e = {}
+		hfmap_e['pre'] = {}
+		hfmap_e['tag'] = {}
+		hfmap_e['pre']['bb'] = {}
+		hfmap_e['pre']['l'] = {}
+		hfmap_e['tag']['bb'] = {}
+		hfmap_e['tag']['l'] = {}
+		hfmap_e['pre']['bb'][2] = 0.958
+		hfmap_e['pre']['l'][2] = 1.026
+		hfmap_e['tag']['bb'][2] = 0.993
+		hfmap_e['tag']['l'][2] = 1.063
+		hfmap_e['pre']['bb'][3] = 0.963
+		hfmap_e['pre']['l'][3] = 1.031
+		hfmap_e['tag']['bb'][3] = 0.994
+		hfmap_e['tag']['l'][3] = 1.064
+		hfmap_e['pre']['bb'][4] = 0.966
+		hfmap_e['pre']['l'][4] = 1.035
+		hfmap_e['tag']['bb'][4] = 0.994
+		hfmap_e['tag']['l'][4] = 1.064
+
+		hfmap_mu = {}
+		hfmap_mu['pre'] = {}
+		hfmap_mu['tag'] = {}
+		hfmap_mu['pre']['bb'] = {}
+		hfmap_mu['pre']['l'] = {}
+		hfmap_mu['tag']['bb'] = {}
+		hfmap_mu['tag']['l'] = {}
+		hfmap_mu['pre']['bb'][2] = 1.238
+		hfmap_mu['pre']['l'][2] = 0.860
+		hfmap_mu['tag']['bb'][2] = 1.03
+		hfmap_mu['tag']['l'][2] = 0.715
+		hfmap_mu['pre']['bb'][3] = 1.029
+		hfmap_mu['pre']['l'][3] = 0.839
+		hfmap_mu['tag']['bb'][3] = 1.031
+		hfmap_mu['tag']['l'][3] = 0.716
+		hfmap_mu['pre']['bb'][4] = 1.177
+		hfmap_mu['pre']['l'][4] = 0.817
+		hfmap_mu['tag']['bb'][4] = 1.024
+		hfmap_mu['tag']['l'][4] = 0.711
 		if sel.mcChannelNumber in helpers.listWjets22:
 			flag = sel.Wfilter_Sherpa_nT
 			if len(sel.el_pt) == 1:
 				f_ca = 1.074
 				if flag == 3 or flag == 4 or flag == 1 or flag == 2:
 					if pretag:
-						hfweight = 0.958
+						hfweight = hfmap_e['pre']['bb'][nj]
 					else:
-						hfweight = 0.993
+						hfweight = hfmap_e['tag']['bb'][nj]
 				elif flag == 5:
 					if pretag:
-						hfweight = 1.026
+						hfweight = hfmap_e['pre']['l'][nj]
 					else:
-						hfweight = 1.063
+						hfweight = hfmap_e['tag']['l'][nj]
 			elif len(sel.mu_pt) == 1:
 				f_ca = 1.147
 				if flag == 3 or flag == 4 or flag == 1 or flag == 2:
 					if pretag:
-						hfweight = 1.238
+						hfweight = hfmap_mu['pre']['bb'][nj]
 					else:
-						hfweight = 1.030
+						hfweight = hfmap_mu['tag']['bb'][nj]
 				elif flag == 5:
 					if pretag:
-						hfweight = 0.860
+						hfweight = hfmap_mu['pre']['l'][nj]
 					else:
-						hfweight = 0.715
-		hfweight = 1.0
-		f_ca = 1.0
+						hfweight = hfmap_mu['tag']['l'][nj]
+		#hfweight = 1.0
+		#f_ca = 1.0
 		w *= f_ca*hfweight
 
 		self.h["yields"][syst].Fill(1, w)

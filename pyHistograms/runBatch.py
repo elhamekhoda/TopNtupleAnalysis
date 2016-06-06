@@ -11,7 +11,7 @@ def main():
 	outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_sr'
 
 	# number of files per job
-	nFilesPerJob = 5
+	nFilesPerJob = 2
 
 	# use it to setup AnalysisTop
 	rundir = '/afs/desy.de/user/d/danilo/private/topana/Top246'
