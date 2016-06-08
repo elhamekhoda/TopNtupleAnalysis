@@ -73,7 +73,7 @@ class AnaTtresSL(Analysis):
 		self.add("yields", 1, 0.5, 1.5)
 		self.add("lepPt", 100, 25, 525)
 		self.add("lepEta", 20, -2.5, 2.5)
-		self.add("lepPhi", 32, -3.2, 3.3)
+		self.add("lepPhi", 32, -3.2, 3.2)
 		self.add("nJets", 10, -0.5, 9.5)
 		self.add("nTrkBtagJets", 10, -0.5, 9.5)
 		self.addVar("MET", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
@@ -268,13 +268,19 @@ class AnaTtresSL(Analysis):
 			goodJetIdx = -1
 			closeJetIdx = -1
 			for i in range(0, len(sel.jet_pt)):
-				if sel.jet_closeToLepton:
-					closeJetIdx = i
-				break
+				if sel.jet_closeToLepton[i]:
+					break
+				#pt = 0
+				#cj = ROOT.TLorentzVector()
+				#cj.SetPtEtaPhiM(sel.jet_pt[i], sel.jet_eta[i], sel.jet_phi[i], sel.jet_m[i])
+				#if cj.DeltaR(l) < 1.5:
+				#	if cj.Perp() > pt:
+				#		closeJetIdx = i
+				#		pt = cj.Perp()
 			for i in range(0, len(sel.ljet_pt)):
-				if sel.ljet_good:
+				if sel.ljet_good[i]:
 					goodJetIdx = i
-				break
+					break
 			lj = ROOT.TLorentzVector()
 			lj.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx], sel.ljet_eta[goodJetIdx], sel.ljet_phi[goodJetIdx], sel.ljet_m[goodJetIdx])
 			closeJet = ROOT.TLorentzVector()

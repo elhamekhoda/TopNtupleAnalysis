@@ -62,6 +62,7 @@ def main():
 		systList.extend(weightChangeSystematics)
 		systList.remove('')
 		systList.append('ttEWK__1up')
+		systList.append('ttEWK__1down')
 		systList.append('wnorm__1up')
 		systList.append('wnorm__1down')
 		systList.append('wbb__1up')
@@ -120,6 +121,8 @@ def main():
 		channels[k.split(':')[0]] = k.split(':')[1]
 	analysisCode = {}
 	import analysis
+	#print "Systematics: ", histSuffixes
+	#print "To loop over: ", systList
 	anaClass = getattr(analysis, options.analysis) 
 	for k in channels:
 		analysisCode[k] = anaClass(k, histSuffixes, channels[k])
@@ -139,7 +142,7 @@ def main():
 
 		for k in range(0, mt.GetEntries()):
 			mt.GetEntry(k)
-			if k % 1000 == 0:
+			if k % 10000 == 0:
 				print "(tree = ",treeName,", syst = ",suffix,") Entry ", k, "/", mt.GetEntries()
 			sel = readEvent(mt)
 

@@ -5,7 +5,7 @@ import uncertainties as unc
 import uncertainties.unumpy as unp
 import numpy as np
 
-odir = 'hists_WjetsHF2'
+odir = 'hists_WjetsHF3'
 files = {}
 channels = ['Wpre_resjets_el', 'Wpre_resjets_mu', 'Wtag_resjets_el', 'Wtag_resjets_mu', 'Wtag2_resjets_el', 'Wtag2_resjets_mu']
 samples = ['data', 'tt', 'zjets', 'vv', 'wbbjets', 'wccjets', 'wcjets', 'wljets', 'singletop']
