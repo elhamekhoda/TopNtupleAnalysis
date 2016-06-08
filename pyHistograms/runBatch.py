@@ -11,7 +11,7 @@ def main():
 	outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_sr'
 
 	# number of files per job
-	nFilesPerJob = 5
+	nFilesPerJob = 80
 
 	# use it to setup AnalysisTop
 	rundir = '/afs/desy.de/user/d/danilo/private/topana/Top246'
@@ -44,7 +44,7 @@ def main():
 	names  += ['zjets']
 	names  += ['tt']
 
-	#names  += ["data"]
+	names  += ["data"]
 	names  += ['singletop']
 	names  += ['vv']
 
@@ -53,6 +53,7 @@ def main():
 					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
+					#'data': 'dataall',
 					'data': 'Data15_13TeV_25ns_207_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
@@ -81,6 +82,10 @@ def main():
 		nJob = 0
 		nFile = 0
 
+		nFilesPerJobEffective = nFilesPerJob
+		if 'tt' in sn:
+			nFilesPerJobEffective = 20
+
 		# write list of files to be read when processing this sample
 		f = open(outputDir+"/input_"+sn+'.txt', 'w')
 		# output file after running read
@@ -106,7 +111,7 @@ def main():
 					for item in files:
 						if not '.part' in item:
 							f.write(item+'\n')
-							if nFile == nFilesPerJob:
+							if nFile == nFilesPerJobEffective:
 								nFile = 0
 								nJob = nJob + 1
 							if nFile == 0:

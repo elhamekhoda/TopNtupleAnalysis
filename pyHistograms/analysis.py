@@ -193,11 +193,11 @@ class AnaTtresSL(Analysis):
 		mapSel = {'be': 'bejets', 'bmu': 'bmujets', 're': 'rejets', 'rmu': 'rmujets'}
 		listSel = mapSel[self.ch].split(',')
 
-		passAllChannels = False
+		passAllChannels = True
 		for item in listSel:
 			passChannel = getattr(sel, item)
 			if not passChannel:
-				passAllChannels = True
+				passAllChannels = False
 		if not passAllChannels:
 			return
 
@@ -376,9 +376,21 @@ class AnaWjetsCR(Analysis):
 				if flag != 5:
 					return
 
-		passChannel = getattr(sel, self.ch)
+		ch = self.ch
+		if "Wtag2" in ch:
+			ch = ch.replace("Wtag2", "Wtag")
+		passChannel = getattr(sel, ch)
 		if not passChannel:
 			return
+		if "Wtag2" in self.ch:
+			nBtags = 0
+			for bidx in range(0, len(sel.tjet_mv2c10)):
+				pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
+				if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
+					if sel.tjet_mv2c10 > helpers.MV2C10_CUT:
+						nBtags += 1
+			if nBtags < 2:
+				return
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c

@@ -8,8 +8,8 @@ def main():
 	ntuplesDir = '/nfs/dust/atlas/user/danilo/02062016WjetsCRv1'
 	
 	# output directory
-	outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_WjetsMETCorrHF'
-	#outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_WjetsHF'
+	#outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_WjetsMETCorrHF'
+	outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_WjetsHF2'
 
 	# number of files per job
 	nFilesPerJob = 80
@@ -22,14 +22,14 @@ def main():
 
 	# queue to submit to
 	#queue = '1nd'
-	queue = 'short.q'
+	queue = 'default.q'
 
 	# the default is AnaTtresSL, which produces many control pltos for tt res.
 	# The Mtt version produces a TTree to do the limit setting
 	# the QCD version aims at plots for QCD studies using the matrix method
 	# look into read.cxx to see what is available
 	# create yours, if you wish
-	analysisType='AnaWjetsCRCheck'
+	analysisType='AnaWjetsCR'
 	
 	# leave it for nominal to run only the nominal
 	systematics = 'nominal'
@@ -40,12 +40,12 @@ def main():
 	names  += ['wccjets']
 	names  += ['wcjets']
 	names  += ['wljets']
-	#names  += ['zjets']
-	#names  += ['tt']
+	names  += ['zjets']
+	names  += ['tt']
 
-	#names  += ["data"]
-	#names  += ['singletop']
-	#names  += ['vv']
+	names  += ["data"]
+	names  += ['singletop']
+	names  += ['vv']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -166,7 +166,8 @@ def main():
 			fr.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
 			fr.write('lsetup rcsetup\n')
 			fr.write('cd TopNtupleAnalysis/pyHistograms\n')
-			out = 'Wpre_resjets_el:'+outputDir+'/Wpre_resjets_el_'+jobName+'.root,Wpre_resjets_mu:'+outputDir+'/Wpre_resjets_mu_'+jobName+'.root,Wtag_resjets_el:'+outputDir+'/Wtag_resjets_el_'+jobName+'.root,Wtag_resjets_mu:'+outputDir+'/Wtag_resjets_mu_'+jobName+'.root'
+			#out = 'Wpre_resjets_el:'+outputDir+'/Wpre_resjets_el_'+jobName+'.root,Wpre_resjets_mu:'+outputDir+'/Wpre_resjets_mu_'+jobName+'.root,Wtag_resjets_el:'+outputDir+'/Wtag_resjets_el_'+jobName+'.root,Wtag_resjets_mu:'+outputDir+'/Wtag_resjets_mu_'+jobName+'.root'
+			out = 'Wpre_resjets_el:'+outputDir+'/Wpre_resjets_el_'+jobName+'.root,Wpre_resjets_mu:'+outputDir+'/Wpre_resjets_mu_'+jobName+'.root,Wtag_resjets_el:'+outputDir+'/Wtag_resjets_el_'+jobName+'.root,Wtag_resjets_mu:'+outputDir+'/Wtag_resjets_mu_'+jobName+'.root,Wtag2_resjets_el:'+outputDir+'/Wtag2_resjets_el_'+jobName+'.root,Wtag2_resjets_mu:'+outputDir+'/Wtag2_resjets_mu_'+jobName+'.root'
 			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
 			fr.close()
 			os.system('chmod a+x '+runfile)
