@@ -391,6 +391,8 @@ class AnaWjetsCR(Analysis):
 						nBtags += 1
 			if nBtags < 2:
 				return
+		if sel.met_met*1e-3 < 200:
+			return
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c

@@ -9,7 +9,7 @@ def main():
 	
 	# output directory
 	#outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_WjetsMETCorrHF'
-	outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_WjetsHF2'
+	outputDir = '/afs/desy.de/user/d/danilo/private/topana/Top246/TopNtupleAnalysis/pyHistograms/hists_WjetsHF3'
 
 	# number of files per job
 	nFilesPerJob = 80

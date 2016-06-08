@@ -3,6 +3,7 @@
 import ROOT
 import uncertainties as unc
 import uncertainties.unumpy as unp
+import numpy as np
 
 odir = 'hists_WjetsHF2'
 files = {}
@@ -147,17 +148,27 @@ def main():
 		plotConfig(ch+"_wjets_q1.pdf", inp, ch, "wjets", 1)
 		plotConfig(ch+"_wjets_q-1.pdf", inp, ch, "wjets", -1)
 
+	toSubtract = ['singletop', 'tt', 'vv', 'zjets']
+	for ch in channels:
+		inp[ch]['datafullsub'] = {}
+		for njets in range(1, 6):
+			inp[ch]['datafullsub'][njets] = {}
+			inp[ch]['datafullsub'][njets][1] = inp[ch]['data'][njets][1]
+			inp[ch]['datafullsub'][njets][-1] = inp[ch]['data'][njets][-1]
+			inp[ch]['datafullsub'][njets][0] = inp[ch]['data'][njets][0]
+			for s in toSubtract:
+				inp[ch]['datafullsub'][njets][0] -= inp[ch][s][njets][0]
+				inp[ch]['datafullsub'][njets][1] -= inp[ch][s][njets][1]
+				inp[ch]['datafullsub'][njets][-1] -= inp[ch][s][njets][-1]
+		plotConfig(ch+"_datafullsub_q0.pdf", inp, ch, "datafullsub", 0)
+		plotConfig(ch+"_datafullsub_q1.pdf", inp, ch, "datafullsub", 1)
+		plotConfig(ch+"_datafullsub_q-1.pdf", inp, ch, "datafullsub", -1)
+
+	nj = 2
+
 	kcc = {'el':unc.ufloat(0,0), 'mu':unc.ufloat(0,0)}
 	kcc['el'] = inp['Wpre_resjets_el']['wccjets'][2][0]/inp['Wpre_resjets_el']['wbbjets'][2][0]
 	kcc['mu'] = inp['Wpre_resjets_mu']['wccjets'][2][0]/inp['Wpre_resjets_mu']['wbbjets'][2][0]
-
-	kcc3 = {'el':unc.ufloat(0,0), 'mu':unc.ufloat(0,0)}
-	kcc3['el'] = inp['Wpre_resjets_el']['wccjets'][3][0]/inp['Wpre_resjets_el']['wbbjets'][3][0]
-	kcc3['mu'] = inp['Wpre_resjets_mu']['wccjets'][3][0]/inp['Wpre_resjets_mu']['wbbjets'][3][0]
-
-	kccp = {'el':unc.ufloat(0,0), 'mu':unc.ufloat(0,0)}
-	kccp['el'] = inp['Wtag_resjets_el']['wccjets'][2][0]/inp['Wtag_resjets_el']['wbbjets'][2][0]
-	kccp['mu'] = inp['Wtag_resjets_mu']['wccjets'][2][0]/inp['Wtag_resjets_mu']['wbbjets'][2][0]
 
 	rmc = {'el':unc.ufloat(0,0), 'mu':unc.ufloat(0,0)}
 	rmcp1 = {'el':unc.ufloat(0,0), 'mu':unc.ufloat(0,0)}
@@ -174,20 +185,10 @@ def main():
 	pc = {}
 	pl = {}
 
-	pbb3 = {}
-	pcc3 = {}
-	pc3 = {}
-	pl3 = {}
-
 	pbbp = {}
 	pccp = {}
 	pcp = {}
 	plp = {}
-
-	c23bb = {}
-	c23cc = {}
-	c23c = {}
-	c23l = {}
 
 	sfbb = {}
 	sfcc = {}
@@ -203,54 +204,35 @@ def main():
 	fl_data = {'el':unc.ufloat(0,0), 'mu':unc.ufloat(0,0)}
 	fl_mc = {'el':unc.ufloat(0,0), 'mu':unc.ufloat(0,0)}
 
-	nj = 2
 	for lep in ['el', 'mu']:
-		pbb[lep] = inp['Wtag_resjets_el']['wbbjets'][nj][0]/inp['Wpre_resjets_el']['wbbjets'][nj][0]
-		pcc[lep] = inp['Wtag_resjets_el']['wccjets'][nj][0]/inp['Wpre_resjets_el']['wccjets'][nj][0]
-		pc[lep] = inp['Wtag_resjets_el']['wcjets'][nj][0]/inp['Wpre_resjets_el']['wcjets'][nj][0]
-		pl[lep] = inp['Wtag_resjets_el']['wljets'][nj][0]/inp['Wpre_resjets_el']['wljets'][nj][0]
-
-		pbb3[lep] = inp['Wtag_resjets_el']['wbbjets'][nj+1][0]/inp['Wpre_resjets_el']['wbbjets'][nj+1][0]
-		pcc3[lep] = inp['Wtag_resjets_el']['wccjets'][nj+1][0]/inp['Wpre_resjets_el']['wccjets'][nj+1][0]
-		pc3[lep] = inp['Wtag_resjets_el']['wcjets'][nj+1][0]/inp['Wpre_resjets_el']['wcjets'][nj+1][0]
-		pl3[lep] = inp['Wtag_resjets_el']['wljets'][nj+1][0]/inp['Wpre_resjets_el']['wljets'][nj+1][0]
-
-		c23bb[lep] = inp['Wpre_resjets_el']['wbbjets'][nj+1][0]/inp['Wpre_resjets_el']['wbbjets'][nj][0]
-		c23cc[lep] = inp['Wpre_resjets_el']['wccjets'][nj+1][0]/inp['Wpre_resjets_el']['wccjets'][nj][0]
-		c23c[lep] = inp['Wpre_resjets_el']['wcjets'][nj+1][0]/inp['Wpre_resjets_el']['wcjets'][nj][0]
-		c23l[lep] = inp['Wpre_resjets_el']['wljets'][nj+1][0]/inp['Wpre_resjets_el']['wljets'][nj][0]
-
-		pbbp[lep] = inp['Wtag2_resjets_el']['wbbjets'][nj][0]/inp['Wtag_resjets_el']['wbbjets'][nj][0]
-		pccp[lep] = inp['Wtag2_resjets_el']['wccjets'][nj][0]/inp['Wtag_resjets_el']['wccjets'][nj][0]
-		pcp[lep] = inp['Wtag2_resjets_el']['wcjets'][nj][0]/inp['Wtag_resjets_el']['wcjets'][nj][0]
-		plp[lep] = inp['Wtag2_resjets_el']['wljets'][nj][0]/inp['Wtag_resjets_el']['wljets'][nj][0]
+		pbb[lep] = inp['Wtag_resjets_%s'%lep]['wbbjets'][nj][0]/inp['Wpre_resjets_%s'%lep]['wbbjets'][nj][0]
+		pcc[lep] = inp['Wtag_resjets_%s'%lep]['wccjets'][nj][0]/inp['Wpre_resjets_%s'%lep]['wccjets'][nj][0]
+		pc[lep] = inp['Wtag_resjets_%s'%lep]['wcjets'][nj][0]/inp['Wpre_resjets_%s'%lep]['wcjets'][nj][0]
+		pl[lep] = inp['Wtag_resjets_%s'%lep]['wljets'][nj][0]/inp['Wpre_resjets_%s'%lep]['wljets'][nj][0]
 
 		N0p_data = inp['Wpre_resjets_%s' % lep]['datasub'][nj][1]
 		N0n_data = inp['Wpre_resjets_%s' % lep]['datasub'][nj][-1]
 		N1p_data = inp['Wtag_resjets_%s' % lep]['datasub'][nj][1]
 		N1n_data = inp['Wtag_resjets_%s' % lep]['datasub'][nj][-1]
-		N2p_data = inp['Wtag2_resjets_%s' % lep]['datasub'][nj][1]
-		N2n_data = inp['Wtag2_resjets_%s' % lep]['datasub'][nj][-1]
 		N0p_mc = inp['Wpre_resjets_%s' % lep]['wjets'][nj][1]
 		N0n_mc = inp['Wpre_resjets_%s' % lep]['wjets'][nj][-1]
-		N1p_mc = inp['Wtag_resjets_%s' % lep]['wjets'][nj][1]
-		N1n_mc = inp['Wtag_resjets_%s' % lep]['wjets'][nj][-1]
-		N2p_mc = inp['Wtag2_resjets_%s' % lep]['wjets'][nj][1]
-		N2n_mc = inp['Wtag2_resjets_%s' % lep]['wjets'][nj][-1]
 
-		N0p3_data = inp['Wpre_resjets_%s' % lep]['datasub'][nj+1][1]
-		N0n3_data = inp['Wpre_resjets_%s' % lep]['datasub'][nj+1][-1]
-		N1p3_data = inp['Wtag_resjets_%s' % lep]['datasub'][nj+1][1]
-		N1n3_data = inp['Wtag_resjets_%s' % lep]['datasub'][nj+1][-1]
+		N0p_bb_mc = inp['Wpre_resjets_%s' % lep]['wbbjets'][nj][1]
+		N0n_bb_mc = inp['Wpre_resjets_%s' % lep]['wbbjets'][nj][-1]
+		N0p_cc_mc = inp['Wpre_resjets_%s' % lep]['wccjets'][nj][1]
+		N0n_cc_mc = inp['Wpre_resjets_%s' % lep]['wccjets'][nj][-1]
+		N0p_c_mc = inp['Wpre_resjets_%s' % lep]['wcjets'][nj][1]
+		N0n_c_mc = inp['Wpre_resjets_%s' % lep]['wcjets'][nj][-1]
+		N0p_l_mc = inp['Wpre_resjets_%s' % lep]['wljets'][nj][1]
+		N0n_l_mc = inp['Wpre_resjets_%s' % lep]['wljets'][nj][-1]
 
-		N0p3_mc = inp['Wpre_resjets_%s' % lep]['wjets'][nj+1][1]
-		N0n3_mc = inp['Wpre_resjets_%s' % lep]['wjets'][nj+1][-1]
-		N1p3_mc = inp['Wtag_resjets_%s' % lep]['wjets'][nj+1][1]
-		N1n3_mc = inp['Wtag_resjets_%s' % lep]['wjets'][nj+1][-1]
-		print "Lepton %s" % lep
-		print "{:10s} {:10s} {:10s} {:10s} {:10s} {:10s} {:10s}".format("data/mc", "N0p", "N0n", "N1p", "N1n", "N2p", "N2n")
-		print "{:10s} {:10f} {:10f} {:10f} {:10f} {:10f} {:10f}".format("mc", N0p_mc, N0n_mc, N1p_mc, N1n_mc, N2p_mc, N2n_mc)
-		print "{:10s} {:10f} {:10f} {:10f} {:10f} {:10f} {:10f}".format("data", N0p_data, N0n_data, N1p_data, N1n_data, N2p_data, N2n_data)
+		N0p_data_fullsub = inp['Wpre_resjets_%s' % lep]['datafullsub'][nj][1]
+		N0n_data_fullsub = inp['Wpre_resjets_%s' % lep]['datafullsub'][nj][-1]
+
+		fbb_mc[lep] = inp['Wpre_resjets_%s'%lep]['wbbjets'][nj][0]/inp['Wpre_resjets_%s'%lep]['wjets'][nj][0]
+		fcc_mc[lep] = inp['Wpre_resjets_%s'%lep]['wccjets'][nj][0]/inp['Wpre_resjets_%s'%lep]['wjets'][nj][0]
+		fc_mc[lep] = inp['Wpre_resjets_%s'%lep]['wcjets'][nj][0]/inp['Wpre_resjets_%s'%lep]['wjets'][nj][0]
+		fl_mc[lep] = inp['Wpre_resjets_%s'%lep]['wljets'][nj][0]/inp['Wpre_resjets_%s'%lep]['wjets'][nj][0]
 
 		# Charge asymmetry
 		rmc[lep] = N0p_mc/N0n_mc
@@ -268,38 +250,28 @@ def main():
 
 		# Now the HF SFs
 
-		A = unp.matrix(
-						[[pbb[lep] + kcc[lep]*pcc[lep], pc[lep], pl[lep]],
-						[pbb[lep]*c23bb[lep] + kcc3[lep]*pcc[lep]*c23bb[lep], pc[lep]*c23c[lep], pl[lep]*c23l[lep]],
-						#[pbbp[lep]*pbb[lep]+kccp[lep]*pccp[lep]*pcc[lep], pcp[lep]*pc[lep], plp[lep]*pl[lep]],
-						[unc.ufloat(1,0)+kcc[lep], unc.ufloat(1, 0), unc.ufloat(1, 0)]])
-		#B_d = unp.matrix([[(N1p_data - N1n_data)/(N0p_data - N0n_data)], [(N2p_data - N2n_data)/(N2p_data - N2n_data)], [unc.ufloat(1,0)]])
-		#B_m = unp.matrix([[(N1p_mc - N1n_mc)/(N0p_mc - N0n_mc)], [(N2p_mc - N2n_mc)/(N2p_mc - N2n_mc)], [unc.ufloat(1,0)]])
-		B_d = unp.matrix([[(N1p_data - N1n_data)/(N0p_data - N0n_data)], [(N1p3_data - N1n3_data)/(N0p3_data - N0n3_data)], [unc.ufloat(1,0)]])
-		B_m = unp.matrix([[(N1p_mc - N1n_mc)/(N0p_mc - N0n_mc)], [(N1p3_mc - N1n3_mc)/(N0p3_mc - N0n3_mc)], [unc.ufloat(1,0)]])
-		
-		f_d = A.I*B_d
-		f_m = A.I*B_m
-		fbb_data[lep] = f_d[0,0]
-		fcc_data[lep] = f_d[0,0]
-		fc_data[lep] = f_d[1,0]
-		fl_data[lep] = f_d[2,0]
+		# CA (MC_bb^- + MC_cc^-) sfbb + CA (MC_c^-) sfc + CA (MC_l^-) sfl = D^-
+		# CA (MC_bb^+ + MC_cc^+) sfbb + CA (MC_c^+) sfc + CA (MC_l^+) sfl = D^+
+		# (fbb + fcc) sfbb + fc sfc + fl sfl = 1
+		A = unp.matrix([
+						[f_ca[lep]*(N0n_bb_mc + N0n_cc_mc), f_ca[lep]*N0n_c_mc, f_ca[lep]*N0n_l_mc],
+						[f_ca[lep]*(N0p_bb_mc + N0p_cc_mc), f_ca[lep]*N0p_c_mc, f_ca[lep]*N0p_l_mc],
+						[fbb_mc[lep] + fcc_mc[lep], fc_mc[lep], fl_mc[lep]]
+						])
+		B_d = unp.matrix([[N0n_data_fullsub], [N0p_data_fullsub], [unc.ufloat(1,0)]])
+#		A = unp.matrix(
+#						[[pbb[lep] + kcc[lep]*pcc[lep] +kc[lep]*pc[lep], pl[lep]],
+#						[unc.ufloat(1,0)+kcc[lep]+kc[lep], unc.ufloat(1, 0)]])
+#		B_d = unp.matrix([[(N1p_data - N1n_data)/(N0p_data - N0n_data)], [unc.ufloat(1,0)]])
+		Ainv = unp.ulinalg.inv(A)
+		Adet = np.linalg.det(unp.nominal_values(A))
+		print "Determinant: ", Adet
+		f_d = Ainv*B_d
 
-		fbb_mc[lep] = f_m[0,0]
-		fcc_mc[lep] = f_m[0,0]
-		fc_mc[lep] = f_m[1,0]
-		fl_mc[lep] = f_m[2,0]
-
-		sfbb[lep] = fbb_data[lep]/fbb_mc[lep]
-		sfcc[lep] = fcc_data[lep]/fcc_mc[lep]
-		sfc[lep] = fc_data[lep]/fc_mc[lep]
-		sfl[lep] = fl_data[lep]/fl_mc[lep]
-
-		#norm_change = Frac_bb[lep]['2p']*sfbb[lep] + Frac_cc[lep]['2p']*sfcc[lep] + Frac_c[lep]['2p']*sfc[lep] + Frac_l[lep]['2p']*sfl[lep]
-		#wbb[lep]['2p'] = sfbb[lep]/norm_change
-		#wcc[lep]['2p'] = sfcc[lep]/norm_change
-		#wc[lep]['2p'] = sfc[lep]/norm_change
-		#wl[lep]['2p'] = sfl[lep]/norm_change
+		sfbb[lep] = f_d[0,0]
+		sfcc[lep] = f_d[0,0]
+		sfc[lep] = f_d[1,0]
+		sfl[lep] = f_d[2,0]
 
 	print "\\begin{tabular}{|c|c|}"
 	print "\\hline"
@@ -311,7 +283,7 @@ def main():
 		print "\\hline"
 		print "\\multicolumn{2}{|c|}{%s lepton} \\\\" % lep
 		print "\\hline"
-		for var in ["pbb", "pcc", "pc", "pl", "pbbp", "pccp", "pcp", "plp", "rmc", "rmc_rat", "kcc", "fbb_data", "fbb_mc", "fcc_data", "fcc_mc", "fc_data", "fc_mc", "fl_data", "fl_mc", "ca_data", "ca_mc", "N_mc", "N_data", "f_ca", "sfbb", "sfcc", "sfc", "sfl"]:
+		for var in ["rmc", "rmc_rat", "ca_data", "ca_mc", "N_mc", "N_data", "f_ca", "sfbb", "sfcc", "sfc", "sfl"]:
 			g = eval(var)
 			print "{:20s}   &   ${:10.3f}$".format(var, g[lep])
 	print "\\hline"
