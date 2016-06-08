@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 
     int help = 0;
     string channel = "e";
-    string prefix = "boosted";
+    string prefix = "";
     string h_input = "lepPt";
     int mcOnly = 0;
     string _outfile = "";
@@ -157,28 +157,32 @@ int main(int argc, char **argv) {
       vector<string> extraText;
       string outfile = _outfile;
       if (outfile == "") {
-        outfile = prefix+"_"+histogram;
+	    if (prefix != "")
+          outfile = prefix+"_";
+		outfile += histogram;
         outfile += string("_");
-        if (channel == "e") {
+        if (channel == "e" || channel == "el") {
           outfile += "e";
         } else if (channel == "mu") {
           outfile += "mu";
         } else if (channel == "comb") {
           outfile += "comb";
         } else {
-          outfile += "ukn";
+          outfile += channel;
         }
         if (stamp == 1) outfile += "_ATLASPrelim";
         if (stamp == 2) outfile += "_ATLAS";
         outfile += ".pdf";
       }
-      if (channel == "e") {
+      if (channel == "e" || channel == "el") {
         extraText.push_back("e+jets");
       } else if (channel == "mu") {
         extraText.push_back("#mu+jets");
       } else if (channel == "comb") {
         //extraText.push_back("e,#mu-channel");
-      }
+      } else {
+        extraText.push_back(channel);
+	  }
       vector<string> split_extraText;
       split(_extraText, ';', split_extraText);
       for (vector<string>::iterator i = split_extraText.begin(); i!=split_extraText.end();++i) extraText.push_back(*i);
@@ -312,7 +316,7 @@ int main(int argc, char **argv) {
         if (stamp == 2) outfile += "_ATLAS";
         outfile += ".pdf";
       }
-      if (channel == "e") {
+      if (channel == "e" || channel == "el") {
         extraText.push_back("e channel");
       } else if (channel == "mu") {
         extraText.push_back("#mu channel");

@@ -1662,14 +1662,25 @@ SampleSetConfiguration makeConfigurationPlots(const string &prefix, const string
     std::string longTitle = title[id];
     std::string latexTitle = latex[id];
     int fillC = fillColor[id];
-    if (it->first.find("data") != std::string::npos) {
-      if (!isMcOnly)
-        stackConfig.add("Data", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+	if (prefix != "") {
+      if (it->first.find("data") != std::string::npos) {
+        if (!isMcOnly)
+          stackConfig.add("Data", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
                                 "PL", 1, kBlack, 1,    0, 20, 1, "e");
-    } else {
-      stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
-                              "F", 1, kBlack, 1001,      fillC, 1, 0, "hist");
-    }
+      } else {
+        stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                                "F", 1, kBlack, 1001,      fillC, 1, 0, "hist");
+      }
+	} else {
+      if (it->first.find("data") != std::string::npos) {
+        if (!isMcOnly)
+          stackConfig.add("Data", Form("%s_%s.root", channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                                "PL", 1, kBlack, 1,    0, 20, 1, "e");
+      } else {
+        stackConfig.add("MC", Form("%s_%s.root", channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                                "F", 1, kBlack, 1001,      fillC, 1, 0, "hist");
+      }
+	}
   }
 
   return stackConfig;

@@ -110,8 +110,8 @@ NotData::NotData(Syst *a) {
 }
 
 Hist NotData::get(const string &name, const string &fname) {
-  if (fname.find("Data") != string::npos) return Hist();
-  if (fname.find("QCD") != string::npos) return Hist();
+  if (fname.find("Data") != string::npos || fname.find("data") != string::npos) return Hist();
+  if (fname.find("QCD") != string::npos || fname.find("qcd") != string::npos) return Hist();
   Hist ha = _a->get(name, fname);
   return ha;
 }
