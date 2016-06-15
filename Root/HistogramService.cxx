@@ -15,6 +15,7 @@
 #include "TH2F.h"
 #include "TH1D.h"
 #include "TH2D.h"
+#include "TProfile.h"
 
 HistogramService::HistogramService(const std::string &filename)
   : m_filename(filename) {
@@ -36,6 +37,8 @@ HistogramService::HistogramService(const std::string &filename)
   m_lockTriggerAndSyst = false;
   m_dummy1D = new TH1F("dummy1D", "dummy 1d", 1, 0.0, 1.0);
   m_dummy1D->SetDirectory(0);
+  m_dummy1DP = new TProfile("dummy1D Profile", "dummy 1d P", 1, 0.0, 1.0, 0.0, 1.0);
+  m_dummy1DP->SetDirectory(0);  
   m_dummy2D = new TH2F("dummy2D", "dummy 2d", 1, 0.0, 1.0, 1, 0.0, 1.0);
   m_dummy2D->SetDirectory(0);
   m_dummyVS = new std::vector<std::string>;
@@ -50,6 +53,7 @@ std::string HistogramService::concat(const std::string &a, const std::string &s)
 HistogramService::~HistogramService() {
   delete m_dummyVS;
   delete m_dummy1D;
+  delete m_dummy1DP;
   delete m_dummy2D;
 
   m_file->cd();
@@ -59,6 +63,10 @@ HistogramService::~HistogramService() {
       for (std::map<std::string, TH1F *>::const_iterator kt = h_hist1D[*it][*jt].begin(); kt != h_hist1D[*it][*jt].end(); ++kt) {
         //std::cout << "Writing " << *it << " " << *jt << " " << kt->first << std::endl;
         h_hist1D[*it][*jt][kt->first]->Write();
+      }
+      for (std::map<std::string, TProfile *>::const_iterator kt = h_profile1D[*it][*jt].begin(); kt != h_profile1D[*it][*jt].end(); ++kt) {
+        //std::cout << "Writing " << *it << " " << *jt << " " << kt->first << std::endl;
+        h_profile1D[*it][*jt][kt->first]->Write();
       }
       for (std::map<std::string, TH2F *>::const_iterator kt = h_hist2D[*it][*jt].begin(); kt != h_hist2D[*it][*jt].end(); ++kt) {
         h_hist2D[*it][*jt][kt->first]->Write();
@@ -169,6 +177,40 @@ void HistogramService::create1DVar(const std::string &name, const std::string &t
   }
 }
 
+void HistogramService::create1DP(const std::string &name, const std::string &title, int binsX, double lowX, double highX, double lowY, double highY, bool allSyst) {
+  m_lockTriggerAndSyst = true;
+  
+  m_file->cd();
+  for (std::vector<std::string>::const_iterator it = m_listOfTriggers.begin(); it != m_listOfTriggers.end(); ++it) {
+    //std::cout << "HistogramService::create1D: entering directory " << std::string(m_filename+std::string(":/")+*it).c_str() << std::endl;
+    m_file->cd(std::string(m_filename+std::string(":/")+*it).c_str());
+    if (allSyst) {
+      for (std::vector<std::string>::const_iterator jt = m_listOfSystematics.begin(); jt != m_listOfSystematics.end(); ++jt) {
+        if (h_profile1D[*it][*jt].find(name) != h_profile1D[*it][*jt].end()) {
+          if (name.find("Cutflow") == std::string::npos) { // don't complain about the Cutflow histograms, which will always be added more than once
+            std::cout << "HistogramService: Histogram named \"" << name << "\" already exists. Giving up creating it." << std::endl;
+          }
+          return;
+        }
+        std::string hname = concat(name, *jt);
+        //std::cout << "Dir " << *it << ", syst " << *jt << ", name = " << name << ", hname = " << hname << std::endl;
+        h_profile1D[*it][*jt][name] = new TProfile(hname.c_str(), title.c_str(), binsX, lowX, highX, lowY, highY);
+        h_profile1D[*it][*jt][name]->Sumw2();
+      }
+    } else { // only create nominal histogram
+      if (h_profile1D[*it][""].find(name) != h_profile1D[*it][""].end()) {
+        if (name.find("Cutflow") == std::string::npos) { // don't complain about the Cutflow histograms, which will always be added more than once
+          std::cout << "HistogramService: Histogram named \"" << name << "\" already exists. Giving up creating it." << std::endl;
+        }
+        return;
+      }
+      h_profile1D[*it][""][name] = new TProfile(name.c_str(), title.c_str(), binsX, lowX, highX,lowY, highY);
+      h_profile1D[*it][""][name]->Sumw2();
+      m_noSystProfile1D.push_back(name);
+    }
+  }
+}
+
 void HistogramService::createVS(const std::string &name) {
   m_file->cd();
   if (m_vs.find(name) != m_vs.end()) {
@@ -245,6 +287,19 @@ TH1F *&HistogramService::h1D(const std::string &name, const std::string &trigger
   //std::cout << "no histogram found " << name << ", " << trigger << ", " << systematics << std::endl;
 
   return h_hist1D[trigger][systematics][name];
+}
+
+TProfile *&HistogramService::p1D(const std::string &name, const std::string &trigger, const std::string &systematics) {
+  //std::cout << "Getting histogram " << name << " " << trigger << " " << systematics<< std::endl;
+  if ( (systematics != "") && (std::find(m_noSystProfile1D.begin(), m_noSystProfile1D.end(), name) != m_noSystProfile1D.end()) )
+    return m_dummy1DP;
+  //std::cout << "No systematics for " << name << std::endl;
+  // this returns a dummy histogram if the histogram was not setup
+  if (h_profile1D[trigger][systematics].find(name) == h_profile1D[trigger][systematics].end())
+    return m_dummy1DP;
+  //std::cout << "no histogram found " << name << ", " << trigger << ", " << systematics << std::endl;
+
+  return h_profile1D[trigger][systematics][name];
 }
 
 std::vector<std::string> *&HistogramService::vs(const std::string &name) {
