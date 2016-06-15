@@ -23,6 +23,7 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.m_tree->Branch("cat",    &_tree_cat);
   m_hSvc.m_tree->Branch("syst",   &_tree_syst);
 
+
   double varBin1[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500};
   int varBinN1 = sizeof(varBin1)/sizeof(double) - 1;
   double varBin2[] = {300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3};
@@ -84,6 +85,11 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.create1DVar("leadJetPt", "; leading Jet p_{T} [GeV]; Events", varBinN1, varBin1);  
   m_hSvc.create1D("nJets", "; number of jets ; Events", 10, -0.5, 9.5);
   
+  m_hSvc.create1D("W_Hadronic", "; M_{j_{1}j_{2}} [GeV] ; Events", 1000, 0, 1000);
+  m_hSvc.create1D("T_Hadronic", "; M_{j_{1}j_{2}j_{bh}} [GeV] ; Events", 1000, 0, 1000);
+  m_hSvc.create1D("T_Leptonic", "; M_{j_{bl}l#nu} [GeV] ; Events", 1000, 0, 1000);
+  m_hSvc.create1D("PT_Diff", "; #Delta p_{T} [GeV] ; Events", 1000, -500, 500);
+
   m_hSvc.create1DVar("leadbJetPt", "; leading b-jet p_{T} [GeV]; Events", varBinN1, varBin1);
   m_hSvc.create1DVar("leadTrkbJetPt", "; leading b-jet p_{T} [GeV]; Events", varBinN1, varBin1);
   m_hSvc.create1D("nBtagJets", "; number of b-tagged jets ; Events", 10, 0, 10);  
@@ -95,13 +101,27 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.create1D("DeltaR_Leading", "; #Delta R Between Leading Jet and Track", 100, 0, 3.2);
   m_hSvc.create1D("DeltaR_Inclusive", "; #Delta R Between Inclusive Jet and Track", 100, 0, 3.2);
 
-  /* // --- Histograms to test b-tagging improvement -- //
   m_hSvc.create1DVar("bjmatched_jet_pt", "; p_{T} of R=0.4 calo jet [GeV]; Events", varBinN3, varBin3);  
   m_hSvc.create1DVar("bjmatched_btagged_jet_pt", "; p_{T} of R=0.4 calo jet [GeV]; Events", varBinN3, varBin3);
   m_hSvc.create1DVar("Nonbjmatched_jet_pt", "; p_{T} of R=0.4 calo jet [GeV]; Events", varBinN3, varBin3);   
   m_hSvc.create1DVar("Nonbjmatched_btagged_jet_pt", "; p_{T} of R=0.4 calo jet [GeV]; Events", varBinN3, varBin3);
-  */    
 
+  char name[200];
+  m_hSvc.create1DP("Profile_DelR", "; #Delta R; Events", 31, 0.2, 0.5, 0., 1.); 
+  for(int idr = 20; idr <=50; idr++)
+   {
+    sprintf(name, "bjmatched_jet_pt_DelR%i",idr);
+    m_hSvc.create1DVar(name, "; p_{T} of R=0.4 calo jet [GeV]; Events", varBinN3, varBin3);
+//    sprintf(name, "Profile_DelR%i",idr);
+//    m_hSvc.create1DP(name, "; #Delta R; Events", 31, 0.2, 0.5, 0., 1.);
+    sprintf(name, "bjmatched_btagged_jet_pt_DelR%i",idr);
+    m_hSvc.create1DVar(name, "; p_{T} of R=0.4 calo jet [GeV]; Events", varBinN3, varBin3);
+    sprintf(name, "Nonbjmatched_jet_pt_DelR%i",idr);
+    m_hSvc.create1DVar(name, "; p_{T} of R=0.4 calo jet [GeV]; Events", varBinN3, varBin3);
+    sprintf(name, "Nonbjmatched_btagged_jet_pt_DelR%i",idr);  
+    m_hSvc.create1DVar(name, "; p_{T} of R=0.4 calo jet [GeV]; Events", varBinN3, varBin3);
+   } // for(int idr = 20; idr <=50; idr++)
+    
   m_hSvc.create1D("mwt", "; W transverse mass [GeV]; Events", 20, 0, 200);
   m_hSvc.create1D("mu", "; <mu>; Events", 100, 0, 100);
   m_hSvc.create1D("mu_original", "; <mu_origianl>; Events", 100, 0, 100);
@@ -181,6 +201,8 @@ AnaTtresSL::~AnaTtresSL() {
 void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   // check channel
   //
+  char name[200];
+
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
 
@@ -459,6 +481,48 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     int  ign1;  // index for the neutrino (because chi2 can test both pz solution)
     double chi2ming1, chi2ming1H, chi2ming1L;
 
+    for(double idr=20.0; idr<=50.0; idr++)
+     {
+      TLorentzVector bl = evt.MC_bl();
+      TLorentzVector bh = evt.MC_bh();
+      double N_BMatch(0.), N_BMatch_BTag(0.), N_nBMatch(0.), N_nBMatch_BTag(0.);
+      for (size_t z = 0; z < evt.jet().size(); ++z)
+       {
+        TLorentzVector tmpAk4Jet = evt.jet()[z].mom();
+        bool is_bmatch = tmpAk4Jet.DeltaR(bl) < 0.4 || tmpAk4Jet.DeltaR(bh) < 0.4;
+        bool is_btag(false);
+
+        for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
+         {
+          TLorentzVector tmpTJet = evt.tjet()[bidx].mom();
+           if(tmpAk4Jet.DeltaR(tmpTJet) < idr/100.) {
+            if(evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk())
+            is_btag = true;
+           } // if(tmpAk4Jet.DeltaR(tmpTJet) < idr/100.)
+         } // for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
+
+         //if(is_bmatch && is_btag) std::cout<<"btag found"<<std::endl;
+         if(is_bmatch) N_BMatch++;
+         if(!is_bmatch) N_nBMatch++;
+         if(is_bmatch && is_btag) N_BMatch_BTag++;
+         if(!is_bmatch && is_btag) N_nBMatch_BTag++;
+       } // for (size_t z = 0; z < evt.jet().size(); ++z)
+
+        if(N_BMatch == 0 || N_nBMatch == 0) continue;
+        double e_b = N_BMatch_BTag/N_BMatch;
+        double e_bbar = N_nBMatch_BTag/N_nBMatch;
+
+        h->p1D("Profile_DelR", "", suffix)->Fill(idr/100., e_b*(1-e_bbar));
+     } // or(double idr=20.0; idr<=50.0; idr++)
+
+
+     TLorentzVector a_w1h( evt.MA_w1h() ), a_w2h( evt.MA_w2h() ), a_bh( evt.MA_bh() );
+     TLorentzVector a_w1l( evt.MA_w1l() ), a_w2l( evt.MA_w2l() ), a_bl( evt.MA_bl() );
+     h->h1D("W_Hadronic", "", suffix)->Fill((a_w1h + a_w2h).M()*1e-3);
+     h->h1D("T_Hadronic", "", suffix)->Fill((a_w1h + a_w2h + a_bh).M()*1e-3 - (a_w1h + a_w2h).M()*1e-3);
+     h->h1D("T_Leptonic", "", suffix)->Fill((a_w1l + a_w2l + a_bl).M()*1e-3);
+     h->h1D("PT_Diff", "", suffix)->Fill(((a_w1h+a_w2h+a_bh).Pt() - (a_w1l+a_w2l+a_bl).Pt() )*1e-3);
+
     std::vector<TLorentzVector *> vjets;
     std::vector<bool> vjets_btagged;
     for (size_t z = 0; z < evt.jet().size(); ++z) {
@@ -468,11 +532,11 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
       // https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks
       //vjets_btagged.push_back(evt.jet()[z].btag_mv2c20_60());
 
-      h->h1D("DeltaPhi_Leading", "", suffix)->Fill(mtt*1e-3, weight);
 
      
       TLorentzVector tmpAk4Jet = evt.jet()[z].mom();
       bool is_btagged(false), is_bmatched(false);
+      std::vector<bool> is_btagged_delR(31, false);
 
       TLorentzVector bl = evt.MC_bl();
       TLorentzVector bh = evt.MC_bh();
@@ -483,20 +547,29 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
       for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
        {
          TLorentzVector tmpTJet = evt.tjet()[bidx].mom();
-         /*
          if(z==0 && bidx==0)
          h->h1D("DeltaR_Leading", "", suffix)->Fill(tmpAk4Jet.DeltaR(tmpTJet));
          h->h1D("DeltaR_Inclusive", "", suffix)->Fill(tmpAk4Jet.DeltaR(tmpTJet));
-         */
-         if(tmpAk4Jet.DeltaR(tmpTJet) <= 0.3){ 
+         if(tmpAk4Jet.DeltaR(tmpTJet) <= 0.4){ 
          if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk())
           is_btagged = true;
 	  // break;
 	 }
+
+         for(double idr=20.0; idr<=50.0; idr++)
+          {
+           if(tmpAk4Jet.DeltaR(tmpTJet) < idr/100.){
+           if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk()) 
+           is_btagged_delR[int(idr)-20] = true;
+          // break;
+          }
+           //std::cout<<"index = "<<int(idr)-20<<", UAngle = "<<idr/100.<<", angle = "<<tmpAk4Jet.DeltaR(tmpTJet)<<
+           //", bool = "<<is_btagged_delR[int(idr)-20]<<std::endl;
+         } // for(double idr=20.0; idr<=50.0; idr++)
        } // for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
 
       vjets_btagged.push_back(is_btagged);
-     /*
+     //std::cout<<"Jet pT = "<<tmpAk4Jet.Pt()<<std::endl;
      if(is_bmatched)
      h->h1D("bjmatched_jet_pt", "", suffix)->Fill(tmpAk4Jet.Pt()*1e-3);
      if(is_bmatched && is_btagged)
@@ -505,7 +578,27 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
      h->h1D("Nonbjmatched_jet_pt", "", suffix)->Fill(tmpAk4Jet.Pt()*1e-3);
      if(!is_bmatched && is_btagged)
      h->h1D("Nonbjmatched_btagged_jet_pt", "", suffix)->Fill(tmpAk4Jet.Pt()*1e-3);
-     */
+
+     //char name[200];
+     for(int idr = 20; idr <=50; idr++)
+      {
+       sprintf(name, "bjmatched_jet_pt_DelR%i",idr);
+       if(is_bmatched)
+       h->h1D(name, "", suffix)->Fill(tmpAk4Jet.Pt()*1e-3);
+
+       sprintf(name, "bjmatched_btagged_jet_pt_DelR%i",idr);
+       if(is_bmatched && is_btagged_delR[idr-20])
+       h->h1D(name, "", suffix)->Fill(tmpAk4Jet.Pt()*1e-3);
+
+       sprintf(name, "Nonbjmatched_jet_pt_DelR%i",idr);
+       if(!is_bmatched)
+       h->h1D(name, "", suffix)->Fill(tmpAk4Jet.Pt()*1e-3); 
+
+       sprintf(name, "Nonbjmatched_btagged_jet_pt_DelR%i",idr);
+       if(!is_bmatched && is_btagged_delR[idr-20])
+       h->h1D(name, "", suffix)->Fill(tmpAk4Jet.Pt()*1e-3);
+      } // for(int idr = 20; idr <=50; idr++)
+
     }
     TLorentzVector met = evt.met();
     bool status = m_chi2.findMinChiSquare(&l, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L); 
