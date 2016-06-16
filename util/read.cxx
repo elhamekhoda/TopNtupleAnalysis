@@ -318,11 +318,7 @@ int main(int argc, char **argv) {
 	MM_0b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "scripts/QCDestimation/150616_fakeRates_rmu_0b/fake.root");
 	MM_1b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "scripts/QCDestimation/150616_fakeRates_rmu_in1b/fake.root");
 	  
-  } else{
-	std::cout << "Invalid runMM option" << std::endl;
-	std::exit(-2);
-
-  }//runMM
+  } 
 
   std::vector<std::string> pdfList;
   for (size_t i = 0,n; i <= pdf.length(); i=n+1) {
