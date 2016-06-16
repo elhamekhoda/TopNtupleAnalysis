@@ -1,3 +1,12 @@
+2016-06-16 Marino Romano <sromanos@cern.ch>
+	* Updating the tools for the real and fake estimation. Adding the MWT and MWT parametrisation in different minDR regions
+	* Adding new Analysis class for the closure test for different CRs (AnaTtresMM)
+	* Adding new real/fake rates for muon channel for W+jets CR (>=3D2 jets; ex-0 bjets and in-1 bjets)
+	* Performing the MWT vs MET parametrisation for the muon channel. 
+	* Update in the structure to read the rates from the root files (should be easier to add/update the real and fake rates). 
+	* Adding weight for sherpa2.2.
+	* TopNtupleAnalysis-00-02-15
+
 2016-06-15 Sanmay Ganguly <sanmay.ganguly@cern.ch>
 	* Added the histograms in TopNtupleAnalysis/Root/AnaTtresSL.cxx to
 	study the $\chi^2$ parametrization
