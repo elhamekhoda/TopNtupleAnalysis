@@ -1171,7 +1171,7 @@ int main(int argc, char **argv) {
 	        bool iselect((dynamic_cast<AnaTtresSL*>(vec_analysis[iAna]))->isElectron());
 	        bool isboost((dynamic_cast<AnaTtresSL*>(vec_analysis[iAna]))->isBoosted());
 	        if (runMM) {
-			std::cout << nBtagged << std::endl;
+
 		   if(nBtagged==0){		     
 	  	     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);// use w+jets rates (>=2 jets) everywhere for the time being
 		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);// use w+jets rates (>=2 jets) everywhere for the time being
