@@ -1,3 +1,8 @@
+2016-06-15 Sanmay Ganguly <sanmay.ganguly@cern.ch>
+	* Added the histograms in TopNtupleAnalysis/Root/AnaTtresSL.cxx to
+	study the $\chi^2$ parametrization
+	* Updated the HistogramService class to add TProfile. 
+
 2016-05-12 Danilo Ferreira de Lima <dferreir@cern.ch>
 	* Added simple Python code for simpler tests.
 	* TopNtupleAnalysis-00-02-14
