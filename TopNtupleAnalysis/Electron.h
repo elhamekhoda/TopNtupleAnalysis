@@ -27,8 +27,8 @@ class Electron : public MObject {
     TLorentzVector &caloMom();
     const TLorentzVector &trkMom() const;
     TLorentzVector &trkMom();
-    const float z0() const;
-    float &z0();
+    const float Dz0() const;
+    float &Dz0();
     
     const float d0() const;
     float &d0();
@@ -73,7 +73,7 @@ class Electron : public MObject {
     bool m_isMediumPP;
     TLorentzVector m_mom_calo;
     TLorentzVector m_mom_trk;
-    float m_z0;
+    float m_Dz0;
     float m_d0;
     float m_sd0;
     int m_author;

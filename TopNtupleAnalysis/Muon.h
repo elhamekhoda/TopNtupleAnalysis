@@ -20,8 +20,8 @@ class Muon : public MObject {
     bool isTight() const;
     void setTight(char t);
 
-    const float z0() const;
-    float &z0();
+    const float Dz0() const;
+    float &Dz0();
 
     const float z0_exPV() const;
     float &z0_exPV();
@@ -80,7 +80,7 @@ class Muon : public MObject {
   protected:
     float m_mi;
     bool m_tight;
-    float m_z0;
+    float m_Dz0;
     float m_z0_exPV;
     float m_d0;
     float m_sd0;

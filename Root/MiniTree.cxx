@@ -53,6 +53,7 @@ void MiniTree::read(int event, Event &e) {
   e.weight_pileup() = f("weight_pileup");
   e.weight_bTagSF() = f("weight_bTagSF_70");
   e.weight_leptonSF() = f("weight_leptonSF");
+  e.weight_Sherpa22_corr() = f("weight_Sherpa22_corr");
   
   // adding the truth information into the event        
   if (f("MC_w1h_pt") > 0)	e.MC_w1h().SetPtEtaPhiM(f("MC_w1h_pt"), f("MC_w1h_eta"), f("MC_w1h_phi"), f("MC_w1h_m"));
@@ -86,6 +87,32 @@ void MiniTree::read(int event, Event &e) {
   if (f("MC_tbar_pt") > 0)	e.MC_tbar().SetPtEtaPhiM(f("MC_tbar_pt"), f("MC_tbar_eta"), f("MC_tbar_phi"), f("MC_tbar_m"));
   else				e.MC_tbar().SetPtEtaPhiM(2000, -9., 0., 0.);
   
+  if (i("MC_ttbar_type") > 0)	e.MC_ttbar_type() = i("MC_ttbar_type");
+  
+  
+    // adding the truth information into the event        
+  if (f("MC_Wdecay1_from_t_pt") > 0)	e.MC_Wdecay1_from_t().SetPtEtaPhiM(f("MC_Wdecay1_from_t_pt"), f("MC_Wdecay1_from_t_eta"), f("MC_Wdecay1_from_t_phi"), f("MC_Wdecay1_from_t_m"));
+  else					e.MC_Wdecay1_from_t().SetPtEtaPhiM(2000, -9., -9., 0);  
+  e.MC_Wdecay1_from_t_pdgId() 	= i("MC_Wdecay1_from_t_pdgId");
+  
+  if (f("MC_Wdecay2_from_t_pt") > 0)	e.MC_Wdecay2_from_t().SetPtEtaPhiM(f("MC_Wdecay2_from_t_pt"), f("MC_Wdecay2_from_t_eta"), f("MC_Wdecay2_from_t_phi"), f("MC_Wdecay2_from_t_m"));
+  else					e.MC_Wdecay2_from_t().SetPtEtaPhiM(2000, -9., -9., 0);  
+  e.MC_Wdecay2_from_t_pdgId() 	= i("MC_Wdecay2_from_t_pdgId");
+  
+  if (f("MC_b_from_t_pt") > 0)	e.MC_b_from_t().SetPtEtaPhiM(f("MC_b_from_t_pt"), f("MC_b_from_t_eta"), f("MC_b_from_t_phi"), f("MC_b_from_t_m"));
+  else				e.MC_b_from_t().SetPtEtaPhiM(2000, -9., -9., 0);  
+    
+  if (f("MC_Wdecay1_from_tbar_pt") > 0)	e.MC_Wdecay1_from_tbar().SetPtEtaPhiM(f("MC_Wdecay1_from_tbar_pt"), f("MC_Wdecay1_from_tbar_eta"), f("MC_Wdecay1_from_tbar_phi"), f("MC_Wdecay1_from_tbar_m"));
+  else					e.MC_Wdecay1_from_tbar().SetPtEtaPhiM(2000, -9., -9., 0);  
+  e.MC_Wdecay1_from_tbar_pdgId() 	= i("MC_Wdecay1_from_tbar_pdgId");
+  
+  if (f("MC_Wdecay2_from_tbar_pt") > 0)	e.MC_Wdecay2_from_tbar().SetPtEtaPhiM(f("MC_Wdecay2_from_tbar_pt"), f("MC_Wdecay2_from_tbar_eta"), f("MC_Wdecay2_from_tbar_phi"), f("MC_Wdecay2_from_tbar_m"));
+  else					e.MC_Wdecay2_from_tbar().SetPtEtaPhiM(2000, -9., -9., 0);  
+  e.MC_Wdecay2_from_tbar_pdgId() 	= i("MC_Wdecay2_from_tbar_pdgId");
+  
+  if (f("MC_b_from_tbar_pt") > 0)	e.MC_b_from_tbar().SetPtEtaPhiM(f("MC_b_from_tbar_pt"), f("MC_b_from_tbar_eta"), f("MC_b_from_tbar_phi"), f("MC_b_from_tbar_m"));
+  else					e.MC_b_from_tbar().SetPtEtaPhiM(2000, -9., -9., 0);  
+      
   // adding the matched objets into the event 
   if (f("MA_w1h_pt") > 0)	e.MA_w1h().SetPtEtaPhiM(f("MA_w1h_pt"), f("MA_w1h_eta"), f("MA_w1h_phi"), f("MA_w1h_m"));
   else   		e.MA_w1h().SetPtEtaPhiM(2000, -9., 0., 0.);
@@ -108,18 +135,16 @@ void MiniTree::read(int event, Event &e) {
   
   if (f("MA_bl_pt") > 0)	e.MA_bl().SetPtEtaPhiM(f("MA_bl_pt"), f("MA_bl_eta"), f("MA_bl_phi"), f("MA_bl_m"));  
   else   		e.MA_bl().SetPtEtaPhiM(2000, -9., 0., 0.);
-  
+
   for (int k = 0; k < vf("el_pt")->size(); ++k) {
     e.electron().push_back(Electron());
     e.electron()[k].mom().SetPtEtaPhiE(vf("el_pt")->at(k), vf("el_eta")->at(k), vf("el_phi")->at(k), vf("el_e")->at(k));
     //e.electron()[k].setMI(vf("el_miniiso")->at(k));
     e.electron()[k].setTightPP(false);
-    if (vc("el_isTight")) {
-      e.electron()[k].setTightPP(vc("el_isTight")->at(k));
-    }
+    if (vc("el_isTight"))	e.electron()[k].setTightPP(vc("el_isTight")->at(k));
     e.electron()[k].caloMom() = e.electron()[k].mom();
     e.electron()[k].trkMom() = e.electron()[k].mom();
-    e.electron()[k].z0() = vf("el_z0")->at(k);
+    e.electron()[k].Dz0() = vf("el_delta_z0_sintheta")->at(k);
     e.electron()[k].d0() = vf("el_d0")->at(k);
     e.electron()[k].sd0() = vf("el_d0sig")->at(k); 
     e.electron()[k].HLT_e24_lhmedium_iloose_L1EM20VH()= 0;
@@ -139,10 +164,8 @@ void MiniTree::read(int event, Event &e) {
     e.muon()[k].mom().SetPtEtaPhiE(vf("mu_pt")->at(k), vf("mu_eta")->at(k), vf("mu_phi")->at(k), vf("mu_e")->at(k));
     e.muon()[k].setMI(0);
     e.muon()[k].setTight(false);
-    if (vc("mu_isTight")) {
-      e.muon()[k].setTight(vc("mu_isTight")->at(k));
-    }
-    e.muon()[k].z0() = vf("mu_z0")->at(k);
+    if (vc("mu_isTight"))	e.muon()[k].setTight(vc("mu_isTight")->at(k));
+    e.muon()[k].Dz0() = vf("mu_delta_z0_sintheta")->at(k);
     e.muon()[k].d0() = vf("mu_d0")->at(k);
     e.muon()[k].sd0() = vf("mu_d0sig")->at(k);
     if (vc("mu_trigMatch_HLT_mu20_L1MU15"))		e.muon()[k].HLT_mu20_L1MU15() 	 = vc("mu_trigMatch_HLT_mu20_L1MU15")->at(k);
@@ -197,6 +220,12 @@ void MiniTree::read(int event, Event &e) {
   if (i("rejets")) e.passes().push_back("rejets");
   if (i("rmujets")) e.passes().push_back("rmujets");
   if (i("rmu2jets")) e.passes().push_back("rmu2jets");
+  
+  if (i("rmujetsQCDCR")) e.passes().push_back("rmujetsQCDCR");
+  if (i("bmujetsQCDCR")) e.passes().push_back("bmujetsQCDCR");
+  if (i("rejetsQCDCR")) e.passes().push_back("rejetsQCDCR");
+  if (i("bejetsQCDCR")) e.passes().push_back("bejetsQCDCR");
+
   if (i("ejets")) e.passes().push_back("ejets");
   if (i("mujets")) e.passes().push_back("mujets");
   if (i("ee")) e.passes().push_back("ee");

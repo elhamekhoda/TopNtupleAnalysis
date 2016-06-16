@@ -49,6 +49,7 @@ void Event::clear() {
   m_jet.clear();
   m_tjet.clear();
   m_largeJet.clear();
+  m_akt4truthjet.clear();
   m_met.SetPxPyPzE(0,0,0,0);
   m_passes.clear();
 }
@@ -84,6 +85,14 @@ const float Event::weight_leptonSF() const {
   return m_weight_leptonSF;
 }
 
+float &Event::weight_Sherpa22_corr() {
+  return m_weight_Sherpa22_corr;
+}
+
+const float Event::weight_Sherpa22_corr() const {
+  return m_weight_Sherpa22_corr;
+}
+
 std::vector<Electron> &Event::electron() {
   return m_electron;
 }
@@ -103,6 +112,12 @@ std::vector<Jet> &Event::tjet() {
 std::vector<LargeJet> &Event::largeJet() {
   return m_largeJet;
 }
+
+//truth jets
+std::vector<Jet> &Event::akt4truthjet() {
+  return m_akt4truthjet;
+}
+
 
 void Event::met(float met_x, float met_y) {
   m_met.SetPxPyPzE(met_x, met_y, 0, std::sqrt(std::pow(met_x, 2) + std::pow(met_y, 2)));
@@ -199,7 +214,79 @@ const unsigned int Event::lbn() const {
   return m_lbn;
 }
 
-//Variables from the truth: lepton+jet channel
+//Variables from truth
+
+TLorentzVector &Event::MC_Wdecay1_from_t() {
+  return m_MC_Wdecay1_from_t;
+}
+const TLorentzVector &Event::MC_Wdecay1_from_t() const {
+  return m_MC_Wdecay1_from_t;
+}
+
+int &Event::MC_Wdecay1_from_t_pdgId() {
+  return m_MC_Wdecay1_from_t_pdgId;
+}
+const int Event::MC_Wdecay1_from_t_pdgId() const {
+  return m_MC_Wdecay1_from_t_pdgId;
+}
+
+TLorentzVector &Event::MC_Wdecay2_from_t() {
+  return m_MC_Wdecay2_from_t;
+}
+const TLorentzVector &Event::MC_Wdecay2_from_t() const {
+  return m_MC_Wdecay2_from_t;
+}
+
+int &Event::MC_Wdecay2_from_t_pdgId() {
+  return m_MC_Wdecay2_from_t_pdgId;
+}
+const int Event::MC_Wdecay2_from_t_pdgId() const {
+  return m_MC_Wdecay2_from_t_pdgId;
+}
+
+TLorentzVector &Event::MC_b_from_t() {
+  return m_MC_b_from_t;
+}
+const TLorentzVector &Event::MC_b_from_t() const {
+  return m_MC_b_from_t;
+}
+
+TLorentzVector &Event::MC_Wdecay1_from_tbar() {
+  return m_MC_Wdecay1_from_tbar;
+}
+const TLorentzVector &Event::MC_Wdecay1_from_tbar() const {
+  return m_MC_Wdecay1_from_tbar;
+}
+
+int &Event::MC_Wdecay1_from_tbar_pdgId() {
+  return m_MC_Wdecay1_from_tbar_pdgId;
+}
+const int Event::MC_Wdecay1_from_tbar_pdgId() const {
+  return m_MC_Wdecay1_from_tbar_pdgId;
+}
+
+TLorentzVector &Event::MC_Wdecay2_from_tbar() {
+  return m_MC_Wdecay2_from_tbar;
+}
+const TLorentzVector &Event::MC_Wdecay2_from_tbar() const {
+  return m_MC_Wdecay2_from_tbar;
+}
+
+int &Event::MC_Wdecay2_from_tbar_pdgId() {
+  return m_MC_Wdecay2_from_tbar_pdgId;
+}
+const int Event::MC_Wdecay2_from_tbar_pdgId() const {
+  return m_MC_Wdecay2_from_tbar_pdgId;
+}
+
+TLorentzVector &Event::MC_b_from_tbar() {
+  return m_MC_b_from_tbar;
+}
+const TLorentzVector &Event::MC_b_from_tbar() const {
+  return m_MC_b_from_tbar;
+}
+
+//Variables from truth: lepton+jet channel
 
 //hadronic top decay
 TLorentzVector &Event::MC_w1h() {
@@ -292,6 +379,13 @@ TLorentzVector &Event::MC_tbar() {
 }
 const TLorentzVector &Event::MC_tbar() const {
   return m_MC_tbar;
+}
+
+int &Event::MC_ttbar_type() {
+  return m_MC_ttbar_type;
+}
+const int Event::MC_ttbar_type() const {
+  return m_MC_ttbar_type;
 }
 
 //MA

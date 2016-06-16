@@ -61,12 +61,12 @@ TLorentzVector &Electron::trkMom() {
   return m_mom_trk;
 }
 
-const float Electron::z0() const {
-  return m_z0;
+const float Electron::Dz0() const {
+  return m_Dz0;
 }
 
-float &Electron::z0() {
-  return m_z0;
+float &Electron::Dz0() {
+  return m_Dz0;
 }
 
 const float Electron::d0() const {
@@ -170,7 +170,7 @@ bool Electron::pass() const {
   if (eta > 1.37 && eta < 1.52) return false;
   if (eta > 2.47) return false;
   if (!isTightPP()) return false;
-  if (std::fabs(z0()) > 2) return false;
+  if (std::fabs(Dz0()) > 0.5) return false;
   if (mi()/mom().Perp() > 0.05) return false;
   if ( (oq() & 1446) != 0 ) return false;
   return true;
@@ -182,7 +182,7 @@ bool Electron::passLoose() const {
   float eta = std::fabs(caloMom().Eta());
   if (eta > 1.37 && eta < 1.52) return false;
   if (eta > 2.47) return false;
-  if (std::fabs(z0()) > 2) return false;
+  if (std::fabs(Dz0()) > 0.5) return false;
   if ( (oq() & 1446) != 0 ) return false;
 
   if (!isMediumPP()) return false;

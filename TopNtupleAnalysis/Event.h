@@ -24,7 +24,8 @@ class Event {
     std::vector<LargeJet> &largeJet();
 
     std::vector<Jet> &tjet();
-
+    std::vector<Jet> &akt4truthjet();
+    
     const bool trigger(const std::string &t) const;
     void setTrigger(const std::string &t, bool passes);
 
@@ -34,6 +35,7 @@ class Event {
     const std::vector<LargeJet> &largeJet() const;
 
     const std::vector<Jet> &tjet() const;
+    const std::vector<Jet> &akt4truthjet() const;
 
     void met(float met_x, float met_y);
     TLorentzVector met() const;
@@ -67,6 +69,9 @@ class Event {
     
     float &weight_leptonSF();
     const float weight_leptonSF() const;
+    
+    float &weight_Sherpa22_corr();
+    const float weight_Sherpa22_corr() const;
 
     std::vector<std::string> &passes();
     const bool passes(const std::string &selection) const;
@@ -83,7 +88,35 @@ class Event {
 
     float &vtxz();
     const float vtxz() const;
-
+    
+    //MC
+    TLorentzVector &MC_Wdecay1_from_t();
+    const TLorentzVector &MC_Wdecay1_from_t() const;
+    int &MC_Wdecay1_from_t_pdgId();
+    const int MC_Wdecay1_from_t_pdgId() const;
+    
+    TLorentzVector &MC_Wdecay2_from_t();
+    const TLorentzVector &MC_Wdecay2_from_t() const;
+    int &MC_Wdecay2_from_t_pdgId();
+    const int MC_Wdecay2_from_t_pdgId() const;
+    
+    TLorentzVector &MC_b_from_t();
+    const TLorentzVector &MC_b_from_t() const;
+    
+    TLorentzVector &MC_Wdecay1_from_tbar();
+    const TLorentzVector &MC_Wdecay1_from_tbar() const;
+    int &MC_Wdecay1_from_tbar_pdgId();
+    const int MC_Wdecay1_from_tbar_pdgId() const;
+    
+    TLorentzVector &MC_Wdecay2_from_tbar();
+    const TLorentzVector &MC_Wdecay2_from_tbar() const;
+    int &MC_Wdecay2_from_tbar_pdgId();
+    const int MC_Wdecay2_from_tbar_pdgId() const;
+    
+    TLorentzVector &MC_b_from_tbar();
+    const TLorentzVector &MC_b_from_tbar() const;
+    
+    //MC
     TLorentzVector &MC_w1h();
     const TLorentzVector &MC_w1h() const;
     int &MC_w1h_pdgId();
@@ -112,6 +145,9 @@ class Event {
 
     TLorentzVector &MC_ttbar_beforeFSR();
     const TLorentzVector &MC_ttbar_beforeFSR() const;
+    
+    int &MC_ttbar_type();
+    const int MC_ttbar_type() const;
     
     //MA
     TLorentzVector &MA_w1h();
@@ -164,6 +200,8 @@ class Event {
 
     std::vector<Jet> m_tjet;
     
+    std::vector<Jet> m_akt4truthjet;
+    
     TLorentzVector m_MC_w1h;
     int m_MC_w1h_pdgId;
     TLorentzVector m_MC_w2h;
@@ -179,6 +217,18 @@ class Event {
 
     TLorentzVector m_MC_t;
     TLorentzVector m_MC_tbar;
+    int m_MC_ttbar_type;
+    
+    TLorentzVector m_MC_Wdecay1_from_t;
+    int m_MC_Wdecay1_from_t_pdgId;
+    TLorentzVector m_MC_Wdecay2_from_t;
+    int m_MC_Wdecay2_from_t_pdgId;   
+    TLorentzVector m_MC_b_from_t;
+    TLorentzVector m_MC_Wdecay1_from_tbar;
+    int m_MC_Wdecay1_from_tbar_pdgId;
+    TLorentzVector m_MC_Wdecay2_from_tbar;
+    int m_MC_Wdecay2_from_tbar_pdgId;   
+    TLorentzVector m_MC_b_from_tbar;
     
     TLorentzVector m_MA_w1h;
     int m_MA_w1h_pdgId;
@@ -206,6 +256,7 @@ class Event {
     float m_weight_pileup;
     float m_weight_bTagSF;
     float m_weight_leptonSF;
+    float m_weight_Sherpa22_corr;
     
     unsigned int m_lbn;
 };
