@@ -30,10 +30,16 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     
     eff_map_resolved_e = (TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_e");
     if(eff_map_resolved_e)	eff_map_resolved_e->SetDirectory(0);
-        
-    eff_map_resolved_mu = (TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_mu");
-    if(eff_map_resolved_mu)	eff_map_resolved_mu->SetDirectory(0);
+       
+    eff_map_resolved_mu_lDR = 		(TH2F*) m_eff_rootfile.Get("eff_mwt_met_map_lowDR_resolved_mu");
+    if(eff_map_resolved_mu_lDR)		eff_map_resolved_mu_lDR->SetDirectory(0);
     
+    eff_map_resolved_mu_mDR = 		(TH2F*) m_eff_rootfile.Get("eff_mwt_met_map_medDR_resolved_mu");
+    if(eff_map_resolved_mu_mDR)		eff_map_resolved_mu_mDR->SetDirectory(0);
+    
+    eff_map_resolved_mu_hDR = 		(TH2F*) m_eff_rootfile.Get("eff_mwt_met_map_highDR_resolved_mu");
+    if(eff_map_resolved_mu_hDR)		eff_map_resolved_mu_hDR->SetDirectory(0);
+   
     eff_map_boosted_e = (TH2F*) m_eff_rootfile.Get("eff_pTdr_boosted_e");
     if(eff_map_boosted_e)	eff_map_boosted_e->SetDirectory(0);
     
@@ -41,19 +47,23 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     if(eff_map_boosted_mu)	eff_map_boosted_mu->SetDirectory(0);
       
     TFile m_fake_rootfile(fake_filename.c_str(), "r");
-        
-    fake_map_resolved_e_lEta    = (TH2F*)m_fake_rootfile.Get("2Dfake_leptPt_cosDPhi_lowEta_resolved_e");
-    fake_map_resolved_e_hEta    = (TH2F*)m_fake_rootfile.Get("2Dfake_leptPt_cosDPhi_highEta_resolved_e");
+            
+    fake_map_resolved_e_lEta = 		(TH2F*)m_fake_rootfile.Get("2Dfake_leptPt_cosDPhi_lowEta_resolved_e");
+    fake_map_resolved_e_hEta = 		(TH2F*)m_fake_rootfile.Get("2Dfake_leptPt_cosDPhi_highEta_resolved_e");
     if(fake_map_resolved_e_lEta)	fake_map_resolved_e_lEta->SetDirectory(0);
     if(fake_map_resolved_e_hEta)	fake_map_resolved_e_hEta->SetDirectory(0);
-        
-    fake_map_resolved_mu = (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_closJetPt_resolved_mu");
-    if(fake_map_resolved_mu)    fake_map_resolved_mu->SetDirectory(0);
 
-    fake_pt_boosted_e = (TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_e");
+    fake_map_resolved_mu_lDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_lowDR_resolved_mu");
+    if(fake_map_resolved_mu_lDR)  fake_map_resolved_mu_lDR->SetDirectory(0);
+    fake_map_resolved_mu_mDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_medDR_resolved_mu");
+    if(fake_map_resolved_mu_mDR)  fake_map_resolved_mu_mDR->SetDirectory(0);
+    fake_map_resolved_mu_hDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_highDR_resolved_mu");
+    if(fake_map_resolved_mu_hDR)  fake_map_resolved_mu_hDR->SetDirectory(0);
+
+    fake_pt_boosted_e = 	(TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_e");
     if(fake_pt_boosted_e)	fake_pt_boosted_e->SetDirectory(0);
     
-    fake_dr_boosted_mu  = (TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_mu");
+    fake_dr_boosted_mu  = 	(TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_mu");
     if(fake_dr_boosted_mu)	fake_dr_boosted_mu->SetDirectory(0); 
 
   }
@@ -67,20 +77,11 @@ MMUtils::~MMUtils(){
   delete eff_map_boosted_e ;
   delete eff_map_boosted_mu ;
   
-  delete fake_map_resolved_e;
   delete fake_map_resolved_e_lEta;
   delete fake_map_resolved_e_hEta;
-  delete fake_map_resolved_mu;
-  
-  delete fake_dr_resolved_mu;
-  delete fake_pt_resolved_mu;
-  delete fake_cos_resolved_mu;
-  delete fake_met_resolved_mu;
   delete fake_map_resolved_mu_lDR;
+  delete fake_map_resolved_mu_mDR;
   delete fake_map_resolved_mu_hDR;
-  delete fake_map_resolved_mu_lCos;
-  delete fake_map_resolved_mu_hCos;
-  
   delete fake_pt_boosted_e;  
   delete fake_dr_boosted_mu;
 
@@ -142,12 +143,68 @@ void MMUtils::getRatesBoostedEl(float &realRate, float &realRate_err, float &fak
     return;
 }
 
-void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float closejl_pT, float cosDPhi, float met, float mwt){
+void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float closejl_pT, float cosDPhi, float met, float mwt, float DPhi){
+   
+    float met_min(0);
+    float met_limit(95);
     
-    get2Drates(realRate, realRate_err, eff_map_resolved_mu,  lepPt, closejl_DR);
-    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu, lepPt, closejl_pT); 
+    float mwt_min(0);
+    float mwt_limit(95);
+
+    if(closejl_DR > 0.6){
+
+      mwt_limit = 195;
+      mwt_min = std::min(mwt, mwt_limit);
+            
+      get2Drates(realRate, realRate_err, eff_map_resolved_mu_hDR,  met, mwt_min); 
+      
+      if(met<50)	mwt_limit = 95;
+      else 		mwt_limit = 195;
+      
+      mwt_min = std::min(mwt, mwt_limit);
+      met_min = std::min(met, met_limit);
+      
+      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_hDR, met_min, mwt_min);
+      
+      if (fakeRate<0) fakeRate=0;
+      
+    }else if(closejl_DR > 0.4){
+
+      mwt_limit = 195;
+      mwt_min = std::min(mwt, mwt_limit);
+      
+      get2Drates(realRate, realRate_err, eff_map_resolved_mu_mDR,  met, mwt_min); 
+      
+      mwt_limit = 95;
+      
+      mwt_min = std::min(mwt, mwt_limit);
+      met_min = std::min(met, met_limit);
+      
+      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_mDR, met_min, mwt_min);
+      
+      if (fakeRate<0) fakeRate=0;
+            
+    }else{
     
+      mwt_limit = 195;    
+      mwt_min = std::min(mwt, mwt_limit);
+      
+      get2Drates(realRate, realRate_err, eff_map_resolved_mu_lDR,  met, mwt_min);
+      
+      if(met<40)	mwt_limit = 95;
+      else 		mwt_limit = 195;
+    
+      mwt_min = std::min(mwt, mwt_limit);
+      met_min = std::min(met, met_limit);
+      
+      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_lDR, met_min, mwt_min);
+ 
+      if (fakeRate<0) fakeRate=0;
+            
+    }//if 
+
     return;
+        
 }
 
 void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float absEta, float cosDPhi){
@@ -165,6 +222,7 @@ void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fa
 float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const bool isElectron, const bool isBoosted) {
    
    bool isTight;
+   float d0sig;
 
    if ( isElectron && evt.electron().size()<1 ) return 0;
    if (!isElectron && evt.muon().size()<1 )     return 0;
@@ -178,6 +236,7 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
    }else {
        lepP4 = evt.muon()[0].mom();
        isTight = evt.muon()[0].isTight();
+       d0sig = evt.muon()[0].sd0();
        
        bool trig_unprescaled = evt.muon()[0].HLT_mu20_iloose_L1MU15() || evt.muon()[0].HLT_mu50();       
        if( !trig_unprescaled && isTight)	return 0;
@@ -212,7 +271,7 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
    float cosDPhi = std::cos(deltaPhi);   
    float MET = evt.met().Pt()*1e-3;
    float mWt = sqrt(2. * lepP4.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(lepP4)) ))*1e-3; 
-   
+        
    //Getting rates
    float fakeRate(0);
    float fakeRate_err(0);
@@ -225,7 +284,8 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
    }
    else{
    	if (isElectron)	getRatesResolvedEl(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, absEta, cosDPhi);
-   	else		getRatesResolvedMu(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, closejl_pT, cosDPhi, MET, mWt);
+   	else		getRatesResolvedMu(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, closejl_pT, cosDPhi, MET, mWt, deltaPhi);
+		
    }//isBoosted	
      
    //Implementing weights
@@ -241,18 +301,18 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
    }
    	
    if (isTight){
-     if(realRate>0 && fakeRate>0)  Weight = fakeRate*(realRate - 1)/(realRate - fakeRate); 
+     if(realRate>0 && fakeRate>0)     Weight = fakeRate*(realRate - 1)/(realRate - fakeRate);      
      else{
-     	     if(realRate==0)std::cerr << "Error: realRate equal to " << realRate << " (tight)" << std::endl;	   
-     	     if(fakeRate==0)std::cerr << "Error: fakeRate equal to " << fakeRate << " (tight)" << std::endl;	    
+     	     //if(realRate==0)std::cerr << "Error: realRate equal to " << realRate << " (tight) " << mWt << std::endl;	   
+     	     //if(fakeRate==0)std::cerr << "Error: fakeRate equal to " << fakeRate << " (tight) " << mWt << " " << cosDPhi << std::endl;	    
 	     Weight = 0;
      }
    }
    else {	
      if(realRate>0 && fakeRate>0)  Weight = fakeRate*realRate/(realRate - fakeRate);
      else{
-	     if(realRate==0)std::cerr << "Error: realRate equal to " << realRate << "  (loose)" << std::endl;	   
-     	     if(fakeRate==0)std::cerr << "Error: fakeRate equal to " << fakeRate << "  (loose)" << std::endl;
+	     //if(realRate==0)std::cerr << "Error: realRate equal to " << realRate << "  (anti-tight) " << mWt << std::endl;	   
+     	     //if(fakeRate==0)std::cerr << "Error: fakeRate equal to " << fakeRate << "  (anti-tight) " << mWt << " " << cosDPhi << std::endl;
      	     Weight = 0;
      }       
    
