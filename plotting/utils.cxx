@@ -1724,7 +1724,7 @@ SampleSetConfiguration makeConfigurationMCOnly(const string &prefix, const strin
   return stackConfig;
 }
 
-SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const string &channel, const vector<string> &other, const vector<string> &title_o, bool isMcOnly) {
+SampleSetConfiguration makeConfigurationPlotsCompare(const string &pre, const string &channel, const vector<string> &other, const vector<string> &title_o, bool isMcOnly) {
   SampleSetConfiguration stackConfig;
 
   stackConfig.addType("MC");
@@ -1732,6 +1732,9 @@ SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const
   for (int z = 0; z < other.size(); z++) {
     stackConfig.addType(Form("MC%d", z));
   }
+  std::string prefix = pre;
+  if (prefix != "")
+    prefix += "_";
 
   for (std::map<std::string, std::string>::iterator it = name.begin(); it != name.end(); ++it) {
     std::string id = it->first;
@@ -1741,10 +1744,10 @@ SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const
     int fillC = fillColor[id];
     if (it->first.find("data") != std::string::npos) {
       if (!isMcOnly)
-        stackConfig.add("Data", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+        stackConfig.add("Data", Form("%s%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
                                 "PL", 1, kBlack, 1,    0, 20, 1, "e");
     } else {
-      stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+      stackConfig.add("MC", Form("%s%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
                               "F", 1, kBlack, 1001,      fillC, 1, 0, "hist");
     }
   }
@@ -1762,11 +1765,11 @@ SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const
       std::string latexTitle = latex[id];
       int fillC = fillColor[id];
       if (it->first.find("ttbar") == std::string::npos) {
-        stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+        stackConfig.add(Form("MC%d", z), Form("%s%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
                                 "", 1, kBlack, 1001,      fillC, 1, 0, "hist");
       } else if (!doneTt) {
         doneTt = true;
-        stackConfig.add(Form("MC%d", z), Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other[z].c_str()), title_o[z].c_str(), title_o[z].c_str(), title_o[z].c_str(),
+        stackConfig.add(Form("MC%d", z), Form("%s%s_%s.root", prefix.c_str(), channel.c_str(), other[z].c_str()), title_o[z].c_str(), title_o[z].c_str(), title_o[z].c_str(),
                                 "F", 1, col[z], 1,      0, 1, 0, "hist");
       }
     }

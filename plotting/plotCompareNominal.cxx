@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
   try {
 
     int help = 0;
-    string prefix = "boosted";
+    string prefix = "";
     string channel = "mu";
     string h_input = "lepPt";
     string h_other = "";
@@ -199,7 +199,10 @@ int main(int argc, char **argv) {
     vector<string> extraText;
     string outfile = _outfile;
     if (outfile == "") {
-      outfile = prefix+"_"+histogram;
+	  if (prefix != "") {
+	    outfile = prefix+"_";
+	  }
+      outfile += histogram;
       outfile += string("_");
       outfile += channel;
       outfile += ".pdf";
@@ -208,7 +211,9 @@ int main(int argc, char **argv) {
       extraText.push_back("e channel");
     } else if (channel == "mu") {
       extraText.push_back("#mu channel");
-    }
+    } else {
+      extraText.push_back(channel);
+	}
     vector<string> split_extraText;
     split(_extraText, ';', split_extraText);
     for (vector<string>::iterator i = split_extraText.begin(); i!=split_extraText.end();++i) extraText.push_back(*i);
