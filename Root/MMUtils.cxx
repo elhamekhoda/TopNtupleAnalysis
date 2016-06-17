@@ -30,6 +30,9 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     
     eff_map_resolved_e = (TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_e");
     if(eff_map_resolved_e)	eff_map_resolved_e->SetDirectory(0);
+    
+    eff_map_resolved_mu = 		(TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_mu");
+    if(eff_map_resolved_mu)		eff_map_resolved_mu->SetDirectory(0);
        
     eff_map_resolved_mu_lDR = 		(TH2F*) m_eff_rootfile.Get("eff_mwt_met_map_lowDR_resolved_mu");
     if(eff_map_resolved_mu_lDR)		eff_map_resolved_mu_lDR->SetDirectory(0);
@@ -74,6 +77,9 @@ MMUtils::~MMUtils(){
   
   delete eff_map_resolved_e  ;
   delete eff_map_resolved_mu  ;
+  delete eff_map_resolved_mu_lDR;
+  delete eff_map_resolved_mu_mDR;
+  delete eff_map_resolved_mu_hDR;
   delete eff_map_boosted_e ;
   delete eff_map_boosted_mu ;
   
@@ -150,7 +156,7 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
     
     float mwt_min(0);
     float mwt_limit(95);
-
+/*
     if(closejl_DR > 0.6){
 
       mwt_limit = 195;
@@ -202,6 +208,49 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
       if (fakeRate<0) fakeRate=0;
             
     }//if 
+*/
+    
+    get2Drates(realRate, realRate_err, eff_map_resolved_mu, lepPt, closejl_DR); 
+
+    if(closejl_DR > 0.6){
+
+      if(met<50)	mwt_limit = 95;
+      else 		mwt_limit = 195;
+      
+      mwt_min = std::min(mwt, mwt_limit);
+      met_min = std::min(met, met_limit);
+      
+      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_hDR, met_min, mwt_min);
+      
+      if (fakeRate<0) fakeRate=0;
+      
+    }else if(closejl_DR > 0.4){
+
+      mwt_limit = 95;
+      
+      mwt_min = std::min(mwt, mwt_limit);
+      met_min = std::min(met, met_limit);
+      
+      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_mDR, met_min, mwt_min);
+      
+      if (fakeRate<0) fakeRate=0;
+            
+    }else{
+    
+      if(met<40)	mwt_limit = 95;
+      else 		mwt_limit = 195;
+    
+      mwt_min = std::min(mwt, mwt_limit);
+      met_min = std::min(met, met_limit);
+      
+      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_lDR, met_min, mwt_min);
+ 
+      if (fakeRate<0) fakeRate=0;
+            
+    }//if
+
+
+
 
     return;
         

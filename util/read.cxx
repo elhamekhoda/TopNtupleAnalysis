@@ -581,7 +581,7 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresSL(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
-  } else if(analysis == "AnaTtresSL_QCDCR2j" || analysis == "AnaTtresSL_QCDCR4j"){
+  } else if(analysis == "AnaTtresSL_QCDVR2j" ||analysis == "AnaTtresSL_QCDCR2j" || analysis == "AnaTtresSL_QCDCR4j" || analysis == "AnaTtresSL_QCDSR2j"){
     vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal)); // resolved electron
     vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
@@ -1205,7 +1205,49 @@ int main(int argc, char **argv) {
 
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDCR2j(sel, weight, suffix);
             }
-          
+          	  
+	  } else if (analysis=="AnaTtresSL_QCDVR2j") { // QCD control region, >=2 jets
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
+	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
+	        
+	        if (runMM) {
+                   
+		   if(nBtagged==0){
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+	  	     
+		  }else{  
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     
+		  }//if  
+	       }//runMM
+
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2j(sel, weight, suffix);
+            }
+	    
+	 } else if (analysis=="AnaTtresSL_QCDSR2j") { // QCD control region, >=2 jets
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
+	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
+	        
+	        if (runMM) {
+                   
+		   if(nBtagged==0){
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+	  	     
+		  }else{  
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     
+		  }//if  
+	       }//runMM
+
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDSR2j(sel, weight, suffix);
+            }
+	    
 	  } else if (analysis=="AnaTtresSL_QCDCR4j") { // QCD control region, >=4 jets
 	    for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        
