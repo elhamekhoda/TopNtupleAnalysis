@@ -313,9 +313,9 @@ int main(int argc, char **argv) {
     
   if (runMM){ // >= 2 jets
 	MM_0b_re      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_noBtag/eff_ttbar.root", "scripts/QCDestimation/200416_WJetsCR_noBtag/fake.root");
-	MM_1b_re      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_Btag/eff_ttbar.root", "scripts/QCDestimation/200416_WJetsCR_Btag/fake.root");
+	MM_1b_re      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_Btag/eff_ttbar.root",   "scripts/QCDestimation/200416_WJetsCR_Btag/fake.root");
 
-	MM_0b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "scripts/QCDestimation/150616_fakeRates_rmu_0b/fake.root");
+	MM_0b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root",   "scripts/QCDestimation/150616_fakeRates_rmu_0b/fake.root");
 	MM_1b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "scripts/QCDestimation/150616_fakeRates_rmu_in1b/fake.root");
 	  
   } 
@@ -581,7 +581,7 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresSL(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
-  } else if(analysis == "AnaTtresSL_QCDVR2j" ||analysis == "AnaTtresSL_QCDCR2j" || analysis == "AnaTtresSL_QCDCR4j" || analysis == "AnaTtresSL_QCDSR2j"){
+  } else if(analysis == "AnaTtresSL_QCDVR2j" ||analysis == "AnaTtresSL_QCDCR2j" || analysis == "AnaTtresSL_QCDCR4j" || analysis == "AnaTtresSL_QCDSR2j" || analysis == "AnaTtresSL_QCDSR4j"){
     vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal)); // resolved electron
     vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
@@ -787,7 +787,7 @@ int main(int argc, char **argv) {
             weight *= sampleXsection.getXsection(channel);
 	    
 	    if(sel.weight_Sherpa22_corr())	weight *= sel.weight_Sherpa22_corr();
-
+	    
             double pdfw = 1.0;
             bool isPdf = false;
             std::string pdfname = "";
@@ -857,7 +857,7 @@ int main(int argc, char **argv) {
                   size_t first_pt = suffix.find("pt");
                   int eig = atoi(suffix.substr(first, last - first - 4).c_str());
                   int ptr = atoi(suffix.substr(first_pt+2, last - first_pt - 2).c_str());
-                  for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                  for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c10")->size(); ++bidx) {
                     TLorentzVector pb;
                     pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                     if (mt.vf("tjet_pt")->at(bidx) > 10e3 &&
@@ -888,7 +888,7 @@ int main(int argc, char **argv) {
                   size_t first_pt = suffix.find("pt");
                   int eig = atoi(suffix.substr(first, last - first - 4).c_str());
                   int ptr = atoi(suffix.substr(first_pt+2, last - first_pt - 2).c_str());
-                  for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                  for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c10")->size(); ++bidx) {
                     TLorentzVector pb;
                     pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                     if (mt.vf("tjet_pt")->at(bidx) > 10e3 &&
@@ -919,7 +919,7 @@ int main(int argc, char **argv) {
                   size_t first_pt = suffix.find("pt");
                   int eig = atoi(suffix.substr(first, last - first - 4).c_str());
                   int ptr = atoi(suffix.substr(first_pt+2, last - first_pt - 2).c_str());
-                  for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                  for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c10")->size(); ++bidx) {
                     TLorentzVector pb;
                     pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                     if (mt.vf("tjet_pt")->at(bidx) > 10e3 &&  
@@ -951,7 +951,7 @@ int main(int argc, char **argv) {
               } else if (suffix.find("btagbSF_") != std::string::npos) {
                 size_t first = std::string("btagbSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
-                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c10")->size(); ++bidx) {
                   TLorentzVector pb;
                   pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                   if (mt.vf("tjet_pt")->at(bidx) > 10e3 &&
@@ -968,7 +968,7 @@ int main(int argc, char **argv) {
               } else if (suffix.find("btagcSF_") != std::string::npos) {
                 size_t first = std::string("btagcSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
-                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c10")->size(); ++bidx) {
                   TLorentzVector pb;
                   pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                   if (mt.vf("tjet_pt")->at(bidx) > 10e3 && 
@@ -985,7 +985,7 @@ int main(int argc, char **argv) {
               } else if (suffix.find("btaglSF_") != std::string::npos) {
                 size_t first = std::string("btaglSF_").size();
                 int eig = atoi(suffix.substr(first, last - first).c_str());
-                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c10")->size(); ++bidx) {
                   TLorentzVector pb;
                   pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                   if (mt.vf("tjet_pt")->at(bidx) > 10e3 &&
@@ -1013,7 +1013,7 @@ int main(int argc, char **argv) {
                 }
               } else {
                 //btagsf = mt.f(pref);
-                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+                for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c10")->size(); ++bidx) {
                   TLorentzVector pb;
                   pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
                   if (mt.vf("tjet_pt")->at(bidx) > 10e3 &&
@@ -1134,24 +1134,24 @@ int main(int argc, char **argv) {
           // this applies b-tagging early
           int nBtagged = 0; 
           int nLeadTagged = 0;
-          if (_btags > 0) {
+          if (_btags > 0) { //calo b-tagging
             for (size_t bidx = 0; bidx < sel.jet().size(); ++bidx) {
               if (sel.jet()[bidx].btag_mv2c20_70()) {
                 nBtagged += 1;	
               }
             }
             if (sel.jet()[0].btag_mv2c20_70()) nLeadTagged++;
-          } else if (_btags <= 0) {
-            for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c20")->size(); ++bidx) {
+          } else if (_btags <= 0) { //track b-tagging
+            for (size_t bidx = 0; bidx < mt.vf("tjet_mv2c10")->size(); ++bidx) {
               TLorentzVector pb;
               pb.SetPtEtaPhiE(mt.vf("tjet_pt")->at(bidx), mt.vf("tjet_eta")->at(bidx), mt.vf("tjet_phi")->at(bidx), mt.vf("tjet_e")->at(bidx));
-              if (mt.vf("tjet_mv2c20")->at(bidx) > -0.3098 && mt.vf("tjet_pt")->at(bidx) > 10e3 && 
+              if (mt.vf("tjet_mv2c10")->at(bidx) > 0.6455 && mt.vf("tjet_pt")->at(bidx) > 10e3 && 
                   std::fabs(mt.vf("tjet_eta")->at(bidx)) < 2.5 && mt.vi("tjet_numConstituents")->at(bidx) >= 2) {
                 nBtagged += 1;
               }
             }
             if (mt.vf("tjet_pt")->size() > 0) {
-              if (mt.vf("tjet_mv2c20")->at(0) > -0.3098 && mt.vf("tjet_pt")->at(0) > 10e3 &&
+              if (mt.vf("tjet_mv2c10")->at(0) > 0.6455 && mt.vf("tjet_pt")->at(0) > 10e3 &&
                   std::fabs(mt.vf("tjet_eta")->at(0)) < 2.5 && mt.vi("tjet_numConstituents")->at(0) >= 2) {
                 nLeadTagged += 1;
               }
@@ -1206,7 +1206,7 @@ int main(int argc, char **argv) {
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDCR2j(sel, weight, suffix);
             }
           	  
-	  } else if (analysis=="AnaTtresSL_QCDVR2j") { // QCD control region, >=2 jets
+	  } else if (analysis=="AnaTtresSL_QCDVR2j") { // QCD vvalidation region, >=2 jets; 3< |d_0Sig| < 5
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
 	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
@@ -1226,8 +1226,8 @@ int main(int argc, char **argv) {
 
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2j(sel, weight, suffix);
             }
-	    
-	 } else if (analysis=="AnaTtresSL_QCDSR2j") { // QCD control region, >=2 jets
+	 
+	 } else if (analysis=="AnaTtresSL_QCDSR2j") { // W+jets enriched control region, >=2 jets
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
 	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
@@ -1247,10 +1247,9 @@ int main(int argc, char **argv) {
 
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDSR2j(sel, weight, suffix);
             }
-	    
-	  } else if (analysis=="AnaTtresSL_QCDCR4j") { // QCD control region, >=4 jets
-	    for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
-	        
+
+	  } else if (analysis=="AnaTtresSL_QCDSR4j") { // resolved control region, >=4 jets
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
 	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
 	        
@@ -1260,14 +1259,14 @@ int main(int argc, char **argv) {
 		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
 		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
 	  	     
-		  }else{ 
+		  }else{  
 		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
 		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
 		     
-		  }//if
+		  }//if  
 	       }//runMM
 
-               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDCR4j(sel, weight, suffix);
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDSR4j(sel, weight, suffix);
             }
 	  
 	  } else if (analysis=="AnaTtresQCDreal") { // to generate the real rates, >=4 jets

@@ -389,7 +389,7 @@ void AnaTtresQCD::runRealRateWQCDCR(const Event &evt, double weight, const std::
   //nB-tagged jets 
   int nTrkBtagged = 0; 
   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-       	if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk())	     
+       	if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
           	nTrkBtagged += 1;
   }
   
@@ -466,7 +466,7 @@ void AnaTtresQCD::GetRealHistograms(const Event &evt, double weight, const std::
 	//nB-tagged jets 
   	int nTrkBtagged = 0; 
   	for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-       		if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk())	     
+       		if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
           		nTrkBtagged += 1;
   
   	}//for     
@@ -678,7 +678,7 @@ void AnaTtresQCD::runFakeRateWQCDCR(const Event &evt, double weight, const std::
   
   int nTrkBtagged = 0; 
   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-       if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk())	     
+       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
           nTrkBtagged += 1;
   
   }//for 
@@ -755,7 +755,7 @@ void AnaTtresQCD::GetFakeHistograms(const Event &evt, const double weight, const
   //nB-tagged jets 
   int nTrkBtagged = 0; 
   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-       if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk())	     
+       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
           nTrkBtagged += 1;
   
   }//for     

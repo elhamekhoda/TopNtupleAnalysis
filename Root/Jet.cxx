@@ -82,6 +82,12 @@ bool Jet::btag_mv2c20_70_trk() const {
   return true;
 }
 
+bool Jet::btag_mv2c10_70_trk() const {
+  if (mv2c10() < 0.6455) return false; // June 23 2016
+  return true;
+}
+
+
 const float Jet::mv1() const {
   return m_mv1;
 }
@@ -96,6 +102,12 @@ float &Jet::mv2c20() {
   return m_mv2c20;
 }
 
+const float Jet::mv2c10() const {
+  return m_mv2c10;
+}
+float &Jet::mv2c10() {
+  return m_mv2c10;
+}
 
 const float Jet::ip3dsv1() const {
   return m_ip3dsv1;

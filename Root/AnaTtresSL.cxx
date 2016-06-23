@@ -316,7 +316,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   int nTrkBtagged = 0; //nB-tagged jets 
   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx) {
     tjetPt_vector.push_back(evt.tjet()[bidx].mom().Perp());
-    if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk()){
+    if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk()){
       if(nTrkBtagged==0)h->h1D("leadTrkbJetPt", "", suffix)->Fill(evt.tjet()[bidx].mom().Perp()*1e-3, weight);
       nTrkBtagged += 1;
     }
@@ -496,7 +496,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
          {
           TLorentzVector tmpTJet = evt.tjet()[bidx].mom();
            if(tmpAk4Jet.DeltaR(tmpTJet) < idr/100.) {
-            if(evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk())
+            if(evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())
             is_btag = true;
            } // if(tmpAk4Jet.DeltaR(tmpTJet) < idr/100.)
          } // for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
@@ -551,7 +551,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
          h->h1D("DeltaR_Leading", "", suffix)->Fill(tmpAk4Jet.DeltaR(tmpTJet));
          h->h1D("DeltaR_Inclusive", "", suffix)->Fill(tmpAk4Jet.DeltaR(tmpTJet));
          if(tmpAk4Jet.DeltaR(tmpTJet) <= 0.4){ 
-         if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk())
+         if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())
           is_btagged = true;
 	  // break;
 	 }
@@ -559,7 +559,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
          for(double idr=20.0; idr<=50.0; idr++)
           {
            if(tmpAk4Jet.DeltaR(tmpTJet) < idr/100.){
-           if (evt.tjet()[bidx].btag_mv2c20_70_trk() && evt.tjet()[bidx].pass_trk()) 
+           if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk()) 
            is_btagged_delR[int(idr)-20] = true;
           // break;
           }

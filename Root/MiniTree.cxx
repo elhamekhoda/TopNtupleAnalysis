@@ -192,7 +192,7 @@ void MiniTree::read(int event, Event &e) {
     e.tjet()[k].trueFlavour() = vi("tjet_label")->at(k);
     e.tjet()[k].mv1() = -99;
     e.tjet()[k].ip3dsv1() = -99;
-    e.tjet()[k].mv2c20() = vf("tjet_mv2c20")==0?-99:vf("tjet_mv2c20")->at(k);
+    e.tjet()[k].mv2c10() = vf("tjet_mv2c10")==0?-99:vf("tjet_mv2c10")->at(k);
     e.tjet()[k].jvt() = -99;
     e.tjet()[k].closeToLepton() = -99;
     e.tjet()[k].numConstituents() = vi("tjet_numConstituents")->at(k);
