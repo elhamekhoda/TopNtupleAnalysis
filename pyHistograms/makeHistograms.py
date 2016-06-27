@@ -30,12 +30,19 @@ def main():
 	parser.add_option("-W", "--WjetsHF",
 							 dest="WjetsHF", default="all",
 				  help="Which W+jets HF to keep. Can be all, bb, cc, c or l.", metavar="FLAVOURS")
+	parser.add_option("-P", "--pdf",
+							 dest="pdf", default="",
+				  help="Which PDFs to reweight to.", metavar="PDFS")
+	parser.add_option("-Q", "--qcd",
+							 dest="qcd", default="",
+				  help="Apply QCD weights?", metavar="BOOL")
 	 
 	(options, args) = parser.parse_args()
 	 
 	if options.fullFiles == '':
 		options.fullFiles = options.files
 
+	pdfList = options.pdf.split(',')
 	Xsec = {}
 	 
 	sumOfWeights = {} # map of DSID to sum of weights
@@ -44,12 +51,26 @@ def main():
 	
 	if not options.data:
 		t_sumWeights = TChain("sumWeights")
+		t_pdfSumWeights = TChain("PDFsumWeights")
 		addFilesInChain(t_sumWeights, options.fullFiles)
 		for k in range(0, t_sumWeights.GetEntries()):
 			t_sumWeights.GetEntry(k)
 			if not t_sumWeights.dsid in sumOfWeights:
 				sumOfWeights[t_sumWeights.dsid] = 0
 			sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
+		for k in range(0, t_pdfSumWeights.GetEntries()):
+			t_pdfSumWeights.GetEntry(k)
+			if not t_pdfSumWeights.dsid in pdfSumOfWeights:
+				pdfSumOfWeights[t_pdfSumWeights.dsid] = {}
+			for l in pdfList:
+				if l not in pdfSumOfWeights[t_pdfSumWeights.dsid]:
+					pdfSumOfWeights[t_pdfSumWeights.dsid][l] = []
+				pdfAttr = getattr(t_pdfSumWeights, l)
+				if len(pdfSumOfWeights[t_pdfSumWeights.dsid][l]) == 0:
+					pdfSumOfWeights[t_pdfSumWeights.dsid][l] = [0]*len(pdfAttr)
+				for m in range(0, len(pdfAttr)):
+					pdfSumOfWeights[t_pdfSumWeights.dsid][l][m] += pdfAttr[l][m]
+				
 	 
 	loadXsec(Xsec, "../scripts/XSection-MC15-13TeV-ttres.data")
 	loadXsec(Xsec, "../../TopDataPreparation/data/XSection-MC15-13TeV.data")
@@ -104,8 +125,14 @@ def main():
 		systematics += ',JET_NPScenario1_JET_GroupedNP_2__1down,JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_3__1down,JET_NPScenario1_JET_GroupedNP_3__1up,JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_1__1down'
 		systematics += ',MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleDown,MET_SoftTrk_ScaleUp'
 		systematics += ',MUONS_ID__1down,MUONS_ID__1up,MUONS_MS__1down,MUONS_MS__1up,MUONS_SCALE__1down,MUONS_SCALE__1up'
-		systematics += ',LARGERJET_Strong_JET_Top_Run1_Tau32__1up,LARGERJET_Strong_JET_Top_Run1_Tau32__1down,LARGERJET_Strong_JET_Rtrk_ModellingAndTracking__1up,LARGERJET_Strong_JET_Rtrk_ModellingAndTracking__1down,LARGERJET_Strong_JET_Top_CrossCalib_Tau32__1up,LARGERJET_Strong_JET_Top_CrossCalib_Tau32__1down,LARGERJET_Strong_JET_Rtrk_Baseline__1down,LARGERJET_Strong_JET_Rtrk_Baseline__1up'
+		systematics += ',LARGERJET_Strong_JET_Rtrk_Modelling_All__1up,LARGERJET_Strong_JET_Rtrk_Modelling_All__1down,LARGERJET_Strong_JET_Rtrk_Baseline_All__1down,LARGERJET_Strong_JET_Rtrk_Baseline_All__1up,LARGERJET_Strong_JET_Rtrk_Tracking_All__1down,LARGERJET_Strong_JET_Rtrk_Tracking_All__1up,LARGERJET_Strong_JET_Rtrk_TotalStat_All__1down,LARGERJET_Strong_JET_Rtrk_TotalStat_All__1up'
 		systList.extend(systematics.split(','))
+	elif options.systs == 'pdf':
+		systList.append('nominal')
+		for m in pdfList:
+			nvar = len(pdfSumOfWeights[pdfSumOfWeights.keys()[0]][m])
+			for k in range(0, nvar):
+				systList.append('pdf_%s_%d' % (m, k))
 	else:
 		systList = options.systs.split(',')
 	 
@@ -127,13 +154,18 @@ def main():
 	for k in channels:
 		analysisCode[k] = anaClass(k, histSuffixes, channels[k])
 		analysisCode[k].keep = options.WjetsHF
+		analysisCode[k].applyQcd = False
+		if options.qcd == "True":
+			analysisCode[k].applyQcd = True
 		#print k, analysisCode[k]
 	 
 	for s in systList:
 		# s is nominal, or the name of systematic
 		treeName = s # systematic name is the same as the TTree name
-		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'wbb_' in treeName or 'wcc_' in treeName or 'wc_' in treeName or 'wl_' in treeName or 'ttEWK_' in treeName:
+		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'wbb_' in treeName or 'wcc_' in treeName or 'wc_' in treeName or 'wl_' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName:
 			treeName = 'nominal'
+		if options.qcd == 'True':
+			treeName += '_Loose'
 		mt = TChain(treeName)
 		suffix = s
 		if suffix == 'nominal':
@@ -152,14 +184,29 @@ def main():
 				weight *= sel.weight_mc
 				channel = sel.mcChannelNumber
 				weight *= Xsec[channel]
-				if not channel in sumOfWeights:
-					print "Could not find DSID ",channel, " in TopDataPreparation files."
-					weight = 0
+				if not 'pdf_' in suffix:
+					if not channel in sumOfWeights:
+						print "Could not find DSID ",channel, " in sum of weights."
+						weight = 0
+					else:
+						weight /= sumOfWeights[channel]
 				else:
-					weight /= sumOfWeights[channel]
+					pdfName = suffix.split('_', 1)[1]
+					pdfNumber = int(suffix.rsplit('_', 1)[1])
+					if not channel in pdfSumOfWeights:
+						print "Could not find DSID ",channel, " in sum of weights."
+						weight = 0
+					else:
+						weight /= pdfSumOfWeights[channel][pdfName][pdfNumber]
+					
 
 			for ana in analysisCode:
 				weight_reco = analysisCode[ana].getWeight(sel, suffix)
+				if 'pdf_' in suffix:
+					pdfName = suffix.split('_', 1)[1]
+					pdfNumber = int(suffix.rsplit('_', 1)[1])
+					pdfAttr = getattr(sel, pdfName)
+					weight_reco *= pdfAttr[pdfNumber]
 				analysisCode[ana].run(sel, suffix, weight*weight_reco)
 	 
 	for k in analysisCode:

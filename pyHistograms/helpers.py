@@ -18,6 +18,22 @@ def initBinds():
 //#include "../../PMGTools/Root/PMGCorrsAndSysts.cxx"
 //#include "../../PMGTools/PMGTools/PMGCorrsAndSysts.h"
 
+#include "TopNtupleAnalysis/MMUtils.h"
+#include "Root/MMUtils.cxx"
+
+#include "TopNtupleAnalysis/Event.h"
+#include "Root/Event.cxx"
+#include "TopNtupleAnalysis/Electron.h"
+#include "Root/Electron.cxx"
+#include "TopNtupleAnalysis/Muon.h"
+#include "Root/Muon.cxx"
+#include "TopNtupleAnalysis/Jet.h"
+#include "Root/Jet.cxx"
+#include "TopNtupleAnalysis/LargeJet.h"
+#include "Root/LargeJet.cxx"
+#include "TopNtupleAnalysis/MObject.h"
+#include "Root/MObject.cxx"
+
 #include "TLorentzVector.h"
 #include <vector>
 
@@ -27,8 +43,25 @@ class WrapperExtras {
     TtresChi2 m_chi2;
     WeakCorr::WeakCorrScaleFactorParam m_ewkTool;
     //PMGCorrsAndSysts m_pmg;
+	MMUtils m_mm_b0_boosted_e;
+	MMUtils m_mm_b1_boosted_e;
+	MMUtils m_mm_b0_res_e;
+	MMUtils m_mm_b1_res_e;
+	MMUtils m_mm_b0_boosted_mu;
+	MMUtils m_mm_b1_boosted_mu;
+	MMUtils m_mm_b0_res_mu;
+	MMUtils m_mm_b1_res_mu;
 
-    WrapperExtras() : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root") { //, m_pmg() {
+    WrapperExtras() : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root"),
+	                  m_mm_b0_boosted_e("../scripts/QCDestimation/040416_WJetsCR_noBtag/eff_ttbar.root", "../scripts/QCDestimation/200416_WJetsCR_noBtag/fake.root"), 
+	                  m_mm_b1_boosted_e("../scripts/QCDestimation/040416_WJetsCR_Btag/eff_ttbar.root", "../scripts/QCDestimation/200416_WJetsCR_Btag/fake.root"), 
+	                  m_mm_b0_res_e("../scripts/QCDestimation/040416_WJetsCR_noBtag/eff_ttbar.root", "../scripts/QCDestimation/200416_WJetsCR_noBtag/fake.root"), 
+	                  m_mm_b1_res_e("../scripts/QCDestimation/040416_WJetsCR_Btag/eff_ttbar.root", "../scripts/QCDestimation/200416_WJetsCR_Btag/fake.root"), 
+	                  m_mm_b0_boosted_mu("../scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_0b/fake.root"), 
+	                  m_mm_b1_boosted_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_in1b/fake.root"), 
+	                  m_mm_b0_res_mu("../scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_0b/fake.root"), 
+	                  m_mm_b1_res_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_in1b/fake.root")
+					  {
       m_chi2.Init(TtresChi2::DATA2015_MC15);
     }
     TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
@@ -111,6 +144,41 @@ class WrapperExtras {
       }
       return sf.nominal;
     }
+    double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger) {
+	  Event e;
+	  e.met() = met;
+	  if (isElectron) {
+	    e.electron().push_back(Electron(lep));
+		e.electron()[0].setTightPP(isTight);
+	  } else {
+	    e.muon().push_back(Muon(lep));
+		e.muon()[0].sd0() = sd0;
+		e.muon()[0].setTight(isTight);
+		e.muon()[0].HLT_mu20_iloose_L1MU15() = muonTrigger;
+	  }
+	  for (int k = 0; k < jet.size(); ++k) {
+	    e.jet().push_back(Jet(jet[k]));
+	  }
+	  double w = 0;
+	  if (!btags && boosted && isElectron) {
+	    w = m_mm_b0_boosted_e.getMMweights(e, 0, isElectron, boosted);
+	  } else if (btags && boosted && isElectron) {
+	    w = m_mm_b1_boosted_e.getMMweights(e, 0, isElectron, boosted);
+	  } else if (!btags && !boosted && isElectron) {
+	    w = m_mm_b0_res_e.getMMweights(e, 0, isElectron, boosted);
+	  } else if (btags && !boosted && isElectron) {
+	    w = m_mm_b1_res_e.getMMweights(e, 0, isElectron, boosted);
+	  } else if (!btags && boosted && !isElectron) {
+	    w = m_mm_b0_boosted_mu.getMMweights(e, 0, !isElectron, boosted);
+	  } else if (btags && boosted && !isElectron) {
+	    w = m_mm_b1_boosted_mu.getMMweights(e, 0, !isElectron, boosted);
+	  } else if (!btags && !boosted && !isElectron) {
+	    w = m_mm_b0_res_mu.getMMweights(e, 0, !isElectron, boosted);
+	  } else if (btags && !boosted && !isElectron) {
+	    w = m_mm_b1_res_mu.getMMweights(e, 0, !isElectron, boosted);
+	  }
+	  return w;
+	}
     //double getWjets22Weight(int njets) {
     //  return m_pmg.Get_Sherpa22VJets_NJetCorrection(njets);
     //}

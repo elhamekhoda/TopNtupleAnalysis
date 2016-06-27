@@ -69,8 +69,10 @@ class Analysis:
 class AnaTtresSL(Analysis):
 	def __init__(self, channel, suf, outputFile):
 		Analysis.__init__(self, channel, suf, outputFile)
+		self.applyQCD = False
 		# make histograms
 		self.add("yields", 1, 0.5, 1.5)
+		self.add("yields_bveto", 1, 0.5, 1.5)
 		self.add("lepPt", 100, 25, 525)
 		self.add("lepEta", 20, -2.5, 2.5)
 		self.add("lepPhi", 32, -3.2, 3.2)
@@ -94,6 +96,8 @@ class AnaTtresSL(Analysis):
 		self.add("mwhad_res", 40, 0, 400)
 		self.add("chi2", 50, -3, 7)
 		self.addVar("mtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
+		self.addVar("mttPos", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
+		self.addVar("mttNeg", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
 		self.addVar("trueMtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
 
 		self.add("largeJet_tau32_wta", 20, 0, 1)
@@ -172,6 +176,113 @@ class AnaTtresSL(Analysis):
 			weight *= f_ca*hfweight
 		return weight
 
+	def qcdWeight(self, sel):
+		if sel.mcChannelNumber != 0:
+			return 1
+
+		nBtag = 0
+		for bidx in range(0, len(sel.tjet_mv2c10)):
+			pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
+			if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
+				if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
+					nBtag += 1
+		isBoosted = 0
+		if 'be' in self.ch or 'bmu' in self.ch:
+			isBoosted = 1
+
+		met = ROOT.TLorentzVector(sel.met_met, 0, sel.met_phi, sel.met_met)
+		l = ROOT.TLorentzVector()
+		lisTight = 0
+		lsd0 = 0
+		isElectron = 0
+		muonTrigger = 0
+		if len(sel.el_pt) == 1:
+			l.SetPtEtaPhiE(sel.el_pt[0], sel.el_eta[0], sel.el_phi[0], sel.el_e[0])
+			lisTight = int(sel.el_isTightPP[0])
+			isElectron = 1
+		elif len(sel.mu_pt) == 1:
+			l.SetPtEtaPhiE(sel.mu_pt[0], sel.mu_eta[0], sel.mu_phi[0], sel.mu_e[0])
+			lisTight = int(sel.mu_isTight[0])
+			lsd0 = sel.mu_d0sig[0]
+			muonTrigger = int(sel.mu_trigMatch_HLT_mu20_iloose_L1MU15[0] or sel.mu_trigMatch_HLT_mu50[0])
+		jets = ROOT.vector('TLorentzVector')()
+		for k in range(0, len(sel.jet_pt)):
+			jets.push_back(ROOT.TLorentzVector(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k]))
+		w = helpers.wrapperC.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger)
+		return w
+
+	def selectChannel(self, sel, w):
+		# OR all channels in the comma-separated list
+		mapSel = {'be': 'bejets_2015,bejets_2016', 'bmu': 'bmujets_2015,bmujets_2016', 're': 'rejets_2015,rejets_2016', 'rmu': 'rmujets_2015,rmujets_2016'}
+		mapSelBVeto = {'be': 'bejets_bveto_2015,bejets_bveto_2016', 'bmu': 'bmujets_bveto_2015,bmujets_bveto_2016', 're': 'rejets_bveto_2015,rejets_bveto_2016', 'rmu': 'rmujets_bveto_2015,rmujets_bveto_2016'}
+		passSel = {}
+		passSelBVeto = {}
+		for i in mapSel:
+			passSel[i] = True
+			passSelBVeto[i] = True
+			listSel = mapSel[i].split(',')
+			listSelBVeto = mapSelBVeto[i].split(',')
+
+			passAllChannels = True
+			for item in listSel:
+				passChannel = getattr(sel, item)
+				if not passChannel:
+					passAllChannels = False
+			if not passAllChannels:
+				passSel[i] = False
+
+			passAllChannels = True
+			for item in listSelBVeto:
+				passChannel = getattr(sel, item)
+				if not passChannel:
+					passAllChannels = False
+			if not passAllChannels:
+				passSelBVeto[i] = False
+
+		# only for bveto count
+		if passSelBVeto[self.ch]:
+			toVeto = False
+			# veto resolved event if it passes the boosted channel
+			if self.ch == 're' or self.ch == 'rmu':
+				if passSelBVeto['be'] or passSelBVeto['bmu']:
+					toVeto = True
+			if sel.mcChannelNumber == '410000':
+				if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+					toVeto = True
+			if not toVeto:
+				wqcd = 1
+				if self.applyQCD:
+					wqcd = self.qcdWeight(sel)
+
+				self.h["yields_bveto"][syst].Fill(1, w*wqcd)
+
+		if not passSel[self.ch]:
+			return False
+
+		# veto resolved event if it passes the boosted channel
+		if self.ch == 're' or self.ch == 'rmu':
+			#if sel.bejets or sel.bmujets or sel.bmujetsmet80:
+			if passSel['be'] or passSel['bmu']:
+				return False
+
+		# apply b-tagging cut
+		nBtag = 0
+		for bidx in range(0, len(sel.tjet_mv2c10)):
+			pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
+			if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
+				if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
+					nBtag += 1
+		if nBtag < 1:
+			return False
+
+		# veto events in nominal ttbar overlapping with the mtt sliced samples
+		# commented now as it is not available in mc15c
+		if sel.mcChannelNumber == '410000':
+			if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+				return False
+		return True
+
+
 	def run(self, sel, syst, w):
 		if sel.mcChannelNumber in helpers.listWjets22:
 			flag = sel.Wfilter_Sherpa_nT
@@ -188,56 +299,21 @@ class AnaTtresSL(Analysis):
 				if flag != 5:
 					return
 
-		# OR all channels in the comma-separated list
-		#mapSel = {'be': 'bejets', 'bmu': 'bmujets,bmujetsmet80', 're': 'rejets', 'rmu': 'rmujets,rmujetsmet80'}
-		mapSel = {'be': 'bejets', 'bmu': 'bmujets', 're': 'rejets', 'rmu': 'rmujets'}
-		listSel = mapSel[self.ch].split(',')
-
-		passAllChannels = True
-		for item in listSel:
-			passChannel = getattr(sel, item)
-			if not passChannel:
-				passAllChannels = False
-		if not passAllChannels:
+		if not self.selectChannel(sel, w):
 			return
 
-		# veto resolved event if it passes the boosted channel
-		if self.ch == 're' or self.ch == 'rmu':
-			#if sel.bejets or sel.bmujets or sel.bmujetsmet80:
-			if sel.bejets or sel.bmujets:
-				return
-
-		#if ((sel.bmujets or sel.rmujets) and not (sel.HLT_mu50 or sel.HLT_mu20_iloose_L1MU15)) or ((sel.bmujetsmet80 or sel.rmujetsmet80) and not (sel.HLT_xe80_tc_lcw_L1XE50)):
-		if ((sel.bmujets or sel.rmujets) and not (sel.HLT_mu50 or sel.HLT_mu20_iloose_L1MU15)):
-			return
-		if (sel.bejets or sel.rejets) and (sel.mcChannelNumber != 0) and not (sel.HLT_e24_lhmedium_L1EM18VH or sel.HLT_e60_lhmedium or sel.HLT_e120_lhloose):
-			return
-		if (sel.bejets or sel.rejets) and (sel.mcChannelNumber == 0) and not (sel.HLT_e24_lhmedium_L1EM20VH or sel.HLT_e60_lhmedium or sel.HLT_e120_lhloose):
-			return
-
-		# apply b-tagging cut
-		nBtag = 0
-		for bidx in range(0, len(sel.tjet_mv2c10)):
-			pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
-			if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
-				if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
-					nBtag += 1
-		if nBtag < 1:
-			return
-
-
-		# veto events in nominal ttbar overlapping with the mtt sliced samples
-		# commented now as it is not available in mc15c
-		#if sel.mcChannelNumber == '410000':
-		#	if sel.MC_ttbar_beforeFSR_m > 1.1e6:
-		#		return
+		if self.applyQCD:
+			w *= self.qcdWeight(sel)
 
 		self.h["yields"][syst].Fill(1, w)
 		l = ROOT.TLorentzVector()
+		lQ = 0
 		if len(sel.el_pt) == 1:
 			l.SetPtEtaPhiE(sel.el_pt[0], sel.el_eta[0], sel.el_phi[0], sel.el_e[0])
+			lQ = sel.el_charge[0]
 		elif len(sel.mu_pt) == 1:
 			l.SetPtEtaPhiE(sel.mu_pt[0], sel.mu_eta[0], sel.mu_phi[0], sel.mu_e[0])
+			lQ = sel.mu_charge[0]
 		self.h["lepPt"][syst].Fill(l.Perp()*1e-3, w)
 		self.h["lepEta"][syst].Fill(l.Eta(), w)
 		self.h["lepPhi"][syst].Fill(l.Phi(), w)
@@ -264,7 +340,7 @@ class AnaTtresSL(Analysis):
 		##TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
 		##double getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
 		nu = helpers.wrapperC.getNu(l, sel.met_met, sel.met_phi)
-		if sel.bmujets or sel.bejets:
+		if self.ch == 'be' or self.ch == 'bmu':
 			goodJetIdx = -1
 			closeJetIdx = -1
 			for i in range(0, len(sel.jet_pt)):
@@ -293,8 +369,12 @@ class AnaTtresSL(Analysis):
 			self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx], w)
 			self.h["mtlep_boo"][syst].Fill((closeJet+nu+l).M()*1e-3, w)
 			self.h["mtt"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
+			if lQ > 0:
+				self.h["mttPos"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
+			elif lQ < 0:
+				self.h["mttNeg"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
 			self.h["largeJetPtMtt"][syst].Fill(lj.Perp()/(closeJet+nu+l+lj).M(), w)
-		elif sel.rejets or sel.rmujets:
+		elif self.ch == 're' or self.ch == 'rmu':
 			jets = ROOT.vector('TLorentzVector')()
 			#jets = []
 			btag = ROOT.vector('bool')()
@@ -314,6 +394,10 @@ class AnaTtresSL(Analysis):
 			mth = res_info["mth"]
 			mwh = res_info["mwh"]
 			self.h["mtt"][syst].Fill(mtt*1e-3, w)
+			if lQ > 0:
+				self.h["mttPos"][syst].Fill(mtt*1e-3, w)
+			elif lQ < 0:
+				self.h["mttNeg"][syst].Fill(mtt*1e-3, w)
 			self.h["mtlep_res"][syst].Fill(mtl*1e-3, w)
 			self.h["mthad_res"][syst].Fill(mth*1e-3, w)
 			self.h["mwhad_res"][syst].Fill(mwh*1e-3, w)
