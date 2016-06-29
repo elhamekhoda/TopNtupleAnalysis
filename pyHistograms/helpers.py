@@ -1,11 +1,13 @@
 
 import ROOT
 from array import array
+import math
 
 
 
 def initBinds():
     bind_neutrino = '''
+
 #include "TopNtupleAnalysis/TtresNeutrinoBuilder.h"
 #include "TopNtupleAnalysis/TtresChi2.h"
 
@@ -14,9 +16,6 @@ def initBinds():
 
 #include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
 #include "Root/WeakCorrScaleFactorParam.cxx"
-
-//#include "../../PMGTools/Root/PMGCorrsAndSysts.cxx"
-//#include "../../PMGTools/PMGTools/PMGCorrsAndSysts.h"
 
 #include "TopNtupleAnalysis/MMUtils.h"
 #include "Root/MMUtils.cxx"
@@ -34,8 +33,14 @@ def initBinds():
 #include "TopNtupleAnalysis/MObject.h"
 #include "Root/MObject.cxx"
 
+#include "xAODBTaggingEfficiency/BTaggingEfficiencyTool.h"
+#include "CalibrationDataInterface/CalibrationDataVariables.h"
+#include "CalibrationDataInterface/CalibrationDataInterfaceROOT.h"
+#include "PATInterfaces/SystematicRegistry.h"
+
 #include "TLorentzVector.h"
 #include <vector>
+#include <cstdlib>
 
 class WrapperExtras {
   public:
@@ -52,6 +57,8 @@ class WrapperExtras {
 	MMUtils m_mm_b0_res_mu;
 	MMUtils m_mm_b1_res_mu;
 
+	BTaggingEfficiencyTool m_btageff;
+
     WrapperExtras() : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root"),
 	                  m_mm_b0_boosted_e("../scripts/QCDestimation/040416_WJetsCR_noBtag/eff_ttbar.root", "../scripts/QCDestimation/200416_WJetsCR_noBtag/fake.root"), 
 	                  m_mm_b1_boosted_e("../scripts/QCDestimation/040416_WJetsCR_Btag/eff_ttbar.root", "../scripts/QCDestimation/200416_WJetsCR_Btag/fake.root"), 
@@ -60,17 +67,37 @@ class WrapperExtras {
 	                  m_mm_b0_boosted_mu("../scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_0b/fake.root"), 
 	                  m_mm_b1_boosted_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_in1b/fake.root"), 
 	                  m_mm_b0_res_mu("../scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_0b/fake.root"), 
-	                  m_mm_b1_res_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_in1b/fake.root")
+	                  m_mm_b1_res_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_in1b/fake.root"),
+					  m_btageff("BTaggingEfficiencyTool")
 					  {
       m_chi2.Init(TtresChi2::DATA2015_MC15);
+	  if (!m_btageff.setProperty("TaggerName", "MV2c10")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("OperatingPoint", "FixedCutBEff_70")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("JetAuthor", "AntiKt2PV0TrackJets")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("EfficiencyFileName", "../share/2016-20_7-13TeV-MC15-CDI-June27_v1.root")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("ScaleFactorFileName", "../share/2016-20_7-13TeV-MC15-CDI-June27_v1.root")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("ScaleFactorBCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("ScaleFactorCCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("ScaleFactorTCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("ScaleFactorLightCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("ExcludeFromEigenVectorTreatment", "")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("EfficiencyBCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("EfficiencyCCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("EfficiencyTCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.setProperty("EfficiencyLightCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
+	  if (!m_btageff.initialize()) std::cout << "Failed to initialize b-tagging eff." << std::endl;
+      CP::SystematicSet s = m_btageff.affectingSystematics();
+	  //for (CP::SystematicSet::const_iterator it = s.begin(); it != s.end(); it++) {
+	  //  std::cout << "Syst. " << it->name() << std::endl;
+	  //}
     }
     TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
       std::vector<TLorentzVector *> vec_nu = m_neutrinoBuilder.candidatesFromWMass_Rotation(&l, met, met_phi, true);
       TLorentzVector nu;
       if (vec_nu.size() > 0) {
         nu = *(vec_nu[0]);
-	for (size_t z = 0; z < vec_nu.size(); ++z) delete vec_nu[z];
-	vec_nu.clear();
+		for (size_t z = 0; z < vec_nu.size(); ++z) delete vec_nu[z];
+		vec_nu.clear();
       }
       return nu;
     }
@@ -123,6 +150,7 @@ class WrapperExtras {
       ret["mtl"] = mtl;
       ret["mth"] = mth;
       ret["mwh"] = mwh;
+      ret["chi2"] = chi2Value;
       return ret;
     }
     double getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var = 0) {
@@ -143,6 +171,47 @@ class WrapperExtras {
         return sf.down;
       }
       return sf.nominal;
+    }
+    float getBtaggingSF(std::vector<TLorentzVector> jet, std::vector<int> flavour, std::vector<float> mv2c10, std::vector<bool> vetoSyst, std::string syst = "") {
+      m_btageff.setMapIndex("B", 0);
+      m_btageff.setMapIndex("C", 0);
+      m_btageff.setMapIndex("T", 0);
+      m_btageff.setMapIndex("Light", 0);
+
+      float btagsf = 1.0;
+      for (int k = 0; k < jet.size(); ++k) {
+	    float sf = 1;
+		Analysis::CalibrationDataVariables v;
+        v.jetPt = jet[k].Perp();
+		v.jetEta = jet[k].Eta();
+		v.jetTagWeight = mv2c10[k];
+		v.jetAuthor = "AntiKt2PV0TrackJets";
+		if (vetoSyst[k]) {
+	      if (!m_btageff.applySystematicVariation(CP::SystematicSet())) {
+	        std::cout << "Could not apply the sys variation " << "" << std::endl;
+	  	    exit(-1);
+	      }
+		} else {
+	      if (!m_btageff.applySystematicVariation(CP::SystematicSet(syst))) {
+	        std::cout << "Could not apply the sys variation " << syst << std::endl;
+	  	    exit(-1);
+	      }
+		}
+		
+        if (mv2c10[k] > 0.6455) {
+		  if (!m_btageff.getScaleFactor(flavour[k], v, sf)) {
+	        std::cout << "Could not get btag SF for " << syst << ", jet pt, eta, weight = " << v.jetPt << ", " << v.jetEta << ", " << v.jetTagWeight << std::endl;
+		    exit(-1);
+		  }
+		} else {
+		  if (!m_btageff.getInefficiencyScaleFactor(flavour[k], v, sf)) {
+	        std::cout << "Could not get btag ineff. SF for " << syst << ", jet pt, eta, weight = " << v.jetPt << ", " << v.jetEta << ", " << v.jetTagWeight << std::endl;
+		    exit(-1);
+		  }
+		}
+		btagsf *= sf;
+	  }
+	  return btagsf;
     }
     double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger) {
 	  Event e;
@@ -179,18 +248,15 @@ class WrapperExtras {
 	  }
 	  return w;
 	}
-    //double getWjets22Weight(int njets) {
-    //  return m_pmg.Get_Sherpa22VJets_NJetCorrection(njets);
-    //}
 };
 '''
-    # hack to get the proper paths
-    import os.path
-    import os
-    if not (os.path.isfile('TopNtupleAnalysis') or os.path.islink('TopNtupleAnalysis')):
-        os.system('ln -s ../TopNtupleAnalysis .')
-    if not (os.path.isfile('Root') or os.path.islink('Root')):
-        os.system('ln -s ../Root .')
+    ROOT.gInterpreter.ProcessLine("gSystem->AddIncludePath(\" -I../../RootCoreBin/include \") ")
+    ROOT.gInterpreter.ProcessLine("gSystem->AddIncludePath(\" -I../ \") ")
+    ROOT.gInterpreter.ProcessLine(".include ../../RootCoreBin/include ")
+    ROOT.gInterpreter.ProcessLine(".include .. ")
+    ROOT.gInterpreter.ProcessLine("gROOT->LoadMacro(\"/cvmfs/atlas.cern.ch/repo/sw/ASG/AnalysisTop/2.4.12/RootCore/scripts/load_packages.C\")")
+    ROOT.gInterpreter.ProcessLine("load_packages()");
+    ROOT.gInterpreter.ProcessLine("std::cout << 123 << std::endl;");
     ROOT.gInterpreter.ProcessLine(bind_neutrino)
     return ROOT.WrapperExtras()
 
@@ -231,6 +297,56 @@ MV2C10_CUT = 0.6455
 # [X] is the number of the pt bin if we want to vary only jets within a pt bin
 # if there is no 'btag' in the name of the variation, then the nominal SF is used
 def applyBtagSF(sel, s):
+    if sel.mcChannelNumber == 0:
+        return 1
+    ptbinInS = -1
+    if 'btag' in s and 'pt' in s:
+       ptbinInS = int(s.split('pt')[1][0])
+
+    jetList = ROOT.vector('TLorentzVector')()
+    jetFlavour = ROOT.vector('int')()
+    jetWeight = ROOT.vector('float')()
+    vetoSyst = ROOT.vector('bool')()
+    for k in range(0, len(sel.tjet_pt)):
+        jetList.push_back(ROOT.TLorentzVector(sel.tjet_pt[k], sel.tjet_eta[k], sel.tjet_phi[k], sel.tjet_e[k]))
+        jetFlavour.push_back(int(sel.tjet_label[k]))
+        jetWeight.push_back(float(sel.tjet_mv2c10[k]))
+        ptbin = -1
+        if ptbinInS >= 0:
+            if jetList[k].Perp() < 50e3:
+                ptbin = 1
+            elif jetList[k].Perp() < 100e3:
+                ptbin = 2
+            else:
+                ptbin = 3
+        if ptbinInS == ptbin:
+            # if this jet is in the correct pt bin, apply the syst. variation
+            vetoSyst.push_back(False)
+        else:
+            # otherwise, take the nominal SF for this jet
+            # even if we are supposed to vary it for any other criteria
+            vetoSyst.push_back(True)
+    syst = ""
+    if 'down' in s:
+       direction = 'down'
+    else:
+       direction = 'up'
+    eig = -1
+    if 'btagbSF_' in s:
+        eig = int(s.split('_')[1])
+        syst = "FT_EFF_Eigen_B_%d__1%s" % (eig, direction)
+    elif 'btagcSF_' in s:
+        eig = int(s.split('_')[1])
+        syst = "FT_EFF_Eigen_C_%d__1%s" % (eig, direction)
+    elif 'btaglSF_' in s:
+        eig = int(s.split('_')[1])
+        syst = "FT_EFF_Eigen_Light_%d__1%s" % (eig, direction)
+    elif 'btageSF_0' in s:
+        syst = "FT_EFF_Eigen_extrapolation__1%s" % (direction)
+    elif 'btageSF_1' in s:
+        syst = "FT_EFF_Eigen_extrapolation from charm__1%s" % (direction)
+    return wrapperC.getBtaggingSF(jetList, jetFlavour, jetWeight, vetoSyst, syst)
+    return sel.weight_bTagSF_70
     pref = 'tjet_bTagSF_70'
     varName = ''
     nomName = pref
@@ -304,6 +420,8 @@ def readEvent(mt):
 
 listEWK = [410000, 301528, 301529, 301530, 301531, 301532]
 def applyEWK(sel, s):
+    if sel.mcChannelNumber == 0:
+        return 1
     top = ROOT.TLorentzVector()
     top.SetPtEtaPhiM(sel.MC_t_pt, sel.MC_t_eta, sel.MC_t_phi, sel.MC_t_m)
     topbar = ROOT.TLorentzVector()

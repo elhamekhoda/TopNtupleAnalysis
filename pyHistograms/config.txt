@@ -7,7 +7,7 @@ sample    5wljets       wljets                               "W+l+jets"         
 sample    6singletop    singletop                            "single top"          "single top"         62
 sample    7zjets        zjets                                "Z+jets"              "$Z$+jets"           95
 sample    8vv           vv                                   "diboson"             "diboson"            5
-syst_flat lumi          "luminosity"                         "tt,wbbjets,wccjets,wcjets,wljets,singletop,zjets,vv"                 0.021                     -0.021
+syst_flat lumi          "luminosity"                         "tt,singletop,zjets,vv"                 0.021                     -0.021
 syst      etrig      "electron trigger"               eTrigSF__1up                               eTrigSF__1down                                       N
 syst      erec       "electron reconstruction"        eRecoSF__1up                               eRecoSF__1down                                       N
 syst      eid        "electron ID"                    eIDSF__1up                                 eIDSF__1down                                         N
@@ -39,10 +39,10 @@ syst      metscale   "MET scale"                      MET_SoftTrk_ScaleUp       
 syst      muresms    "muon res. (MS)"                 MUONS_MS__1up                              MUONS_MS__1down                                      S
 syst      muresid    "muon res. (ID)"                 MUONS_ID__1up                              MUONS_ID__1down                                      S
 syst      muscale    "muon scale"                     MUONS_SCALE__1up                           MUONS_SCALE__1down                                   S
-syst      akt10run1tau32 "anti-$k_t$ R=1.0 run 1 $\\tau_{32}$" LARGERJET_Strong_JET_Top_Run1_Tau32__1up LARGERJET_Strong_JET_Top_Run1_Tau32__1down    S
-syst      akt10xcalib "anti-$k_t$ R=1.0 cross calibration" LARGERJET_Strong_JET_Top_CrossCalib_Tau32__1up LARGERJET_Strong_JET_Top_CrossCalib_Tau32__1down   S
-syst      akt10rtrkbl "anti-$k_t$ R=1.0 $r_{trk}$ bl." LARGERJET_Strong_JET_Rtrk_Baseline__1up   LARGERJET_Strong_JET_Rtrk_Baseline__1down            S
-syst      akt10rtrk  "anti-$k_t$ R=1.0 $r_{trk}$"     LARGERJET_Strong_JET_Rtrk_ModellingAndTracking__1up LARGERJET_Strong_JET_Rtrk_ModellingAndTracking__1down S
+syst      akt10model "anti-$k_t$ R=1.0 $r_{trk}$ modelling" LARGERJET_Strong_JET_Rtrk_Modelling_All__1up LARGERJET_Strong_JET_Rtrk_Modelling_All__1down    S
+syst      akt10baseline "anti-$k_t$ R=1.0 $r_{trk}$ baseline" LARGERJET_Strong_JET_Rtrk_Baseline_All__1up LARGERJET_Strong_JET_Rtrk_Baseline_All__1down    S
+syst      akt10track "anti-$k_t$ R=1.0 $r_{trk}$ tracking" LARGERJET_Strong_JET_Rtrk_Tracking_All__1up LARGERJET_Strong_JET_Rtrk_Tracking_All__1down    S
+syst      akt10stat "anti-$k_t$ R=1.0 $r_{trk}$ total stat." LARGERJET_Strong_JET_Rtrk_TotalStat_All__1up LARGERJET_Strong_JET_Rtrk_TotalStat_All__1down    S
 #syst      btagb0     "b-tagging eff. (E0)"            btagbSF_0__1up                             btagbSF_0__1down                                     S
 #syst      btagb1     "b-tagging eff. (E1)"            btagbSF_1__1up                             btagbSF_1__1down                                     S
 #syst      btagb2     "b-tagging eff. (E2)"            btagbSF_2__1up                             btagbSF_2__1down                                     S

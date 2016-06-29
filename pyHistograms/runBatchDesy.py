@@ -10,7 +10,7 @@ def main():
 	theScope = 'user.dferreir'
 	
 	# output directory
-	outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
+	outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
 
 	# number of files per job
 	nFilesPerJob = 80
@@ -24,7 +24,7 @@ def main():
 
 	# queue to submit to
 	#queue = '1nd'
-	queue = 'short.q'
+	queue = 'default.q'
 
 	# the default is AnaTtresSL, which produces many control pltos for tt res.
 	# The Mtt version produces a TTree to do the limit setting
@@ -35,8 +35,8 @@ def main():
 	analysisType='AnaTtresSL'
 	
 	# leave it for nominal to run only the nominal
-	#systematics = 'nominal'
-	systematics = 'all'
+	systematics = 'nominal'
+	#systematics = 'all'
 	
 	# 25 ns datasets
 	names   = []
@@ -51,6 +51,31 @@ def main():
 	names  += ['singletop']
 	names  += ['vv']
 
+	names  += ["data"]
+
+	#names  += ['zprime400']
+	#names  += ['zprime500']
+	#names  += ['zprime750']
+	#names  += ['zprime1000']
+	#names  += ['zprime1250']
+	#names  += ['zprime1500']
+	#names  += ['zprime1750']
+	#names  += ['zprime2000']
+	#names  += ['zprime2250']
+	#names  += ['zprime2500']
+	#names  += ['zprime2750']
+	#names  += ['zprime3000']
+	#names  += ['zprime4000']
+	#names  += ['zprime5000']
+
+	#names = []
+	#names  += ['kkgrav400']
+	#names  += ['kkgrav500']
+	#names  += ['kkgrav750']
+	#names  += ['kkgrav1000']
+	#names  += ['kkgrav2000']
+	#names  += ['kkgrav3000']
+
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -58,9 +83,30 @@ def main():
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
 					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
+					'zprime400': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime400',
+					'zprime500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime500',
+					'zprime750': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime750',
+					'zprime1000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1000',
+					'zprime1250': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1250',
+					'zprime1500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1500',
+					'zprime1750': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1750',
+					'zprime2000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2000',
+					'zprime2250': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2250',
+					'zprime2500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2500',
+					'zprime2750': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2750',
+					'zprime3000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime3000',
+					'zprime4000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime4000',
+					'zprime5000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime5000',
+					'kkgrav400': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt400',
+					'kkgrav500': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt500',
+					'kkgrav750': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt750',
+					'kkgrav1000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt1000',
+					'kkgrav2000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt2000',
+					'kkgrav3000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt3000',
 		   }
 	
 	import TopExamples.grid
@@ -180,6 +226,8 @@ def main():
 			fr.write('#$ -j y\n')
 			fr.write('#$ -l cvmfs\n')
 			fr.write('#$ -l distro=sld6\n')
+			fr.write('#$ -l arch=amd64\n')
+			fr.write('#$ -l h_vmem=2G\n')
 			fr.write('#$ -o '+logfile+'\n')
 			fr.write('#$ -q '+queue+'\n')
 			fr.write('#$ -m '+'eas'+'\n')
@@ -198,13 +246,13 @@ def main():
 			fr.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
 			fr.write('lsetup rcsetup\n')
 			fr.write('cd TopNtupleAnalysis/pyHistograms\n')
-			out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root'
+			out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root,be2015:'+outputDir+'/be2015_'+jobName+'.root,bmu2015:'+outputDir+'/bmu2015_'+jobName+'.root,re2015:'+outputDir+'/re2015_'+jobName+'.root,rmu2015:'+outputDir+'/rmu2015_'+jobName+'.root,be2016:'+outputDir+'/be2016_'+jobName+'.root,bmu2016:'+outputDir+'/bmu2016_'+jobName+'.root,re2016:'+outputDir+'/re2016_'+jobName+'.root,rmu2016:'+outputDir+'/rmu2016_'+jobName+'.root'
 			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
 			fr.close()
 			os.system('chmod a+x '+runfile)
 			subcmd = 'qsub '+runfile
 			os.system(subcmd)
-			sys.exit(0)
+			#sys.exit(0)
 	
 if __name__ == '__main__':
 	main()

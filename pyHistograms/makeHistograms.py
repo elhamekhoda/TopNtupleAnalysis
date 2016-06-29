@@ -157,7 +157,7 @@ def main():
 		analysisCode[k].applyQcd = False
 		if options.qcd == "True":
 			analysisCode[k].applyQcd = True
-		#print k, analysisCode[k]
+		print k, analysisCode[k], channels[k]
 	 
 	for s in systList:
 		# s is nominal, or the name of systematic
@@ -207,7 +207,7 @@ def main():
 					pdfNumber = int(suffix.rsplit('_', 1)[1])
 					pdfAttr = getattr(sel, pdfName)
 					weight_reco *= pdfAttr[pdfNumber]
-				analysisCode[ana].run(sel, suffix, weight*weight_reco)
+				analysisCode[ana].run(sel, suffix, weight*weight_reco, weight)
 	 
 	for k in analysisCode:
 		analysisCode[k].end()

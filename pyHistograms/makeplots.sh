@@ -1,5 +1,5 @@
 
-LUMI=1.79617
+LUMI=5.80751
 
 for ch in be bmu re rmu ; do
     ../../plotting/plot -c $ch -h yields -l $LUMI -C config.txt >yields_${ch}.txt
@@ -25,3 +25,4 @@ for ch in be bmu re rmu ; do
     ../../plotting/plot -c $ch -h largeJet_tau21_wta -l $LUMI  --yTitle "Events / 0.05" --xTitle "Large-R jet #tau_{21} wta" --stamp 0 -C config.txt
     ../../plotting/plot -c $ch -h mtt -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events" --stamp 0 -C config.txt
 done
+
