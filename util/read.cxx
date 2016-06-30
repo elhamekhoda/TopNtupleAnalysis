@@ -138,6 +138,8 @@ int main(int argc, char **argv) {
   int applyWSF = 0;
   int applyEWK = 1;
   std::string only = "";
+  int opt_dsid(-1);
+  float opt_dsidSoW(0);
 
   static struct extendedOption extOpt[] = {
         {"help",                  no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -160,6 +162,8 @@ int main(int argc, char **argv) {
         {"applyWSF",              required_argument,     0, 'W', "Apply W SF.", &applyWSF, extendedOption::eOTInt},
         {"applyEWK",              required_argument,     0, 'E', "Apply electroweak correction.", &applyEWK, extendedOption::eOTInt},
         {"onlyChannel",           required_argument,     0, 'O', "Run code only for comma-separated channels.", &only, extendedOption::eOTString},
+        {"dsid",                  required_argument,     0, 'D', "dsid", &opt_dsid, extendedOption::eOTInt},
+        {"dsidsumOfWeight",       required_argument,     0, 'Z', "dsid 's Sum of Weight (when one needs to split jobs for 1 DSID)", &opt_dsidSoW, extendedOption::eOTFloat},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -307,13 +311,10 @@ int main(int argc, char **argv) {
   MMUtils * MM_0b_rmu     = NULL;
   MMUtils * MM_1b_re      = NULL;
   MMUtils * MM_1b_rmu     = NULL;
-
-  MMUtils * MM_be      = NULL;
-  MMUtils * MM_bmu     = NULL;  
     
   if (runMM){ // >= 2 jets
-	MM_0b_re      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_noBtag/eff_ttbar.root", "scripts/QCDestimation/200416_WJetsCR_noBtag/fake.root");
-	MM_1b_re      = new MMUtils("scripts/QCDestimation/040416_WJetsCR_Btag/eff_ttbar.root",   "scripts/QCDestimation/200416_WJetsCR_Btag/fake.root");
+	MM_0b_re      = new MMUtils("scripts/QCDestimation/290616_realRates_re_0b/eff_ttbar.root",     "scripts/QCDestimation/300616_fakeRates_re_0b/fake.root");
+	MM_1b_re      = new MMUtils("scripts/QCDestimation/290616_realRates_re_in1b/eff_ttbar.root",   "scripts/QCDestimation/300616_fakeRates_re_in1b/fake.root");
 
 	MM_0b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root",   "scripts/QCDestimation/250616_fakeRates_rmu_0b/fake.root");
 	MM_1b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "scripts/QCDestimation/250616_fakeRates_rmu_in1b/fake.root");
@@ -358,6 +359,12 @@ int main(int argc, char **argv) {
       if (sumOfWeights.find(dsid) == sumOfWeights.end()) sumOfWeights[dsid] = 0;
         sumOfWeights[dsid] += value;
     }
+    if(opt_dsid>0 && opt_dsid==dsid){
+       cout << "For DSID= " << opt_dsid << " : Overwriting sumOfWeights=" << sumOfWeights[dsid] << " by " << opt_dsidSoW << endl;
+       sumOfWeights[dsid]=opt_dsidSoW;
+    }
+    cout << "sumOfWeights[ "<< dsid <<" ] = " << sumOfWeights[dsid] << endl;
+    
     for (int k = 0; k < t_PDFsumWeights.GetEntries(); ++k) {
       t_PDFsumWeights.GetEntry(k);
       if (PDFsumOfWeights.find(dsid) == PDFsumOfWeights.end()) PDFsumOfWeights[dsid] = std::map<std::string, std::vector<float> >();
@@ -581,7 +588,7 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresSL(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
-  } else if(analysis == "AnaTtresSL_QCDVR2j" ||analysis == "AnaTtresSL_QCDCR2j" || analysis == "AnaTtresSL_QCDCR4j" || analysis == "AnaTtresSL_QCDSR2j" || analysis == "AnaTtresSL_QCDSR4j"){
+  } else if(analysis == "AnaTtresSL_QCDVR2j" ||analysis == "AnaTtresSL_QCDCR2j" || analysis == "AnaTtresSL_QCDSR2j" || analysis == "AnaTtresSL_QCDCR4j" || analysis == "AnaTtresSL_QCDVR4j"){
     vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal)); // resolved electron
     vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
@@ -1227,7 +1234,7 @@ int main(int argc, char **argv) {
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2j(sel, weight, suffix);
             }
 	 
-	 } else if (analysis=="AnaTtresSL_QCDSR2j") { // W+jets enriched control region, >=2 jets
+	  } else if (analysis=="AnaTtresSL_QCDSR2j") { // W+jets enriched control region, >=2 jets
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
 	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
@@ -1248,7 +1255,7 @@ int main(int argc, char **argv) {
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDSR2j(sel, weight, suffix);
             }
 
-	  } else if (analysis=="AnaTtresSL_QCDSR4j") { // resolved control region, >=4 jets
+	  } else if (analysis=="AnaTtresSL_QCDCR4j") { // resolved control region, >=4 jets
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
 	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
@@ -1266,8 +1273,29 @@ int main(int argc, char **argv) {
 		  }//if  
 	       }//runMM
 
-               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDSR4j(sel, weight, suffix);
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDCR4j(sel, weight, suffix);
             }
+
+ 	  } else if (analysis=="AnaTtresSL_QCDVR4j") { // QCD vvalidation region, >=4 jets; 3< |d_0Sig| < 5
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
+	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
+	        
+	        if (runMM) {
+                   
+		   if(nBtagged==0){
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+	  	     
+		  }else{  
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     
+		  }//if  
+	       }//runMM
+
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR4j(sel, weight, suffix);
+            }	 
 	  
 	  } else if (analysis=="AnaTtresQCDreal") { // to generate the real rates, >=4 jets
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 

@@ -28,33 +28,26 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     
     TFile m_eff_rootfile(eff_filename.c_str(), "r");
     
-    eff_map_resolved_e = (TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_e");
+    eff_map_resolved_e = 	(TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_e");
     if(eff_map_resolved_e)	eff_map_resolved_e->SetDirectory(0);
     
-    eff_map_resolved_mu = 		(TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_mu");
-    if(eff_map_resolved_mu)		eff_map_resolved_mu->SetDirectory(0);
-       
-    eff_map_resolved_mu_lDR = 		(TH2F*) m_eff_rootfile.Get("eff_mwt_met_map_lowDR_resolved_mu");
-    if(eff_map_resolved_mu_lDR)		eff_map_resolved_mu_lDR->SetDirectory(0);
-    
-    eff_map_resolved_mu_mDR = 		(TH2F*) m_eff_rootfile.Get("eff_mwt_met_map_medDR_resolved_mu");
-    if(eff_map_resolved_mu_mDR)		eff_map_resolved_mu_mDR->SetDirectory(0);
-    
-    eff_map_resolved_mu_hDR = 		(TH2F*) m_eff_rootfile.Get("eff_mwt_met_map_highDR_resolved_mu");
-    if(eff_map_resolved_mu_hDR)		eff_map_resolved_mu_hDR->SetDirectory(0);
-   
-    eff_map_boosted_e = (TH2F*) m_eff_rootfile.Get("eff_pTdr_boosted_e");
+    eff_map_resolved_mu = 	(TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_mu");
+    if(eff_map_resolved_mu)	eff_map_resolved_mu->SetDirectory(0);
+          
+    eff_map_boosted_e = 	(TH2F*) m_eff_rootfile.Get("eff_pTdr_boosted_e");
     if(eff_map_boosted_e)	eff_map_boosted_e->SetDirectory(0);
     
-    eff_map_boosted_mu = (TH2F*) m_eff_rootfile.Get("eff_pTdr_boosted_mu");    
+    eff_map_boosted_mu = 	(TH2F*) m_eff_rootfile.Get("eff_pTdr_boosted_mu");    
     if(eff_map_boosted_mu)	eff_map_boosted_mu->SetDirectory(0);
       
     TFile m_fake_rootfile(fake_filename.c_str(), "r");
-            
-    fake_map_resolved_e_lEta = 		(TH2F*)m_fake_rootfile.Get("2Dfake_leptPt_cosDPhi_lowEta_resolved_e");
-    fake_map_resolved_e_hEta = 		(TH2F*)m_fake_rootfile.Get("2Dfake_leptPt_cosDPhi_highEta_resolved_e");
-    if(fake_map_resolved_e_lEta)	fake_map_resolved_e_lEta->SetDirectory(0);
-    if(fake_map_resolved_e_hEta)	fake_map_resolved_e_hEta->SetDirectory(0);
+            	
+    fake_map_resolved_e_lDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_cosDPhi_lowDR_resolved_e");
+    if(fake_map_resolved_e_lDR)  fake_map_resolved_e_lDR->SetDirectory(0);
+    fake_map_resolved_e_mDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_cosDPhi_medDR_resolved_e");
+    if(fake_map_resolved_e_mDR)  fake_map_resolved_e_mDR->SetDirectory(0);
+    fake_map_resolved_e_hDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_cosDPhi_highDR_resolved_e");
+    if(fake_map_resolved_e_hDR)  fake_map_resolved_e_hDR->SetDirectory(0);
 
     fake_map_resolved_mu_lDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_lowDR_resolved_mu");
     if(fake_map_resolved_mu_lDR)  fake_map_resolved_mu_lDR->SetDirectory(0);
@@ -77,14 +70,12 @@ MMUtils::~MMUtils(){
   
   delete eff_map_resolved_e  ;
   delete eff_map_resolved_mu  ;
-  delete eff_map_resolved_mu_lDR;
-  delete eff_map_resolved_mu_mDR;
-  delete eff_map_resolved_mu_hDR;
   delete eff_map_boosted_e ;
   delete eff_map_boosted_mu ;
   
-  delete fake_map_resolved_e_lEta;
-  delete fake_map_resolved_e_hEta;
+  delete fake_map_resolved_e_lDR;
+  delete fake_map_resolved_e_mDR;
+  delete fake_map_resolved_e_hDR;
   delete fake_map_resolved_mu_lDR;
   delete fake_map_resolved_mu_mDR;
   delete fake_map_resolved_mu_hDR;
@@ -156,59 +147,6 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
     
     float mwt_min(0);
     float mwt_limit(95);
-/*
-    if(closejl_DR > 0.6){
-
-      mwt_limit = 195;
-      mwt_min = std::min(mwt, mwt_limit);
-            
-      get2Drates(realRate, realRate_err, eff_map_resolved_mu_hDR,  met, mwt_min); 
-      
-      if(met<50)	mwt_limit = 95;
-      else 		mwt_limit = 195;
-      
-      mwt_min = std::min(mwt, mwt_limit);
-      met_min = std::min(met, met_limit);
-      
-      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_hDR, met_min, mwt_min);
-      
-      if (fakeRate<0) fakeRate=0;
-      
-    }else if(closejl_DR > 0.4){
-
-      mwt_limit = 195;
-      mwt_min = std::min(mwt, mwt_limit);
-      
-      get2Drates(realRate, realRate_err, eff_map_resolved_mu_mDR,  met, mwt_min); 
-      
-      mwt_limit = 95;
-      
-      mwt_min = std::min(mwt, mwt_limit);
-      met_min = std::min(met, met_limit);
-      
-      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_mDR, met_min, mwt_min);
-      
-      if (fakeRate<0) fakeRate=0;
-            
-    }else{
-    
-      mwt_limit = 195;    
-      mwt_min = std::min(mwt, mwt_limit);
-      
-      get2Drates(realRate, realRate_err, eff_map_resolved_mu_lDR,  met, mwt_min);
-      
-      if(met<40)	mwt_limit = 95;
-      else 		mwt_limit = 195;
-    
-      mwt_min = std::min(mwt, mwt_limit);
-      met_min = std::min(met, met_limit);
-      
-      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_lDR, met_min, mwt_min);
- 
-      if (fakeRate<0) fakeRate=0;
-            
-    }//if 
-*/
     
     get2Drates(realRate, realRate_err, eff_map_resolved_mu, lepPt, closejl_DR); 
 
@@ -249,9 +187,6 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
             
     }//if
 
-
-
-
     return;
         
 }
@@ -260,11 +195,26 @@ void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fa
 
     get2Drates(realRate, realRate_err, eff_map_resolved_e, lepPt, closejl_DR);
     
-    if(absEta<1.6)
-    	get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_lEta, lepPt, cosDPhi);
-    else
-        get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_hEta, lepPt, cosDPhi);
-	
+    if(closejl_DR > 2.6){
+            
+      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_hDR, lepPt, cosDPhi);
+      
+      if (fakeRate<0) fakeRate=0;
+      
+    }else if(closejl_DR > 1.0){
+      
+      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_mDR, lepPt, cosDPhi);
+      
+      if (fakeRate<0) fakeRate=0;
+            
+    }else{
+          
+      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_lDR, lepPt, cosDPhi);
+ 
+      if (fakeRate<0) fakeRate=0;
+            
+    }//if	
+
     return;
 }
 

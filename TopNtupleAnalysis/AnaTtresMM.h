@@ -27,7 +27,7 @@ class AnaTtresMM : public Analysis {
     virtual void runMatrixMethod_QCDVR2j(const Event &e, double weight, const std::string &suffix);
     virtual void runMatrixMethod_QCDCR2j(const Event &e, double weight, const std::string &suffix);
     virtual void runMatrixMethod_QCDSR2j(const Event &e, double weight, const std::string &suffix);
-    virtual void runMatrixMethod_QCDSR4j(const Event &e, double weight, const std::string &suffix);
+    virtual void runMatrixMethod_QCDVR4j(const Event &e, double weight, const std::string &suffix);
     virtual void runMatrixMethod_QCDCR4j(const Event &e, double weight, const std::string &suffix);
     virtual void GetHistograms(const Event &evt, const double weight,const std::string &prefix, const std::string &suffix);
     virtual void IniHistograms(std::string &suffix);

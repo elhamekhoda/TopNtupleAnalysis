@@ -39,46 +39,18 @@ class MMUtils{
     TH2F * eff_map_resolved_mu;
     TH2F * eff_map_boosted_e;
     TH2F * eff_map_boosted_mu;
-    
-    TH2F * eff_map_resolved_mu_lDR;
-    TH2F * eff_map_resolved_mu_mDR;
-    TH2F * eff_map_resolved_mu_hDR;
-
-    TH1F * eff_lepPt_resolved_mu;
-    TH1F * eff_minDeltaR_resolved_mu;
-    TH1F * eff_cosDPhi_resolved_mu;
-    TH1F * eff_MET_resolved_mu;
 	
-    TH2F * fake_map_resolved_e;
-    TH2F * fake_map_resolved_e_lEta;
-    TH2F * fake_map_resolved_e_hEta;
+    TH2F * fake_map_resolved_e_lDR;
+    TH2F * fake_map_resolved_e_mDR;
+    TH2F * fake_map_resolved_e_hDR;
     
-    TH2F * fake_map_resolved_mu;
     TH2F * fake_map_resolved_mu_lDR;
     TH2F * fake_map_resolved_mu_mDR;
     TH2F * fake_map_resolved_mu_hDR;
-   
-    TH1F * fake_pt_resolved_mu_lDR;
-    TH1F * fake_pt_resolved_mu_mDR;
-    TH1F * fake_pt_resolved_mu_hDR;
-    
-    TH2F * fake_map_resolved_mu_lDPhi;
-    TH2F * fake_map_resolved_mu_hDPhi;
-    TH2F * fake_map_resolved_mu_lLepPt;
-    TH2F * fake_map_resolved_mu_hLepPt;
-    
-    TH1F * fake_lepPt_resolved_mu;
-    TH1F * fake_minDeltaR_resolved_mu;
-    TH1F * fake_cosDPhi_resolved_mu;
-    TH1F * fake_MET_resolved_mu;
-    TH1F * fake_mwt_resolved_mu;
-    TH1F * fake_mwtmet_resolved_mu;
     
     TH1F * fake_pt_boosted_e;
     TH1F * fake_dr_boosted_mu;
-    
-    TH1F * fake_mwtmet_resolved_mu_hDR;
-    
+        
     HistogramService m_hSvc;
         
 };

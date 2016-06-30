@@ -221,16 +221,20 @@ void MiniTree::read(int event, Event &e) {
   if (i("rmujets")) e.passes().push_back("rmujets");
   if (i("rmu2jets")) e.passes().push_back("rmu2jets");
   
-  if (i("rmujetsQCDCR")) e.passes().push_back("rmujetsQCDCR");
-  if (i("bmujetsQCDCR")) e.passes().push_back("bmujetsQCDCR");
-  if (i("rejetsQCDCR")) e.passes().push_back("rejetsQCDCR");
-  if (i("bejetsQCDCR")) e.passes().push_back("bejetsQCDCR");
+  if (i("rmujetsQCDCR")) 	e.passes().push_back("rmujetsQCDCR");
+  if (i("bmujetsQCDCR")) 	e.passes().push_back("bmujetsQCDCR");
+  if (i("rejetsIncluR_2015")) 	e.passes().push_back("rejetsIncluR_2015");
+  if (i("bejetsIncluR_2015")) 	e.passes().push_back("bejetsIncluR_2015");
 
   if (i("ejets")) e.passes().push_back("ejets");
   if (i("mujets")) e.passes().push_back("mujets");
   if (i("ee")) e.passes().push_back("ee");
   if (i("emu")) e.passes().push_back("emu");
   if (i("mumu")) e.passes().push_back("mumu");
+  
+  
+  
+  
 }
 
 ULong64_t          &MiniTree::ul64(const std::string &n) {
