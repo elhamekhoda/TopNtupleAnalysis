@@ -94,31 +94,31 @@ def main():
 		systList.append('wc__1down')
 		systList.append('wl__1up')
 		systList.append('wl__1down')
-#		for i in range(0, 4):
-#			systList.append('btagbSF_'+str(i)+'__1up')
-#			systList.append('btagbSF_'+str(i)+'__1down')
-#			if i == 0:
-#				for j in range(1, 4):
-#					systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1up')
-#					systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1down')
-#		for i in range(0, 4):
-#			systList.append('btagcSF_'+str(i)+'__1up')
-#			systList.append('btagcSF_'+str(i)+'__1down')
-#			if i == 0:
-#				for j in range(1, 4):
-#					systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1up')
-#					systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1down')
-#		for i in range(0, 11):
-#			systList.append('btaglSF_'+str(i)+'__1up')
-#			systList.append('btaglSF_'+str(i)+'__1down')
-#			if i == 0:
-#				for j in range(1, 4):
-#					systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1up')
-#					systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1down')
-#		systList.append('btageSF_0__1up')
-#		systList.append('btageSF_0__1down')
-#		systList.append('btageSF_1__1up')
-#		systList.append('btageSF_1__1down')
+		for i in range(0, 4):
+			systList.append('btagbSF_'+str(i)+'__1up')
+			systList.append('btagbSF_'+str(i)+'__1down')
+			if i == 0:
+				for j in range(1, 4):
+					systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1up')
+					systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1down')
+		for i in range(0, 4):
+			systList.append('btagcSF_'+str(i)+'__1up')
+			systList.append('btagcSF_'+str(i)+'__1down')
+			if i == 0:
+				for j in range(1, 4):
+					systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1up')
+					systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1down')
+		for i in range(0, 11):
+			systList.append('btaglSF_'+str(i)+'__1up')
+			systList.append('btaglSF_'+str(i)+'__1down')
+			if i == 0:
+				for j in range(1, 4):
+					systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1up')
+					systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1down')
+		systList.append('btageSF_0__1up')
+		systList.append('btageSF_0__1down')
+		systList.append('btageSF_1__1up')
+		systList.append('btageSF_1__1down')
 		systematics  = 'EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up'
 		systematics += ',JET_JER_SINGLE_NP__1up'
 		systematics += ',JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1down,JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1up'

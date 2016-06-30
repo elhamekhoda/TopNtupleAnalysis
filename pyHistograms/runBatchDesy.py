@@ -10,10 +10,11 @@ def main():
 	theScope = 'user.dferreir'
 	
 	# output directory
-	outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
+	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
+	outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
 
 	# number of files per job
-	nFilesPerJob = 80
+	nFilesPerJob = 40
 	#nFilesPerJob = 8
 
 	# use it to setup AnalysisTop
@@ -24,7 +25,7 @@ def main():
 
 	# queue to submit to
 	#queue = '1nd'
-	queue = 'default.q'
+	queue = 'short.q'
 
 	# the default is AnaTtresSL, which produces many control pltos for tt res.
 	# The Mtt version produces a TTree to do the limit setting
@@ -35,8 +36,8 @@ def main():
 	analysisType='AnaTtresSL'
 	
 	# leave it for nominal to run only the nominal
-	systematics = 'nominal'
-	#systematics = 'all'
+	#systematics = 'nominal'
+	systematics = 'all'
 	
 	# 25 ns datasets
 	names   = []
@@ -53,28 +54,27 @@ def main():
 
 	names  += ["data"]
 
-	#names  += ['zprime400']
-	#names  += ['zprime500']
-	#names  += ['zprime750']
-	#names  += ['zprime1000']
-	#names  += ['zprime1250']
-	#names  += ['zprime1500']
-	#names  += ['zprime1750']
-	#names  += ['zprime2000']
-	#names  += ['zprime2250']
-	#names  += ['zprime2500']
-	#names  += ['zprime2750']
-	#names  += ['zprime3000']
-	#names  += ['zprime4000']
-	#names  += ['zprime5000']
+	names  += ['zprime400']
+	names  += ['zprime500']
+	names  += ['zprime750']
+	names  += ['zprime1000']
+	names  += ['zprime1250']
+	names  += ['zprime1500']
+	names  += ['zprime1750']
+	names  += ['zprime2000']
+	names  += ['zprime2250']
+	names  += ['zprime2500']
+	names  += ['zprime2750']
+	names  += ['zprime3000']
+	names  += ['zprime4000']
+	names  += ['zprime5000']
 
-	#names = []
-	#names  += ['kkgrav400']
-	#names  += ['kkgrav500']
-	#names  += ['kkgrav750']
-	#names  += ['kkgrav1000']
-	#names  += ['kkgrav2000']
-	#names  += ['kkgrav3000']
+	names  += ['kkgrav400']
+	names  += ['kkgrav500']
+	names  += ['kkgrav750']
+	names  += ['kkgrav1000']
+	names  += ['kkgrav2000']
+	names  += ['kkgrav3000']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -83,7 +83,7 @@ def main():
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
-					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia',
+					#'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
 					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
@@ -144,7 +144,7 @@ def main():
 
 		nFilesPerJobEffective = nFilesPerJob
 		if 'tt' in sn:
-			nFilesPerJobEffective = 20
+			nFilesPerJobEffective = 10
 			#nFilesPerJobEffective = 2
 
 		# write list of files to be read when processing this sample
@@ -170,17 +170,30 @@ def main():
 					#files = glob.glob(d+'/*.root*')
 
 					from subprocess import Popen, PIPE
-					process = Popen(["rucio", "list-file-replicas", d], stdout=PIPE)
+					process = Popen(["rucio", "list-file-replicas", "--protocols", "root", d], stdout=PIPE)
 					(output, err) = process.communicate()
 					#exit_code = process.wait()
-					pfns = []
+					pfns = {}
 					for line in output.split('\n'):
-						if not 'DESY-HH_LOCALGROUPDISK' in line:
+						outline = line.split()
+						if not 'root://' in line:
 							continue
-						pfn = line.split("DESY-HH_LOCALGROUPDISK: ")[1].split()[0]
-						pfn = pfn.replace('srm/managerv2?SFN=','')
-						pfns.append(pfn)
-					files = pfns
+						fname = outline[3]
+						site = outline[10][0:-1]
+						pfno = outline[11]
+						idx = pfno.find('/', len("root://")+2)
+						pfn = pfno[:idx] + "/" + pfno[idx:]
+						if not fname in pfns:
+							pfns[fname] = {}
+						pfns[fname][site] = pfn
+					files = []
+					for fname in pfns:
+						if 'DESY-HH_LOCALGROUPDISK' in pfns[fname]:
+							files.append(pfns[fname]['DESY-HH_LOCALGROUPDISK'])
+						else:
+							#print "File %s is not available in DESY! It is available on " % fname, pfns[fname]
+							k = pfns[fname].keys()[0]
+							files.append(pfns[fname][k])
 					# and write it in ht elist of input files to process
 					for item in files:
 						if not '.part' in item:
@@ -227,7 +240,7 @@ def main():
 			fr.write('#$ -l cvmfs\n')
 			fr.write('#$ -l distro=sld6\n')
 			fr.write('#$ -l arch=amd64\n')
-			fr.write('#$ -l h_vmem=2G\n')
+			fr.write('#$ -l h_vmem=3G\n')
 			fr.write('#$ -o '+logfile+'\n')
 			fr.write('#$ -q '+queue+'\n')
 			fr.write('#$ -m '+'eas'+'\n')
@@ -244,6 +257,7 @@ def main():
 			fr.write('export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase\n')
 			fr.write('export DQ2_LOCAL_SITE_ID=DESY-HH_SCRATCHDISK \n')
 			fr.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
+			fr.write('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
 			fr.write('lsetup rcsetup\n')
 			fr.write('cd TopNtupleAnalysis/pyHistograms\n')
 			out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root,be2015:'+outputDir+'/be2015_'+jobName+'.root,bmu2015:'+outputDir+'/bmu2015_'+jobName+'.root,re2015:'+outputDir+'/re2015_'+jobName+'.root,rmu2015:'+outputDir+'/rmu2015_'+jobName+'.root,be2016:'+outputDir+'/be2016_'+jobName+'.root,bmu2016:'+outputDir+'/bmu2016_'+jobName+'.root,re2016:'+outputDir+'/re2016_'+jobName+'.root,rmu2016:'+outputDir+'/rmu2016_'+jobName+'.root'
@@ -255,5 +269,12 @@ def main():
 			#sys.exit(0)
 	
 if __name__ == '__main__':
+	import os
+	fr = open("get_proxy.sh", "w")
+	fr.write("export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n")
+	fr.write("voms-proxy-init --voms atlas --vomslife 96:00 --valid 96:00\n")
+	fr.close()
+	os.system("chmod a+x get_proxy.sh")
+	os.system("./get_proxy.sh")
 	main()
 

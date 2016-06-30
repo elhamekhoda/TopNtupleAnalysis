@@ -72,13 +72,13 @@ class AnaTtresSL(Analysis):
 		self.applyQCD = False
 		# make histograms
 		self.add("yields", 1, 0.5, 1.5)
-		self.add("yields_mcw", 1, 0.5, 1.5)
-		self.add("yields_mcw_lepsf", 1, 0.5, 1.5)
-		self.add("yields_mcw_lepsf_pil", 1, 0.5, 1.5)
-		self.add("yields_mcw_lepsf_pil_jvt", 1, 0.5, 1.5)
-		self.add("yields_mcw_lepsf_pil_jvt_btag", 1, 0.5, 1.5)
-		self.add("yields_mcw_lepsf_pil_jvt_btag_ewk", 1, 0.5, 1.5)
-		self.add("yields_mcw_lepsf_pil_jvt_btag_ewk_sherpa", 1, 0.5, 1.5)
+		#self.add("yields_mcw", 1, 0.5, 1.5)
+		#self.add("yields_mcw_lepsf", 1, 0.5, 1.5)
+		#self.add("yields_mcw_lepsf_pil", 1, 0.5, 1.5)
+		#self.add("yields_mcw_lepsf_pil_jvt", 1, 0.5, 1.5)
+		#self.add("yields_mcw_lepsf_pil_jvt_btag", 1, 0.5, 1.5)
+		#self.add("yields_mcw_lepsf_pil_jvt_btag_ewk", 1, 0.5, 1.5)
+		#self.add("yields_mcw_lepsf_pil_jvt_btag_ewk_sherpa", 1, 0.5, 1.5)
 		self.add("runNumber", 24647, 276261.5, 300908.5)
 		self.add("yields_bveto", 1, 0.5, 1.5)
 		self.add("lepPt", 100, 25, 525)
@@ -343,31 +343,26 @@ class AnaTtresSL(Analysis):
 		if self.applyQCD:
 			w *= self.qcdWeight(sel)
 
-		self.h["btagSF"][syst].Fill(helpers.applyBtagSF(sel, syst), w)
-		if sel.mcChannelNumber != 0:
-			self.h["btagSF_simple"][syst].Fill(sel.weight_trackjet_bTagSF_70, w)
-		else:
-			self.h["btagSF_simple"][syst].Fill(1, w)
 		if sel.mcChannelNumber != 0:
 			self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
-		self.h["yields_mcw"][syst].Fill(1, wTruth)
-		if sel.mcChannelNumber != 0:
-			self.h["yields_mcw_lepsf"][syst].Fill(1, wTruth*sel.weight_leptonSF)
-			self.h["yields_mcw_lepsf_pil"][syst].Fill(1, wTruth*sel.weight_leptonSF*sel.weight_pileup)
-			self.h["yields_mcw_lepsf_pil_jvt"][syst].Fill(1, wTruth*sel.weight_leptonSF*sel.weight_pileup*sel.weight_jvt)
-			self.h["yields_mcw_lepsf_pil_jvt_btag"][syst].Fill(1, wTruth*sel.weight_leptonSF*sel.weight_pileup*sel.weight_jvt*helpers.applyBtagSF(sel, syst))
-			wEWK = 1
-			if sel.mcChannelNumber in helpers.listEWK:
-				wEWK = helpers.applyBtagSF(sel, syst)
-			self.h["yields_mcw_lepsf_pil_jvt_btag_ewk"][syst].Fill(1, wTruth*sel.weight_leptonSF*sel.weight_pileup*sel.weight_jvt*helpers.applyBtagSF(sel, syst)*wEWK)
-			self.h["yields_mcw_lepsf_pil_jvt_btag_ewk_sherpa"][syst].Fill(1, wTruth*sel.weight_leptonSF*sel.weight_pileup*sel.weight_jvt*helpers.applyBtagSF(sel, syst)*wEWK*sel.weight_Sherpa22_corr)
-		else:
-			self.h["yields_mcw_lepsf"][syst].Fill(1, wTruth)
-			self.h["yields_mcw_lepsf_pil"][syst].Fill(1, wTruth)
-			self.h["yields_mcw_lepsf_pil_jvt"][syst].Fill(1, wTruth)
-			self.h["yields_mcw_lepsf_pil_jvt_btag"][syst].Fill(1, wTruth)
-			self.h["yields_mcw_lepsf_pil_jvt_btag_ewk"][syst].Fill(1, wTruth)
-			self.h["yields_mcw_lepsf_pil_jvt_btag_ewk_sherpa"][syst].Fill(1, wTruth)
+		#self.h["yields_mcw"][syst].Fill(1, wTruth)
+		#if sel.mcChannelNumber != 0:
+		#	self.h["yields_mcw_lepsf"][syst].Fill(1, wTruth*sel.weight_leptonSF)
+		#	self.h["yields_mcw_lepsf_pil"][syst].Fill(1, wTruth*sel.weight_leptonSF*sel.weight_pileup)
+		#	self.h["yields_mcw_lepsf_pil_jvt"][syst].Fill(1, wTruth*sel.weight_leptonSF*sel.weight_pileup*sel.weight_jvt)
+		#	self.h["yields_mcw_lepsf_pil_jvt_btag"][syst].Fill(1, wTruth*sel.weight_leptonSF*sel.weight_pileup*sel.weight_jvt*helpers.applyBtagSF(sel, syst))
+		#	wEWK = 1
+		#	if sel.mcChannelNumber in helpers.listEWK:
+		#		wEWK = helpers.applyBtagSF(sel, syst)
+		#	self.h["yields_mcw_lepsf_pil_jvt_btag_ewk"][syst].Fill(1, wTruth*sel.weight_leptonSF*sel.weight_pileup*sel.weight_jvt*helpers.applyBtagSF(sel, syst)*wEWK)
+		#	self.h["yields_mcw_lepsf_pil_jvt_btag_ewk_sherpa"][syst].Fill(1, wTruth*sel.weight_leptonSF*sel.weight_pileup*sel.weight_jvt*helpers.applyBtagSF(sel, syst)*wEWK*sel.weight_Sherpa22_corr)
+		#else:
+		#	self.h["yields_mcw_lepsf"][syst].Fill(1, wTruth)
+		#	self.h["yields_mcw_lepsf_pil"][syst].Fill(1, wTruth)
+		#	self.h["yields_mcw_lepsf_pil_jvt"][syst].Fill(1, wTruth)
+		#	self.h["yields_mcw_lepsf_pil_jvt_btag"][syst].Fill(1, wTruth)
+		#	self.h["yields_mcw_lepsf_pil_jvt_btag_ewk"][syst].Fill(1, wTruth)
+		#	self.h["yields_mcw_lepsf_pil_jvt_btag_ewk_sherpa"][syst].Fill(1, wTruth)
 		self.h["yields"][syst].Fill(1, w)
 		self.h["runNumber"][syst].Fill(sel.runNumber, w)
 		l = ROOT.TLorentzVector()
@@ -439,6 +434,13 @@ class AnaTtresSL(Analysis):
 			elif lQ < 0:
 				self.h["mttNeg"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
 			self.h["largeJetPtMtt"][syst].Fill(lj.Perp()/(closeJet+nu+l+lj).M(), w)
+			mtt = (closeJet+nu+l+lj).M()*1e-3
+			if mtt > 1.1e3:
+				self.h["btagSF"][syst].Fill(helpers.applyBtagSF(sel, syst), w)
+				if sel.mcChannelNumber != 0:
+					self.h["btagSF_simple"][syst].Fill(sel.weight_trackjet_bTagSF_70, w)
+				else:
+					self.h["btagSF_simple"][syst].Fill(1, w)
 		elif 're' in self.ch or 'rmu' in self.ch:
 			jets = ROOT.vector('TLorentzVector')()
 			#jets = []
@@ -464,6 +466,12 @@ class AnaTtresSL(Analysis):
 				self.h["mttPos"][syst].Fill(mtt*1e-3, w)
 			elif lQ < 0:
 				self.h["mttNeg"][syst].Fill(mtt*1e-3, w)
+			if mtt > 1.1e3:
+				self.h["btagSF"][syst].Fill(helpers.applyBtagSF(sel, syst), w)
+				if sel.mcChannelNumber != 0:
+					self.h["btagSF_simple"][syst].Fill(sel.weight_trackjet_bTagSF_70, w)
+				else:
+					self.h["btagSF_simple"][syst].Fill(1, w)
 			self.h["mtlep_res"][syst].Fill(mtl*1e-3, w)
 			self.h["mthad_res"][syst].Fill(mth*1e-3, w)
 			self.h["mwhad_res"][syst].Fill(mwh*1e-3, w)

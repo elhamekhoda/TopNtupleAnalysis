@@ -346,7 +346,9 @@ def applyBtagSF(sel, s):
     elif 'btageSF_1' in s:
         syst = "FT_EFF_Eigen_extrapolation from charm__1%s" % (direction)
     return wrapperC.getBtaggingSF(jetList, jetFlavour, jetWeight, vetoSyst, syst)
-    return sel.weight_bTagSF_70
+
+# same as above, but it reads the SFs from the file
+def applyBtagSFFromFile(sel, s):
     pref = 'tjet_bTagSF_70'
     varName = ''
     nomName = pref
