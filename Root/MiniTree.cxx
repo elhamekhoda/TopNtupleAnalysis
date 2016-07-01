@@ -216,15 +216,29 @@ void MiniTree::read(int event, Event &e) {
 
   if (i("bejets")) e.passes().push_back("bejets");
   if (i("bmujets")) e.passes().push_back("bmujets");
+  if (i("bejets_2015")) e.passes().push_back("bejets_2015");
+  if (i("bmujets_2015")) e.passes().push_back("bmujets_2015");
+  if (i("bejets_2016")) e.passes().push_back("bejets_2016");
+  if (i("bmujets_2016")) e.passes().push_back("bmujets_2016");
   if (i("bmu2jets")) e.passes().push_back("bmu2jets");
+
   if (i("rejets")) e.passes().push_back("rejets");
   if (i("rmujets")) e.passes().push_back("rmujets");
+  if (i("rejets_2015")) e.passes().push_back("rejets_2015");
+  if (i("rmujets_2015")) e.passes().push_back("rmujets_2015");
+  if (i("rejets_2016")) e.passes().push_back("rejets_2016");
+  if (i("rmujets_2016")) e.passes().push_back("rmujets_2016");
   if (i("rmu2jets")) e.passes().push_back("rmu2jets");
   
-  if (i("rmujetsQCDCR")) 	e.passes().push_back("rmujetsQCDCR");
-  if (i("bmujetsQCDCR")) 	e.passes().push_back("bmujetsQCDCR");
+  if (i("rmujetsQCDCR_2015")) 	e.passes().push_back("rmujetsQCDCR_2015");
+  if (i("bmujetsQCDCR_2015")) 	e.passes().push_back("bmujetsQCDCR_2015");
   if (i("rejetsIncluR_2015")) 	e.passes().push_back("rejetsIncluR_2015");
   if (i("bejetsIncluR_2015")) 	e.passes().push_back("bejetsIncluR_2015");
+
+  if (i("rmujetsQCDCR_2016")) 	e.passes().push_back("rmujetsQCDCR_2016");
+  if (i("bmujetsQCDCR_2016")) 	e.passes().push_back("bmujetsQCDCR_2016");
+  if (i("rejetsIncluR_2016")) 	e.passes().push_back("rejetsIncluR_2016");
+  if (i("bejetsIncluR_2016")) 	e.passes().push_back("bejetsIncluR_2016");
 
   if (i("ejets")) e.passes().push_back("ejets");
   if (i("mujets")) e.passes().push_back("mujets");
