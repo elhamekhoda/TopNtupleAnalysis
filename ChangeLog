@@ -1,3 +1,7 @@
+2016-07-01 Sanmay Ganguly <sanmay.ganguly@cern.ch>
+	* separating the 2015 and 2016 analysis types for real and fake rates
+	* TopNtupleAnalysis-00-02-16
+
 2016-06-16 Marino Romano <sromanos@cern.ch>
 	* Updating the tools for the real and fake estimation. Adding the MWT and MWT parametrisation in different minDR regions
 	* Adding new Analysis class for the closure test for different CRs (AnaTtresMM)
