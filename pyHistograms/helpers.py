@@ -33,10 +33,12 @@ def initBinds():
 #include "TopNtupleAnalysis/MObject.h"
 #include "Root/MObject.cxx"
 
+/*
 #include "xAODBTaggingEfficiency/BTaggingEfficiencyTool.h"
 #include "CalibrationDataInterface/CalibrationDataVariables.h"
 #include "CalibrationDataInterface/CalibrationDataInterfaceROOT.h"
 #include "PATInterfaces/SystematicRegistry.h"
+*/
 
 #include "TLorentzVector.h"
 #include <vector>
@@ -57,7 +59,7 @@ class WrapperExtras {
 	MMUtils m_mm_b0_res_mu;
 	MMUtils m_mm_b1_res_mu;
 
-	BTaggingEfficiencyTool m_btageff;
+	//BTaggingEfficiencyTool m_btageff;
 
     WrapperExtras() : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root"),
 	                  m_mm_b0_boosted_e("../scripts/QCDestimation/040416_WJetsCR_noBtag/eff_ttbar.root", "../scripts/QCDestimation/200416_WJetsCR_noBtag/fake.root"), 
@@ -67,10 +69,11 @@ class WrapperExtras {
 	                  m_mm_b0_boosted_mu("../scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_0b/fake.root"), 
 	                  m_mm_b1_boosted_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_in1b/fake.root"), 
 	                  m_mm_b0_res_mu("../scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_0b/fake.root"), 
-	                  m_mm_b1_res_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_in1b/fake.root"),
-					  m_btageff("BTaggingEfficiencyTool")
+	                  m_mm_b1_res_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/150616_fakeRates_rmu_in1b/fake.root")//,
+					  //m_btageff("BTaggingEfficiencyTool")
 					  {
       m_chi2.Init(TtresChi2::DATA2015_MC15);
+	  /*
 	  if (!m_btageff.setProperty("TaggerName", "MV2c10")) std::cout << "Failed to set b-tagging property." << std::endl;
 	  if (!m_btageff.setProperty("OperatingPoint", "FixedCutBEff_70")) std::cout << "Failed to set b-tagging property." << std::endl;
 	  if (!m_btageff.setProperty("JetAuthor", "AntiKt2PV0TrackJets")) std::cout << "Failed to set b-tagging property." << std::endl;
@@ -90,6 +93,7 @@ class WrapperExtras {
 	  //for (CP::SystematicSet::const_iterator it = s.begin(); it != s.end(); it++) {
 	  //  std::cout << "Syst. " << it->name() << std::endl;
 	  //}
+	  */
     }
     TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
       std::vector<TLorentzVector *> vec_nu = m_neutrinoBuilder.candidatesFromWMass_Rotation(&l, met, met_phi, true);
@@ -172,6 +176,7 @@ class WrapperExtras {
       }
       return sf.nominal;
     }
+	/*
     float getBtaggingSF(std::vector<TLorentzVector> jet, std::vector<int> flavour, std::vector<float> mv2c10, std::vector<bool> vetoSyst, std::string syst = "") {
       m_btageff.setMapIndex("B", 0);
       m_btageff.setMapIndex("C", 0);
@@ -212,7 +217,7 @@ class WrapperExtras {
 		btagsf *= sf;
 	  }
 	  return btagsf;
-    }
+    }*/
     double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger) {
 	  Event e;
 	  e.met() = met;

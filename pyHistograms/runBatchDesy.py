@@ -26,6 +26,7 @@ def main():
 	# queue to submit to
 	#queue = '1nd'
 	queue = 'short.q'
+	#queue = 'default.q'
 
 	# the default is AnaTtresSL, which produces many control pltos for tt res.
 	# The Mtt version produces a TTree to do the limit setting
@@ -83,7 +84,6 @@ def main():
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
-					#'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
 					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
