@@ -364,29 +364,33 @@ def applyBtagSFFromFile(sel, s):
     # then check which branch to take to apply the variation
     if 'btag' in s:
         # if we are also varying only jets in a specific pt bin, the pt bin is identified as "ptX", where X is an integer
-	# get "X" as an integer from the systematic name
+        # get "X" as an integer from the systematic name
         if 'pt' in s:
-	    ptbinInS = int(s.split('pt')[1][0])
-	    # later, if this is != -1, we will use it to apply the variation only at the jets within this pt bin
-	# get eigenvector index
-	eig = int(s.split('_')[1])
-	# get direction
-	direction = 'up'
-	if 'down' in s:
-  	    direction = 'down'
-	# check if it is a b,c,light or extrapolation variation and set name
+            ptbinInS = int(s.split('pt')[1][0])
+            # later, if this is != -1, we will use it to apply the variation only at the jets within this pt bin
+        # get direction
+        direction = 'up'
+        if 'down' in s:
+            direction = 'down'
+        # check if it is a b,c,light or extrapolation variation and set name
         if 'btagbSF_' in s:
             varName = pref+'_eigen_B_'+direction
+            # get eigenvector index
+            eig = int(s.split('_')[1])
         if 'btagcSF_' in s:
             varName = pref+'_eigen_C_'+direction
+            # get eigenvector index
+            eig = int(s.split('_')[1])
         if 'btaglSF_' in s:
             varName = pref+'_eigen_Light_'+direction
+            # get eigenvector index
+            eig = int(s.split('_')[1])
         if 'btageSF_0' in s:
-            varName = pref+'_extrapolation_'+direction
-	    eig = -1
+            varName = pref+'_syst_extrapolation_'+direction
+            eig = -1
         if 'btageSF_1' in s:
-            varName = pref+'_extrapolation_from_charm_'+direction
-	    eig = -1
+            varName = pref+'_syst_extrapolation_from_charm_'+direction
+            eig = -1
     else: # not a b-tagging variation, so take the nominal
         varName = pref
 
@@ -394,31 +398,33 @@ def applyBtagSFFromFile(sel, s):
     # loop over track jets
     for bidx in range(0, len(sel.tjet_mv2c20)):
         pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
-	# and apply object definition cuts (should already have been applied)
+        # and apply object definition cuts (should already have been applied)
         if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
-	    # if we requested to vary only jets in a specific pt bin, check if this jet is in the pt bin
-	    if ptbinInS != 0:
-  	        ptbin = 0
-	        if pb.Perp() < 50e3:
-	            ptbin = 1
+            # if we requested to vary only jets in a specific pt bin, check if this jet is in the pt bin
+            vetoed = False
+            if ptbinInS != 0:
+                ptbin = 0
+                if pb.Perp() < 50e3:
+                    ptbin = 1
                 elif pb.Perp() < 100e3:
-	            ptbin = 2
-	        else:
-	            ptbin = 3
-		if ptbinInS == ptbin:
-		    # if this jet is in the correct pt bin, apply the syst. variation
-	            theWeight = getattr(sel, varName)
-		else:
-		    # otherwise, take the nominal SF for this jet
-		    # even if we are supposed to vary it for any other criteria
-	            theWeight = getattr(sel, nomName)
-	    else: # we have not requested the pt binned variation
-	        # so we always vary all jets, regardless of the pt bin
-		# if no variation was requested, varName will be set to the nominal above
-	        theWeight = getattr(sel, varName)
-	    if eig > -1: # branches in b,c,light variation have a second index related to the eigenvector number
+                    ptbin = 2
+                else:
+                    ptbin = 3
+                if ptbinInS == ptbin:
+                    # if this jet is in the correct pt bin, apply the syst. variation
+                    theWeight = getattr(sel, varName)
+                else:
+                    # otherwise, take the nominal SF for this jet
+                    # even if we are supposed to vary it for any other criteria
+                    theWeight = getattr(sel, nomName)
+                    vetoed = True
+            else: # we have not requested the pt binned variation
+                # so we always vary all jets, regardless of the pt bin
+                # if no variation was requested, varName will be set to the nominal above
+                theWeight = getattr(sel, varName)
+            if eig > -1 and not vetoed: # branches in b,c,light variation have a second index related to the eigenvector number
                 btagsf *= theWeight[bidx][eig]
-	    else: # extrapolation branches or the nominal, have no second index
+            else: # extrapolation branches or the nominal, have no second index
                 btagsf *= theWeight[bidx]
     return btagsf
 

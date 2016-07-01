@@ -80,20 +80,6 @@ def main():
 	if options.systs == 'all':
 		systList = []
 		systList.append('nominal')
-		systList.extend(weightChangeSystematics)
-		systList.remove('')
-		systList.append('ttEWK__1up')
-		systList.append('ttEWK__1down')
-		systList.append('wnorm__1up')
-		systList.append('wnorm__1down')
-		systList.append('wbb__1up')
-		systList.append('wbb__1down')
-		systList.append('wcc__1up')
-		systList.append('wcc__1down')
-		systList.append('wc__1up')
-		systList.append('wc__1down')
-		systList.append('wl__1up')
-		systList.append('wl__1down')
 		for i in range(0, 4):
 			systList.append('btagbSF_'+str(i)+'__1up')
 			systList.append('btagbSF_'+str(i)+'__1down')
@@ -119,6 +105,20 @@ def main():
 		systList.append('btageSF_0__1down')
 		systList.append('btageSF_1__1up')
 		systList.append('btageSF_1__1down')
+		systList.extend(weightChangeSystematics)
+		systList.remove('')
+		systList.append('ttEWK__1up')
+		systList.append('ttEWK__1down')
+		systList.append('wnorm__1up')
+		systList.append('wnorm__1down')
+		systList.append('wbb__1up')
+		systList.append('wbb__1down')
+		systList.append('wcc__1up')
+		systList.append('wcc__1down')
+		systList.append('wc__1up')
+		systList.append('wc__1down')
+		systList.append('wl__1up')
+		systList.append('wl__1down')
 		systematics  = 'EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up'
 		systematics += ',JET_JER_SINGLE_NP__1up'
 		systematics += ',JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1down,JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1up'
