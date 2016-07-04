@@ -51,12 +51,12 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j(const Event &evt, double weight, const 
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR")))
+    if (!(evt.passes("bejetsQCDCR_2015") || evt.passes("bmujetsQCDCR")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR")))
+    if (!(evt.passes("rejetsQCDCR_2015") || evt.passes("rmujetsQCDCR")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
@@ -278,12 +278,12 @@ void AnaTtresMM::runMatrixMethod_QCDSR2j(const Event &evt, double weight, const 
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("bmujetsQCDCR")))
+    if (!(evt.passes("rejetsWCR_2015") || evt.passes("bmujetsWCR_2015")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR")))
+    if (!(evt.passes("rejetsWCR_2015") || evt.passes("rmujetsWCR_2015")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
@@ -616,12 +616,12 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2015(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015")))
+    if (!(evt.passes("bejetsQCDCR_2015") || evt.passes("bmujetsQCDCR_2015")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
+    if (!(evt.passes("rejetsQCDCR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
@@ -843,12 +843,12 @@ void AnaTtresMM::runMatrixMethod_QCDSR2j_2015(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015")))
+    if (!(evt.passes("rejetsWCR_2015") || evt.passes("bmujetsQCDCR_2015")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
+    if (!(evt.passes("rejetsWCR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;

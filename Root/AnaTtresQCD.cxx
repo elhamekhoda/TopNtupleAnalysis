@@ -759,7 +759,7 @@ void AnaTtresQCD::runRealRateWQCDCR(const Event &evt, double weight, const std::
           	nTrkBtagged += 1;
   }
   
-  if (nTrkBtagged!=0)	return;			
+  //if (nTrkBtagged!=0)	return;			
 			
   if (leptMa_pdgId!=0)	{
 
@@ -946,7 +946,7 @@ void AnaTtresQCD::runRealRateWQCDCR_2015(const Event &evt, double weight, const 
           	nTrkBtagged += 1;
   }
   
-  if (nTrkBtagged!=0)	return;			
+  //if (nTrkBtagged!=0)	return;			
 			
   if (leptMa_pdgId!=0)	{
 
@@ -1348,11 +1348,11 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
     return;
 
   if (m_boosted)
-    if (!(evt.passes("bejetsQCDCR") || evt.passes("bmujetsQCDCR_2015")))
+    if (!(evt.passes("bejetsQCDCR_2015") || evt.passes("bmujetsQCDCR_2015")))
       return;
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsQCDCR") || evt.passes("rmujetsQCDCR_2015")))
+    if (!(evt.passes("rejetsQCDCR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
   
   if (!m_boosted)	if(evt.jet().size()<4)	return;
@@ -1537,14 +1537,15 @@ void AnaTtresQCD::runFakeRateWQCDCR_2015(const Event &evt, double weight, const 
     return;
 
   if (m_boosted)
-    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015")))
+    if (!(evt.passes("bejetsQCDCR_2015") || evt.passes("bmujetsQCDCR_2015")))
       return;
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
+    if (!(evt.passes("rejetsQCDCR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
+
     
   bool trig1(0); 
   bool trig2(0); 
@@ -1620,7 +1621,7 @@ void AnaTtresQCD::runFakeRateWQCDCR_2015(const Event &evt, double weight, const 
   
   }//for 
   
-  if (nTrkBtagged!=0)	return;		
+  //if (nTrkBtagged!=0)	return;		
   
   h->h1D("fake_trig1", "", suffix)  ->Fill(trig1);
   h->h1D("fake_trig2", "", suffix)  ->Fill(trig2);
@@ -1831,7 +1832,7 @@ void AnaTtresQCD::runFakeRateWQCDCR(const Event &evt, double weight, const std::
   
   }//for 
   
-  if (nTrkBtagged!=0)	return;		
+  //if (nTrkBtagged!=0)	return;		
   
   h->h1D("fake_trig1", "", suffix)  ->Fill(trig1);
   h->h1D("fake_trig2", "", suffix)  ->Fill(trig2);

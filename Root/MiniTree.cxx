@@ -232,13 +232,18 @@ void MiniTree::read(int event, Event &e) {
   
   if (i("rmujetsQCDCR_2015")) 	e.passes().push_back("rmujetsQCDCR_2015");
   if (i("bmujetsQCDCR_2015")) 	e.passes().push_back("bmujetsQCDCR_2015");
+  if (i("rejetsQCDCR_2015")) 	e.passes().push_back("rejetsQCDCR_2015");
+  if (i("bejetsQCDCR_2015")) 	e.passes().push_back("bejetsQCDCR_2015");
   if (i("rejetsIncluR_2015")) 	e.passes().push_back("rejetsIncluR_2015");
   if (i("bejetsIncluR_2015")) 	e.passes().push_back("bejetsIncluR_2015");
+  if (i("rejetsWCR_2015")) 	e.passes().push_back("rejetsWCR_2015");
+  if (i("bejetsWCR_2015")) 	e.passes().push_back("bejetsWCR_2015");
+
 
   if (i("rmujetsQCDCR_2016")) 	e.passes().push_back("rmujetsQCDCR_2016");
   if (i("bmujetsQCDCR_2016")) 	e.passes().push_back("bmujetsQCDCR_2016");
-  if (i("rejetsIncluR_2016")) 	e.passes().push_back("rejetsIncluR_2016");
-  if (i("bejetsIncluR_2016")) 	e.passes().push_back("bejetsIncluR_2016");
+  if (i("rejetsQCDCR_2016")) 	e.passes().push_back("rejetsQCDCR_2016");
+  if (i("bejetsQCDCR_2016")) 	e.passes().push_back("bejetsQCDCR_2016");
 
   if (i("ejets")) e.passes().push_back("ejets");
   if (i("mujets")) e.passes().push_back("mujets");
