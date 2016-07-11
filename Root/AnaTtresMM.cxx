@@ -278,7 +278,7 @@ void AnaTtresMM::runMatrixMethod_QCDSR2j(const Event &evt, double weight, const 
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("rejetsWCR_2015") || evt.passes("bmujetsWCR_2015")))
+    if (!(evt.passes("bejetsWCR_2015") || evt.passes("bmujetsWCR_2015")))
       return;
   }
 
