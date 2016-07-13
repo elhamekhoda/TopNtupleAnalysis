@@ -40,9 +40,8 @@ class MMUtils{
     TH2F * eff_map_boosted_e;
     TH2F * eff_map_boosted_mu;
 	
-    TH2F * fake_map_resolved_e_lDR;
-    TH2F * fake_map_resolved_e_mDR;
-    TH2F * fake_map_resolved_e_hDR;
+    TH2F * fake_map_resolved_e_lEta;
+    TH2F * fake_map_resolved_e_hEta;
     
     TH2F * fake_map_resolved_mu_lDR;
     TH2F * fake_map_resolved_mu_mDR;

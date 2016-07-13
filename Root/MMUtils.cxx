@@ -41,14 +41,13 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     if(eff_map_boosted_mu)	eff_map_boosted_mu->SetDirectory(0);
       
     TFile m_fake_rootfile(fake_filename.c_str(), "r");
-            	
-    fake_map_resolved_e_lDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_cosDPhi_lowDR_resolved_e");
-    if(fake_map_resolved_e_lDR)  fake_map_resolved_e_lDR->SetDirectory(0);
-    fake_map_resolved_e_mDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_cosDPhi_medDR_resolved_e");
-    if(fake_map_resolved_e_mDR)  fake_map_resolved_e_mDR->SetDirectory(0);
-    fake_map_resolved_e_hDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_cosDPhi_highDR_resolved_e");
-    if(fake_map_resolved_e_hDR)  fake_map_resolved_e_hDR->SetDirectory(0);
 
+    fake_map_resolved_e_lEta =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_cosDPhi_lowEta_resolved_e");
+    if(fake_map_resolved_e_lEta)  fake_map_resolved_e_lEta->SetDirectory(0);
+    
+    fake_map_resolved_e_hEta =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_cosDPhi_highEta_resolved_e");
+    if(fake_map_resolved_e_hEta)  fake_map_resolved_e_hEta->SetDirectory(0);
+    
     fake_map_resolved_mu_lDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_lowDR_resolved_mu");
     if(fake_map_resolved_mu_lDR)  fake_map_resolved_mu_lDR->SetDirectory(0);
     fake_map_resolved_mu_mDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_medDR_resolved_mu");
@@ -73,9 +72,8 @@ MMUtils::~MMUtils(){
   delete eff_map_boosted_e ;
   delete eff_map_boosted_mu ;
   
-  delete fake_map_resolved_e_lDR;
-  delete fake_map_resolved_e_mDR;
-  delete fake_map_resolved_e_hDR;
+  delete fake_map_resolved_e_lEta;
+  delete fake_map_resolved_e_hEta;
   delete fake_map_resolved_mu_lDR;
   delete fake_map_resolved_mu_mDR;
   delete fake_map_resolved_mu_hDR;
@@ -195,25 +193,8 @@ void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fa
 
     get2Drates(realRate, realRate_err, eff_map_resolved_e, lepPt, closejl_DR);
     
-    if(closejl_DR > 2.6){
-            
-      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_hDR, lepPt, cosDPhi);
-      
-      if (fakeRate<0) fakeRate=0;
-      
-    }else if(closejl_DR > 1.0){
-      
-      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_mDR, lepPt, cosDPhi);
-      
-      if (fakeRate<0) fakeRate=0;
-            
-    }else{
-          
-      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_lDR, lepPt, cosDPhi);
- 
-      if (fakeRate<0) fakeRate=0;
-            
-    }//if	
+    if(absEta > 1.8)	get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_hEta, lepPt, cosDPhi);
+    else		get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_lEta, lepPt, cosDPhi);
 
     return;
 }
