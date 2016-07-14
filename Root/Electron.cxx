@@ -186,7 +186,7 @@ bool Electron::passLoose() const {
   if ( (oq() & 1446) != 0 ) return false;
 
   if (!isMediumPP()) return false;
-  if (isEM() & (1<<0x1) != 0) return false; 
+  if ((isEM() & (1<<0x1)) != 0) return false; 
   return true;
 }
 

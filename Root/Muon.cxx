@@ -180,21 +180,21 @@ int &Muon::charge() {
   return m_charge;
 }
 
-bool Muon::setST(bool b) {
+void Muon::setST(bool b) {
   m_st = b;
 }
 bool Muon::st() const {
   return m_st;
 }
 
-bool Muon::setSA(bool b) {
+void Muon::setSA(bool b) {
   m_sa = b;
 }
 bool Muon::sa() const {
   return m_sa;
 }
 
-bool Muon::setCB(bool b) {
+void Muon::setCB(bool b) {
   m_cb = b;
 }
 
