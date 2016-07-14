@@ -6,12 +6,17 @@ import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
 def main():
 	# input directory
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
+	# for standard data and MC
 	pattern = 'user.dferreir.*24062016v1_output.root'
+	# for QCD e
+	pattern_qcde = 'user.dferreir.*24062016QCDev1_output.root'
+	pattern_qcdmu = 'user.dferreir.*24062016QCDmuv1_output.root'
 	theScope = 'user.dferreir'
 	
 	# output directory
 	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
 	outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr'
 
 	# number of files per job
 	nFilesPerJob = 40
@@ -42,40 +47,37 @@ def main():
 	
 	# 25 ns datasets
 	names   = []
-	names  += ['tt']
-	names  += ['wbbjets']
-	names  += ['wccjets']
-	names  += ['wcjets']
-	names  += ['wljets']
-	names  += ['zjets']
 
-	names  += ["data"]
-	names  += ['singletop']
-	names  += ['vv']
-
-	names  += ["data"]
-
-	names  += ['zprime400']
-	names  += ['zprime500']
-	names  += ['zprime750']
-	names  += ['zprime1000']
-	names  += ['zprime1250']
-	names  += ['zprime1500']
-	names  += ['zprime1750']
-	names  += ['zprime2000']
-	names  += ['zprime2250']
-	names  += ['zprime2500']
-	names  += ['zprime2750']
-	names  += ['zprime3000']
-	names  += ['zprime4000']
-	names  += ['zprime5000']
-
-	names  += ['kkgrav400']
-	names  += ['kkgrav500']
-	names  += ['kkgrav750']
-	names  += ['kkgrav1000']
-	names  += ['kkgrav2000']
-	names  += ['kkgrav3000']
+	#names  += ['tt']
+	#names  += ['wbbjets']
+	#names  += ['wccjets']
+	#names  += ['wcjets']
+	#names  += ['wljets']
+	#names  += ['zjets']
+	#names  += ["data"]
+	names  += ['qcde', 'qcdmu']
+	#names  += ['singletop']
+	#names  += ['vv']
+	#names  += ['zprime400']
+	#names  += ['zprime500']
+	#names  += ['zprime750']
+	#names  += ['zprime1000']
+	#names  += ['zprime1250']
+	#names  += ['zprime1500']
+	#names  += ['zprime1750']
+	#names  += ['zprime2000']
+	#names  += ['zprime2250']
+	#names  += ['zprime2500']
+	#names  += ['zprime2750']
+	#names  += ['zprime3000']
+	#names  += ['zprime4000']
+	#names  += ['zprime5000']
+	#names  += ['kkgrav400']
+	#names  += ['kkgrav500']
+	#names  += ['kkgrav750']
+	#names  += ['kkgrav1000']
+	#names  += ['kkgrav2000']
+	#names  += ['kkgrav3000']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -83,6 +85,8 @@ def main():
 					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
+					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
+					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
 					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
@@ -124,6 +128,14 @@ def main():
 	datasets = []
 	for l in response:
 		datasets.append(l)
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_qcde})
+	datasets_qcde = []
+	for l in response:
+		datasets_qcde.append(l)
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_qcdmu})
+	datasets_qcdmu = []
+	for l in response:
+		datasets_qcdmu.append(l)
 	
 	# each "sample" below means an item in the list names above
 	# there may contain multiple datasets
@@ -144,8 +156,13 @@ def main():
 
 		nFilesPerJobEffective = nFilesPerJob
 		if 'tt' in sn:
+			nFilesPerJobEffective = 5
+		if 'singletop' in sn:
 			nFilesPerJobEffective = 10
-			#nFilesPerJobEffective = 2
+		if 'kkgrav' in sn:
+			nFilesPerJobEffective = 10
+		if 'zprime' in sn:
+			nFilesPerJobEffective = 10
 
 		# write list of files to be read when processing this sample
 		f = open(outputDir+"/input_"+sn+'.txt', 'w')
@@ -153,7 +170,12 @@ def main():
 		outfile = sn
 		
 		# go over all directories in the ntuplesDir
-		for d in datasets:
+		ds = datasets
+		if sn == 'qcde':
+			ds = datasets_qcde
+		elif sn == 'qcde':
+			ds = datasets_qcdmu
+		for d in ds:
 			# remove path and get only dir name in justfile
 			#justfile = d.split('/')[-1]
 			dsid_dir = d.split('.')[2] # get the DSID of the directory
@@ -214,6 +236,12 @@ def main():
 		if "data" in sn:
 			theSysts = "nominal"
 			isData = ' -d '
+		elif "qcde" in sn:
+			theSysts = "nominal"
+			isData = ' -d -Q e '
+		elif "qcdmu" in sn:
+			theSysts = "nominal"
+			isData = ' -d -Q mu '
 		if "wbbjets" in sn:
 			extra = ' --WjetsHF bb '
 		elif 'wccjets' in sn:

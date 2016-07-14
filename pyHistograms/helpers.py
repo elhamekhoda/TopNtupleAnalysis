@@ -220,7 +220,7 @@ class WrapperExtras {
     }*/
     double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger) {
 	  Event e;
-	  e.met() = met;
+	  e.met(met.Px(), met.Py());
 	  if (isElectron) {
 	    e.electron().push_back(Electron(lep));
 		e.electron()[0].setTightPP(isTight);
@@ -244,13 +244,13 @@ class WrapperExtras {
 	  } else if (btags && !boosted && isElectron) {
 	    w = m_mm_b1_res_e.getMMweights(e, 0, isElectron, boosted);
 	  } else if (!btags && boosted && !isElectron) {
-	    w = m_mm_b0_boosted_mu.getMMweights(e, 0, !isElectron, boosted);
+	    w = m_mm_b0_boosted_mu.getMMweights(e, 0, isElectron, boosted);
 	  } else if (btags && boosted && !isElectron) {
-	    w = m_mm_b1_boosted_mu.getMMweights(e, 0, !isElectron, boosted);
+	    w = m_mm_b1_boosted_mu.getMMweights(e, 0, isElectron, boosted);
 	  } else if (!btags && !boosted && !isElectron) {
-	    w = m_mm_b0_res_mu.getMMweights(e, 0, !isElectron, boosted);
+	    w = m_mm_b0_res_mu.getMMweights(e, 0, isElectron, boosted);
 	  } else if (btags && !boosted && !isElectron) {
-	    w = m_mm_b1_res_mu.getMMweights(e, 0, !isElectron, boosted);
+	    w = m_mm_b1_res_mu.getMMweights(e, 0, isElectron, boosted);
 	  }
 	  return w;
 	}
@@ -264,6 +264,7 @@ class WrapperExtras {
     ROOT.gInterpreter.ProcessLine("load_packages()");
     ROOT.gInterpreter.ProcessLine("std::cout << 123 << std::endl;");
     ROOT.gInterpreter.ProcessLine(bind_neutrino)
+    ROOT.gInterpreter.ProcessLine("std::cout << 456 << std::endl;");
     return ROOT.WrapperExtras()
 
 wrapperC = initBinds()

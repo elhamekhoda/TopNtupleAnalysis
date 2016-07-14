@@ -34,8 +34,8 @@ def main():
 							 dest="pdf", default="",
 				  help="Which PDFs to reweight to.", metavar="PDFS")
 	parser.add_option("-Q", "--qcd",
-							 dest="qcd", default="",
-				  help="Apply QCD weights?", metavar="BOOL")
+							 dest="qcd", default="False",
+							 help="Apply QCD weights?", metavar="CHANNEL")
 	 
 	(options, args) = parser.parse_args()
 	 
@@ -50,27 +50,22 @@ def main():
 	pdfSumOfWeights = {} # map of DSID to map of PDF variation names to sum of weights
 	
 	if not options.data:
-		t_sumWeights = TChain("sumWeights")
-		t_pdfSumWeights = TChain("PDFsumWeights")
-		addFilesInChain(t_sumWeights, options.fullFiles)
-		for k in range(0, t_sumWeights.GetEntries()):
-			t_sumWeights.GetEntry(k)
-			if not t_sumWeights.dsid in sumOfWeights:
-				sumOfWeights[t_sumWeights.dsid] = 0
-			sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
-		for k in range(0, t_pdfSumWeights.GetEntries()):
-			t_pdfSumWeights.GetEntry(k)
-			if not t_pdfSumWeights.dsid in pdfSumOfWeights:
-				pdfSumOfWeights[t_pdfSumWeights.dsid] = {}
-			for l in pdfList:
-				if l not in pdfSumOfWeights[t_pdfSumWeights.dsid]:
-					pdfSumOfWeights[t_pdfSumWeights.dsid][l] = []
-				pdfAttr = getattr(t_pdfSumWeights, l)
-				if len(pdfSumOfWeights[t_pdfSumWeights.dsid][l]) == 0:
-					pdfSumOfWeights[t_pdfSumWeights.dsid][l] = [0]*len(pdfAttr)
-				for m in range(0, len(pdfAttr)):
-					pdfSumOfWeights[t_pdfSumWeights.dsid][l][m] += pdfAttr[l][m]
-				
+		fs = open("sumOfWeights.txt")
+		for line in fs.readlines():
+			line_spl = line.split()
+			sumOfWeights[int(line_spl[0])] = float(line_spl[1])
+		fs.close()
+		pfs = open("pdfSumOfWeights.txt")
+		for line in pfs.readlines():
+			line_spl = line.split()
+			if not int(line_spl[0]) in pdfSumOfWeights:
+				pdfSumOfWeights[int(line_spl[0])] = {}
+			if not line_spl[1] in pdfSumOfWeights[int(line_spl[0])]:
+				pdfSumOfWeights[int(line_spl[0])][line_spl[1]] = {}
+			pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
+		pfs.close()
+
+	print sumOfWeights
 	 
 	loadXsec(Xsec, "../scripts/XSection-MC15-13TeV-ttres.data")
 	loadXsec(Xsec, "../../TopDataPreparation/data/XSection-MC15-13TeV.data")
@@ -154,9 +149,9 @@ def main():
 	for k in channels:
 		analysisCode[k] = anaClass(k, histSuffixes, channels[k])
 		analysisCode[k].keep = options.WjetsHF
-		analysisCode[k].applyQcd = False
-		if options.qcd == "True":
-			analysisCode[k].applyQcd = True
+		analysisCode[k].applyQCD = False
+		if options.qcd != "False":
+			analysisCode[k].applyQCD = options.qcd
 		print k, analysisCode[k], channels[k]
 	 
 	for s in systList:
@@ -164,7 +159,7 @@ def main():
 		treeName = s # systematic name is the same as the TTree name
 		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'wbb_' in treeName or 'wcc_' in treeName or 'wc_' in treeName or 'wl_' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName:
 			treeName = 'nominal'
-		if options.qcd == 'True':
+		if options.qcd != "False":
 			treeName += '_Loose'
 		mt = TChain(treeName)
 		suffix = s

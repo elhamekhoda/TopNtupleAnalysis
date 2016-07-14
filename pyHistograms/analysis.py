@@ -193,8 +193,8 @@ class AnaTtresSL(Analysis):
 				if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
 					nBtag += 1
 		isBoosted = 0
-		if 'be' in self.ch or 'bmu' in self.ch:
-			isBoosted = 1
+		#if 'be' in self.ch or 'bmu' in self.ch:
+		#	isBoosted = 1
 
 		met = ROOT.TLorentzVector(sel.met_met, 0, sel.met_phi, sel.met_met)
 		l = ROOT.TLorentzVector()
@@ -204,13 +204,15 @@ class AnaTtresSL(Analysis):
 		muonTrigger = 0
 		if len(sel.el_pt) == 1:
 			l.SetPtEtaPhiE(sel.el_pt[0], sel.el_eta[0], sel.el_phi[0], sel.el_e[0])
-			lisTight = int(sel.el_isTightPP[0])
+			lisTight = sel.el_isTight[0]
+			lisTight = bool(int(lisTight.encode('hex'), 16))
 			isElectron = 1
 		elif len(sel.mu_pt) == 1:
 			l.SetPtEtaPhiE(sel.mu_pt[0], sel.mu_eta[0], sel.mu_phi[0], sel.mu_e[0])
-			lisTight = int(sel.mu_isTight[0])
+			lisTight = sel.mu_isTight[0]
+			lisTight = bool(int(lisTight.encode('hex'), 16))
 			lsd0 = sel.mu_d0sig[0]
-			muonTrigger = int(sel.mu_trigMatch_HLT_mu20_iloose_L1MU15[0] or sel.mu_trigMatch_HLT_mu50[0])
+			muonTrigger = bool(int(sel.mu_trigMatch_HLT_mu20_iloose_L1MU15[0].encode('hex'), 16)) or bool(int(sel.mu_trigMatch_HLT_mu50[0].encode('hex'), 16))
 		jets = ROOT.vector('TLorentzVector')()
 		for k in range(0, len(sel.jet_pt)):
 			jets.push_back(ROOT.TLorentzVector(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k]))
@@ -255,18 +257,31 @@ class AnaTtresSL(Analysis):
 
 			passORChannels = False
 			for item in listSel:
+				if self.applyQCD == "e" and "mujets" in item:
+					continue
+				elif self.applyQCD == "mu" and "ejets" in item:
+					continue
+				hardPass = True
+				if 'be' in i or 'bmu' in i:
+					hardPass = False
+					for k in range(0, len(sel.ljet_pt)):
+						if sel.ljet_good[k] and sel.ljet_pt[k] > 300e3:
+							hardPass = True
+							break
+
 				passChannel = getattr(sel, item)
-				if passChannel:
+				if passChannel and hardPass:
 					passORChannels = True
 					break
 			passSel[i] = passORChannels
 
 			passORChannels = False
-			for item in listSelBVeto:
-				passChannel = getattr(sel, item)
-				if passChannel:
-					passORChannels = True
-					break
+			if not self.applyQCD:
+				for item in listSelBVeto:
+					passChannel = getattr(sel, item)
+					if passChannel:
+						passORChannels = True
+						break
 			passSelBVeto[i] = passORChannels
 
 		# only for bveto count
@@ -298,6 +313,16 @@ class AnaTtresSL(Analysis):
 		if not passSel[self.ch]:
 			return False
 
+		# bugfix for no large-R jet requirement in QCD
+		if 'be' in self.ch or 'bmu' in self.ch:
+			passes = False
+			for i in range(0, len(sel.ljet_pt)):
+				if sel.ljet_good[i]:
+					passes = True
+					break
+			if not passes:
+				return False
+
 		# veto resolved event if it passes the boosted channel
 		if 're' in self.ch or 'rmu' in self.ch:
 			#if sel.bejets or sel.bmujets or sel.bmujetsmet80:
@@ -325,7 +350,7 @@ class AnaTtresSL(Analysis):
 		return True
 
 
-	def run(self, sel, syst, w, wTruth):
+	def run(self, sel, syst, wo, wTruth):
 		if sel.mcChannelNumber in helpers.listWjets22:
 			flag = sel.Wfilter_Sherpa_nT
 			if self.keep == 'bb':
@@ -341,6 +366,7 @@ class AnaTtresSL(Analysis):
 				if flag != 5:
 					return
 
+		w = wo
 		if not self.selectChannel(sel, syst, w):
 			return
 
