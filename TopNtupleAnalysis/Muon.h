@@ -68,13 +68,13 @@ class Muon : public MObject {
     int charge() const;
     int &charge();
 
-    bool setST(bool b);
+    void setST(bool b);
     bool st() const;
 
-    bool setSA(bool b);
+    void setSA(bool b);
     bool sa() const;
 
-    bool setCB(bool b);
+    void setCB(bool b);
     bool cb() const;
 
   protected:
