@@ -21,17 +21,13 @@ class AnaTtresQCD : public Analysis {
     virtual ~AnaTtresQCD();
 
     void run(const Event &e, double weight, const std::string &syst);
-    
-    virtual void runRealRateQCDCR(const Event &e, double weight, const std::string &suffix);
-    virtual void runRealRateWQCDCR(const Event &e, double weight, const std::string &suffix);
+        
     virtual void runRealRateQCDCR_2015(const Event &e, double weight, const std::string &suffix);
     virtual void runRealRateWQCDCR_2015(const Event &e, double weight, const std::string &suffix);    
     virtual void runRealRateQCDCR_2016(const Event &e, double weight, const std::string &suffix);
     virtual void runRealRateWQCDCR_2016(const Event &e, double weight, const std::string &suffix);
     virtual void GetRealHistograms(const Event &evt, const double weight, const std::string &suffix);
     
-    virtual void runFakeRateQCDCR(const Event &e, double weight, const std::string &suffix);
-    virtual void runFakeRateWQCDCR(const Event &e, double weight, const std::string &suffix);
     virtual void runFakeRateQCDCR_2015(const Event &e, double weight, const std::string &suffix);
     virtual void runFakeRateWQCDCR_2015(const Event &e, double weight, const std::string &suffix);
     virtual void runFakeRateQCDCR_2016(const Event &e, double weight, const std::string &suffix);
