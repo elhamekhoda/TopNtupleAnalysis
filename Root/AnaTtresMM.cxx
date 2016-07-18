@@ -65,7 +65,8 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2015(const Event &evt, double weight, c
     if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
 
-  if (!m_boosted)	if(evt.jet().size()<2)	return;
+  if (m_boosted)	return;
+  else			if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
   
