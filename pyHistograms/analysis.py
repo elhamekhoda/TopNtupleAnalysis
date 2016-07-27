@@ -75,9 +75,6 @@ class AnaTtresSL(Analysis):
 		self.add("yieldsPos", 1, 0.5, 1.5)
 		self.add("yieldsNeg", 1, 0.5, 1.5)
 		self.add("runNumber", 24647, 276261.5, 300908.5)
-		self.add("yields_bveto", 1, 0.5, 1.5)
-		self.add("yields_bvetoPos", 1, 0.5, 1.5)
-		self.add("yields_bvetoNeg", 1, 0.5, 1.5)
 		self.add("lepPt", 100, 25, 525)
 		self.add("lepEta", 20, -2.5, 2.5)
 		self.add("lepPhi", 32, -3.2, 3.2)
@@ -234,26 +231,10 @@ class AnaTtresSL(Analysis):
 					'bmu2016': 'bmujets_2016',
 					're2016': 'rejets_2016',
 					'rmu2016': 'rmujets_2016'}
-		mapSelBVeto = {
-					'be': 'bejets_bveto_2015,bejets_bveto_2016',
-					'bmu': 'bmujets_bveto_2015,bmujets_bveto_2016',
-					're': 'rejets_bveto_2015,rejets_bveto_2016',
-					'rmu': 'rmujets_bveto_2015,rmujets_bveto_2016',
-					'be2015': 'bejets_bveto_2015',
-					'bmu2015': 'bmujets_bveto_2015',
-					're2015': 'rejets_bveto_2015',
-					'rmu2015': 'rmujets_bveto_2015',
-					'be2016': 'bejets_bveto_2016',
-					'bmu2016': 'bmujets_bveto_2016',
-					're2016': 'rejets_bveto_2016',
-					'rmu2016': 'rmujets_bveto_2016'}
 		passSel = {}
-		passSelBVeto = {}
 		for i in mapSel:
 			passSel[i] = True
-			passSelBVeto[i] = True
 			listSel = mapSel[i].split(',')
-			listSelBVeto = mapSelBVeto[i].split(',')
 
 			passORChannels = False
 			for item in listSel:
@@ -274,41 +255,6 @@ class AnaTtresSL(Analysis):
 					passORChannels = True
 					break
 			passSel[i] = passORChannels
-
-			passORChannels = False
-			if not self.applyQCD:
-				for item in listSelBVeto:
-					passChannel = getattr(sel, item)
-					if passChannel:
-						passORChannels = True
-						break
-			passSelBVeto[i] = passORChannels
-
-		# only for bveto count
-		if passSelBVeto[self.ch]:
-			toVeto = False
-			# veto resolved event if it passes the boosted channel
-			if 're' in self.ch or 'rmu' in self.ch:
-				if passSelBVeto['be'] or passSelBVeto['bmu']:
-					toVeto = True
-			if sel.mcChannelNumber == 410000:
-				if sel.MC_ttbar_beforeFSR_m > 1.1e6:
-					toVeto = True
-			if not toVeto:
-				wqcd = 1
-				if self.applyQCD:
-					wqcd = self.qcdWeight(sel)
-
-				self.h["yields_bveto"][syst].Fill(1, w*wqcd)
-				lQ = 0
-				if len(sel.el_pt) == 1:
-					lQ = sel.el_charge[0]
-				elif len(sel.mu_pt) == 1:
-					lQ = sel.mu_charge[0]
-				if lQ > 0:
-					self.h["yields_bvetoPos"][syst].Fill(1, w*wqcd)
-				elif lQ < 0:
-					self.h["yields_bvetoNeg"][syst].Fill(1, w*wqcd)
 
 		if not passSel[self.ch]:
 			return False
@@ -344,9 +290,9 @@ class AnaTtresSL(Analysis):
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c
-		if sel.mcChannelNumber == 410000:
-			if sel.MC_ttbar_beforeFSR_m > 1.1e6:
-				return False
+		#if sel.mcChannelNumber == 410000:
+		#	if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+		#		return False
 		return True
 
 

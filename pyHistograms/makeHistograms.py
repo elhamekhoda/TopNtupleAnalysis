@@ -65,7 +65,7 @@ def main():
 			pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
 		pfs.close()
 
-	print sumOfWeights
+	#print sumOfWeights
 	 
 	loadXsec(Xsec, "../scripts/XSection-MC15-13TeV-ttres.data")
 	loadXsec(Xsec, "../../TopDataPreparation/data/XSection-MC15-13TeV.data")
