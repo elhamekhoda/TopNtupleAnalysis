@@ -8,6 +8,7 @@ def main():
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
 	pattern = 'user.dferreir.*15072016v1_output.root'
+	pattern_mtt = 'user.dferreir.*28072016v1_output.root'
 	# for QCD e
 	pattern_qcde = 'user.dferreir.*24062016QCDev1_output.root'
 	pattern_qcdmu = 'user.dferreir.*24062016QCDmuv1_output.root'
@@ -49,35 +50,36 @@ def main():
 	names   = []
 
 	names  += ['tt']
-	#names  += ['wbbjets']
-	#names  += ['wccjets']
-	#names  += ['wcjets']
-	#names  += ['wljets']
-	#names  += ['zjets']
-	#names  += ["data"]
-	#names  += ['qcde', 'qcdmu']
-	#names  += ['singletop']
-	#names  += ['vv']
-	#names  += ['zprime400']
-	#names  += ['zprime500']
-	#names  += ['zprime750']
-	#names  += ['zprime1000']
-	#names  += ['zprime1250']
-	#names  += ['zprime1500']
-	#names  += ['zprime1750']
-	#names  += ['zprime2000']
-	#names  += ['zprime2250']
-	#names  += ['zprime2500']
-	#names  += ['zprime2750']
-	#names  += ['zprime3000']
-	#names  += ['zprime4000']
-	#names  += ['zprime5000']
-	#names  += ['kkgrav400']
-	#names  += ['kkgrav500']
-	#names  += ['kkgrav750']
-	#names  += ['kkgrav1000']
-	#names  += ['kkgrav2000']
-	#names  += ['kkgrav3000']
+	names  += ['tthm']
+	names  += ['wbbjets']
+	names  += ['wccjets']
+	names  += ['wcjets']
+	names  += ['wljets']
+	names  += ['zjets']
+	names  += ["data"]
+	names  += ['qcde', 'qcdmu']
+	names  += ['singletop']
+	names  += ['vv']
+	names  += ['zprime400']
+	names  += ['zprime500']
+	names  += ['zprime750']
+	names  += ['zprime1000']
+	names  += ['zprime1250']
+	names  += ['zprime1500']
+	names  += ['zprime1750']
+	names  += ['zprime2000']
+	names  += ['zprime2250']
+	names  += ['zprime2500']
+	names  += ['zprime2750']
+	names  += ['zprime3000']
+	names  += ['zprime4000']
+	names  += ['zprime5000']
+	names  += ['kkgrav400']
+	names  += ['kkgrav500']
+	names  += ['kkgrav750']
+	names  += ['kkgrav1000']
+	names  += ['kkgrav2000']
+	names  += ['kkgrav3000']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -88,6 +90,7 @@ def main():
 					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', #,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+					'tthm': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
 					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
@@ -136,6 +139,11 @@ def main():
 	datasets_qcdmu = []
 	for l in response:
 		datasets_qcdmu.append(l)
+
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_mtt})
+	datasets_mtt = []
+	for l in response:
+		datasets_mtt.append(l)
 	
 	# each "sample" below means an item in the list names above
 	# there may contain multiple datasets
@@ -155,13 +163,15 @@ def main():
 		nFile = 0
 
 		nFilesPerJobEffective = nFilesPerJob
-		if 'tt' in sn:
-			nFilesPerJobEffective = 3
-		if 'singletop' in sn:
-			nFilesPerJobEffective = 5
-		if 'kkgrav' in sn:
+		if 'tthm' in sn:
 			nFilesPerJobEffective = 2
-		if 'zprime' in sn:
+		elif 'tt' in sn:
+			nFilesPerJobEffective = 5
+		elif 'singletop' in sn:
+			nFilesPerJobEffective = 5
+		elif 'kkgrav' in sn:
+			nFilesPerJobEffective = 2
+		elif 'zprime' in sn:
 			nFilesPerJobEffective = 2
 
 		# write list of files to be read when processing this sample
@@ -175,6 +185,8 @@ def main():
 			ds = datasets_qcde
 		elif sn == 'qcdmu':
 			ds = datasets_qcdmu
+		elif sn == 'tthm':
+			ds = datasets_mtt
 		for d in ds:
 			# remove path and get only dir name in justfile
 			#justfile = d.split('/')[-1]

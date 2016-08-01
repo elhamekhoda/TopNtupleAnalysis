@@ -121,60 +121,67 @@ class AnaTtresSL(Analysis):
 		# assuming b-tagging
 		hfweight = 1.0
 		f_ca = 1.0
+
+		frac = {}
+		frac['e'] = {'bb': 0.559, 'cc': 0.136, 'c': 0.221, 'l': 0.084}
+		frac['mu'] = {'bb': 0.590, 'cc': 0.149, 'c': 0.184, 'l': 0.077}
+		f_ca_map = {'e': 0.82, 'mu':0.84}
+		flav_map = {}
+		flav_map['e'] = {'bb': 1.66, 'cc': 1.66, 'c': 0.85, 'l': 0.65}
+		flav_map['mu'] = {'bb': 1.67, 'cc': 1.67, 'c': 0.87, 'l': 0.65}
+		for c in frac:
+			for f in frac[c]:
+				frac[c][f] *= flav_map[c][f]
+		flav_map_unc = {}
+		flav_map_unc['e'] = {'bb': 0.0862, 'cc': 0.0862, 'c': 0.20, 'l': 0.0575}
+		flav_map_unc['mu'] = {'bb': 0.071, 'cc': 0.071, 'c': 0.20, 'l': 0.045}
+		#flav_map_unc['e'] = {'bb': 0.50, 'cc': 0.50, 'c': 0.50, 'l': 0.50}
+		#flav_map_unc['mu'] = {'bb': 0.50, 'cc': 0.50, 'c': 0.50, 'l': 0.50}
+
+		chan = ''
 		if len(sel.el_pt) == 1:
-			frac_bb = 0.559
-			frac_cc = 0.136
-			frac_c = 0.221
-			frac_l = 0.084
+			chan = 'e'
 		elif len(sel.mu_pt) == 1:
-			frac_bb = 0.590
-			frac_cc = 0.149
-			frac_c = 0.184
-			frac_l = 0.077
+			chan = 'mu'
+		flav = ''
 		if sel.mcChannelNumber in helpers.listWjets22:
 			flag = sel.Wfilter_Sherpa_nT
-			if len(sel.el_pt) == 1:
-				f_ca = 1.074
-			elif len(sel.mu_pt) == 1:
-				f_ca = 1.147
+			if flag == 3 or flag == 4:
+				flav = 'bb'
+			elif flag == 1:
+				flav = 'cc'
+			elif flag == 2:
+				flav = 'c'
+			elif flag == 5:
+				flav = 'l'
+			f_ca = f_ca_map[chan]
 			norm = 1.0
-			hfweight = 1.0
-			if s == "wbb__1up":
-				norm = 1.0/(1.5*frac_bb + frac_cc + frac_c + frac_l)
-				if flag == 3 or flag == 4:
-					hfweight = 1.5
-			elif s == "wbb__1down":
-				norm = 1.0/(0.5*frac_bb + frac_cc + frac_c + frac_l)
-				if flag == 3 or flag == 4:
-					hfweight = 0.5
-			elif s == "wcc__1up":
-				norm = 1.0/(frac_bb + 1.5*frac_cc + frac_c + frac_l)
-				if flag == 1:
-					hfweight = 1.5
-			elif s == "wcc__1down":
-				norm = 1.0/(frac_bb + 0.5*frac_cc + frac_c + frac_l)
-				if flag == 1:
-					hfweight = 0.5
-			elif s == "wc__1up":
-				norm = 1.0/(frac_bb + frac_cc + 1.5*frac_c + frac_l)
-				if flag == 2:
-					hfweight = 1.5
-			elif s == "wc__1down":
-				norm = 1.0/(frac_bb + frac_cc + 0.5*frac_c + frac_l)
-				if flag == 2:
-					hfweight = 0.5
-			elif s == "wl__1up":
-				norm = 1.0/(frac_bb + frac_cc + frac_c + 1.5*frac_l)
-				if flag == 5:
-					hfweight = 1.5
-			elif s == "wl__1down":
-				norm = 1.0/(frac_bb + frac_cc + frac_c + 0.5*frac_l)
-				if flag == 5:
-					hfweight = 0.5
+			hfweight = flav_map[chan][flav]
+			flavunc = ''
+			if 'wbb__' in s:
+				flavunc = 'bb'
+			elif 'wcc__' in s:
+				flavunc = 'cc'
+			elif 'wc__' in s:
+				flavunc = 'c'
+			elif 'wl__' in s:
+				flavunc = 'l'
+			updown = 0
+			if '1up' in s:
+				updown = 1
+			elif '1down' in s:
+				updown = -1
+			norm = 0
+			for f in ['bb', 'cc', 'c', 'l']:
+				if flavunc == f:
+					norm += (1+updown*flav_map_unc[chan][f])*frac[chan][f]
+					hfweight *= (1+updown*flav_map_unc[chan][f])
+				else:
+					norm += frac[chan][f]
 			if s == "wnorm__1up":
-				f_ca *= 1.20
+				f_ca *= 1.10
 			elif s == "wnorm__1down":
-				f_ca *= 0.80
+				f_ca *= 0.90
 			hfweight /= norm
 			weight *= f_ca*hfweight
 		return weight
@@ -290,9 +297,9 @@ class AnaTtresSL(Analysis):
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c
-		#if sel.mcChannelNumber == 410000:
-		#	if sel.MC_ttbar_beforeFSR_m > 1.1e6:
-		#		return False
+		if sel.mcChannelNumber == 410000:
+			if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+				return False
 		return True
 
 

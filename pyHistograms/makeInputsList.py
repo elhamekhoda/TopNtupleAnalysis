@@ -8,6 +8,7 @@ def main():
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
 	pattern = 'user.dferreir.*15072016v1_output.root'
+	pattern_mtt = 'user.dferreir.*28072016v1_output.root'
 	# for QCD e
 	pattern_qcde = 'user.dferreir.*24062016QCDev1_output.root'
 	pattern_qcdmu = 'user.dferreir.*24062016QCDmuv1_output.root'
@@ -17,18 +18,20 @@ def main():
 	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
 	outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
 	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2415'
+	#outputDir = '.'
 
 	# 25 ns datasets
 	names   = []
 
 	names  += ['tt']
+	names  += ['tthm']
 	names  += ['wbbjets']
-	#names  += ['wccjets']
-	#names  += ['wcjets']
-	#names  += ['wljets']
+	names  += ['wccjets']
+	names  += ['wcjets']
+	names  += ['wljets']
 	names  += ['zjets']
-	#names  += ["data"]
-	#names  += ['qcde', 'qcdmu']
+	names  += ["data"]
+	names  += ['qcde', 'qcdmu']
 	names  += ['singletop']
 	names  += ['vv']
 	names  += ['zprime400']
@@ -60,7 +63,8 @@ def main():
 					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
-					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', #,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+					'tthm':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
 					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
@@ -109,6 +113,10 @@ def main():
 	datasets_qcdmu = []
 	for l in response:
 		datasets_qcdmu.append(l)
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_mtt})
+	datasets_mtt = []
+	for l in response:
+		datasets_mtt.append(l)
 	
 	# each "sample" below means an item in the list names above
 	# there may contain multiple datasets
@@ -132,6 +140,8 @@ def main():
 			ds = datasets_qcde
 		elif sn == 'qcdmu':
 			ds = datasets_qcdmu
+		elif sn == 'tthm':
+			ds = datasets_mtt
 		for d in ds:
 			# remove path and get only dir name in justfile
 			#justfile = d.split('/')[-1]
