@@ -392,12 +392,6 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
   if (!m_boosted)	if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
-  
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
 
   bool isTight = false;
   float d0sig(99);
@@ -407,38 +401,10 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
     l = evt.electron()[0].mom();
     isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
-    /*
-    //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
-    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
-    trig3 = evt.electron()[0].HLT_e60_lhmedium();
-    trig4 = evt.electron()[0].HLT_e120_lhloose();
-                
-    bool trig_MC = trig1 || trig3 || trig4; 
-    bool trig_DT = trig2 || trig3 || trig4;
-            
-    if (evt.channelNumber()!=0){
-        if (!trig_MC)return;
-    }else{
-        if (!trig_DT)return;
-    }
-    */
   } else {
     l = evt.muon()[0].mom();
     isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();
-    /*
-    //Muon trigers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-    
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-    
-    //if (isTight)
-       if (trig_prescaled && !trig_unprescaled)	return;
-    */       
+    d0sig = evt.muon()[0].sd0();     
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -507,12 +473,6 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
 
   HistogramService *h = &m_hSvc;
   
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
-
   bool isTight = false;
   float d0sig(99);
     
@@ -521,38 +481,10 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
     l = evt.electron()[0].mom();
     isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
-    /*
-    //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
-    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
-    trig3 = evt.electron()[0].HLT_e60_lhmedium();
-    trig4 = evt.electron()[0].HLT_e120_lhloose();
-                
-    bool trig_MC = trig1 || trig3 || trig4; 
-    bool trig_DT = trig2 || trig3 || trig4;
-            
-    if (evt.channelNumber()!=0){
-        if (!trig_MC)return;
-    }else{
-        if (!trig_DT)return;
-    }
-    */
   } else {
     l = evt.muon()[0].mom();
     isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();
-    /*
-    //Muon trigers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-    
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-    
-    //if (isTight)
-       if (trig_prescaled && !trig_unprescaled)	return;
-    */       
+    d0sig = evt.muon()[0].sd0();      
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -639,18 +571,7 @@ void AnaTtresMM::runMatrixMethod_WjetsCR2j_2016(const Event &evt, double weight,
   } else {
     l = evt.muon()[0].mom();
     isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();
-    /*
-    //Muon trigers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-    
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-    
-    if (trig_prescaled && !trig_unprescaled)	return;
-    */        
+    d0sig = evt.muon()[0].sd0();        
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -703,22 +624,6 @@ void AnaTtresMM::runMatrixMethod_QCDSR2j_2016(const Event &evt, double weight, c
     l = evt.electron()[0].mom();
     isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
-    /*
-    //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
-    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
-    trig3 = evt.electron()[0].HLT_e60_lhmedium();
-    trig4 = evt.electron()[0].HLT_e120_lhloose();
-                
-    bool trig_MC = trig1 || trig3 || trig4; 
-    bool trig_DT = trig2 || trig3 || trig4;
-            
-    if (evt.channelNumber()!=0){
-        if (!trig_MC)return;
-    }else{
-        if (!trig_DT)return;
-    }
-    */
   } else {
     l = evt.muon()[0].mom();
     isTight = evt.muon()[0].isTight();
@@ -802,12 +707,6 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
 
   HistogramService *h = &m_hSvc;
   
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
-
   bool isTight = false;
   float d0sig(99);
     
@@ -816,38 +715,10 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
     l = evt.electron()[0].mom();
     isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
-    /*
-    //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
-    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
-    trig3 = evt.electron()[0].HLT_e60_lhmedium();
-    trig4 = evt.electron()[0].HLT_e120_lhloose();
-                
-    bool trig_MC = trig1 || trig3 || trig4; 
-    bool trig_DT = trig2 || trig3 || trig4;
-            
-    if (evt.channelNumber()!=0){
-        if (!trig_MC)return;
-    }else{
-        if (!trig_DT)return;
-    }
-    */
   } else {
     l = evt.muon()[0].mom();
     isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();
-    /*
-    //Muon trigers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-    
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-    
-    //if (isTight)
-       if (trig_prescaled && !trig_unprescaled)	return;
-    */        
+    d0sig = evt.muon()[0].sd0();      
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -915,13 +786,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
   if (!m_boosted)	if(evt.jet().size()<4)	return;
 
   HistogramService *h = &m_hSvc;
-  
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
-
+ 
   bool isTight = false;
   float d0sig(99);
     
@@ -930,38 +795,10 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
     l = evt.electron()[0].mom();
     isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
-    /*
-    //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
-    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
-    trig3 = evt.electron()[0].HLT_e60_lhmedium();
-    trig4 = evt.electron()[0].HLT_e120_lhloose();
-                
-    bool trig_MC = trig1 || trig3 || trig4; 
-    bool trig_DT = trig2 || trig3 || trig4;
-            
-    if (evt.channelNumber()!=0){
-        if (!trig_MC)return;
-    }else{
-        if (!trig_DT)return;
-    }
-    */
   } else {
     l = evt.muon()[0].mom();
     isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();
-    /*
-    //Muon trigers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-    
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-    
-    //if (isTight)
-       if (trig_prescaled && !trig_unprescaled)	return;
-    */       
+    d0sig = evt.muon()[0].sd0();      
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 

@@ -269,6 +269,8 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     bool trig_prescaled   = trig1;
     bool trig_unprescaled = trig2 || trig3;
     
+    if(!trig_prescaled && !trig_unprescaled) return;
+    
     //if (s!="_Loose")
     if (isTight)
        if (trig_prescaled && !trig_unprescaled)	return;
