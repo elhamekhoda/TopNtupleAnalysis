@@ -417,12 +417,12 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
       if(fabs(d0sig)<5)			return;
   }//if
 
-  int nTrkBtagged = 0; 
-  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
-          nTrkBtagged += 1;
-  
-  }//for 
+//   int nTrkBtagged = 0; 
+//   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+//        if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+//           nTrkBtagged += 1;
+//   
+//   }//for 
   
   //if (nTrkBtagged!=0)	return;	
 
@@ -497,12 +497,12 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
       if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
   }//if
   
-  int nTrkBtagged = 0; 
-  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
-          nTrkBtagged += 1;
-  
-  }//for 
+//   int nTrkBtagged = 0; 
+//   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+//        if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+//           nTrkBtagged += 1;
+//   
+//   }//for 
   
   //if (nTrkBtagged!=0)	return;	
 
@@ -531,7 +531,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
 }//AnaTtresMM::runMatrixMethod_QCDVR2j_2016
 
 
-void AnaTtresMM::runMatrixMethod_WjetsCR2j_2016/(const Event &evt, double weight, const std::string &suffix) {
+void AnaTtresMM::runMatrixMethod_WjetsCR2j_2016(const Event &evt, double weight, const std::string &suffix) {
 
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
@@ -629,12 +629,12 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
       if(fabs(d0sig)<5)			return;
   }//if
   
-  int nTrkBtagged = 0; 
-  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
-          nTrkBtagged += 1;
-  
-  }//for 
+//   int nTrkBtagged = 0; 
+//   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+//        if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+//           nTrkBtagged += 1;
+//   
+//   }//for 
   
   //if (nTrkBtagged!=0)	return;	
 
@@ -709,12 +709,12 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
       if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
   }//if
   
-  int nTrkBtagged = 0; 
-  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
-          nTrkBtagged += 1;
-    
-  }//for 
+//   int nTrkBtagged = 0; 
+//   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+//        if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+//           nTrkBtagged += 1;
+//     
+//   }//for 
   
   //if (nTrkBtagged!=0)	return;	    
 
