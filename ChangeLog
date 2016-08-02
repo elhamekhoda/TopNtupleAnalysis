@@ -1,3 +1,6 @@
+2016-08-02 Sanmay Ganguly <sanmay.ganguly@cern.ch>
+	* Removed the muon triggers for 2016 version 
+
 2016-07-01 Sanmay Ganguly <sanmay.ganguly@cern.ch>
 	* separating the 2015 and 2016 analysis types for real and fake rates
 	* TopNtupleAnalysis-00-02-16
