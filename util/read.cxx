@@ -620,7 +620,7 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresMM(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon 
-  } else if(analysis == "AnaTtresSL_QCDVR2j_2016" ||analysis == "AnaTtresSL_QCDCR2j_2016" analysis == "AnaTtresSL_QCDCR4j_2016" || analysis == "AnaTtresSL_QCDVR4j_2016" || analysis == "AnaTtresSL_WjetsCR2j_2016"){
+  } else if(analysis == "AnaTtresSL_QCDVR2j_2016" ||analysis == "AnaTtresSL_QCDCR2j_2016"  || analysis == "AnaTtresSL_QCDCR4j_2016" || analysis == "AnaTtresSL_QCDVR4j_2016" || analysis == "AnaTtresSL_WjetsCR2j_2016"){
     vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal)); // resolved electron
     vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
