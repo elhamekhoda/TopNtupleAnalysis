@@ -137,9 +137,11 @@ int main(int argc, char **argv) {
   std::string pdf = "";
   int applyWSF = 0;
   int applyEWK = 1;
+  int version = 2015;
   std::string only = "";
   int opt_dsid(-1);
   float opt_dsidSoW(0);
+
 
   static struct extendedOption extOpt[] = {
         {"help",                  no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -161,6 +163,7 @@ int main(int argc, char **argv) {
         {"pdf",                   required_argument,     0, 'p', "Only run PDF variations.", &pdf, extendedOption::eOTString},
         {"applyWSF",              required_argument,     0, 'W', "Apply W SF.", &applyWSF, extendedOption::eOTInt},
         {"applyEWK",              required_argument,     0, 'E', "Apply electroweak correction.", &applyEWK, extendedOption::eOTInt},
+//        {"version",               required_argument,     0, 'v', "Define the version : version 2015 for 2015 (default) and version 2016 for 2016.", &version, extendedOption::eOTInt},
         {"onlyChannel",           required_argument,     0, 'O', "Run code only for comma-separated channels.", &only, extendedOption::eOTString},
         {"dsid",                  required_argument,     0, 'D', "dsid", &opt_dsid, extendedOption::eOTInt},
         {"dsidsumOfWeight",       required_argument,     0, 'Z', "dsid 's Sum of Weight (when one needs to split jobs for 1 DSID)", &opt_dsidSoW, extendedOption::eOTFloat},
@@ -307,18 +310,42 @@ int main(int argc, char **argv) {
     }
   }
 
+  std::string str2015("2015"), str2016("2016");
+  unsigned int tmp15, tmp16;
+  tmp15 = analysis.find(str2015);
+  tmp16 = analysis.find(str2016);
+
+  if(tmp15 < 100 && tmp16 > 100) version = 2015;
+  else if(tmp15 > 100 && tmp16 < 100) version = 2016;
+
+  std::cout<<"Analysis = "<<analysis<<", Version = "<<version<<std::endl;
+
+
   MMUtils * MM_0b_re      = NULL;
   MMUtils * MM_0b_rmu     = NULL;
   MMUtils * MM_1b_re      = NULL;
   MMUtils * MM_1b_rmu     = NULL;
     
   if (runMM){ // >= 2 jets
-	MM_0b_re      = new MMUtils("scripts/QCDestimation/170716_realRates_re_0b/eff_ttbar.root",     "scripts/QCDestimation/130716_fakeRates_re_0b/fake.root");
-	MM_1b_re      = new MMUtils("scripts/QCDestimation/170716_realRates_re_in1b/eff_ttbar.root",   "scripts/QCDestimation/130716_fakeRates_re_in1b/fake.root");
 
-	MM_0b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root",   "scripts/QCDestimation/250616_fakeRates_rmu_0b/fake.root");
-	MM_1b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "scripts/QCDestimation/250616_fakeRates_rmu_in1b/fake.root");
-	  
+        if(version == 2015) {
+	MM_0b_re      = new MMUtils("scripts/QCDestimation/170716_realRates_re_0b/eff_ttbar.root",     "scripts/QCDestimation/130716_fakeRates_re_0b/fake.root", version);
+	MM_1b_re      = new MMUtils("scripts/QCDestimation/170716_realRates_re_in1b/eff_ttbar.root",   "scripts/QCDestimation/130716_fakeRates_re_in1b/fake.root", version);
+
+        MM_0b_rmu      = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root",     "scripts/QCDestimation/250616_fakeRates_rmu_0b/fake.root", version);
+        MM_1b_rmu      = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root",   "scripts/QCDestimation/250616_fakeRates_rmu_in1b/fake.root", version);
+
+        } // f(version == 2015)
+
+        if(version == 2016) {
+        MM_0b_re      = new MMUtils("scripts/QCDestimation/170716_realRates_re_0b/eff_ttbar.root",     "scripts/QCDestimation/130716_fakeRates_re_0b/fake.root", version);
+        MM_1b_re      = new MMUtils("scripts/QCDestimation/170716_realRates_re_in1b/eff_ttbar.root",   "scripts/QCDestimation/130716_fakeRates_re_in1b/fake.root", version);
+
+	MM_0b_rmu     = new MMUtils("scripts/QCDestimation/btag0_eff_ttbar.root",   "scripts/QCDestimation/btag0_fake.root", version);
+	MM_1b_rmu     = new MMUtils("scripts/QCDestimation/btag1_eff_ttbar.root",   "scripts/QCDestimation/btag1_fake.root", version);
+        } // if(version == 2016)	  
+
+
   } 
 
   std::vector<std::string> pdfList;
@@ -593,7 +620,7 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresMM(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon 
-  } else if(analysis == "AnaTtresSL_QCDVR2j_2016" ||analysis == "AnaTtresSL_QCDCR2j_2016" || analysis == "AnaTtresSL_QCDSR2j_2016" || analysis == "AnaTtresSL_QCDCR4j_2016" || analysis == "AnaTtresSL_QCDVR4j_2016"){
+  } else if(analysis == "AnaTtresSL_QCDVR2j_2016" ||analysis == "AnaTtresSL_QCDCR2j_2016" || analysis == "AnaTtresSL_QCDSR2j_2016" || analysis == "AnaTtresSL_QCDCR4j_2016" || analysis == "AnaTtresSL_QCDVR4j_2016" || analysis == "AnaTtresSL_WjetsCR2j_2016"){
     vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal)); // resolved electron
     vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
@@ -1318,7 +1345,32 @@ int main(int argc, char **argv) {
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_WjetsCR2j_2015(sel, weight, suffix);
             }
 
-	  } 
+	  }
+
+          else if (analysis=="AnaTtresSL_WjetsCR2j_2016") { // W+jets enriched control region, >=2 jets
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+                bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
+                bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
+
+                if (runMM) {
+
+                   if(nBtagged==0){
+                     if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
+                     else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+
+                  }else{
+                     if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
+                     else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+
+                  }//if  
+               }//runMM
+
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_WjetsCR2j_2016(sel, weight, suffix);
+            }
+
+          }
+
+ 
 
            else if (analysis=="AnaTtresSL_QCDSR2j_2016") { // W+jets enriched control region, >=2 jets
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {

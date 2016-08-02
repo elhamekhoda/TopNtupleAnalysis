@@ -20,7 +20,7 @@
 #include "TLorentzVector.h"
 
 
-MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filename) {
+MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filename, int version) {
 
   if (eff_filename!="" && fake_filename!=""){
     
@@ -53,6 +53,7 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     fake_map_resolved_mu_mDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_medDR_resolved_mu");
     if(fake_map_resolved_mu_mDR)  fake_map_resolved_mu_mDR->SetDirectory(0);
     fake_map_resolved_mu_hDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_highDR_resolved_mu");
+//    fake_map_resolved_mu_hDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_minDeltaR_resolved_mu");
     if(fake_map_resolved_mu_hDR)  fake_map_resolved_mu_hDR->SetDirectory(0);
 
     fake_pt_boosted_e = 	(TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_e");
@@ -61,6 +62,7 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     fake_dr_boosted_mu  = 	(TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_mu");
     if(fake_dr_boosted_mu)	fake_dr_boosted_mu->SetDirectory(0); 
 
+    _version = version;
   }
   
 }
@@ -147,12 +149,22 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
     float mwt_limit(95);
     
     get2Drates(realRate, realRate_err, eff_map_resolved_mu, lepPt, closejl_DR); 
+//    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_hDR, lepPt, closejl_DR);
 
+//    if (fakeRate<0) fakeRate=0;
+
+    
     if(closejl_DR > 0.6){
 
+      if(_version == 2015) {
       if(met<50)	mwt_limit = 95;
       else 		mwt_limit = 195;
-      
+      } // if(_version == 2015)
+      else {
+      if(met<100)        mwt_limit =100;
+      else              mwt_limit = 200;
+      } // else
+
       mwt_min = std::min(mwt, mwt_limit);
       met_min = std::min(met, met_limit);
       
@@ -162,7 +174,10 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
       
     }else if(closejl_DR > 0.4){
 
+      if(_version == 2015)
       mwt_limit = 95;
+      else
+      mwt_limit = 200;
       
       mwt_min = std::min(mwt, mwt_limit);
       met_min = std::min(met, met_limit);
@@ -172,10 +187,16 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
       if (fakeRate<0) fakeRate=0;
             
     }else{
-    
+ 
+      if(_version == 2015) {   
       if(met<40)	mwt_limit = 95;
       else 		mwt_limit = 195;
-    
+      }
+      else {
+      if(met<100)        mwt_limit = 100;
+      else               mwt_limit = 60;
+      }    
+
       mwt_min = std::min(mwt, mwt_limit);
       met_min = std::min(met, met_limit);
       
@@ -184,6 +205,7 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
       if (fakeRate<0) fakeRate=0;
             
     }//if
+    
 
     return;
         
