@@ -399,11 +399,11 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    isTight = evt.electron()[0].isTightPP();
+    //isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
   } else {
     l = evt.muon()[0].mom();
-    isTight = evt.muon()[0].isTight();
+    //isTight = evt.muon()[0].isTight();
     d0sig = evt.muon()[0].sd0();     
   }//m_electron
 
@@ -426,22 +426,22 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
   
   //if (nTrkBtagged!=0)	return;	
 
-  //deltaR between lepton and the closest narrow jet
-  float closejl_deltaR  = 99;
-  float deltaR_tmp      = 99;
-  int closejl_idx       = -1;
-  
-  size_t jet_idx = 0;
-  for (; jet_idx < evt.jet().size(); ++jet_idx){    
-    deltaR_tmp = 99;
-    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
-    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
-    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
-    if (deltaR_tmp < closejl_deltaR){
-        closejl_deltaR = deltaR_tmp;
-        closejl_idx = jet_idx;
-    }   
-  }//for     
+//   //deltaR between lepton and the closest narrow jet
+//   float closejl_deltaR  = 99;
+//   float deltaR_tmp      = 99;
+//   int closejl_idx       = -1;
+//   
+//   size_t jet_idx = 0;
+//   for (; jet_idx < evt.jet().size(); ++jet_idx){    
+//     deltaR_tmp = 99;
+//     float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
+//     float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
+//     deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
+//     if (deltaR_tmp < closejl_deltaR){
+//         closejl_deltaR = deltaR_tmp;
+//         closejl_idx = jet_idx;
+//     }   
+//   }//for     
 
   //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
@@ -479,11 +479,11 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    isTight = evt.electron()[0].isTightPP();
+    //isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
   } else {
     l = evt.muon()[0].mom();
-    isTight = evt.muon()[0].isTight();
+    //isTight = evt.muon()[0].isTight();
     d0sig = evt.muon()[0].sd0();      
   }//m_electron
 
@@ -506,22 +506,22 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
   
   //if (nTrkBtagged!=0)	return;	
 
-  //deltaR between lepton and the closest narrow jet
-  float closejl_deltaR  = 99;
-  float deltaR_tmp      = 99;
-  int closejl_idx       = -1;
-  
-  size_t jet_idx = 0;
-  for (; jet_idx < evt.jet().size(); ++jet_idx){    
-    deltaR_tmp = 99;
-    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
-    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
-    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
-    if (deltaR_tmp < closejl_deltaR){
-        closejl_deltaR = deltaR_tmp;
-        closejl_idx = jet_idx;
-    }   
-  }//for     
+//   //deltaR between lepton and the closest narrow jet
+//   float closejl_deltaR  = 99;
+//   float deltaR_tmp      = 99;
+//   int closejl_idx       = -1;
+//   
+//   size_t jet_idx = 0;
+//   for (; jet_idx < evt.jet().size(); ++jet_idx){    
+//     deltaR_tmp = 99;
+//     float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
+//     float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
+//     deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
+//     if (deltaR_tmp < closejl_deltaR){
+//         closejl_deltaR = deltaR_tmp;
+//         closejl_idx = jet_idx;
+//     }   
+//   }//for     
 
   //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
@@ -531,7 +531,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
 }//AnaTtresMM::runMatrixMethod_QCDVR2j_2016
 
 
-void AnaTtresMM::runMatrixMethod_WjetsCR2j_2016(const Event &evt, double weight, const std::string &suffix) {
+void AnaTtresMM::runMatrixMethod_WjetsCR2j_2016/(const Event &evt, double weight, const std::string &suffix) {
 
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
@@ -553,24 +553,18 @@ void AnaTtresMM::runMatrixMethod_WjetsCR2j_2016(const Event &evt, double weight,
 
   HistogramService *h = &m_hSvc;
   
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
-
   bool isTight = false;
   float d0sig(99);
     
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    isTight = evt.electron()[0].isTightPP();
+    //isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
 
   } else {
     l = evt.muon()[0].mom();
-    isTight = evt.muon()[0].isTight();
+    //isTight = evt.muon()[0].isTight();
     d0sig = evt.muon()[0].sd0();        
   }//m_electron
 
@@ -588,102 +582,6 @@ void AnaTtresMM::runMatrixMethod_WjetsCR2j_2016(const Event &evt, double weight,
 
 }//runMatrixMethod_WjetsCR2j_2016
 
-
-void AnaTtresMM::runMatrixMethod_QCDSR2j_2016(const Event &evt, double weight, const std::string &suffix) {
-
-  if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
-    return;
-
-  if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
-    return;
-
-  if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2016")))
-      return;
-  }
-
-  if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2016")))
-      return;
-
-  if (!m_boosted)	if(evt.jet().size()<2)	return;
-
-  HistogramService *h = &m_hSvc;
-  
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
-
-  bool isTight = false;
-  float d0sig(99);
-    
-  TLorentzVector l;
-  if (m_electron) {
-    l = evt.electron()[0].mom();
-    isTight = evt.electron()[0].isTightPP();
-    d0sig = evt.electron()[0].sd0();
-  } else {
-    l = evt.muon()[0].mom();
-    isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();
-    /*
-    //Muon trigers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-    
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-    
-    //if (isTight)
-       if (trig_prescaled && !trig_unprescaled)	return;
-    */        
-  }//m_electron
-
-  float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
-  float MET = evt.met().Perp()*1e-3;
-  
-  if(m_electron){
-      if( (MET<20) || (MET+mWt)<60)		return;
-  }else{
-      if( (MET<20) || (MET+mWt)<60)		return;
-      if(fabs(d0sig)>3)			      	return;
-  }//if
-  
-  int nTrkBtagged = 0; 
-  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
-          nTrkBtagged += 1;
-  
-  }//for 
-  
-  //if (nTrkBtagged!=0)	return;	
-
-  //deltaR between lepton and the closest narrow jet
-  float closejl_deltaR  = 99;
-  float deltaR_tmp      = 99;
-  int closejl_idx       = -1;
-  
-  size_t jet_idx = 0;
-  for (; jet_idx < evt.jet().size(); ++jet_idx){    
-    deltaR_tmp = 99;
-    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
-    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
-    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
-    if (deltaR_tmp < closejl_deltaR){
-        closejl_deltaR = deltaR_tmp;
-        closejl_idx = jet_idx;
-    }   
-  }//for     
-
-  //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
-  //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
-  //else				GetHistograms(evt, weight, "lDR_", suffix);
-  GetHistograms(evt, weight, "", suffix);
-
-}//runMatrixMethod_QCDSR2j_2016
 
 
 void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, const std::string &suffix) {
@@ -707,17 +605,17 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
 
   HistogramService *h = &m_hSvc;
   
-  bool isTight = false;
+  //bool isTight = false;
   float d0sig(99);
     
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    isTight = evt.electron()[0].isTightPP();
+    //isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
   } else {
     l = evt.muon()[0].mom();
-    isTight = evt.muon()[0].isTight();
+    //isTight = evt.muon()[0].isTight();
     d0sig = evt.muon()[0].sd0();      
   }//m_electron
 
@@ -740,22 +638,22 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
   
   //if (nTrkBtagged!=0)	return;	
 
-  //deltaR between lepton and the closest narrow jet
-  float closejl_deltaR  = 99;
-  float deltaR_tmp      = 99;
-  int closejl_idx       = -1;
-  
-  size_t jet_idx = 0;
-  for (; jet_idx < evt.jet().size(); ++jet_idx){    
-    deltaR_tmp = 99;
-    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
-    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
-    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
-    if (deltaR_tmp < closejl_deltaR){
-        closejl_deltaR = deltaR_tmp;
-        closejl_idx = jet_idx;
-    }   
-  }//for     
+//   //deltaR between lepton and the closest narrow jet
+//   float closejl_deltaR  = 99;
+//   float deltaR_tmp      = 99;
+//   int closejl_idx       = -1;
+//   
+//   size_t jet_idx = 0;
+//   for (; jet_idx < evt.jet().size(); ++jet_idx){    
+//     deltaR_tmp = 99;
+//     float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
+//     float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
+//     deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
+//     if (deltaR_tmp < closejl_deltaR){
+//         closejl_deltaR = deltaR_tmp;
+//         closejl_idx = jet_idx;
+//     }   
+//   }//for     
 
   //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
@@ -787,17 +685,17 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
 
   HistogramService *h = &m_hSvc;
  
-  bool isTight = false;
+  //bool isTight = false;
   float d0sig(99);
     
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    isTight = evt.electron()[0].isTightPP();
+    //isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
   } else {
     l = evt.muon()[0].mom();
-    isTight = evt.muon()[0].isTight();
+    //isTight = evt.muon()[0].isTight();
     d0sig = evt.muon()[0].sd0();      
   }//m_electron
 
@@ -818,24 +716,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
     
   }//for 
   
-  //if (nTrkBtagged!=0)	return;	
-
-  //deltaR between lepton and the closest narrow jet
-  float closejl_deltaR  = 99;
-  float deltaR_tmp      = 99;
-  int closejl_idx       = -1;
-  
-  size_t jet_idx = 0;
-  for (; jet_idx < evt.jet().size(); ++jet_idx){    
-    deltaR_tmp = 99;
-    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
-    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
-    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
-    if (deltaR_tmp < closejl_deltaR){
-        closejl_deltaR = deltaR_tmp;
-        closejl_idx = jet_idx;
-    }   
-  }//for     
+  //if (nTrkBtagged!=0)	return;	    
 
   GetHistograms(evt, weight, "", suffix);
 
