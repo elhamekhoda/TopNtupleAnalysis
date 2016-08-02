@@ -20,7 +20,7 @@
 class MMUtils{
 
   public:
-    MMUtils(const std::string &eff_filename="eff.root", const std::string &fake_filename="fake.root"); 
+    MMUtils(const std::string &eff_filename="eff.root", const std::string &fake_filename="fake.root", int version = 0); 
     ~MMUtils();
 
     float getMMweights(const Event &evt, const int runMM_StatErr, const bool isElectron, const bool isBoosted);
@@ -51,6 +51,8 @@ class MMUtils{
     TH1F * fake_dr_boosted_mu;
         
     HistogramService m_hSvc;
+
+    int _version;
         
 };
 
