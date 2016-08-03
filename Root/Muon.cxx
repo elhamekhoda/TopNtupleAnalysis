@@ -66,6 +66,20 @@ float &Muon::sd0() {
   return m_sd0;
 }
 
+const float Muon::ptvarcone30() const {
+  return m_ptvarcone30;
+}
+float &Muon::ptvarcone30() {
+  return m_ptvarcone30;
+}
+
+const float Muon::topoetcone20() const {
+  return m_topoetcone20;
+}
+float &Muon::topoetcone20() {
+  return m_topoetcone20;
+}
+
 //Triggers
 
 const bool Muon::HLT_mu50() const {

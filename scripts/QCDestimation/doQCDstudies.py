@@ -97,7 +97,7 @@ def effRates(inputDir):
 		inputfile = TFile(ttbarFile,'READ')
 		
 		
-		parametrization1D =  ["lepPt", "minDeltaR", "cosDPhi", "MET", "d0sig", "Dz0sin", "mwt", "mwt_met", "nJets", "nTrkBtagJets"]
+		parametrization1D =  ["lepPt", "minDeltaR", "cosDPhi", "MET", "d0sig", "Dz0sin", "mwt", "mwt_met", "nJets", "nTrkBtagJets","ptvarcone","topoetcone","topoetcone_effBins"]
 		#parametrization1D += ["lepPhi", "MET_phi", "DeltaPhi", "minDeltaR_tjet_effBins","minDeltaR_tjet", "mwt_effBins", "mwt_met_effBins", "Dz0sin"]
 		
 		for ipar in parametrization1D:
@@ -134,19 +134,21 @@ def effRates(inputDir):
 			h_ratio.Write("realRate_"+ipar+"_"+ichan[0]+"_"+ichan[1])	               			
 			saveCanvas(c, "h_real_"+ipar+"_"+ichan[0]+"_"+ichan[1], outfile, "real_plots")
 		
-		parametrization2D = ["LepPt_DR", "mwt_met_map", "mwt_met_map_lowDR", "mwt_met_map_medDR", "mwt_met_map_highDR"]
+		parametrization2D = ["LepPt_DR", "mwt_met_map", "mwt_met_map_lowDR", "mwt_met_map_medDR", "mwt_met_map_highDR", "lepPt_topoetcone"]
 		for ipar in parametrization2D:
-		
-			if (ipar.find("mwt_met_map")!=-1):
+
+			if(ipar.find("LepPt_DR")!=-1):
+				histo_t = inputfile.Get("eff_"+ipar).Clone() 		   
+				histo_l = inputfile.Get("eff_"+ipar+"_Loose").Clone()
+				histo_l.Add(histo_t,+1)	
+				name = 'pTdr'		
+
+			else:
 				histo_t = inputfile.Get("eff_"+ipar).Clone() 		   
 				histo_l = inputfile.Get("eff_"+ipar+"_Loose").Clone()
 				histo_l.Add(histo_t,+1)
 				name = ipar
-			else:
-				histo_t = inputfile.Get("eff_"+ipar).Clone() 		   
-				histo_l = inputfile.Get("eff_"+ipar+"_Loose").Clone()
-				histo_l.Add(histo_t,+1)	
-				name = 'pTdr'
+			
 						
 			# ---> 2D fake rates: leptPt vs leptEta
 			if extraPlots:	histo_t.Write("hP_2D_"+ipar+"_tight_"+ichan[0]+'_'+ichan[1])
@@ -163,8 +165,8 @@ def effRates(inputDir):
 			h2D_ratio.Draw("colz TEXT e1 SAME")
 			h2D_ratio.SetStats(0)
 			
-			h2D_ratio.GetZaxis().SetRangeUser(0.7, 1.0)
-			h2D_ratio.GetXaxis().SetRangeUser(30, 400)
+			#h2D_ratio.GetZaxis().SetRangeUser(0.7, 1.0)
+			h2D_ratio.GetXaxis().SetRangeUser(30, 300)
 			h2D_ratio.GetYaxis().SetRangeUser(0.4, 7)
 			#if(ichan[0]=='boosted'):	h2D_ratio.GetYaxis().SetRangeUser(0., 1.5)
 			#else:				h2D_ratio.GetYaxis().SetRangeUser(0., 5.0)
@@ -184,145 +186,7 @@ def effRates(inputDir):
 			h2D_ratio.Write('eff_'+name+'_'+ichan[0]+'_'+ichan[1])
 			saveCanvas(c2, "2Dh_"+name+"_"+ichan[0]+"_"+ichan[1], outfile, "real_plots")
 		
-		
-		'''
-		#pT
-		hTmp_t_pt = inputfile.Get("eff_LepPt_DR").ProjectionX().Clone()
-		hTmp_l_pt = inputfile.Get("eff_LepPt_DR_Loose").ProjectionX().Clone()
-		hTmp_l_pt.Add(hTmp_t_pt,+1)
-		
-		#DR
-		hTmp_t_dr = inputfile.Get("eff_LepPt_DR").ProjectionY().Clone()
-		hTmp_l_dr = inputfile.Get("eff_LepPt_DR_Loose").ProjectionY().Clone()
-		hTmp_l_dr.Add(hTmp_t_dr,+1)
-		
-		#pT and DR	
-		hTmp_t_pTdr = inputfile.Get("eff_LepPt_DR").Clone()		     
-		hTmp_l_pTdr = inputfile.Get("eff_LepPt_DR_Loose").Clone()
-		hTmp_l_pTdr.Add(hTmp_t_pTdr,+1)
-		
-		#eff using TH1 lepton pT
-		c = TCanvas("c_hP_pt_"  +ichan[0]+'_'+ichan[1])
-		leg = TLegend(0.6, 0.7, 0.8, 0.9, "Lept Pt")
-		hTmp_t_pt.Draw()		
-		hTmp_t_pt.SetStats(0)
-		hTmp_t_pt.SetLineColor(2)
-		hTmp_t_pt.SetLineWidth(2)
-		leg.AddEntry(hTmp_t_pt, "tight: "+`hTmp_t_pt.Integral()`[:10], "L")
-		
-		hTmp_l_pt.Draw("same")
-		hTmp_l_pt.SetStats(0)
-		hTmp_l_pt.SetLineColor(4)
-		hTmp_l_pt.SetLineWidth(2)
-		leg.AddEntry(hTmp_l_pt, "loose: "+`hTmp_l_pt.Integral()`[:10], "L")
-		
-		c.SetGridy(1)
-		c.SetLogy(1)
-		c.SetLogx(1)
-		c.Update()
-                c.Modified()
-		leg.Draw()		
-		saveCanvas(c, 'hP_pt_'+ichan[0]+'_'+ichan[1], outfile, 'eff_plots')
-		
-		
-		h_ratio_pt = hTmp_t_pt
-		h_ratio_pt.Divide(hTmp_t_pt, hTmp_l_pt, 1.0, 1.0, "B")
-		
-		c = TCanvas("c_"+ichan[0]+'_eff_pt_'+ichan[1])
-                maxi = 0
-		mini = 0
-		h_ratio_pt.Draw("e")			               	
-		maxi = h_ratio_pt.GetMaximum()
-		mini = h_ratio_pt.GetMinimum()
-                h_ratio_pt.SetMaximum(maxi*1.3)
-		h_ratio_pt.SetMinimum(mini*0.7)
-		c.SetGridy(1)
-		c.Update()
-                c.Modified()		
-		saveCanvas(c, 'h_eff_pt_'+ichan[0]+'_'+ichan[1], outfile, 'eff_plots')
-				
-		#eff using TH1 minDR
-		c = TCanvas("c_hP_dr_"  +ichan[0]+'_'+ichan[1])
-		leg = TLegend(0.6, 0.7, 0.8, 0.9, "min #Delta R")
-		hTmp_t_dr.Draw()		
-		hTmp_t_dr.SetStats(0)
-		hTmp_t_dr.SetLineColor(2)
-		hTmp_t_dr.SetLineWidth(2)
-		leg.AddEntry(hTmp_t_dr, "tight: "+`hTmp_t_dr.Integral()`[:10], "L")
-		
-		hTmp_l_dr.Draw("same")
-		hTmp_l_dr.SetStats(0)
-		hTmp_l_dr.SetLineColor(4)
-		hTmp_l_dr.SetLineWidth(2)
-		leg.AddEntry(hTmp_l_dr, "loose: "+`hTmp_l_dr.Integral()`[:10], "L")
-		
-		c.SetGridy(1)
-		c.SetLogy(1)
-		c.Update()
-                c.Modified()
-		leg.Draw()		
-		saveCanvas(c, 'hP_dr_'+ichan[0]+'_'+ichan[1], outfile, 'eff_plots')
-				
-		h_ratio_dr = hTmp_t_dr
-		h_ratio_dr.Divide(hTmp_t_dr, hTmp_l_dr, 1.0, 1.0, "B")
-		
-		c1 = TCanvas("c_"+'eff_dr_'+ichan[0]+'_'+ichan[1])
-                maxi = 0
-		mini = 0
-		h_ratio_dr.Draw("e")			               	
-		maxi = h_ratio_dr.GetMaximum()
-		mini = h_ratio_dr.GetMinimum()
-                h_ratio_dr.SetMaximum(maxi*1.3)
-		h_ratio_dr.SetMinimum(0.5)
-		c.SetGridy(1)
-		c1.Update()
-                c1.Modified()
-		saveCanvas(c1, 'h_eff_dr_'+ichan[0]+'_'+ichan[1], outfile, 'eff_plots')
-		
-		#eff using TH2 lepton pT and minDR
-		c = TCanvas("c_hP_pTdr_tight_"  +ichan[0]+'_'+ichan[1])
-		hTmp_t_pTdr.Draw("colzTEXT")
-		hTmp_t_pTdr.SetStats(0)
-		c.SetLogx(1)
-		saveCanvas(c, 'hP_pTdr_tight_'+ichan[0]+'_'+ichan[1], outfile, 'eff_plots')
-		
-		c = TCanvas("c_hP_pTdr_loose_"  +ichan[0]+'_'+ichan[1])
-		hTmp_l_pTdr.Draw("colzTEXT")
-		hTmp_l_pTdr.SetStats(0)	
-		c.SetLogx(1)
-		saveCanvas(c, 'hP_pTdr_loose_'+ichan[0]+'_'+ichan[1], outfile, 'eff_plots')
-				
-		h_ratio_pTdr = hTmp_t_pTdr
-		h_ratio_pTdr.Divide(hTmp_t_pTdr, hTmp_l_pTdr, 1.0, 1.0, "B")
-		
-		gStyle.SetPaintTextFormat("1.3f")
-		c2 = TCanvas("c_"+'eff2D_dr_'+ichan[0]+'_'+ichan[1])
-		c2.cd()
-		h_ratio_pTdr.Draw()
-		h_ratio_pTdr.Draw("colz TEXT e1 SAME")
-		
-		h_ratio_pTdr.GetZaxis().SetRangeUser(0.5, 1.0)
-		
-		if(ichan[0]=='boosted'):	h_ratio_pTdr.GetYaxis().SetRangeUser(0., 1.5)
-		else:				h_ratio_pTdr.GetYaxis().SetRangeUser(0., 5.0)
-		
-		h_ratio_pTdr.SetStats(0)
-		#h_ratio_pTdr[i].GetYaxis().SetMoreLogLabels(1)	
-		#h_ratio_pTdr[i].GetXaxis().SetMoreLogLabels(1)	
-		gPad.RedrawAxis()	
-		gStyle.SetPaintTextFormat("1.3f")               	
-		c2.SetLogx(1)
-		#c2.SetLogy(1)
-		c2.SetGridy(1)
-		c2.Update()
-                c2.Modified()		
-		saveCanvas(c2, '2Dh_eff_dr_'+ichan[0]+'_'+ichan[1], outfile, 'eff_plots')
-			
-		outfile.cd()	
-		h_ratio_pt.Write('eff_pt_'+ichan[0]+'_'+ichan[1])
-		h_ratio_dr.Write('eff_dr_'+ichan[0]+'_'+ichan[1])
-		h_ratio_pTdr.Write('eff_pTdr_'+ichan[0]+'_'+ichan[1])
-		'''
+
 	return
 	
 	
@@ -335,8 +199,8 @@ def fakeRates(inputDir, lumi):
 	channels  = []
 	
 	
-	channels += [('resolved','e' )]
-	#channels += [('resolved','mu')]
+	#channels += [('resolved','e' )]
+	channels += [('resolved','mu')]
 	#channels += [('boosted', 'e' )]
 	#channels += [('boosted', 'mu')]
 		
@@ -386,10 +250,10 @@ def fakeRates(inputDir, lumi):
 		dataFile = TFile(hadd_dataPath,'READ')
 		
 		varList = [] 
-		varList += ['mwt_effBins', 'mwt', 'lepPt_effBins','lepPt','minDeltaR_effBins','minDeltaR','minDeltaR_tjet_effBins','minDeltaR_tjet','closJetPt']
+		varList += ['mwt', 'lepPt_effBins','lepPt','minDeltaR_effBins','minDeltaR','minDeltaR_tjet_effBins','minDeltaR_tjet','closJetPt']
 		varList += ['MET', 'MET_effBins','lepPhi', 'MET_phi', 'DeltaPhi', 'cos_metPhi_lepPhi', 'cos_metPhi_lepPhi_effBins', 'lepEta','nTrkBtagJets','nJets', 'closJetJVT', 'mwt_met', 'Dz0sin', 'd0sig']
 		
-		#varList += ['MET_effBins1', 'MET_effBins2','MET_effBins3','MET_effBins4','MET_effBins5']
+		varList += ["ptvarcone", "topoetcone", "topoetcone_effBins"]
 		#varList += ['mwt_effBins1', 'mwt_effBins2', 'mwt_effBins3', 'mwt_effBins4', 'mwt_effBins5', 'mwt_effBins6']
 		
 		#varList += ['chi2']
@@ -583,13 +447,15 @@ def fakeRates(inputDir, lumi):
 			c_l.Modified() 
 			saveCanvas(c_l, 'hLOG_'+ichan[0]+'_'+var+'_loose_'+ichan[1], outfile, 'fake_plots')
 		# --> Fake rate
-		
+		parametrization1D = []
 		parametrization1D =  ["lepPt_effBins", "lepPt", "lepEta", "minDeltaR_effBins", "minDeltaR", "closJetPt_effBins", "cos_metPhi_lepPhi", "cos_metPhi_lepPhi_effBins","MET", "d0sig"]
-		parametrization1D += ["minDeltaR_highEta", "lepPt_highEta", "cos_metPhi_lepPhi_highEta", "minDeltaR_lowEta", "lepPt_lowEta", "cos_metPhi_lepPhi_lowEta"]
-		parametrization1D += ["minDeltaR_lowEta", "minDeltaR_highEta"]
+		#parametrization1D += ["minDeltaR_highEta", "lepPt_highEta", "cos_metPhi_lepPhi_highEta", "minDeltaR_lowEta", "lepPt_lowEta", "cos_metPhi_lepPhi_lowEta"]
+		parametrization1D += ["ptvarcone", "topoetcone", "topoetcone_effBins"]
+		#parametrization1D += ["lepPt_highmWt", "lepPt_medmWt", "lepPt_lowmWt", "cos_metPhi_lepPhi_highmWt", "cos_metPhi_lepPhi_medmWt", "cos_metPhi_lepPhi_lowmWt"]
 		#parametrization1D += ["lepPhi", "MET_phi", "DeltaPhi", "minDeltaR_tjet_effBins","minDeltaR_tjet", "mwt_effBins", "mwt_met_effBins", "Dz0sin", "nJets", "nTrkBtagJets"]
-		parametrization1D += ["lepPt_lowDR", "lepPt_highDR", "minDeltaR_lowDR", "minDeltaR_highDR", "cos_metPhi_lepPhi_lowDR", "cos_metPhi_lepPhi_highDR", "mwt_effBins", "MET_effBins"]
-		#parametrization1D += ["mwt_met_highDR", "mwt_met_lowDR", "met_highDR", "met_lowDR"]
+		#parametrization1D += ["lepPt_lowDR", "lepPt_highDR", "minDeltaR_lowDR", "minDeltaR_highDR", "cos_metPhi_lepPhi_lowDR", "cos_metPhi_lepPhi_highDR"]
+		parametrization1D += ["mwt_effBins", "MET_effBins"]
+		parametrization1D += ["mwt_met_highDR", "mwt_met_lowDR", "met_highDR", "met_lowDR"]
 		
 		for ipar in parametrization1D:
 		
@@ -645,12 +511,13 @@ def fakeRates(inputDir, lumi):
 			h_ratio.Write("fakeRate_"+ipar+"_"+ichan[0]+"_"+ichan[1])	               			
 			saveCanvas(c, "h_fake_"+ipar+"_"+ichan[0]+"_"+ichan[1], outfile, "fake_plots")
 		
-
-		parametrization2D =  ["lepPt_lepEta", "lepPt_closJetPt", "lepPt_closJetPt_lowDR", "lepPt_closJetPt_medDR", "lepPt_closJetPt_highDR"]
-		parametrization2D += ["lepPt_cosDPhi", "lepPt_cosDPhi_lowDR", "lepPt_cosDPhi_medDR", "lepPt_cosDPhi_highDR"]
-		parametrization2D += ["lepPt_cosDPhi_lowEta", "lepPt_cosDPhi_highEta", "lepPt_closJetPt_lowEta", "lepPt_closJetPt_highEta"]
-		parametrization2D += ["lepPt_met", "lepPt_met_lowDR", "lepPt_met_highDR"]
-		parametrization2D += ["lepPt_minDeltaR"]
+		parametrization2D = []
+		#parametrization2D =  ["lepPt_lepEta", "lepPt_closJetPt", "lepPt_closJetPt_lowDR", "lepPt_closJetPt_medDR", "lepPt_closJetPt_highDR"]
+		#parametrization2D += ["lepPt_cosDPhi", "lepPt_cosDPhi_lowDR", "lepPt_cosDPhi_medDR", "lepPt_cosDPhi_highDR"]
+		#parametrization2D += ["lepPt_cosDPhi_lowEta", "lepPt_cosDPhi_highEta", "lepPt_closJetPt_lowEta", "lepPt_closJetPt_highEta"]
+		#parametrization2D += ["lepPt_cosDPhi_lowmWt", "lepPt_cosDPhi_medmWt", "lepPt_cosDPhi_highmWt"]
+		#parametrization2D += ["lepPt_met", "lepPt_met_lowDR", "lepPt_met_highDR"]
+		parametrization2D += ["lepPt_minDeltaR","lepPt_topoetcone"]
 		#parametrization2D += ["minDeltaR_met_highLepPt", "minDeltaR_met_lowLepPt", "lepPt_closJetPt"]
 		parametrization2D += ['mwt_met_map', 'mwt_met_map_lowDR', 'mwt_met_map_medDR', 'mwt_met_map_highDR']
 		for ipar in parametrization2D:
@@ -750,8 +617,8 @@ def fakeRates(inputDir, lumi):
 
 #Produce eff rate plots
 
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/010716_ePreTag_v3.0_2j_realRates/'
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/010716_eTag_v3.0_2j_realRates/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/030816_ePreTag_v1.0_2j_realRates/'
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/030816_eTag_v1.0_2j_realRates/'
 
 if 0:
 	effRates(inputDir)
@@ -760,11 +627,13 @@ if 0:
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/250616_muPreTag_v1.0_2j_fakeRates/'
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/250616_muTag_v1.0_2j_fakeRates/'
 
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/130716_ePreTag_v1.0_2j_fakeRates/'
-#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/130716_eTag_v1.0_2j_fakeRates/'
+#inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/030816_ePreTag_v1.0_2j_fakeRates/'
+inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/030816_muPreTag_v16.0_2j_fakeRates/'
 
-lumi = 3193.68 #pb-1
+#lumi = 3193.68 #pb-1
 #lumi =  5807.5 #pb-1
+lumi =  3200+3500 #pb-1
+
 
 if 1:	
 	fakeRates(inputDir, lumi)

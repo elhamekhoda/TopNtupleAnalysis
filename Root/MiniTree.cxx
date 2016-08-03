@@ -147,6 +147,8 @@ void MiniTree::read(int event, Event &e) {
     e.electron()[k].Dz0() = vf("el_delta_z0_sintheta")->at(k);
     e.electron()[k].d0() = vf("el_d0")->at(k);
     e.electron()[k].sd0() = vf("el_d0sig")->at(k); 
+    e.electron()[k].ptvarcone20() = vf("el_ptvarcone20")->at(k);
+    e.electron()[k].topoetcone20()= vf("el_topoetcone20")->at(k);  
     e.electron()[k].HLT_e24_lhmedium_iloose_L1EM20VH()= 0;
     e.electron()[k].HLT_e24_lhmedium_L1EM18VH() = 0;
     e.electron()[k].HLT_e24_lhmedium_L1EM20VH() = 0;
@@ -168,6 +170,8 @@ void MiniTree::read(int event, Event &e) {
     e.muon()[k].Dz0() = vf("mu_delta_z0_sintheta")->at(k);
     e.muon()[k].d0() = vf("mu_d0")->at(k);
     e.muon()[k].sd0() = vf("mu_d0sig")->at(k);
+    e.muon()[k].ptvarcone30() = vf("mu_ptvarcone30")->at(k);
+    e.muon()[k].topoetcone20()= vf("mu_topoetcone20")->at(k); 
     if (vc("mu_trigMatch_HLT_mu20_L1MU15"))		e.muon()[k].HLT_mu20_L1MU15() 	 = vc("mu_trigMatch_HLT_mu20_L1MU15")->at(k);
     if (vc("mu_trigMatch_HLT_mu20_iloose_L1MU15"))	e.muon()[k].HLT_mu20_iloose_L1MU15() = vc("mu_trigMatch_HLT_mu20_iloose_L1MU15")->at(k); 
     e.muon()[k].HLT_mu50() 		 = vc("mu_trigMatch_HLT_mu50")->at(k);   
@@ -226,21 +230,20 @@ void MiniTree::read(int event, Event &e) {
   if (i("rmujets")) e.passes().push_back("rmujets");
   if (i("rejets_2015")) e.passes().push_back("rejets_2015");
   if (i("rmujets_2015")) e.passes().push_back("rmujets_2015");
-  if (i("rmujetsWCR_2015")) e.passes().push_back("rmujetsWCR_2015");
   if (i("rejets_2016")) e.passes().push_back("rejets_2016");
   if (i("rmujets_2016")) e.passes().push_back("rmujets_2016");
-  if (i("rmujetsWCR_2016")) e.passes().push_back("rmujetsWCR_2016");
   if (i("rmu2jets")) e.passes().push_back("rmu2jets");
   
-  if (i("rmujetsQCDCR_2015")) 	e.passes().push_back("rmujetsQCDCR_2015");
-  if (i("bmujetsQCDCR_2015")) 	e.passes().push_back("bmujetsQCDCR_2015");
   if (i("rejetsQCDCR_2015")) 	e.passes().push_back("rejetsQCDCR_2015");
   if (i("bejetsQCDCR_2015")) 	e.passes().push_back("bejetsQCDCR_2015");
+  if (i("rmujetsQCDCR_2015")) 	e.passes().push_back("rmujetsQCDCR_2015");
+  if (i("bmujetsQCDCR_2015")) 	e.passes().push_back("bmujetsQCDCR_2015");  
   if (i("rejetsIncluR_2015")) 	e.passes().push_back("rejetsIncluR_2015");
   if (i("bejetsIncluR_2015")) 	e.passes().push_back("bejetsIncluR_2015");
   if (i("rejetsWCR_2015")) 	e.passes().push_back("rejetsWCR_2015");
   if (i("bejetsWCR_2015")) 	e.passes().push_back("bejetsWCR_2015");
-
+  if (i("rmujetsWCR_2015")) 	e.passes().push_back("rmujetsWCR_2015");
+  if (i("bmujetsWCR_2015")) 	e.passes().push_back("bmujetsWCR_2015");
 
   if (i("rmujetsQCDCR_2016")) 	e.passes().push_back("rmujetsQCDCR_2016");
   if (i("bmujetsQCDCR_2016")) 	e.passes().push_back("bmujetsQCDCR_2016");

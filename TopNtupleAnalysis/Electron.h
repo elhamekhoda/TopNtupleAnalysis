@@ -48,6 +48,12 @@ class Electron : public MObject {
     int &isEM();
     const int isEM() const;
     
+    const float ptvarcone20() const;
+    float &ptvarcone20();
+    
+    const float topoetcone20() const;
+    float &topoetcone20();
+    
     const bool HLT_e24_lhmedium_iloose_L1EM20VH() const;
     bool &HLT_e24_lhmedium_iloose_L1EM20VH();
     
@@ -76,6 +82,8 @@ class Electron : public MObject {
     float m_Dz0;
     float m_d0;
     float m_sd0;
+    float m_ptvarcone20;
+    float m_topoetcone20;
     int m_author;
 
     int m_nSiHits;

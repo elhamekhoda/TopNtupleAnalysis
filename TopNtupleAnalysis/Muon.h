@@ -46,7 +46,13 @@ class Muon : public MObject {
 
     const bool passTrkCuts() const;
     bool &passTrkCuts();
-
+    
+    const float ptvarcone30() const;
+    float &ptvarcone30();
+    
+    const float topoetcone20() const;
+    float &topoetcone20();
+    
     bool pass() const;
     bool passLoose() const;
 
@@ -84,6 +90,8 @@ class Muon : public MObject {
     float m_z0_exPV;
     float m_d0;
     float m_sd0;
+    float m_ptvarcone30;
+    float m_topoetcone20;
     
     bool m_HLT_mu50;
     bool m_HLT_mu20_iloose_L1MU15;

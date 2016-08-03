@@ -116,6 +116,20 @@ int &Electron::isEM() {
   return m_isEM;
 }
 
+const float Electron::ptvarcone20() const {
+  return m_ptvarcone20;
+}
+float &Electron::ptvarcone20() {
+  return m_ptvarcone20;
+}
+
+const float Electron::topoetcone20() const {
+  return m_topoetcone20;
+}
+float &Electron::topoetcone20() {
+  return m_topoetcone20;
+}
+
 //Triggers
 
 const bool Electron::HLT_e24_lhmedium_iloose_L1EM20VH() const {
