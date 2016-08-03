@@ -20,7 +20,7 @@
 #include "TLorentzVector.h"
 
 
-MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filename, int version) {
+MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filename) {
 
   if (eff_filename!="" && fake_filename!=""){
     
@@ -28,7 +28,10 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
     
     TFile m_eff_rootfile(eff_filename.c_str(), "r");
     
-    eff_map_resolved_e = 	(TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_e");
+    //eff_map_resolved_e = 	(TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_e");
+    //if(eff_map_resolved_e)	eff_map_resolved_e->SetDirectory(0);
+
+    eff_map_resolved_e = 	(TH2F*) m_eff_rootfile.Get("eff_lepPt_topoetcone_resolved_e");
     if(eff_map_resolved_e)	eff_map_resolved_e->SetDirectory(0);
     
     eff_map_resolved_mu = 	(TH2F*) m_eff_rootfile.Get("eff_pTdr_resolved_mu");
@@ -42,27 +45,22 @@ MMUtils::MMUtils(const std::string &eff_filename, const std::string &fake_filena
       
     TFile m_fake_rootfile(fake_filename.c_str(), "r");
 
-    fake_map_resolved_e_lEta =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_cosDPhi_lowEta_resolved_e");
-    if(fake_map_resolved_e_lEta)  fake_map_resolved_e_lEta->SetDirectory(0);
-    
-    fake_map_resolved_e_hEta =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_cosDPhi_highEta_resolved_e");
-    if(fake_map_resolved_e_hEta)  fake_map_resolved_e_hEta->SetDirectory(0);
-    
+    fake_map_resolved_e =        (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_topoetcone_resolved_e");
+    if(fake_map_resolved_e)      fake_map_resolved_e->SetDirectory(0);
+
     fake_map_resolved_mu_lDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_lowDR_resolved_mu");
     if(fake_map_resolved_mu_lDR)  fake_map_resolved_mu_lDR->SetDirectory(0);
     fake_map_resolved_mu_mDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_medDR_resolved_mu");
     if(fake_map_resolved_mu_mDR)  fake_map_resolved_mu_mDR->SetDirectory(0);
     fake_map_resolved_mu_hDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_mwt_met_map_highDR_resolved_mu");
-//    fake_map_resolved_mu_hDR =    (TH2F*)m_fake_rootfile.Get("2Dfake_lepPt_minDeltaR_resolved_mu");
     if(fake_map_resolved_mu_hDR)  fake_map_resolved_mu_hDR->SetDirectory(0);
-
+    
     fake_pt_boosted_e = 	(TH1F*)m_fake_rootfile.Get("fakeRate_pt_boosted_e");
     if(fake_pt_boosted_e)	fake_pt_boosted_e->SetDirectory(0);
     
     fake_dr_boosted_mu  = 	(TH1F*)m_fake_rootfile.Get("fakeRate_dr_boosted_mu");
     if(fake_dr_boosted_mu)	fake_dr_boosted_mu->SetDirectory(0); 
 
-    _version = version;
   }
   
 }
@@ -74,11 +72,22 @@ MMUtils::~MMUtils(){
   delete eff_map_boosted_e ;
   delete eff_map_boosted_mu ;
   
-  delete fake_map_resolved_e_lEta;
-  delete fake_map_resolved_e_hEta;
+  delete fake_map_resolved_e_lDR;
+  delete fake_map_resolved_e_mDR;
+  delete fake_map_resolved_e_hDR;
   delete fake_map_resolved_mu_lDR;
   delete fake_map_resolved_mu_mDR;
   delete fake_map_resolved_mu_hDR;
+  
+  delete fake_map_resolved_e;
+  delete fake_minDeltaR_resolved_e_hEta;
+  delete fake_map_resolved_e_lEta;
+  delete fake_map_resolved_e_hEta;
+  
+  delete fake_pt_hmWt_resolved_e;
+  delete fake_pt_mmWt_resolved_e;
+  delete fake_pt_lmWt_resolved_e;
+  
   delete fake_pt_boosted_e;  
   delete fake_dr_boosted_mu;
 
@@ -130,12 +139,12 @@ void MMUtils::getRatesBoostedMu(float &realRate, float &realRate_err, float &fak
     return;
 }
 
-void MMUtils::getRatesBoostedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR){
+void MMUtils::getRatesBoostedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float absEta, float cosDPhi){
 
     get2Drates(realRate, realRate_err, eff_map_boosted_e, lepPt, closejl_DR);
-
-    if(lepPt > 120)	get1Drates(fakeRate, fakeRate_err, fake_pt_boosted_e, 119);
-    else		get1Drates(fakeRate, fakeRate_err, fake_pt_boosted_e, lepPt);
+   
+    if(absEta > 1.8)	get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_hEta, lepPt, cosDPhi);
+    else		get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_lEta, lepPt, cosDPhi);
 
     return;
 }
@@ -149,22 +158,12 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
     float mwt_limit(95);
     
     get2Drates(realRate, realRate_err, eff_map_resolved_mu, lepPt, closejl_DR); 
-//    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_hDR, lepPt, closejl_DR);
 
-//    if (fakeRate<0) fakeRate=0;
-
-    
     if(closejl_DR > 0.6){
 
-      if(_version == 2015) {
       if(met<50)	mwt_limit = 95;
       else 		mwt_limit = 195;
-      } // if(_version == 2015)
-      else {
-      if(met<100)        mwt_limit =100;
-      else              mwt_limit = 200;
-      } // else
-
+      
       mwt_min = std::min(mwt, mwt_limit);
       met_min = std::min(met, met_limit);
       
@@ -174,10 +173,7 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
       
     }else if(closejl_DR > 0.4){
 
-      if(_version == 2015)
       mwt_limit = 95;
-      else
-      mwt_limit = 200;
       
       mwt_min = std::min(mwt, mwt_limit);
       met_min = std::min(met, met_limit);
@@ -187,16 +183,10 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
       if (fakeRate<0) fakeRate=0;
             
     }else{
- 
-      if(_version == 2015) {   
+    
       if(met<40)	mwt_limit = 95;
       else 		mwt_limit = 195;
-      }
-      else {
-      if(met<100)        mwt_limit = 100;
-      else               mwt_limit = 60;
-      }    
-
+    
       mwt_min = std::min(mwt, mwt_limit);
       met_min = std::min(met, met_limit);
       
@@ -205,19 +195,16 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
       if (fakeRate<0) fakeRate=0;
             
     }//if
-    
 
     return;
         
 }
 
-void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float absEta, float cosDPhi){
+void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float absEta, float cosDPhi, float mwt, float topoetcone){
 
-    get2Drates(realRate, realRate_err, eff_map_resolved_e, lepPt, closejl_DR);
+    get2Drates(realRate, realRate_err, eff_map_resolved_e, lepPt, topoetcone);   
+    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e, lepPt, topoetcone);
     
-    if(absEta > 1.8)	get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_hEta, lepPt, cosDPhi);
-    else		get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_lEta, lepPt, cosDPhi);
-
     return;
 }
 
@@ -225,6 +212,7 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
    
    bool isTight;
    float d0sig;
+   float topoetcone;
 
    if ( isElectron && evt.electron().size()<1 ) return 0;
    if (!isElectron && evt.muon().size()<1 )     return 0;
@@ -234,6 +222,8 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
    if (isElectron)    {
        lepP4 = evt.electron()[0].mom();
        isTight = evt.electron()[0].isTightPP();
+       d0sig = evt.electron()[0].sd0();
+       topoetcone = evt.electron()[0].topoetcone20()*1e-3;
        
    }else {
        lepP4 = evt.muon()[0].mom();
@@ -281,11 +271,11 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
    float realRate_err(0);  
    
    if (isBoosted){
-   	if (isElectron)	getRatesBoostedEl(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR);
+   	if (isElectron)	getRatesBoostedEl(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, absEta, cosDPhi);
    	else		getRatesBoostedMu(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR);
    }
    else{
-   	if (isElectron)	getRatesResolvedEl(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, absEta, cosDPhi);
+   	if (isElectron)	getRatesResolvedEl(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, absEta, cosDPhi, mWt, topoetcone);
    	else		getRatesResolvedMu(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, closejl_pT, cosDPhi, MET, mWt, deltaPhi);
 		
    }//isBoosted	
