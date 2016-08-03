@@ -106,8 +106,8 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2015(const Event &evt, double weight, c
   float MET = evt.met().Perp()*1e-3;
   
   if(m_electron){
-      //if( (MET>20) || (MET+mWt)>60)	return;
-      if( (MET<20) || (MET+mWt)>60)	return;
+      if( (MET>20) || (MET+mWt)>60)	return;
+      //if( (MET<20) || (MET+mWt)>60)	return;
   }else{
       if( (MET<20) || (MET+mWt)<60)	return;
       if(fabs(d0sig)<5)			return;
@@ -132,8 +132,8 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2015(const Event &evt, double weight, c
 
   if(m_electron){
   
-    if (abs(l.Eta())>1.8)	        GetHistograms(evt, weight, "hEta_", suffix);
-    else				GetHistograms(evt, weight, "lEta_", suffix);
+    //if (abs(l.Eta())>1.8)	        GetHistograms(evt, weight, "hEta_", suffix);
+    //else				GetHistograms(evt, weight, "lEta_", suffix);
     GetHistograms(evt, weight, "", suffix);
     
   }else{
@@ -160,12 +160,12 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2015(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR")))
+    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR")))
+    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
@@ -208,7 +208,8 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2015(const Event &evt, double weight, c
   float MET = evt.met().Perp()*1e-3;
   
   if(m_electron){
-      if( (MET>20) && (MET+mWt)>60)		return;
+      if( (MET<20) && (MET+mWt)>60)		return; //Validation region 1
+      if( (MET>20) && (MET+mWt)<60)		return; //Validation region 2
   }else{
       if( (MET<20) || (MET+mWt)<60)		return;
       if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
@@ -283,6 +284,15 @@ void AnaTtresMM::runMatrixMethod_WjetsCR2j_2015(const Event &evt, double weight,
       if(fabs(d0sig)>3)			      	return;
   }//if
   
+  int nTrkBtagged = 0; 
+  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+          nTrkBtagged += 1;
+  
+  }//for 
+  
+ if (nTrkBtagged!=0)	return;	
+
   GetHistograms(evt, weight, "", suffix);
 
 }//runMatrixMethod_WjetsCR2j_2015
@@ -368,6 +378,75 @@ void AnaTtresMM::runMatrixMethod_SR4j_2015(const Event &evt, double weight, cons
 
 }//runMatrixMethod_SR4j_2015
 
+void AnaTtresMM::runMatrixMethod_QCDVR4j_2015(const Event &evt, double weight, const std::string &suffix) {
+
+  if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
+    return;
+
+  if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
+    return;
+
+  if (m_boosted) {
+    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015")))
+      return;
+  }
+
+  if (!m_boosted)
+    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
+      return;
+
+  if (!m_boosted)	if(evt.jet().size()<4)	return;
+
+  HistogramService *h = &m_hSvc;
+  
+  bool trig1(0); 
+  bool trig2(0); 
+  bool trig3(0);
+  bool trig4(0);
+  bool trig5(0);
+
+  bool isTight = false;
+  float d0sig(99);
+    
+  TLorentzVector l;
+  if (m_electron) {
+    l = evt.electron()[0].mom();
+    isTight = evt.electron()[0].isTightPP();
+    d0sig = evt.electron()[0].sd0();
+
+  } else {
+    l = evt.muon()[0].mom();
+    isTight = evt.muon()[0].isTight();
+    d0sig = evt.muon()[0].sd0();
+    
+    //Muon trigers
+    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
+    trig2 = evt.muon()[0].HLT_mu50();
+    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
+    
+    bool trig_prescaled   = trig1;
+    bool trig_unprescaled = trig2 || trig3;
+    
+    if (trig_prescaled && !trig_unprescaled)	return;
+           
+  }//m_electron
+
+  float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
+  float MET = evt.met().Perp()*1e-3;
+  
+  if(m_electron){
+      //if( (MET<20) && (MET+mWt)>60)		return; //Validation region 1
+      if( (MET>20) && (MET+mWt)<60)		return; //Validation region 2
+  }else{
+      if( (MET<20) || (MET+mWt)<60)		return;
+      if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
+  }//if
+
+  GetHistograms(evt, weight, "", suffix);
+
+}//AnaTtresMM::runMatrixMethod_QCDVR4j_2015
+
+
 // ----- end functions with 2015 configuration ---------- //
 
 // ----- functions with 2016 version ---------- //
@@ -381,17 +460,23 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))
+    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
+    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
+  
+  bool trig1(0); 
+  bool trig2(0); 
+  bool trig3(0);
+  bool trig4(0);
+  bool trig5(0);
 
   bool isTight = false;
   float d0sig(99);
@@ -399,12 +484,40 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    //isTight = evt.electron()[0].isTightPP();
+    isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
+    /*
+    //Electron trigers
+    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
+    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
+    trig3 = evt.electron()[0].HLT_e60_lhmedium();
+    trig4 = evt.electron()[0].HLT_e120_lhloose();
+                
+    bool trig_MC = trig1 || trig3 || trig4; 
+    bool trig_DT = trig2 || trig3 || trig4;
+            
+    if (evt.channelNumber()!=0){
+        if (!trig_MC)return;
+    }else{
+        if (!trig_DT)return;
+    }
+    */
   } else {
     l = evt.muon()[0].mom();
-    //isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();     
+    isTight = evt.muon()[0].isTight();
+    d0sig = evt.muon()[0].sd0();
+    
+    //Muon trigers
+    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
+    trig2 = evt.muon()[0].HLT_mu50();
+    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
+    
+    bool trig_prescaled   = trig1;
+    bool trig_unprescaled = trig2 || trig3;
+    
+    //if (isTight)
+       if (trig_prescaled && !trig_unprescaled)	return;
+           
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -417,31 +530,31 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
       if(fabs(d0sig)<5)			return;
   }//if
 
-//   int nTrkBtagged = 0; 
-//   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-//        if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
-//           nTrkBtagged += 1;
-//   
-//   }//for 
+  int nTrkBtagged = 0; 
+  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+          nTrkBtagged += 1;
+  
+  }//for 
   
   //if (nTrkBtagged!=0)	return;	
 
-//   //deltaR between lepton and the closest narrow jet
-//   float closejl_deltaR  = 99;
-//   float deltaR_tmp      = 99;
-//   int closejl_idx       = -1;
-//   
-//   size_t jet_idx = 0;
-//   for (; jet_idx < evt.jet().size(); ++jet_idx){    
-//     deltaR_tmp = 99;
-//     float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
-//     float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
-//     deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
-//     if (deltaR_tmp < closejl_deltaR){
-//         closejl_deltaR = deltaR_tmp;
-//         closejl_idx = jet_idx;
-//     }   
-//   }//for     
+  //deltaR between lepton and the closest narrow jet
+  float closejl_deltaR  = 99;
+  float deltaR_tmp      = 99;
+  int closejl_idx       = -1;
+  
+  size_t jet_idx = 0;
+  for (; jet_idx < evt.jet().size(); ++jet_idx){    
+    deltaR_tmp = 99;
+    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
+    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
+    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
+    if (deltaR_tmp < closejl_deltaR){
+        closejl_deltaR = deltaR_tmp;
+        closejl_idx = jet_idx;
+    }   
+  }//for     
 
   //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
@@ -461,30 +574,64 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))
+    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
+    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
   
+  bool trig1(0); 
+  bool trig2(0); 
+  bool trig3(0);
+  bool trig4(0);
+  bool trig5(0);
+
   bool isTight = false;
   float d0sig(99);
     
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    //isTight = evt.electron()[0].isTightPP();
+    isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
+    /*
+    //Electron trigers
+    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
+    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
+    trig3 = evt.electron()[0].HLT_e60_lhmedium();
+    trig4 = evt.electron()[0].HLT_e120_lhloose();
+                
+    bool trig_MC = trig1 || trig3 || trig4; 
+    bool trig_DT = trig2 || trig3 || trig4;
+            
+    if (evt.channelNumber()!=0){
+        if (!trig_MC)return;
+    }else{
+        if (!trig_DT)return;
+    }
+    */
   } else {
     l = evt.muon()[0].mom();
-    //isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();      
+    isTight = evt.muon()[0].isTight();
+    d0sig = evt.muon()[0].sd0();
+    
+    //Muon trigers
+    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
+    trig2 = evt.muon()[0].HLT_mu50();
+    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
+    
+    bool trig_prescaled   = trig1;
+    bool trig_unprescaled = trig2 || trig3;
+    
+    //if (isTight)
+       if (trig_prescaled && !trig_unprescaled)	return;
+           
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -497,31 +644,31 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
       if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
   }//if
   
-//   int nTrkBtagged = 0; 
-//   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-//        if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
-//           nTrkBtagged += 1;
-//   
-//   }//for 
+  int nTrkBtagged = 0; 
+  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+          nTrkBtagged += 1;
+  
+  }//for 
   
   //if (nTrkBtagged!=0)	return;	
 
-//   //deltaR between lepton and the closest narrow jet
-//   float closejl_deltaR  = 99;
-//   float deltaR_tmp      = 99;
-//   int closejl_idx       = -1;
-//   
-//   size_t jet_idx = 0;
-//   for (; jet_idx < evt.jet().size(); ++jet_idx){    
-//     deltaR_tmp = 99;
-//     float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
-//     float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
-//     deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
-//     if (deltaR_tmp < closejl_deltaR){
-//         closejl_deltaR = deltaR_tmp;
-//         closejl_idx = jet_idx;
-//     }   
-//   }//for     
+  //deltaR between lepton and the closest narrow jet
+  float closejl_deltaR  = 99;
+  float deltaR_tmp      = 99;
+  int closejl_idx       = -1;
+  
+  size_t jet_idx = 0;
+  for (; jet_idx < evt.jet().size(); ++jet_idx){    
+    deltaR_tmp = 99;
+    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
+    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
+    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
+    if (deltaR_tmp < closejl_deltaR){
+        closejl_deltaR = deltaR_tmp;
+        closejl_idx = jet_idx;
+    }   
+  }//for     
 
   //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
@@ -531,7 +678,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
 }//AnaTtresMM::runMatrixMethod_QCDVR2j_2016
 
 
-void AnaTtresMM::runMatrixMethod_WjetsCR2j_2016(const Event &evt, double weight, const std::string &suffix) {
+void AnaTtresMM::runMatrixMethod_QCDSR2j_2016(const Event &evt, double weight, const std::string &suffix) {
 
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
@@ -540,32 +687,64 @@ void AnaTtresMM::runMatrixMethod_WjetsCR2j_2016(const Event &evt, double weight,
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))
+    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsWCR_2016") || evt.passes("rmujetsQCDCR_2016")))
+    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
-  if (m_boosted)	return;  
-  else			if(evt.jet().size()<2)	return;
+  if (!m_boosted)	if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
   
+  bool trig1(0); 
+  bool trig2(0); 
+  bool trig3(0);
+  bool trig4(0);
+  bool trig5(0);
+
   bool isTight = false;
   float d0sig(99);
     
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    //isTight = evt.electron()[0].isTightPP();
+    isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
-
+    /*
+    //Electron trigers
+    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
+    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
+    trig3 = evt.electron()[0].HLT_e60_lhmedium();
+    trig4 = evt.electron()[0].HLT_e120_lhloose();
+                
+    bool trig_MC = trig1 || trig3 || trig4; 
+    bool trig_DT = trig2 || trig3 || trig4;
+            
+    if (evt.channelNumber()!=0){
+        if (!trig_MC)return;
+    }else{
+        if (!trig_DT)return;
+    }
+    */
   } else {
     l = evt.muon()[0].mom();
-    //isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();        
+    isTight = evt.muon()[0].isTight();
+    d0sig = evt.muon()[0].sd0();
+    
+    //Muon trigers
+    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
+    trig2 = evt.muon()[0].HLT_mu50();
+    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
+    
+    bool trig_prescaled   = trig1;
+    bool trig_unprescaled = trig2 || trig3;
+    
+    //if (isTight)
+       if (trig_prescaled && !trig_unprescaled)	return;
+           
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -578,10 +757,38 @@ void AnaTtresMM::runMatrixMethod_WjetsCR2j_2016(const Event &evt, double weight,
       if(fabs(d0sig)>3)			      	return;
   }//if
   
+  int nTrkBtagged = 0; 
+  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+          nTrkBtagged += 1;
+  
+  }//for 
+  
+  //if (nTrkBtagged!=0)	return;	
+
+  //deltaR between lepton and the closest narrow jet
+  float closejl_deltaR  = 99;
+  float deltaR_tmp      = 99;
+  int closejl_idx       = -1;
+  
+  size_t jet_idx = 0;
+  for (; jet_idx < evt.jet().size(); ++jet_idx){    
+    deltaR_tmp = 99;
+    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
+    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
+    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
+    if (deltaR_tmp < closejl_deltaR){
+        closejl_deltaR = deltaR_tmp;
+        closejl_idx = jet_idx;
+    }   
+  }//for     
+
+  //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
+  //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
+  //else				GetHistograms(evt, weight, "lDR_", suffix);
   GetHistograms(evt, weight, "", suffix);
 
-}//runMatrixMethod_WjetsCR2j_2016
-
+}//runMatrixMethod_QCDSR2j_2016
 
 
 void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, const std::string &suffix) {
@@ -593,30 +800,64 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsQCDCR_2016") || evt.passes("bmujetsQCDCR_2016")))
+    if (!(evt.passes("bejetsQCDCR") || evt.passes("bmujetsQCDCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsQCDCR_2016") || evt.passes("rmujetsQCDCR_2016")))
+    if (!(evt.passes("rejetsQCDCR") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<4)	return;
 
   HistogramService *h = &m_hSvc;
   
-  //bool isTight = false;
+  bool trig1(0); 
+  bool trig2(0); 
+  bool trig3(0);
+  bool trig4(0);
+  bool trig5(0);
+
+  bool isTight = false;
   float d0sig(99);
     
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    //isTight = evt.electron()[0].isTightPP();
+    isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
+    /*
+    //Electron trigers
+    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
+    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
+    trig3 = evt.electron()[0].HLT_e60_lhmedium();
+    trig4 = evt.electron()[0].HLT_e120_lhloose();
+                
+    bool trig_MC = trig1 || trig3 || trig4; 
+    bool trig_DT = trig2 || trig3 || trig4;
+            
+    if (evt.channelNumber()!=0){
+        if (!trig_MC)return;
+    }else{
+        if (!trig_DT)return;
+    }
+    */
   } else {
     l = evt.muon()[0].mom();
-    //isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();      
+    isTight = evt.muon()[0].isTight();
+    d0sig = evt.muon()[0].sd0();
+    
+    //Muon trigers
+    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
+    trig2 = evt.muon()[0].HLT_mu50();
+    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
+    
+    bool trig_prescaled   = trig1;
+    bool trig_unprescaled = trig2 || trig3;
+    
+    //if (isTight)
+       if (trig_prescaled && !trig_unprescaled)	return;
+           
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -629,31 +870,31 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
       if(fabs(d0sig)<5)			return;
   }//if
   
-//   int nTrkBtagged = 0; 
-//   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-//        if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
-//           nTrkBtagged += 1;
-//   
-//   }//for 
+  int nTrkBtagged = 0; 
+  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+          nTrkBtagged += 1;
+  
+  }//for 
   
   //if (nTrkBtagged!=0)	return;	
 
-//   //deltaR between lepton and the closest narrow jet
-//   float closejl_deltaR  = 99;
-//   float deltaR_tmp      = 99;
-//   int closejl_idx       = -1;
-//   
-//   size_t jet_idx = 0;
-//   for (; jet_idx < evt.jet().size(); ++jet_idx){    
-//     deltaR_tmp = 99;
-//     float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
-//     float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
-//     deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
-//     if (deltaR_tmp < closejl_deltaR){
-//         closejl_deltaR = deltaR_tmp;
-//         closejl_idx = jet_idx;
-//     }   
-//   }//for     
+  //deltaR between lepton and the closest narrow jet
+  float closejl_deltaR  = 99;
+  float deltaR_tmp      = 99;
+  int closejl_idx       = -1;
+  
+  size_t jet_idx = 0;
+  for (; jet_idx < evt.jet().size(); ++jet_idx){    
+    deltaR_tmp = 99;
+    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
+    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
+    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
+    if (deltaR_tmp < closejl_deltaR){
+        closejl_deltaR = deltaR_tmp;
+        closejl_idx = jet_idx;
+    }   
+  }//for     
 
   //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
@@ -673,30 +914,64 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsQCDCR_2016") || evt.passes("bmujetsQCDCR_2016")))
+    if (!(evt.passes("bejetsQCDCR") || evt.passes("bmujetsQCDCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsQCDCR_2016") || evt.passes("rmujetsQCDCR_2016")))
+    if (!(evt.passes("rejetsQCDCR") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<4)	return;
 
   HistogramService *h = &m_hSvc;
- 
-  //bool isTight = false;
+  
+  bool trig1(0); 
+  bool trig2(0); 
+  bool trig3(0);
+  bool trig4(0);
+  bool trig5(0);
+
+  bool isTight = false;
   float d0sig(99);
     
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
-    //isTight = evt.electron()[0].isTightPP();
+    isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
+    /*
+    //Electron trigers
+    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
+    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
+    trig3 = evt.electron()[0].HLT_e60_lhmedium();
+    trig4 = evt.electron()[0].HLT_e120_lhloose();
+                
+    bool trig_MC = trig1 || trig3 || trig4; 
+    bool trig_DT = trig2 || trig3 || trig4;
+            
+    if (evt.channelNumber()!=0){
+        if (!trig_MC)return;
+    }else{
+        if (!trig_DT)return;
+    }
+    */
   } else {
     l = evt.muon()[0].mom();
-    //isTight = evt.muon()[0].isTight();
-    d0sig = evt.muon()[0].sd0();      
+    isTight = evt.muon()[0].isTight();
+    d0sig = evt.muon()[0].sd0();
+    
+    //Muon trigers
+    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
+    trig2 = evt.muon()[0].HLT_mu50();
+    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
+    
+    bool trig_prescaled   = trig1;
+    bool trig_unprescaled = trig2 || trig3;
+    
+    //if (isTight)
+       if (trig_prescaled && !trig_unprescaled)	return;
+           
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -709,14 +984,31 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
       if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
   }//if
   
-//   int nTrkBtagged = 0; 
-//   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
-//        if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
-//           nTrkBtagged += 1;
-//     
-//   }//for 
+  int nTrkBtagged = 0; 
+  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+       if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+          nTrkBtagged += 1;
   
-  //if (nTrkBtagged!=0)	return;	    
+  }//for 
+  
+  //if (nTrkBtagged!=0)	return;	
+
+  //deltaR between lepton and the closest narrow jet
+  float closejl_deltaR  = 99;
+  float deltaR_tmp      = 99;
+  int closejl_idx       = -1;
+  
+  size_t jet_idx = 0;
+  for (; jet_idx < evt.jet().size(); ++jet_idx){    
+    deltaR_tmp = 99;
+    float dphi = l.DeltaPhi(evt.jet()[jet_idx].mom());
+    float dy = l.Rapidity() - evt.jet()[jet_idx].mom().Rapidity();
+    deltaR_tmp = std::sqrt(dy*dy + dphi*dphi);
+    if (deltaR_tmp < closejl_deltaR){
+        closejl_deltaR = deltaR_tmp;
+        closejl_idx = jet_idx;
+    }   
+  }//for     
 
   GetHistograms(evt, weight, "", suffix);
 
@@ -736,13 +1028,20 @@ void AnaTtresMM::GetHistograms(const Event &evt, double weight, const std::strin
   //lepton
   TLorentzVector l;   
   float d0sig(0);
-  
+  float ptvarcone(-1);
+  float topoetcone(-1);
+
   if (m_electron) {
      l  = evt.electron()[0].mom();
      d0sig = evt.electron()[0].sd0();
+     ptvarcone	= evt.electron()[0].ptvarcone20();
+     topoetcone	= evt.electron()[0].topoetcone20();
   } else{			
      l  = evt.muon()[0].mom();
      d0sig = evt.muon()[0].sd0();
+     ptvarcone	= evt.muon()[0].ptvarcone30();
+     topoetcone	= evt.muon()[0].topoetcone20();
+
   }//m_electron 
 
   h->h1D(prefix+"lepPt", "", 		suffix)->Fill(l.Perp()*1e-3, weight);
@@ -752,6 +1051,9 @@ void AnaTtresMM::GetHistograms(const Event &evt, double weight, const std::strin
   h->h1D(prefix+"lepPhi", "", 		suffix)->Fill(l.Phi(), weight);
 
   h->h1D(prefix+"MET_phi", "", 	suffix)->Fill(evt.met().Phi(), weight);
+  h->h1D(prefix+"ptvarcone", 	    "", suffix)->Fill(ptvarcone*1e-3, weight);
+  h->h1D(prefix+"topoetcone", 	    "", suffix)->Fill(topoetcone*1e-3, weight);
+
 
   const TLorentzVector &j = evt.jet()[0].mom();
   h->h1D(prefix+"leadJetPt", "", suffix)->Fill(j.Perp()*1e-3, weight);
@@ -1021,8 +1323,9 @@ void AnaTtresMM::IniHistograms(std::string &suffix){
   m_hSvc.m_tree->Branch("weight", &_tree_weight);
   m_hSvc.m_tree->Branch("cat",    &_tree_cat);
   m_hSvc.m_tree->Branch("syst",   &_tree_syst);
-
-  double varBin1[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500};
+  
+  //double varBin1[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500};
+  double varBin1[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 190, 500};
   int varBinN1 = sizeof(varBin1)/sizeof(double) - 1;
   double varBin2[] = {300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3};
   int varBinN2 = sizeof(varBin2)/sizeof(double) - 1;
@@ -1113,13 +1416,15 @@ void AnaTtresMM::IniHistograms(std::string &suffix){
   m_hSvc.create1DVar(suffix+"MET", 	"; missing E_{T} [GeV]; Events", varBinN1, varBin1);
   m_hSvc.create1D(suffix+"MET_phi", 	"; missing E_{T} #phi [rd] ; Events", 32, -3.2, 3.2);
 
+  m_hSvc.create1D(suffix+"ptvarcone",         		"; ptvarcone [GeV]; Events", 50, -10, 40); 
+  m_hSvc.create1D(suffix+"topoetcone",         		"; topoetcone [GeV]; Events", 40, -10, 30); 
 
   //double metBin[] = {20, 30, 40, 50, 60, 100, 500};
   double metBin[] = {0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68};
   int metBinN = sizeof(metBin)/sizeof(double) - 1; 
   m_hSvc.create1DVar(suffix+"MET_effBins",               "; Missing E_{T} [GeV]; Events", metBinN, metBin);
 
-  double mwtBin[] = {0, 15, 30, 45, 60, 80, 100, 200, 600};
+  double mwtBin[] = {0, 15, 40, 60, 100, 600};
   int mwtBinN = sizeof(mwtBin)/sizeof(double) - 1;
   m_hSvc.create1DVar(suffix+"mwt_effBins",               "; W transverse mass [GeV]; Events", mwtBinN, mwtBin);
 
