@@ -168,7 +168,8 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2015(const Event &evt, double weight, c
     if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
 
-  if (!m_boosted)	if(evt.jet().size()<2)	return;
+  if (m_boosted)	return;
+  else			if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
   
@@ -208,7 +209,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2015(const Event &evt, double weight, c
   float MET = evt.met().Perp()*1e-3;
   
   if(m_electron){
-      if( (MET<20) && (MET+mWt)>60)		return; //Validation region 1
+      //if( (MET<20) && (MET+mWt)>60)		return; //Validation region 1
       if( (MET>20) && (MET+mWt)<60)		return; //Validation region 2
   }else{
       if( (MET<20) || (MET+mWt)<60)		return;
@@ -395,7 +396,19 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2015(const Event &evt, double weight, c
     if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
 
-  if (!m_boosted)	if(evt.jet().size()<4)	return;
+  int nLargeRjets(0);
+  if (m_boosted){
+  
+    size_t goodljet_idx = 0;
+    for (; goodljet_idx < evt.largeJet().size(); ++goodljet_idx) {
+      if (evt.largeJet()[goodljet_idx].good())
+        if (evt.largeJet()[goodljet_idx].mom().Pt()*1e-3 > 300)
+          nLargeRjets += 1;
+    }
+    
+    if (nLargeRjets==0)	return;
+  
+  } else	if(evt.jet().size()<4)	return;
 
   HistogramService *h = &m_hSvc;
   
