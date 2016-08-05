@@ -62,14 +62,24 @@ class WrapperExtras {
 	//BTaggingEfficiencyTool m_btageff;
 
     WrapperExtras() : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root"),
-	                  m_mm_b0_boosted_e("../scripts/QCDestimation/170716_realRates_re_0b/eff_ttbar.root", "../scripts/QCDestimation/130716_fakeRates_re_0b/fake.root"), 
-	                  m_mm_b1_boosted_e("../scripts/QCDestimation/170716_realRates_re_in1b/eff_ttbar.root", "../scripts/QCDestimation/130716_fakeRates_re_in1b/fake.root"), 
-	                  m_mm_b0_res_e("../scripts/QCDestimation/170716_realRates_re_0b/eff_ttbar.root", "../scripts/QCDestimation/130716_fakeRates_re_0b/fake.root"), 
-	                  m_mm_b1_res_e("../scripts/QCDestimation/170716_realRates_re_in1b/eff_ttbar.root", "../scripts/QCDestimation/130716_fakeRates_re_in1b/fake.root"), 
-	                  m_mm_b0_boosted_mu("../scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "../scripts/QCDestimation/250616_fakeRates_rmu_0b/fake.root"), 
-	                  m_mm_b1_boosted_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/250616_fakeRates_rmu_in1b/fake.root"), 
-	                  m_mm_b0_res_mu("../scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "../scripts/QCDestimation/250616_fakeRates_rmu_0b/fake.root"), 
-	                  m_mm_b1_res_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/250616_fakeRates_rmu_in1b/fake.root")//,
+	                  m_mm_b0_boosted_e("../scripts/QCDestimation/030816_realRates_re_0b/eff_ttbar.root", "../scripts/QCDestimation/020816_fakeRates_re_0b/fake.root",
+					                    "../scripts/QCDestimation/030816_realRates_re_0b/eff_ttbar.root", "../scripts/QCDestimation/020816_fakeRates_re_0b/fake.root"), 
+	                  m_mm_b1_boosted_e("../scripts/QCDestimation/030816_realRates_re_in1b/eff_ttbar.root", "../scripts/QCDestimation/020816_fakeRates_re_in1b/fake.root",
+					                    "../scripts/QCDestimation/030816_realRates_re_in1b/eff_ttbar.root", "../scripts/QCDestimation/020816_fakeRates_re_in1b/fake.root"), 
+	                  m_mm_b0_res_e("../scripts/QCDestimation/030816_realRates_re_0b/eff_ttbar.root", "../scripts/QCDestimation/020816_fakeRates_re_0b/fake.root",
+					                "../scripts/QCDestimation/030816_realRates_re_0b/eff_ttbar.root", "../scripts/QCDestimation/020816_fakeRates_re_0b/fake.root"), 
+	                  m_mm_b1_res_e("../scripts/QCDestimation/030816_realRates_re_in1b/eff_ttbar.root", "../scripts/QCDestimation/020816_fakeRates_re_in1b/fake.root",
+					                "../scripts/QCDestimation/030816_realRates_re_in1b/eff_ttbar.root", "../scripts/QCDestimation/020816_fakeRates_re_in1b/fake.root"), 
+
+	                  m_mm_b0_boosted_mu("../scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "../scripts/QCDestimation/250616_fakeRates_rmu_0b/fake.root",
+					                     "../scripts/QCDestimation/MUON_RATES_2016/btag0_eff_ttbar.root", "../scripts/QCDestimation/MUON_RATES_2016/btag0_fake.root"), 
+	                  m_mm_b1_boosted_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/250616_fakeRates_rmu_in1b/fake.root",
+					                     "../scripts/QCDestimation/MUON_RATES_2016/btag1_eff_ttbar.root", "../scripts/QCDestimation/MUON_RATES_2016/btag1_fake.root"), 
+
+	                  m_mm_b0_res_mu("../scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", "../scripts/QCDestimation/250616_fakeRates_rmu_0b/fake.root",
+					                     "../scripts/QCDestimation/MUON_RATES_2016/btag0_eff_ttbar.root", "../scripts/QCDestimation/MUON_RATES_2016/btag0_fake.root"), 
+	                  m_mm_b1_res_mu("../scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "../scripts/QCDestimation/250616_fakeRates_rmu_in1b/fake.root",
+					                     "../scripts/QCDestimation/MUON_RATES_2016/btag1_eff_ttbar.root", "../scripts/QCDestimation/MUON_RATES_2016/btag1_fake.root")//, 
 					  //m_btageff("BTaggingEfficiencyTool")
 					  {
       m_chi2.Init(TtresChi2::DATA2015_MC15);
@@ -218,12 +228,14 @@ class WrapperExtras {
 	  }
 	  return btagsf;
     }*/
-    double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger) {
+    double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger, float topoetcone20, int runNumber) {
 	  Event e;
 	  e.met(met.Px(), met.Py());
 	  if (isElectron) {
 	    e.electron().push_back(Electron(lep));
 		e.electron()[0].setTightPP(isTight);
+		e.electron()[0].topoetcone20() = topoetcone20;
+		e.electron()[0].sd0() = sd0;
 	  } else {
 	    e.muon().push_back(Muon(lep));
 		e.muon()[0].sd0() = sd0;
@@ -236,21 +248,21 @@ class WrapperExtras {
 	  }
 	  double w = 0;
 	  if (!btags && boosted && isElectron) {
-	    w = m_mm_b0_boosted_e.getMMweights(e, 0, isElectron, boosted);
+	    w = m_mm_b0_boosted_e.getMMweights(e, 0, isElectron, boosted, runNumber);
 	  } else if (btags && boosted && isElectron) {
-	    w = m_mm_b1_boosted_e.getMMweights(e, 0, isElectron, boosted);
+	    w = m_mm_b1_boosted_e.getMMweights(e, 0, isElectron, boosted, runNumber);
 	  } else if (!btags && !boosted && isElectron) {
-	    w = m_mm_b0_res_e.getMMweights(e, 0, isElectron, boosted);
+	    w = m_mm_b0_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
 	  } else if (btags && !boosted && isElectron) {
-	    w = m_mm_b1_res_e.getMMweights(e, 0, isElectron, boosted);
+	    w = m_mm_b1_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
 	  } else if (!btags && boosted && !isElectron) {
-	    w = m_mm_b0_boosted_mu.getMMweights(e, 0, isElectron, boosted);
+	    w = m_mm_b0_boosted_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
 	  } else if (btags && boosted && !isElectron) {
-	    w = m_mm_b1_boosted_mu.getMMweights(e, 0, isElectron, boosted);
+	    w = m_mm_b1_boosted_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
 	  } else if (!btags && !boosted && !isElectron) {
-	    w = m_mm_b0_res_mu.getMMweights(e, 0, isElectron, boosted);
+	    w = m_mm_b0_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
 	  } else if (btags && !boosted && !isElectron) {
-	    w = m_mm_b1_res_mu.getMMweights(e, 0, isElectron, boosted);
+	    w = m_mm_b1_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
 	  }
 	  return w;
 	}

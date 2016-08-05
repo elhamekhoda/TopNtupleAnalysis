@@ -206,10 +206,14 @@ class AnaTtresSL(Analysis):
 		lsd0 = 0
 		isElectron = 0
 		muonTrigger = 0
+		topoetcone20 = 0
+		runNumber = sel.runNumber
 		if len(sel.el_pt) == 1:
 			l.SetPtEtaPhiE(sel.el_pt[0], sel.el_eta[0], sel.el_phi[0], sel.el_e[0])
 			lisTight = sel.el_isTight[0]
 			lisTight = bool(int(lisTight.encode('hex'), 16))
+			lsd0 = sel.el_d0sig[0]
+			topoetcone20 = sel.el_topoetcone20[0]
 			isElectron = 1
 		elif len(sel.mu_pt) == 1:
 			l.SetPtEtaPhiE(sel.mu_pt[0], sel.mu_eta[0], sel.mu_phi[0], sel.mu_e[0])
@@ -217,10 +221,11 @@ class AnaTtresSL(Analysis):
 			lisTight = bool(int(lisTight.encode('hex'), 16))
 			lsd0 = sel.mu_d0sig[0]
 			muonTrigger = bool(int(sel.mu_trigMatch_HLT_mu20_iloose_L1MU15[0].encode('hex'), 16)) or bool(int(sel.mu_trigMatch_HLT_mu50[0].encode('hex'), 16))
+			topoetcone20 = sel.mu_topoetcone20[0]
 		jets = ROOT.vector('TLorentzVector')()
 		for k in range(0, len(sel.jet_pt)):
 			jets.push_back(ROOT.TLorentzVector(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k]))
-		w = helpers.wrapperC.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger)
+		w = helpers.wrapperC.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger, topoetcone20, runNumber)
 		return w
 
 	def selectChannel(self, sel, syst, w):

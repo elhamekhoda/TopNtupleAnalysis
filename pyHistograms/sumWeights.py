@@ -46,13 +46,13 @@ def main():
 				pdfSumOfWeights[t_pdfSumWeights.dsid][l][m] += pdfAttr[l][m]
 
 	fs = open("sumOfWeights.txt", "w")
-	for channel in sumOfWeights:
+	for channel in sorted(sumOfWeights.keys()):
 		fs.write("%20d%20s%20f\n" % (channel, "", sumOfWeights[channel]))
 	fs.close()
 
 	pfs = open("pdfSumOfWeights.txt", "w")
-	for channel in pdfSumOfWeights:
-		for pdfName in pdfSumOfWeights[channel]:
+	for channel in sorted(pdfSumOfWeights.keys()):
+		for pdfName in sorted(pdfSumOfWeights[channel].keys()):
 			for pdfNumber in range(0, len(pdfSumOfWeights[channel][pdfName])):
 				fs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", pdfName, "", pdfNumber, "", pdfSumOfWeights[channel][pdfName]))
 	pfs.close()

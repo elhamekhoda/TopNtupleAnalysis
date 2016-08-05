@@ -7,24 +7,24 @@ def main():
 	# input directory
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
-	pattern = 'user.dferreir.*15072016v1_output.root'
-	pattern_mtt = 'user.dferreir.*28072016v1_output.root'
+	pattern = 'user.dferreir.*03082016v1_output.root'
+	pattern_mtt = 'user.dferreir.*03082016v3_output.root'
 	# for QCD e
-	pattern_qcde = 'user.dferreir.*24062016QCDev1_output.root'
-	pattern_qcdmu = 'user.dferreir.*24062016QCDmuv1_output.root'
+	pattern_qcde = 'user.dferreir.*03082016QCDev3_output.root'
+	pattern_qcdmu = 'user.dferreir.*03082016QCDmuv3_output.root'
 	theScope = 'user.dferreir'
 	
 	# output directory
 	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
 	outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
-	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2415'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2416'
 
 	# number of files per job
 	nFilesPerJob = 40
 	#nFilesPerJob = 8
 
 	# use it to setup AnalysisTop
-	rundir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2415'
+	rundir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416'
 
 	# email to use to tell us when the job is done
 	email = 'dferreir@cern.ch'
@@ -185,7 +185,7 @@ def main():
 			ds = datasets_qcde
 		elif sn == 'qcdmu':
 			ds = datasets_qcdmu
-		elif sn == 'tthm':
+		elif sn == 'tthm' or sn == 'singletop':
 			ds = datasets_mtt
 		for d in ds:
 			# remove path and get only dir name in justfile
