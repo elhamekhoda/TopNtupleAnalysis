@@ -15,7 +15,7 @@ AnaTtresMM::AnaTtresMM(const std::string &filename, bool electron, bool boosted,
   : Analysis(filename, systList), m_electron(electron), m_boosted(boosted),
     m_neutrinoBuilder("MeV"), m_chi2("MeV") {
 
-  m_chi2.Init(TtresChi2::DATA2015_MC15);
+  m_chi2.Init(TtresChi2::DATA2015_MC15C);
   std::string suffix = "";
   IniHistograms(suffix);
   /*

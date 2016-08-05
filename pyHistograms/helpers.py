@@ -82,7 +82,7 @@ class WrapperExtras {
 					                     "../scripts/QCDestimation/MUON_RATES_2016/btag1_eff_ttbar.root", "../scripts/QCDestimation/MUON_RATES_2016/btag1_fake.root")//, 
 					  //m_btageff("BTaggingEfficiencyTool")
 					  {
-      m_chi2.Init(TtresChi2::DATA2015_MC15);
+      m_chi2.Init(TtresChi2::DATA2015_MC15C);
 	  /*
 	  if (!m_btageff.setProperty("TaggerName", "MV2c10")) std::cout << "Failed to set b-tagging property." << std::endl;
 	  if (!m_btageff.setProperty("OperatingPoint", "FixedCutBEff_70")) std::cout << "Failed to set b-tagging property." << std::endl;

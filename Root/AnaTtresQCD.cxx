@@ -13,9 +13,7 @@
 
 AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList)
   : Analysis(filename, systList), m_electron(electron), m_boosted(boosted),
-    m_neutrinoBuilder("MeV"), m_chi2("MeV") {
-
-  m_chi2.Init(TtresChi2::DATA2015_MC15);
+    m_neutrinoBuilder("MeV") {
   
   std::string suffix = "";
   IniHistograms(suffix);

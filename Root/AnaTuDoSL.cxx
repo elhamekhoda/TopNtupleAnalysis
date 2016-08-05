@@ -10,14 +10,13 @@
 
 AnaTuDoSL::AnaTuDoSL(const std::string &filename, bool electron, MiniTree *mini)
   : Analysis(filename), m_electron(electron), m_isData(false),
-    m_neutrinoBuilder("MeV"), m_chi2("MeV") {
+    m_neutrinoBuilder("MeV") {
 
     TH1::SetDefaultSumw2();
         
 //     m_histoSvc = HistoListSvc::svc(filename, "foo.xml", mini->m_chain); 
     m_mini = mini;
     
-    m_chi2.Init(TtresChi2::DATA2012SUMMER2013);
 
 //     m_lep_DeltaPhi = m_histoSvc->th2F("hl_lep_DeltaPhi", "lep_DeltaPhi (hl)",140,-3.5,3.5,100,0,200);
 //     m_lep_DeltaPhiCut = m_histoSvc->th2F("hl_lep_DeltaPhiCut", "lep_DeltaPhi (hl,cut)",140,-3.5,3.5,100,0,200);

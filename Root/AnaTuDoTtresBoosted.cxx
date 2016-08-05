@@ -10,14 +10,12 @@
 
 AnaTuDoTtresBoosted::AnaTuDoTtresBoosted(const std::string &filename, bool electron, MiniTree *mini)
   : Analysis(filename), m_electron(electron), m_isData(false),
-    m_neutrinoBuilder("MeV"), m_chi2("MeV") {
+    m_neutrinoBuilder("MeV") {
 
     TH1::SetDefaultSumw2();
         
 //     m_histoSvc = HistoListSvc::svc(filename, "foo.xml", mini->m_chain); 
     m_mini = mini;
-    
-    m_chi2.Init(TtresChi2::DATA2012SUMMER2013);
 
 //     m_leppt = m_histoSvc->th1F("leppt", "p_T of lepton", 20, 0, 200);
 //     m_lepeta = m_histoSvc->th1F("lepeta", "#eta of lepton", 20, -5, 5);

@@ -15,7 +15,7 @@ AnaTtresSLMtt::AnaTtresSLMtt(const std::string &filename, bool electron, bool bo
   : Analysis(filename, systList), m_electron(electron), m_boosted(boosted),
     m_neutrinoBuilder("MeV"), m_chi2("MeV") {
 
-  m_chi2.Init(TtresChi2::DATA2015_MC15);
+  m_chi2.Init(TtresChi2::DATA2015_MC15C);
 
   m_hSvc.m_tree->Branch("truemtt",    &_tree_truemtt);
   m_hSvc.m_tree->Branch("mtt",    &_tree_mtt);

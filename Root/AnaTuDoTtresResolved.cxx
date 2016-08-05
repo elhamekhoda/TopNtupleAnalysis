@@ -17,7 +17,7 @@ AnaTuDoTtresResolved::AnaTuDoTtresResolved(const std::string &filename, bool ele
 //     m_histoSvc = HistoListSvc::svc(filename, "foo.xml", mini->m_chain); 
     m_mini = mini;
     
-    m_chi2.Init(TtresChi2::DATA2012SUMMER2013);
+    m_chi2.Init(TtresChi2::DATA2015_MC15C);
 
 //     m_leppt = m_histoSvc->th1F("leppt", "p_T of lepton", 20, 0, 200);
 //     m_lepeta = m_histoSvc->th1F("lepeta", "#eta of lepton", 20, -5, 5);
