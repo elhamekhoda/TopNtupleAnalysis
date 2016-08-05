@@ -1,3 +1,7 @@
+2016-08-05 Samuel Calvet <scalvet@cern.ch>
+	* Code ready to run on 2 type of rates (2015/2016)
+	* MiniTree has now the isData branch filled
+
 2016-08-02 Sanmay Ganguly <sanmay.ganguly@cern.ch>
 	* Removed the muon triggers for 2016 version 
 

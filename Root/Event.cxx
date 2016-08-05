@@ -155,6 +155,18 @@ const unsigned int Event::runNumber() const {
   return m_runNumber;
 }
 
+unsigned int &Event::randomRunNumber() {
+  return  m_randomRunNumber;
+}
+
+const unsigned int Event::randomRunNumber() const {
+  return  m_randomRunNumber;
+}
+
+const unsigned int Event::runNumber_or_RandomRunNumber() const {
+  return m_isData ? m_runNumber : m_randomRunNumber;
+}
+
 ULong64_t &Event::eventNumber() {
   return m_eventNumber;
 }

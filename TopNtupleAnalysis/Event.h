@@ -42,6 +42,9 @@ class Event {
 
     unsigned int &runNumber();
     const unsigned int runNumber() const;
+    unsigned int &randomRunNumber();
+    const unsigned int randomRunNumber() const;
+    const unsigned int runNumber_or_RandomRunNumber() const;
 
     ULong64_t &eventNumber();
     const ULong64_t eventNumber() const;
@@ -242,6 +245,7 @@ class Event {
     TLorentzVector m_MA_bl; 
 
     unsigned int m_runNumber;
+    unsigned int m_randomRunNumber;
     ULong64_t m_eventNumber;
     int m_channelNumber;
     bool m_isData;

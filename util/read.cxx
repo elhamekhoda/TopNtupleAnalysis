@@ -313,11 +313,24 @@ int main(int argc, char **argv) {
   MMUtils * MM_1b_rmu     = NULL;
     
   if (runMM){ // >= 2 jets
-	MM_0b_re      = new MMUtils("scripts/QCDestimation/030816_realRates_re_0b/eff_ttbar.root",     "scripts/QCDestimation/020816_fakeRates_re_0b/fake.root");
-	MM_1b_re      = new MMUtils("scripts/QCDestimation/030816_realRates_re_in1b/eff_ttbar.root",   "scripts/QCDestimation/020816_fakeRates_re_in1b/fake.root");
+  	// MMUtils(real2015, fake2015, real2016, fake2016)
+	MM_0b_re  = new MMUtils("scripts/QCDestimation/030816_realRates_re_0b/eff_ttbar.root", 	// real2015
+				"scripts/QCDestimation/020816_fakeRates_re_0b/fake.root",	// fake2015
+				"scripts/QCDestimation/030816_realRates_re_0b/eff_ttbar.root",	// real2016
+				"scripts/QCDestimation/020816_fakeRates_re_0b/fake.root");	// fake2016
+	MM_1b_re  = new MMUtils("scripts/QCDestimation/030816_realRates_re_in1b/eff_ttbar.root",// real2015  
+				"scripts/QCDestimation/020816_fakeRates_re_in1b/fake.root",	// fake2015
+				"scripts/QCDestimation/030816_realRates_re_in1b/eff_ttbar.root",// real2016 
+				"scripts/QCDestimation/020816_fakeRates_re_in1b/fake.root"); 	// fake2016
 
-	MM_0b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root",   "scripts/QCDestimation/250616_fakeRates_rmu_0b/fake.root");
-	MM_1b_rmu     = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root", "scripts/QCDestimation/250616_fakeRates_rmu_in1b/fake.root");
+	MM_0b_rmu = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", // real2015  
+				"scripts/QCDestimation/250616_fakeRates_rmu_0b/fake.root",	// fake2015
+				"scripts/QCDestimation/MUON_RATES_2016/btag0_eff_ttbar.root",	// real2016  
+				"scripts/QCDestimation/MUON_RATES_2016/btag0_fake.root");	// fake2016
+	MM_1b_rmu = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root",// real2015  
+				"scripts/QCDestimation/250616_fakeRates_rmu_in1b/fake.root",	// fake2015
+				"scripts/QCDestimation/MUON_RATES_2016/btag1_eff_ttbar.root",	// real2016
+				"scripts/QCDestimation/MUON_RATES_2016/btag1_fake.root");	// fake2016
 	  
   } 
 
@@ -789,6 +802,10 @@ int main(int argc, char **argv) {
           //  }
           //}
         }
+	
+	const unsigned int runNumber = sel.runNumber_or_RandomRunNumber();
+	//std::cout << runNumber << std::endl;
+	
         // loop over weight systematics
         for (size_t wIdx = 0; wIdx < weightSystematics.size(); ++wIdx) {
           std::string &suffix = weightSystematics[wIdx];
@@ -1193,12 +1210,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
 
 		   if(nBtagged==0){		     
-	  	     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);// use w+jets rates (>=2 jets) everywhere for the time being
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);// use w+jets rates (>=2 jets) everywhere for the time being
+	  	     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
 
 		   }else{		      
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);// use w+jets rates (>=2 jets) everywhere for the time being
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);// use w+jets rates (>=2 jets) everywhere for the time being
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
 		     
 		   }//if
 		}//runMM
@@ -1214,12 +1231,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
                    
 		   if(nBtagged==0){
-		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
 		  }else{  
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
 		  }//if  
 	       }//runMM
@@ -1236,12 +1253,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
                    
 		   if(nBtagged==0){
-		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
 		  }else{  
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
 		  }//if  
 	       }//runMM
@@ -1258,12 +1275,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
                    
 		   if(nBtagged==0){
-		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
 		  }else{  
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
 		  }//if  
 	       }//runMM
@@ -1281,12 +1298,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
                    
 		   if(nBtagged==0){
-		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
 		  }else{  
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
 		  }//if  
 	       }//runMM
@@ -1304,12 +1321,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
                    
 		   if(nBtagged==0){
-		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
 		  }else{  
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
 		  }//if  
 	       }//runMM
@@ -1327,12 +1344,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
                    
 		   if(nBtagged==0){
-		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
 		  }else{  
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
 		  }//if  
 	       }//runMM
@@ -1349,12 +1366,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
                    
 		   if(nBtagged==0){
-		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
 		  }else{  
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
 		  }//if  
 	       }//runMM
@@ -1372,12 +1389,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
                    
 		   if(nBtagged==0){
-		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
 		  }else{  
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
 		  }//if  
 	       }//runMM
@@ -1394,12 +1411,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
                    
 		   if(nBtagged==0){
-		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
 		  }else{  
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
 		  }//if  
 	       }//runMM
@@ -1415,12 +1432,12 @@ int main(int argc, char **argv) {
 	        if (runMM) {
                    
 		   if(nBtagged==0){
-		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
 		  }else{  
-		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0);
-		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0);
+		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
 		  }//if  
 	       }//runMM

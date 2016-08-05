@@ -36,8 +36,10 @@ void MiniTree::read(int event, Event &e) {
   e.clear();
   m_chain->GetEntry(event);
   e.channelNumber() = ui("mcChannelNumber");
+  e.isData()= e.channelNumber()==0;
   e.eventNumber() = ul64("eventNumber"); 
   e.runNumber() = ui("runNumber"); 
+  e.randomRunNumber() = ui("randomRunNumber"); 
 
   for (std::map<std::string, char>::iterator it = m_c.begin(); it != m_c.end(); ++it) {
     if (it->first.find("HLT_") == 0) {
