@@ -6,7 +6,6 @@
 #define MMUTILS_H
 
 #include "TopNtupleAnalysis/Event.h"
-#include "TopNtupleAnalysis/HistogramService.h"
 
 #include <string>
 #include <getopt.h>
