@@ -90,7 +90,6 @@ class MMUtils{
      TH1F * fake_pt_boosted_e_2016;
      TH1F * fake_dr_boosted_mu_2016;
         
-    HistogramService m_hSvc;
         
 };
 
