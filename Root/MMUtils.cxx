@@ -27,7 +27,7 @@ MMUtils::MMUtils(const std::string &eff_filename2015, const std::string &fake_fi
     std::cout << "  for 2015:" << eff_filename2015 << " and " << fake_filename2015 << std::endl;
     std::cout << "  for 2016:" << eff_filename2016 << " and " << fake_filename2016 << std::endl;
     
-    TFile m_eff_rootfile2015(eff_filename2016.c_str(), "r");
+    TFile m_eff_rootfile2015(eff_filename2015.c_str(), "r");
     
     //eff_map_resolved_e_2015 = 	(TH2F*) m_eff_rootfile2015.Get("eff_pTdr_resolved_e");
     //if(eff_map_resolved_e_2015)	eff_map_resolved_e_2015->SetDirectory(0);
@@ -209,7 +209,7 @@ void MMUtils::getRatesBoostedEl(float &realRate, float &realRate_err, float &fak
 }
 
 void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float closejl_pT, float cosDPhi, float met, float mwt, float DPhi, const unsigned int runNumber){
-   
+
  if (runNumber<290000){//2015
     float met_min(0);
     float met_limit(95);
@@ -341,9 +341,7 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
        lepP4 = evt.muon()[0].mom();
        isTight = evt.muon()[0].isTight();
        d0sig = evt.muon()[0].sd0();
-       
-       bool trig_unprescaled = evt.muon()[0].HLT_mu20_iloose_L1MU15() || evt.muon()[0].HLT_mu50();       
-       if( !trig_unprescaled && isTight)	return 0;
+
    }
    
    float lepPt  = lepP4.Perp()*1e-3; 
@@ -391,7 +389,7 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
    	else		getRatesResolvedMu(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, closejl_pT, cosDPhi, MET, mWt, deltaPhi, runNumber);
 		
    }//isBoosted	
-     
+
    //Implementing weights
    float Weight = 1;
 
