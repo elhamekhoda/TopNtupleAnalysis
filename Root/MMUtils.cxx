@@ -106,9 +106,6 @@ MMUtils::~MMUtils(){
   delete eff_map_boosted_e_2015 ;
   delete eff_map_boosted_mu_2015 ;
   
-  delete fake_map_resolved_e_2015_lDR;
-  delete fake_map_resolved_e_2015_mDR;
-  delete fake_map_resolved_e_2015_hDR;
   delete fake_map_resolved_mu_2015_lDR;
   delete fake_map_resolved_mu_2015_mDR;
   delete fake_map_resolved_mu_2015_hDR;
@@ -124,16 +121,7 @@ MMUtils::~MMUtils(){
   delete fake_map_resolved_mu_2016_lDR;
   delete fake_map_resolved_mu_2016_mDR;
   delete fake_map_resolved_mu_2016_hDR;
-  
-//   delete fake_map_resolved_e_2015;
-//   delete fake_minDeltaR_resolved_e_2015_hEta;
-//   delete fake_map_resolved_e_2015_lEta;
-//   delete fake_map_resolved_e_2015_hEta;
-  
-//   delete fake_pt_hmWt_resolved_e_2015;
-//   delete fake_pt_mmWt_resolved_e_2015;
-//   delete fake_pt_lmWt_resolved_e_2015;
-  
+    
   delete fake_pt_boosted_e_2015;  
   delete fake_dr_boosted_mu_2015;
 
