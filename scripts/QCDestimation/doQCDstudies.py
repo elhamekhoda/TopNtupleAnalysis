@@ -199,8 +199,8 @@ def fakeRates(inputDir, lumi):
 	channels  = []
 	
 	
-	#channels += [('resolved','e' )]
-	channels += [('resolved','mu')]
+	channels += [('resolved','e' )]
+	#channels += [('resolved','mu')]
 	#channels += [('boosted', 'e' )]
 	#channels += [('boosted', 'mu')]
 		
@@ -213,15 +213,9 @@ def fakeRates(inputDir, lumi):
 		hadd_in= []		
 		
 		# --> Merging the bkg
-		for ibkg in ["ttbar", "Wjets", "Zjets", "st", "VV"]:			
+		for ibkg in ["ttbar", "Wev", "Wmv", "Wtv", "Zjets", "st", "VV"]:			
 			
-			if ibkg=="ttbar":				
-				for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_ttbar.root ").readlines():
-					hadd_in.append(File[:-1])
-			elif ibkg=="Wjets":
-				for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_W*root ").readlines():
-					hadd_in.append(File[:-1])
-			elif ibkg=="Zjets":
+			if ibkg=="Zjets" :
 				for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_Z*root ").readlines():
 					hadd_in.append(File[:-1])
 			elif ibkg=="st":
@@ -230,6 +224,17 @@ def fakeRates(inputDir, lumi):
 			elif ibkg=="VV":
 				for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_VV.root ").readlines():
 					hadd_in.append(File[:-1])
+                        elif ibkg=="Wtv":
+                                for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_Wtv.root ").readlines():
+                                        hadd_in.append(File[:-1])
+                        else:
+                                hadd_intmp= []
+                                for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_"+ibkg+"*.root ").readlines():
+                                        hadd_intmp.append(File[:-1])                            
+                                hadd_Path = inputDir+ichan[0]+"_"+ichan[1]+"_"+ibkg+".root"
+                                MergeFiles(hadd_Path, hadd_intmp)
+                                for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_"+ibkg+".root ").readlines():
+                                        hadd_in.append(File[:-1])
 
 		hadd_bkgPath = ichan[0]+"_BKG_"+ichan[1]+".root"
 		if merge:	MergeFiles(hadd_bkgPath, hadd_in)
@@ -251,7 +256,7 @@ def fakeRates(inputDir, lumi):
 		
 		varList = [] 
 		varList += ['mwt', 'lepPt_effBins','lepPt','minDeltaR_effBins','minDeltaR','minDeltaR_tjet_effBins','minDeltaR_tjet','closJetPt']
-		varList += ['MET', 'MET_effBins','lepPhi', 'MET_phi', 'DeltaPhi', 'cos_metPhi_lepPhi', 'cos_metPhi_lepPhi_effBins', 'lepEta','nTrkBtagJets','nJets', 'closJetJVT', 'mwt_met', 'Dz0sin', 'd0sig']
+		varList += ['MET', 'lepPhi', 'MET_phi', 'DeltaPhi', 'cos_metPhi_lepPhi', 'cos_metPhi_lepPhi_effBins', 'lepEta','nTrkBtagJets','nJets', 'closJetJVT', 'mwt_met', 'Dz0sin', 'd0sig']
 		
 		varList += ["ptvarcone", "topoetcone", "topoetcone_effBins"]
 		#varList += ['mwt_effBins1', 'mwt_effBins2', 'mwt_effBins3', 'mwt_effBins4', 'mwt_effBins5', 'mwt_effBins6']
@@ -295,7 +300,8 @@ def fakeRates(inputDir, lumi):
 			h_ibkg = []
 			i=0
 			
-			bkgList = ["ttbar", "Wev", "Wmv", "Wtv", "Zee", "Zmm", "Ztt", "st", "VV"]
+			#bkgList = ["ttbar", "Wev", "Wmv", "Wtv", "Zee", "Zmm", "Ztt", "st", "VV"]
+                        bkgList = ["ttbar", "Wev", "Wmv", "Wtv", "Zmm", "Ztt", "st", "VV"]
 						
 			for ibkg in bkgList:
 				
@@ -390,7 +396,8 @@ def fakeRates(inputDir, lumi):
 			name 	  = ["ttbar", "We#nu", "W#mu#nu", "W#tau#nu", "Zee", "Z#mu#mu", "Z#tau#tau", "st", "Diboson"]
 			h_ibkg = []
 			i=0
-			for ibkg in ["ttbar", "Wev", "Wmv", "Wtv", "Zee", "Zmm", "Ztt", "st", "VV"]:
+			#for ibkg in ["ttbar", "Wev", "Wmv", "Wtv", "Zee", "Zmm", "Ztt", "st", "VV"]:
+                        for ibkg in ["ttbar", "Wev", "Wmv", "Wtv", "Zmm", "Ztt", "st", "VV"]:
 				tmp_bkgFile  = TFile(inputDir+ichan[0]+"_"+ichan[1]+"_"+ibkg+".root",'READ')
 				h_ibkg.append(tmp_bkgFile.Get("fake_"+var+'_Loose').Clone())
 				h_ibkg[i].SetDirectory(0)
@@ -455,7 +462,8 @@ def fakeRates(inputDir, lumi):
 		#parametrization1D += ["lepPhi", "MET_phi", "DeltaPhi", "minDeltaR_tjet_effBins","minDeltaR_tjet", "mwt_effBins", "mwt_met_effBins", "Dz0sin", "nJets", "nTrkBtagJets"]
 		#parametrization1D += ["lepPt_lowDR", "lepPt_highDR", "minDeltaR_lowDR", "minDeltaR_highDR", "cos_metPhi_lepPhi_lowDR", "cos_metPhi_lepPhi_highDR"]
 		parametrization1D += ["mwt_effBins", "MET_effBins"]
-		parametrization1D += ["mwt_met_highDR", "mwt_met_lowDR", "met_highDR", "met_lowDR"]
+#		parametrization1D += ["mwt_met_highDR", "mwt_met_lowDR", "met_highDR", "met_lowDR"]
+               # parametrization1D += ["met_highDR"]
 		
 		for ipar in parametrization1D:
 		
@@ -618,7 +626,7 @@ def fakeRates(inputDir, lumi):
 #Produce eff rate plots
 
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/030816_ePreTag_v1.0_2j_realRates/'
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/030816_eTag_v1.0_2j_realRates/'
+inputDir = '/AtlasDisk/users/sanmay/TTBar/AnalysisTop-2.4.16/LPCTools_New/ProduceMiniTuple/COMB_REALRATES/'
 
 if 0:
 	effRates(inputDir)
@@ -628,11 +636,12 @@ if 0:
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/250616_muTag_v1.0_2j_fakeRates/'
 
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/030816_ePreTag_v1.0_2j_fakeRates/'
-inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/030816_muPreTag_v16.0_2j_fakeRates/'
+inputDir = '/AtlasDisk/users/sanmay/TTBar/AnalysisTop-2.4.16/LPCTools_New/ProduceMiniTuple/080816_eTag_v1.1_2j_fakeRates_2016_1btag/'
 
 #lumi = 3193.68 #pb-1
 #lumi =  5807.5 #pb-1
-lumi =  3200+3500 #pb-1
+#lumi =  3200+3500 #pb-1
+lumi = 3200+11571
 
 
 if 1:	
