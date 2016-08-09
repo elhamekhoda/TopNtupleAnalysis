@@ -476,7 +476,7 @@ int main(int argc, char **argv) {
         systsListWithBlankNominal.push_back("btageSF_1__1down_Loose");
       }
     }
-    if (_btags < 0) {
+    if (_btags <= 0) {
       /*
       for (std::map<std::string, MiniTree::MTType>::const_iterator it = mt.m_brs.begin(); it != mt.m_brs.end(); ++it) {
         if (it->first.find(trackjet_pre) != std::string::npos) {
