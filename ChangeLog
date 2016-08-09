@@ -1,3 +1,6 @@
+2016-08-09 Sanmay Ganguly <sanmay.ganguly@cern.ch>
+	* The "0btag" and "1btag" splitting re-implemented in AnaTtresQCD code 
+
 2016-08-05 Samuel Calvet <scalvet@cern.ch>
 	* Code ready to run on 2 type of rates (2015/2016)
 	* MiniTree has now the isData branch filled
