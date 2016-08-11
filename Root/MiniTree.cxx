@@ -246,6 +246,10 @@ void MiniTree::read(int event, Event &e) {
   if (i("bejetsWCR_2015")) 	e.passes().push_back("bejetsWCR_2015");
   if (i("rmujetsWCR_2015")) 	e.passes().push_back("rmujetsWCR_2015");
   if (i("bmujetsWCR_2015")) 	e.passes().push_back("bmujetsWCR_2015");
+  if (i("rejetsWCR_2016")) 	e.passes().push_back("rejetsWCR_2016");
+  if (i("bejetsWCR_2016")) 	e.passes().push_back("bejetsWCR_2016");
+  if (i("rmujetsWCR_2016")) 	e.passes().push_back("rmujetsWCR_2016");
+  if (i("bmujetsWCR_2016")) 	e.passes().push_back("bmujetsWCR_2016");
 
   if (i("rmujetsQCDCR_2016")) 	e.passes().push_back("rmujetsQCDCR_2016");
   if (i("bmujetsQCDCR_2016")) 	e.passes().push_back("bmujetsQCDCR_2016");
