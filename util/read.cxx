@@ -314,21 +314,27 @@ int main(int argc, char **argv) {
     
   if (runMM){ // >= 2 jets
   	// MMUtils(real2015, fake2015, real2016, fake2016)
-	MM_0b_re  = new MMUtils("scripts/QCDestimation/030816_realRates_re_0b/eff_ttbar.root", 	// real2015
-				"scripts/QCDestimation/020816_fakeRates_re_0b/fake.root",	// fake2015
+	MM_0b_re  = new MMUtils("scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", // real2015
+				"scripts/QCDestimation/110816_fakeRates_re_0b/fake.root",	// fake2015
+				
 				"scripts/QCDestimation/030816_realRates_re_0b/eff_ttbar.root",	// real2016
 				"scripts/QCDestimation/020816_fakeRates_re_0b/fake.root");	// fake2016
-	MM_1b_re  = new MMUtils("scripts/QCDestimation/030816_realRates_re_in1b/eff_ttbar.root",// real2015  
-				"scripts/QCDestimation/020816_fakeRates_re_in1b/fake.root",	// fake2015
+				
+	MM_1b_re  = new MMUtils("scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", // real2015  
+				"scripts/QCDestimation/110816_fakeRates_re_in1b/fake.root",	// fake2015
+				
 				"scripts/QCDestimation/030816_realRates_re_in1b/eff_ttbar.root",// real2016 
 				"scripts/QCDestimation/020816_fakeRates_re_in1b/fake.root"); 	// fake2016
 
-	MM_0b_rmu = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_0b/eff_ttbar.root", // real2015  
-				"scripts/QCDestimation/250616_fakeRates_rmu_0b/fake.root",	// fake2015
+	MM_0b_rmu = new MMUtils("scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root",// real2015  
+				"scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",	// fake2015
+				
 				"scripts/QCDestimation/MUON_RATES_2016/btag0_eff_ttbar.root",	// real2016  
 				"scripts/QCDestimation/MUON_RATES_2016/btag0_fake.root");	// fake2016
-	MM_1b_rmu = new MMUtils("scripts/QCDestimation/150616_realRates_rmu_in1b/eff_ttbar.root",// real2015  
-				"scripts/QCDestimation/250616_fakeRates_rmu_in1b/fake.root",	// fake2015
+				
+	MM_1b_rmu = new MMUtils("scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root",// real2015  
+				"scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",	// fake2015
+				
 				"scripts/QCDestimation/MUON_RATES_2016/btag1_eff_ttbar.root",	// real2016
 				"scripts/QCDestimation/MUON_RATES_2016/btag1_fake.root");	// fake2016
 	  
@@ -1221,7 +1227,6 @@ int main(int argc, char **argv) {
 	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
 	        
 	        if (runMM) {
-                   
 		   if(nBtagged==0){
 		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
