@@ -13,9 +13,7 @@
 
 AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList)
   : Analysis(filename, systList), m_electron(electron), m_boosted(boosted),
-    m_neutrinoBuilder("MeV"), m_chi2("MeV") {
-
-  m_chi2.Init(TtresChi2::DATA2015_MC15C);
+    m_neutrinoBuilder("MeV") {
   
 
   std::string suffix(""), btag("");
@@ -47,348 +45,6 @@ void AnaTtresQCD::run(const Event &evt, double weight, const std::string &suffix
 //**************************
 //******* Real Rates *******
 //**************************
-
-
-void AnaTtresQCD::runRealRateQCDCR_2015(const Event &evt, double weight, const std::string &suffix){
-  // check channel
-  if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
-    return;
-
-  if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
-    return;
-
-  if (m_boosted)
-    if (!(evt.passes("bejets_2015") || evt.passes("bmujets_2015")))
-      return;
-
-  if (!m_boosted)
-    if (!(evt.passes("rejets_2015") || evt.passes("rmujets_2015")))
-      return;
-
-  if (!m_boosted)	if(evt.jet().size()<4)	return; 
-  
-  HistogramService *h = &m_hSvc;
-	  
-  //Pre-selection: 
-  int ttbar_type = evt.MC_ttbar_type();
- 
-  ///Electrons  
-  if (evt.MC_w1l_pdgId()==11){
-
-  	if (evt.MC_w1l().Perp()<15000 || fabs(evt.MC_w1l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCe_pt_eta", "", suffix)->Fill(evt.MC_w1l().Perp()*1e-3, evt.MC_w1l().Eta()); 
-
-  }else if(evt.MC_w2l_pdgId()==-11){  
-
-  	if (evt.MC_w2l().Perp()<15000 || fabs(evt.MC_w2l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCe_pt_eta", "", suffix)->Fill(evt.MC_w2l().Perp()*1e-3, evt.MC_w2l().Eta()); 
-
-  }//if
-    
-  ///Muons 
-  if (evt.MC_w1l_pdgId()==13){
-
-  	if (evt.MC_w1l().Perp()<15000 || fabs(evt.MC_w1l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCmu_pt_eta", "", suffix) ->Fill(evt.MC_w1l().Perp()*1e-3, evt.MC_w1l().Eta()); 
-  		
-  }else if(evt.MC_w2l_pdgId()==-13){
-
-  	if (evt.MC_w2l().Perp()<15000 || fabs(evt.MC_w2l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCmu_pt_eta", "", suffix) ->Fill(evt.MC_w2l().Perp()*1e-3, evt.MC_w2l().Eta()); 
-
-  }//if
-   
-  ///Taus 
-  if (evt.MC_w1l_pdgId()==15){
-
-  	if (evt.MC_w1l().Perp()<15000 || fabs(evt.MC_w1l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCtau_pt_eta", "", suffix) ->Fill(evt.MC_w1l().Perp()*1e-3, evt.MC_w1l().Eta()); 
-  		
-  }else if(evt.MC_w2l_pdgId()==-15){
-
-  	if (evt.MC_w2l().Perp()<15000 || fabs(evt.MC_w2l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCtau_pt_eta", "", suffix) ->Fill(evt.MC_w2l().Perp()*1e-3, evt.MC_w2l().Eta()); 
-
-  }//if
-
-
-  ///----------------------------------
-  //Matching truth and reco lepton
-  ///----------------------------------
-
-  TLorentzVector lept;    
-  int leptMa_pdgId = 0;
-
-  float dr = 99;
-  float lep_drMax = 0.2;
-  float tau_drMax = 0.4;
-
-  float d0sig(0); 
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
-  
-  bool isTight(0);
-
-  if (m_electron) {  
-    lept = evt.electron()[0].mom();	  
-    d0sig = evt.electron()[0].sd0();
-    
-    //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();		// MC / data prescaled
-    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();		// data only
-    trig3 = evt.electron()[0].HLT_e60_lhmedium();
-    trig4 = evt.electron()[0].HLT_e120_lhloose();
-
-    isTight = evt.electron()[0].isTightPP();
-  		
-    bool trig_MC = trig1 || trig3 || trig4;	
-    bool trig_DT = trig2 || trig3 || trig4;
-  
-    if (evt.MC_w1l_pdgId()==11){
-  	dr = lept.DeltaR(evt.MC_w1l());
-  	if (dr<lep_drMax)	leptMa_pdgId = evt.MC_w1l_pdgId();
-    
-    }else if (evt.MC_w1l_pdgId()==15){
-  	dr = lept.DeltaR(evt.MC_w1l());
-  	if (dr<tau_drMax)	leptMa_pdgId = evt.MC_w1l_pdgId();
-
-    }else if (evt.MC_w2l_pdgId()==-11){
-  	dr = lept.DeltaR(evt.MC_w2l());
-  	if (dr<lep_drMax)	leptMa_pdgId = evt.MC_w2l_pdgId();
-
-    }else if (evt.MC_w2l_pdgId()==-15){
-  	dr = lept.DeltaR(evt.MC_w2l());
-  	if (dr<tau_drMax)	leptMa_pdgId = evt.MC_w2l_pdgId();
-
-
-    }else if (abs(evt.MC_w1l_pdgId())==13 || abs(evt.MC_w2l_pdgId())==13)	std::cout << "reco electron and truth muon" << std::endl;
-  	   
-  } else {
-    lept = evt.muon()[0].mom();   
-    d0sig = evt.muon()[0].sd0();
-    
-    //Muon triggers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-
-    isTight = evt.muon()[0].isTight();
-
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-    
-    if (trig_prescaled && !trig_unprescaled)		return; 
-      
-    if (evt.MC_w1l_pdgId()==13 && lept.DeltaR(evt.MC_w1l())<lep_drMax){
-  	leptMa_pdgId = evt.MC_w1l_pdgId();
-    }else if (evt.MC_w2l_pdgId()==-13 && lept.DeltaR(evt.MC_w2l())<lep_drMax){
-  	leptMa_pdgId = evt.MC_w2l_pdgId();
-    }
-    else if (evt.MC_w1l_pdgId()==15 && lept.DeltaR(evt.MC_w1l())<tau_drMax){
-  	leptMa_pdgId = evt.MC_w1l_pdgId();
-    }else if (evt.MC_w2l_pdgId()==-15 && lept.DeltaR(evt.MC_w2l())<tau_drMax){
-  	leptMa_pdgId = evt.MC_w2l_pdgId();
-    }
-    else if (abs(evt.MC_w1l_pdgId())==11 || abs(evt.MC_w2l_pdgId())==11)	std::cout << "reco muon and truth electron" << std::endl;    
-
-
-  }//m_electron
-
-  h->h1D("eff_d0sig", "", suffix)  ->Fill(d0sig, weight);
-
-  h->h1D("trig1", "", suffix)  ->Fill(trig1);
-  h->h1D("trig2", "", suffix)  ->Fill(trig2);
-  h->h1D("trig3", "", suffix)  ->Fill(trig3);
-  h->h1D("trig4", "", suffix)  ->Fill(trig4);
-  h->h1D("trig5", "", suffix)  ->Fill(trig5);
-  
-  if (leptMa_pdgId!=0)	{
-
-        GetRealHistograms(evt, weight, suffix, "");	
-  }
-
-}//AnaTtresQCD::runRealRateQCDCR_2015
-
-
-void AnaTtresQCD::runRealRateQCDCR_2016(const Event &evt, double weight, const std::string &suffix){
-  // check channel
-  if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
-    return;
-
-  if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
-    return;
-
-  if (m_boosted)
-    if (!(evt.passes("bejets") || evt.passes("bmujets_2016")))
-      return;
-
-  if (!m_boosted)
-    if (!(evt.passes("rejets") || evt.passes("rmujets_2016")))
-      return;
-
-  if (!m_boosted)	if(evt.jet().size()<4)	return; 
-  
-  HistogramService *h = &m_hSvc;
-	  
-  //Pre-selection: 
-  int ttbar_type = evt.MC_ttbar_type();
- 
-  ///Electrons  
-  if (evt.MC_w1l_pdgId()==11){
-
-  	if (evt.MC_w1l().Perp()<15000 || fabs(evt.MC_w1l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCe_pt_eta", "", suffix)->Fill(evt.MC_w1l().Perp()*1e-3, evt.MC_w1l().Eta()); 
-
-  }else if(evt.MC_w2l_pdgId()==-11){  
-
-  	if (evt.MC_w2l().Perp()<15000 || fabs(evt.MC_w2l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCe_pt_eta", "", suffix)->Fill(evt.MC_w2l().Perp()*1e-3, evt.MC_w2l().Eta()); 
-
-  }//if
-    
-  ///Muons 
-  if (evt.MC_w1l_pdgId()==13){
-
-  	if (evt.MC_w1l().Perp()<15000 || fabs(evt.MC_w1l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCmu_pt_eta", "", suffix) ->Fill(evt.MC_w1l().Perp()*1e-3, evt.MC_w1l().Eta()); 
-  		
-  }else if(evt.MC_w2l_pdgId()==-13){
-
-  	if (evt.MC_w2l().Perp()<15000 || fabs(evt.MC_w2l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCmu_pt_eta", "", suffix) ->Fill(evt.MC_w2l().Perp()*1e-3, evt.MC_w2l().Eta()); 
-
-  }//if
-   
-  ///Taus 
-  if (evt.MC_w1l_pdgId()==15){
-
-  	if (evt.MC_w1l().Perp()<15000 || fabs(evt.MC_w1l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCtau_pt_eta", "", suffix) ->Fill(evt.MC_w1l().Perp()*1e-3, evt.MC_w1l().Eta()); 
-  		
-  }else if(evt.MC_w2l_pdgId()==-15){
-
-  	if (evt.MC_w2l().Perp()<15000 || fabs(evt.MC_w2l().Eta())>3.0)  return; 	
-  	h->h2D("eff_MCtau_pt_eta", "", suffix) ->Fill(evt.MC_w2l().Perp()*1e-3, evt.MC_w2l().Eta()); 
-
-  }//if
-
-
-  ///----------------------------------
-  //Matching truth and reco lepton
-  ///----------------------------------
-
-  TLorentzVector lept;    
-  int leptMa_pdgId = 0;
-
-  float dr = 99;
-  float lep_drMax = 0.2;
-  float tau_drMax = 0.4;
-
-  float d0sig(0); 
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
-  
-  bool isTight(0);
-
-  if (m_electron) {  
-    lept = evt.electron()[0].mom();	  
-    d0sig = evt.electron()[0].sd0();
-    
-    //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();		// MC / data prescaled
-    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();		// data only
-    trig3 = evt.electron()[0].HLT_e60_lhmedium();
-    trig4 = evt.electron()[0].HLT_e120_lhloose();
-
-    isTight = evt.electron()[0].isTightPP();
-  		
-    bool trig_MC = trig1 || trig3 || trig4;	
-    bool trig_DT = trig2 || trig3 || trig4;
-/*
-    if (evt.channelNumber()!=0){
-  	  if (!trig_MC)return;
-    }else{
-  	  if (!trig_DT)return;
-    }			
-*/    
-    if (evt.MC_w1l_pdgId()==11){
-  	dr = lept.DeltaR(evt.MC_w1l());
-  	if (dr<lep_drMax)	leptMa_pdgId = evt.MC_w1l_pdgId();
-    
-    }else if (evt.MC_w1l_pdgId()==15){
-  	dr = lept.DeltaR(evt.MC_w1l());
-  	if (dr<tau_drMax)	leptMa_pdgId = evt.MC_w1l_pdgId();
-
-    }else if (evt.MC_w2l_pdgId()==-11){
-  	dr = lept.DeltaR(evt.MC_w2l());
-  	if (dr<lep_drMax)	leptMa_pdgId = evt.MC_w2l_pdgId();
-
-    }else if (evt.MC_w2l_pdgId()==-15){
-  	dr = lept.DeltaR(evt.MC_w2l());
-  	if (dr<tau_drMax)	leptMa_pdgId = evt.MC_w2l_pdgId();
-
-
-    }else if (abs(evt.MC_w1l_pdgId())==13 || abs(evt.MC_w2l_pdgId())==13)	std::cout << "reco electron and truth muon" << std::endl;
-  	   
-  } else {
-    lept = evt.muon()[0].mom();   
-    d0sig = evt.muon()[0].sd0();
-    
-    //Muon triggers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-
-    isTight = evt.muon()[0].isTight();
-
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-    
-    if (trig_prescaled && !trig_unprescaled)		return; 
-    
-/*
-    if (!isTight) {
-  	 if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)		weight *= 1/10.;
-    }
-    else{
-  	 if (trig_prescaled && !trig_unprescaled)		return;  
-    }	
- */   
-    if (evt.MC_w1l_pdgId()==13 && lept.DeltaR(evt.MC_w1l())<lep_drMax){
-  	leptMa_pdgId = evt.MC_w1l_pdgId();
-    }else if (evt.MC_w2l_pdgId()==-13 && lept.DeltaR(evt.MC_w2l())<lep_drMax){
-  	leptMa_pdgId = evt.MC_w2l_pdgId();
-    }
-    else if (evt.MC_w1l_pdgId()==15 && lept.DeltaR(evt.MC_w1l())<tau_drMax){
-  	leptMa_pdgId = evt.MC_w1l_pdgId();
-    }else if (evt.MC_w2l_pdgId()==-15 && lept.DeltaR(evt.MC_w2l())<tau_drMax){
-  	leptMa_pdgId = evt.MC_w2l_pdgId();
-    }
-    else if (abs(evt.MC_w1l_pdgId())==11 || abs(evt.MC_w2l_pdgId())==11)	std::cout << "reco muon and truth electron" << std::endl;    
-
-
-  }//m_electron
-
-  h->h1D("eff_d0sig", "", suffix)  ->Fill(d0sig, weight);
-
-  h->h1D("trig1", "", suffix)  ->Fill(trig1);
-  h->h1D("trig2", "", suffix)  ->Fill(trig2);
-  h->h1D("trig3", "", suffix)  ->Fill(trig3);
-  h->h1D("trig4", "", suffix)  ->Fill(trig4);
-  h->h1D("trig5", "", suffix)  ->Fill(trig5);
-  
-  if (leptMa_pdgId!=0)	{
-
-        GetRealHistograms(evt, weight, suffix, "");	
-  }
-
-}//AnaTtresQCD::runRealRateQCDCR_2016
 
 
 
@@ -467,11 +123,6 @@ void AnaTtresQCD::runRealRateWQCDCR_2015(const Event &evt, double weight, const 
   float tau_drMax = 0.4;
 
   float d0sig(0); 
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
   
   bool isTight(0);
 
@@ -502,18 +153,6 @@ void AnaTtresQCD::runRealRateWQCDCR_2015(const Event &evt, double weight, const 
     lept = evt.muon()[0].mom();   
     d0sig = evt.muon()[0].sd0();
     
-    //Muon triggers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-
-    isTight = evt.muon()[0].isTight();
-
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-
-    if (trig_prescaled && !trig_unprescaled)		return;
-
     if (evt.MC_w1l_pdgId()==13 && lept.DeltaR(evt.MC_w1l())<lep_drMax){
   	leptMa_pdgId = evt.MC_w1l_pdgId();
     }else if (evt.MC_w2l_pdgId()==-13 && lept.DeltaR(evt.MC_w2l())<lep_drMax){
@@ -530,12 +169,6 @@ void AnaTtresQCD::runRealRateWQCDCR_2015(const Event &evt, double weight, const 
   }//m_electron
 
   h->h1D("eff_d0sig", "", suffix)  ->Fill(d0sig, weight);
-
-  h->h1D("trig1", "", suffix)  ->Fill(trig1);
-  h->h1D("trig2", "", suffix)  ->Fill(trig2);
-  h->h1D("trig3", "", suffix)  ->Fill(trig3);
-  h->h1D("trig4", "", suffix)  ->Fill(trig4);
-  h->h1D("trig5", "", suffix)  ->Fill(trig5);
   
   //nB-tagged jets 
   int nTrkBtagged = 0; 
@@ -626,35 +259,13 @@ void AnaTtresQCD::runRealRateWQCDCR_2016(const Event &evt, double weight, const 
   float tau_drMax = 0.4;
 
   float d0sig(0); 
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
   
   bool isTight(0);
 
   if (m_electron) {  
     lept = evt.electron()[0].mom();	  
     d0sig = evt.electron()[0].sd0();
-    /*
-    //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();		// MC / data prescaled
-    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();		// data only
-    trig3 = evt.electron()[0].HLT_e60_lhmedium();
-    trig4 = evt.electron()[0].HLT_e120_lhloose();
 
-    isTight = evt.electron()[0].isTightPP();
-  		
-    bool trig_MC = trig1 || trig3 || trig4;	
-    bool trig_DT = trig2 || trig3 || trig4;
-
-    if (evt.channelNumber()!=0){
-  	  if (!trig_MC)return;
-    }else{
-  	  if (!trig_DT)return;
-    }			
-    */
     if (evt.MC_w1l_pdgId()==11){
   	dr = lept.DeltaR(evt.MC_w1l());
   	if (dr<lep_drMax)	leptMa_pdgId = evt.MC_w1l_pdgId();
@@ -677,27 +288,7 @@ void AnaTtresQCD::runRealRateWQCDCR_2016(const Event &evt, double weight, const 
   } else {
     lept = evt.muon()[0].mom();   
     d0sig = evt.muon()[0].sd0();
- /*    
-    //Muon triggers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-
-    isTight = evt.muon()[0].isTight();
-
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-
-    if (trig_prescaled && !trig_unprescaled)		return;
-
-
-    if (!isTight) {
-  	 if (evt.channelNumber()!=0) if (trig_prescaled && !trig_unprescaled)		weight *= 1/10.;
-    }
-    else{
-  	 if (trig_prescaled && !trig_unprescaled)		return;  
-    }	
-  */  
+ 
     if (evt.MC_w1l_pdgId()==13 && lept.DeltaR(evt.MC_w1l())<lep_drMax){
   	leptMa_pdgId = evt.MC_w1l_pdgId();
     }else if (evt.MC_w2l_pdgId()==-13 && lept.DeltaR(evt.MC_w2l())<lep_drMax){
@@ -714,12 +305,6 @@ void AnaTtresQCD::runRealRateWQCDCR_2016(const Event &evt, double weight, const 
   }//m_electron
 
   h->h1D("eff_d0sig", "", suffix)  ->Fill(d0sig, weight);
-
-  h->h1D("trig1", "", suffix)  ->Fill(trig1);
-  h->h1D("trig2", "", suffix)  ->Fill(trig2);
-  h->h1D("trig3", "", suffix)  ->Fill(trig3);
-  h->h1D("trig4", "", suffix)  ->Fill(trig4);
-  h->h1D("trig5", "", suffix)  ->Fill(trig5);
   
   //nB-tagged jets 
   int nTrkBtagged = 0; 
@@ -875,11 +460,6 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
   
   if (!m_boosted)	if(evt.jet().size()<4)	return;
       
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
     
   bool isTight;
   TLorentzVector lept; 
@@ -894,17 +474,7 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
 	isTight = evt.muon()[0].isTight();
 	lept  = evt.muon()[0].mom();
         sd0    = evt.muon()[0].sd0();
-	
-	//Muon triggers
-	trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-	trig2 = evt.muon()[0].HLT_mu50();
-	trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-	
-	bool trig_prescaled   = trig1;
-	bool trig_unprescaled = trig2 || trig3;
-	
-	if (trig_prescaled && !trig_unprescaled)		return;
-	
+		
   }//m_electron
   HistogramService *h = &m_hSvc;
   
@@ -917,12 +487,6 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
       if( (MET<20) || (MET+mWt)<60)	return;
       if(fabs(sd0)<5)			return;
   }//if
-    
-  h->h1D("fake_trig1", "", suffix)  ->Fill(trig1);
-  h->h1D("fake_trig2", "", suffix)  ->Fill(trig2);
-  h->h1D("fake_trig3", "", suffix)  ->Fill(trig3);
-  h->h1D("fake_trig4", "", suffix)  ->Fill(trig4);
-  h->h1D("fake_trig5", "", suffix)  ->Fill(trig5);
   
   GetFakeHistograms(evt, weight, "", suffix, ""); 
   
@@ -946,13 +510,7 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
       return;
   
   if (!m_boosted)	if(evt.jet().size()<4)	return;
-      
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
-    
+          
   bool isTight;
   TLorentzVector lept; 
   float sd0(99);
@@ -961,44 +519,10 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
 	isTight = evt.electron()[0].isTightPP();
 	lept  = evt.electron()[0].mom();
 	sd0    = evt.electron()[0].sd0();
-	/*
-	//Electron trigers
-	trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH(); 		// MC / data prescaled
-	trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH(); 		// data	only
-	trig3 = evt.electron()[0].HLT_e60_lhmedium();
-	trig4 = evt.electron()[0].HLT_e120_lhloose();
-		
-	bool trig_MC = trig1 || trig3 || trig4;	
-	bool trig_DT = trig2 || trig3 || trig4;
-	
-	if (evt.channelNumber()!=0){
-	  if (!trig_MC)return;
-	}else{
-	  if (!trig_DT)return;
-	}			
-  	*/
   } else{
 	isTight = evt.muon()[0].isTight();
 	lept  = evt.muon()[0].mom();
         sd0    = evt.muon()[0].sd0();
-	
-	//Muon triggers
-	trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-	trig2 = evt.muon()[0].HLT_mu50();
-	trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-	
-	bool trig_prescaled   = trig1;
-	bool trig_unprescaled = trig2 || trig3;
-	
-	if (trig_prescaled && !trig_unprescaled)		return;
-	/*
-	if (!isTight) {
-	 if (evt.channelNumber()!=0)	if (trig_prescaled && !trig_unprescaled)		weight *= 1.0/10.;
-	}
-	else{
-	 if (trig_prescaled && !trig_unprescaled)		return;	 
-	}	
-	*/	
   }//m_electron
   HistogramService *h = &m_hSvc;
   
@@ -1011,13 +535,7 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
       if( (MET<20) || (MET+mWt)<60)	return;
       if(fabs(sd0)<5)			return;
   }//if
-    
-  h->h1D("fake_trig1", "", suffix)  ->Fill(trig1);
-  h->h1D("fake_trig2", "", suffix)  ->Fill(trig2);
-  h->h1D("fake_trig3", "", suffix)  ->Fill(trig3);
-  h->h1D("fake_trig4", "", suffix)  ->Fill(trig4);
-  h->h1D("fake_trig5", "", suffix)  ->Fill(trig5);
-  
+      
   GetFakeHistograms(evt, weight, "", suffix, "");
    
   
@@ -1042,12 +560,6 @@ void AnaTtresQCD::runFakeRateWQCDCR_2015(const Event &evt, double weight, const 
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
     
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
-    
   bool isTight;
   TLorentzVector lept; 
   float sd0(99);
@@ -1061,17 +573,7 @@ void AnaTtresQCD::runFakeRateWQCDCR_2015(const Event &evt, double weight, const 
 	isTight 	= evt.muon()[0].isTight();
 	lept  		= evt.muon()[0].mom();
         sd0    		= evt.muon()[0].sd0();
-	
-	//Muon triggers
-	trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-	trig2 = evt.muon()[0].HLT_mu50();
-	trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-	
-	bool trig_prescaled   = trig1;
-	bool trig_unprescaled = trig2 || trig3;
-	
-	if (trig_prescaled && !trig_unprescaled)		return;
-		
+			
   }//m_electron
   HistogramService *h = &m_hSvc;
   
@@ -1095,13 +597,7 @@ void AnaTtresQCD::runFakeRateWQCDCR_2015(const Event &evt, double weight, const 
   }//for 
   
   if (nTrkBtagged!=0)	return;		
-  
-  h->h1D("fake_trig1", "", suffix)  ->Fill(trig1);
-  h->h1D("fake_trig2", "", suffix)  ->Fill(trig2);
-  h->h1D("fake_trig3", "", suffix)  ->Fill(trig3);
-  h->h1D("fake_trig4", "", suffix)  ->Fill(trig4);
-  h->h1D("fake_trig5", "", suffix)  ->Fill(trig5);
-  
+    
   GetFakeHistograms(evt, weight, "", suffix, "");   
  
 } //AnaTtresQCD::runFakeRateWQCDCR_2015
@@ -1124,13 +620,7 @@ void AnaTtresQCD::runFakeRateWQCDCR_2016(const Event &evt, double weight, const 
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
-    
-  bool trig1(0); 
-  bool trig2(0); 
-  bool trig3(0);
-  bool trig4(0);
-  bool trig5(0);
-    
+        
   bool isTight;
   TLorentzVector lept; 
   float sd0(99);
@@ -1138,46 +628,10 @@ void AnaTtresQCD::runFakeRateWQCDCR_2016(const Event &evt, double weight, const 
   if (m_electron) {	
 	isTight = evt.electron()[0].isTightPP();
 	lept  = evt.electron()[0].mom();
-	sd0    = evt.electron()[0].sd0();
-/*
-	//Electron trigers
-	trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH(); 		// MC / data prescaled
-	trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH(); 		// data	only
-	trig3 = evt.electron()[0].HLT_e60_lhmedium();
-	trig4 = evt.electron()[0].HLT_e120_lhloose();
-		
-	bool trig_MC = trig1 || trig3 || trig4;	
-	bool trig_DT = trig2 || trig3 || trig4;
-	
-	if (evt.channelNumber()!=0){
-	  if (!trig_MC)return;
-	}else{
-	  if (!trig_DT)return;
-	}			
-  */
   } else{
 	isTight = evt.muon()[0].isTight();
 	lept  = evt.muon()[0].mom();
-        sd0    = evt.muon()[0].sd0();
-	/*
-	//Muon triggers
-	trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-	trig2 = evt.muon()[0].HLT_mu50();
-	trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-	
-	bool trig_prescaled   = trig1;
-	bool trig_unprescaled = trig2 || trig3;
-	
-	if (trig_prescaled && !trig_unprescaled)		return;
-	
-	
-	if (!isTight) {
-	 if (evt.channelNumber()!=0)	if (trig_prescaled && !trig_unprescaled)		weight *= 1.0/10.;
-	}
-	else{
-	 if (trig_prescaled && !trig_unprescaled)		return;	 
-	}
-	*/	
+        sd0    = evt.muon()[0].sd0();	
 		
   }//m_electron
   HistogramService *h = &m_hSvc;
@@ -1201,12 +655,6 @@ void AnaTtresQCD::runFakeRateWQCDCR_2016(const Event &evt, double weight, const 
   
   //if (nTrkBtagged!=0)	return;	
   //if (nTrkBtagged < 1) return;	
-  
-  h->h1D("fake_trig1", "", suffix)  ->Fill(trig1);
-  h->h1D("fake_trig2", "", suffix)  ->Fill(trig2);
-  h->h1D("fake_trig3", "", suffix)  ->Fill(trig3);
-  h->h1D("fake_trig4", "", suffix)  ->Fill(trig4);
-  h->h1D("fake_trig5", "", suffix)  ->Fill(trig5);
 
   GetFakeHistograms(evt, weight, "", suffix, "");
   if(nTrkBtagged == 0)
@@ -1623,11 +1071,6 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   m_hSvc.create1D(suffix+"fake_ptvarcone",         		"; ptvarcone; Events", 50, -10, 40); 
   m_hSvc.create1D(suffix+"fake_topoetcone",         		"; topoetcone; Events", 40, -10, 30); 
    
-  m_hSvc.create1D(suffix+"fake_trig1",  "; trig1; Events", 2, 0, 2);
-  m_hSvc.create1D(suffix+"fake_trig2",  "; trig1; Events", 2, 0, 2);
-  m_hSvc.create1D(suffix+"fake_trig3",  "; trig1; Events", 2, 0, 2);
-  m_hSvc.create1D(suffix+"fake_trig4",  "; trig1; Events", 2, 0, 2);
-  m_hSvc.create1D(suffix+"fake_trig5",  "; trig1; Events", 2, 0, 2);
   
   double metBin[] = {20, 30, 40, 50, 60, 100, 500};
   int metBinN = sizeof(metBin)/sizeof(double) - 1; 

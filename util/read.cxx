@@ -601,29 +601,21 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresSL(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
-  } else if(analysis == "AnaTtresSL_QCDVR2j_2015" ||analysis == "AnaTtresSL_QCDCR2j_2015" || analysis == "AnaTtresSL_WjetsCR2j_2015" || analysis == "AnaTtresSL_SR4j_2015" || analysis == "AnaTtresSL_QCDVR4j_2015"){
+  } else if(analysis == "AnaTtresSL_QCDVR2j_2015" ||analysis == "AnaTtresSL_QCDCR2j_2015" || analysis == "AnaTtresSL_WjetsCR2j_2015" || analysis == "AnaTtresSL_SR4j_2015" || analysis == "AnaTtresSL_QCDVR4j_2015"
+         || analysis == "AnaTtresSL_QCDVR2j_2016" ||analysis == "AnaTtresSL_QCDCR2j_2016" || analysis == "AnaTtresSL_QCDSR2j_2016" || analysis == "AnaTtresSL_QCDCR4j_2016" || analysis == "AnaTtresSL_QCDVR4j_2016"){
     vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal)); // resolved electron
     vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresMM(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon 
-  } else if(analysis == "AnaTtresSL_QCDVR2j_2016" ||analysis == "AnaTtresSL_QCDCR2j_2016" || analysis == "AnaTtresSL_QCDSR2j_2016" || analysis == "AnaTtresSL_QCDCR4j_2016" || analysis == "AnaTtresSL_QCDVR4j_2016"){
-    vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal)); // resolved electron
-    vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
-    vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
-    vec_analysis.push_back(new AnaTtresMM(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
-  }
-    else if(analysis == "AnaTtresQCDreal_2015"||analysis == "AnaTtresWQCDreal_2015"||analysis == "AnaTtresQCDfake_2015"||analysis == "AnaTtresWQCDfake_2015"){
+  } 
+    else if(analysis == "AnaTtresWQCDreal_2015"||analysis == "AnaTtresQCDfake_2015"||analysis == "AnaTtresWQCDfake_2015"
+         || analysis == "AnaTtresWQCDreal_2016"||analysis == "AnaTtresQCDfake_2016"||analysis == "AnaTtresWQCDfake_2016") {
     vec_analysis.push_back(new AnaTtresQCD(outList[0], true,  false, systsListWithBlankNominal) ); //resolved electron
     vec_analysis.push_back(new AnaTtresQCD(outList[1], false, false, systsListWithBlankNominal) ); // resolved muon
     vec_analysis.push_back(new AnaTtresQCD(outList[2], true,  true,  systsListWithBlankNominal) ); // boosted  electron
     vec_analysis.push_back(new AnaTtresQCD(outList[3], false, true,  systsListWithBlankNominal) ); // boosted  muon
   }
-    else if(analysis == "AnaTtresQCDreal_2016"||analysis == "AnaTtresWQCDreal_2016"||analysis == "AnaTtresQCDfake_2016"||analysis == "AnaTtresWQCDfake_2016"){
-    vec_analysis.push_back(new AnaTtresQCD(outList[0], true,  false, systsListWithBlankNominal) ); //resolved electron
-    vec_analysis.push_back(new AnaTtresQCD(outList[1], false, false, systsListWithBlankNominal) ); // resolved muon
-    vec_analysis.push_back(new AnaTtresQCD(outList[2], true,  true,  systsListWithBlankNominal) ); // boosted  electron
-    vec_analysis.push_back(new AnaTtresQCD(outList[3], false, true,  systsListWithBlankNominal) ); // boosted  muon
-  }
+
     else if (analysis == "AnaTtresSLMtt") {
     vec_analysis.push_back(new AnaTtresSLMtt(outList[0], true,  false, systsListWithBlankNominal)); // resolved electron
     vec_analysis.push_back(new AnaTtresSLMtt(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
@@ -1446,16 +1438,7 @@ int main(int argc, char **argv) {
             }	 
 	  
 	  }
-
-            else if (analysis=="AnaTtresQCDreal_2015") { // to generate the real rates, >=4 jets
-            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runRealRateQCDCR_2015(sel, weight, suffix);
-          }    
-            else if (analysis=="AnaTtresQCDreal_2016") { // to generate the real rates, >=4 jets
-            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
-		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runRealRateQCDCR_2016(sel, weight, suffix);
-          }
-            else if (analysis=="AnaTtresWQCDreal_2015") { // to generate the real rates, >=2 jets
+	  else if (analysis=="AnaTtresWQCDreal_2015") { // to generate the real rates, >=2 jets
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
 		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runRealRateWQCDCR_2015(sel, weight, suffix);
 	  } 
