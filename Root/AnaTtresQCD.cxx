@@ -195,11 +195,11 @@ void AnaTtresQCD::runRealRateWQCDCR_2016(const Event &evt, double weight, const 
     return;
   //std::cout<<"HERE"<<std::endl;
   if (m_boosted)
-    if (!(evt.passes("bejetsWCR_2016") || evt.passes("bmujetsWCR_2016")))
+    if (!(evt.passes("bmujetsWCR_2016") || evt.passes("bejetsWCR_2016")))
       return;
   //std::cout<<"HERE1"<<std::endl;
   if (!m_boosted)
-    if (!(evt.passes("rejetsWCR_2016") || evt.passes("rmujetsWCR_2016")))
+    if (!(evt.passes("rmujetsWCR_2016") || evt.passes("rejetsWCR_2016")))
       return;
   if (!m_boosted)	if(evt.jet().size()<2)	return;
  
@@ -1172,7 +1172,7 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
 	m_hSvc.create2DVar(suffix+"eff_lepPt_cosDPhi",	        "; Pt of lepton [GeV]; Cos( #Delta #phi(met, lept) )", eff_N_pT_bins, eff_pT_bins_be, CdPhiBinN, CdPhiBin);
 	m_hSvc.create2DVar(suffix+"eff_lepPt_cosDPhi_lowDR",    "; Pt of lepton [GeV]; Cos( #Delta #phi(met, lept) )", eff_N_pT_bins, eff_pT_bins_be, CdPhiBinN, CdPhiBin);
 	m_hSvc.create2DVar(suffix+"eff_lepPt_cosDPhi_highDR",   "; Pt of lepton [GeV]; Cos( #Delta #phi(met, lept) )", eff_N_pT_bins, eff_pT_bins_be, CdPhiBinN, CdPhiBin);
-  
+        m_hSvc.create2DVar(suffix+"eff_lepPt_topoetcone",       "; Pt of lepton [GeV]; topoetcone20 [GeV]", fake_N_pT_bins, fake_pT_bins_re, topoetconeBinN, topoetconeBin); 
   	//Fake 1D     
   	m_hSvc.create1DVar(suffix+"fake_lepPt_effBins", 	  "; Pt of lepton [GeV]; Eff", fake_N_pT_bins, fake_pT_bins_be);
 	

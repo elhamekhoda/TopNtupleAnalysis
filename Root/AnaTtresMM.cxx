@@ -392,18 +392,18 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2016")))
+    if (!(evt.passes("bmujetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2016")))
+    if (!(evt.passes("rmujetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
-  
+
   bool isTight = false;
   float d0sig(99);
     
@@ -455,8 +455,8 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
         closejl_deltaR = deltaR_tmp;
         closejl_idx = jet_idx;
     }   
-  }//for     
-
+  }//for  
+   
   //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
   //else				GetHistograms(evt, weight, "lDR_", suffix);
@@ -475,12 +475,12 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2016")))
+    if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bejetsQCDCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2016")))
+    if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rejetsQCDCR_2016")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
@@ -543,7 +543,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
   //else				GetHistograms(evt, weight, "lDR_", suffix);
   GetHistograms(evt, weight, "", suffix);
-
+  
 }//AnaTtresMM::runMatrixMethod_QCDVR2j_2016
 
 
@@ -993,13 +993,13 @@ void AnaTtresMM::GetHistograms(const Event &evt, double weight, const std::strin
     h->h1D(prefix+"largeJetEta", "", suffix)->Fill(lj.Eta(), weight);
     h->h1D(prefix+"largeJetPhi", "", suffix)->Fill(lj.Phi(), weight);
     h->h1D(prefix+"largeJetSd12", "", suffix)->Fill(evt.largeJet()[goodljet_idx].split12()*1e-3, weight);
-
+    
     h->h1D(prefix+"largeJet_tau32", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau32"), weight);
     h->h1D(prefix+"largeJet_tau32_wta", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau32_wta"), weight);
 
     h->h1D("largeJet_tau21", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau21"), weight);
     h->h1D("largeJet_tau21_wta", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau21_wta"), weight);
-    
+        
     // recalc. mtt
     // lepton = l
     // large-R jet = hadronic top = lj
@@ -1086,7 +1086,7 @@ void AnaTtresMM::GetHistograms(const Event &evt, double weight, const std::strin
     h->m_tree->Fill();
 
   }
-
+ 
 }//GetHistograms
 
 

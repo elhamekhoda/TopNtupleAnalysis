@@ -317,26 +317,26 @@ int main(int argc, char **argv) {
 	MM_0b_re  = new MMUtils("scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", // real2015
 				"scripts/QCDestimation/110816_fakeRates_re_0b/fake.root",	// fake2015
 				
-				"scripts/QCDestimation/030816_realRates_re_0b/eff_ttbar.root",	// real2016
-				"scripts/QCDestimation/020816_fakeRates_re_0b/fake.root");	// fake2016
+				"scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",	// real2016
+				"scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root");	// fake2016
 				
 	MM_1b_re  = new MMUtils("scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", // real2015  
 				"scripts/QCDestimation/110816_fakeRates_re_in1b/fake.root",	// fake2015
 				
-				"scripts/QCDestimation/030816_realRates_re_in1b/eff_ttbar.root",// real2016 
-				"scripts/QCDestimation/020816_fakeRates_re_in1b/fake.root"); 	// fake2016
+				"scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016 
+				"scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"); // fake2016
 
 	MM_0b_rmu = new MMUtils("scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root",// real2015  
 				"scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",	// fake2015
 				
-				"scripts/QCDestimation/MUON_RATES_2016/btag0_eff_ttbar.root",	// real2016  
-				"scripts/QCDestimation/MUON_RATES_2016/btag0_fake.root");	// fake2016
+				"scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",	// real2016  
+				"scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root");// fake2016
 				
 	MM_1b_rmu = new MMUtils("scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root",// real2015  
 				"scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",	// fake2015
 				
-				"scripts/QCDestimation/MUON_RATES_2016/btag1_eff_ttbar.root",	// real2016
-				"scripts/QCDestimation/MUON_RATES_2016/btag1_fake.root");	// fake2016
+				"scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",	// real2016
+				"scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root");	// fake2016
 	  
   } 
 
