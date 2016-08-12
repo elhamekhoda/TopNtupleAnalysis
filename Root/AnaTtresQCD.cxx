@@ -568,7 +568,6 @@ void AnaTtresQCD::runRealRateWQCDCR_2016(const Event &evt, double weight, const 
   if (!m_boosted)
     if (!(evt.passes("rejetsWCR_2016") || evt.passes("rmujetsWCR_2016")))
       return;
-    std::cout<<"HERE2"<<std::endl;
   if (!m_boosted)	if(evt.jet().size()<2)	return;
  
   HistogramService *h = &m_hSvc;
@@ -734,9 +733,6 @@ void AnaTtresQCD::runRealRateWQCDCR_2016(const Event &evt, double weight, const 
 
 			
   if (leptMa_pdgId!=0)	{
-
-     
-     std::cout<<"leptMa_pdgId = "<<leptMa_pdgId<<std::endl;
 
      GetRealHistograms(evt, weight, suffix, "");
      if(nTrkBtagged == 0)
