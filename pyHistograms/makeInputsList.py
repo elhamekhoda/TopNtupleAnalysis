@@ -8,7 +8,11 @@ def main():
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
 	pattern = 'user.dferreir.*03082016v1_output.root'
-	pattern_mtt = 'user.dferreir.*03082016v3_output.root'
+	pattern_mtt = 'user.dferreir.*03082016v4_output.root'
+	pattern_data = 'user.dferreir.00*03082016v3_output.root'
+
+	pattern_syst = 'user.dferreir.*03082016Systv4_output.root'
+	pattern_pdf = 'user.dferreir.*03082016PDFv4_output.root'
 	# for QCD e
 	pattern_qcde = 'user.dferreir.*03082016QCDev1_output.root'
 	pattern_qcdmu = 'user.dferreir.*03082016QCDmuv1_output.root'
@@ -16,9 +20,9 @@ def main():
 	
 	# output directory
 	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
-	outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
-	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2416'
-	#outputDir = '.'
+	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
+	#outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2416'
+	outputDir = '.'
 
 	# 25 ns datasets
 	names   = []
@@ -26,12 +30,12 @@ def main():
 	names  += ['tt']
 	names  += ['tthm']
 	names  += ['wbbjets']
-	names  += ['wccjets']
-	names  += ['wcjets']
-	names  += ['wljets']
+	#names  += ['wccjets']
+	#names  += ['wcjets']
+	#names  += ['wljets']
 	names  += ['zjets']
-	names  += ["data"]
-	names  += ['qcde', 'qcdmu']
+	#names  += ["data"]
+	#names  += ['qcde', 'qcdmu']
 	names  += ['singletop']
 	names  += ['vv']
 	names  += ['zprime400']
@@ -54,6 +58,10 @@ def main():
 	names  += ['kkgrav1000']
 	names  += ['kkgrav2000']
 	names  += ['kkgrav3000']
+	names  += ['ttpdf']
+	names  += ['ttpowhegherwig']
+	names  += ['ttmcatnloherwig']
+	names  += ['ttradhi', 'ttradlo']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -65,6 +73,11 @@ def main():
 					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', #,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'tthm':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+					'ttpdf':'MC15c_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF',
+					'ttpowhegherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwig',
+					'ttmcatnloherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwig',
+					'ttradhi':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadHi',
+					'ttradlo':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadLo',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
 					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
@@ -105,18 +118,33 @@ def main():
 	datasets = []
 	for l in response:
 		datasets.append(l)
-	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_qcde})
-	datasets_qcde = []
-	for l in response:
-		datasets_qcde.append(l)
-	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_qcdmu})
-	datasets_qcdmu = []
-	for l in response:
-		datasets_qcdmu.append(l)
+	#response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_qcde})
+	#datasets_qcde = []
+	#for l in response:
+	#	datasets_qcde.append(l)
+	#response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_qcdmu})
+	#datasets_qcdmu = []
+	#for l in response:
+	#	datasets_qcdmu.append(l)
 	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_mtt})
 	datasets_mtt = []
 	for l in response:
 		datasets_mtt.append(l)
+
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_pdf})
+	datasets_pdf = []
+	for l in response:
+		datasets_pdf.append(l)
+
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_syst})
+	datasets_syst = []
+	for l in response:
+		datasets_syst.append(l)
+
+	#response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_data})
+	#datasets_data = []
+	#for l in response:
+	#	datasets_data.append(l)
 	
 	# each "sample" below means an item in the list names above
 	# there may contain multiple datasets
@@ -131,17 +159,29 @@ def main():
 			else:
 				sample.datasets.extend(samples[0].datasets)
 
-		# write list of files to be read when processing this sample
-		f = open(outputDir+"/input_all.txt", 'a')
-		
 		# go over all directories in the ntuplesDir
 		ds = datasets
+		suf = 'all'
 		if sn == 'qcde':
 			ds = datasets_qcde
+			suf = 'qcde'
 		elif sn == 'qcdmu':
 			ds = datasets_qcdmu
+			suf = 'qcdmu'
 		elif sn == 'tthm' or sn == 'singletop':
 			ds = datasets_mtt
+		elif sn == 'ttpdf':
+			ds = datasets_pdf
+			suf = 'pdf'
+		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:
+			ds = datasets_syst
+			suf = 'syst'
+		elif sn == 'data':
+			ds = datasets_data
+			suf = 'data'
+		# write list of files to be read when processing this sample
+		f = open(outputDir+"/inputSW_%s.txt" % suf, 'a')
+		
 		for d in ds:
 			# remove path and get only dir name in justfile
 			#justfile = d.split('/')[-1]

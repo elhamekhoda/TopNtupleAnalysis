@@ -8,7 +8,10 @@ def main():
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
 	pattern = 'user.dferreir.*03082016v1_output.root'
-	pattern_mtt = 'user.dferreir.*03082016v3_output.root'
+	pattern_data = 'user.dferreir.*03082016v3_output.root'
+	pattern_mtt = 'user.dferreir.*03082016v4_output.root'
+	pattern_syst = 'user.dferreir.*03082016Systv4_output.root'
+	pattern_pdf = 'user.dferreir.*03082016PDFv4_output.root'
 	# for QCD e
 	pattern_qcde = 'user.dferreir.*03082016QCDev3_output.root'
 	pattern_qcdmu = 'user.dferreir.*03082016QCDmuv3_output.root'
@@ -49,48 +52,57 @@ def main():
 	# 25 ns datasets
 	names   = []
 
-	names  += ['tt']
+	#names  += ['tt']
 	names  += ['tthm']
 	names  += ['wbbjets']
 	names  += ['wccjets']
 	names  += ['wcjets']
 	names  += ['wljets']
-	names  += ['zjets']
-	names  += ["data"]
-	names  += ['qcde', 'qcdmu']
+	#names  += ['zjets']
+	#names  += ["data"]
+	#names  += ['qcde', 'qcdmu']
 	names  += ['singletop']
-	names  += ['vv']
-	names  += ['zprime400']
-	names  += ['zprime500']
-	names  += ['zprime750']
-	names  += ['zprime1000']
-	names  += ['zprime1250']
-	names  += ['zprime1500']
-	names  += ['zprime1750']
-	names  += ['zprime2000']
-	names  += ['zprime2250']
-	names  += ['zprime2500']
-	names  += ['zprime2750']
-	names  += ['zprime3000']
-	names  += ['zprime4000']
-	names  += ['zprime5000']
-	names  += ['kkgrav400']
-	names  += ['kkgrav500']
-	names  += ['kkgrav750']
-	names  += ['kkgrav1000']
-	names  += ['kkgrav2000']
-	names  += ['kkgrav3000']
+	#names  += ['vv']
+	#names  += ['zprime400']
+	#names  += ['zprime500']
+	#names  += ['zprime750']
+	#names  += ['zprime1000']
+	#names  += ['zprime1250']
+	#names  += ['zprime1500']
+	#names  += ['zprime1750']
+	#names  += ['zprime2000']
+	#names  += ['zprime2250']
+	#names  += ['zprime2500']
+	#names  += ['zprime2750']
+	#names  += ['zprime3000']
+	#names  += ['zprime4000']
+	#names  += ['zprime5000']
+	#names  += ['kkgrav400']
+	#names  += ['kkgrav500']
+	#names  += ['kkgrav750']
+	#names  += ['kkgrav1000']
+	#names  += ['kkgrav2000']
+	#names  += ['kkgrav3000']
+	#names  += ['ttpdf']
+	#names  += ['ttpowhegherwig']
+	#names  += ['ttmcatnloherwig']
+	#names  += ['ttradhi', 'ttradlo']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
-					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
-					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
+					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_11571ipb_EXOT4',
+					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_11571ipb_EXOT4',
+					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_11571ipb_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', #,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'tthm': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+					'ttpdf':'MC15c_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF',
+					'ttpowhegherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwig',
+					'ttmcatnloherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwig',
+					'ttradhi':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadHi',
+					'ttradlo':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadLo',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
 					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
@@ -144,6 +156,21 @@ def main():
 	datasets_mtt = []
 	for l in response:
 		datasets_mtt.append(l)
+
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_data})
+	datasets_data = []
+	for l in response:
+		datasets_data.append(l)
+
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_syst})
+	datasets_syst = []
+	for l in response:
+		datasets_syst.append(l)
+
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_pdf})
+	datasets_pdf = []
+	for l in response:
+		datasets_pdf.append(l)
 	
 	# each "sample" below means an item in the list names above
 	# there may contain multiple datasets
@@ -173,6 +200,8 @@ def main():
 			nFilesPerJobEffective = 2
 		elif 'zprime' in sn:
 			nFilesPerJobEffective = 2
+		elif 'data' in sn or 'qcd' in sn:
+			nFilesPerJobEffective = 300
 
 		# write list of files to be read when processing this sample
 		f = open(outputDir+"/input_"+sn+'.txt', 'w')
@@ -187,6 +216,12 @@ def main():
 			ds = datasets_qcdmu
 		elif sn == 'tthm' or sn == 'singletop':
 			ds = datasets_mtt
+		elif sn == 'ttpdf':
+			ds = datasets_pdf
+		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:
+			ds = datasets_syst
+		elif sn == 'data':
+			ds = datasets_data
 		for d in ds:
 			# remove path and get only dir name in justfile
 			#justfile = d.split('/')[-1]
@@ -285,7 +320,7 @@ def main():
 			fr.write('#$ -q '+queue+'\n')
 			fr.write('#$ -m '+'eas'+'\n')
 			fr.write('#$ -M '+email+'\n')
-			fr.write('#$ -N tnapy_'+jobName+'\n')
+			fr.write('#$ -N tpy_'+jobName+'\n')
 			# bsub options
 			#fr.write('#$ -e '+logfile+'\n')
 			#fr.write('#$ -o '+logfile+'\n')
