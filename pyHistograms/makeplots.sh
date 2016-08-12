@@ -1,17 +1,20 @@
 
-LUMI=5.80751
+#LUMI=5.80751
+#LUMI=11.5715+3.19368
+LUMI=14.76518
 
 PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/plotting/plot
 
 for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
-#for ch in re rmu re2015 rmu2015 re2016 rmu2016 ; do
-#for ch in rmu rmu2015 rmu2016 ; do
     $PLOTTING -c $ch -h yields -l $LUMI -C config.txt >yields_${ch}.txt
-    $PLOTTING -c $ch -h yields_bveto -l $LUMI -C config.txt >yields_bveto_${ch}.txt
+#    $PLOTTING -c $ch -h yields_bveto -l $LUMI -C config.txt >yields_bveto_${ch}.txt
     $PLOTTING -c $ch -h yieldsPos -l $LUMI -C config.txt >yieldsPos_${ch}.txt
-    $PLOTTING -c $ch -h yields_bvetoPos -l $LUMI -C config.txt >yields_bvetoPos_${ch}.txt
+#    $PLOTTING -c $ch -h yields_bvetoPos -l $LUMI -C config.txt >yields_bvetoPos_${ch}.txt
     $PLOTTING -c $ch -h yieldsNeg -l $LUMI -C config.txt >yieldsNeg_${ch}.txt
-    $PLOTTING -c $ch -h yields_bvetoNeg -l $LUMI -C config.txt >yields_bvetoNeg_${ch}.txt
+#    $PLOTTING -c $ch -h yields_bvetoNeg -l $LUMI -C config.txt >yields_bvetoNeg_${ch}.txt
+done
+
+for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
     $PLOTTING -c $ch -h lepPt --normBinWidth 20 -l $LUMI --rebin 4 --xTitle "Lepton p_{T} [GeV]" --yTitle "Events / 20 GeV" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h lepEta  -l $LUMI  --xTitle "Lepton #eta" --yTitle "Events / 0.25" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h nJets -l $LUMI --xTitle "Number of jets" --yTitle "Events" --stamp 0 -C config.txt
@@ -32,12 +35,13 @@ for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2
     $PLOTTING -c $ch -h chi2 -l $LUMI  --yTitle "Events / 0.2" --xTitle "log(#chi^{2})" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h largeJet_tau32_wta -l $LUMI  --yTitle "Events / 0.05" --xTitle "Large-R jet #tau_{32} wta" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h largeJet_tau21_wta -l $LUMI  --yTitle "Events / 0.05" --xTitle "Large-R jet #tau_{21} wta" --stamp 0 -C config.txt
+    $PLOTTING -c $ch -h trueMtt --mcOnly 1 --logY 1 -l $LUMI --xTitle "true m_{t#bar{t}}" --yTitle "Events" --stamp 0 -C config.txt
 done
 
-#for ch in be bmu re rmu re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
-#    $PLOTTING -c $ch -h mtt --mcOnly 1 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events" --stamp 0 -C config.txt
-#done
-#
-#for ch in be bmu2015 be2015 ; do
-#    $PLOTTING -c $ch -h mtt --mcOnly 0 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events" --stamp 0 -C config.txt
-#done
+for ch in be bmu re rmu re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
+    $PLOTTING -c $ch -h mtt --mcOnly 1 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events" --stamp 0 -C config.txt
+done
+
+for ch in be bmu2015 be2015 ; do
+    $PLOTTING -c $ch -h mtt --mcOnly 0 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events" --stamp 0 -C config.txt
+done

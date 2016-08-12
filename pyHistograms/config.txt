@@ -1,5 +1,5 @@
 sample    0data         data                                 "data"                "data"               1
-sample    1tt           tt                                   "t#bar{t}"            "$t\bar{t}$"         0
+sample    1tt           ttall                                "t#bar{t}"            "$t\bar{t}$"         0
 sample    2wbbjets      wbbjets                              "W+bb+jets"           "$W$+bb+jets"        416
 sample    3wccjets      wccjets                              "W+cc+jets"           "$W$+cc+jets"        432
 sample    4wcjets       wcjets                               "W+c+jets"            "$W$+c+jets"         632
@@ -20,7 +20,7 @@ syst      muidstat   "muon ID (stat)"                 muIDStatSF__1up           
 syst      muidsyst   "muon ID (syst)"                 muIDSystSF__1up                            muIDSystSF__1down                                    N
 syst      muisolstat "muon isolation (stat)"          muIsolStatSF__1up                          muIsolStatSF__1down                                  N
 syst      muisolsyst "muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down                                  N
-syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      N
+#syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      N
 syst      jvt        "JVT"                            jvtSF__1up                                 jvtSF__1down                                         N
 syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 -                                                    N
 syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N

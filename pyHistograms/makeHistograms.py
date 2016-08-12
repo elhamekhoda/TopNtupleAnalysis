@@ -15,9 +15,6 @@ def main():
 	parser.add_option("-f", "--files",
 							 dest="files", default="input.txt",
 				  help="Text file with list of input files.", metavar="FILE")
-	parser.add_option("-F", "--fullFiles",
-							 dest="fullFiles", default="",
-				  help="Text file with list of all input files for normalisation calculation.", metavar="FILE")
 	parser.add_option("-A", "--analysis",
 							 dest="analysis", default="AnaTtresSL",
 				  help="Analysis code to run.", metavar="ANALYSIS")
@@ -50,20 +47,27 @@ def main():
 	pdfSumOfWeights = {} # map of DSID to map of PDF variation names to sum of weights
 	
 	if not options.data:
-		fs = open("sumOfWeights.txt")
-		for line in fs.readlines():
-			line_spl = line.split()
-			sumOfWeights[int(line_spl[0])] = float(line_spl[1])
-		fs.close()
-		pfs = open("pdfSumOfWeights.txt")
-		for line in pfs.readlines():
-			line_spl = line.split()
-			if not int(line_spl[0]) in pdfSumOfWeights:
-				pdfSumOfWeights[int(line_spl[0])] = {}
-			if not line_spl[1] in pdfSumOfWeights[int(line_spl[0])]:
-				pdfSumOfWeights[int(line_spl[0])][line_spl[1]] = {}
-			pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
-		pfs.close()
+		if len(pdfList) != 0:
+			pfs = open("sumOfWeightspdf_new.txt")
+			for line in pfs.readlines():
+				line_spl = line.split()
+				if not int(line_spl[0]) in pdfSumOfWeights:
+					pdfSumOfWeights[int(line_spl[0])] = {}
+				if not line_spl[1] in pdfSumOfWeights[int(line_spl[0])]:
+					pdfSumOfWeights[int(line_spl[0])][line_spl[1]] = {}
+				pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
+			pfs.close()
+		else:
+			fs = open("sumOfWeights_new.txt")
+			for line in fs.readlines():
+				line_spl = line.split()
+				sumOfWeights[int(line_spl[0])] = float(line_spl[1])
+			fs.close()
+			fs = open("sumOfWeightssyst_new.txt")
+			for line in fs.readlines():
+				line_spl = line.split()
+				sumOfWeights[int(line_spl[0])] = float(line_spl[1])
+			fs.close()
 
 	#print sumOfWeights
 	 
@@ -167,7 +171,8 @@ def main():
 			suffix = ''
 		addFilesInChain(mt, options.files)
 
-		for k in range(0, mt.GetEntries()):
+		ent = mt.GetEntries()
+		for k in range(0, ent):
 			mt.GetEntry(k)
 			if k % 10000 == 0:
 				print "(tree = ",treeName,", syst = ",suffix,") Entry ", k, "/", mt.GetEntries()
