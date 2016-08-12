@@ -403,7 +403,7 @@ void AnaTtresQCD::runRealRateWQCDCR_2015(const Event &evt, double weight, const 
   if (m_boosted)
     if (!(evt.passes("bejetsWCR_2015") || evt.passes("bmujetsWCR_2015")))
       return;
-
+  
   if (!m_boosted)
     if (!(evt.passes("rejetsWCR_2015") || evt.passes("rmujetsWCR_2015")))
       return;
@@ -560,19 +560,18 @@ void AnaTtresQCD::runRealRateWQCDCR_2016(const Event &evt, double weight, const 
 
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
-
+  //std::cout<<"HERE"<<std::endl;
   if (m_boosted)
-    if (!(evt.passes("bejets") || evt.passes("bejets_2016")))
+    if (!(evt.passes("bejetsWCR_2016") || evt.passes("bmujetsWCR_2016")))
       return;
-
+  //std::cout<<"HERE1"<<std::endl;
   if (!m_boosted)
-    if (!(evt.passes("rejets") || evt.passes("rejets_2016")))
+    if (!(evt.passes("rejetsWCR_2016") || evt.passes("rmujetsWCR_2016")))
       return;
-
-  if (!m_boosted)	if(evt.jet().size()<2)	return; 
-  
+    std::cout<<"HERE2"<<std::endl;
+  if (!m_boosted)	if(evt.jet().size()<2)	return;
+ 
   HistogramService *h = &m_hSvc;
-	  
   //Pre-selection: 
   int ttbar_type = evt.MC_ttbar_type();
  
@@ -732,9 +731,12 @@ void AnaTtresQCD::runRealRateWQCDCR_2016(const Event &evt, double weight, const 
   
 //  if (nTrkBtagged!=0)	return;	
 //   if (nTrkBtagged < 1) return;		
+
 			
   if (leptMa_pdgId!=0)	{
 
+     
+     std::cout<<"leptMa_pdgId = "<<leptMa_pdgId<<std::endl;
 
      GetRealHistograms(evt, weight, suffix, "");
      if(nTrkBtagged == 0)
@@ -1646,9 +1648,9 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   m_hSvc.create2DVar(suffix+"eff_mwt_met_map",	       "; MET [GeV]; MWT [GeV]", metBinN, metBin, mwtBinN, mwtBin);
   m_hSvc.create2DVar(suffix+"fake_mwt_met_map",        "; MET [GeV]; MWT [GeV]", metBinN, metBin, mwtBinN, mwtBin);
     
-  double metBin_lowDR[] = {20, 30, 40, 60, 100, 500};
+  double metBin_lowDR[] = {20, 30, 40, 60, 80, 100, 150, 500};
   int metBinN_lowDR = sizeof(metBin_lowDR)/sizeof(double) - 1; 
-  double mwtBin_lowDR[] = {0, 15, 100, 200, 600};
+  double mwtBin_lowDR[] = {0, 15, 60, 100, 200, 600};
   int mwtBinN_lowDR = sizeof(mwtBin_lowDR)/sizeof(double) - 1;
     
   m_hSvc.create2DVar(suffix+"eff_mwt_met_map_lowDR",   "; MET [GeV]; MWT [GeV]", metBinN_lowDR, metBin_lowDR, mwtBinN_lowDR, mwtBin_lowDR);
@@ -1662,7 +1664,7 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   m_hSvc.create2DVar(suffix+"eff_mwt_met_map_medDR",   "; MET [GeV]; MWT [GeV]", metBinN_medDR, metBin_medDR, mwtBinN_medDR, mwtBin_medDR);
   m_hSvc.create2DVar(suffix+"fake_mwt_met_map_medDR",  "; MET [GeV]; MWT [GeV]", metBinN_medDR, metBin_medDR, mwtBinN_medDR, mwtBin_medDR);
   
-  double metBin_highDR[] = {20, 30, 40, 50, 60, 100, 500};
+  double metBin_highDR[] = {20, 30, 40, 50, 60, 100, 150, 500};
   int metBinN_highDR = sizeof(metBin_highDR)/sizeof(double) - 1; 
   double mwtBin_highDR[] = {0, 15, 30, 45, 60, 80, 100, 200, 600};
   int mwtBinN_highDR = sizeof(mwtBin_highDR)/sizeof(double) - 1;

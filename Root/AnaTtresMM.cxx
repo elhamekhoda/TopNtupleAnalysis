@@ -700,18 +700,18 @@ void AnaTtresMM::runMatrixMethod_QCDSR2j_2016(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2016")))
+    if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bejetsWCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2016")))
+    if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rejetsWCR_2016")))
       return;
-
+  std::cout<<"HERE"<<std::endl;
   if (!m_boosted)	if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
-  
+  std::cout<<"HERE1"<<std::endl;  
   bool trig1(0); 
   bool trig2(0); 
   bool trig3(0);
@@ -746,7 +746,7 @@ void AnaTtresMM::runMatrixMethod_QCDSR2j_2016(const Event &evt, double weight, c
     l = evt.muon()[0].mom();
     isTight = evt.muon()[0].isTight();
     d0sig = evt.muon()[0].sd0();
-    
+    /*
     //Muon trigers
     trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
     trig2 = evt.muon()[0].HLT_mu50();
@@ -757,7 +757,7 @@ void AnaTtresMM::runMatrixMethod_QCDSR2j_2016(const Event &evt, double weight, c
     
     //if (isTight)
        if (trig_prescaled && !trig_unprescaled)	return;
-           
+     */      
   }//m_electron
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -800,7 +800,6 @@ void AnaTtresMM::runMatrixMethod_QCDSR2j_2016(const Event &evt, double weight, c
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
   //else				GetHistograms(evt, weight, "lDR_", suffix);
   GetHistograms(evt, weight, "", suffix);
-
 }//runMatrixMethod_QCDSR2j_2016
 
 
