@@ -36,9 +36,6 @@ def main():
 	 
 	(options, args) = parser.parse_args()
 	 
-	if options.fullFiles == '':
-		options.fullFiles = options.files
-
 	pdfList = options.pdf.split(',')
 	Xsec = {}
 	 
@@ -47,7 +44,7 @@ def main():
 	pdfSumOfWeights = {} # map of DSID to map of PDF variation names to sum of weights
 	
 	if not options.data:
-		if len(pdfList) != 0:
+		if options.pdf != "":
 			pfs = open("sumOfWeightspdf_new.txt")
 			for line in pfs.readlines():
 				line_spl = line.split()
@@ -74,7 +71,7 @@ def main():
 	loadXsec(Xsec, "../scripts/XSection-MC15-13TeV-ttres.data")
 	loadXsec(Xsec, "../../TopDataPreparation/data/XSection-MC15-13TeV.data")
 	#loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
-	 
+
 	# systematics list
 	if options.systs == 'all':
 		systList = []

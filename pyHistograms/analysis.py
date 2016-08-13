@@ -302,7 +302,7 @@ class AnaTtresSL(Analysis):
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c
-		if sel.mcChannelNumber == 410000:
+		if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m"):
 			if sel.MC_ttbar_beforeFSR_m > 1.1e6:
 				return False
 		return True
@@ -332,7 +332,7 @@ class AnaTtresSL(Analysis):
 		if self.applyQCD:
 			w *= self.qcdWeight(sel)
 
-		if sel.mcChannelNumber != 0:
+		if sel.mcChannelNumber != 0 and hasattr(sel, "MC_ttbar_beforeFSR_m"):
 			self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
 		self.h["yields"][syst].Fill(1, w)
 		self.h["runNumber"][syst].Fill(sel.runNumber, w)
@@ -528,7 +528,7 @@ class AnaWjetsCR(Analysis):
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c
-		if sel.mcChannelNumber == 410000:
+		if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m"):
 		    if sel.MC_ttbar_beforeFSR_m > 1.1e6:
 		        return
 
@@ -608,7 +608,7 @@ class AnaWjetsCRCheck(Analysis):
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c
-		if sel.mcChannelNumber == 410000:
+		if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m"):
 		    if sel.MC_ttbar_beforeFSR_m > 1.1e6:
 		        return
 		

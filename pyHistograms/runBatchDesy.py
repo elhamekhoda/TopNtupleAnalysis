@@ -8,7 +8,7 @@ def main():
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
 	pattern = 'user.dferreir.*03082016v1_output.root'
-	pattern_data = 'user.dferreir.*03082016v3_output.root'
+	pattern_data = 'user.dferreir.00*03082016v3_output.root'
 	pattern_mtt = 'user.dferreir.*03082016v4_output.root'
 	pattern_syst = 'user.dferreir.*03082016Systv4_output.root'
 	pattern_pdf = 'user.dferreir.*03082016PDFv4_output.root'
@@ -19,7 +19,7 @@ def main():
 	
 	# output directory
 	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
-	outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
+	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
 	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2416'
 
 	# number of files per job
@@ -46,22 +46,24 @@ def main():
 	analysisType='AnaTtresSL'
 	
 	# leave it for nominal to run only the nominal
-	#systematics = 'nominal'
-	systematics = 'all'
+	systematics = 'nominal'
+	#systematics = 'all'
 	
 	# 25 ns datasets
 	names   = []
 
 	#names  += ['tt']
-	names  += ['tthm']
-	names  += ['wbbjets']
-	names  += ['wccjets']
-	names  += ['wcjets']
-	names  += ['wljets']
+
+	#names  += ['tthm']
+	#names  += ['wbbjets']
+	#names  += ['wccjets']
+	#names  += ['wcjets']
+	#names  += ['wljets']
+	#names  += ['singletop']
+
 	#names  += ['zjets']
 	#names  += ["data"]
 	#names  += ['qcde', 'qcdmu']
-	names  += ['singletop']
 	#names  += ['vv']
 	#names  += ['zprime400']
 	#names  += ['zprime500']
@@ -83,10 +85,12 @@ def main():
 	#names  += ['kkgrav1000']
 	#names  += ['kkgrav2000']
 	#names  += ['kkgrav3000']
-	#names  += ['ttpdf']
-	#names  += ['ttpowhegherwig']
-	#names  += ['ttmcatnloherwig']
-	#names  += ['ttradhi', 'ttradlo']
+	names  += ['ttpdf']
+	names  += ['ttpowhegherwig']
+	names  += ['ttmcatnloherwig']
+	names  += ['ttradhi', 'ttradlo']
+
+	#names  = ['qcde', 'qcdmu']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -289,6 +293,8 @@ def main():
 		elif "qcdmu" in sn:
 			theSysts = "nominal"
 			isData = ' -d -Q mu '
+		elif "pdf" in sn:
+			isData = ' --pdf PDF4LHC15_nlo_30 '
 		if "wbbjets" in sn:
 			extra = ' --WjetsHF bb '
 		elif 'wccjets' in sn:
@@ -336,7 +342,7 @@ def main():
 			fr.write('lsetup rcsetup\n')
 			fr.write('cd TopNtupleAnalysis/pyHistograms\n')
 			out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root,be2015:'+outputDir+'/be2015_'+jobName+'.root,bmu2015:'+outputDir+'/bmu2015_'+jobName+'.root,re2015:'+outputDir+'/re2015_'+jobName+'.root,rmu2015:'+outputDir+'/rmu2015_'+jobName+'.root,be2016:'+outputDir+'/be2016_'+jobName+'.root,bmu2016:'+outputDir+'/bmu2016_'+jobName+'.root,re2016:'+outputDir+'/re2016_'+jobName+'.root,rmu2016:'+outputDir+'/rmu2016_'+jobName+'.root'
-			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
+			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
 			fr.close()
 			os.system('chmod a+x '+runfile)
 			subcmd = 'qsub '+runfile
