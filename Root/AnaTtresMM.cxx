@@ -16,8 +16,16 @@ AnaTtresMM::AnaTtresMM(const std::string &filename, bool electron, bool boosted,
     m_neutrinoBuilder("MeV"), m_chi2("MeV") {
 
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
+
   std::string suffix = "";
+  std::string btag0 = "btag0_";
+  std::string btag1 = "btag1_";
   IniHistograms(suffix);
+  IniHistograms(btag0);
+  IniHistograms(btag1);
+  
+  
+  
   /*
   std::string name_hDR = "hDR_";
   IniHistograms(name_hDR);
@@ -177,14 +185,26 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2015(const Event &evt, double weight, c
   float MET = evt.met().Perp()*1e-3;
   
   if(m_electron){
-      //if( (MET<20) && (MET+mWt)>60)		return; //Validation region 1
-      if( (MET>20) && (MET+mWt)<60)		return; //Validation region 2
+      if( (MET<20) || (MET+mWt)<60)		return; //Validation region 1
+      //if( (MET>20) || (MET+mWt)<60)		return; //Validation region 2
   }else{
       if( (MET<20) || (MET+mWt)<60)		return;
-      if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
+      //if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
+      if(fabs(d0sig)>5)      	return;
   }//if
   
+  //nB-tagged jets 
+  int nTrkBtagged = 0; 
+  for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
+       	if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())	     
+          	nTrkBtagged += 1;
+  }
+  
   GetHistograms(evt, weight, "", suffix);
+  if(nTrkBtagged == 0)
+  GetHistograms(evt, weight, "btag0_",suffix );
+  if(nTrkBtagged >= 1)
+  GetHistograms(evt, weight, "btag1_", suffix);
 
 }//AnaTtresMM::runMatrixMethod_QCDVR2j_2015
 
@@ -367,8 +387,8 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2015(const Event &evt, double weight, c
   float MET = evt.met().Perp()*1e-3;
   
   if(m_electron){
-      //if( (MET<20) && (MET+mWt)>60)		return; //Validation region 1
-      if( (MET>20) && (MET+mWt)<60)		return; //Validation region 2
+      //if( (MET<20) || (MET+mWt)>60)		return; //Validation region 1
+      if( (MET>20) || (MET+mWt)<60)		return; //Validation region 2
   }else{
       if( (MET<20) || (MET+mWt)<60)		return;
       if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
@@ -1203,7 +1223,7 @@ void AnaTtresMM::IniHistograms(std::string &suffix){
   int mwtBinN = sizeof(mwtBin)/sizeof(double) - 1;
   m_hSvc.create1DVar(suffix+"mwt_effBins",               "; W transverse mass [GeV]; Events", mwtBinN, mwtBin);
 
-  double mwtmetBin[] = {60, 65, 70, 75, 80, 85, 90, 100, 120, 150, 400};
+  double mwtmetBin[] = {0, 10, 20, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 100, 120, 150, 400};
   int mwtmetBinN = sizeof(mwtmetBin)/sizeof(double) - 1; 
   m_hSvc.create1DVar(suffix+"mwt_met", 	      "; MET + MWT [GeV]; Events", mwtmetBinN, mwtmetBin);
   
