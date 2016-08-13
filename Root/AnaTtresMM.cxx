@@ -475,12 +475,12 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bejetsQCDCR_2016")))
+    if (!(evt.passes("bmujetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rejetsQCDCR_2016")))
+    if (!(evt.passes("rmujetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<2)	return;
@@ -510,7 +510,8 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
       if( (MET>20) && (MET+mWt)>60)		return;
   }else{
       if( (MET<20) || (MET+mWt)<60)		return;
-      if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
+      //if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
+      if(fabs(d0sig)>5)                         return;
   }//if
   
   int nTrkBtagged = 0; 
@@ -993,13 +994,13 @@ void AnaTtresMM::GetHistograms(const Event &evt, double weight, const std::strin
     h->h1D(prefix+"largeJetEta", "", suffix)->Fill(lj.Eta(), weight);
     h->h1D(prefix+"largeJetPhi", "", suffix)->Fill(lj.Phi(), weight);
     h->h1D(prefix+"largeJetSd12", "", suffix)->Fill(evt.largeJet()[goodljet_idx].split12()*1e-3, weight);
-    
+    if(evt.largeJet().size() > 0) {  
     h->h1D(prefix+"largeJet_tau32", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau32"), weight);
     h->h1D(prefix+"largeJet_tau32_wta", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau32_wta"), weight);
 
     h->h1D("largeJet_tau21", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau21"), weight);
     h->h1D("largeJet_tau21_wta", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau21_wta"), weight);
-        
+    }    
     // recalc. mtt
     // lepton = l
     // large-R jet = hadronic top = lj
@@ -1270,6 +1271,7 @@ void AnaTtresMM::IniHistograms(std::string &suffix){
     m_hSvc.create1D(suffix+"largeJetPhi", "; large jet #phi [rd] ; Events", 32, -3.2, 3.2);
     m_hSvc.create1D(suffix+"largeJetSd12", "; large jet #sqrt{d_{12}} [GeV] ; Events", 20, 0, 200);
     m_hSvc.create1DVar(suffix+"mtlep_boo", "; leptonic top mass [GeV] ; Events", varBinN4, varBin4);
+
   } else {
     m_hSvc.create1DVar(suffix+"mtlep_res", "; leptonic top mass [GeV]; Events", varBinN4, varBin4);
     m_hSvc.create1DVar(suffix+"mthad_res", "; hadronic top mass [GeV]; Events", varBinN4, varBin4);
@@ -1279,13 +1281,13 @@ void AnaTtresMM::IniHistograms(std::string &suffix){
 
   m_hSvc.create1DVar(suffix+"mtt", "; mass of the top-antitop system [GeV]; Events", varBinN5, varBin5);
   m_hSvc.create1DVar(suffix+"trueMtt", "; mass of the top-antitop system [GeV]; Events", varBinN5, varBin5);
-
+  
   m_hSvc.create1D(suffix+"largeJet_tau32", "; #tau_{32}; Events", 20, 0, 1);
   m_hSvc.create1D(suffix+"largeJet_tau32_wta", "; #tau_{32} wta; Events", 20, 0, 1);
 
   m_hSvc.create1D(suffix+"largeJet_tau21", "; #tau_{21}; Events", 20, 0, 1);
   m_hSvc.create1D(suffix+"largeJet_tau21_wta", "; #tau_{21} wta; Events", 20, 0, 1);
-
+  
 
 }//IniHistograms
 

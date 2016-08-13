@@ -336,7 +336,7 @@ int main(int argc, char **argv) {
 				"scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",	// fake2015
 				
 				"scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",	// real2016
-				"scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root");	// fake2016
+				"scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root");// fake2016
 	  
   } 
 
