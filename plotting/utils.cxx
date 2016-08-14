@@ -1903,12 +1903,21 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     }
     std::string pdfpre = it->second[3];
     int pdfmax = atoi(it->second[4].c_str());
-    vector<string> patterns;
-    patterns.push_back(pdfpre+std::string("_")+std::to_string(0));
-    patterns.push_back(pdfpre+std::string("_")+std::to_string(pdfmax));
-    int this_smooth = smooth;
+	if (pdfmax != 0) {
+      vector<string> patterns;
+      patterns.push_back(pdfpre+std::string("_")+std::to_string(0));
+      patterns.push_back(pdfpre+std::string("_")+std::to_string(pdfmax));
+      int this_smooth = smooth;
 
-    systCalc.add(name.c_str(), new HistDiffMany(filenam, patterns, sample, this_smooth), it->second[0]);
+      systCalc.add(name.c_str(), new HistDiffMany(filenam, patterns, sample, this_smooth), it->second[0]);
+	} else { // difference of 0 and 0 is nothing, so use it to flag that we want the difference between 0 and the nominal
+      vector<string> patterns;
+      patterns.push_back("");
+      patterns.push_back(pdfpre+std::string("_")+std::to_string(0));
+      int this_smooth = smooth;
+
+      systCalc.add(name.c_str(), new HistDiffMany(filenam, patterns, sample, this_smooth), it->second[0]);
+	}
   }
 
   for (std::map<std::string, std::vector<std::string> >::iterator it = syst_flat.begin(); it != syst_flat.end(); ++it) {
