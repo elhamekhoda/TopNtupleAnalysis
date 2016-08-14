@@ -76,6 +76,9 @@ class Event {
     float &weight_Sherpa22_corr();
     const float weight_Sherpa22_corr() const;
 
+    int &Wfilter_Sherpa_nT();
+    const int Wfilter_Sherpa_nT() const;
+
     std::vector<std::string> &passes();
     const bool passes(const std::string &selection) const;
 
@@ -261,6 +264,7 @@ class Event {
     float m_weight_bTagSF;
     float m_weight_leptonSF;
     float m_weight_Sherpa22_corr;
+    int m_Wfilter_Sherpa_nT;
     
     unsigned int m_lbn;
 };

@@ -36,44 +36,96 @@
 
 #include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
 
-// type = 0 for nominal
-// type = 1 for up
-// type = 2 for down
-double applyBoostedWSF(int type, bool isElectron) {
-  //static const double nominal_e = 0.8108;
-  //static const double err_e = 0.215;
-  //static const double nominal_mu = 0.94122;
-  //static const double err_mu = 0.1583;
-  //static const double nominal_e = 0.72;
-  //static const double err_e = 0.17;
-  //static const double nominal_mu = 0.76;
-  //static const double err_mu = 0.13;
-  static const double nominal_e = 0.82;
-  static const double err_e = 0.18;
-  static const double nominal_mu = 0.73;
-  static const double err_mu = 0.12;
-  if (isElectron) {
-    if (type == 2) {
-      return nominal_e - err_e;
-    } else if (type == 1) {
-      return nominal_e + err_e;
-    }
-    return nominal_e;
-  } else {
-    if (type == 2) {
-      return nominal_mu - err_mu;
-    } else if (type == 1) {
-      return nominal_mu + err_mu;
-    }
-    return nominal_mu;
+double wjetsSF(const Event &sel, const std::string &syst) {
+  bool isWjets = false;
+  if (sel.channelNumber() >= 363330 && sel.channelNumber() <= 363354) {
+    isWjets = true;
+  }
+  if (sel.channelNumber() >= 363436 && sel.channelNumber() <= 363483) {
+    isWjets = true;
+  }
+  if (!isWjets) return 1.0;
+
+  std::vector<std::string> flavours = {"bb", "cc", "c", "l"};
+
+  double hfweight = 1.0;
+  double f_ca = 1.0;
+  std::map<std::string, std::map<std::string, float> > frac;
+  frac["e"]  = std::map<std::string, float>();
+  frac["mu"] = std::map<std::string, float>();
+  frac["e"]["bb"] = 0.559; frac["e"]["cc"] = 0.136; frac["e"]["c"] = 0.221; frac["e"]["l"] = 0.084;
+  frac["e"]["bb"] = 0.590; frac["e"]["cc"] = 0.149; frac["e"]["c"] = 0.184; frac["e"]["l"] = 0.077;
+
+  std::map<std::string, float> f_ca_map;
+  f_ca_map["e"] = 0.82; f_ca_map["mu"] = 0.84;
+
+  std::map<std::string, std::map<std::string, float> > flav_map;
+  flav_map["e"]["bb"] = 1.66; flav_map["e"]["cc"] = 1.66; flav_map["e"]["c"] = 0.85; flav_map["e"]["l"] = 0.65;
+  flav_map["e"]["bb"] = 1.66; flav_map["e"]["cc"] = 1.67; flav_map["e"]["c"] = 0.87; flav_map["e"]["l"] = 0.65;
+
+  for (auto &c : frac) {
+    for (auto &f : frac[c.first]) {
+	  frac[c.first][f.first] *= flav_map[c.first][f.first];
+	}
   }
 
-  return 1.0;
-}
+  std::map<std::string, std::map<std::string, float> > flav_map_unc;
+  flav_map_unc["e"]["bb"] = 0.0862; flav_map_unc["e"]["cc"] = 0.0862; flav_map_unc["e"]["c"] = 0.200; flav_map_unc["e"]["l"] = 0.0575;
+  flav_map_unc["e"]["bb"] = 0.0710; flav_map_unc["e"]["cc"] = 0.0710; flav_map_unc["e"]["c"] = 0.200; flav_map_unc["e"]["l"] = 0.0450;
 
-bool isWjets(int channel) {
-  if (channel >= 361300 && channel <= 361371) return true;
-  return false;
+  std::string chan = "";
+  if (sel.electron().size() == 1) {
+    chan = "e";
+  } else if (sel.muon().size() == 1) {
+    chan = "mu";
+  }
+
+  std::string flav = "";
+  int flag = sel.Wfilter_Sherpa_nT();
+  if (flag == 3 || flag == 4) {
+    flav = "bb";
+  } else if (flag == 1) {
+    flav = "cc";
+  } else if (flag == 2) {
+    flav = "c";
+  } else if (flag == 5) {
+    flav = "l";
+  }
+  f_ca = f_ca_map[chan];
+  double norm = 1.0;
+  hfweight = flav_map[chan][flav];
+  std::string flavunc = "";
+  if (syst.find("wbb__") != std::string::npos) {
+    flavunc = "bb";
+  } else if (syst.find("wcc__") != std::string::npos) {
+    flavunc = "cc";
+  } else if (syst.find("wc__") != std::string::npos) {
+    flavunc = "c";
+  } else if (syst.find("wl__") != std::string::npos) {
+    flavunc = "l";
+  }
+  double updown = 0.0;
+  if (syst.find("1up") != std::string::npos) {
+    updown = 1.0;
+  } else if (syst.find("1down") != std::string::npos) {
+    updown = -1.0;
+  }
+  norm  = 0;
+  for (auto &f : flavours) {
+    if (flavunc == f) {
+	  norm += (1.0 + updown*flav_map_unc[chan][f])*frac[chan][f];
+	  hfweight *= (1.0 + updown*flav_map_unc[chan][f]);
+	} else {
+	  norm += frac[chan][f];
+	}
+  }
+  if (syst == "wnorm__1up") {
+    f_ca *= 1.10;
+  } else if (syst == "wnorm__1down") {
+    f_ca *= 0.90;
+  }
+  hfweight /= norm;
+  return f_ca*hfweight;
 }
 
 double ttWeight(Event &sel) {
@@ -431,8 +483,20 @@ int main(int argc, char **argv) {
     systsListWithBlankNominal.push_back("muIsolSystSF__1up");
     systsListWithBlankNominal.push_back("muIsolSystSF__1down");
 
-    systsListWithBlankNominal.push_back("boostedWSF__1up");
-    systsListWithBlankNominal.push_back("boostedWSF__1down");
+    systsListWithBlankNominal.push_back("wnorm__1up");
+    systsListWithBlankNominal.push_back("wnorm__1down");
+
+    systsListWithBlankNominal.push_back("wbb__1up");
+    systsListWithBlankNominal.push_back("wbb__1down");
+
+    systsListWithBlankNominal.push_back("wcc__1up");
+    systsListWithBlankNominal.push_back("wcc__1down");
+
+    systsListWithBlankNominal.push_back("wc__1up");
+    systsListWithBlankNominal.push_back("wc__1down");
+
+    systsListWithBlankNominal.push_back("wl__1up");
+    systsListWithBlankNominal.push_back("wl__1down");
 
     systsListWithBlankNominal.push_back("ttEWK__1up");
     systsListWithBlankNominal.push_back("ttEWK__1down");
@@ -821,7 +885,9 @@ int main(int argc, char **argv) {
             weight *= sel.weight_mc()*sel.weight_pileup();	    	    
             weight *= sampleXsection.getXsection(channel);
 	    
-	    if(sel.weight_Sherpa22_corr())	weight *= sel.weight_Sherpa22_corr();
+            if(sel.weight_Sherpa22_corr())	weight *= sel.weight_Sherpa22_corr();
+
+			weight *= wjetsSF(sel, suffix);
 	    
             double pdfw = 1.0;
             bool isPdf = false;
@@ -1153,17 +1219,6 @@ int main(int argc, char **argv) {
               weight /= PDFsumOfWeights[channel][pdfname][pdfvar];
             }
 		
-            // boosted W SF
-            if ( (sel.passes("bejets") || sel.passes("bmujets")) && isWjets(channel) && applyWSF ) {
-              if (suffix == "boostedWSF__1down" || suffix == "boostedWSF__1down_Loose") {
-                weight *= applyBoostedWSF(2, sel.passes("bejets"));
-              } else if (suffix == "boostedWSF__1up" || suffix == "boostedWSF__1up_Loose") {
-                weight *= applyBoostedWSF(1, sel.passes("bejets"));
-              } else {
-                weight *= applyBoostedWSF(0, sel.passes("bejets"));
-              }
-            }
-
 	  }//!isData
       
           // this applies b-tagging early

@@ -93,6 +93,14 @@ const float Event::weight_Sherpa22_corr() const {
   return m_weight_Sherpa22_corr;
 }
 
+int &Event::Wfilter_Sherpa_nT() {
+  return m_Wfilter_Sherpa_nT;
+}
+
+const int Event::Wfilter_Sherpa_nT() const {
+  return m_Wfilter_Sherpa_nT;
+}
+
 std::vector<Electron> &Event::electron() {
   return m_electron;
 }

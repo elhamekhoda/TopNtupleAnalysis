@@ -56,6 +56,7 @@ void MiniTree::read(int event, Event &e) {
   e.weight_bTagSF() = f("weight_bTagSF_70");
   e.weight_leptonSF() = f("weight_leptonSF");
   e.weight_Sherpa22_corr() = f("weight_Sherpa22_corr");
+  e.Wfilter_Sherpa_nT() = i("Wfilter_Sherpa_nT");
   
   // adding the truth information into the event        
   if (f("MC_w1h_pt") > 0)	e.MC_w1h().SetPtEtaPhiM(f("MC_w1h_pt"), f("MC_w1h_eta"), f("MC_w1h_phi"), f("MC_w1h_m"));
