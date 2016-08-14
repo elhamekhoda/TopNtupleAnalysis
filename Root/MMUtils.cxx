@@ -20,8 +20,8 @@
 #include "TLorentzVector.h"
 
 
-MMUtils::MMUtils(const std::string &eff_filename2015, const std::string &fake_filename2015, const std::string &eff_filename2016, const std::string &fake_filename2016) {
-
+MMUtils::MMUtils(const int isBtagged, const std::string &eff_filename2015, const std::string &fake_filename2015, const std::string &eff_filename2016, const std::string &fake_filename2016) {
+    m_isBtagged = isBtagged;
     
     std::cout << "MMUtils:: Going to use  " << std::endl;
     std::cout << "  for 2015:" << eff_filename2015 << " and " << fake_filename2015 << std::endl;
@@ -245,7 +245,7 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
     }//if
   }
   else{//2016
-      float met_min(0);
+    float met_min(0);
     float met_limit(95);
     
     float mwt_min(0);
@@ -255,8 +255,10 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
 
     if(closejl_DR > 0.6){
 
-      if(met<50)	mwt_limit = 95;
-      else 		mwt_limit = 195;
+      mwt_limit = 195;
+      met_limit=140;
+      
+      if(met>140)mwt_limit=40;
       
       mwt_min = std::min(mwt, mwt_limit);
       met_min = std::min(met, met_limit);
@@ -266,9 +268,14 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
       if (fakeRate<0) fakeRate=0;
       
     }else if(closejl_DR > 0.4){
-
-      mwt_limit = 95;
-      
+      if(m_isBtagged==0){
+         if(met<40)	mwt_limit = 95;
+         else 		mwt_limit = 195;
+      } 
+      else {
+      		mwt_limit = 195;
+      		met_limit = 195;
+      }
       mwt_min = std::min(mwt, mwt_limit);
       met_min = std::min(met, met_limit);
       

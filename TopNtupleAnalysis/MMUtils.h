@@ -19,7 +19,7 @@
 class MMUtils{
 
   public:
-    MMUtils(const std::string &eff_filename2015, const std::string &fake_filename2015, const std::string &eff_filename2016, const std::string &fake_filename2016); 
+    MMUtils(const int isBtagged, const std::string &eff_filename2015, const std::string &fake_filename2015, const std::string &eff_filename2016, const std::string &fake_filename2016); 
     ~MMUtils();
 
     float getMMweights(const Event &evt, const int runMM_StatErr, const bool isElectron, const bool isBoosted, const unsigned int runNumber);
@@ -85,7 +85,8 @@ class MMUtils{
 //     
      TH1F * fake_pt_boosted_e_2016;
      TH1F * fake_dr_boosted_mu_2016;
-        
+    
+    int m_isBtagged; 
         
 };
 

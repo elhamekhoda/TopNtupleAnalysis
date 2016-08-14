@@ -313,30 +313,30 @@ int main(int argc, char **argv) {
   MMUtils * MM_1b_rmu     = NULL;
     
   if (runMM){ // >= 2 jets
-  	// MMUtils(real2015, fake2015, real2016, fake2016)
-	MM_0b_re  = new MMUtils("scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", // real2015
-				"scripts/QCDestimation/110816_fakeRates_re_0b/fake.root",	// fake2015
+  	// MMUtils(isBtagged, real2015, fake2015, real2016, fake2016)
+	MM_0b_re  = new MMUtils(0, "scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", // real2015
+				   "scripts/QCDestimation/110816_fakeRates_re_0b/fake.root",	// fake2015
 				
 				"scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",	// real2016
 				"scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root");	// fake2016
 				
-	MM_1b_re  = new MMUtils("scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", // real2015  
-				"scripts/QCDestimation/110816_fakeRates_re_in1b/fake.root",	// fake2015
+	MM_1b_re  = new MMUtils(1, "scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", // real2015  
+				   "scripts/QCDestimation/110816_fakeRates_re_in1b/fake.root",	// fake2015
 				
-				"scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016 
-				"scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"); // fake2016
+				   "scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016 
+				   "scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"); // fake2016
 
-	MM_0b_rmu = new MMUtils("scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root",// real2015  
-				"scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",	// fake2015
+	MM_0b_rmu = new MMUtils(0, "scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root",// real2015  
+				   "scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",	// fake2015
 				
-				"scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",	// real2016  
-				"scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root");// fake2016
+				  "scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",	// real2016  
+				  "scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root");// fake2016
 				
-	MM_1b_rmu = new MMUtils("scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root",// real2015  
-				"scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",	// fake2015
+	MM_1b_rmu = new MMUtils(1, "scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root",// real2015  
+				   "scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",	// fake2015
 				
-				"scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",	// real2016
-				"scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root");// fake2016
+				   "scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",	// real2016
+				   "scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root");// fake2016
 	  
   } 
 
