@@ -285,8 +285,8 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
             
     }else{
     
-      if(met<40)	mwt_limit = 95;
-      else 		mwt_limit = 195;
+      	mwt_limit = 195;
+        met_limit = 140;
     
       mwt_min = std::min(mwt, mwt_limit);
       met_min = std::min(met, met_limit);
