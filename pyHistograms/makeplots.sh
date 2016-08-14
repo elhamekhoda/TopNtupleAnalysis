@@ -1,9 +1,7 @@
 
-#LUMI=5.80751
-#LUMI=11.5715+3.19368
 LUMI=14.76518
 
-PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/plotting/plot
+PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416/TopNtupleAnalysis/plotting/plot
 
 for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
     $PLOTTING -c $ch -h yields -l $LUMI -C config.txt >yields_${ch}.txt
@@ -35,7 +33,7 @@ for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2
     $PLOTTING -c $ch -h chi2 -l $LUMI  --yTitle "Events / 0.2" --xTitle "log(#chi^{2})" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h largeJet_tau32_wta -l $LUMI  --yTitle "Events / 0.05" --xTitle "Large-R jet #tau_{32} wta" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h largeJet_tau21_wta -l $LUMI  --yTitle "Events / 0.05" --xTitle "Large-R jet #tau_{21} wta" --stamp 0 -C config.txt
-    $PLOTTING -c $ch -h trueMtt --mcOnly 1 --logY 1 -l $LUMI --xTitle "true m_{t#bar{t}}" --yTitle "Events" --stamp 0 -C config.txt
+    $PLOTTING -c $ch -h trueMtt --mcOnly 1 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "true m_{t#bar{t}}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
 done
 
 for ch in be bmu re rmu re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do

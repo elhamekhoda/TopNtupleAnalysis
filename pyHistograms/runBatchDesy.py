@@ -90,6 +90,7 @@ def main():
 	names  += ['ttradhi', 'ttradlo']
 
 	#names  = ['qcde', 'qcdmu']
+	#names  = ['ttpdf']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -294,8 +295,8 @@ def main():
 			theSysts = "nominal"
 			isData = ' -d -Q mu '
 		elif "pdf" in sn:
-			isData = ' --pdf PDF4LHC15_nlo_30 '
-			isData = ' --noMttSlices '
+			isData = ' --pdf PDF4LHC15_nlo_30 --noMttSlices '
+			theSysts = "pdf"
 		elif "ttsyst" in sn:
 			isData = ' --noMttSlices '
 			theSysts = "nominal"

@@ -91,7 +91,7 @@ syst_flat singletop  "single top cross sec."          "singletop"            0.0
 syst_flat qcd        "QCD unc."                       "qcde,qcdmu"           0.50                                       -0.050
 syst_flat ttxsec     "ttbar cross section"            "tt"                   0.056                                      -0.061
 syst_model ttgen     "ttbar gen."                    "tt"                    ttpowhegherwig                            ttmcatnloherwig               S
-syst_model ttps      "ttbar p. shower"               "tt"                    ttpowhegpythia                            ttpowhegherwig                S
+syst_model ttps      "ttbar p. shower"               "tt"                    ttsyst                                    ttpowhegherwig                S
 syst_model ttisrfsr  "ttbar ISR/FSR"                 "tt"                    ttradlo                                   ttradhi                       S
 #syst_pdf   ttpdf     "ttbar PDF"                     "tt"                    ttpdf                                     pdf_PDF4LHC15_nlo_30          30
 syst_pdf_simple   ttpdf0    "PDF0"                   "tt"                    ttpdf                                      pdf_PDF4LHC15_nlo_30           0
