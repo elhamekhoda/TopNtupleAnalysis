@@ -4,9 +4,9 @@ import HQTTtResonancesTools.DC15MC13TeV_25ns_mc15c_EXOT4
 import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
 
 def main():
-	# input directory
-	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
+
+	# change this for your samples
 	pattern = 'user.dferreir.*03082016v1_output.root'
 	pattern_data = 'user.dferreir.00*03082016v3_output.root'
 	pattern_mtt = 'user.dferreir.*03082016v4_output.root'
@@ -18,8 +18,7 @@ def main():
 	theScope = 'user.dferreir'
 	
 	# output directory
-	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
-	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
+	# change this for your output directory
 	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2416'
 
 	# number of files per job
@@ -27,6 +26,7 @@ def main():
 	#nFilesPerJob = 8
 
 	# use it to setup AnalysisTop
+	# change this for the place where you setup RootCore
 	rundir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416'
 
 	# email to use to tell us when the job is done
@@ -42,49 +42,47 @@ def main():
 	# the QCD version aims at plots for QCD studies using the matrix method
 	# look into read.cxx to see what is available
 	# create yours, if you wish
-	#analysisType='AnaWjetsCR'
 	analysisType='AnaTtresSL'
 	
 	# leave it for nominal to run only the nominal
-	systematics = 'nominal'
-	#systematics = 'all'
+	#systematics = 'nominal'
+	systematics = 'all'
 	
 	# 25 ns datasets
 	names   = []
 
-	#names  += ['tt']
+	names  += ['tt']
+	names  += ['tthm']
+	names  += ['wbbjets']
+	names  += ['wccjets']
+	names  += ['wcjets']
+	names  += ['wljets']
+	names  += ['singletop']
 
-	#names  += ['tthm']
-	#names  += ['wbbjets']
-	#names  += ['wccjets']
-	#names  += ['wcjets']
-	#names  += ['wljets']
-	#names  += ['singletop']
-
-	#names  += ['zjets']
-	#names  += ["data"]
-	#names  += ['qcde', 'qcdmu']
-	#names  += ['vv']
-	#names  += ['zprime400']
-	#names  += ['zprime500']
-	#names  += ['zprime750']
-	#names  += ['zprime1000']
-	#names  += ['zprime1250']
-	#names  += ['zprime1500']
-	#names  += ['zprime1750']
-	#names  += ['zprime2000']
-	#names  += ['zprime2250']
-	#names  += ['zprime2500']
-	#names  += ['zprime2750']
-	#names  += ['zprime3000']
-	#names  += ['zprime4000']
-	#names  += ['zprime5000']
-	#names  += ['kkgrav400']
-	#names  += ['kkgrav500']
-	#names  += ['kkgrav750']
-	#names  += ['kkgrav1000']
-	#names  += ['kkgrav2000']
-	#names  += ['kkgrav3000']
+	names  += ['zjets']
+	names  += ["data"]
+	names  += ['qcde', 'qcdmu']
+	names  += ['vv']
+	names  += ['zprime400']
+	names  += ['zprime500']
+	names  += ['zprime750']
+	names  += ['zprime1000']
+	names  += ['zprime1250']
+	names  += ['zprime1500']
+	names  += ['zprime1750']
+	names  += ['zprime2000']
+	names  += ['zprime2250']
+	names  += ['zprime2500']
+	names  += ['zprime2750']
+	names  += ['zprime3000']
+	names  += ['zprime4000']
+	names  += ['zprime5000']
+	names  += ['kkgrav400']
+	names  += ['kkgrav500']
+	names  += ['kkgrav750']
+	names  += ['kkgrav1000']
+	names  += ['kkgrav2000']
+	names  += ['kkgrav3000']
 	names  += ['ttsyst']
 	names  += ['ttpdf']
 	names  += ['ttpowhegherwig']
