@@ -375,15 +375,15 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
    float realRate(0);
    float realRate_err(0);  
    
-   if (isBoosted){
-   	if (isElectron)	getRatesBoostedEl(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, absEta, cosDPhi, runNumber);
-   	else		getRatesBoostedMu(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, runNumber);
-   }
-   else{
+//    if (isBoosted){
+//    	if (isElectron)	getRatesBoostedEl(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, absEta, cosDPhi, runNumber);
+//    	else		getRatesBoostedMu(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, runNumber);
+//    }
+//    else{
    	if (isElectron)	getRatesResolvedEl(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, absEta, cosDPhi, mWt, topoetcone, runNumber);
    	else		getRatesResolvedMu(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, closejl_pT, cosDPhi, MET, mWt, deltaPhi, runNumber);
-		
-   }//isBoosted	
+// 		
+//    }//isBoosted	
 
    //Implementing weights
    float Weight = 1;
