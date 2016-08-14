@@ -8,6 +8,7 @@ class Analysis:
 	fi = None
 	histSuffixes = [] # systematic copies of histograms
 	h = {} # map of histogram names to map of systematics to histograms
+	noMttSlices = False
 	def __init__(self, channel, suf, outputFile):
 		self.fi = ROOT.TFile(outputFile, "recreate")
 		self.ch = channel
@@ -70,6 +71,7 @@ class AnaTtresSL(Analysis):
 	def __init__(self, channel, suf, outputFile):
 		Analysis.__init__(self, channel, suf, outputFile)
 		self.applyQCD = False
+		self.noMttSlices = False
 		# make histograms
 		self.add("yields", 1, 0.5, 1.5)
 		self.add("yieldsPos", 1, 0.5, 1.5)
@@ -302,7 +304,7 @@ class AnaTtresSL(Analysis):
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c
-		if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m"):
+		if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
 			if sel.MC_ttbar_beforeFSR_m > 1.1e6:
 				return False
 		return True
@@ -528,7 +530,7 @@ class AnaWjetsCR(Analysis):
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c
-		if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m"):
+		if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
 		    if sel.MC_ttbar_beforeFSR_m > 1.1e6:
 		        return
 
@@ -608,7 +610,7 @@ class AnaWjetsCRCheck(Analysis):
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c
-		if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m"):
+		if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
 		    if sel.MC_ttbar_beforeFSR_m > 1.1e6:
 		        return
 		

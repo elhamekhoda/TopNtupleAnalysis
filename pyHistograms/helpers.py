@@ -74,12 +74,12 @@ class WrapperExtras {
 	                  m_mm_b0_boosted_mu("../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",
 					                     "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"), 
 	                  m_mm_b1_boosted_mu("../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",
-					                     "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"), 
+					                     "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root"), 
 
 	                  m_mm_b0_res_mu("../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",
 					                     "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"), 
 	                  m_mm_b1_res_mu("../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",
-					                     "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root")//, 
+					                     "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root")//, 
 					  //m_btageff("BTaggingEfficiencyTool")
 					  {
       m_chi2.Init(TtresChi2::DATA2015_MC15C);

@@ -39,9 +39,9 @@ for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2
 done
 
 for ch in be bmu re rmu re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
-    $PLOTTING -c $ch -h mtt --mcOnly 1 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events" --stamp 0 -C config.txt
+    $PLOTTING -c $ch -h mtt --mcOnly 1 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
 done
 
-for ch in be bmu2015 be2015 ; do
-    $PLOTTING -c $ch -h mtt --mcOnly 0 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events" --stamp 0 -C config.txt
+for ch in bmu2015 be2015 ; do
+    $PLOTTING -c $ch -h mtt --mcOnly 0 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
 done

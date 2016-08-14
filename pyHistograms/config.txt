@@ -9,7 +9,7 @@ sample    7zjets        zjets                                "Z+jets"           
 sample    8aqcde        qcde                                 "QCD (e)"             "QCD (e)"            901
 sample    8bqcdmu       qcdmu                                "QCD (#mu)"           "QCD ($\mu$)"        902
 sample    9vv           vv                                   "diboson"             "diboson"            5
-syst_flat lumi          "luminosity"                         "tt,singletop,zjets,vv"                 0.021                     -0.021
+syst_flat lumi          "luminosity"                         "tt,singletop,zjets,vv"                 0.026                     -0.026
 syst      etrig      "electron trigger"               eTrigSF__1up                               eTrigSF__1down                                       N
 syst      erec       "electron reconstruction"        eRecoSF__1up                               eRecoSF__1down                                       N
 syst      eid        "electron ID"                    eIDSF__1up                                 eIDSF__1down                                         N
@@ -22,7 +22,7 @@ syst      muisolstat "muon isolation (stat)"          muIsolStatSF__1up         
 syst      muisolsyst "muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down                                  N
 #syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      N
 syst      jvt        "JVT"                            jvtSF__1up                                 jvtSF__1down                                         N
-syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 -                                                    N
+syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N
 syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N
 syst      wbb        "W+bb fraction"                  wbb__1up                                   wbb__1down                                           N
 syst      wcc        "W+cc fraction"                  wcc__1up                                   wcc__1down                                           N
@@ -49,11 +49,17 @@ syst      btagb0     "b-tagging eff. (E0)"            btagbSF_0__1up            
 syst      btagb1     "b-tagging eff. (E1)"            btagbSF_1__1up                             btagbSF_1__1down                                     S
 syst      btagb2     "b-tagging eff. (E2)"            btagbSF_2__1up                             btagbSF_2__1down                                     S
 syst      btagb3     "b-tagging eff. (E3)"            btagbSF_3__1up                             btagbSF_3__1down                                     S
-syst      btagc0     "b-tagging c mistag (E0)"        btagcSF_0__1up                             btagcSF_0__1down                                     S
+#syst      btagc0     "b-tagging c mistag (E0)"        btagcSF_0__1up                             btagcSF_0__1down                                     S
+syst      btagc0pt1  "b-tagging c mistag (E0) low"    btagcSF_0_pt1__1up                         btagcSF_0_pt1__1down                                 S
+syst      btagc0pt2  "b-tagging c mistag (E0) med."   btagcSF_0_pt2__1up                         btagcSF_0_pt2__1down                                 S
+syst      btagc0pt3  "b-tagging c mistag (E0) high"   btagcSF_0_pt3__1up                         btagcSF_0_pt3__1down                                 S
 syst      btagc1     "b-tagging c mistag (E1)"        btagcSF_1__1up                             btagcSF_1__1down                                     S
 syst      btagc2     "b-tagging c mistag (E2)"        btagcSF_2__1up                             btagcSF_2__1down                                     S
 syst      btagc3     "b-tagging c mistag (E3)"        btagcSF_3__1up                             btagcSF_3__1down                                     S
-syst      btagl0     "b-tagging l mistag (E0)"        btaglSF_0__1up                             btaglSF_0__1down                                     S
+#syst      btagl0     "b-tagging l mistag (E0)"        btaglSF_0__1up                             btaglSF_0__1down                                     S
+syst      btagl0pt1  "b-tagging l mistag (E0) low"    btaglSF_0_pt1__1up                         btaglSF_0_pt1__1down                                 S
+syst      btagl0pt2  "b-tagging l mistag (E0) med."   btaglSF_0_pt2__1up                         btaglSF_0_pt2__1down                                 S
+syst      btagl0pt3  "b-tagging l mistag (E0) high"   btaglSF_0_pt3__1up                         btaglSF_0_pt3__1down                                 S
 syst      btagl1     "b-tagging l mistag (E1)"        btaglSF_1__1up                             btaglSF_1__1down                                     S
 syst      btagl2     "b-tagging l mistag (E2)"        btaglSF_2__1up                             btaglSF_2__1down                                     S
 syst      btagl3     "b-tagging l mistag (E3)"        btaglSF_3__1up                             btaglSF_3__1down                                     S
@@ -69,7 +75,7 @@ syst      btage0     "b-tagging extrap."              btageSF_0__1up            
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
 syst_flat qcd        "QCD unc."                       "qcde,qcdmu"           0.50                                       -0.050
 syst_flat ttxsec     "ttbar cross section"            "tt"                   0.056                                      -0.061
-#syst_model ttgen     "ttbar gen."                    "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwigAF2  S
-#syst_model ttps      "ttbar p. shower"               "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythiaAF2                MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwigAF2   S
-#syst_model ttisrfsr  "ttbar ISR/FSR"                 "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbarRadLo                          MC15_13TeV_25ns_FS_EXOT4_ttbarRadHi             S
-#syst_pdf   ttpdf     "ttbar PDF"                     "ttbar"                MC15_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF                   pdf_PDF4LHC15_nlo_30           30
+syst_model ttgen     "ttbar gen."                    "tt"                    ttpowhegherwig                            ttmcatnloherwig               S
+syst_model ttps      "ttbar p. shower"               "tt"                    ttpowhegpythia                            ttpowhegherwig                S
+syst_model ttisrfsr  "ttbar ISR/FSR"                 "tt"                    ttradlo                                   ttradhi                       S
+syst_pdf   ttpdf     "ttbar PDF"                     "tt"                    ttpdf                                     pdf_PDF4LHC15_nlo_30          30

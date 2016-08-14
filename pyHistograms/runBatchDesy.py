@@ -85,6 +85,7 @@ def main():
 	#names  += ['kkgrav1000']
 	#names  += ['kkgrav2000']
 	#names  += ['kkgrav3000']
+	names  += ['ttsyst']
 	names  += ['ttpdf']
 	names  += ['ttpowhegherwig']
 	names  += ['ttmcatnloherwig']
@@ -102,6 +103,7 @@ def main():
 					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_11571ipb_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', #,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'tthm': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+					'ttsyst':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia',
 					'ttpdf':'MC15c_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF',
 					'ttpowhegherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwig',
 					'ttmcatnloherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwig',
@@ -295,6 +297,14 @@ def main():
 			isData = ' -d -Q mu '
 		elif "pdf" in sn:
 			isData = ' --pdf PDF4LHC15_nlo_30 '
+			isData = ' --noMttSlices '
+		elif "ttsyst" in sn:
+			isData = ' --noMttSlices '
+			theSysts = "nominal"
+		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:
+			theSysts = "nominal"
+			isData = ' --noMttSlices '
+
 		if "wbbjets" in sn:
 			extra = ' --WjetsHF bb '
 		elif 'wccjets' in sn:

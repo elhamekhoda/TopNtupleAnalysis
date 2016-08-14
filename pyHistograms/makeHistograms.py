@@ -33,6 +33,9 @@ def main():
 	parser.add_option("-Q", "--qcd",
 							 dest="qcd", default="False",
 							 help="Apply QCD weights?", metavar="CHANNEL")
+	parser.add_option("-N", "--noMttSlices",
+							 action='store_true', dest="noMttSlices", default=False,
+				  help="If set, stop vetoing high mtt events in 410000 sample.", metavar="BOOL")
 	 
 	(options, args) = parser.parse_args()
 	 
@@ -153,6 +156,8 @@ def main():
 		analysisCode[k].applyQCD = False
 		if options.qcd != "False":
 			analysisCode[k].applyQCD = options.qcd
+		if options.noMttSlices:
+			analysisCode[k].noMttSlices = True
 		print k, analysisCode[k], channels[k]
 	 
 	for s in systList:
