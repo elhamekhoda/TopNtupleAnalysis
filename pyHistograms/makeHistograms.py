@@ -57,17 +57,17 @@ def main():
 					pdfSumOfWeights[int(line_spl[0])][line_spl[1]] = {}
 				pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
 			pfs.close()
-		else:
-			fs = open("sumOfWeights_new.txt")
-			for line in fs.readlines():
-				line_spl = line.split()
-				sumOfWeights[int(line_spl[0])] = float(line_spl[1])
-			fs.close()
-			fs = open("sumOfWeightssyst_new.txt")
-			for line in fs.readlines():
-				line_spl = line.split()
-				sumOfWeights[int(line_spl[0])] = float(line_spl[1])
-			fs.close()
+
+		fs = open("sumOfWeights_new.txt")
+		for line in fs.readlines():
+			line_spl = line.split()
+			sumOfWeights[int(line_spl[0])] = float(line_spl[1])
+		fs.close()
+		fs = open("sumOfWeightssyst_new.txt")
+		for line in fs.readlines():
+			line_spl = line.split()
+			sumOfWeights[int(line_spl[0])] = float(line_spl[1])
+		fs.close()
 
 	#print sumOfWeights
 	 
@@ -127,6 +127,7 @@ def main():
 		systematics += ',LARGERJET_Strong_JET_Rtrk_Modelling_All__1up,LARGERJET_Strong_JET_Rtrk_Modelling_All__1down,LARGERJET_Strong_JET_Rtrk_Baseline_All__1down,LARGERJET_Strong_JET_Rtrk_Baseline_All__1up,LARGERJET_Strong_JET_Rtrk_Tracking_All__1down,LARGERJET_Strong_JET_Rtrk_Tracking_All__1up,LARGERJET_Strong_JET_Rtrk_TotalStat_All__1down,LARGERJET_Strong_JET_Rtrk_TotalStat_All__1up'
 		systList.extend(systematics.split(','))
 	elif options.systs == 'pdf':
+		systList = []
 		systList.append('nominal')
 		for m in pdfList:
 			nvar = len(pdfSumOfWeights[pdfSumOfWeights.keys()[0]][m])
@@ -193,7 +194,7 @@ def main():
 					else:
 						weight /= sumOfWeights[channel]
 				else:
-					pdfName = suffix.split('_', 1)[1]
+					pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
 					pdfNumber = int(suffix.rsplit('_', 1)[1])
 					if not channel in pdfSumOfWeights:
 						print "Could not find DSID ",channel, " in sum of weights."
@@ -205,7 +206,7 @@ def main():
 			for ana in analysisCode:
 				weight_reco = analysisCode[ana].getWeight(sel, suffix)
 				if 'pdf_' in suffix:
-					pdfName = suffix.split('_', 1)[1]
+					pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
 					pdfNumber = int(suffix.rsplit('_', 1)[1])
 					pdfAttr = getattr(sel, pdfName)
 					weight_reco *= pdfAttr[pdfNumber]
