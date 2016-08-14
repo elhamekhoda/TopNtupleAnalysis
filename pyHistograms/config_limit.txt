@@ -15,6 +15,9 @@ sample    zprime5000   zprime5000                           "Zprime5000"        
 sample    kkgrav400    kkgrav400                            "KKgraviton400"       "KKgraviton400"      10
 sample    kkgrav500    kkgrav500                            "KKgraviton500"       "KKgraviton500"      10
 sample    kkgrav750    kkgrav750                            "KKgraviton750"       "KKgraviton750"      10
+sample    kkgrav1000   kkgrav1000                           "KKgraviton1000"      "KKgraviton1000"     10
+sample    kkgrav2000   kkgrav2000                           "KKgraviton2000"      "KKgraviton2000"     10
+sample    kkgrav3000   kkgrav3000                           "KKgraviton3000"      "KKgraviton3000"     10
 sample    data         data                                 "data"                "data"               1
 sample    tt           ttall                                "t#bar{t}"            "$t\bar{t}$"         0
 sample    wbbjets      wbbjets                              "W+bb+jets"           "$W$+bb+jets"        416
