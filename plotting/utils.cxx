@@ -1894,6 +1894,7 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     for (int i = 0; i <= pdfmax; ++i) {
       patterns.push_back(pdfpre+std::string("_")+std::to_string(i));
     }
+    patterns.push_back(""); // add difference between the nominal and zero-th PDF EV
     int this_smooth = smooth;
 
     systCalc.add(name.c_str(), new HistDiffMany(filenam, patterns, sample, this_smooth), it->second[0]);
