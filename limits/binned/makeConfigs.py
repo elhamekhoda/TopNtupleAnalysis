@@ -4,75 +4,10 @@ from time import time
 from inputs import *
 import socket, random, re
 
+# change those:
+setdir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416'
+mydir = '/nfs/dust/atlas/user/danilo/hists_sr2416/TRexFitter'
 
-
-dobatch = 1
-site=""
-#outputName="resolved"
-outputName="boosted"
-#outputName="boosted_resolved"
-if socket.gethostname().find("clratl") != -1:
-	site="LPC"
-
-listOfJobs=[]
-
-def createAndSubmitJob(configName):
-	system('mkdir -p '+outputName)
-	
-	here = getcwd()
-	scriptName="script_"+configName.split('.')[0]+".sh"
-	f = open(scriptName,'w')	
-	f.write('#!/bin/bash\n')
-	f.write('echo running on $HOSTNAME\n')
-	f.write('\n')
-	WORKDIR=""
-	if site=="LPC":
-		workDir = re.sub('\.','',str(time())+`random.randint(0, 1000000)`)
-		WORKDIR = "/users_local1/$LOGNAME/"+workDir
-	else :
-		print "ERROR : site is not defiend!"
-		return
-		
-	f.write('\n' + 'mkdir -p '+WORKDIR+'\n')
-	f.write('\n' + 'cd '+WORKDIR+'\n')
-	f.write('export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase\n')
-	f.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
-	f.write('localSetupROOT\n')
-	f.write('\n')
-	f.write('cp -f '+here+'/t.tar.gz .\n')
-	f.write('tar -xzvf t.tar.gz\n')
-	f.write('echo "untaring done!" \n\n')
-	
-	f.write('./myFit.exe h '+configName+' > log_'+configName.split('.')[0]+'_h\n')
-	f.write('./myFit.exe d '+configName+' > log_'+configName.split('.')[0]+'_d\n')
-	f.write('./myFit.exe w '+configName+' > log_'+configName.split('.')[0]+'_w\n')
-	f.write('./myFit.exe f '+configName+' > log_'+configName.split('.')[0]+'_f\n')
-	f.write('./myFit.exe p '+configName+' > log_'+configName.split('.')[0]+'_p\n')
-	if configName.find("bkg")!=-1:
-		#do nothing
-		a=1
-	else:
-		f.write('./myFit.exe l '+configName+' > log_'+configName.split('.')[0]+'_l\n')
-		f.write('./myFit.exe s '+configName+' > log_'+configName.split('.')[0]+'_s\n')
-		#f.write('./myFit.exe r '+configName+' > log_'+configName.split('.')[0]+'_r\n')
-	
-	
-	
-	outDir = './JobTtres_'+configName.split('.')[0].replace('ttres_','')
-	
-	f.write('cp -rf '+outDir+' '+here+'/'+outputName+'\n')
-	f.write('cp -f log_'+configName.split('.')[0]+'_*  '+here+'/'+outputName+'/'+outDir+'/\n')
-	f.write('rm -rf '+WORKDIR+'\n')
-	f.close()
-	
-	com=""
-	if site=="LPC":
-		com = 'qsub -N '+outDir.split('_')[1]+' -q multi64sl6@clratlserv05  -e '+here+'/'+outputName+' -o '+here+'/'+outputName+' '+scriptName
-		
-	#print com
-	global listOfJobs
-	listOfJobs+=[com,]
-	
 def fixFile(template, final, i, doBOnlyFit):
   fr = open(template, 'r')
   f = open(final, 'w')
@@ -102,43 +37,52 @@ Sample: "Signal"
   fr.close()
 
 
+def jobSubmit(suf):
+	runfile = 'submit_%s.sh' % suf
+	logfile = mydir+'/stdout_%s.txt'%suf
+	queue = 'long.q'
+	email = 'dferreir@cern.ch'
+	jobName = 'ttlim_%s'%suf
+	fr = open(runfile, 'w')
+	fr.write('#!/bin/sh\n')
+	fr.write('#$ -cwd\n')
+	fr.write('#$ -j y\n')
+	fr.write('#$ -l cvmfs\n')
+	fr.write('#$ -l distro=sld6\n')
+	fr.write('#$ -l arch=amd64\n')
+	fr.write('#$ -l h_vmem=35G\n')
+	fr.write('#$ -o '+logfile+'\n')
+	fr.write('#$ -q '+queue+'\n')
+	fr.write('#$ -m '+'eas'+'\n')
+	fr.write('#$ -M '+email+'\n')
+	fr.write('#$ -N '+jobName+'\n')
+	fr.write('cd '+setdir+'\n')
+	fr.write('export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase\n')
+	fr.write('export DQ2_LOCAL_SITE_ID=DESY-HH_SCRATCHDISK \n')
+	fr.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
+	fr.write('lsetup rcsetup\n')
+	fr.write('cd '+mydir+'\n')
+	fr.write('./myFit.exe h ttres_%s.config\n'%suf)
+	fr.write('./myFit.exe d ttres_%s.config\n'%suf)
+	fr.write('./myFit.exe w ttres_%s.config\n'%suf)
+	fr.write('./myFit.exe f ttres_%s.config\n'%suf)
+	fr.write('./myFit.exe p ttres_%s.config\n'%suf)
+	if not 'bkg' in suf:
+		fr.write('./myFit.exe l ttres_%s.config\n'%suf)
+		fr.write('./myFit.exe s ttres_%s.config\n'%suf)
+	fr.close()
+	system('chmod a+x %s'%runfile)
+	system('qsub %s'%runfile)
 
 
 # B ONLY fit
 fixFile('ttres_template.config', 'ttres_bkg.config', "bkg", True)
-system('cp -f hist_Zprime2000.root hist_bkg.root') ## use a dummy signal for the background only fit
-if dobatch:
-	createAndSubmitJob('ttres_bkg.config')
-else:
-	system('./myFit.exe h ttres_bkg.config')
-	system('./myFit.exe d ttres_bkg.config')
-	system('./myFit.exe w ttres_bkg.config')
-	system('./myFit.exe f ttres_bkg.config')
-	system('./myFit.exe p ttres_bkg.config')
-
-
+system('cp -f hist_zprime2000.root hist_bkg.root') ## use a dummy signal for the background only fit
+jobSubmit('bkg')
 
 # now go over to signal
-for i in signalList:
-  fixFile('ttres_template.config', 'ttres_'+i+'.config', i, False)
+for t in signalList:
+  for i in signalList[t]:
+    fixFile('ttres_template.config', 'ttres_'+i+'.config', i, False)
+    jobSubmit(i)
 
-  if dobatch:
-     createAndSubmitJob('ttres_'+i+'.config')
-  else:
-     system('./myFit.exe h ttres_'+i+'.config')
-     system('./myFit.exe d ttres_'+i+'.config')
-     system('./myFit.exe w ttres_'+i+'.config')
-     system('./myFit.exe f ttres_'+i+'.config')
-     system('./myFit.exe p ttres_'+i+'.config')
-     system('./myFit.exe l ttres_'+i+'.config')
-     system('./myFit.exe s ttres_'+i+'.config')
-
-
-
-
-if dobatch :
-	system("tar -czvf t.tar.gz . --exclude=boosted* --exclude=resolved* --exclude=old* --exclude=*.tar.gz" )
-	for j in listOfJobs:
-		print j
-		system(j)
-	
