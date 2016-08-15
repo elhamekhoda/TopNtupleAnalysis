@@ -50,7 +50,7 @@ for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2
     $PLOTCOMP --logY 1 --mcOnly 1 --syst MUONS_ID__1up,MUONS_ID__1down --systTitles "muon res. ID up,muon res. ID down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_muresid.pdf
     $PLOTCOMP --logY 1 --mcOnly 1 --syst MUONS_SCALE__1up,MUONS_SCALE__1down --systTitles "muon scale up,muon scale down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_muscale.pdf
     $PLOTCOMP --logY 1 --mcOnly 1 --syst EG_RESOLUTION_ALL__1up,EG_RESOLUTION_ALL__1down --systTitles "e res. up,e res. down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_eres.pdf
-    $PLOTCOMP --logY 1 --mcOnly 1 --syst EG_SCALE_ALL__1up,EG_SCALE_ALL__1down --systTitles "e scale up,e scale down" -l $LUMI -c $ch mtt -o syst_${ch}_mtt_escale.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst EG_SCALE_ALL__1up,EG_SCALE_ALL__1down --systTitles "e scale up,e scale down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_escale.pdf
     $PLOTCOMP --logY 1 --mcOnly 1 --syst MET_SoftTrk_ResoPara --systTitles "MET res. para." -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_metrespara.pdf
     $PLOTCOMP --logY 1 --mcOnly 1 --syst MET_SoftTrk_ResoPerp --systTitles "MET res. perp." -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_metresperp.pdf
     $PLOTCOMP --logY 1 --mcOnly 1 --syst MET_SoftTrk_ScaleUp,MET_SoftTrk_ScaleDown --systTitles "MET scale up,MET scale down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_metscale.pdf
