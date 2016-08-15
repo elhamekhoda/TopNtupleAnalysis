@@ -54,14 +54,14 @@ double wjetsSF(const Event &sel, const std::string &syst) {
   frac["e"]  = std::map<std::string, float>();
   frac["mu"] = std::map<std::string, float>();
   frac["e"]["bb"] = 0.559; frac["e"]["cc"] = 0.136; frac["e"]["c"] = 0.221; frac["e"]["l"] = 0.084;
-  frac["e"]["bb"] = 0.590; frac["e"]["cc"] = 0.149; frac["e"]["c"] = 0.184; frac["e"]["l"] = 0.077;
+  frac["mu"]["bb"] = 0.590; frac["mu"]["cc"] = 0.149; frac["mu"]["c"] = 0.184; frac["mu"]["l"] = 0.077;
 
   std::map<std::string, float> f_ca_map;
   f_ca_map["e"] = 0.82; f_ca_map["mu"] = 0.84;
 
   std::map<std::string, std::map<std::string, float> > flav_map;
   flav_map["e"]["bb"] = 1.66; flav_map["e"]["cc"] = 1.66; flav_map["e"]["c"] = 0.85; flav_map["e"]["l"] = 0.65;
-  flav_map["e"]["bb"] = 1.66; flav_map["e"]["cc"] = 1.67; flav_map["e"]["c"] = 0.87; flav_map["e"]["l"] = 0.65;
+  flav_map["mu"]["bb"] = 1.67; flav_map["mu"]["cc"] = 1.67; flav_map["mu"]["c"] = 0.87; flav_map["mu"]["l"] = 0.65;
 
   for (auto &c : frac) {
     for (auto &f : frac[c.first]) {
@@ -71,7 +71,7 @@ double wjetsSF(const Event &sel, const std::string &syst) {
 
   std::map<std::string, std::map<std::string, float> > flav_map_unc;
   flav_map_unc["e"]["bb"] = 0.0862; flav_map_unc["e"]["cc"] = 0.0862; flav_map_unc["e"]["c"] = 0.200; flav_map_unc["e"]["l"] = 0.0575;
-  flav_map_unc["e"]["bb"] = 0.0710; flav_map_unc["e"]["cc"] = 0.0710; flav_map_unc["e"]["c"] = 0.200; flav_map_unc["e"]["l"] = 0.0450;
+  flav_map_unc["mu"]["bb"] = 0.0710; flav_map_unc["mu"]["cc"] = 0.0710; flav_map_unc["mu"]["c"] = 0.200; flav_map_unc["mu"]["l"] = 0.0450;
 
   std::string chan = "";
   if (sel.electron().size() == 1) {
@@ -91,9 +91,11 @@ double wjetsSF(const Event &sel, const std::string &syst) {
   } else if (flag == 5) {
     flav = "l";
   }
+
   f_ca = f_ca_map[chan];
   double norm = 1.0;
   hfweight = flav_map[chan][flav];
+
   std::string flavunc = "";
   if (syst.find("wbb__") != std::string::npos) {
     flavunc = "bb";
@@ -110,6 +112,7 @@ double wjetsSF(const Event &sel, const std::string &syst) {
   } else if (syst.find("1down") != std::string::npos) {
     updown = -1.0;
   }
+
   norm  = 0;
   for (auto &f : flavours) {
     if (flavunc == f) {
