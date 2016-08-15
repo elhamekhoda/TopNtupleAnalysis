@@ -85,6 +85,7 @@ class AnaTtresSL(Analysis):
 		self.addVar("MET", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
 		self.add("MET_phi", 32, -3.2, 3.2)
 		self.add("mwt", 20, 0, 200)
+		self.add("closestJetDr", 20, 0, 2.0)
 		self.add("mu", 100, 0, 100)
 		self.add("vtxz", 40, -400, 400)
 		self.add("npv", 50, 0, 50)
@@ -356,6 +357,16 @@ class AnaTtresSL(Analysis):
 		self.h["MET_phi"][syst].Fill(sel.met_phi, w)
 		self.h["MET"][syst].Fill(sel.met_met*1e-3, w)
 		self.h["nJets"][syst].Fill(len(sel.jet_pt), w)
+		closestJetIdx = -1
+		closestJetDr = 99
+		for i in range(0, len(sel.jet_pt)):
+			cj = ROOT.TLorentzVector()
+			cj.SetPtEtaPhiM(sel.jet_pt[i], sel.jet_eta[i], sel.jet_phi[i], sel.jet_m[i])
+			if cj.DeltaR(l) < closestJetDr:
+				closestJetIdx = i
+				closestJetDr = cj.DeltaR(l)
+
+		self.h["closestJetDr"][syst].Fill(closestJetDr, w)
 		nBtags = 0
 		tjets = []
 		tb = []

@@ -242,6 +242,7 @@ class WrapperExtras {
 		e.muon()[0].setTight(isTight);
 		e.muon()[0].HLT_mu20_iloose_L1MU15() = muonTrigger;
 		e.muon()[0].HLT_mu50() = muonTrigger;
+		e.muon()[0].topoetcone20() = topoetcone20;
 	  }
 	  for (int k = 0; k < jet.size(); ++k) {
 	    e.jet().push_back(Jet(jet[k]));
