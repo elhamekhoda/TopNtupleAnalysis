@@ -91,7 +91,8 @@ syst      btagl10    "b-tagging l mistag (E10)"       btaglSF_10__1up           
 syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     S
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     S
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
-syst_flat qcd        "QCD unc."                       "qcde,qcdmu"           0.50                                       -0.050
+syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.050
+syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.050
 syst_flat ttxsec     "ttbar cross section"            "tt"                   0.056                                      -0.061
 syst_model ttgen     "ttbar gen."                    "tt"                    ttpowhegherwig                            ttmcatnloherwig               S
 syst_model ttps      "ttbar p. shower"               "tt"                    ttsyst                                    ttpowhegherwig                S

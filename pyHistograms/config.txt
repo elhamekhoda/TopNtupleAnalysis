@@ -20,7 +20,7 @@ syst      muidstat   "muon ID (stat)"                 muIDStatSF__1up           
 syst      muidsyst   "muon ID (syst)"                 muIDSystSF__1up                            muIDSystSF__1down                                    N
 syst      muisolstat "muon isolation (stat)"          muIsolStatSF__1up                          muIsolStatSF__1down                                  N
 syst      muisolsyst "muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down                                  N
-#syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      N
+#syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      S
 syst      jvt        "JVT"                            jvtSF__1up                                 jvtSF__1down                                         N
 syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N
 syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N
@@ -73,7 +73,8 @@ syst      btagl10    "b-tagging l mistag (E10)"       btaglSF_10__1up           
 syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     S
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     S
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
-syst_flat qcd        "QCD unc."                       "qcde,qcdmu"           0.50                                       -0.050
+syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.050
+syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.050
 syst_flat ttxsec     "ttbar cross section"            "tt"                   0.056                                      -0.061
 syst_model ttgen     "ttbar gen."                    "tt"                    ttpowhegherwig                            ttmcatnloherwig               S
 syst_model ttps      "ttbar p. shower"               "tt"                    ttsyst                                    ttpowhegherwig                S

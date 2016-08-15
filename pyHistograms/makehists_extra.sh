@@ -1,7 +1,7 @@
 
-LUMI=5.80751
+LUMI=14.76518
 
-PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/plotting/plot
+PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416/TopNtupleAnalysis/plotting/plot
 
 rm -f hist_*.root
 for histogram in mtt mttPos mttNeg ; do
@@ -10,6 +10,6 @@ for histogram in mtt mttPos mttNeg ; do
     done
 done
 
-rm spectrum_all.tar.gz
-tar cvfz spectrum_all.tar.gz hist*.root
+#rm spectrum_all.tar.gz
+#tar cvfz spectrum_all.tar.gz hist*.root
 

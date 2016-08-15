@@ -2,14 +2,12 @@
 LUMI=14.76518
 
 PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416/TopNtupleAnalysis/plotting/plot
+PLOTCOMP=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416/TopNtupleAnalysis/plotting/plotCompareNominal
 
 for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
     $PLOTTING -c $ch -h yields -l $LUMI -C config.txt >yields_${ch}.txt
-#    $PLOTTING -c $ch -h yields_bveto -l $LUMI -C config.txt >yields_bveto_${ch}.txt
     $PLOTTING -c $ch -h yieldsPos -l $LUMI -C config.txt >yieldsPos_${ch}.txt
-#    $PLOTTING -c $ch -h yields_bvetoPos -l $LUMI -C config.txt >yields_bvetoPos_${ch}.txt
     $PLOTTING -c $ch -h yieldsNeg -l $LUMI -C config.txt >yieldsNeg_${ch}.txt
-#    $PLOTTING -c $ch -h yields_bvetoNeg -l $LUMI -C config.txt >yields_bvetoNeg_${ch}.txt
 done
 
 for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
@@ -38,8 +36,16 @@ done
 
 for ch in be bmu re rmu re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
     $PLOTTING -c $ch -h mtt --mcOnly 1 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
+    $PLOTTING -c $ch -h mttPos --mcOnly 1 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}^{+}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
+    $PLOTTING -c $ch -h mttNeg --mcOnly 1 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}^{-}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
 done
 
 for ch in bmu2015 be2015 ; do
     $PLOTTING -c $ch -h mtt --mcOnly 0 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
+    $PLOTTING -c $ch -h mttPos --mcOnly 0 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}^{+}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
+    $PLOTTING -c $ch -h mttNeg --mcOnly 0 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}^{-}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
+done
+
+for ch in be bmu re rmu ; do
+    $PLOTCOMP -c $ch -h mtt --mcOnly 1 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
 done

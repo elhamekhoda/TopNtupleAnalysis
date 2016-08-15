@@ -90,7 +90,7 @@ def main():
 	names  += ['ttradhi', 'ttradlo']
 
 	#names  = ['qcde', 'qcdmu']
-	#names  = ['ttpdf']
+	names  = ['ttpdf']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
