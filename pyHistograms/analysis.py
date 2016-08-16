@@ -57,7 +57,7 @@ class Analysis:
 
 		# this applies the EWK weight
 		channel = sel.mcChannelNumber
-		if channel in helpers.listEWK:
+		if channel in helpers.listEWK and not self.noMttSlices:
 			weight *= helpers.applyEWK(sel, s)
 
 		# this applies the W+jets Sherpa 2.2 nJets reweighting correction
