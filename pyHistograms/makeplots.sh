@@ -1,8 +1,8 @@
 
 LUMI=14.76518
 
-PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416/TopNtupleAnalysis/plotting/plot
-PLOTCOMP=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416/TopNtupleAnalysis/plotting/plotCompareNominal
+PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418/TopNtupleAnalysis/plotting/plot
+PLOTCOMP=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418/TopNtupleAnalysis/plotting/plotCompareNominal
 
 for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
     $PLOTTING -c $ch -h yields -l $LUMI -C config.txt >yields_${ch}.txt
@@ -11,6 +11,7 @@ for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2
 done
 
 for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
+    $PLOTTING -c $ch -h closestJetDr  -l $LUMI --xTitle "min #Delta R (jet, lepton)" --yTitle "Events / 0.1" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h lepPt --normBinWidth 20 -l $LUMI --rebin 4 --xTitle "Lepton p_{T} [GeV]" --yTitle "Events / 20 GeV" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h lepEta  -l $LUMI  --xTitle "Lepton #eta" --yTitle "Events / 0.25" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h nJets -l $LUMI --xTitle "Number of jets" --yTitle "Events" --stamp 0 -C config.txt
