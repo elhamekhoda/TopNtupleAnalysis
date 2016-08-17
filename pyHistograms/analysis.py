@@ -128,15 +128,15 @@ class AnaTtresSL(Analysis):
 		frac = {}
 		frac['e'] = {'bb': 0.559, 'cc': 0.136, 'c': 0.221, 'l': 0.084}
 		frac['mu'] = {'bb': 0.590, 'cc': 0.149, 'c': 0.184, 'l': 0.077}
-		f_ca_map = {'e': 0.796251, 'mu': 0.837977}
+		f_ca_map = {'e': 1.016079, 'mu': 0.837977}
 		flav_map = {}
-		flav_map['e'] = {'bb': 1.237631, 'cc': 1.237631, 'c': 0.951056, 'l': 0.876176}
+		flav_map['e'] = {'bb': 0.891112, 'cc': 0.891112, 'c': 1.024976, 'l': 1.059199}
 		flav_map['mu'] = {'bb': 1.156720, 'cc': 1.156720, 'c': 0.966231, 'l': 0.919192}
 		for c in frac:
 			for f in frac[c]:
 				frac[c][f] *= flav_map[c][f]
 		flav_map_unc = {}
-		flav_map_unc['e'] = {'bb': 0.185636, 'cc': 0.185636, 'c': 0.50, 'l': 0.0685163}
+		flav_map_unc['e'] = {'bb': 0.263043, 'cc': 0.263043, 'c': 0.50, 'l': 0.0567175}
 		flav_map_unc['mu'] = {'bb': 0.108275, 'cc': 0.108275, 'c': 0.50, 'l': 0.0336468}
 		#flav_map_unc['e'] = {'bb': 0.50, 'cc': 0.50, 'c': 0.50, 'l': 0.50}
 		#flav_map_unc['mu'] = {'bb': 0.50, 'cc': 0.50, 'c': 0.50, 'l': 0.50}
@@ -361,10 +361,13 @@ class AnaTtresSL(Analysis):
 		closestJetDr = 99
 		for i in range(0, len(sel.jet_pt)):
 			cj = ROOT.TLorentzVector()
-			cj.SetPtEtaPhiM(sel.jet_pt[i], sel.jet_eta[i], sel.jet_phi[i], sel.jet_m[i])
-			if cj.DeltaR(l) < closestJetDr:
+			cj.SetPtEtaPhiE(sel.jet_pt[i], sel.jet_eta[i], sel.jet_phi[i], sel.jet_e[i])
+			dy = (cj.Rapidity() - l.Rapidity())
+			dp = cj.DeltaPhi(l)
+			dr = (dy**2 + dp**2)**0.5
+			if dr < closestJetDr:
 				closestJetIdx = i
-				closestJetDr = cj.DeltaR(l)
+				closestJetDr = dr
 
 		self.h["closestJetDr"][syst].Fill(closestJetDr, w)
 		nBtags = 0
