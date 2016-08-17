@@ -890,7 +890,7 @@ int main(int argc, char **argv) {
 	    
             if(sel.weight_Sherpa22_corr())	weight *= sel.weight_Sherpa22_corr();
 
-			weight *= wjetsSF(sel, suffix);
+			weight *= wjetsSF(sel, suffix); 
 	    
             double pdfw = 1.0;
             bool isPdf = false;

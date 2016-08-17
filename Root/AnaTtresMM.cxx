@@ -480,8 +480,19 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
   //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
   //else				GetHistograms(evt, weight, "lDR_", suffix);
+
+  if(std::isnan(weight)) {
+  std::cout<<"Weight is Nan, making it  0"<<std::endl;
+  weight = 0;
+  }
+ 
+
   GetHistograms(evt, weight, "", suffix);
-  
+  if(nTrkBtagged == 0)
+  GetHistograms(evt, weight, "btag0_",suffix );
+  if(nTrkBtagged >= 1)
+  GetHistograms(evt, weight, "btag1_", suffix); 
+ 
 } // runMatrixMethod_QCDCR2j_2016
 
 
@@ -563,7 +574,16 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
   //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
   //else				GetHistograms(evt, weight, "lDR_", suffix);
+  if(std::isnan(weight)) {
+  std::cout<<"Weight is Nan, making it  0"<<std::endl;
+  weight = 0;
+  }
+
   GetHistograms(evt, weight, "", suffix);
+  if(nTrkBtagged == 0)
+  GetHistograms(evt, weight, "btag0_",suffix );
+  if(nTrkBtagged >= 1)
+  GetHistograms(evt, weight, "btag1_", suffix);
   
 }//AnaTtresMM::runMatrixMethod_QCDVR2j_2016
 
@@ -584,11 +604,11 @@ void AnaTtresMM::runMatrixMethod_QCDSR2j_2016(const Event &evt, double weight, c
   if (!m_boosted)
     if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rejetsWCR_2016")))
       return;
-  std::cout<<"HERE"<<std::endl;
+  
   if (!m_boosted)	if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
-  std::cout<<"HERE1"<<std::endl;  
+  
   bool isTight = false;
   float d0sig(99);
     

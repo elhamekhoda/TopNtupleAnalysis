@@ -70,7 +70,7 @@ MMUtils::MMUtils(const int isBtagged, const std::string &eff_filename2015, const
     eff_map_resolved_e_2016 = 	(TH2F*) m_eff_rootfile2016.Get("eff_lepPt_topoetcone_resolved_e");
     if(eff_map_resolved_e_2016)	eff_map_resolved_e_2016->SetDirectory(0);
     
-    eff_map_resolved_mu_2016 = 	(TH2F*) m_eff_rootfile2016.Get("eff_pTdr_resolved_mu");
+    eff_map_resolved_mu_2016 = 	(TH2F*) m_eff_rootfile2016.Get("eff_LepPt_DR_sbin_resolved_mu");
     if(eff_map_resolved_mu_2016)	eff_map_resolved_mu_2016->SetDirectory(0);
           
     eff_map_boosted_e_2016 = 	(TH2F*) m_eff_rootfile2016.Get("eff_pTdr_boosted_e");
