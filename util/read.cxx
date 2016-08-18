@@ -73,7 +73,7 @@ double wjetsSF(const Event &sel, const std::string &syst) {
   }
 
   std::map<std::string, std::map<std::string, float> > flav_map_unc;
-  flav_map_unc["e"]["bb"] = 0.263284,; flav_map_unc["e"]["cc"] = 0.263284,; flav_map_unc["e"]["c"] = 0.500; flav_map_unc["e"]["l"] = 0.123311;
+  flav_map_unc["e"]["bb"] = 0.263284; flav_map_unc["e"]["cc"] = 0.263284; flav_map_unc["e"]["c"] = 0.500; flav_map_unc["e"]["l"] = 0.123311;
   flav_map_unc["mu"]["bb"] = 0.105859; flav_map_unc["mu"]["cc"] = 0.105859; flav_map_unc["mu"]["c"] = 0.500; flav_map_unc["mu"]["l"] = 0.0409622;
 
   std::string chan = "";
@@ -118,7 +118,7 @@ double wjetsSF(const Event &sel, const std::string &syst) {
 
   norm  = 0;
   //for (auto &f : flavours) {
-  for (std::vector<std::string>::iterator it = flavours.begin(); it != falvours.end(); ++it) {
+  for (std::vector<std::string>::iterator it = flavours.begin(); it != flavours.end(); ++it) {
     std::string f = *it;
     if (flavunc == f) {
 	  norm += (1.0 + updown*flav_map_unc[chan][f])*frac[chan][f];
@@ -543,16 +543,22 @@ int main(int argc, char **argv) {
       n_eigenvars_l = mt.vf("weight_bTagSF_70_eigenvars_Light_up")->size();
 
       for (int i = 0; i < n_eigenvars_b; ++i) {
-        systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up");
-        systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1down");
+        std::stringstream ss;
+	ss << i;
+        systsListWithBlankNominal.push_back("btagbSF_"+ss.str()+"__1up");
+        systsListWithBlankNominal.push_back("btagbSF_"+ss.str()+"__1down");
       }
       for (int i = 0; i < n_eigenvars_c; ++i) {
-        systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1up");
-        systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1down");
+        std::stringstream ss;
+	ss << i;
+        systsListWithBlankNominal.push_back("btagcSF_"+ss.str()+"__1up");
+        systsListWithBlankNominal.push_back("btagcSF_"+ss.str()+"__1down");
       }
       for (int i = 0; i < n_eigenvars_l; ++i) {
-        systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up");
-        systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down");
+        std::stringstream ss;
+	ss << i;
+        systsListWithBlankNominal.push_back("btaglSF_"+ss.str()+"__1up");
+        systsListWithBlankNominal.push_back("btaglSF_"+ss.str()+"__1down");
       }
       systsListWithBlankNominal.push_back("btageSF_0__1up");
       systsListWithBlankNominal.push_back("btageSF_0__1down");
@@ -560,16 +566,22 @@ int main(int argc, char **argv) {
       systsListWithBlankNominal.push_back("btageSF_1__1down");
       if (loose) {
         for (int i = 0; i < n_eigenvars_b; ++i) {
-          systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up_Loose");
-          systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1down_Loose");
+          std::stringstream ss;
+  	  ss << i;
+          systsListWithBlankNominal.push_back("btagbSF_"+ss.str()+"__1up_Loose");
+          systsListWithBlankNominal.push_back("btagbSF_"+ss.str()+"__1down_Loose");
         }
         for (int i = 0; i < n_eigenvars_c; ++i) {
-          systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1up_Loose");
-          systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1down_Loose");
+          std::stringstream ss;
+  	  ss << i;
+          systsListWithBlankNominal.push_back("btagcSF_"+ss.str()+"__1up_Loose");
+          systsListWithBlankNominal.push_back("btagcSF_"+ss.str()+"__1down_Loose");
         }
         for (int i = 0; i < n_eigenvars_l; ++i) {
-          systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up_Loose");
-          systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down_Loose");
+          std::stringstream ss;
+  	  ss << i;
+          systsListWithBlankNominal.push_back("btaglSF_"+ss.str()+"__1up_Loose");
+          systsListWithBlankNominal.push_back("btaglSF_"+ss.str()+"__1down_Loose");
         }
         systsListWithBlankNominal.push_back("btageSF_0__1up_Loose");
         systsListWithBlankNominal.push_back("btageSF_0__1down_Loose");
@@ -594,38 +606,44 @@ int main(int argc, char **argv) {
       n_eigenvars_l = mt.vf("weight_trackjet_bTagSF_70_eigenvars_Light_up")->size();
 
       for (int i = 0; i < n_eigenvars_b; ++i) {
-        systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up");
-        systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1down");
+        std::stringstream ss;
+  	ss << i;
+        systsListWithBlankNominal.push_back("btagbSF_"+ss.str()+"__1up");
+        systsListWithBlankNominal.push_back("btagbSF_"+ss.str()+"__1down");
       }
       for (int i = 0; i < n_eigenvars_c; ++i) {
-        systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1up");
-        systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1down");
+        std::stringstream ss;
+  	ss << i;
+        systsListWithBlankNominal.push_back("btagcSF_"+ss.str()+"__1up");
+        systsListWithBlankNominal.push_back("btagcSF_"+ss.str()+"__1down");
       }
       for (int i = 0; i < n_eigenvars_l; ++i) {
-        systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up");
-        systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down");
+        std::stringstream ss;
+  	ss << i;
+        systsListWithBlankNominal.push_back("btaglSF_"+ss.str()+"__1up");
+        systsListWithBlankNominal.push_back("btaglSF_"+ss.str()+"__1down");
       }
 
-      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt1__1up");
-      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt1__1down");
-      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt2__1up");
-      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt2__1down");
-      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt3__1up");
-      systsListWithBlankNominal.push_back("btagbSF_"+to_string(0)+"_pt3__1down");
+      systsListWithBlankNominal.push_back("btagbSF_0_pt1__1up");
+      systsListWithBlankNominal.push_back("btagbSF_0_pt1__1down");
+      systsListWithBlankNominal.push_back("btagbSF_0_pt2__1up");
+      systsListWithBlankNominal.push_back("btagbSF_0_pt2__1down");
+      systsListWithBlankNominal.push_back("btagbSF_0_pt3__1up");
+      systsListWithBlankNominal.push_back("btagbSF_0_pt3__1down");
 
-      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt1__1up");
-      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt1__1down");
-      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt2__1up");
-      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt2__1down");
-      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt3__1up");
-      systsListWithBlankNominal.push_back("btagcSF_"+to_string(0)+"_pt3__1down");
+      systsListWithBlankNominal.push_back("btagcSF_0_pt1__1up");
+      systsListWithBlankNominal.push_back("btagcSF_0_pt1__1down");
+      systsListWithBlankNominal.push_back("btagcSF_0_pt2__1up");
+      systsListWithBlankNominal.push_back("btagcSF_0_pt2__1down");
+      systsListWithBlankNominal.push_back("btagcSF_0_pt3__1up");
+      systsListWithBlankNominal.push_back("btagcSF_0_pt3__1down");
 
-      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt1__1up");
-      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt1__1down");
-      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt2__1up");
-      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt2__1down");
-      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt3__1up");
-      systsListWithBlankNominal.push_back("btaglSF_"+to_string(0)+"_pt3__1down");
+      systsListWithBlankNominal.push_back("btaglSF_0_pt1__1up");
+      systsListWithBlankNominal.push_back("btaglSF_0_pt1__1down");
+      systsListWithBlankNominal.push_back("btaglSF_0_pt2__1up");
+      systsListWithBlankNominal.push_back("btaglSF_0_pt2__1down");
+      systsListWithBlankNominal.push_back("btaglSF_0_pt3__1up");
+      systsListWithBlankNominal.push_back("btaglSF_0_pt3__1down");
 
 
 
@@ -635,16 +653,22 @@ int main(int argc, char **argv) {
       systsListWithBlankNominal.push_back("btageSF_1__1down");
       if (loose) {
         for (int i = 0; i < n_eigenvars_b; ++i) {
-          systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1up_Loose");
-          systsListWithBlankNominal.push_back("btagbSF_"+to_string(i)+"__1down_Loose");
+        std::stringstream ss;
+  	ss << i;
+          systsListWithBlankNominal.push_back("btagbSF_"+ss.str()+"__1up_Loose");
+          systsListWithBlankNominal.push_back("btagbSF_"+ss.str()+"__1down_Loose");
         }
         for (int i = 0; i < n_eigenvars_c; ++i) {
-          systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1up_Loose");
-          systsListWithBlankNominal.push_back("btagcSF_"+to_string(i)+"__1down_Loose");
+        std::stringstream ss;
+  	ss << i;
+          systsListWithBlankNominal.push_back("btagcSF_"+ss.str()+"__1up_Loose");
+          systsListWithBlankNominal.push_back("btagcSF_"+ss.str()+"__1down_Loose");
         }
         for (int i = 0; i < n_eigenvars_l; ++i) {
-          systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1up_Loose");
-          systsListWithBlankNominal.push_back("btaglSF_"+to_string(i)+"__1down_Loose");
+        std::stringstream ss;
+  	ss << i;
+          systsListWithBlankNominal.push_back("btaglSF_"+ss.str()+"__1up_Loose");
+          systsListWithBlankNominal.push_back("btaglSF_"+ss.str()+"__1down_Loose");
         }
         systsListWithBlankNominal.push_back("btageSF_0__1up_Loose");
         systsListWithBlankNominal.push_back("btageSF_0__1down_Loose");
@@ -856,35 +880,41 @@ int main(int argc, char **argv) {
 
           //if (_btags > 0) {
             for (int i = 0; i < n_eigenvars_b; ++i) {
-              weightSystematics.push_back(std::string("btagbSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
-              weightSystematics.push_back(std::string("btagbSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
+              std::stringstream ss;
+     	      ss << i;
+              weightSystematics.push_back(std::string("btagbSF_"+ss.str()+"__1up")+systSuffixForHistograms);
+              weightSystematics.push_back(std::string("btagbSF_"+ss.str()+"__1down")+systSuffixForHistograms);
             }
-            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt1__1up")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt1__1down")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt2__1up")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt2__1down")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt3__1up")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btagbSF_"+to_string(0)+"_pt3__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_0_pt1__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_0_pt1__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_0_pt2__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_0_pt2__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_0_pt3__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagbSF_0_pt3__1down")+systSuffixForHistograms);
             for (int i = 0; i < n_eigenvars_c; ++i) {
-              weightSystematics.push_back(std::string("btagcSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
-              weightSystematics.push_back(std::string("btagcSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
+              std::stringstream ss;
+     	      ss << i;
+              weightSystematics.push_back(std::string("btagcSF_"+ss.str()+"__1up")+systSuffixForHistograms);
+              weightSystematics.push_back(std::string("btagcSF_"+ss.str()+"__1down")+systSuffixForHistograms);
             }
-            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt1__1up")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt1__1down")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt2__1up")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt2__1down")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt3__1up")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btagcSF_"+to_string(0)+"_pt3__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_0_pt1__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_0_pt1__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_0_pt2__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_0_pt2__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_0_pt3__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btagcSF_0_pt3__1down")+systSuffixForHistograms);
             for (int i = 0; i < n_eigenvars_l; ++i) {
-              weightSystematics.push_back(std::string("btaglSF_"+to_string(i)+"__1up")+systSuffixForHistograms);
-              weightSystematics.push_back(std::string("btaglSF_"+to_string(i)+"__1down")+systSuffixForHistograms);
+              std::stringstream ss;
+     	      ss << i;
+              weightSystematics.push_back(std::string("btaglSF_"+ss.str()+"__1up")+systSuffixForHistograms);
+              weightSystematics.push_back(std::string("btaglSF_"+ss.str()+"__1down")+systSuffixForHistograms);
             }
-            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt1__1up")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt1__1down")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt2__1up")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt2__1down")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt3__1up")+systSuffixForHistograms);
-            weightSystematics.push_back(std::string("btaglSF_"+to_string(0)+"_pt3__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_0_pt1__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_0_pt1__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_0_pt2__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_0_pt2__1down")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_0_pt3__1up")+systSuffixForHistograms);
+            weightSystematics.push_back(std::string("btaglSF_0_pt3__1down")+systSuffixForHistograms);
             weightSystematics.push_back(std::string("btageSF_0__1up")+systSuffixForHistograms);
             weightSystematics.push_back(std::string("btageSF_0__1down")+systSuffixForHistograms);
             weightSystematics.push_back(std::string("btageSF_1__1up")+systSuffixForHistograms);
