@@ -57,21 +57,24 @@ double wjetsSF(const Event &sel, const std::string &syst) {
   frac["mu"]["bb"] = 0.590; frac["mu"]["cc"] = 0.149; frac["mu"]["c"] = 0.184; frac["mu"]["l"] = 0.077;
 
   std::map<std::string, float> f_ca_map;
-  f_ca_map["e"] = 1.016079; f_ca_map["mu"] = 0.837977;
+  f_ca_map["e"] = 0.760132; f_ca_map["mu"] = 0.981076;
 
   std::map<std::string, std::map<std::string, float> > flav_map;
-  flav_map["e"]["bb"] = 0.891112; flav_map["e"]["cc"] = 0.891112; flav_map["e"]["c"] = 1.024976; flav_map["e"]["l"] = 1.059199;
-  flav_map["mu"]["bb"] = 1.156720; flav_map["mu"]["cc"] = 1.156720; flav_map["mu"]["c"] = 0.966231; flav_map["mu"]["l"] = 0.919192;
+  flav_map["e"]["bb"] = 1.389717; flav_map["e"]["cc"] = 1.389717; flav_map["e"]["c"] = 0.919222; flav_map["e"]["l"] = 0.794204;
+  flav_map["mu"]["bb"] = 1.310202,; flav_map["mu"]["cc"] = 1.310202; flav_map["mu"]["c"] = 0.925191; flav_map["mu"]["l"] = 0.830731;
 
-  for (auto &c : frac) {
-    for (auto &f : frac[c.first]) {
-	  frac[c.first][f.first] *= flav_map[c.first][f.first];
+  //for (auto &c : frac) {
+  //    for (auto &f : frac[c.first]) {
+  for (std::map<std::string, std::map<std::string, float> >::iterator it = frac.begin(); it != frac.end(); ++it) {
+  	for (std::map<std::string, float>::iterator jt = frac[it->first].begin(); jt != frac[it->first].end(); ++jt) {
+	  //frac[c.first][f.first] *= flav_map[c.first][f.first];
+	  frac[it->first][jt->first] *= flav_map[it->first][jt->first];
 	}
   }
 
   std::map<std::string, std::map<std::string, float> > flav_map_unc;
-  flav_map_unc["e"]["bb"] = 0.263043; flav_map_unc["e"]["cc"] = 0.263043; flav_map_unc["e"]["c"] = 0.500; flav_map_unc["e"]["l"] = 0.0567175;
-  flav_map_unc["mu"]["bb"] = 0.108275; flav_map_unc["mu"]["cc"] = 0.108275; flav_map_unc["mu"]["c"] = 0.500; flav_map_unc["mu"]["l"] = 0.0336468;
+  flav_map_unc["e"]["bb"] = 0.263284,; flav_map_unc["e"]["cc"] = 0.263284,; flav_map_unc["e"]["c"] = 0.500; flav_map_unc["e"]["l"] = 0.123311;
+  flav_map_unc["mu"]["bb"] = 0.105859; flav_map_unc["mu"]["cc"] = 0.105859; flav_map_unc["mu"]["c"] = 0.500; flav_map_unc["mu"]["l"] = 0.0409622;
 
   std::string chan = "";
   if (sel.electron().size() == 1) {
@@ -114,7 +117,9 @@ double wjetsSF(const Event &sel, const std::string &syst) {
   }
 
   norm  = 0;
-  for (auto &f : flavours) {
+  //for (auto &f : flavours) {
+  for (std::vector<std::string>::iterator it = flavours.begin(); it != falvours.end(); ++it) {
+    std::string f = *it;
     if (flavunc == f) {
 	  norm += (1.0 + updown*flav_map_unc[chan][f])*frac[chan][f];
 	  hfweight *= (1.0 + updown*flav_map_unc[chan][f]);
