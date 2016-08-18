@@ -327,7 +327,9 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
 
   int maxNtjet = (evt.tjet().size()<6) ? evt.tjet().size() : 6;
   for (int i = 0; i < maxNtjet; ++i){ 
-     std::string nameJet_pt = "tjet" + std::to_string(i)+"_pt";
+     std::stringstream ss;
+     ss << i;
+     std::string nameJet_pt = "tjet" + ss.str()+"_pt";
      h->h1D(nameJet_pt, "", suffix)->Fill(tjetPt_vector[i]*1e-3, weight);
   }
 
@@ -354,17 +356,19 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   
   int maxNjet = (evt.jet().size()<6) ? evt.jet().size() : 6;
   for (int i = 0; i < maxNjet; ++i){  
-     
-     std::string nameJet_m = "jet" + std::to_string(i)+"_m";
+       std::stringstream ss;
+       ss << i;
+
+     std::string nameJet_m = "jet" + ss.str()+"_m";
      h->h1D(nameJet_m, "", suffix)->Fill(jetMass_vector[i]*1e-3, weight);
      
-     std::string nameJet_pt = "jet" + std::to_string(i)+"_pt";
+     std::string nameJet_pt = "jet" + ss.str()+"_pt";
      h->h1D(nameJet_pt, "", suffix)->Fill(jetPt_vector[i]*1e-3, weight);
      
-     std::string nameJet_eta = "jet" + std::to_string(i)+"_eta";
+     std::string nameJet_eta = "jet" + ss.str()+"_eta";
      h->h1D(nameJet_eta, "", suffix)->Fill(jetEta_vector[i], weight);
      
-     std::string nameJet_phi = "jet" + std::to_string(i)+"_phi";
+     std::string nameJet_phi = "jet" + ss.str()+"_phi";
      h->h1D(nameJet_phi, "", suffix)->Fill(jetPhi_vector[i], weight);    
   
   }//for
