@@ -7,19 +7,19 @@ def main():
 	# for standard data and MC
 
 	# change this for your samples
-	pattern = 'user.dferreir.*03082016v1_output.root'
-	pattern_data = 'user.dferreir.00*03082016v3_output.root'
-	pattern_mtt = 'user.dferreir.*03082016v4_output.root'
-	pattern_syst = 'user.dferreir.*03082016Systv4_output.root'
-	pattern_pdf = 'user.dferreir.*03082016PDFv4_output.root'
+	pattern = 'user.dferreir.*14082016v1_output.root'
+	pattern_data = 'user.dferreir.00*14082016v1_output.root'
+	#pattern_mtt = 'user.dferreir.*03082016v4_output.root'
+	pattern_syst = 'user.dferreir.*14082016Systv1_output.root'
+	pattern_pdf = 'user.dferreir.*14082016PDFv1_output.root'
 	# for QCD e
-	pattern_qcde = 'user.dferreir.*03082016QCDev3_output.root'
-	pattern_qcdmu = 'user.dferreir.*03082016QCDmuv3_output.root'
+	pattern_qcde = 'user.dferreir.*14082016QCDev1_output.root'
+	pattern_qcdmu = 'user.dferreir.*14082016QCDmuv1_output.root'
 	theScope = 'user.dferreir'
 	
 	# output directory
 	# change this for your output directory
-	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2416'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418'
 
 	# number of files per job
 	nFilesPerJob = 40
@@ -27,7 +27,7 @@ def main():
 
 	# use it to setup AnalysisTop
 	# change this for the place where you setup RootCore
-	rundir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416'
+	rundir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418'
 
 	# email to use to tell us when the job is done
 	email = 'dferreir@cern.ch'
@@ -51,46 +51,45 @@ def main():
 	# 25 ns datasets
 	names   = []
 
-	names  += ['tt']
-	names  += ['tthm']
-	names  += ['wbbjets']
-	names  += ['wccjets']
-	names  += ['wcjets']
-	names  += ['wljets']
-	names  += ['singletop']
+	#names  += ['tt']
+	#names  += ['tthm']
+	#names  += ['wbbjets']
+	#names  += ['wccjets']
+	#names  += ['wcjets']
+	#names  += ['wljets']
+	#names  += ['singletop']
 
-	names  += ['zjets']
-	names  += ["data"]
-	names  += ['qcde', 'qcdmu']
-	names  += ['vv']
-	names  += ['zprime400']
-	names  += ['zprime500']
-	names  += ['zprime750']
-	names  += ['zprime1000']
-	names  += ['zprime1250']
-	names  += ['zprime1500']
-	names  += ['zprime1750']
-	names  += ['zprime2000']
-	names  += ['zprime2250']
-	names  += ['zprime2500']
-	names  += ['zprime2750']
-	names  += ['zprime3000']
-	names  += ['zprime4000']
-	names  += ['zprime5000']
-	names  += ['kkgrav400']
-	names  += ['kkgrav500']
-	names  += ['kkgrav750']
-	names  += ['kkgrav1000']
-	names  += ['kkgrav2000']
-	names  += ['kkgrav3000']
-	names  += ['ttsyst']
-	names  += ['ttpdf']
-	names  += ['ttpowhegherwig']
-	names  += ['ttmcatnloherwig']
-	names  += ['ttradhi', 'ttradlo']
+	#names  += ['zjets']
+	#names  += ["data"]
+	#names  += ['qcde', 'qcdmu']
+	#names  += ['vv']
+	#names  += ['zprime400']
+	#names  += ['zprime500']
+	#names  += ['zprime750']
+	#names  += ['zprime1000']
+	#names  += ['zprime1250']
+	#names  += ['zprime1500']
+	#names  += ['zprime1750']
+	#names  += ['zprime2000']
+	#names  += ['zprime2250']
+	#names  += ['zprime2500']
+	#names  += ['zprime2750']
+	#names  += ['zprime3000']
+	#names  += ['zprime4000']
+	#names  += ['zprime5000']
+	#names  += ['kkgrav400']
+	#names  += ['kkgrav500']
+	#names  += ['kkgrav750']
+	#names  += ['kkgrav1000']
+	#names  += ['kkgrav2000']
+	#names  += ['kkgrav3000']
+	#names  += ['ttsyst']
+	#names  += ['ttpdf']
+	#names  += ['ttpowhegherwig']
+	#names  += ['ttmcatnloherwig']
+	#names  += ['ttradhi', 'ttradlo']
 
-	#names  = ['qcde', 'qcdmu']
-	names  = ['ttpdf']
+	names   = ['qcde', 'qcdmu']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -157,10 +156,10 @@ def main():
 	for l in response:
 		datasets_qcdmu.append(l)
 
-	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_mtt})
-	datasets_mtt = []
-	for l in response:
-		datasets_mtt.append(l)
+	#response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_mtt})
+	#datasets_mtt = []
+	#for l in response:
+	#	datasets_mtt.append(l)
 
 	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_data})
 	datasets_data = []
@@ -219,8 +218,8 @@ def main():
 			ds = datasets_qcde
 		elif sn == 'qcdmu':
 			ds = datasets_qcdmu
-		elif sn == 'tthm' or sn == 'singletop':
-			ds = datasets_mtt
+		#elif sn == 'tthm' or sn == 'singletop':
+		#	ds = datasets_mtt
 		elif sn == 'ttpdf':
 			ds = datasets_pdf
 		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:

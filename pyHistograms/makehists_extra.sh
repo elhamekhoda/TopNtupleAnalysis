@@ -1,7 +1,7 @@
 
 LUMI=14.76518
 
-PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416/TopNtupleAnalysis/plotting/plot
+PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418/TopNtupleAnalysis/plotting/plot
 
 rm -f hist_*.root
 for histogram in mtt mttPos mttNeg ; do

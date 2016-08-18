@@ -86,6 +86,7 @@ class AnaTtresSL(Analysis):
 		self.add("MET_phi", 32, -3.2, 3.2)
 		self.add("mwt", 20, 0, 200)
 		self.add("closestJetDr", 20, 0, 2.0)
+		self.add("closestJetPt", 20, 0, 200)
 		self.add("mu", 100, 0, 100)
 		self.add("vtxz", 40, -400, 400)
 		self.add("npv", 50, 0, 50)
@@ -128,16 +129,16 @@ class AnaTtresSL(Analysis):
 		frac = {}
 		frac['e'] = {'bb': 0.559, 'cc': 0.136, 'c': 0.221, 'l': 0.084}
 		frac['mu'] = {'bb': 0.590, 'cc': 0.149, 'c': 0.184, 'l': 0.077}
-		f_ca_map = {'e': 1.016079, 'mu': 0.837977}
+		f_ca_map = {'e': 0.760132, 'mu': 0.981076}
 		flav_map = {}
-		flav_map['e'] = {'bb': 0.891112, 'cc': 0.891112, 'c': 1.024976, 'l': 1.059199}
-		flav_map['mu'] = {'bb': 1.156720, 'cc': 1.156720, 'c': 0.966231, 'l': 0.919192}
+		flav_map['e'] = {'bb': 1.389717, 'cc': 1.389717, 'c': 0.919222, 'l': 0.794204}
+		flav_map['mu'] = {'bb': 1.310202, 'cc': 1.310202, 'c': 0.925191, 'l': 0.830731}
 		for c in frac:
 			for f in frac[c]:
 				frac[c][f] *= flav_map[c][f]
 		flav_map_unc = {}
-		flav_map_unc['e'] = {'bb': 0.263043, 'cc': 0.263043, 'c': 0.50, 'l': 0.0567175}
-		flav_map_unc['mu'] = {'bb': 0.108275, 'cc': 0.108275, 'c': 0.50, 'l': 0.0336468}
+		flav_map_unc['e'] = {'bb': 0.263284, 'cc': 0.263284, 'c': 0.50, 'l': 0.123311}
+		flav_map_unc['mu'] = {'bb': 0.105859, 'cc': 0.105859, 'c': 0.50, 'l': 0.0409622}
 		#flav_map_unc['e'] = {'bb': 0.50, 'cc': 0.50, 'c': 0.50, 'l': 0.50}
 		#flav_map_unc['mu'] = {'bb': 0.50, 'cc': 0.50, 'c': 0.50, 'l': 0.50}
 
@@ -358,6 +359,7 @@ class AnaTtresSL(Analysis):
 		self.h["MET"][syst].Fill(sel.met_met*1e-3, w)
 		self.h["nJets"][syst].Fill(len(sel.jet_pt), w)
 		closestJetIdx = -1
+		closestJetPt = 0
 		closestJetDr = 99
 		for i in range(0, len(sel.jet_pt)):
 			cj = ROOT.TLorentzVector()
@@ -368,8 +370,10 @@ class AnaTtresSL(Analysis):
 			if dr < closestJetDr:
 				closestJetIdx = i
 				closestJetDr = dr
+				closestJetPt = cj.Perp()
 
 		self.h["closestJetDr"][syst].Fill(closestJetDr, w)
+		self.h["closestJetPt"][syst].Fill(closestJetPt*1e-3, w)
 		nBtags = 0
 		tjets = []
 		tb = []

@@ -7,21 +7,18 @@ def main():
 	# input directory
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
-	pattern = 'user.dferreir.*03082016v1_output.root'
-	pattern_mtt = 'user.dferreir.*03082016v4_output.root'
-	pattern_data = 'user.dferreir.00*03082016v3_output.root'
+	pattern = 'user.dferreir.*14082016v1_output.root'
+	#pattern_mtt = 'user.dferreir.*14082016v1_output.root'
+	pattern_data = 'user.dferreir.00*14082016v1_output.root'
 
-	pattern_syst = 'user.dferreir.*03082016Systv4_output.root'
-	pattern_pdf = 'user.dferreir.*03082016PDFv4_output.root'
+	pattern_syst = 'user.dferreir.*14082016Systv1_output.root'
+	pattern_pdf = 'user.dferreir.*14082016PDFv1_output.root'
 	# for QCD e
-	pattern_qcde = 'user.dferreir.*03082016QCDev1_output.root'
-	pattern_qcdmu = 'user.dferreir.*03082016QCDmuv1_output.root'
+	pattern_qcde = 'user.dferreir.*14082016QCDev1_output.root'
+	pattern_qcdmu = 'user.dferreir.*14082016QCDmuv1_output.root'
 	theScope = 'user.dferreir'
 	
 	# output directory
-	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
-	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
-	#outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2416'
 	outputDir = '.'
 
 	# 25 ns datasets
@@ -126,10 +123,10 @@ def main():
 	#datasets_qcdmu = []
 	#for l in response:
 	#	datasets_qcdmu.append(l)
-	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_mtt})
-	datasets_mtt = []
-	for l in response:
-		datasets_mtt.append(l)
+	#response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_mtt})
+	#datasets_mtt = []
+	#for l in response:
+	#	datasets_mtt.append(l)
 
 	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_pdf})
 	datasets_pdf = []
@@ -168,8 +165,8 @@ def main():
 		elif sn == 'qcdmu':
 			ds = datasets_qcdmu
 			suf = 'qcdmu'
-		elif sn == 'tthm' or sn == 'singletop':
-			ds = datasets_mtt
+		#elif sn == 'tthm' or sn == 'singletop':
+		#	ds = datasets_mtt
 		elif sn == 'ttpdf':
 			ds = datasets_pdf
 			suf = 'pdf'
