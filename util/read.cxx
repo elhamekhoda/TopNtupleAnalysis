@@ -46,7 +46,11 @@ double wjetsSF(const Event &sel, const std::string &syst) {
   }
   if (!isWjets) return 1.0;
 
-  std::vector<std::string> flavours = {"bb", "cc", "c", "l"};
+  std::vector<std::string> flavours;
+  flavours.push_back("bb");
+  flavours.push_back("cc");
+  flavours.push_back("c");
+  flavours.push_back("l");
 
   double hfweight = 1.0;
   double f_ca = 1.0;
