@@ -195,6 +195,7 @@ int main(int argc, char **argv) {
   std::string only = "";
   int opt_dsid(-1);
   float opt_dsidSoW(0);
+  std::string sumWeightsFile = "";
 
   static struct extendedOption extOpt[] = {
         {"help",                  no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -202,6 +203,7 @@ int main(int argc, char **argv) {
         {"atlFastII",             required_argument,     0, 'a', "Is this AtlFastII? (0/1)", &isAtlFastII, extendedOption::eOTInt},
         {"files",                 required_argument,     0, 'f', "Input list of comma-separated files to apply the selection on. If argument has input_ and .txt in the name, it is assumed that a file list is inside the text file provided as argument.", &files, extendedOption::eOTString},
         {"fullFiles",             required_argument,     0, 'F', "Full list of input files in this sample to be used to calculate the sum of weights for the normalisation. If left untouched, the contents of --files will be assumed to represent the full sample.", &input_fullFileList, extendedOption::eOTString},
+        {"sumWeights",            required_argument,     0, 'w', "File with sum of weights.", &sumWeightsFile, extendedOption::eOTString},
         {"analysis",              required_argument,     0, 'A', "Analysis to run. Choices: AnaTtresSL", &analysis, extendedOption::eOTString},
         {"output",                required_argument,     0, 'o', "Comma-separated list of output files.", &outFile, extendedOption::eOTString},
         {"systs",                 required_argument,     0, 's', "Comma-separated list of systematics.", &systs, extendedOption::eOTString},
@@ -410,7 +412,7 @@ int main(int argc, char **argv) {
   std::map<int, std::map<std::string, std::vector<float> > > PDFsumOfWeights;
   TChain t_sumWeights("sumWeights");
   TChain t_PDFsumWeights("PDFsumWeights");
-  if(!isData) {
+  if(!isData && sumWeightsFile == "") {
     for (int k = 0; k < fullFileList.size(); ++k) {
       t_sumWeights.Add(fullFileList[k].c_str());
       if (pdf != "") t_PDFsumWeights.Add(fullFileList[k].c_str());
@@ -449,6 +451,27 @@ int main(int argc, char **argv) {
 
         for (int m = 0; m < PDFsumOfWeights[dsid][pdfList[l]].size(); ++m)
           PDFsumOfWeights[dsid][pdfList[l]][m] += valuePdf[pdfList[l]]->at(m);
+      }
+    }
+  }
+  if (!isData && sumWeightsFile != "") {
+    ifstream f(sumWeightsFile.c_str());
+    if (!f) {
+      std::cout << "Cannot open " << sumWeightsFile << std::endl;
+      std::exit(-2);
+    }
+    std::string thePathStr;
+    while (std::getline(f, thePathStr)) {
+      if (thePathStr != "") {
+        size_t idx = std::string::npos;
+        idx = thePathStr.find("\n");
+        std::string aFile = thePathStr.substr(0, idx);
+		std::stringstream ss(aFile);
+		int dsid;
+		float sw;
+		ss >> dsid >> sw;
+		sumOfWeights[dsid] = sw;
+		//std::cout << "sumOfWeights " << dsid << " = " << sumOfWeights[dsid]  << std::endl;
       }
     }
   }
