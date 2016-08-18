@@ -940,7 +940,7 @@ int main(int argc, char **argv) {
             std::string pref_pt = "tjet_bTagSF_70";
             //std::string prefe = "weight_bTagSF_70_env";
             std::string prefe = "weight_bTagSF_70";
-            if (_btags < 0 && _btags > -10) {
+            if (_btags <= 0 && _btags > -10) {
               pref = "weight_trackjet_bTagSF_70";
               //prefe = "weight_trackjet_bTagSF_70_env";
               prefe = "weight_trackjet_bTagSF_70";
