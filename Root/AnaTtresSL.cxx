@@ -3,6 +3,7 @@
  * @author Danilo Enoque Ferreira de Lima <dferreir@cern.ch>
  */
 
+#include <sstream>
 #include "TopNtupleAnalysis/Analysis.h"
 #include "TopNtupleAnalysis/AnaTtresSL.h"
 #include "TopNtupleAnalysis/Event.h"
