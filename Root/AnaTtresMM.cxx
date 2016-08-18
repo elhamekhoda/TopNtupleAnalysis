@@ -3,6 +3,7 @@
  * @author Danilo Enoque Ferreira de Lima <dferreir@cern.ch>
  */
 
+#include <sstream>
 #include "TopNtupleAnalysis/Analysis.h"
 #include "TopNtupleAnalysis/AnaTtresMM.h"
 #include "TopNtupleAnalysis/Event.h"
@@ -907,7 +908,9 @@ void AnaTtresMM::GetHistograms(const Event &evt, double weight, const std::strin
 
   int maxNtjet = (evt.tjet().size()<6) ? evt.tjet().size() : 6;
   for (int i = 0; i < maxNtjet; ++i){ 
-     std::string nameJet_pt = "tjet" + std::to_string(i)+"_pt";
+  std::stringstream ss;
+  ss << i;
+     std::string nameJet_pt = "tjet" + ss.str()+"_pt";
      h->h1D(nameJet_pt, "", suffix)->Fill(tjetPt_vector[i]*1e-3, weight);
   }
 
@@ -935,16 +938,18 @@ void AnaTtresMM::GetHistograms(const Event &evt, double weight, const std::strin
   int maxNjet = (evt.jet().size()<6) ? evt.jet().size() : 6;
   for (int i = 0; i < maxNjet; ++i){  
      
-     std::string nameJet_m = prefix+"jet" + std::to_string(i)+"_m";
+  std::stringstream ss;
+  ss << i;
+     std::string nameJet_m = prefix+"jet" + ss.str()+"_m";
      h->h1D(nameJet_m, "", suffix)->Fill(jetMass_vector[i]*1e-3, weight);
      
-     std::string nameJet_pt = prefix+"jet" + std::to_string(i)+"_pt";
+     std::string nameJet_pt = prefix+"jet" + ss.str()+"_pt";
      h->h1D(nameJet_pt, "", suffix)->Fill(jetPt_vector[i]*1e-3, weight);
      
-     std::string nameJet_eta = prefix+"jet" + std::to_string(i)+"_eta";
+     std::string nameJet_eta = prefix+"jet" + ss.str()+"_eta";
      h->h1D(nameJet_eta, "", suffix)->Fill(jetEta_vector[i], weight);
      
-     std::string nameJet_phi = prefix+"jet" + std::to_string(i)+"_phi";
+     std::string nameJet_phi = prefix+"jet" + ss.str()+"_phi";
      h->h1D(nameJet_phi, "", suffix)->Fill(jetPhi_vector[i], weight);    
   
   }//for
