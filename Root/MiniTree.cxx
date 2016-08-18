@@ -21,7 +21,8 @@ MiniTree::MiniTree(bool toWrite, const std::string &file, const std::string &nam
 
   //m_file = TFile::Open(file.c_str());
   m_chain = new TChain(name.c_str());
-  ((TChain *) m_chain)->Add(file.c_str());
+  //((TChain *) m_chain)->Add(file.c_str());
+
   m_sumWeights = 0;
 
   prepareBranches();
@@ -361,45 +362,55 @@ void MiniTree::prepareBranches() {
     }
   }
 
-  for (auto& it : m_f) {
-    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
-    m_brs[it.first] = mtFloat;
+  //for (auto& it : m_f) {
+  for (std::map<std::string, float>::iterator it = m_f.begin(); it != m_f.end(); ++it) {
+    m_chain->SetBranchAddress(it->first.c_str(), &(it->second));
+    m_brs[it->first] = mtFloat;
   }
-  for (auto& it : m_ui) {
-    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
-    m_brs[it.first] = mtUint;
+  //for (auto& it : m_ui) {
+  for (std::map<std::string, unsigned int>::iterator it = m_ui.begin(); it != m_ui.end(); ++it) {
+    m_chain->SetBranchAddress(it->first.c_str(), &(it->second));
+    m_brs[it->first] = mtUint;
   }
-  for (auto& it : m_ul64) {
-    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
-    m_brs[it.first] = mtULong64;
+  //for (auto& it : m_ul64) {
+  for (std::map<std::string, ULong64_t>::iterator it = m_ul64.begin(); it != m_ul64.end(); ++it) {
+    m_chain->SetBranchAddress(it->first.c_str(), &(it->second));
+    m_brs[it->first] = mtULong64;
   }
-  for (auto& it : m_i) {
-    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
-    m_brs[it.first] = mtInt;
+  //for (auto& it : m_i) {
+  for (std::map<std::string, int>::iterator it = m_i.begin(); it != m_i.end(); ++it) {
+    m_chain->SetBranchAddress(it->first.c_str(), &(it->second));
+    m_brs[it->first] = mtInt;
   }
-  for (auto& it : m_c) {
-    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
-    m_brs[it.first] = mtChar;
+  //for (auto& it : m_c) {
+  for (std::map<std::string, char>::iterator it = m_c.begin(); it != m_c.end(); ++it) {
+    m_chain->SetBranchAddress(it->first.c_str(), &(it->second));
+    m_brs[it->first] = mtChar;
   }
-  for (auto& it : m_vc) {
-    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
-    m_brs[it.first] = mtVChar;
+  //for (auto& it : m_vc) {
+  for (std::map<std::string, std::vector<char> *>::iterator it = m_vc.begin(); it != m_vc.end(); ++it) {
+    m_chain->SetBranchAddress(it->first.c_str(), &(it->second));
+    m_brs[it->first] = mtVChar;
   }
-  for (auto& it : m_vf) {
-    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
-    m_brs[it.first] = mtVFloat;
+  //for (auto& it : m_vf) {
+  for (std::map<std::string, std::vector<float> *>::iterator it = m_vf.begin(); it != m_vf.end(); ++it) {
+    m_chain->SetBranchAddress(it->first.c_str(), &(it->second));
+    m_brs[it->first] = mtVFloat;
   }
-  for (auto& it : m_vi) {
-    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
-    m_brs[it.first] = mtVInt;
+  //for (auto& it : m_vi) {
+  for (std::map<std::string, std::vector<int> *>::iterator it = m_vi.begin(); it != m_vi.end(); ++it) {
+    m_chain->SetBranchAddress(it->first.c_str(), &(it->second));
+    m_brs[it->first] = mtVInt;
   }
-  for (auto& it : m_vvi) {
-    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
-    m_brs[it.first] = mtVVInt;
+  //for (auto& it : m_vvi) {
+  for (std::map<std::string, std::vector<std::vector<int> > *>::iterator it = m_vvi.begin(); it != m_vvi.end(); ++it) {
+    m_chain->SetBranchAddress(it->first.c_str(), &(it->second));
+    m_brs[it->first] = mtVVInt;
   }
-  for (auto& it : m_vvf) {
-    m_chain->SetBranchAddress(it.first.c_str(), &(it.second));
-    m_brs[it.first] = mtVVFloat;
+  //for (auto& it : m_vvf) {
+  for (std::map<std::string, std::vector<std::vector<float> > *>::iterator it = m_vvf.begin(); it != m_vvf.end(); ++it) {
+    m_chain->SetBranchAddress(it->first.c_str(), &(it->second));
+    m_brs[it->first] = mtVVFloat;
   }
 }
 
