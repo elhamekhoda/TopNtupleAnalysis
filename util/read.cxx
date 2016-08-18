@@ -61,7 +61,7 @@ double wjetsSF(const Event &sel, const std::string &syst) {
 
   std::map<std::string, std::map<std::string, float> > flav_map;
   flav_map["e"]["bb"] = 1.389717; flav_map["e"]["cc"] = 1.389717; flav_map["e"]["c"] = 0.919222; flav_map["e"]["l"] = 0.794204;
-  flav_map["mu"]["bb"] = 1.310202,; flav_map["mu"]["cc"] = 1.310202; flav_map["mu"]["c"] = 0.925191; flav_map["mu"]["l"] = 0.830731;
+  flav_map["mu"]["bb"] = 1.310202; flav_map["mu"]["cc"] = 1.310202; flav_map["mu"]["c"] = 0.925191; flav_map["mu"]["l"] = 0.830731;
 
   //for (auto &c : frac) {
   //    for (auto &f : frac[c.first]) {
@@ -713,7 +713,9 @@ int main(int argc, char **argv) {
         std::string s = "pdf_";
         s += pdfList[m];
         s += "_";
-        s += std::to_string(l);
+	std::stringstream ss;
+	ss << l;
+        s += ss.str();
         systsListWithBlankNominal.push_back(s);
       }
     }
@@ -842,7 +844,9 @@ int main(int argc, char **argv) {
                 std::string s = "pdf_";
                 s += pdfList[m];
                 s += "_";
-                s += std::to_string(l);
+		std::stringstream ss;
+		ss << l;
+                s += ss.str();
                 weightSystematics.push_back(s);
               }
             }
