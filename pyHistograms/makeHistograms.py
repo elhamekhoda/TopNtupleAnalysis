@@ -36,6 +36,9 @@ def main():
 	parser.add_option("-N", "--noMttSlices",
 							 action='store_true', dest="noMttSlices", default=False,
 				  help="If set, stop vetoing high mtt events in 410000 sample.", metavar="BOOL")
+	parser.add_option("-M", "--applyMET",
+							 dest="applyMET", default="0",
+				  help="Extra MET cut to be applied.", metavar="CUT")
 	 
 	(options, args) = parser.parse_args()
 	 
@@ -159,6 +162,8 @@ def main():
 			analysisCode[k].applyQCD = options.qcd
 		if options.noMttSlices:
 			analysisCode[k].noMttSlices = True
+		if options.applyMET != "":
+			analysisCode[k].applyMET = float(options.applyMET)
 		print k, analysisCode[k], channels[k]
 	 
 	for s in systList:

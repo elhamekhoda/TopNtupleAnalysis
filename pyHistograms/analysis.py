@@ -9,10 +9,13 @@ class Analysis:
 	histSuffixes = [] # systematic copies of histograms
 	h = {} # map of histogram names to map of systematics to histograms
 	noMttSlices = False
+	applyMET = 0
 	def __init__(self, channel, suf, outputFile):
 		self.fi = ROOT.TFile(outputFile, "recreate")
 		self.ch = channel
 		self.histSuffixes = suf
+		self.noMttSlices = False
+		self.applyMET = 0
 		self.h = {}
 		self.keep = '' # can be 'bb', 'cc', 'c' or 'l' and only applies to W+jets
 
@@ -72,6 +75,7 @@ class AnaTtresSL(Analysis):
 		Analysis.__init__(self, channel, suf, outputFile)
 		self.applyQCD = False
 		self.noMttSlices = False
+		self.applyMET = 0
 		# make histograms
 		self.add("yields", 1, 0.5, 1.5)
 		self.add("yieldsPos", 1, 0.5, 1.5)
@@ -335,6 +339,9 @@ class AnaTtresSL(Analysis):
 
 		if self.applyQCD:
 			w *= self.qcdWeight(sel)
+		if self.applyMET > 0 and not ('be' in self.ch or 'bmu' in self.ch):
+			if sel.met_met*1e-3 < self.applyMET:
+				return
 
 		if sel.mcChannelNumber != 0 and hasattr(sel, "MC_ttbar_beforeFSR_m"):
 			self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
