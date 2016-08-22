@@ -21,7 +21,7 @@ MiniTree::MiniTree(bool toWrite, const std::string &file, const std::string &nam
 
   //m_file = TFile::Open(file.c_str());
   m_chain = new TChain(name.c_str());
-  //((TChain *) m_chain)->Add(file.c_str());
+  ((TChain *) m_chain)->Add(file.c_str());
 
   m_sumWeights = 0;
 
