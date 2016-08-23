@@ -55,6 +55,7 @@ def main():
 
 	names  += ['tt']
 	names  += ['tthm']
+	names  += ['ttv']
 	names  += ['wbbjets']
 	names  += ['wccjets']
 	names  += ['wcjets']
@@ -109,6 +110,7 @@ def main():
 					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_11571ipb_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', #,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'tthm': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+					'ttv':'MC15c_13TeV_25ns_FS_EXOT4_ttbarV',
 					'ttsyst':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia',
 					'ttpdf':'MC15c_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF',
 					'ttpowhegherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwig',
