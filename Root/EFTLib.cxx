@@ -185,6 +185,12 @@ namespace SM_gux_ttxgux {
 CPPProcess process;
 }
 
+
+#include "LHAPDF/LHAPDF.h"
+using namespace LHAPDF;
+
+const PDF *m_pdf = 0;
+
 double alphas(const double scale2) {
   double mZ2 = std::pow(91.1888, 2);
   double alphasMZ = 0.118;
@@ -195,7 +201,8 @@ double alphas(const double scale2) {
   return als;
 }
 
-void initEFTModels(float lambda, float cvv) {
+void initEFTModels(float lambda, float cvv, const std::string &s, int id) {
+  m_pdf = mkPDF(s.c_str(), id);
   EFT_gg_ttx::process.initProc("param_card_eft.dat");
   EFT_uux_ttx::process.initProc("param_card_eft.dat");
 
@@ -238,7 +245,7 @@ void initEFTModels(float lambda, float cvv) {
 }
 
 template <typename C>
-double getWeight(C &process, int i1pid, int i2pid, TLorentzVector i1o, TLorentzVector i2o, TLorentzVector to, TLorentzVector tbaro, std::vector<TLorentzVector> f, double aS = -1) {
+double getWeight(C &process, int i1pid, int i2pid, TLorentzVector i1o, TLorentzVector i2o, TLorentzVector to, TLorentzVector tbaro, std::vector<TLorentzVector> f, double Q2 = -1) {
   
   double weight = 0;
 
@@ -249,6 +256,7 @@ double getWeight(C &process, int i1pid, int i2pid, TLorentzVector i1o, TLorentzV
   t = to;
   tbar = tbaro;
 
+  double aS = m_pdf->alphasQ2(Q2);
   Parameters_sm::getInstance()->aS = aS;
   Parameters_TopEffTh::getInstance()->aS = aS;
   Parameters_sm::getInstance()->setDependentParameters();
@@ -307,7 +315,7 @@ double getWeight(C &process, int i1pid, int i2pid, TLorentzVector i1o, TLorentzV
   return weight;
 };
 
-double getEFTWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double aS) {
+double getEFTWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
   if (abs(i1_pid) < 6) {
     if (i1_pid > 0)
       i1_pid = 2;
@@ -348,39 +356,39 @@ double getEFTWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVect
   }
   if (i1_pid == 21 && i2_pid == 21) { // gg-> tt
     if (f_pid.size() == 0) {
-      return getWeight<EFT_gg_ttx::CPPProcess>(EFT_gg_ttx::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+      return getWeight<EFT_gg_ttx::CPPProcess>(EFT_gg_ttx::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     } else if (f_pid.size() == 1) {
       if (f_pid[0] == 21)
-        return getWeight<EFT_gg_ttxg::CPPProcess>(EFT_gg_ttxg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<EFT_gg_ttxg::CPPProcess>(EFT_gg_ttxg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     } else if (f_pid.size() == 2) {
       if (f_pid[0] == 21 && f_pid[1] == 21)
-        return getWeight(EFT_gg_ttxgg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(EFT_gg_ttxgg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       if (abs(f_pid[0]) == 2 && abs(f_pid[1]) == 2)
-        return getWeight(EFT_gg_ttxuux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(EFT_gg_ttxuux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     }
   } else if (i1_pid == 2 && i2_pid == 2) {
     if (f_pid.size() == 2) {
       if (f_pid[0] == 2 && f_pid[1] == 2) {
-        return getWeight(EFT_uu_ttxuu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(EFT_uu_ttxuu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       }
     }
   } else if (i1_pid == -2 && i2_pid == -2) {
     if (f_pid.size() == 2) {
       if (f_pid[0] == -2 && f_pid[1] == -2) {
-        return getWeight(EFT_uxux_ttxuxux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(EFT_uxux_ttxuxux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       }
     }
   } else if (i1_pid == 2 && i2_pid == -2) {
     if (f_pid.size() == 0) {
-      return getWeight<EFT_uux_ttx::CPPProcess>(EFT_uux_ttx::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+      return getWeight<EFT_uux_ttx::CPPProcess>(EFT_uux_ttx::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     } else if (f_pid.size() == 1) {
       if (f_pid[0] == 21)
-        return getWeight<EFT_uux_ttxg::CPPProcess>(EFT_uux_ttxg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<EFT_uux_ttxg::CPPProcess>(EFT_uux_ttxg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     } else if (f_pid.size() == 2) {
       if (f_pid[0] == 2 && f_pid[1] == -2) {
-        return getWeight(EFT_uux_ttxuux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(EFT_uux_ttxuux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       } else if (f_pid[0] == 21 && f_pid[1] == 21) {
-        return getWeight(EFT_uux_ttxgg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(EFT_uux_ttxgg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       }
     }
   } else if (i1_pid == 21 && abs(i2_pid) == 2) {
@@ -391,14 +399,14 @@ double getEFTWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVect
     }
     if (f_pid.size() == 1) {
       if (f_pid[0] == -2 && i2_pid == -2)
-        return getWeight<EFT_gux_ttxux::CPPProcess>(EFT_gux_ttxux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<EFT_gux_ttxux::CPPProcess>(EFT_gux_ttxux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       if (f_pid[0] ==  2 && i2_pid ==  2)
-        return getWeight<EFT_gu_ttxu::CPPProcess>(EFT_gu_ttxu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<EFT_gu_ttxu::CPPProcess>(EFT_gu_ttxu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     } else if (f_pid.size() == 2) {
       if (f_pid[1] == -2 && i2_pid == -2)
-        return getWeight<EFT_gux_ttxgux::CPPProcess>(EFT_gux_ttxgux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<EFT_gux_ttxgux::CPPProcess>(EFT_gux_ttxgux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       if (f_pid[1] == 2  && i2_pid == 2)
-        return getWeight<EFT_gu_ttxgu::CPPProcess>(EFT_gu_ttxgu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<EFT_gu_ttxgu::CPPProcess>(EFT_gu_ttxgu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     }
   }
   std::cout << "WARNING: Reached end of getEFTWeight without a weight! This cannot happen. i1 = " << i1_pid << ", i2 = " << i2_pid;
@@ -410,7 +418,7 @@ double getEFTWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVect
   return 0;
 }
 
-double getSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double aS) {
+double getSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
   if (abs(i1_pid) < 6) {
     if (i1_pid > 0)
       i1_pid = 2;
@@ -451,39 +459,39 @@ double getSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVecto
   }
   if (i1_pid == 21 && i2_pid == 21) { // gg-> tt
     if (f_pid.size() == 0) {
-      return getWeight<SM_gg_ttx::CPPProcess>(SM_gg_ttx::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+      return getWeight<SM_gg_ttx::CPPProcess>(SM_gg_ttx::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     } else if (f_pid.size() == 1) {
       if (f_pid[0] == 21)
-        return getWeight<SM_gg_ttxg::CPPProcess>(SM_gg_ttxg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<SM_gg_ttxg::CPPProcess>(SM_gg_ttxg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     } else if (f_pid.size() == 2) {
       if (f_pid[0] == 21 && f_pid[1] == 21)
-        return getWeight(SM_gg_ttxgg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(SM_gg_ttxgg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       if (abs(f_pid[0]) == 2 && abs(f_pid[1]) == 2)
-        return getWeight(SM_gg_ttxuux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(SM_gg_ttxuux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     }
   } else if (i1_pid == 2 && i2_pid == 2) {
     if (f_pid.size() == 2) {
       if (f_pid[0] == 2 && f_pid[1] == 2) {
-        return getWeight(SM_uu_ttxuu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(SM_uu_ttxuu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       }
     }
   } else if (i1_pid == -2 && i2_pid == -2) {
     if (f_pid.size() == 2) {
       if (f_pid[0] == -2 && f_pid[1] == -2) {
-        return getWeight(SM_uxux_ttxuxux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(SM_uxux_ttxuxux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       }
     }
   } else if (i1_pid == 2 && i2_pid == -2) {
     if (f_pid.size() == 0) {
-      return getWeight<SM_uux_ttx::CPPProcess>(SM_uux_ttx::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+      return getWeight<SM_uux_ttx::CPPProcess>(SM_uux_ttx::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     } else if (f_pid.size() == 1) {
       if (f_pid[0] == 21)
-        return getWeight<SM_uux_ttxg::CPPProcess>(SM_uux_ttxg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<SM_uux_ttxg::CPPProcess>(SM_uux_ttxg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     } else if (f_pid.size() == 2) {
       if (f_pid[0] == 2 && f_pid[1] == -2) {
-        return getWeight(SM_uux_ttxuux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(SM_uux_ttxuux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       } else if (f_pid[0] == 21 && f_pid[1] == 21) {
-        return getWeight(SM_uux_ttxgg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight(SM_uux_ttxgg::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       }
     }
   } else if (i1_pid == 21 && abs(i2_pid) == 2) {
@@ -494,14 +502,14 @@ double getSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVecto
     }
     if (f_pid.size() == 1) {
       if (f_pid[0] == -2 && i2_pid == -2)
-        return getWeight<SM_gux_ttxux::CPPProcess>(SM_gux_ttxux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<SM_gux_ttxux::CPPProcess>(SM_gux_ttxux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       if (f_pid[0] ==  2 && i2_pid ==  2)
-        return getWeight<SM_gu_ttxu::CPPProcess>(SM_gu_ttxu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<SM_gu_ttxu::CPPProcess>(SM_gu_ttxu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     } else if (f_pid.size() == 2) {
       if (f_pid[1] == -2 && i2_pid == -2)
-        return getWeight<SM_gux_ttxgux::CPPProcess>(SM_gux_ttxgux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<SM_gux_ttxgux::CPPProcess>(SM_gux_ttxgux::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
       if (f_pid[1] == 2  && i2_pid == 2)
-        return getWeight<SM_gu_ttxgu::CPPProcess>(SM_gu_ttxgu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, aS);
+        return getWeight<SM_gu_ttxgu::CPPProcess>(SM_gu_ttxgu::process, i1_pid, i2_pid, i1, i2, t, tbar, f, Q2);
     }
   }
   std::cout << "WARNING: Reached end of getSMWeight without a weight! This cannot happen. i1 = " << i1_pid << ", i2 = " << i2_pid;

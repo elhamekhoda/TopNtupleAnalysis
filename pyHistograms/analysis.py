@@ -10,12 +10,16 @@ class Analysis:
 	h = {} # map of histogram names to map of systematics to histograms
 	noMttSlices = False
 	applyMET = 0
+	eftLambda = -1
+	eftCvv = 0
 	def __init__(self, channel, suf, outputFile):
 		self.fi = ROOT.TFile(outputFile, "recreate")
 		self.ch = channel
 		self.histSuffixes = suf
 		self.noMttSlices = False
 		self.applyMET = 0
+		self.eftLambda = -1
+		self.eftCvv = -1
 		self.h = {}
 		self.keep = '' # can be 'bb', 'cc', 'c' or 'l' and only applies to W+jets
 
@@ -76,6 +80,8 @@ class AnaTtresSL(Analysis):
 		self.applyQCD = False
 		self.noMttSlices = False
 		self.applyMET = 0
+		self.eftLambda = -1
+		self.eftCvv = 0
 		# make histograms
 		self.add("yields", 1, 0.5, 1.5)
 		self.add("yieldsPos", 1, 0.5, 1.5)
@@ -124,6 +130,10 @@ class AnaTtresSL(Analysis):
 		#### warning: disabled for now in mc15c
 		btagsf = helpers.applyBtagSFFromFile(sel, s)
 		weight *= btagsf
+
+		# for EFT
+		if self.eftLambda > 0:
+			weight *= helpers.getEFTSMWeight(sel)
 
 		# W+jets C/A and HF syst. variations
 		# assuming b-tagging
@@ -389,7 +399,7 @@ class AnaTtresSL(Analysis):
 			if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
 				tjets.append(pb)
 				b = False
-				if sel.tjet_mv2c10 > helpers.MV2C10_CUT:
+				if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
 					nBtags += 1
 					b = True
 				tb.append(b)

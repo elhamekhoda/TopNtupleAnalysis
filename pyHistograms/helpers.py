@@ -10,28 +10,14 @@ def initBinds():
 
 #include "TopNtupleAnalysis/TtresNeutrinoBuilder.h"
 #include "TopNtupleAnalysis/TtresChi2.h"
-
-#include "Root/TtresNeutrinoBuilder.cxx"
-#include "Root/TtresChi2.cxx"
-
 #include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
-#include "Root/WeakCorrScaleFactorParam.cxx"
-
 #include "TopNtupleAnalysis/MMUtils.h"
-#include "Root/MMUtils.cxx"
-
 #include "TopNtupleAnalysis/Event.h"
-#include "Root/Event.cxx"
 #include "TopNtupleAnalysis/Electron.h"
-#include "Root/Electron.cxx"
 #include "TopNtupleAnalysis/Muon.h"
-#include "Root/Muon.cxx"
 #include "TopNtupleAnalysis/Jet.h"
-#include "Root/Jet.cxx"
 #include "TopNtupleAnalysis/LargeJet.h"
-#include "Root/LargeJet.cxx"
 #include "TopNtupleAnalysis/MObject.h"
-#include "Root/MObject.cxx"
 
 /*
 #include "xAODBTaggingEfficiency/BTaggingEfficiencyTool.h"
@@ -44,74 +30,77 @@ def initBinds():
 #include <vector>
 #include <cstdlib>
 
+#include "TopNtupleAnalysis/EFTLib.h"
+
 class WrapperExtras {
   public:
     TtresNeutrinoBuilder m_neutrinoBuilder;
     TtresChi2 m_chi2;
     WeakCorr::WeakCorrScaleFactorParam m_ewkTool;
     //PMGCorrsAndSysts m_pmg;
-	MMUtils m_mm_b0_boosted_e;
-	MMUtils m_mm_b1_boosted_e;
-	MMUtils m_mm_b0_res_e;
-	MMUtils m_mm_b1_res_e;
-	MMUtils m_mm_b0_boosted_mu;
-	MMUtils m_mm_b1_boosted_mu;
-	MMUtils m_mm_b0_res_mu;
-	MMUtils m_mm_b1_res_mu;
+    MMUtils m_mm_b0_boosted_e;
+    MMUtils m_mm_b1_boosted_e;
+    MMUtils m_mm_b0_res_e;
+    MMUtils m_mm_b1_res_e;
+    MMUtils m_mm_b0_boosted_mu;
+    MMUtils m_mm_b1_boosted_mu;
+    MMUtils m_mm_b0_res_mu;
+    MMUtils m_mm_b1_res_mu;
 
-	//BTaggingEfficiencyTool m_btageff;
+    //BTaggingEfficiencyTool m_btageff;
 
-    WrapperExtras() : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root"),
-	                  m_mm_b0_boosted_e(0, "../scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_re_0b/fake.root",
-					                    "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root"), 
-	                  m_mm_b1_boosted_e(1, "../scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_re_in1b/fake.root",
-					                    "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"), 
-	                  m_mm_b0_res_e(0, "../scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_re_0b/fake.root",
-					                    "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root"), 
-	                  m_mm_b1_res_e(1, "../scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_re_in1b/fake.root",
-					                    "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"), 
+    WrapperExtras()
+                    : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root"),
+                      m_mm_b0_boosted_e(0, "../scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_re_0b/fake.root",
+                                           "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root"), 
+                      m_mm_b1_boosted_e(1, "../scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_re_in1b/fake.root",
+                                           "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"), 
+                      m_mm_b0_res_e(0, "../scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_re_0b/fake.root",
+                                       "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root"), 
+                      m_mm_b1_res_e(1, "../scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_re_in1b/fake.root",
+                                       "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"), 
 
-	                  m_mm_b0_boosted_mu(0, "../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",
-					                     "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"), 
-	                  m_mm_b1_boosted_mu(1, "../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",
-					                     "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root"), 
+                      m_mm_b0_boosted_mu(0, "../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",
+                                            "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"), 
+                      m_mm_b1_boosted_mu(1, "../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",
+                                            "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root"), 
 
-	                  m_mm_b0_res_mu(0, "../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",
-					                     "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"), 
-	                  m_mm_b1_res_mu(1, "../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",
-					                     "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root")//, 
-					  //m_btageff("BTaggingEfficiencyTool")
-					  {
+                      m_mm_b0_res_mu(0, "../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",
+                                        "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"), 
+                      m_mm_b1_res_mu(1, "../scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root", "../scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",
+                                        "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root", "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root")//, 
+                      //m_btageff("BTaggingEfficiencyTool")
+    {
       m_chi2.Init(TtresChi2::DATA2015_MC15C);
-	  /*
-	  if (!m_btageff.setProperty("TaggerName", "MV2c10")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("OperatingPoint", "FixedCutBEff_70")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("JetAuthor", "AntiKt2PV0TrackJets")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("EfficiencyFileName", "../share/2016-20_7-13TeV-MC15-CDI-June27_v1.root")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("ScaleFactorFileName", "../share/2016-20_7-13TeV-MC15-CDI-June27_v1.root")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("ScaleFactorBCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("ScaleFactorCCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("ScaleFactorTCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("ScaleFactorLightCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("ExcludeFromEigenVectorTreatment", "")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("EfficiencyBCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("EfficiencyCCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("EfficiencyTCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.setProperty("EfficiencyLightCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
-	  if (!m_btageff.initialize()) std::cout << "Failed to initialize b-tagging eff." << std::endl;
+      /*
+      if (!m_btageff.setProperty("TaggerName", "MV2c10")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("OperatingPoint", "FixedCutBEff_70")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("JetAuthor", "AntiKt2PV0TrackJets")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("EfficiencyFileName", "../share/2016-20_7-13TeV-MC15-CDI-June27_v1.root")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("ScaleFactorFileName", "../share/2016-20_7-13TeV-MC15-CDI-June27_v1.root")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("ScaleFactorBCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("ScaleFactorCCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("ScaleFactorTCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("ScaleFactorLightCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("ExcludeFromEigenVectorTreatment", "")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("EfficiencyBCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("EfficiencyCCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("EfficiencyTCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.setProperty("EfficiencyLightCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
+      if (!m_btageff.initialize()) std::cout << "Failed to initialize b-tagging eff." << std::endl;
       CP::SystematicSet s = m_btageff.affectingSystematics();
-	  //for (CP::SystematicSet::const_iterator it = s.begin(); it != s.end(); it++) {
-	  //  std::cout << "Syst. " << it->name() << std::endl;
-	  //}
-	  */
+      //for (CP::SystematicSet::const_iterator it = s.begin(); it != s.end(); it++) {
+      //  std::cout << "Syst. " << it->name() << std::endl;
+      //}
+      */
     }
     TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
       std::vector<TLorentzVector *> vec_nu = m_neutrinoBuilder.candidatesFromWMass_Rotation(&l, met, met_phi, true);
       TLorentzVector nu;
       if (vec_nu.size() > 0) {
         nu = *(vec_nu[0]);
-		for (size_t z = 0; z < vec_nu.size(); ++z) delete vec_nu[z];
-		vec_nu.clear();
+        for (size_t z = 0; z < vec_nu.size(); ++z) delete vec_nu[z];
+        vec_nu.clear();
       }
       return nu;
     }
@@ -196,77 +185,85 @@ class WrapperExtras {
       float btagsf = 1.0;
       for (int k = 0; k < jet.size(); ++k) {
 	    float sf = 1;
-		Analysis::CalibrationDataVariables v;
-        v.jetPt = jet[k].Perp();
-		v.jetEta = jet[k].Eta();
-		v.jetTagWeight = mv2c10[k];
-		v.jetAuthor = "AntiKt2PV0TrackJets";
-		if (vetoSyst[k]) {
-	      if (!m_btageff.applySystematicVariation(CP::SystematicSet())) {
-	        std::cout << "Could not apply the sys variation " << "" << std::endl;
-	  	    exit(-1);
-	      }
-		} else {
-	      if (!m_btageff.applySystematicVariation(CP::SystematicSet(syst))) {
-	        std::cout << "Could not apply the sys variation " << syst << std::endl;
-	  	    exit(-1);
-	      }
-		}
-		
-        if (mv2c10[k] > 0.6455) {
-		  if (!m_btageff.getScaleFactor(flavour[k], v, sf)) {
-	        std::cout << "Could not get btag SF for " << syst << ", jet pt, eta, weight = " << v.jetPt << ", " << v.jetEta << ", " << v.jetTagWeight << std::endl;
-		    exit(-1);
-		  }
-		} else {
-		  if (!m_btageff.getInefficiencyScaleFactor(flavour[k], v, sf)) {
-	        std::cout << "Could not get btag ineff. SF for " << syst << ", jet pt, eta, weight = " << v.jetPt << ", " << v.jetEta << ", " << v.jetTagWeight << std::endl;
-		    exit(-1);
-		  }
-		}
-		btagsf *= sf;
-	  }
-	  return btagsf;
-    }*/
+            Analysis::CalibrationDataVariables v;
+            v.jetPt = jet[k].Perp();
+            v.jetEta = jet[k].Eta();
+            v.jetTagWeight = mv2c10[k];
+            v.jetAuthor = "AntiKt2PV0TrackJets";
+            if (vetoSyst[k]) {
+              if (!m_btageff.applySystematicVariation(CP::SystematicSet())) {
+                std::cout << "Could not apply the sys variation " << "" << std::endl;
+                exit(-1);
+              }
+            } else {
+              if (!m_btageff.applySystematicVariation(CP::SystematicSet(syst))) {
+                std::cout << "Could not apply the sys variation " << syst << std::endl;
+                exit(-1);
+              }
+            }
+
+            if (mv2c10[k] > 0.6455) {
+              if (!m_btageff.getScaleFactor(flavour[k], v, sf)) {
+                std::cout << "Could not get btag SF for " << syst << ", jet pt, eta, weight = " << v.jetPt << ", " << v.jetEta << ", " << v.jetTagWeight << std::endl;
+                exit(-1);
+              }
+            } else {
+              if (!m_btageff.getInefficiencyScaleFactor(flavour[k], v, sf)) {
+                std::cout << "Could not get btag ineff. SF for " << syst << ", jet pt, eta, weight = " << v.jetPt << ", " << v.jetEta << ", " << v.jetTagWeight << std::endl;                exit(-1);
+              }
+            }
+            btagsf *= sf;
+      }
+      return btagsf;
+    }
+    */
     double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger, float topoetcone20, int runNumber) {
-	  Event e;
-	  e.met(met.Px(), met.Py());
-	  if (isElectron) {
-	    e.electron().push_back(Electron(lep));
-		e.electron()[0].setTightPP(isTight);
-		e.electron()[0].topoetcone20() = topoetcone20;
-		e.electron()[0].sd0() = sd0;
-	  } else {
-	    e.muon().push_back(Muon(lep));
-		e.muon()[0].sd0() = sd0;
-		e.muon()[0].setTight(isTight);
-		e.muon()[0].HLT_mu20_iloose_L1MU15() = muonTrigger;
-		e.muon()[0].HLT_mu50() = muonTrigger;
-		e.muon()[0].topoetcone20() = topoetcone20;
-	  }
-	  for (int k = 0; k < jet.size(); ++k) {
-	    e.jet().push_back(Jet(jet[k]));
-	  }
-	  double w = 0;
-	  if (!btags && boosted && isElectron) {
-	    w = m_mm_b0_boosted_e.getMMweights(e, 0, isElectron, boosted, runNumber);
-	  } else if (btags && boosted && isElectron) {
-	    w = m_mm_b1_boosted_e.getMMweights(e, 0, isElectron, boosted, runNumber);
-	  } else if (!btags && !boosted && isElectron) {
-	    w = m_mm_b0_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
-	  } else if (btags && !boosted && isElectron) {
-	    w = m_mm_b1_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
-	  } else if (!btags && boosted && !isElectron) {
-	    w = m_mm_b0_boosted_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
-	  } else if (btags && boosted && !isElectron) {
-	    w = m_mm_b1_boosted_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
-	  } else if (!btags && !boosted && !isElectron) {
-	    w = m_mm_b0_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
-	  } else if (btags && !boosted && !isElectron) {
-	    w = m_mm_b1_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
-	  }
-	  return w;
-	}
+      Event e;
+      e.met(met.Px(), met.Py());
+      if (isElectron) {
+        e.electron().push_back(Electron(lep));
+        e.electron()[0].setTightPP(isTight);
+        e.electron()[0].topoetcone20() = topoetcone20;
+        e.electron()[0].sd0() = sd0;
+      } else {
+        e.muon().push_back(Muon(lep));
+    	e.muon()[0].sd0() = sd0;
+    	e.muon()[0].setTight(isTight);
+    	e.muon()[0].HLT_mu20_iloose_L1MU15() = muonTrigger;
+    	e.muon()[0].HLT_mu50() = muonTrigger;
+    	e.muon()[0].topoetcone20() = topoetcone20;
+      }
+      for (int k = 0; k < jet.size(); ++k) {
+        e.jet().push_back(Jet(jet[k]));
+      }
+      double w = 0;
+      if (!btags && boosted && isElectron) {
+        w = m_mm_b0_boosted_e.getMMweights(e, 0, isElectron, boosted, runNumber);
+      } else if (btags && boosted && isElectron) {
+        w = m_mm_b1_boosted_e.getMMweights(e, 0, isElectron, boosted, runNumber);
+      } else if (!btags && !boosted && isElectron) {
+        w = m_mm_b0_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
+      } else if (btags && !boosted && isElectron) {
+        w = m_mm_b1_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
+      } else if (!btags && boosted && !isElectron) {
+        w = m_mm_b0_boosted_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
+      } else if (btags && boosted && !isElectron) {
+        w = m_mm_b1_boosted_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
+      } else if (!btags && !boosted && !isElectron) {
+        w = m_mm_b0_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
+      } else if (btags && !boosted && !isElectron) {
+        w = m_mm_b1_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
+      }
+      return w;
+    }
+    void setEFT(float eftLambda, float eftCvv) {
+      initEFTModels(eftLambda, eftCvv, "NNPDF21_lo_as_0130_100", 0);
+    }
+    double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
+      double eftw = getEFTWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
+      double smw  = getSMWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
+      return eftw/smw;
+    }
 };
 '''
     ROOT.gInterpreter.ProcessLine("gSystem->AddIncludePath(\" -I../../RootCoreBin/include \") ")
@@ -275,9 +272,7 @@ class WrapperExtras {
     ROOT.gInterpreter.ProcessLine(".include .. ")
     ROOT.gInterpreter.ProcessLine("gROOT->LoadMacro(\"/cvmfs/atlas.cern.ch/repo/sw/ASG/AnalysisTop/2.4.12/RootCore/scripts/load_packages.C\")")
     ROOT.gInterpreter.ProcessLine("load_packages()");
-    ROOT.gInterpreter.ProcessLine("std::cout << 123 << std::endl;");
     ROOT.gInterpreter.ProcessLine(bind_neutrino)
-    ROOT.gInterpreter.ProcessLine("std::cout << 456 << std::endl;");
     return ROOT.WrapperExtras()
 
 wrapperC = initBinds()
@@ -460,6 +455,35 @@ def applyEWK(sel, s):
         w = wrapperC.getEWK(top, topbar, sel.initial_type, 2)
     else:
         w = wrapperC.getEWK(top, topbar, sel.initial_type, 0)
+    return w
+
+def getEFTSMWeight(sel):
+    #double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
+    if sel.mcChannelNumber == 0:
+        return 1
+    #if not sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]:
+    #    return 1
+    i1 = ROOT.TLorentzVector()
+    i2 = ROOT.TLorentzVector()
+    top = ROOT.TLorentzVector()
+    topbar = ROOT.TLorentzVector()
+    i1.SetPxPyPzE(sel.MC_px_me[0], sel.MC_py_me[0], sel.MC_pz_me[0], sel.MC_e_me[0])
+    i1_pid = sel.MC_id_me[0]
+    i2.SetPxPyPzE(sel.MC_px_me[1], sel.MC_py_me[1], sel.MC_pz_me[1], sel.MC_e_me[1])
+    i2_pid = sel.MC_id_me[1]
+    if sel.MC_id_me[2] > 0:
+        top.SetPxPyPzE(sel.MC_px_me[2], sel.MC_py_me[2], sel.MC_pz_me[2], sel.MC_e_me[2])
+        topbar.SetPxPyPzE(sel.MC_px_me[3], sel.MC_py_me[3], sel.MC_pz_me[3], sel.MC_e_me[3])
+    else:
+        top.SetPxPyPzE(sel.MC_px_me[3], sel.MC_py_me[3], sel.MC_pz_me[3], sel.MC_e_me[3])
+        topbar.SetPxPyPzE(sel.MC_px_me[2], sel.MC_py_me[2], sel.MC_pz_me[2], sel.MC_e_me[2])
+    f = ROOT.vector('TLorentzVector')()
+    f_pid = ROOT.vector('int')()
+    for idx in range(4,len(sel.MC_px_me)):
+        f_pid.push_back(sel.MC_id_me[idx])
+        f.push_back(ROOT.TLorentzVector(sel.MC_px_me[idx], sel.MC_py_me[idx], sel.MC_pz_me[idx], sel.MC_e_me[idx]))
+    Q2 = sel.MC_Q_me**2
+    w = wrapperC.getEFTSMWeight(i1_pid, i2_pid, f_pid, i1, i2, top, topbar, f, Q2)
     return w
 
 listWjets22 = []

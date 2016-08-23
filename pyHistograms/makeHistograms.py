@@ -39,6 +39,9 @@ def main():
 	parser.add_option("-M", "--applyMET",
 							 dest="applyMET", default="0",
 				  help="Extra MET cut to be applied.", metavar="CUT")
+	parser.add_option("-E", "--EFT",
+							 dest="EFT", default="-1,0",
+				  help="Parameters to use when reweighting LO ttbar to an EFT setup with a lambda and cvv configuration. Set lambda to a negative value to disable this.", metavar="LAMBDA,CVV")
 	 
 	(options, args) = parser.parse_args()
 	 
@@ -154,6 +157,13 @@ def main():
 	#print "Systematics: ", histSuffixes
 	#print "To loop over: ", systList
 	anaClass = getattr(analysis, options.analysis) 
+	eftLambda = -1
+	eftCvv = 0
+	if options.EFT != "":
+		eftStr = options.EFT.split(",")
+		eftLambda = float(eftStr[0])
+		eftCvv = float(eftStr[1])
+		helpers.wrapperC.setEFT(eftLambda, eftCvv)
 	for k in channels:
 		analysisCode[k] = anaClass(k, histSuffixes, channels[k])
 		analysisCode[k].keep = options.WjetsHF
@@ -164,6 +174,11 @@ def main():
 			analysisCode[k].noMttSlices = True
 		if options.applyMET != "":
 			analysisCode[k].applyMET = float(options.applyMET)
+		if options.EFT != "":
+			eftStr = options.EFT.split(",")
+			analysisCode[k].eftLambda = eftLambda
+			analysisCode[k].eftCvv = eftCvv
+
 		print k, analysisCode[k], channels[k]
 	 
 	for s in systList:
