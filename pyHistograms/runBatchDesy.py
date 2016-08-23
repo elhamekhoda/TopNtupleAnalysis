@@ -7,7 +7,8 @@ def main():
 	# for standard data and MC
 
 	# change this for your samples
-	pattern = 'user.dferreir.*14082016v1_output.root'
+	#pattern = 'user.dferreir.*14082016v1_output.root'
+	pattern = 'user.dferreir.*14082016v2_output.root'
 	pattern_data = 'user.dferreir.00*14082016v1_output.root'
 	#pattern_mtt = 'user.dferreir.*03082016v4_output.root'
 	pattern_syst = 'user.dferreir.*14082016Systv1_output.root'
@@ -19,7 +20,8 @@ def main():
 	
 	# output directory
 	# change this for your output directory
-	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_highmet'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jes'
 
 	# number of files per job
 	nFilesPerJob = 40
@@ -51,45 +53,51 @@ def main():
 	# 25 ns datasets
 	names   = []
 
-	#names  += ['tt']
-	#names  += ['tthm']
-	#names  += ['wbbjets']
-	#names  += ['wccjets']
-	#names  += ['wcjets']
-	#names  += ['wljets']
-	#names  += ['singletop']
+	names  += ['tt']
+	names  += ['tthm']
+	names  += ['wbbjets']
+	names  += ['wccjets']
+	names  += ['wcjets']
+	names  += ['wljets']
+	names  += ['singletop']
 
-	#names  += ['zjets']
-	#names  += ["data"]
-	#names  += ['qcde', 'qcdmu']
-	#names  += ['vv']
-	#names  += ['zprime400']
-	#names  += ['zprime500']
-	#names  += ['zprime750']
-	#names  += ['zprime1000']
-	#names  += ['zprime1250']
-	#names  += ['zprime1500']
-	#names  += ['zprime1750']
-	#names  += ['zprime2000']
-	#names  += ['zprime2250']
-	#names  += ['zprime2500']
-	#names  += ['zprime2750']
-	#names  += ['zprime3000']
-	#names  += ['zprime4000']
-	#names  += ['zprime5000']
-	#names  += ['kkgrav400']
-	#names  += ['kkgrav500']
-	#names  += ['kkgrav750']
-	#names  += ['kkgrav1000']
-	#names  += ['kkgrav2000']
-	#names  += ['kkgrav3000']
-	#names  += ['ttsyst']
-	#names  += ['ttpdf']
-	#names  += ['ttpowhegherwig']
-	#names  += ['ttmcatnloherwig']
-	#names  += ['ttradhi', 'ttradlo']
+	names  += ['zjets']
+	names  += ["data"]
+	names  += ['qcde', 'qcdmu']
+	names  += ['vv']
+	names  += ['zprime400']
+	names  += ['zprime500']
+	names  += ['zprime750']
+	names  += ['zprime1000']
+	names  += ['zprime1250']
+	names  += ['zprime1500']
+	names  += ['zprime1750']
+	names  += ['zprime2000']
+	names  += ['zprime2250']
+	names  += ['zprime2500']
+	names  += ['zprime2750']
+	names  += ['zprime3000']
+	names  += ['zprime4000']
+	names  += ['zprime5000']
+	names  += ['kkgrav400']
+	names  += ['kkgrav500']
+	names  += ['kkgrav750']
+	names  += ['kkgrav1000']
+	names  += ['kkgrav2000']
+	names  += ['kkgrav3000']
+	names  += ['ttsyst']
+	names  += ['ttpdf']
+	names  += ['ttpowhegherwig']
+	names  += ['ttmcatnloherwig']
+	names  += ['ttradhi', 'ttradlo']
 
-	names   = ['qcde', 'qcdmu']
+	#names  += ['eftl30c1']
+	#names  += ['eftl35c1']
+	#names  += ['eftl40c1']
+	#names  += ['eftl45c1']
+	#names  += ['eftl50c1']
+	#names  += ['eftl55c1']
+	#names  += ['eftl60c1']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -130,6 +138,13 @@ def main():
 					'kkgrav1000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt1000',
 					'kkgrav2000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt2000',
 					'kkgrav3000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt3000',
+					'eftl30c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl35c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl40c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl45c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl55c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl55c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl60c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 		   }
 	
 	import TopExamples.grid
@@ -302,7 +317,7 @@ def main():
 		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:
 			theSysts = "nominal"
 			isData = ' --noMttSlices '
-
+		
 		if "wbbjets" in sn:
 			extra = ' --WjetsHF bb '
 		elif 'wccjets' in sn:
@@ -311,7 +326,20 @@ def main():
 			extra = ' --WjetsHF c'
 		elif 'wljets' in sn:
 			extra = ' --WjetsHF l'
+		if 'eft' in sn:
+			extraEFT = {
+					'eftl30c1': ' --EFT 3000,1',
+					'eftl35c1': ' --EFT 3500,1',
+					'eftl40c1': ' --EFT 4000,1',
+					'eftl45c1': ' --EFT 4500,1',
+					'eftl50c1': ' --EFT 5000,1',
+					'eftl55c1': ' --EFT 5500,1',
+					'eftl60c1': ' --EFT 6000,1',
+					}
+			extra = extraEFT[sn]
 	
+		#extra += '  --applyMET 80 '
+
 		for job in forJobs:
 			jobName = sn+'_'+job
 			infile = outputDir+"/input_"+jobName+'.txt'
@@ -356,7 +384,7 @@ def main():
 			subcmd = 'qsub '+runfile
 			os.system(subcmd)
 			#sys.exit(0)
-	
+
 if __name__ == '__main__':
 	import os
 	fr = open("get_proxy.sh", "w")
