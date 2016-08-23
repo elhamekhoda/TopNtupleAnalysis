@@ -77,16 +77,16 @@ def plot(t):
     ftxt.write('muexp_m2  '+str(muexp_m2)+'\n')
     ftxt.write('xsec      '+str(xs[t][i])+'\n')
     ftxt.close()
-    print t,'\t',mass[t][I]*1000,"GeV\texp: ", muexp*xs[t][I], "\tobs:",muobs*xs[t][I],"pb"
-    sigma1.SetPoint(i, mass[t][I], muexp*xs[t][I])
-    sigma1.SetPointError(i, 0, 0, muexp_m1*xs[t][I], muexp_p1*xs[t][I])
-    sigma2.SetPoint(i, mass[t][I], muexp*xs[t][I])
-    sigma2.SetPointError(i, 0, 0, muexp_m2*xs[t][I], muexp_p2*xs[t][I])
+    print t,'\t',mass[t][I]*1000,"GeV\texp: ", muexp, "\tobs:",muobs,"pb"
+    sigma1.SetPoint(i, mass[t][I], muexp)
+    sigma1.SetPointError(i, 0, 0, muexp_m1, muexp_p1)
+    sigma2.SetPoint(i, mass[t][I], muexp)
+    sigma2.SetPointError(i, 0, 0, muexp_m2, muexp_p2)
     xsec12.SetPoint(i, mass[t][I], xs[t][I])
     if 'zprime' in t:
       xsec3.SetPoint(i, mass[t][I], xs3[t][I])
-    nom.SetPoint(i, mass[t][I], muexp*xs[t][I])
-    obs.SetPoint(i, mass[t][I], muobs*xs[t][I])
+    nom.SetPoint(i, mass[t][I], muexp)
+    obs.SetPoint(i, mass[t][I], muobs)
     i+=1
   
   nom.SetLineWidth(2);
@@ -111,14 +111,14 @@ def plot(t):
   sigma1.SetMarkerColor(3);
   sigma1.SetLineColor(3);
 
-  l.AddEntry(nom, "Expected", "L")
-  #l.AddEntry(obs, "Observed", "LP")
+  l.AddEntry(nom, "Expected 95% CLs upper limit", "L")
+  #l.AddEntry(obs, "Observed 95% CLs upper limit", "LP")
   l.AddEntry(sigma1, "#pm 1 #sigma", "F")
   l.AddEntry(sigma2, "#pm 2 #sigma", "F")
   if 'zprime' in t:
     l.AddEntry(xsec12, "LO Z'_{#it{TC2}} #Gamma=1.2% cross section #times 1.3", "L")
   elif 'kkG' in t:
-    l.AddEntry(xsec12, "LO KK graviton_cross section", "L")
+    l.AddEntry(xsec12, "LO KK graviton cross section", "L")
   if 'zprime' in t:
     l.AddEntry(xsec3, "LO Z'_{#it{TC2}} #Gamma=3% cross section #times 1.3", "L")
 

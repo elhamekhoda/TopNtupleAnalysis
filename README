@@ -8,11 +8,21 @@ The framework works by reading the flat ntuples using the class MiniTree, as cal
 from read.cxx and then running an analysis class (that derives of Analysis) on each event and
 producing histograms to be saved in the output(s).
 
-To compile the code, do (only ROOT must be setup):
+To compile the code, do in this directory (only ROOT must be setup):
 make
+
+You can also compile the code using RootCore, by setting up RootCore (setupATLAS and then rcSetup Top,2.4.18) and doing:
+rc find_packages
+rc compile
 
 To check your options on how to run it:
 ./read --help
+
+If you used RootCore, you must run it with:
+$ROOTCOREBIN/bin/x86_64-slc6-gcc49-opt/read --help
+
+(this will be implied in what follows)
+
 
 For example:
 ./read --files input1.root,input2.root --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0
@@ -42,13 +52,39 @@ input2.root
 
 Take a look at the Root/AnaTtresSL.cxx and TopNtupleAnalysis/AnaTtresSL.h files for an analysis example.
 
-For now this code uses an input file called EventCount.root to find out the number of events before skimming.
-This file can be produced using:
-python scripts/yieldsFromAmi.py 
-
 If, however, the mini flat ntuple files contain a histogram with the sum of weights (which is the correct
 way of doing this), one can just read the information from there.
 
+You can also write a sumOfWeights.txt file containing, in each line the dataset ID and the sum of weights and use:
+./read --files input.txt --analysis AnaTtresSL --output re.root,rmu.root,be.root,bmu.root --data 0 --sumWeights sumOfWeights.txt
+
+This will speed it up.
+
+Finally, it is recommended to use the Python code in pyHistograms, which will also link to the C++ code, but it should be easier to adapt to your needs.
+To do that, please compile the code using RootCore, so that it can link against the library created by RootCore.
+In that Python code, you can run it with:
+
+cd pyHistograms
+
+# the following make a list of all input MC files (adapt it to point to the input files list)
+# by default it reads the files directly from the Grid to avoid downloading them
+python makeInputLists.py
+
+# this generates the text files with the sum of weights
+# using the input files above
+python sumWeights.py
+
+# this generates the histograms itself:
+./makeHistograms.py - --files input.txt --output be:be.root,bmu:bmu.root,re:re.root,rmu:rmu.root --analysis AnaTtresSL --systs nominal
+
+You can set --systs to all to run over all systematics (takes much longer), or give it a comma-separated list of systematics.
+You can use the option -d to indicate you want to run over data.
+The syntax of the --output flag is to provide a comma-separated list of "XXX:YYY", where XXX indicates the channel to run (it will be read by the analysis in analysis.py,
+specified in the --analysis flag) and YYY indicates the output ROOT file for that channel.
+AnaTtresSL in analysis.py is set up to have the be, bmu, re, rmu channels as well as be2015, bmu2015, re2015, rmu2016, be2016, bmu2016, re2016, rmu2016. But you can create
+a new class in analysis.py of your choice and define different channels.
+
+Check runBatchDesy.py to check how to submit it to the Grid.
 
 Auxiliary scripts
 ---------------------------

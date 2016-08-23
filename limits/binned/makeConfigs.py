@@ -5,8 +5,8 @@ from inputs import *
 import socket, random, re
 
 # change those:
-setdir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2416'
-mydir = '/nfs/dust/atlas/user/danilo/hists_sr2416/TRexFitter'
+setdir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418'
+mydir = '/nfs/dust/atlas/user/danilo/hists_sr2418/TRexFitter'
 
 def fixFile(template, final, i, doBOnlyFit):
   fr = open(template, 'r')
