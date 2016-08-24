@@ -45,6 +45,17 @@ double wjetsSF(const Event &sel, const std::string &syst) {
     isWjets = true;
   }
   if (!isWjets) return 1.0;
+  const unsigned int runNumber = sel.runNumber_or_RandomRunNumber();
+
+  int year = 2015;
+  if (runNumber > 297730) {
+    year = 2016;
+  }
+
+  int nj = 2;
+  if (sel.jet().size() >= 4) {
+    nj = 4;
+  }
 
   std::vector<std::string> flavours;
   flavours.push_back("bb");
@@ -54,31 +65,92 @@ double wjetsSF(const Event &sel, const std::string &syst) {
 
   double hfweight = 1.0;
   double f_ca = 1.0;
-  std::map<std::string, std::map<std::string, float> > frac;
-  frac["e"]  = std::map<std::string, float>();
-  frac["mu"] = std::map<std::string, float>();
-  frac["e"]["bb"] = 0.559; frac["e"]["cc"] = 0.136; frac["e"]["c"] = 0.221; frac["e"]["l"] = 0.084;
-  frac["mu"]["bb"] = 0.590; frac["mu"]["cc"] = 0.149; frac["mu"]["c"] = 0.184; frac["mu"]["l"] = 0.077;
+  std::map<int, std::map<int, std::map<std::string, std::map<std::string, float> > > > frac;
+  frac[2015] = std::map<int, std::map<std::string, std::map<std::string, float> > >();
+  frac[2016] = std::map<int, std::map<std::string, std::map<std::string, float> > >();
+  frac[2015][2] = std::map<std::string, std::map<std::string, float> >();
+  frac[2016][2] = std::map<std::string, std::map<std::string, float> >();
+  frac[2015][4] = std::map<std::string, std::map<std::string, float> >();
+  frac[2016][4] = std::map<std::string, std::map<std::string, float> >();
+  frac[2015][2]["e"]  = std::map<std::string, float>();
+  frac[2015][2]["mu"] = std::map<std::string, float>();
+  frac[2016][2]["e"]  = std::map<std::string, float>();
+  frac[2016][2]["mu"] = std::map<std::string, float>();
+  frac[2015][4]["e"]  = std::map<std::string, float>();
+  frac[2015][4]["mu"] = std::map<std::string, float>();
+  frac[2016][4]["e"]  = std::map<std::string, float>();
+  frac[2016][4]["mu"] = std::map<std::string, float>();
 
-  std::map<std::string, float> f_ca_map;
-  f_ca_map["e"] = 0.760132; f_ca_map["mu"] = 0.981076;
+  frac[2015][2]["e"]["bb"] = 0.091; frac[2015][2]["e"]["cc"] = 0.070; frac[2015][2]["e"]["c"] = 0.226; frac[2015][2]["e"]["l"] = 0.613;
+  frac[2015][2]["mu"]["bb"] = 0.088; frac[2015][2]["mu"]["cc"] = 0.065; frac[2015][2]["mu"]["c"] = 0.216; frac[2015][2]["mu"]["l"] = 0.631;
 
-  std::map<std::string, std::map<std::string, float> > flav_map;
-  flav_map["e"]["bb"] = 1.389717; flav_map["e"]["cc"] = 1.389717; flav_map["e"]["c"] = 0.919222; flav_map["e"]["l"] = 0.794204;
-  flav_map["mu"]["bb"] = 1.310202; flav_map["mu"]["cc"] = 1.310202; flav_map["mu"]["c"] = 0.925191; flav_map["mu"]["l"] = 0.830731;
+  frac[2016][2]["e"]["bb"] = 0.090; frac[2016][2]["e"]["cc"] = 0.067; frac[2016][2]["e"]["c"] = 0.232; frac[2016][2]["e"]["l"] = 0.611;
+  frac[2016][2]["mu"]["bb"] = 0.089; frac[2016][2]["mu"]["cc"] = 0.065; frac[2016][2]["mu"]["c"] = 0.221; frac[2016][2]["mu"]["l"] = 0.625;
+
+  frac[2015][4]["e"]["bb"] = 0.140; frac[2015][4]["e"]["cc"] = 0.157; frac[2015][4]["e"]["c"] = 0.220; frac[2015][4]["e"]["l"] = 0.483;
+  frac[2015][4]["mu"]["bb"] = 0.153; frac[2015][4]["mu"]["cc"] = 0.155; frac[2015][4]["mu"]["c"] = 0.210; frac[2015][4]["mu"]["l"] = 0.482;
+
+  frac[2016][4]["e"]["bb"] = 0.148; frac[2016][4]["e"]["cc"] = 0.155; frac[2016][4]["e"]["c"] = 0.221; frac[2016][4]["e"]["l"] = 0.487;
+  frac[2016][4]["mu"]["bb"] = 0.146; frac[2016][4]["mu"]["cc"] = 0.149; frac[2016][4]["mu"]["c"] = 0.213; frac[2016][4]["mu"]["l"] = 0.492;
+
+  std::map<int, std::map<int, std::map<std::string, float> > > f_ca_map;
+  f_ca_map[2015] = std::map<int, std::map<std::string, float> >();
+  f_ca_map[2016] = std::map<int, std::map<std::string, float> >();
+  f_ca_map[2015][2] = std::map<std::string, float>();
+  f_ca_map[2016][2] = std::map<std::string, float>();
+  f_ca_map[2015][4] = std::map<std::string, float>();
+  f_ca_map[2016][4] = std::map<std::string, float>();
+
+  f_ca_map[2015][2]["e"] = 1.01; f_ca_map[2015][2]["mu"] = 1.02;
+  f_ca_map[2016][2]["e"] = 0.91; f_ca_map[2016][2]["mu"] = 1.11;
+
+  f_ca_map[2015][4]["e"] = 0.76; f_ca_map[2015][4]["mu"] = 0.94;
+  f_ca_map[2016][4]["e"] = 0.90; f_ca_map[2016][4]["mu"] = 0.82;
+
+  std::map<int, std::map<int, std::map<std::string, std::map<std::string, float> > > > flav_map;
+  flav_map[2015] = std::map<int, std::map<std::string, std::map<std::string, float> > >();
+  flav_map[2016] = std::map<int, std::map<std::string, std::map<std::string, float> > >();
+  flav_map[2015][2] = std::map<std::string, std::map<std::string, float> >();
+  flav_map[2016][2] = std::map<std::string, std::map<std::string, float> >();
+  flav_map[2015][4] = std::map<std::string, std::map<std::string, float> >();
+  flav_map[2016][4] = std::map<std::string, std::map<std::string, float> >();
+  flav_map[2015][2]["e"] = std::map<std::string, float>();
+  flav_map[2015][2]["mu"] = std::map<std::string, float>();
+  flav_map[2016][2]["e"] = std::map<std::string, float>();
+  flav_map[2016][2]["mu"] = std::map<std::string, float>();
+  flav_map[2015][4]["e"] = std::map<std::string, float>();
+  flav_map[2015][4]["mu"] = std::map<std::string, float>();
+  flav_map[2016][4]["e"] = std::map<std::string, float>();
+  flav_map[2016][4]["mu"] = std::map<std::string, float>();
+
+  flav_map[2015][2]["e"]["bb"] = 1.57; flav_map[2015][2]["e"]["cc"] = 1.57; flav_map[2015][2]["e"]["c"] = 1.00; flav_map[2015][2]["e"]["l"] = 0.85;
+  flav_map[2016][2]["e"]["bb"] = 2.06; flav_map[2016][2]["e"]["cc"] = 2.06; flav_map[2016][2]["e"]["c"] = 1.00; flav_map[2016][2]["e"]["l"] = 0.73;
+
+  flav_map[2015][2]["mu"]["bb"] = 1.49; flav_map[2015][2]["mu"]["cc"] = 1.49; flav_map[2015][2]["mu"]["c"] = 1.00; flav_map[2015][2]["mu"]["l"] = 0.88;
+  flav_map[2016][2]["mu"]["bb"] = 1.70; flav_map[2016][2]["mu"]["cc"] = 1.70; flav_map[2016][2]["mu"]["c"] = 1.00; flav_map[2016][2]["mu"]["l"] = 0.83;
+
+  flav_map[2015][4]["e"]["bb"] = 1.43; flav_map[2015][4]["e"]["cc"] = 1.43; flav_map[2015][4]["e"]["c"] = 0.91; flav_map[2015][4]["e"]["l"] = 0.78;
+  flav_map[2016][4]["e"]["bb"] = 1.73; flav_map[2016][4]["e"]["cc"] = 1.73; flav_map[2016][4]["e"]["c"] = 0.84; flav_map[2016][4]["e"]["l"] = 0.61;
+
+  flav_map[2015][4]["mu"]["bb"] = 1.37; flav_map[2015][4]["mu"]["cc"] = 1.37; flav_map[2015][4]["mu"]["c"] = 0.91; flav_map[2015][4]["mu"]["l"] = 0.80;
+  flav_map[2016][4]["mu"]["bb"] = 1.52; flav_map[2016][4]["mu"]["cc"] = 1.52; flav_map[2016][4]["mu"]["c"] = 0.89; flav_map[2016][4]["mu"]["l"] = 0.74;
 
   //for (auto &c : frac) {
   //    for (auto &f : frac[c.first]) {
-  for (std::map<std::string, std::map<std::string, float> >::iterator it = frac.begin(); it != frac.end(); ++it) {
-  	for (std::map<std::string, float>::iterator jt = frac[it->first].begin(); jt != frac[it->first].end(); ++jt) {
+  for (std::map<std::string, std::map<std::string, float> >::iterator it = frac[year][nj].begin(); it != frac[year][nj].end(); ++it) {
+  	for (std::map<std::string, float>::iterator jt = frac[year][nj][it->first].begin(); jt != frac[year][nj][it->first].end(); ++jt) {
 	  //frac[c.first][f.first] *= flav_map[c.first][f.first];
-	  frac[it->first][jt->first] *= flav_map[it->first][jt->first];
+	  frac[year][nj][it->first][jt->first] *= flav_map[year][nj][it->first][jt->first];
 	}
   }
 
-  std::map<std::string, std::map<std::string, float> > flav_map_unc;
-  flav_map_unc["e"]["bb"] = 0.263284; flav_map_unc["e"]["cc"] = 0.263284; flav_map_unc["e"]["c"] = 0.500; flav_map_unc["e"]["l"] = 0.123311;
-  flav_map_unc["mu"]["bb"] = 0.105859; flav_map_unc["mu"]["cc"] = 0.105859; flav_map_unc["mu"]["c"] = 0.500; flav_map_unc["mu"]["l"] = 0.0409622;
+  std::map<int, std::map<std::string, std::map<std::string, float> > > flav_map_unc;
+  flav_map_unc[2015] = std::map<std::string, std::map<std::string, float> >();
+  flav_map_unc[2016] = std::map<std::string, std::map<std::string, float> >();
+  flav_map_unc[2015]["e"]["bb"] = 0.253; flav_map_unc[2015]["e"]["cc"] = 0.253; flav_map_unc[2015]["e"]["c"] = 0.500; flav_map_unc[2015]["e"]["l"] = 0.123;
+  flav_map_unc[2015]["mu"]["bb"] = 0.100; flav_map_unc[2015]["mu"]["cc"] = 0.100; flav_map_unc[2015]["mu"]["c"] = 0.500; flav_map_unc[2015]["mu"]["l"] = 0.041;
+  flav_map_unc[2016]["e"]["bb"] = 0.043; flav_map_unc[2016]["e"]["cc"] = 0.043; flav_map_unc[2016]["e"]["c"] = 0.500; flav_map_unc[2016]["e"]["l"] = 0.031;
+  flav_map_unc[2016]["mu"]["bb"] = 0.046; flav_map_unc[2016]["mu"]["cc"] = 0.046; flav_map_unc[2016]["mu"]["c"] = 0.500; flav_map_unc[2016]["mu"]["l"] = 0.023;
 
   std::string chan = "";
   if (sel.electron().size() == 1) {
@@ -99,9 +171,9 @@ double wjetsSF(const Event &sel, const std::string &syst) {
     flav = "l";
   }
 
-  f_ca = f_ca_map[chan];
+  f_ca = f_ca_map[year][nj][chan];
   double norm = 1.0;
-  hfweight = flav_map[chan][flav];
+  hfweight = flav_map[year][nj][chan][flav];
 
   std::string flavunc = "";
   if (syst.find("wbb__") != std::string::npos) {
@@ -125,10 +197,10 @@ double wjetsSF(const Event &sel, const std::string &syst) {
   for (std::vector<std::string>::iterator it = flavours.begin(); it != flavours.end(); ++it) {
     std::string f = *it;
     if (flavunc == f) {
-	  norm += (1.0 + updown*flav_map_unc[chan][f])*frac[chan][f];
-	  hfweight *= (1.0 + updown*flav_map_unc[chan][f]);
+	  norm += (1.0 + updown*flav_map_unc[year][chan][f])*frac[year][nj][chan][f];
+	  hfweight *= (1.0 + updown*flav_map_unc[year][chan][f]);
 	} else {
-	  norm += frac[chan][f];
+	  norm += frac[year][nj][chan][f];
 	}
   }
   if (syst == "wnorm__1up") {
