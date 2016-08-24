@@ -40,7 +40,7 @@ def main():
 							 dest="applyMET", default="0",
 				  help="Extra MET cut to be applied.", metavar="CUT")
 	parser.add_option("-E", "--EFT",
-							 dest="EFT", default="-1,0",
+							 dest="EFT", default="",
 				  help="Parameters to use when reweighting LO ttbar to an EFT setup with a lambda and cvv configuration. Set lambda to a negative value to disable this.", metavar="LAMBDA,CVV")
 	 
 	(options, args) = parser.parse_args()
@@ -85,6 +85,16 @@ def main():
 	if options.systs == 'all':
 		systList = []
 		systList.append('nominal')
+		systList.append('wnorm__1up')
+		systList.append('wnorm__1down')
+		systList.append('wbb__1up')
+		systList.append('wbb__1down')
+		systList.append('wcc__1up')
+		systList.append('wcc__1down')
+		systList.append('wc__1up')
+		systList.append('wc__1down')
+		systList.append('wl__1up')
+		systList.append('wl__1down')
 		for i in range(0, 4):
 			systList.append('btagbSF_'+str(i)+'__1up')
 			systList.append('btagbSF_'+str(i)+'__1down')
@@ -114,16 +124,6 @@ def main():
 		systList.remove('')
 		systList.append('ttEWK__1up')
 		systList.append('ttEWK__1down')
-		systList.append('wnorm__1up')
-		systList.append('wnorm__1down')
-		systList.append('wbb__1up')
-		systList.append('wbb__1down')
-		systList.append('wcc__1up')
-		systList.append('wcc__1down')
-		systList.append('wc__1up')
-		systList.append('wc__1down')
-		systList.append('wl__1up')
-		systList.append('wl__1down')
 		systematics  = 'EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up'
 		systematics += ',JET_JER_SINGLE_NP__1up'
 		# 3NP for the akt4 jets
