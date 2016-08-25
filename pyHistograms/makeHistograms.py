@@ -42,6 +42,9 @@ def main():
 	parser.add_option("-E", "--EFT",
 							 dest="EFT", default="",
 				  help="Parameters to use when reweighting LO ttbar to an EFT setup with a lambda and cvv configuration. Set lambda to a negative value to disable this.", metavar="LAMBDA,CVV")
+	parser.add_option("-p", "--pdfForWeight",
+							 dest="pdfForWeight", default="NNPDF21_lo_as_0130_100",
+				  help="PDF to use to get alpha_S when doing either the EFT or the scalar model reweighting.", metavar="PDF")
 	 
 	(options, args) = parser.parse_args()
 	 
@@ -172,6 +175,7 @@ def main():
 		eftStr = options.EFT.split(",")
 		eftLambda = float(eftStr[0])
 		eftCvv = float(eftStr[1])
+		helpers.wrapperC.initPDF(options.pdfForWeight)
 		helpers.wrapperC.setEFT(eftLambda, eftCvv)
 	for k in channels:
 		analysisCode[k] = anaClass(k, histSuffixes, channels[k])

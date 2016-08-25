@@ -256,8 +256,14 @@ class WrapperExtras {
       }
       return w;
     }
+    void initPDF(const std::string &s = "NNPDF21_lo_as_0130_100") {
+      initPDFForReweighting(s.c_str(), 0);
+    }
+    double alphaS(double Q2) {
+      return pdfAlphaS(Q2);
+    }
     void setEFT(float eftLambda, float eftCvv) {
-      initEFTModels(eftLambda, eftCvv, "NNPDF21_lo_as_0130_100", 0);
+      initEFTModels(eftLambda, eftCvv);
     }
     double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
       double eftw = getEFTWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);

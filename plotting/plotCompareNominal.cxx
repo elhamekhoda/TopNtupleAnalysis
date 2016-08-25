@@ -162,6 +162,24 @@ int main(int argc, char **argv) {
           systCalc.add(syst_items[z]+std::string("_smooth"), new HistNorm(up*0.50, pattern), syst_items[z]+std::string(" smooth"));
         }
         systCalc.add(syst_items[z], new HistNorm(up*0.50, pattern), syst_items[z]);
+      } else if (syst_items[z].find("WJETS") == 0) {
+        if (smooth) {
+          nsyst_items.push_back(syst_items[z]+std::string("_smooth")); nsyst_titles.push_back(syst_titles[z]+std::string(" smooth"));
+        }
+        nsyst_items.push_back(syst_items[z]); nsyst_titles.push_back(syst_titles[z]);
+		double up = 1.0;
+		if (syst_items[z].find("down") != std::string::npos) {
+		  up = -1.0;
+		}
+		std::vector<std::string> pattern;
+		pattern.push_back("wbbjets");
+		pattern.push_back("wccjets");
+		pattern.push_back("wcjets");
+		pattern.push_back("wljets");
+        if (smooth) {
+          systCalc.add(syst_items[z]+std::string("_smooth"), new HistNorm(up*1.00, pattern), syst_items[z]+std::string(" smooth"));
+        }
+        systCalc.add(syst_items[z], new HistNorm(up*1.00, pattern), syst_items[z]);
       } else {
         if (smooth) {
           nsyst_items.push_back(syst_items[z]+std::string("_smooth")); nsyst_titles.push_back(syst_titles[z]+std::string(" smooth"));

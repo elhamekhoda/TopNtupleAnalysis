@@ -40,6 +40,7 @@ for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2
     $PLOTCOMP --logY 1 --mcOnly 1 --syst qcd__1up,qcd__1down --systTitles "QCD up,QCD down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_qcd.pdf
     $PLOTCOMP --mcOnly 0 --syst qcd__1up,qcd__1down --systTitles "QCD up,QCD down" -l $LUMI -c $ch -h MET -o syst_${ch}_MET_qcd.pdf
     $PLOTCOMP --mcOnly 0 --syst qcd__1up,qcd__1down --systTitles "QCD up,QCD down" -l $LUMI -c $ch -h mwt -o syst_${ch}_mwt_qcd.pdf
+    $PLOTCOMP --mcOnly 0 --syst WJETS__1up,WJETS__1down --systTitles "Wjets 100% up,Wjets 100% down" -l $LUMI -c $ch -h mwt -o syst_${ch}_mwt_wjets100p.pdf
 
     # systematics in mtt
     $PLOTCOMP --logY 1 --mcOnly 1 -c $ch -h mtt -l $LUMI --other ttpowhegherwig,ttmcatnloherwig --titles "Powheg+Herwig,MC@NLO+Herwig" -o systmodel_${ch}_mtt_mcgen.pdf
@@ -47,10 +48,30 @@ for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2
     $PLOTCOMP --logY 1 --mcOnly 1 -c $ch -h mtt -l $LUMI --other ttradlo,ttradhi --titles "ISR/FSR(low),ISR/FSR(high)" -o systmodel_${ch}_mtt_isrfsr.pdf
 
     $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_JER_SINGLE_NP__1up --systTitles "akt4 JER" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jer.pdf
-    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_1__1down --systTitles "akt4 JES 1 up,akt4 JES 1 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes1.pdf
-    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_2__1down --systTitles "akt4 JES 2 up,akt4 JES 2 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes2.pdf
-    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_NPScenario1_JET_GroupedNP_3__1up,JET_NPScenario1_JET_GroupedNP_3__1down --systTitles "akt4 JES 3 up,akt4 JES 3 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes3.pdf
-    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1up,JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1down --systTitles "akt4 JES eta interc. up,akt4 JES eta interc. down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jesetainter.pdf
+
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_EffectiveNP_1__1up,JET_19NP_JET_EffectiveNP_1__1down --systTitles "akt4 JES 1 up,akt4 JES 1 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes1.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_EffectiveNP_2__1up,JET_19NP_JET_EffectiveNP_2__1down --systTitles "akt4 JES 2 up,akt4 JES 2 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes2.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_EffectiveNP_3__1up,JET_19NP_JET_EffectiveNP_3__1down --systTitles "akt4 JES 3 up,akt4 JES 3 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes3.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_EffectiveNP_4__1up,JET_19NP_JET_EffectiveNP_4__1down --systTitles "akt4 JES 4 up,akt4 JES 4 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes4.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_EffectiveNP_5__1up,JET_19NP_JET_EffectiveNP_5__1down --systTitles "akt4 JES 5 up,akt4 JES 5 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes5.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_EffectiveNP_6restTerm__1up,JET_19NP_JET_EffectiveNP_6restTerm__1down --systTitles "akt4 JES 6 up,akt4 JES 6 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes6.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_Pileup_RhoTopology__1up,JET_19NP_JET_Pileup_RhoTopology__1down --systTitles "akt4 JES pile up rho topo. up,akt4 JES pile up rho topo. down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jespurho.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_Pileup_OffsetNPV__1up,JET_19NP_JET_Pileup_OffsetNPV__1down --systTitles "akt4 JES pile up offset NPV up,akt4 JES pile up offset NPV down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jespuoffnpv.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_Pileup_OffsetMu__1up,JET_19NP_JET_Pileup_OffsetMu__1down --systTitles "akt4 JES pile up offset mu up,akt4 JES pile up offset mu down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jespuoffmu.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_Pileup_PtTerm__1up,JET_19NP_JET_Pileup_PtTerm__1down --systTitles "akt4 JES pile up pt term up,akt4 JES pile up pt term down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jespuoffmu.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_BJES_Response__1up,JET_19NP_JET_BJES_Response__1down --systTitles "akt4 bJES resp. up,akt4 bJES resp. down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4bjes.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_EtaIntercalibration_TotalStat__1up,JET_19NP_JET_EtaIntercalibration_TotalStat__1down --systTitles "akt4 eta intercalib. stat. up,akt4 eta intercalib. stat. down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jesetastat.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_EtaIntercalibration_NonClosure__1up,JET_19NP_JET_EtaIntercalibration_NonClosure__1down --systTitles "akt4 eta intercalib. non-closure up,akt4 eta intercalib. non-closure down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jesetanc.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_EtaIntercalibration_Modelling__1up,JET_19NP_JET_EtaIntercalibration_Modelling__1down --systTitles "akt4 eta intercalib. model. up,akt4 eta intercalib. model. down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jesetamod.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_Flavor_Response__1up,JET_19NP_JET_Flavor_Response__1down --systTitles "akt4 JES flav. resp. up,akt4 JES flav. resp. down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jesfr.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_Flavor_Composition__1up,JET_19NP_JET_Flavor_Composition__1down --systTitles "akt4 JES flav. comp. up,akt4 JES flav. comp. down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jesfc.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_PunchThrough_MC15__1up,JET_19NP_JET_PunchThrough_MC15__1down --systTitles "akt4 JES punchthrough up,akt4 JES punchthrough down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jespt.pdf
+    $PLOTCOMP --logY 1 --mcOnly 1 --syst JET_19NP_JET_SingleParticle_HighPt__1up,JET_19NP_JET_SingleParticle_HighPt__1down --systTitles "akt4 JES single part. up,akt4 JES single part. down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jessp.pdf
+
+    #$PLOTCOMP --logY 1 --mcOnly 1 --syst JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_1__1down --systTitles "akt4 JES 1 up,akt4 JES 1 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes1.pdf
+    #$PLOTCOMP --logY 1 --mcOnly 1 --syst JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_2__1down --systTitles "akt4 JES 2 up,akt4 JES 2 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes2.pdf
+    #$PLOTCOMP --logY 1 --mcOnly 1 --syst JET_NPScenario1_JET_GroupedNP_3__1up,JET_NPScenario1_JET_GroupedNP_3__1down --systTitles "akt4 JES 3 up,akt4 JES 3 down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jes3.pdf
+    #$PLOTCOMP --logY 1 --mcOnly 1 --syst JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1up,JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1down --systTitles "akt4 JES eta interc. up,akt4 JES eta interc. down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_akt4jesetainter.pdf
 
     $PLOTCOMP --logY 1 --mcOnly 1 --syst MUONS_MS__1up,MUONS_MS__1down --systTitles "muon res. MS up,muon res. MS down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_muresms.pdf
     $PLOTCOMP --logY 1 --mcOnly 1 --syst MUONS_ID__1up,MUONS_ID__1down --systTitles "muon res. ID up,muon res. ID down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_muresid.pdf

@@ -201,8 +201,15 @@ double alphas(const double scale2) {
   return als;
 }
 
-void initEFTModels(float lambda, float cvv, const std::string &s, int id) {
+void initPDFForReweighting(const std::string &s, int id) {
   m_pdf = mkPDF(s.c_str(), id);
+}
+
+double pdfAlphaS(double Q2) {
+  return m_pdf->alphasQ2(Q2);
+}
+
+void initEFTModels(float lambda, float cvv) {
   EFT_gg_ttx::process.initProc("param_card_eft.dat");
   EFT_uux_ttx::process.initProc("param_card_eft.dat");
 
