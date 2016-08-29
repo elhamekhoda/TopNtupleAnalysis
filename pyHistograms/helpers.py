@@ -2,7 +2,9 @@
 import ROOT
 from array import array
 import math
-
+import sys
+sys.path.append('2HDM')
+#import T2HDM
 
 
 def initBinds():
@@ -282,6 +284,32 @@ class WrapperExtras {
     return ROOT.WrapperExtras()
 
 wrapperC = initBinds()
+
+## Initialise the T2HDM class and load the precompiled modules
+nameX = -1
+mX    = -1
+tanb  = -1
+stanb = "-1"
+itanb = -1
+typeX = -1
+sba   = -999
+cutsX = ""
+def init2HDM(MH,MA,SBA,TANB,TYPE):
+  import T2HDM
+  nameX = "H" if(MH>0) else "A"
+  mX    = MH if(MH>0) else MA
+  tanb  = TANB
+  stanb = '%.2f' % tanb
+  typeX = T2HDM.model.typeX ## can be also modified but should match the generation step
+  sba   = T2HDM.model.sba   ## can be also modified but should match the generation step
+  cutsX = T2HDM.model.cuts  ## can be also modified but should match the generation step
+  T2HDM.setParameters(nameX,mX,cutsX,typeX,sba)
+  itanb = T2HDM.getItanb(tanb)
+  print "itanb=",itanb
+  T2HDM.setModules(nameX,"All",itanb)
+  print "cuts:",cutsX
+  print T2HDM.modules
+
 
 
 def loadXsec(m, fName):

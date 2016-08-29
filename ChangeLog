@@ -1,3 +1,8 @@
+2016-08-30 Noam Tal Hod <hod@cern.ch>
+	* Added 2HDM setup This is very preliminary and requrires some extra
+	non-ATLAS tools/packages to be there on top of AnalysisTop. Please
+	consault the README file(s).
+
 2016-08-12 Samuel Calvet <scalvet@cern.ch>
 	* Cleaning in MM codes
 

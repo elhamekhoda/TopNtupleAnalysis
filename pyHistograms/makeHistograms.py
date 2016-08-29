@@ -5,6 +5,11 @@ import math
 from ROOT import *
 from analysis import *
 from optparse import OptionParser
+'''
+import sys
+sys.path.append('2HDM')
+import T2HDM
+'''
 
 def main():
 
@@ -39,6 +44,9 @@ def main():
 	parser.add_option("-M", "--applyMET",
 							 dest="applyMET", default="0",
 				  help="Extra MET cut to be applied.", metavar="CUT")
+        parser.add_option("-S", "--SCALAR",
+                                                         dest="SCALAR", default="",
+                                  help="Parameters to use when reweighting LO ttbar+jets to a scalar 2HDM setup with a configuration of {mH,mA,sin(b-a), tan(b) and the model type}.", metavar="MH,MA,SBA,TANB,TYPE")
 	parser.add_option("-E", "--EFT",
 							 dest="EFT", default="",
 				  help="Parameters to use when reweighting LO ttbar to an EFT setup with a lambda and cvv configuration. Set lambda to a negative value to disable this.", metavar="LAMBDA,CVV")
@@ -171,12 +179,42 @@ def main():
 	anaClass = getattr(analysis, options.analysis) 
 	eftLambda = -1
 	eftCvv = 0
+        scalarMH   = -1
+        scalarMA   = -1
+        scalarSBA  = -999
+        scalarTANB = -1
+        scalarTYPE = -1
 	if options.EFT != "":
 		eftStr = options.EFT.split(",")
 		eftLambda = float(eftStr[0])
 		eftCvv = float(eftStr[1])
 		helpers.wrapperC.initPDF(options.pdfForWeight)
 		helpers.wrapperC.setEFT(eftLambda, eftCvv)
+        if options.SCALAR != "":
+                scalarStr  = options.SCALAR.split(",")
+                scalarMH   = float(scalarStr[0])
+                scalarMA   = float(scalarStr[1])
+                scalarSBA  = float(scalarStr[2])
+                scalarTANB = float(scalarStr[3])
+                scalarTYPE = int(scalarStr[4])
+                helpers.wrapperC.initPDF(options.pdfForWeight)
+                helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
+                '''
+                ## Initialise the T2HDM class and load the precompiled modules
+                nameX = "H" if(scalarMH>0) else "A"
+                mX    = scalarMH if(scalarMH>0) else scalarMA
+                tanb  = scalarTANB
+                stanb = '%.2f' % tanb
+                typeX = T2HDM.model.typeX ## can be also modified but should match the generation step
+                sba   = T2HDM.model.sba   ## can be also modified but should match the generation step
+                cutsX = T2HDM.model.cuts  ## can be also modified but should match the generation step
+                T2HDM.setParameters(nameX,mX,cutsX,typeX,sba)
+                itanb = T2HDM.getItanb(tanb)
+                print "itanb=",itanb
+                T2HDM.setModules(nameX,"All",itanb)
+                print "cuts:",cutsX
+                print T2HDM.modules
+                '''
 	for k in channels:
 		analysisCode[k] = anaClass(k, histSuffixes, channels[k])
 		analysisCode[k].keep = options.WjetsHF
@@ -191,7 +229,13 @@ def main():
 			eftStr = options.EFT.split(",")
 			analysisCode[k].eftLambda = eftLambda
 			analysisCode[k].eftCvv = eftCvv
-
+                if options.SCALAR != "":
+                        scalarStr = options.SCALAR.split(",")
+                        analysisCode[k].scalarMH   = scalarMH
+                        analysisCode[k].scalarMA   = scalarMA
+                        analysisCode[k].scalarSBA  = scalarSBA
+                        analysisCode[k].scalarTANB = scalarTANB
+                        analysisCode[k].scalarTYPE = scalarTYPE
 		print k, analysisCode[k], channels[k]
 	 
 	for s in systList:
