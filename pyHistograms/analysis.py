@@ -135,6 +135,10 @@ class AnaTtresSL(Analysis):
 		if self.eftLambda > 0:
 			weight *= helpers.getEFTSMWeight(sel)
 
+                # for 2HDM
+                if(helpers.nameX != ""):
+                        weight *= helpers.get2HDMWeight(sel)
+
 		# W+jets C/A and HF syst. variations
 		# assuming b-tagging
 		hfweight = 1.0

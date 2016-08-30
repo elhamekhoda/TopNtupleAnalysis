@@ -1,3 +1,8 @@
+2016-08-31 Noam Tal Hod <hod@cern.ch>
+	* Added the weight functionality. Not all subprocesses are supported
+	yet. Will add all later. Have a look at getTopology(...),
+	get2HDMWeight(...) and the associated methods for details.
+
 2016-08-30 Noam Tal Hod <hod@cern.ch>
 	* Added 2HDM setup This is very preliminary and requrires some extra
 	non-ATLAS tools/packages to be there on top of AnalysisTop. Please

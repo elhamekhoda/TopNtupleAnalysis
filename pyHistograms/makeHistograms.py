@@ -5,11 +5,6 @@ import math
 from ROOT import *
 from analysis import *
 from optparse import OptionParser
-'''
-import sys
-sys.path.append('2HDM')
-import T2HDM
-'''
 
 def main():
 
@@ -199,22 +194,6 @@ def main():
                 scalarTYPE = int(scalarStr[4])
                 helpers.wrapperC.initPDF(options.pdfForWeight)
                 helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
-                '''
-                ## Initialise the T2HDM class and load the precompiled modules
-                nameX = "H" if(scalarMH>0) else "A"
-                mX    = scalarMH if(scalarMH>0) else scalarMA
-                tanb  = scalarTANB
-                stanb = '%.2f' % tanb
-                typeX = T2HDM.model.typeX ## can be also modified but should match the generation step
-                sba   = T2HDM.model.sba   ## can be also modified but should match the generation step
-                cutsX = T2HDM.model.cuts  ## can be also modified but should match the generation step
-                T2HDM.setParameters(nameX,mX,cutsX,typeX,sba)
-                itanb = T2HDM.getItanb(tanb)
-                print "itanb=",itanb
-                T2HDM.setModules(nameX,"All",itanb)
-                print "cuts:",cutsX
-                print T2HDM.modules
-                '''
 	for k in channels:
 		analysisCode[k] = anaClass(k, histSuffixes, channels[k])
 		analysisCode[k].keep = options.WjetsHF

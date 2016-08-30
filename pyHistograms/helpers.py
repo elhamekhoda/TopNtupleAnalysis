@@ -286,7 +286,8 @@ class WrapperExtras {
 wrapperC = initBinds()
 
 ## Initialise the T2HDM class and load the precompiled modules
-nameX = -1
+nameX = ""
+noX   = ""
 mX    = -1
 tanb  = -1
 stanb = "-1"
@@ -296,7 +297,22 @@ sba   = -999
 cutsX = ""
 def init2HDM(MH,MA,SBA,TANB,TYPE):
   import T2HDM
+  ### Needed to modify global copies of these vars:
+  global T2HDM
+  global nameX
+  global noX
+  global mX
+  global tanb
+  global stanb
+  global itanb
+  global typeX
+  global sba
+  global cutsX
+  ### No need for global declaration to read value of these vars
+  ############
+
   nameX = "H" if(MH>0) else "A"
+  noX = "h" if(nameX=="A") else "h1"
   mX    = MH if(MH>0) else MA
   tanb  = TANB
   stanb = '%.2f' % tanb
@@ -491,6 +507,52 @@ def applyEWK(sel, s):
         w = wrapperC.getEWK(top, topbar, sel.initial_type, 0)
     return w
 
+
+'''
+topologiesSM = {
+   "P0_gg_ttx":0.0,      "P0_uux_ttx":0.1,
+
+   "P1_gg_ttxg":1.0,     "P1_gu_ttxu":1.1,       "P1_gux_ttxux":1.2,   "P1_uux_ttxg":1.3,
+
+   "P2_gg_ttxgg":2.00,   "P2_gg_ttxuux":2.01,
+   "P2_gu_ttxgu":2.10,   "P2_gux_ttxgux":2.11,
+   "P2_uux_ttxgg":2.20,  "P2_uux_ttxccx":2.21,
+   "P2_uu_ttxuu":2.30,   "P2_uux_ttxuux":2.31,   "P2_uxux_ttxuxux":2.32,
+   "P2_uc_ttxuc":2.40,   "P2_ucx_ttxucx":2.41,   "P2_uxcx_ttxuxcx":2.42, 
+}
+'''
+
+def getTopology(ids):
+    '''
+    For now, only support some trivial subprocesses:
+     * 2->2: P0_gg_ttx,  P0_uux_ttx
+     * 2->3: P1_gg_ttxg  P1_uux_ttxg
+     * 2->4: P2_gg_ttxgg P2_gg_ttxuux
+    Will add the others later...
+    '''
+    n = len(ids)
+    topology = ""
+    if(n==4): topology += "P0_"
+    if(n==5): topology += "P1_"
+    if(n==6): topology += "P2_"
+    if(abs(ids[0])==21 and abs(ids[1])==21):         topology += "gg"
+    if(abs(ids[0])==abs(ids[1]) and abs(ids[0])<=6): topology += "uux"
+    topology += "_ttx"
+    if(n==5 and abs(ids[0])==abs(ids[1])):
+        if(abs(ids[4])==21):                         topology += "g"
+    if(n==6 and abs(ids[0])==abs(ids[1])):
+        if(abs(ids[4])==abs(ids[5]) and abs(ids[0])==21):
+            if(abs(ids[4])==21):                     topology += "gg"
+            if(abs(ids[4])<=6):                      topology += "uux"
+    return topology
+
+def stripTopology(topology):
+    topology = topology.replace("P0_","")
+    topology = topology.replace("P1_","")
+    topology = topology.replace("P2_","")
+    topology = topology.replace("_","")
+    return topology
+
 def getEFTSMWeight(sel):
     #double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
     if sel.mcChannelNumber == 0:
@@ -519,6 +581,51 @@ def getEFTSMWeight(sel):
     Q2 = sel.MC_Q_me**2
     w = wrapperC.getEFTSMWeight(i1_pid, i2_pid, f_pid, i1, i2, top, topbar, f, Q2)
     return w
+
+
+def get2HDMWeight(sel):
+    print "sel.mcChannelNumber=",sel.mcChannelNumber
+    if sel.mcChannelNumber == 0:
+        return 1
+    if not sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]:
+        return 1
+    n = len(sel.MC_id_me)
+    mepartons = {}
+    mepartons.update({"prod1":{"id":sel.MC_id_me[0],"p4":ROOT.TLorentzVector(sel.MC_px_me[0],sel.MC_py_me[0],sel.MC_pz_me[0],sel.MC_e_me[0])}})
+    mepartons.update({"prod2":{"id":sel.MC_id_me[1],"p4":ROOT.TLorentzVector(sel.MC_px_me[1],sel.MC_py_me[1],sel.MC_pz_me[1],sel.MC_e_me[1])}})
+    mepartons.update({"tops1":{"id":sel.MC_id_me[2],"p4":ROOT.TLorentzVector(sel.MC_px_me[2],sel.MC_py_me[2],sel.MC_pz_me[2],sel.MC_e_me[2])}})
+    mepartons.update({"tops2":{"id":sel.MC_id_me[3],"p4":ROOT.TLorentzVector(sel.MC_px_me[3],sel.MC_py_me[3],sel.MC_pz_me[3],sel.MC_e_me[3])}})
+    if(n>4): mepartons.update({"jets1":{"id":sel.MC_id_me[4],"p4":ROOT.TLorentzVector(sel.MC_px_me[4],sel.MC_py_me[4],sel.MC_pz_me[4],sel.MC_e_me[4])}})
+    if(n>5): mepartons.update({"jets2":{"id":sel.MC_id_me[5],"p4":ROOT.TLorentzVector(sel.MC_px_me[5],sel.MC_py_me[5],sel.MC_pz_me[5],sel.MC_e_me[5])}})
+
+    p = [[ mepartons["prod1"]["p4"].E(), mepartons["prod1"]["p4"].Px(), mepartons["prod1"]["p4"].Py(), mepartons["prod1"]["p4"].Pz() ],
+         [ mepartons["prod2"]["p4"].E(), mepartons["prod2"]["p4"].Px(), mepartons["prod2"]["p4"].Py(), mepartons["prod2"]["p4"].Pz() ],
+         [ mepartons["tops1"]["p4"].E(), mepartons["tops1"]["p4"].Px(), mepartons["tops1"]["p4"].Py(), mepartons["tops1"]["p4"].Pz() ],
+         [ mepartons["tops2"]["p4"].E(), mepartons["tops2"]["p4"].Px(), mepartons["tops2"]["p4"].Py(), mepartons["tops2"]["p4"].Pz() ]]
+    if(n>4): p.append([mepartons["jets1"]["p4"].E(), mepartons["jets1"]["p4"].Px(), mepartons["jets1"]["p4"].Py(), mepartons["jets1"]["p4"].Pz()])
+    if(n>5): p.append([mepartons["jets2"]["p4"].E(), mepartons["jets2"]["p4"].Px(), mepartons["jets2"]["p4"].Py(), mepartons["jets2"]["p4"].Pz()])
+    P = T2HDM.invert_momenta(p)
+    Q2 = sel.MC_Q_me**2
+    alphaS = wrapperC.alphaS(Q2)
+    nhel = 0 # sum over all helicities
+    topologySM_name = getTopology(sel.MC_id_me)
+    topologyXX_name = getTopology(sel.MC_id_me)+"_no_"+noX
+    topologySM_lib = 'matrix2SM'+stripTopology(topologySM_name)+'py'
+    topologyXX_lib = 'matrix2'+nameX+str(itanb)+stripTopology(topologyXX_name)+'py'
+    ids = []
+    for i in xrange(sel.MC_id_me.size()): ids.append(sel.MC_id_me[i])
+    print "ids=",ids
+    print "topology name:",topologySM_name
+    print "topology libSM :",topologySM_lib
+    print "topology libXX :",topologyXX_lib
+    weightX = 1
+    if(topologySM_lib in T2HDM.modules and topologyXX_lib in T2HDM.modules):
+        me2SM = T2HDM.modules[topologySM_lib].get_me(P,alphaS,nhel) ### calculate the SM ME^2
+        me2XX = T2HDM.modules[topologyXX_lib].get_me(P,alphaS,nhel) ### calculate the X ME^2
+        weightX = me2XX/me2SM                                       ### calculate the weight
+    print "weight=",weightX
+    return weightX
+
 
 listWjets22 = []
 listWjets22.extend(range(363330, 363354+1))
