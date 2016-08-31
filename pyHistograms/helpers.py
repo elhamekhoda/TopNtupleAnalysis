@@ -509,41 +509,69 @@ def applyEWK(sel, s):
 
 
 '''
-topologiesSM = {
-   "P0_gg_ttx":0.0,      "P0_uux_ttx":0.1,
+SM topo's         |  H/A matched topo's  | H/A partially matched topo's
+------------------+----------------------+-------------------------------
+P0_gg_ttx         |  P0_gg_ttx           |  
+P0_uux_ttx        |  P0_uux_ttx          |  P0_bbx_ttx
+P1_uux_ttxg       |  P1_uux_ttxg         |  P1_bbx_ttxg
+P1_gux_ttxux      |  P1_gux_ttxux        |  P1_gbx_ttxbx 
+P1_gu_ttxu        |  P1_gu_ttxu          |  P1_gb_ttxb
+P1_gg_ttxg        |  P1_gg_ttxg          |  
+P2_gu_ttxgu       |  P2_gu_ttxgu         |  P2_gb_ttxgb
+P2_uxux_ttxuxux   |  P2_uxux_ttxuxux     |  P2_bxbx_ttxbxbx
+P2_uxcx_ttxuxcx   |  P2_uxcx_ttxuxcx     |  P2_uxbx_ttxuxbx
+P2_uux_ttxuux     |  P2_uux_ttxuux       |  P2_bbx_ttxbbx
+P2_uux_ttxgg      |  P2_uux_ttxgg        |  P2_bbx_ttxgg
+P2_uux_ttxccx     |  P2_uux_ttxccx       |  P2_uux_ttxbbx  P2_bbx_ttxuux(?)
+P2_uu_ttxuu       |  P2_uu_ttxuu         |  P2_bb_ttxbb
+P2_ucx_ttxucx     |  P2_ucx_ttxucx       |  P2_ubx_ttxubx   
+P2_uc_ttxuc       |  P2_uc_ttxuc         |  P2_ub_ttxub
+P2_gux_ttxgux     |  P2_gux_ttxgux       |  P2_gbx_ttxgbx
+P2_gg_ttxgg       |  P2_gg_ttxgg         |     
+P2_gg_ttxuux      |  P2_gg_ttxuux        |  P2_gg_ttxbbx
 
-   "P1_gg_ttxg":1.0,     "P1_gu_ttxu":1.1,       "P1_gux_ttxux":1.2,   "P1_uux_ttxg":1.3,
-
-   "P2_gg_ttxgg":2.00,   "P2_gg_ttxuux":2.01,
-   "P2_gu_ttxgu":2.10,   "P2_gux_ttxgux":2.11,
-   "P2_uux_ttxgg":2.20,  "P2_uux_ttxccx":2.21,
-   "P2_uu_ttxuu":2.30,   "P2_uux_ttxuux":2.31,   "P2_uxux_ttxuxux":2.32,
-   "P2_uc_ttxuc":2.40,   "P2_ucx_ttxucx":2.41,   "P2_uxcx_ttxuxcx":2.42, 
-}
+H/A unmatched topo's:
+P2_uxb_ttxuxb (?)
 '''
 
-def getTopology(ids):
-    '''
-    For now, only support some trivial subprocesses:
-     * 2->2: P0_gg_ttx,  P0_uux_ttx
-     * 2->3: P1_gg_ttxg  P1_uux_ttxg
-     * 2->4: P2_gg_ttxgg P2_gg_ttxuux
-    Will add the others later...
-    '''
-    n = len(ids)
+def getTopology(id1,id2=999):
     topology = ""
+    GLU=21
+    TOP=6
+    CHM=4
+    idsum = id1+id2
+    absidsum = abs(id1)+abs(id2)
+    absidsub = abs(abs(id1)-abs(id2))
+    if(abs(id2)>GLU):
+        if(id1==GLU):                        topology = "g"
+        if(abs(id1)<TOP and id1>0):          topology = "u"
+        if(abs(id1)<TOP and id1<0):          topology = "ux"
+    elif(idsum==2*GLU):                      topology = "gg"
+    elif(idsum==0 and id1<CHM):              topology = "uux"
+    elif(idsum==0 and id1>=CHM):             topology = "ccx"
+    elif(idsum>GLU and idsum<2*GLU):         topology = "gu"
+    elif(idsum<GLU and idsum>=GLU-TOP):      topology = "gux"
+    elif(absidsum<2*TOP):                    
+        if(id1>0           and absidsub==0): topology = "uu"
+        if(id1<0           and absidsub==0): topology = "uxux"
+        if(id1>0 and id2>0 and absidsub>0):  topology = "uc"
+        if(id1*id2<0       and absidsub>0):  topology = "ucx"
+        if(id1<0 and id2<0 and absidsub>0):  topology = "uxcx"
+    else:
+        print "Cannot understand the topology - quitting"
+        quit()
+    return topology
+
+def combineTopology(ids):
+    topology = ""
+    n = len(ids)
     if(n==4): topology += "P0_"
     if(n==5): topology += "P1_"
     if(n==6): topology += "P2_"
-    if(abs(ids[0])==21 and abs(ids[1])==21):         topology += "gg"
-    if(abs(ids[0])==abs(ids[1]) and abs(ids[0])<=6): topology += "uux"
-    topology += "_ttx"
-    if(n==5 and abs(ids[0])==abs(ids[1])):
-        if(abs(ids[4])==21):                         topology += "g"
-    if(n==6 and abs(ids[0])==abs(ids[1])):
-        if(abs(ids[4])==abs(ids[5]) and abs(ids[0])==21):
-            if(abs(ids[4])==21):                     topology += "gg"
-            if(abs(ids[4])<=6):                      topology += "uux"
+    topology += getTopology(ids[0],ids[1])
+    topology += "_ttx" ## should be always there...
+    if(n==5): topology += getTopology(ids[4])
+    if(n==6): topology += getTopology(ids[4],ids[5])
     return topology
 
 def stripTopology(topology):
@@ -552,6 +580,84 @@ def stripTopology(topology):
     topology = topology.replace("P2_","")
     topology = topology.replace("_","")
     return topology
+
+def getMomenta(sel,topology):
+    n = len(sel.MC_id_me)
+    topoparts = topology.split("_")
+    print "topoparts=",topoparts
+    if(len(topoparts)<3):
+        print "Error: topoparts=",topoparts
+        print "Too few topo parts - quitting"
+        quit()
+    prod  = topoparts[1]
+    decay = topoparts[2].replace("ttx","")
+    print "prod=",prod
+    print "decay=",decay
+    GLU=21
+    TOP=6
+    CHM=4
+    me = {}
+    ### Fill production partons' momenta ###
+    if(prod=="gg" or prod=="uu" or prod=="uxux"):
+        me.update({"p1":{"id":sel.MC_id_me[0],"idx":0}})
+        me.update({"p2":{"id":sel.MC_id_me[1],"idx":1}})
+    elif(prod=="uux"):
+        q  = 0 if(sel.MC_id_me[0]>0) else 1
+        qx = 1 if(sel.MC_id_me[0]>0) else 0
+        me.update({"p1":{"id":sel.MC_id_me[q], "idx":q}})
+        me.update({"p2":{"id":sel.MC_id_me[qx],"idx":qx}})
+    elif(prod=="gu" or prod=="gux"):
+        g = 0 if(sel.MC_id_me[0]==GLU) else 1
+        q = 1 if(sel.MC_id_me[0]==GLU) else 0
+        me.update({"p1":{"id":sel.MC_id_me[g],"idx":g}})
+        me.update({"p2":{"id":sel.MC_id_me[q],"idx":q}})
+    elif(prod=="uc" or prod=="ucx" or prod=="uxcx"):
+        qLight = 0 if(abs(sel.MC_id_me[0])<abs(sel.MC_id_me[1])) else 1
+        qHeavy = 1 if(abs(sel.MC_id_me[0])<abs(sel.MC_id_me[1])) else 0
+        me.update({"p1":{"id":sel.MC_id_me[qLight],"idx":qLight}})
+        me.update({"p2":{"id":sel.MC_id_me[qHeavy],"idx":qHeavy}})
+    else:
+        print "Cannot understand the production - quitting"
+        quit()
+    ### Fill top quarks' momenta ###
+    t  = 2 if(sel.MC_id_me[2]>0) else 3
+    tx = 3 if(sel.MC_id_me[3]>0) else 2
+    me.update({"t1":{"id":sel.MC_id_me[t], "idx":t}})
+    me.update({"t2":{"id":sel.MC_id_me[tx],"idx":tx}}) 
+    ### Fill extra partons' momenta ###
+    if(n==5):
+        if(decay=="g" or decay=="u" or decay=="ux"):
+            me.update({"j1":{"id":sel.MC_id_me[4],"idx":4}})
+    if(n==6):
+        if(decay=="gg" or decay=="uu" or decay=="uxux"):
+            me.update({"j1":{"id":sel.MC_id_me[4],"idx":4}})
+            me.update({"j2":{"id":sel.MC_id_me[5],"idx":5}})
+        elif(decay=="uux" or decay=="ccx"):
+            q  = 4 if(sel.MC_id_me[4]>0) else 5
+            qx = 5 if(sel.MC_id_me[4]>0) else 4
+            me.update({"j1":{"id":sel.MC_id_me[q], "idx":q}})
+            me.update({"j2":{"id":sel.MC_id_me[qx],"idx":qx}})
+        elif(decay=="gu" or decay=="gux"):
+            g = 4 if(sel.MC_id_me[4]==GLU) else 5
+            q = 5 if(sel.MC_id_me[4]==GLU) else 4
+            me.update({"j1":{"id":sel.MC_id_me[g],"idx":g}})
+            me.update({"j2":{"id":sel.MC_id_me[q],"idx":q}})
+        elif(decay=="uc" or decay=="ucx" or decay=="uxcx"):
+            qLight = 4 if(abs(sel.MC_id_me[4])<abs(sel.MC_id_me[5])) else 5
+            qHeavy = 5 if(abs(sel.MC_id_me[4])<abs(sel.MC_id_me[5])) else 4
+            me.update({"j1":{"id":sel.MC_id_me[qLight],"idx":qLight}})
+            me.update({"j2":{"id":sel.MC_id_me[qHeavy],"idx":qHeavy}})
+        else:
+            print "Cannot understand the decay - quitting"
+            quit()
+    ### Fill the momenta array
+    p = [[ sel.MC_e_me[me["p1"]["idx"]], sel.MC_px_me[me["p1"]["idx"]], sel.MC_py_me[me["p1"]["idx"]], sel.MC_pz_me[me["p1"]["idx"]] ],
+         [ sel.MC_e_me[me["p2"]["idx"]], sel.MC_px_me[me["p2"]["idx"]], sel.MC_py_me[me["p2"]["idx"]], sel.MC_pz_me[me["p2"]["idx"]] ],
+         [ sel.MC_e_me[me["t1"]["idx"]], sel.MC_px_me[me["t1"]["idx"]], sel.MC_py_me[me["t1"]["idx"]], sel.MC_pz_me[me["t1"]["idx"]] ],
+         [ sel.MC_e_me[me["t2"]["idx"]], sel.MC_px_me[me["t2"]["idx"]], sel.MC_py_me[me["t2"]["idx"]], sel.MC_pz_me[me["t2"]["idx"]] ]]
+    if(n>4): p.append([ sel.MC_e_me[me["j1"]["idx"]], sel.MC_px_me[me["j1"]["idx"]], sel.MC_py_me[me["j1"]["idx"]], sel.MC_pz_me[me["j1"]["idx"]] ])
+    if(n>5): p.append([ sel.MC_e_me[me["j2"]["idx"]], sel.MC_px_me[me["j2"]["idx"]], sel.MC_py_me[me["j2"]["idx"]], sel.MC_pz_me[me["j2"]["idx"]] ])
+    return p
 
 def getEFTSMWeight(sel):
     #double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
@@ -589,27 +695,8 @@ def get2HDMWeight(sel):
         return 1
     if not sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]:
         return 1
-    n = len(sel.MC_id_me)
-    mepartons = {}
-    mepartons.update({"prod1":{"id":sel.MC_id_me[0],"p4":ROOT.TLorentzVector(sel.MC_px_me[0],sel.MC_py_me[0],sel.MC_pz_me[0],sel.MC_e_me[0])}})
-    mepartons.update({"prod2":{"id":sel.MC_id_me[1],"p4":ROOT.TLorentzVector(sel.MC_px_me[1],sel.MC_py_me[1],sel.MC_pz_me[1],sel.MC_e_me[1])}})
-    mepartons.update({"tops1":{"id":sel.MC_id_me[2],"p4":ROOT.TLorentzVector(sel.MC_px_me[2],sel.MC_py_me[2],sel.MC_pz_me[2],sel.MC_e_me[2])}})
-    mepartons.update({"tops2":{"id":sel.MC_id_me[3],"p4":ROOT.TLorentzVector(sel.MC_px_me[3],sel.MC_py_me[3],sel.MC_pz_me[3],sel.MC_e_me[3])}})
-    if(n>4): mepartons.update({"jets1":{"id":sel.MC_id_me[4],"p4":ROOT.TLorentzVector(sel.MC_px_me[4],sel.MC_py_me[4],sel.MC_pz_me[4],sel.MC_e_me[4])}})
-    if(n>5): mepartons.update({"jets2":{"id":sel.MC_id_me[5],"p4":ROOT.TLorentzVector(sel.MC_px_me[5],sel.MC_py_me[5],sel.MC_pz_me[5],sel.MC_e_me[5])}})
-
-    p = [[ mepartons["prod1"]["p4"].E(), mepartons["prod1"]["p4"].Px(), mepartons["prod1"]["p4"].Py(), mepartons["prod1"]["p4"].Pz() ],
-         [ mepartons["prod2"]["p4"].E(), mepartons["prod2"]["p4"].Px(), mepartons["prod2"]["p4"].Py(), mepartons["prod2"]["p4"].Pz() ],
-         [ mepartons["tops1"]["p4"].E(), mepartons["tops1"]["p4"].Px(), mepartons["tops1"]["p4"].Py(), mepartons["tops1"]["p4"].Pz() ],
-         [ mepartons["tops2"]["p4"].E(), mepartons["tops2"]["p4"].Px(), mepartons["tops2"]["p4"].Py(), mepartons["tops2"]["p4"].Pz() ]]
-    if(n>4): p.append([mepartons["jets1"]["p4"].E(), mepartons["jets1"]["p4"].Px(), mepartons["jets1"]["p4"].Py(), mepartons["jets1"]["p4"].Pz()])
-    if(n>5): p.append([mepartons["jets2"]["p4"].E(), mepartons["jets2"]["p4"].Px(), mepartons["jets2"]["p4"].Py(), mepartons["jets2"]["p4"].Pz()])
-    P = T2HDM.invert_momenta(p)
-    Q2 = sel.MC_Q_me**2
-    alphaS = wrapperC.alphaS(Q2)
-    nhel = 0 # sum over all helicities
-    topologySM_name = getTopology(sel.MC_id_me)
-    topologyXX_name = getTopology(sel.MC_id_me)+"_no_"+noX
+    topologySM_name = combineTopology(sel.MC_id_me)
+    topologyXX_name = topologySM_name+"_no_"+noX
     topologySM_lib = 'matrix2SM'+stripTopology(topologySM_name)+'py'
     topologyXX_lib = 'matrix2'+nameX+str(itanb)+stripTopology(topologyXX_name)+'py'
     ids = []
@@ -618,11 +705,24 @@ def get2HDMWeight(sel):
     print "topology name:",topologySM_name
     print "topology libSM :",topologySM_lib
     print "topology libXX :",topologyXX_lib
+    ### !!! Attention !!!
+    ### need to select the libXX according
+    ### to the specific production / decay
+    ### since the SM topologies assume m(b)=0
+    ### so if there's a b-quark in the production
+    ### or decay, the relevant XX lib should be loaded !
+    ### !!! Attention !!!
     weightX = 1
     if(topologySM_lib in T2HDM.modules and topologyXX_lib in T2HDM.modules):
-        me2SM = T2HDM.modules[topologySM_lib].get_me(P,alphaS,nhel) ### calculate the SM ME^2
-        me2XX = T2HDM.modules[topologyXX_lib].get_me(P,alphaS,nhel) ### calculate the X ME^2
-        weightX = me2XX/me2SM                                       ### calculate the weight
+        pCpp = getMomenta(sel,topologySM_name)
+        pPython = T2HDM.invert_momenta(pCpp)
+        Q2 = sel.MC_Q_me**2
+        alphaS = wrapperC.alphaS(Q2)
+        nhel = 0 # sum over all helicities
+        me2SM = T2HDM.modules[topologySM_lib].get_me(pPython,alphaS,nhel) ### calculate the SM ME^2
+        me2XX = T2HDM.modules[topologyXX_lib].get_me(pPython,alphaS,nhel) ### calculate the X ME^2
+        print "me2SM=%g, me2XX=%g" % (me2SM,me2XX)
+        weightX = me2XX/me2SM                                             ### calculate the weight
     print "weight=",weightX
     return weightX
 
