@@ -249,6 +249,7 @@ void initEFTModels(float lambda, float cvv) {
   Parameters_TopEffTh::getInstance()->mdl_Lambda__exp__2 = std::pow(lambda, 2);
   Parameters_TopEffTh::getInstance()->mdl_C81qq = cvv;
   Parameters_TopEffTh::getInstance()->mdl_C1qt = cvv;
+  Parameters_TopEffTh::getInstance()->setIndependentCouplings();
 }
 
 template <typename C>
