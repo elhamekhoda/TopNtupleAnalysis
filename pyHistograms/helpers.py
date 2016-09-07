@@ -341,13 +341,19 @@ def loadXsec(m, fName):
 	    continue
 	m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2])
 
-def addFilesInChain(c, txtFileOption):
+def addFilesInChain(c, txtFileOption, n = -1):
+    counter = 0
     for f in txtFileOption.split(','):
         txtf = open(f)
         for l in txtf.readlines():
 	    if l[-1] == '\n':
 	        l = l[0:-1]
+            if counter > n:
+                break
             c.Add(l)
+            counter += 1
+        if counter > n:
+            break
 
 class Event:
     def __init__(self):

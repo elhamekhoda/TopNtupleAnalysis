@@ -92,10 +92,7 @@ def main():
 	doEWK = False
 
 	mt = TChain("nominal")
-	m = len(options.files)
-	if m > 20:
-		m = 20
-	addFilesInChain(mt, options.files[0:m])
+	addFilesInChain(mt, options.files[0:m], 20)
 	ent = mt.GetEntries()
 	ch = -1
 	for k in range(0, ent):
