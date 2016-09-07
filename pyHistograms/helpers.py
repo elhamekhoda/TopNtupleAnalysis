@@ -348,7 +348,7 @@ def addFilesInChain(c, txtFileOption, n = -1):
         for l in txtf.readlines():
 	    if l[-1] == '\n':
 	        l = l[0:-1]
-            if counter > n:
+            if counter > n and n > 0:
                 break
             c.Add(l)
             counter += 1

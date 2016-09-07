@@ -91,13 +91,12 @@ def main():
 	isWjets = False
 	doEWK = False
 
-	mt = TChain("nominal")
-	addFilesInChain(mt, options.files[0:m], 20)
-	ent = mt.GetEntries()
-	ch = -1
+	mt_load = TChain("nominal")
+	addFilesInChain(mt_load, options.files, 20)
+	ent = mt_load.GetEntries()
 	for k in range(0, ent):
-		mt.GetEntry(k)
-		sel = readEvent(mt)
+		mt_load.GetEntry(k)
+		sel = readEvent(mt_load)
 		if sel.mcChannelNumber in helpers.listWjets22:
 			isWjets = True
 		if sel.mcChannelNumber in helpers.listEWK:
