@@ -46,7 +46,7 @@ def main():
 							 dest="EFT", default="",
 				  help="Parameters to use when reweighting LO ttbar to an EFT setup with a lambda and cvv configuration. Set lambda to a negative value to disable this.", metavar="LAMBDA,CVV")
 	parser.add_option("-p", "--pdfForWeight",
-							 dest="pdfForWeight", default="NNPDF21_lo_as_0130_100",
+							 dest="pdfForWeight", default="NNPDF30_nlo_as_0118", # this is the PDF used for LO, so it should be used for the alphaS
 				  help="PDF to use to get alpha_S when doing either the EFT or the scalar model reweighting.", metavar="PDF")
 	 
 	(options, args) = parser.parse_args()
@@ -87,20 +87,42 @@ def main():
 	loadXsec(Xsec, "../../TopDataPreparation/data/XSection-MC15-13TeV.data")
 	#loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
 
+	# check if there is any W+jets sample there
+	isWjets = False
+	doEWK = False
+
+	mt = TChain("nominal")
+	m = len(options.files)
+	if m > 20:
+		m = 20
+	addFilesInChain(mt, options.files[0:m])
+	ent = mt.GetEntries()
+	ch = -1
+	for k in range(0, ent):
+		mt.GetEntry(k)
+		sel = readEvent(mt)
+		if sel.mcChannelNumber in helpers.listWjets22:
+			isWjets = True
+		if sel.mcChannelNumber in helpers.listEWK:
+			doEWK = True
+		if isWjets or doEWK:
+			break
+
 	# systematics list
 	if options.systs == 'all':
 		systList = []
 		systList.append('nominal')
-		systList.append('wnorm__1up')
-		systList.append('wnorm__1down')
-		systList.append('wbb__1up')
-		systList.append('wbb__1down')
-		systList.append('wcc__1up')
-		systList.append('wcc__1down')
-		systList.append('wc__1up')
-		systList.append('wc__1down')
-		systList.append('wl__1up')
-		systList.append('wl__1down')
+		if isWjets:
+			systList.append('wnorm__1up')
+			systList.append('wnorm__1down')
+			systList.append('wbb__1up')
+			systList.append('wbb__1down')
+			systList.append('wcc__1up')
+			systList.append('wcc__1down')
+			systList.append('wc__1up')
+			systList.append('wc__1down')
+			systList.append('wl__1up')
+			systList.append('wl__1down')
 		for i in range(0, 4):
 			systList.append('btagbSF_'+str(i)+'__1up')
 			systList.append('btagbSF_'+str(i)+'__1down')
@@ -128,8 +150,12 @@ def main():
 		systList.append('btageSF_1__1down')
 		systList.extend(weightChangeSystematics)
 		systList.remove('')
-		systList.append('ttEWK__1up')
-		systList.append('ttEWK__1down')
+		if doEWK:
+			systList.append('ttEWK__1up')
+			systList.append('ttEWK__1down')
+		if options.EFT != '':
+			systList.append("eftScale__1up")
+			systList.append("eftScale__1down")
 		systematics  = 'EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up'
 		systematics += ',JET_JER_SINGLE_NP__1up'
 		# 3NP for the akt4 jets

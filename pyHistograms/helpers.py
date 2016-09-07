@@ -696,7 +696,7 @@ def getMomenta(sel,topology):
     if(n>5): p.append([ sel.MC_e_me[me["j2"]["idx"]], sel.MC_px_me[me["j2"]["idx"]], sel.MC_py_me[me["j2"]["idx"]], sel.MC_pz_me[me["j2"]["idx"]] ])
     return p
 
-def getEFTSMWeight(sel):
+def getEFTSMWeight(sel, s = ""):
     #double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
     if sel.mcChannelNumber == 0:
         return 1
@@ -721,7 +721,11 @@ def getEFTSMWeight(sel):
     for idx in range(4,len(sel.MC_px_me)):
         f_pid.push_back(sel.MC_id_me[idx])
         f.push_back(ROOT.TLorentzVector(sel.MC_px_me[idx], sel.MC_py_me[idx], sel.MC_pz_me[idx], sel.MC_e_me[idx]))
-    Q2 = sel.MC_Q_me**2
+    Q2 = (1e-3*sel.MC_Q_me)**2
+    if 'eftScale' in s and 'up' in s:
+    	Q2 *= 4
+    elif 'eftScale' in s and 'down' in s:
+    	Q2 *= 0.25
     w = wrapperC.getEFTSMWeight(i1_pid, i2_pid, f_pid, i1, i2, top, topbar, f, Q2)
     return w
 
