@@ -6,7 +6,7 @@ import socket, random, re
 
 # change those:
 setdir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418'
-mydir = '/nfs/dust/atlas/user/danilo/hists_sr2418/TRexFitter'
+mydir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jes/TRexFitter'
 
 def fixFile(template, final, i, doBOnlyFit):
   fr = open(template, 'r')
@@ -22,6 +22,16 @@ Sample: "Signal"
   NormFactor: "SigXsecOverSM",0,0,100
   HistoFile: "%s"
 ''' % ('hist_'+i))
+      if 'eft' in i:
+      f.write('''
+Systematic: "eftScale"
+  Title: "EFT scale unc."
+  Type: HISTO
+  HistoNameSufUp: "eftScaleup"
+  HistoNameSufDown: "eftScaledw"
+  Samples: Signal
+  Symmetrisation: TwoSided
+''')
       continue
     
     nline = line
@@ -76,12 +86,18 @@ def jobSubmit(suf):
 
 
 # B ONLY fit
-fixFile('ttres_template.config', 'ttres_bkg.config', "bkg", True)
-system('cp -f hist_zprime2000.root hist_bkg.root') ## use a dummy signal for the background only fit
-jobSubmit('bkg')
+#fixFile('ttres_template.config', 'ttres_bkg.config', "bkg", True)
+#system('cp -f hist_zprime2000.root hist_bkg.root') ## use a dummy signal for the background only fit
+#jobSubmit('bkg')
+
+#fixFile('ttres_template.config', 'ttres_eftbkg.config', "eftbkg", True)
+#system('cp -f hist_eftl30c1.root hist_eftbkg.root') ## use a dummy signal for the background only fit
+#jobSubmit('eftbkg')
 
 # now go over to signal
 for t in signalList:
+  if t != 'eft':
+    continue
   for i in signalList[t]:
     fixFile('ttres_template.config', 'ttres_'+i+'.config', i, False)
     jobSubmit(i)

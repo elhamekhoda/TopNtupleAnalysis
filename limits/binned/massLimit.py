@@ -31,18 +31,32 @@ def plot(t):
   gStyle.SetPadTickY(1)
 
   clim = TCanvas("clim", "", 800, 600);
-  l = TLegend(0.5,0.45,0.87,0.89)
+  if not 'eft' in t:
+    l = TLegend(0.5,0.45,0.87,0.89)
+  else:
+    l = TLegend(0.5,0.6,0.87,0.89)
   l.SetBorderSize(0)
 
   maxm = mass[t][-1]
   minm = mass[t][0]
+  if minm == maxm:
+    maxm += 0.5 
+    minm -= 0.5 
   h = TH1F("h", "", 50, minm, maxm);
-  h.GetYaxis().SetRangeUser(1e-2, 2000);
-  h.GetYaxis().SetTitle("#sigma #times BR [pb]");
+  if 'eft' in t:
+    h.GetYaxis().SetRangeUser(0, 15);
+  else:
+    h.GetYaxis().SetRangeUser(1e-2, 2000);
+  if "eft" in t:
+    h.GetYaxis().SetTitle("c_{Vv}");
+  else:
+    h.GetYaxis().SetTitle("#sigma #times BR [pb]");
   if 'zprime' in t:
     h.GetXaxis().SetTitle("m_{Z'} [TeV]");
   elif 'kkG' in t:
     h.GetXaxis().SetTitle("m_{G_{KK}} [TeV]");
+  elif 'eft' in t:
+    h.GetXaxis().SetTitle("#Lambda [TeV]");
   h.GetXaxis().SetTitleOffset(0.9);
   h.GetXaxis().SetLabelSize(0.05);
   h.GetXaxis().SetTitleSize(0.05);
@@ -113,8 +127,8 @@ def plot(t):
 
   l.AddEntry(nom, "Expected 95% CLs upper limit", "L")
   #l.AddEntry(obs, "Observed 95% CLs upper limit", "LP")
-  l.AddEntry(sigma1, "#pm 1 #sigma", "F")
-  l.AddEntry(sigma2, "#pm 2 #sigma", "F")
+  l.AddEntry(sigma1, "Expected 95% CLs upper limit #pm 1 #sigma", "F")
+  l.AddEntry(sigma2, "Expected 95% CLs upper limit #pm 2 #sigma", "F")
   if 'zprime' in t:
     l.AddEntry(xsec12, "LO Z'_{#it{TC2}} #Gamma=1.2% cross section #times 1.3", "L")
   elif 'kkG' in t:
@@ -125,23 +139,26 @@ def plot(t):
   sigma2.Draw("3");
   sigma1.Draw("3");
   nom.Draw("L")
-  obs.Draw("LP")
-  xsec12.Draw("L")
+  #obs.Draw("LP")
+  if not 'eft' in t:
+    xsec12.Draw("L")
   if 'zprime' in t:
     xsec3.Draw("L")
   l.Draw()
-  clim.SetLogy(1)
+  if not 'eft':
+    clim.SetLogy(1)
 
   gPad.RedrawAxis()
 
   stampATLAS("Internal", 0.15, 0.83)
-  stampLumiText(15.8, 0.25, 0.75, "#sqrt{s} = 13 TeV", 0.04)
+  stampLumiText(15.8, 0.15, 0.75, "#sqrt{s} = 13 TeV", 0.04)
 
   clim.SaveAs("mass_limit_%s.eps" % t)
   clim.SaveAs("mass_limit_%s.png" % t)
   clim.SaveAs("mass_limit_%s.pdf" % t)
   clim.SaveAs("mass_limit_%s.C" % t)
 
-plot('zprime')
-plot('kkG')
+#plot('zprime')
+#plot('kkG')
+plot('eft')
 

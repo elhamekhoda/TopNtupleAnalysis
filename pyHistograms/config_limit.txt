@@ -18,6 +18,9 @@ sample    kkgrav750    kkgrav750                            "KKgraviton750"     
 sample    kkgrav1000   kkgrav1000                           "KKgraviton1000"      "KKgraviton1000"     10
 sample    kkgrav2000   kkgrav2000                           "KKgraviton2000"      "KKgraviton2000"     10
 sample    kkgrav3000   kkgrav3000                           "KKgraviton3000"      "KKgraviton3000"     10
+sample    eftl30c1     eftl30c1                             "EFTL30c1"            "EFTL30C1"           10
+sample    eftl35c1     eftl35c1                             "EFTL35c1"            "EFTL35C1"           10
+sample    eftl40c1     eftl40c1                             "EFTL40c1"            "EFTL40C1"           10
 sample    data         data                                 "data"                "data"               1
 sample    tt           ttall                                "t#bar{t}"            "$t\bar{t}$"         0
 sample    wbbjets      wbbjets                              "W+bb+jets"           "$W$+bb+jets"        416
@@ -30,7 +33,7 @@ sample    qcde         qcde                                 "QCD (e)"           
 sample    qcdmu        qcdmu                                "QCD (#mu)"           "QCD ($\mu$)"        902
 sample    vv           vv                                   "diboson"             "diboson"            5
 sample    ttv          ttv                                  "ttV"                 "$t\bar{t}V$"        7
-syst_flat lumi          "luminosity"                         "ttall,singletop,zjets,vv,ttv"                 0.029                     -0.029
+syst_flat lumi          "luminosity"                         "ttall,singletop,zjets,vv,ttv,zprime,kkgrav,eft"                 0.029                     -0.029
 syst      etrig      "electron trigger"               eTrigSF__1up                               eTrigSF__1down                                       N
 syst      erec       "electron reconstruction"        eRecoSF__1up                               eRecoSF__1down                                       N
 syst      eid        "electron ID"                    eIDSF__1up                                 eIDSF__1down                                         N
@@ -41,14 +44,14 @@ syst      muidstat   "muon ID (stat)"                 muIDStatSF__1up           
 syst      muidsyst   "muon ID (syst)"                 muIDSystSF__1up                            muIDSystSF__1down                                    N
 syst      muisolstat "muon isolation (stat)"          muIsolStatSF__1up                          muIsolStatSF__1down                                  N
 syst      muisolsyst "muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down                                  N
-#syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      N
+syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      N
 syst      jvt        "JVT"                            jvtSF__1up                                 jvtSF__1down                                         N
-syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N
-syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N
-syst      wbb        "W+bb fraction"                  wbb__1up                                   wbb__1down                                           N
-syst      wcc        "W+cc fraction"                  wcc__1up                                   wcc__1down                                           N
-syst      wc         "W+c fraction"                   wc__1up                                    wc__1down                                            N
-syst      wl         "W+bb fraction"                  wl__1up                                    wl__1down                                            N
+syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft
+syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft
+syst      wbb        "W+bb fraction"                  wbb__1up                                   wbb__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft
+syst      wcc        "W+cc fraction"                  wcc__1up                                   wcc__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft
+syst      wc         "W+c fraction"                   wc__1up                                    wc__1down                                            N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft
+syst      wl         "W+l fraction"                   wl__1up                                    wl__1down                                            N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft
 syst      eres       "electron res."                  EG_RESOLUTION_ALL__1up                     EG_RESOLUTION_ALL__1down                             S
 syst      escale     "electron scale"                 EG_SCALE_ALL__1up                          EG_SCALE_ALL__1down                                  S
 syst      akt4jer    "anti-$k_t$ R=0.4 JER"           JET_JER_SINGLE_NP__1up                     -                                                    S
@@ -105,6 +108,7 @@ syst      btagl9     "b-tagging l mistag (E9)"        btaglSF_9__1up            
 syst      btagl10    "b-tagging l mistag (E10)"       btaglSF_10__1up                            btaglSF_10__1down                                    S
 syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     S
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     S
+syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbjets,wccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
 syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.050
 syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.050
