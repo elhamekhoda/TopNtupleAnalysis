@@ -58,6 +58,8 @@ int main(int argc, char **argv) {
     int mcOnly = 0;
     smooth = 40;
     int _logY = 0;
+    float normBinWidth = 0;
+    int rebin = 1;
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -80,6 +82,8 @@ int main(int argc, char **argv) {
         {"mcOnly",          required_argument,     0, 'm', "Do not include data? (0/1)", &mcOnly, extendedOption::eOTInt},
         {"smoothen",        required_argument,     0, 'k', "Smoothen systematics.", &smooth, extendedOption::eOTInt},
         {"logY",            required_argument,     0, 'g', "Y axis in log?", &_logY, extendedOption::eOTInt},
+        {"rebin",           required_argument,     0, 'r', "Rebin by this factor.", &rebin, extendedOption::eOTInt},
+        {"normBinWidth",    required_argument,     0, 'b', "Divide bin content by bin width?", &normBinWidth, extendedOption::eOTFloat},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
@@ -142,7 +146,7 @@ int main(int argc, char **argv) {
 		} else {
           filenam.push_back(Form("%s_%s.root", channel.c_str(), "ttpdf"));
 		}
-        sample.push_back("ttbar");
+        sample.push_back("ttall");
         if (smooth) {
           systCalc.add(syst_items[z]+std::string("_smooth"), new NotData(new HistDiffMany(filenam, patterns, sample, true)), syst_items[z]+std::string(" smooth"));
         }
@@ -193,7 +197,7 @@ int main(int argc, char **argv) {
     }
     if (other_items.size() == 2) {
       std::vector<std::string> pat;
-      pat.push_back("ttbar");
+      pat.push_back("ttall");
       if (smooth) {
         std::string s = other_items[0];
         s += std::string("_smooth");
@@ -254,6 +258,8 @@ int main(int argc, char **argv) {
     if (underflow) stackConfig.showUnderflow();
     if (xMax > -998.0) stackConfig.limitMaxX(xMax);
     if (xMin > -998.0) stackConfig.limitMinX(xMin);
+    if (rebin != 1) stackConfig.rebin(rebin);
+    if (normBinWidth > 0) stackConfig.normBinWidth(normBinWidth);
 
     cout << "Yields:" << endl << endl;
     systCalc.printYields(stackConfig);

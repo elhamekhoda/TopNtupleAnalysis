@@ -878,7 +878,7 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
   }
 
   double maximum = MC->GetMaximum();
-  double minimum = 0.001;
+  double minimum = 1; //0.001;
   if (Data) maximum = std::max(Data->GetBinContent(Data->GetMaximumBin()), MC->GetMaximum());
   maximum *= 1.7;
   if (logY) {
