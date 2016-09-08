@@ -7,7 +7,7 @@ def main():
 	# input directory
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
-	pattern = 'user.dferreir.*14082016v1_output.root'
+	pattern = 'user.dferreir.*14082016v2_output.root'
 	#pattern_mtt = 'user.dferreir.*14082016v1_output.root'
 	pattern_data = 'user.dferreir.00*14082016v1_output.root'
 
@@ -26,6 +26,7 @@ def main():
 
 	names  += ['tt']
 	names  += ['tthm']
+	names  += ['ttv']
 	names  += ['wbbjets']
 	#names  += ['wccjets']
 	#names  += ['wcjets']
@@ -59,6 +60,7 @@ def main():
 	names  += ['ttpowhegherwig']
 	names  += ['ttmcatnloherwig']
 	names  += ['ttradhi', 'ttradlo']
+	names  += ['eftl30c1']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -70,6 +72,7 @@ def main():
 					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', #,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'tthm':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+					'ttv':'MC15c_13TeV_25ns_FS_EXOT4_ttbarV',
 					'ttpdf':'MC15c_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF',
 					'ttpowhegherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwig',
 					'ttmcatnloherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwig',
@@ -98,6 +101,7 @@ def main():
 					'kkgrav1000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt1000',
 					'kkgrav2000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt2000',
 					'kkgrav3000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt3000',
+					'eftl30c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 		   }
 	
 	import TopExamples.grid

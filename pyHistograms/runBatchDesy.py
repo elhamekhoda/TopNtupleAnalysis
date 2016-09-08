@@ -92,13 +92,15 @@ def main():
 	names  += ['ttmcatnloherwig']
 	names  += ['ttradhi', 'ttradlo']
 
-	#names  += ['eftl30c1']
-	#names  += ['eftl35c1']
-	#names  += ['eftl40c1']
+	names   = []
+	names  += ['eftl30c1']
+	names  += ['eftl35c1']
+	names  += ['eftl40c1']
 	#names  += ['eftl45c1']
 	#names  += ['eftl50c1']
 	#names  += ['eftl55c1']
 	#names  += ['eftl60c1']
+	###names   = ["qcde", "qcdmu"]
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -215,6 +217,8 @@ def main():
 			nFilesPerJobEffective = 2
 		elif 'tt' in sn:
 			nFilesPerJobEffective = 5
+		elif 'eft' in sn:
+			nFilesPerJobEffective = 1
 		elif 'singletop' in sn:
 			nFilesPerJobEffective = 5
 		elif 'kkgrav' in sn:
@@ -379,7 +383,8 @@ def main():
 			fr.write('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
 			fr.write('lsetup rcsetup\n')
 			fr.write('cd TopNtupleAnalysis/pyHistograms\n')
-			out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root,be2015:'+outputDir+'/be2015_'+jobName+'.root,bmu2015:'+outputDir+'/bmu2015_'+jobName+'.root,re2015:'+outputDir+'/re2015_'+jobName+'.root,rmu2015:'+outputDir+'/rmu2015_'+jobName+'.root,be2016:'+outputDir+'/be2016_'+jobName+'.root,bmu2016:'+outputDir+'/bmu2016_'+jobName+'.root,re2016:'+outputDir+'/re2016_'+jobName+'.root,rmu2016:'+outputDir+'/rmu2016_'+jobName+'.root'
+			#out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root,be2015:'+outputDir+'/be2015_'+jobName+'.root,bmu2015:'+outputDir+'/bmu2015_'+jobName+'.root,re2015:'+outputDir+'/re2015_'+jobName+'.root,rmu2015:'+outputDir+'/rmu2015_'+jobName+'.root,be2016:'+outputDir+'/be2016_'+jobName+'.root,bmu2016:'+outputDir+'/bmu2016_'+jobName+'.root,re2016:'+outputDir+'/re2016_'+jobName+'.root,rmu2016:'+outputDir+'/rmu2016_'+jobName+'.root'
+			out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root'
 			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
 			fr.close()
 			os.system('chmod a+x '+runfile)
