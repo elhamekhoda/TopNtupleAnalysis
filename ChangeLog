@@ -1,3 +1,6 @@
+2016-09-09 Noam Tal Hod <hod@cern.ch>
+	* fixed a few bugs and added a few features to the 2HDM setup
+
 2016-09-09 Samuel Calvet <scalvet@cern.ch>
 	* Remove warnings in Root/EFTLib.cxx
 	* Remove warnings in MG's code
