@@ -99,8 +99,7 @@ MMUtils::MMUtils(const int isBtagged, const std::string &eff_filename2015, const
   
 }
   
-MMUtils::~MMUtils(){
-/* 
+MMUtils::~MMUtils(){ 
   delete eff_map_resolved_e_2015  ;
   delete eff_map_resolved_mu_2015  ;
   delete eff_map_boosted_e_2015 ;
@@ -124,7 +123,6 @@ MMUtils::~MMUtils(){
     
   delete fake_pt_boosted_e_2015;  
   delete fake_dr_boosted_mu_2015;
-*/
 } 
 
 void MMUtils::get2Drates(float &rate, float &rate_err, TH2F* rate_map, float x, float y){
