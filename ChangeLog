@@ -1,3 +1,6 @@
+2016-09-09 Samuel Calvet <scalvet@cern.ch>
+	* Remove wanrings in Root/EFTLib.cxx
+
 2016-08-31 Noam Tal Hod <hod@cern.ch>
 	* Added reclassification feature in case of event with extra ME
 	b-quarks - these topologies have one set of libs in the SM case givne

@@ -301,7 +301,7 @@ double getWeight(C &process, int i1pid, int i2pid, TLorentzVector i1o, TLorentzV
   p[3][1] = tbar.Px();
   p[3][2] = tbar.Py();
   p[3][3] = tbar.Pz();
-  for (int k = 0; k < f.size(); ++k) {
+  for (unsigned int k = 0; k < f.size(); ++k) {
     p[4+k] = new double[4];
     p[4+k][0] = f[k].E();
     p[4+k][1] = f[k].Px();
@@ -314,10 +314,10 @@ double getWeight(C &process, int i1pid, int i2pid, TLorentzVector i1o, TLorentzV
   process.setInitial(i1pid, i2pid);
   // Evaluate matrix element
   process.sigmaKin();
-  const double* matrix_elements = process.getMatrixElements();
+  //const double* matrix_elements = process.getMatrixElements();
 
   weight = process.sigmaHat();
-  for (int k = 0; k < p.size(); ++k)
+  for (unsigned int k = 0; k < p.size(); ++k)
     delete [] p[k];
   p.clear();
   return weight;
@@ -336,7 +336,7 @@ double getEFTWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVect
     if (i2_pid < 0)
       i2_pid = -2;
   }
-  for (int k = 0; k < f_pid.size(); ++k) {
+  for (unsigned int k = 0; k < f_pid.size(); ++k) {
     if (abs(f_pid[k]) < 6) {
       if (f_pid[k] > 0)
         f_pid[k] = 2;
@@ -418,7 +418,7 @@ double getEFTWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVect
     }
   }
   std::cout << "WARNING: Reached end of getEFTWeight without a weight! This cannot happen. i1 = " << i1_pid << ", i2 = " << i2_pid;
-  for (int k = 0; k < f_pid.size(); ++k) {
+  for (unsigned int k = 0; k < f_pid.size(); ++k) {
     std::cout << ", f" << k << " = " << f_pid[k];
   }
   std::cout << std::endl;
@@ -439,7 +439,7 @@ double getSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVecto
     if (i2_pid < 0)
       i2_pid = -2;
   }
-  for (int k = 0; k < f_pid.size(); ++k) {
+  for (unsigned int k = 0; k < f_pid.size(); ++k) {
     if (abs(f_pid[k]) < 6) {
       if (f_pid[k] > 0)
         f_pid[k] = 2;
@@ -521,7 +521,7 @@ double getSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVecto
     }
   }
   std::cout << "WARNING: Reached end of getSMWeight without a weight! This cannot happen. i1 = " << i1_pid << ", i2 = " << i2_pid;
-  for (int k = 0; k < f_pid.size(); ++k) {
+  for (unsigned int k = 0; k < f_pid.size(); ++k) {
     std::cout << ", f" << k << " = " << f_pid[k];
   }
   std::cout << std::endl;
