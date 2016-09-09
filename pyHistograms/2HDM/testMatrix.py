@@ -1,7 +1,4 @@
-import ROOT
-from ROOT import *
 import matrix2SomeNamepy as matrix2py
-
 def invert_momenta(p):
    """ fortran/C-python do not order table in the same order"""
    new_p = []
@@ -10,10 +7,21 @@ def invert_momenta(p):
       for j, x in enumerate(onep):
          new_p[j][i] = x
    return new_p
-
 matrix2py.initialise('param_card.dat')
 nhel = 0 # sum over all helicities
-
+# 2HDM setup: mX=600, sba=1, tanb=0.3, type=2 --> topo=P0_gg_ttx, mtt=506.969, me2XX/me2SM=0.516962/0.517445=0.999065
+# ME ids are:  [21, 21, 6, -6]
+# Q = 245.40846875
+alphaS = 0.112812567332
+p=[
+  [501.564,0,0,501.564],
+  [128.108,0,0,-128.108],
+  [360.934,50.0707,167.275,265.174],
+  [268.738,-50.0707,-167.275,108.282],
+]
+P = invert_momenta(p)
+me2 = matrix2py.get_me(P,alphaS,nhel)
+print "ME2(ttx)=",me2
 
 # ### MEcode=0, topology=ttx, Q=207.957183669, alphaS=0.10498082074 ->
 # p = [[148.7495, 0.0, 0.0, 148.7495], [346.258375, 0.0, 0.0, -346.258375],
@@ -27,12 +35,12 @@ nhel = 0 # sum over all helicities
 
 
 ### MEcode=1, topology=ttxg, Q=209.048729925, alphaS=0.104907446345 ->
-p = [[264.3046875, 0.0, 0.0, 264.3046875], [328.02553125, 0.0, 0.0, -328.02553125],
-     [242.8330625, 18.229767578125, 58.28096484375, 157.198890625], [199.76946875, -59.23303515625, -29.940345703125, -79.73228125], [149.727625, 41.00326953125, -28.34062109375, -141.18746875]]
-alphas = 0.104907446345                                                                                                       
-P = invert_momenta(p)
-me2 = matrix2py.get_me(P,alphas,nhel)
-print "ME2(ttxg)=",me2
+# p = [[264.3046875, 0.0, 0.0, 264.3046875], [328.02553125, 0.0, 0.0, -328.02553125],
+#     [242.8330625, 18.229767578125, 58.28096484375, 157.198890625], [199.76946875, -59.23303515625, -29.940345703125, -79.73228125], [149.727625, 41.00326953125, -28.34062109375, -141.18746875]]
+# alphas = 0.104907446345                                                                                                       
+# P = invert_momenta(p)
+# me2 = matrix2py.get_me(P,alphas,nhel)
+# print "ME2(ttxg)=",me2
 
 
 # ### MEcode=2, topology=ttxgg, Q=268.652716997, alphaS=0.101510739152 ->

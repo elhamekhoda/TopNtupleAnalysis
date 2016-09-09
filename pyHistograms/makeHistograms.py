@@ -216,6 +216,7 @@ def main():
                 scalarTYPE = int(scalarStr[4])
                 helpers.wrapperC.initPDF(options.pdfForWeight)
                 helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
+                print "2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE)
 	for k in channels:
 		analysisCode[k] = anaClass(k, histSuffixes, channels[k])
 		analysisCode[k].keep = options.WjetsHF

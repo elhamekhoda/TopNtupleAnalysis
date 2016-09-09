@@ -13,7 +13,7 @@ from ROOT import *
 
 class t2HDM:
    """The 2HDM definitions"""
-   def __init__(self, nameX="A", mX=500, typeX=2, sba=1, mintanb=0.3, maxtanb=2.0):
+   def __init__(self, nameX="A", mX=500, typeX=2, sba=1, mintanb=0.3, maxtanb=0.3):
       self.nameX   = nameX
       self.mX      = mX
       self.typeX   = typeX
@@ -142,10 +142,10 @@ def invert_momenta(p):
    return new_p
 
 
-def couplings(type,nameX,fermion,tanb,sba,cba):
+def couplings(typeX,nameX,fermion,tanb,sba,cba):
    Fermions = fermions()
    g = 0.
-   if(type==1):
+   if(typeX==1):
       if(nameX=="h"):
          if(fermion==Fermions.u or fermion==Fermions.c  or fermion==Fermions.t):   g = sba+cba/tanb
          if(fermion==Fermions.d or fermion==Fermions.s  or fermion==Fermions.b):   g = sba+cba/tanb
@@ -158,7 +158,7 @@ def couplings(type,nameX,fermion,tanb,sba,cba):
          if(fermion==Fermions.u or fermion==Fermions.c  or fermion==Fermions.t):   g = +1./tanb
          if(fermion==Fermions.d or fermion==Fermions.s  or fermion==Fermions.b):   g = -1./tanb
          if(fermion==Fermions.e or fermion==Fermions.mu or fermion==Fermions.tau): g = -1./tanb
-   if(type==2):
+   if(typeX==2):
       if(nameX=="h"):
          if(fermion==Fermions.u or fermion==Fermions.c  or fermion==Fermions.t):   g = sba+cba/tanb
          if(fermion==Fermions.d or fermion==Fermions.s  or fermion==Fermions.b):   g = sba-cba*tanb
@@ -173,7 +173,8 @@ def couplings(type,nameX,fermion,tanb,sba,cba):
          if(fermion==Fermions.e or fermion==Fermions.mu or fermion==Fermions.tau): g = tanb
    return g
 
-def setParameters(nameX,mX,cuts="",type=2,sba=1):
+
+def setParameters(nameX,mX,cuts="",typeX=2,sba=1):
    f = TFile("/afs/cern.ch/user/h/hod/data/thdm_grid_v166.root","READ")
    t = f.Get("thdm")
    b_tb  = NUMPY.zeros(1, dtype=float)
@@ -211,21 +212,24 @@ def setParameters(nameX,mX,cuts="",type=2,sba=1):
       wH   = b_wH[0]
       mA   = b_mA[0]
       mH   = b_mH[0]
-      YMT   = couplings(type,nameX,Fermions.t,tanb,sba,cba)*MT
-      YMB   = couplings(type,nameX,Fermions.b,tanb,sba,cba)*MB
-      YMC   = couplings(type,nameX,Fermions.c,tanb,sba,cba)*MC
-      YMM   = couplings(type,nameX,Fermions.mu,tanb,sba,cba)*MM
-      YMTAU = couplings(type,nameX,Fermions.tau,tanb,sba,cba)*MTAU
+      YMT   = couplings(typeX,nameX,Fermions.t,tanb,sba,cba)*MT
+      YMB   = couplings(typeX,nameX,Fermions.b,tanb,sba,cba)*MB
+      YMC   = couplings(typeX,nameX,Fermions.c,tanb,sba,cba)*MC
+      YMM   = couplings(typeX,nameX,Fermions.mu,tanb,sba,cba)*MM
+      YMTAU = couplings(typeX,nameX,Fermions.tau,tanb,sba,cba)*MTAU
       print "["+str(i)+"] tanb="+'%.6f' % tanb+" sba="+'%.6f' % sba+" cba="+'%.6f' % cba+" wA="+'%.6f' % wA+" wH="+'%.6f' % wH+" YMT="+'%.6f' % YMT+" YMB="+'%.6f' % YMB+" YMC="+'%.6f' % YMC+" YMM="+'%.6f' % YMM+" YMTAU="+'%.6f' % YMTAU
       adict = {}
       adict = {'tanb':tanb, 'sba':sba, 'cba':cba, 'mA':mA, 'wA':wA, 'mH':mH, 'wH':wH, 'YMT':YMT, 'YMB':YMB, 'YMC':YMC, 'YMM':YMM, 'YMTAU':YMTAU}
       parameters.append(adict.copy())
    print "N="+str(len(parameters))+" parameters set !"
 
+
 def getItanb(tanb):
    for i in xrange(len(parameters)):
       if(parameters[i]['tanb']==tanb): return i
+   print "Cannot find index of tanb=%g in parameters list of disctionaries" % tanb
    return -1
+
 
 def compileSM(nameX,mX,sba):	
    X       = "matrix/"+nameX+"/"+str(mX)+"/"+str(sba)+"/"
@@ -284,6 +288,8 @@ def compileSM(nameX,mX,sba):
             out, err = p.communicate()
             p = subprocess.Popen("cp ../../Cards/*.dat "+libdir+proc+"/", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = p.communicate()
+            p = subprocess.Popen("rm -f "+libdir+proc+"/*_default.dat", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = p.communicate()
 
 
 def compileX(index,nameX,mX,sba):
@@ -324,10 +330,16 @@ def compileX(index,nameX,mX,sba):
       out, err = p.communicate()
 
       replacements = {}
-      replacements.update({' = 111.,':          ' = '+str(parameters[index].get("mA"))+','})
-      replacements.update({' = 0.11111,':       ' = '+str(parameters[index].get("wA"))+','})
-      replacements.update({' = 120.,':          ' = '+str(parameters[index].get("mH"))+','})
-      replacements.update({' = 0.00575308848,': ' = '+str(parameters[index].get("wH"))+','})
+      if(nameX=="H"):
+         replacements.update({' = 111.,':          ' = 100000000000.,'})
+         replacements.update({' = 0.11111,':       ' = 100000000000.,'})
+         replacements.update({' = 120.,':          ' = '+str(parameters[index].get("mH"))+','})
+         replacements.update({' = 0.00575308848,': ' = '+str(parameters[index].get("wH"))+','})
+      if(nameX=="A"):
+         replacements.update({' = 111.,':          ' = '+str(parameters[index].get("mA"))+','})
+         replacements.update({' = 0.11111,':       ' = '+str(parameters[index].get("wA"))+','})
+         replacements.update({' = 120.,':          ' = 100000000000.,'})
+         replacements.update({' = 0.00575308848,': ' = 100000000000.,'})
       replacements.update({' = 1.27,':          ' = '+str(parameters[index].get("YMC"))+','})
       replacements.update({' = 4.2,':           ' = '+str(parameters[index].get("YMB"))+','})
       replacements.update({' = 164.5,':         ' = '+str(parameters[index].get("YMT"))+','})
@@ -370,6 +382,8 @@ def compileX(index,nameX,mX,sba):
             out, err = p.communicate()
             p = subprocess.Popen("cp ../../Cards/*.dat "+libdir+proc+"/", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = p.communicate()
+            p = subprocess.Popen("rm -f "+libdir+proc+"/*_default.dat", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = p.communicate()
 
 modules = {}
 def setModules(nameX,libs="All",index=-1):
@@ -392,7 +406,7 @@ def setModules(nameX,libs="All",index=-1):
                print "in "+os.getcwd()+", trying to import ",name
                module_info = imp.find_module(name,[libmatrix+str(i)+"/"+procdir+"/"])
                modules.update({name:imp.load_module(name, *module_info)})
-               modules[name].initialise("param_card.dat")
+               modules[name].initialise(libmatrix+str(i)+"/"+procdir+"/param_card.dat")
                print "Successfully initialised ",name
    if(libs=="X" and index!=-1):
       for proc in model.diagramsXX:
@@ -405,7 +419,7 @@ def setModules(nameX,libs="All",index=-1):
             print "in "+os.getcwd()+", trying to import ",name
             module_info = imp.find_module(name,[libmatrix+str(index)+"/"+procdir+"/"])
             modules.update({name:imp.load_module(name, *module_info)})
-            modules[name].initialise("param_card.dat")
+            modules[name].initialise(libmatrix+str(index)+"/"+procdir+"/param_card.dat")
             print "Successfully initialised ",name
    if(libs=="All" or libs=="SM"):
       for proc in model.diagramsSM:
@@ -416,7 +430,7 @@ def setModules(nameX,libs="All",index=-1):
             print "in "+os.getcwd()+", trying to import "+name
             module_info = imp.find_module(name,[libmatrix+"SM/"+procdir+"/"])
             modules.update({name:imp.load_module(name, *module_info)})
-            modules[name].initialise("param_card.dat")
+            modules[name].initialise(libmatrix+"SM/"+procdir+"/param_card.dat")
             print "Successfully initialised ",name
 
 
@@ -482,6 +496,6 @@ def makeAll(nameX,mX,sba,test=False):
 
 
 def test2HDM():
-   setParameters(model.nameX,model.mX,model.cuts,model.type,model.sba)
+   setParameters(model.nameX,model.mX,model.cuts,model.typeX,model.sba)
    print parameters
    makeAll(model.nameX,model.mX,model.sba,True)

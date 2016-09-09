@@ -3,6 +3,7 @@ import ROOT
 import math
 from array import array
 
+
 class Analysis:
 	ch = ''
 	fi = None
@@ -12,6 +13,7 @@ class Analysis:
 	applyMET = 0
 	eftLambda = -1
 	eftCvv = 0
+        w2HDM = 1
 	def __init__(self, channel, suf, outputFile):
 		self.fi = ROOT.TFile(outputFile, "recreate")
 		self.ch = channel
@@ -20,6 +22,7 @@ class Analysis:
 		self.applyMET = 0
 		self.eftLambda = -1
 		self.eftCvv = -1
+		self.w2HDM = 1
 		self.h = {}
 		self.keep = '' # can be 'bb', 'cc', 'c' or 'l' and only applies to W+jets
 
@@ -91,6 +94,7 @@ class AnaTtresSL(Analysis):
 		self.applyMET = 0
 		self.eftLambda = -1
 		self.eftCvv = 0
+		self.w2HDM = 1
 		# make histograms
 		self.add("yields", 1, 0.5, 1.5)
 		self.add("yieldsPos", 1, 0.5, 1.5)
@@ -120,10 +124,20 @@ class AnaTtresSL(Analysis):
 		self.addVar("mthad_res", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
 		self.add("mwhad_res", 40, 0, 400)
 		self.add("chi2", 50, -3, 7)
+                self.add("trueMttLow1", 20,300,1000)
+                self.add("trueMttLow1r", 20,300,1000)
+                self.add("trueMttLow2", 25,300,800)
+                self.add("trueMttLow2r", 25,300,800)
+                self.add("mttLow1", 20,300,1000)
+                self.add("mttLow1r", 20,300,1000)
+                self.add("mttLow2", 25,300,800)
+                self.add("mttLow2r", 25,300,800)
 		self.addVar("mtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
+		self.addVar("mttr", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
 		self.addVar("mttPos", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
 		self.addVar("mttNeg", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
 		self.addVar("trueMtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
+		self.addVar("trueMttr", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
 		self.add("btagSF", 50, 0, 2)
 
 		self.add("largeJet_tau32_wta", 20, 0, 1)
@@ -145,8 +159,10 @@ class AnaTtresSL(Analysis):
 			weight *= helpers.getEFTSMWeight(sel, s)
 
                 # for 2HDM
+                self.w2HDM = 1
                 if(helpers.nameX != ""):
-                        weight *= helpers.get2HDMWeight(sel)
+                        self.w2HDM = helpers.get2HDMWeight(sel)
+                        weight *= self.w2HDM
 
 		# W+jets C/A and HF syst. variations
 		# assuming b-tagging
@@ -425,7 +441,13 @@ class AnaTtresSL(Analysis):
 				return
 
 		if sel.mcChannelNumber != 0 and hasattr(sel, "MC_ttbar_beforeFSR_m"):
+                        w0 = w/self.w2HDM
 			self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
+			self.h["trueMttr"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
+                        self.h["trueMttLow1"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
+                        self.h["trueMttLow1r"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
+                        self.h["trueMttLow2"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
+                        self.h["trueMttLow2r"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
 		self.h["yields"][syst].Fill(1, w)
 		self.h["runNumber"][syst].Fill(sel.runNumber, w)
 		l = ROOT.TLorentzVector()
@@ -503,7 +525,7 @@ class AnaTtresSL(Analysis):
 			lj.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx], sel.ljet_eta[goodJetIdx], sel.ljet_phi[goodJetIdx], sel.ljet_m[goodJetIdx])
 			closeJet = ROOT.TLorentzVector()
 			closeJet.SetPtEtaPhiE(sel.jet_pt[closeJetIdx], sel.jet_eta[closeJetIdx], sel.jet_phi[closeJetIdx], sel.jet_e[closeJetIdx])
-			self.h["closeJetPt"][syst].Fill(closeJet.Perp()*1e-3, w)
+			
 			self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
 			self.h["largeJetM"][syst].Fill(lj.M()*1e-3, w)
 			self.h["largeJetEta"][syst].Fill(lj.Eta(), w)
@@ -512,6 +534,12 @@ class AnaTtresSL(Analysis):
 			self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx], w)
 			self.h["mtlep_boo"][syst].Fill((closeJet+nu+l).M()*1e-3, w)
 			self.h["mtt"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
+                        w0 = w/self.w2HDM
+			self.h["mttr"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w0*(self.w2HDM-1.))
+                        self.h["mttLow1"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
+                        self.h["mttLow1r"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w0*(self.w2HDM-1.))
+                        self.h["mttLow2"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
+                        self.h["mttLow2r"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w0*(self.w2HDM-1.))
 			if lQ > 0:
 				self.h["mttPos"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
 			elif lQ < 0:
@@ -540,7 +568,13 @@ class AnaTtresSL(Analysis):
 			mth = res_info["mth"]
 			mwh = res_info["mwh"]
 			chi2 = res_info["chi2"]
+                        w0 = w/self.w2HDM
 			self.h["mtt"][syst].Fill(mtt*1e-3, w)
+			self.h["mttr"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))
+			self.h["mttLow1"][syst].Fill(mtt*1e-3, w)
+			self.h["mttLow1r"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))
+			self.h["mttLow2"][syst].Fill(mtt*1e-3, w)
+			self.h["mttLow2r"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))
 			if lQ > 0:
 				self.h["mttPos"][syst].Fill(mtt*1e-3, w)
 			elif lQ < 0:

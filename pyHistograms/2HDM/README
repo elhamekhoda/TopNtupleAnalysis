@@ -4,6 +4,7 @@ To generate libs locally:
   * put it wherever you like: /path/to/mg/
   * tar -zxvf MG5_aMC_v2.4.3_HEFTff.tar.gz
   * cd MG5_aMC_v2_4_3/
+  * make sure that models/HEFTff/restrict_default.dat has a weird suffix such that it is non-readable for MG
   * you can run the processes just to get a feeling e.g. as:
     ./bin/mg5_aMC run/proc.H.dat
     ./bin/mg5_aMC run/proc.A.dat
@@ -25,8 +26,9 @@ setting up AnalysisTop:
   * rcSetup
 
 setting up 2HDM:
-  * cd TopNtupleAnalysis/pyHistograms/2HDM
-  * source local/setup.sh
+  * cd TopNtupleAnalysis/pyHistograms/2HDM/local/
+  * source setup.sh
+  * cd ../../
 
 makeing the libs:
   * edit the __init__ function of t2HDM class in T2HDM.py  to tune the model parameters

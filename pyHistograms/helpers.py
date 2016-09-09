@@ -310,9 +310,8 @@ def init2HDM(MH,MA,SBA,TANB,TYPE):
   global cutsX
   ### No need for global declaration to read value of these vars
   ############
-
   nameX = "H" if(MH>0) else "A"
-  noX = "h" if(nameX=="A") else "h1"
+  noX   = "h" if(nameX=="A") else "h1"
   mX    = MH if(MH>0) else MA
   tanb  = TANB
   stanb = '%.2f' % tanb
@@ -540,7 +539,8 @@ H/A unmatched topo's:
 P2_uxb_ttxuxb (?)
 '''
 
-def getTopology(isProd,id1,id2=999):
+def getTopology(prod,id1,id2=999):
+    isProd = True if(prod!="") else False
     topology = ""
     GLU=21
     TOP=6
@@ -549,20 +549,20 @@ def getTopology(isProd,id1,id2=999):
     absidsum = abs(id1)+abs(id2)
     absidsub = abs(abs(id1)-abs(id2))
     if(abs(id2)>GLU):
-        if(id1==GLU):                           topology = "g"
-        if(abs(id1)<TOP and id1>0):             topology = "u"
-        if(abs(id1)<TOP and id1<0):             topology = "ux"
-    elif(idsum==2*GLU):                         topology = "gg"
-    elif(idsum==0 and id1<CHM):                 topology = "uux"
-    elif(idsum==0 and id1>=CHM and not isProd): topology = "ccx"
-    elif(idsum>GLU and idsum<2*GLU):            topology = "gu"
-    elif(idsum<GLU and idsum>=GLU-TOP):         topology = "gux"
+        if(id1==GLU):                            topology = "g"
+        if(abs(id1)<TOP and id1>0):              topology = "u"
+        if(abs(id1)<TOP and id1<0):              topology = "ux"
+    elif(idsum==2*GLU):                          topology = "gg"
+    elif(idsum==0 and id1<TOP):                  topology = "uux"
+    elif(idsum==0 and id1>=CHM and prod=="uux"): topology = "ccx"
+    elif(idsum>GLU and idsum<2*GLU):             topology = "gu"
+    elif(idsum<GLU and idsum>=GLU-TOP):          topology = "gux"
     elif(absidsum<2*TOP):                    
-        if(id1>0           and absidsub==0):    topology = "uu"
-        if(id1<0           and absidsub==0):    topology = "uxux"
-        if(id1>0 and id2>0 and absidsub>0):     topology = "uc"
-        if(id1*id2<0       and absidsub>0):     topology = "ucx"
-        if(id1<0 and id2<0 and absidsub>0):     topology = "uxcx"
+        if(id1>0           and absidsub==0):     topology = "uu"
+        if(id1<0           and absidsub==0):     topology = "uxux"
+        if(id1>0 and id2>0 and absidsub>0):      topology = "uc"
+        if(id1*id2<0       and absidsub>0):      topology = "ucx"
+        if(id1<0 and id2<0 and absidsub>0):      topology = "uxcx"
     else:
         print "Cannot understand the topology - quitting"
         quit()
@@ -574,10 +574,13 @@ def combineTopology(ids):
     if(n==4): topology += "P0_"
     if(n==5): topology += "P1_"
     if(n==6): topology += "P2_"
-    topology += getTopology(True,ids[0],ids[1])
+    prod = getTopology("",ids[0],ids[1])
+    topology += prod
     topology += "_ttx" ## should be always there...
-    if(n==5): topology += getTopology(False,ids[4])
-    if(n==6): topology += getTopology(False,ids[4],ids[5])
+    decay = ""
+    if(n==5): decay = getTopology(prod,ids[4])
+    if(n==6): decay = getTopology(prod,ids[4],ids[5])
+    topology += decay
     return topology
 
 def stripTopology(topology):
@@ -614,9 +617,9 @@ def correct2HDMTopology(sel,topology):
             print "Cannot understand the decay with b's (n=5)- quitting:",decay
             quit()
     if(n==6 and (abs(sel.MC_id_me[4])==BOT or abs(sel.MC_id_me[5])==BOT)):
-        if(decay=="uux"):                                                   decay = "bbx"
-        elif(decay=="gu" or decay=="gux" or decay=="uu" or decay=="uxux"):  decay = decay.replace("u","b")
-        elif(decay=="uc" or decay=="ucx" or decay=="uxcx" or decay=="ccx"): decay = decay.replace("c","b")
+        if(decay=="uux"):                                                    decay = "bbx"
+        elif(decay=="gu" or decay=="gux" or decay=="uu"   or decay=="uxux"): decay = decay.replace("u","b")
+        elif(decay=="uc" or decay=="ucx" or decay=="uxcx" or decay=="ccx"):  decay = decay.replace("c","b")
         else:
             print "Cannot understand the decay with b's (n=6) - quitting:",decay
             quit()
@@ -627,15 +630,12 @@ def correct2HDMTopology(sel,topology):
 def getMomenta(sel,topology):
     n = len(sel.MC_id_me)
     topoparts = topology.split("_")
-    # print "topoparts=",topoparts
     if(len(topoparts)<3):
         print "Error: topoparts=",topoparts
         print "Too few topo parts - quitting"
         quit()
     prod  = topoparts[1]
     decay = topoparts[2].replace("ttx","")
-    # print "prod=",prod
-    # print "decay=",decay
     GLU=21
     TOP=6
     CHM=4
@@ -664,7 +664,7 @@ def getMomenta(sel,topology):
         quit()
     ### Fill top quarks' momenta ###
     t  = 2 if(sel.MC_id_me[2]>0) else 3
-    tx = 3 if(sel.MC_id_me[3]>0) else 2
+    tx = 3 if(sel.MC_id_me[2]>0) else 2
     me.update({"t1":{"id":sel.MC_id_me[t], "idx":t}})
     me.update({"t2":{"id":sel.MC_id_me[tx],"idx":tx}}) 
     ### Fill extra partons' momenta ###
@@ -736,8 +736,26 @@ def getEFTSMWeight(sel, s = ""):
     return w
 
 
+def print2HDM(sel,topology,alphaS,ids,pCpp,me2XX,me2SM):
+    pt1 = ROOT.TLorentzVector()
+    pt2 = ROOT.TLorentzVector()
+    pt1.SetPxPyPzE(sel.MC_px_me[2],sel.MC_py_me[2],sel.MC_pz_me[2],sel.MC_e_me[2])
+    pt2.SetPxPyPzE(sel.MC_px_me[3],sel.MC_py_me[3],sel.MC_pz_me[3],sel.MC_e_me[3])
+    if(abs((pt1+pt2).M()-mX)<100):
+       weightX = me2XX/me2SM
+       print "# 2HDM setup: mX=%g, sba=%g, tanb=%g, type=%g --> topo=%s, mtt=%g, me2XX/me2SM=%g/%g=%g" % (mX,sba,tanb,typeX,topology,(pt1+pt2).M(),me2XX,me2SM,weightX)
+       print "# ME ids are: ",ids
+       print "# Q =",sel.MC_Q_me/1000.
+       print "alphaS =",alphaS
+       print "p=["
+       for x in xrange(len(ids)):
+          print "  [%g,%g,%g,%g]," % (sel.MC_e_me[x],sel.MC_px_me[x],sel.MC_py_me[x],sel.MC_pz_me[x])
+       print "]"
+       print "used p =", pCpp
+
+
+
 def get2HDMWeight(sel):
-    # print "sel.mcChannelNumber=",sel.mcChannelNumber
     if sel.mcChannelNumber == 0:
         return 1
     if not sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]:
@@ -749,22 +767,21 @@ def get2HDMWeight(sel):
     topologyXX_lib = 'matrix2'+nameX+str(itanb)+stripTopology(topologyXX_name)+'py'
     ids = []
     for i in xrange(sel.MC_id_me.size()): ids.append(sel.MC_id_me[i])
-    # print "ids=",ids
-    # print "topology name:",topologySM_name
-    # print "topology libSM :",topologySM_lib
-    # print "topology libXX :",topologyXX_lib
-    weightX = 1
-    if(topologySM_lib in T2HDM.modules and topologyXX_lib in T2HDM.modules):
-        pCpp = getMomenta(sel,topologySM_name)
-        pPython = T2HDM.invert_momenta(pCpp)
-        Q2 = sel.MC_Q_me**2
-        alphaS = wrapperC.alphaS(Q2)
-        nhel = 0 # sum over all helicities
-        me2SM = T2HDM.modules[topologySM_lib].get_me(pPython,alphaS,nhel) ### calculate the SM ME^2
-        me2XX = T2HDM.modules[topologyXX_lib].get_me(pPython,alphaS,nhel) ### calculate the X ME^2
-        # print "me2SM=%g, me2XX=%g" % (me2SM,me2XX)
-        weightX = me2XX/me2SM                                             ### calculate the weight
-    # print "weight=",weightX
+    if(topologySM_lib not in T2HDM.modules or topologyXX_lib not in T2HDM.modules):
+        print "topology %s or %s (or both) is not in T2HDM.modules" % (topologySM_lib,topologyXX_lib) 
+        print "ME id's are: ",ids
+        return 1
+
+    pCpp = getMomenta(sel,topologySM_name)
+    pPython = T2HDM.invert_momenta(pCpp)
+    Q2 = (sel.MC_Q_me/1000.)*(sel.MC_Q_me/1000.)
+    alphaS = wrapperC.alphaS(Q2)
+    nhel = 0 # sum over all helicities
+    me2SM = T2HDM.modules[topologySM_lib].get_me(pPython,alphaS,nhel) ### calculate the SM ME^2
+    me2XX = T2HDM.modules[topologyXX_lib].get_me(pPython,alphaS,nhel) ### calculate the X ME^2
+    weightX = me2XX/me2SM                                             ### calculate the weight
+    #print2HDM(sel,topologySM_name,alphaS,ids,pCpp,me2XX,me2SM)        ### print basic info
+    
     return weightX
 
 
