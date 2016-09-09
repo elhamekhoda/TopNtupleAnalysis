@@ -61,7 +61,7 @@ void CPPProcess::sigmaKin()
   static int ntry = 0, sum_hel = 0, ngood = 0; 
   static int igood[ncomb]; 
   static int jhel; 
-  std::complex<double> * * wfs; 
+  //std::complex<double> * * wfs; 
   double t[nprocesses]; 
   // Helicities for the process
   static const int helicities[ncomb][nexternal] = {{-1, -1, -1, -1, -1}, {-1,
@@ -173,7 +173,7 @@ double CPPProcess::sigmaHat()
 void CPPProcess::calculate_wavefunctions(const int perm[], const int hel[])
 {
   // Calculate wavefunctions for all processes
-  int i, j; 
+  //int i, j; 
 
   // Calculate all wavefunctions
   vxxxxx(p[perm[0]], mME[0], hel[0], -1, w[0]); 
@@ -221,7 +221,7 @@ double CPPProcess::matrix_2_gg_ttxg()
 {
   int i, j; 
   // Local variables
-  const int ngraphs = 18; 
+  //const int ngraphs = 18; 
   const int ncolor = 6; 
   std::complex<double> ztemp; 
   std::complex<double> jamp[ncolor]; 
