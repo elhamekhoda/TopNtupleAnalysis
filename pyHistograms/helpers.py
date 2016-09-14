@@ -31,6 +31,7 @@ def initBinds():
 #include "TLorentzVector.h"
 #include <vector>
 #include <cstdlib>
+#include <sstream>
 
 #include "TopNtupleAnalysis/EFTLib.h"
 
@@ -268,8 +269,17 @@ class WrapperExtras {
       initEFTModels(eftLambda, eftCvv);
     }
     double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
-      double eftw = getEFTWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
+      double eftw = getEFTWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2, 1.0);
       double smw  = getSMWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
+      //double smw  = getEFTWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2, 0.0);
+      //double s = (t+tbar).M2();
+      //double tm = (i1-t).M2();
+      //double u = (i1-tbar).M2();
+      //std::stringstream str;
+      //for (int i = 0; i < f_pid.size(); ++i) { str << f_pid[i] << " "; }
+      //double test = s/(4e3*4e3*4*3.14159*alphaS(Q2));
+      //if (i1_pid != 21 && f_pid.size() == 0 && std::sqrt(s) > 2000)
+      //  std::cout << "EFT/SM = " << eftw << "/" << smw << "-1 = " << eftw/smw-1<<", i1, i2 = " << i1_pid<< ", " << i2_pid << ", s,t,u = " << s << ", " << tm << ", " << u << ", Q2 = " << Q2 << ", aS = " << alphaS(Q2) << ", nj = " << f_pid.size() << str.str() << ", analyt = " << test << "  -> " << (eftw/smw-1)/test << std::endl;
       return eftw/smw - 1.0;
     }
 };

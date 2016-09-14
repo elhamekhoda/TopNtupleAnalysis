@@ -98,6 +98,7 @@ CPPProcess process;
 
 // SM tt
 
+
 namespace SM_gg_ttx {
 #include "TopNtupleAnalysis/EFTIncludes/P1_Sigma_sm_gg_ttx/CPPProcess.h"
 #include "TopNtupleAnalysis/EFTIncludes/P1_Sigma_sm_gg_ttx/CPPProcess.cc"
@@ -184,6 +185,7 @@ namespace SM_gux_ttxgux {
 #include "TopNtupleAnalysis/EFTIncludes/P3_Sigma_sm_gux_ttxgux/CPPProcess.cc"
 CPPProcess process;
 }
+
 
 
 #include "LHAPDF/LHAPDF.h"
@@ -323,7 +325,10 @@ double getWeight(C &process, int i1pid, int i2pid, TLorentzVector i1o, TLorentzV
   return weight;
 };
 
-double getEFTWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
+double getEFTWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2, double cvv) {
+  Parameters_TopEffTh::getInstance()->mdl_C81qq = cvv;
+  Parameters_TopEffTh::getInstance()->mdl_C1qt = cvv;
+  Parameters_TopEffTh::getInstance()->setIndependentCouplings();
   if (abs(i1_pid) < 6) {
     if (i1_pid > 0)
       i1_pid = 2;
