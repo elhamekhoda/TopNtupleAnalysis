@@ -153,11 +153,12 @@ Hist Relative::get(const string &name, const string &fname) {
   //return (ha-hb)*0.5;
 }
 
-RelativeISRFSR::RelativeISRFSR(const string &a, const string &b, const vector<string> &only, int smoothLevel) {
+RelativeISRFSR::RelativeISRFSR(const string &a, const string &b, const vector<string> &only, int smoothLevel, float factor) {
   _a = a;
   _b = b;
   _only = only;
   _smoothLevel = smoothLevel;
+  _factor = factor;
 }
 
 Hist RelativeISRFSR::get(const string &name, const string &fname) {
@@ -174,9 +175,9 @@ Hist RelativeISRFSR::get(const string &name, const string &fname) {
   Hist hd = ha - hb;
   hc *= 0.5;
   if (_smoothLevel <= 0)
-    return (hnom*hd/hc); // == (hnom*hd/hc + hnom) - hnom, where the first term can be seen as the variation histogram
+    return (hnom*hd/hc*_factor); // == (hnom*hd/hc + hnom) - hnom, where the first term can be seen as the variation histogram
   //return (hnom*hd/hc).abs();
-  Hist ha_smooth = (hnom*hd/hc + hnom).smoothRun1(hnom, _smoothLevel);
+  Hist ha_smooth = (hnom*hd/hc*_factor + hnom).smoothRun1(hnom, _smoothLevel);
   return ha_smooth - hnom;
 }
 

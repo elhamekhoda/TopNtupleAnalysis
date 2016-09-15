@@ -1866,11 +1866,21 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     int this_smooth = smooth;
     if (this_smooth > 0 && it->second.size() == 5) this_smooth = it->second[4] == "S";
 
-    if (pref != "") {
-      systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[3].c_str()), pattern, this_smooth), it->second[0]);
-	} else {
-      systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), it->second[2].c_str()), Form("%s_%s.root", channel.c_str(), it->second[3].c_str()), pattern, this_smooth), it->second[0]);
-	}
+    if (!updw) {
+      if (pref != "") {
+        systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[3].c_str()), pattern, this_smooth, 1), it->second[0]);
+      } else {
+        systCalc.add(name.c_str(), new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), it->second[2].c_str()), Form("%s_%s.root", channel.c_str(), it->second[3].c_str()), pattern, this_smooth, 1), it->second[0]);
+      }
+    } else {
+      if (pref != "") {
+        systCalc.add(name+"up", new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[3].c_str()), pattern, this_smooth, 1), it->second[0]+"up");
+        systCalc.add(name+"dw", new RelativeISRFSR(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[3].c_str()), pattern, this_smooth, -1), it->second[0]+"dw");
+      } else {
+        systCalc.add(name+"up", new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), it->second[2].c_str()), Form("%s_%s.root", channel.c_str(), it->second[3].c_str()), pattern, this_smooth, 1), it->second[0]+" up");
+        systCalc.add(name+"dw", new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), it->second[2].c_str()), Form("%s_%s.root", channel.c_str(), it->second[3].c_str()), pattern, this_smooth, -1), it->second[0]+" dw");
+      }
+    }
   }
 
   // HistDiffMany
