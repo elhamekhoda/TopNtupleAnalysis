@@ -442,14 +442,54 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
            
   }//m_electron
 
+
+   //---- extra addition for log10(chi2) ---- //
+   int  igj3, igj4; // index for the Whad
+   int igb3, igb4; // index for the b's
+   int  ign1;  // index for the neutrino (because chi2 can test both pz solution)
+   double chi2ming1, chi2ming1H, chi2ming1L;
+
+   std::vector<TLorentzVector *> vjets;
+   std::vector<bool> vjets_btagged;
+
+
+    for (size_t z = 0; z < evt.jet().size(); ++z) {
+      vjets.push_back(new TLorentzVector(0,0,0,0));
+      vjets[z]->SetPtEtaPhiE(evt.jet()[z].mom().Perp(), evt.jet()[z].mom().Eta(), evt.jet()[z].mom().Phi(), evt.jet()[z].mom().E());
+
+      TLorentzVector tmpAk4Jet = evt.jet()[z].mom();
+      bool is_btagged(false), is_bmatched(false);
+
+      for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
+       {
+         TLorentzVector tmpTJet = evt.tjet()[bidx].mom();
+         if(tmpAk4Jet.DeltaR(tmpTJet) <= 0.4){
+         if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())
+          is_btagged = true;
+          // break;
+          }
+       } // for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx) 
+         
+       vjets_btagged.push_back(is_btagged);
+     } // for (size_t z = 0; z < evt.jet().size(); ++z
+       
+  TLorentzVector met = evt.met();
+  bool status = m_chi2.findMinChiSquare(&l, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
+
+  float chi2Value = 1000000; // log10(1000000) = 6
+  if(status)
+  chi2Value = chi2ming1;
+
+
+
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
   float MET = evt.met().Perp()*1e-3;
   
   if(m_electron){
       if( (MET>20) || (MET+mWt)>60)	return;
   }else{
-      if( (MET<20) || (MET+mWt)<60)	return;
-      if(fabs(d0sig)<5)			return;
+      if( (MET>20) || (MET+mWt)>60)	return;
+      if(fabs(d0sig)>3)			return;
   }//if
 
   int nTrkBtagged = 0; 
@@ -535,15 +575,55 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
            
   }//m_electron
 
+
+   //---- extra addition for log10(chi2) ---- //
+   int  igj3, igj4; // index for the Whad
+   int igb3, igb4; // index for the b's
+   int  ign1;  // index for the neutrino (because chi2 can test both pz solution)
+   double chi2ming1, chi2ming1H, chi2ming1L;
+
+   std::vector<TLorentzVector *> vjets;
+   std::vector<bool> vjets_btagged;
+
+
+    for (size_t z = 0; z < evt.jet().size(); ++z) {
+      vjets.push_back(new TLorentzVector(0,0,0,0));
+      vjets[z]->SetPtEtaPhiE(evt.jet()[z].mom().Perp(), evt.jet()[z].mom().Eta(), evt.jet()[z].mom().Phi(), evt.jet()[z].mom().E());
+
+      TLorentzVector tmpAk4Jet = evt.jet()[z].mom();
+      bool is_btagged(false), is_bmatched(false);
+
+      for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
+       {
+         TLorentzVector tmpTJet = evt.tjet()[bidx].mom();
+         if(tmpAk4Jet.DeltaR(tmpTJet) <= 0.4){
+         if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())
+          is_btagged = true;
+          // break;
+          }
+       } // for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx) 
+         
+       vjets_btagged.push_back(is_btagged);
+     } // for (size_t z = 0; z < evt.jet().size(); ++z
+       
+  TLorentzVector met = evt.met();
+  bool status = m_chi2.findMinChiSquare(&l, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
+
+  float chi2Value = 1000000; // log10(1000000) = 6
+  if(status)
+  chi2Value = chi2ming1;
+
+
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
   float MET = evt.met().Perp()*1e-3;
-  
+ 
   if(m_electron){
       if( (MET>20) && (MET+mWt)>60)		return;
   }else{
-      if( (MET<20) || (MET+mWt)<60)		return;
-      //if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
-      if(fabs(d0sig)>5)                         return;
+  //    if( (MET<20) || (MET+mWt)<60)		return;
+      if( (MET > 20) || (MET+mWt)<60)             return; // VR1
+      //if( (MET < 20) || (MET+mWt)>60)             return; // VR2
+      if(fabs(d0sig)>3)                        return;
   }//if
   
   int nTrkBtagged = 0; 
@@ -580,8 +660,13 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
   weight = 0;
   }
 
+  if(std::isinf(weight)) {
+  std::cout<<"Weight is Inf, making it  0"<<std::endl;
+  weight = 0;
+  }
+
   GetHistograms(evt, weight, "", suffix);
-  if(nTrkBtagged == 0)
+  if(nTrkBtagged == 0) 
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
@@ -689,12 +774,12 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsQCDCR") || evt.passes("bmujetsQCDCR_2016")))
+    if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsQCDCR") || evt.passes("rmujetsQCDCR_2016")))
+    if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<4)	return;
@@ -717,14 +802,53 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
            
   }//m_electron
 
+
+   //---- extra addition for log10(chi2) ---- //
+   int  igj3, igj4; // index for the Whad
+   int igb3, igb4; // index for the b's
+   int  ign1;  // index for the neutrino (because chi2 can test both pz solution)
+   double chi2ming1, chi2ming1H, chi2ming1L;
+
+   std::vector<TLorentzVector *> vjets;
+   std::vector<bool> vjets_btagged;
+
+
+    for (size_t z = 0; z < evt.jet().size(); ++z) {
+      vjets.push_back(new TLorentzVector(0,0,0,0));
+      vjets[z]->SetPtEtaPhiE(evt.jet()[z].mom().Perp(), evt.jet()[z].mom().Eta(), evt.jet()[z].mom().Phi(), evt.jet()[z].mom().E());
+
+      TLorentzVector tmpAk4Jet = evt.jet()[z].mom();
+      bool is_btagged(false), is_bmatched(false);
+
+      for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
+       {
+         TLorentzVector tmpTJet = evt.tjet()[bidx].mom();
+         if(tmpAk4Jet.DeltaR(tmpTJet) <= 0.4){
+         if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())
+          is_btagged = true;
+          // break;
+          }
+       } // for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx) 
+         
+       vjets_btagged.push_back(is_btagged);
+     } // for (size_t z = 0; z < evt.jet().size(); ++z
+       
+  TLorentzVector met = evt.met();
+  bool status = m_chi2.findMinChiSquare(&l, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
+
+  float chi2Value = 1000000; // log10(1000000) = 6
+  if(status)
+  chi2Value = chi2ming1;
+
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
   float MET = evt.met().Perp()*1e-3;
   
   if(m_electron){
       if( (MET>20) || (MET+mWt)>60)	return;
   }else{
-      if( (MET<20) || (MET+mWt)<60)	return;
-      if(fabs(d0sig)<5)			return;
+      if( (MET>20) || (MET+mWt)>60)	return;
+      if(fabs(d0sig)>3)			return;
+      //if(log10(chi2Value) < 1.5 || log10(chi2Value) > 6)        return;
   }//if
   
   int nTrkBtagged = 0; 
@@ -756,9 +880,20 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
   //if (closejl_deltaR>0.6)	GetHistograms(evt, weight, "hDR_", suffix);
   //else if (closejl_deltaR>0.4)	GetHistograms(evt, weight, "mDR_", suffix);
   //else				GetHistograms(evt, weight, "lDR_", suffix);
-  
+  //std::cout<<"Real weight = "<<weight<<std::endl; 
+  if(std::isnan(weight)) {
+  std::cout<<"Weight is Nan, making it  0"<<std::endl;
+  weight = 0;
+  }
+  //std::cout<<"FILLING HISTO, weight = "<<weight<<std::endl;
   GetHistograms(evt, weight, "", suffix);
+  if(nTrkBtagged == 0)
+  GetHistograms(evt, weight, "btag0_",suffix );
+  if(nTrkBtagged >= 1)
+  GetHistograms(evt, weight, "btag1_", suffix);
   
+
+
 }//AnaTtresMM::runMatrixMethod_QCDCR4j_2016
 
 
@@ -771,12 +906,12 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
     return;
 
   if (m_boosted) {
-    if (!(evt.passes("bejetsQCDCR") || evt.passes("bmujetsQCDCR_2016")))
+    if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))
       return;
   }
 
   if (!m_boosted)
-    if (!(evt.passes("rejetsQCDCR") || evt.passes("rmujetsQCDCR_2016")))
+    if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
   if (!m_boosted)	if(evt.jet().size()<4)	return;
@@ -785,7 +920,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
   
   bool isTight = false;
   float d0sig(99);
-    
+  
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
@@ -799,14 +934,57 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
     
   }//m_electron
 
+
+   //---- extra addition for log10(chi2) ---- //
+   int  igj3, igj4; // index for the Whad
+   int igb3, igb4; // index for the b's
+   int  ign1;  // index for the neutrino (because chi2 can test both pz solution)
+   double chi2ming1, chi2ming1H, chi2ming1L;
+
+   std::vector<TLorentzVector *> vjets;
+   std::vector<bool> vjets_btagged;
+
+
+    for (size_t z = 0; z < evt.jet().size(); ++z) {
+      vjets.push_back(new TLorentzVector(0,0,0,0));
+      vjets[z]->SetPtEtaPhiE(evt.jet()[z].mom().Perp(), evt.jet()[z].mom().Eta(), evt.jet()[z].mom().Phi(), evt.jet()[z].mom().E());
+
+      TLorentzVector tmpAk4Jet = evt.jet()[z].mom();
+      bool is_btagged(false), is_bmatched(false);
+
+      for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
+       {
+         TLorentzVector tmpTJet = evt.tjet()[bidx].mom();
+         if(tmpAk4Jet.DeltaR(tmpTJet) <= 0.4){
+         if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())
+          is_btagged = true;
+          // break;
+          }
+       } // for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx) 
+         
+       vjets_btagged.push_back(is_btagged);
+     } // for (size_t z = 0; z < evt.jet().size(); ++z
+       
+  TLorentzVector met = evt.met();
+  bool status = m_chi2.findMinChiSquare(&l, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
+
+  float chi2Value = 1000000; // log10(1000000) = 6
+  if(status)
+  chi2Value = chi2ming1;
+
+
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
   float MET = evt.met().Perp()*1e-3;
   
   if(m_electron){
       if( (MET>20) || (MET+mWt)>60)		return;
   }else{
-      if( (MET<20) || (MET+mWt)<60)		return;
-      if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
+      //if( (MET<20) || (MET+mWt)<60)		return;
+      //if(fabs(d0sig)<3 || fabs(d0sig)>5)      	return;
+      //if( (MET<20) && (MET+mWt)<60)             return;
+      if( (MET > 20) || (MET+mWt)<60)             return; // VR1
+      //if( (MET < 20) || (MET+mWt)>60)             return; // VR2
+      if(fabs(d0sig)>3)                          return; 
   }//if
   
   int nTrkBtagged = 0; 
@@ -835,9 +1013,24 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
     }   
   }//for     
 
-  GetHistograms(evt, weight, "", suffix);
+  if(std::isnan(weight)) {
+  std::cout<<"Weight is Nan, making it  0"<<std::endl;
+  weight = 0;
+  }
 
-}//runMatrixMethod_QCDSR4j_2016
+  if(std::isinf(weight)) {
+  std::cout<<"Weight is Inf, making it  0"<<std::endl;
+  weight = 0;
+  }
+
+
+  GetHistograms(evt, weight, "", suffix);
+  if(nTrkBtagged == 0)
+  GetHistograms(evt, weight, "btag0_",suffix );
+  if(nTrkBtagged >= 1)
+  GetHistograms(evt, weight, "btag1_", suffix);
+
+}//runMatrixMethod_QCDVR4j_2016
 
 
 
@@ -849,7 +1042,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR4j_2016(const Event &evt, double weight, c
 void AnaTtresMM::GetHistograms(const Event &evt, double weight, const std::string &prefix, const std::string &suffix){
 
   HistogramService *h = &m_hSvc;
-    
+  
   //lepton
   TLorentzVector l;   
   float d0sig(0);
