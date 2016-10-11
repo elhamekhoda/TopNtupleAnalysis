@@ -1,5 +1,10 @@
+2016-10-07 Sanmay Ganguly <sanmay.ganguly@cern.ch>
+	*Update rates for muon channel 
+	* TopNtupleAnalysis-00-02-22
+
 2016-09-09 Noam Tal Hod <hod@cern.ch>
 	* fixed a few bugs and added a few features to the 2HDM setup
+	* TopNtupleAnalysis-00-02-21
 
 2016-09-09 Samuel Calvet <scalvet@cern.ch>
 	* Remove warnings in Root/EFTLib.cxx
@@ -10,16 +15,19 @@
 	b-quarks - these topologies have one set of libs in the SM case givne
 	that the SM model used assumes m(b)=0, while in the H/A case there is
 	another set of libs which take into account the b mass
+	* TopNtupleAnalysis-00-02-20
 
 2016-08-31 Noam Tal Hod <hod@cern.ch>
 	* Added the weight functionality. Not all subprocesses are supported
 	yet. Will add all later. Have a look at getTopology(...),
 	get2HDMWeight(...) and the associated methods for details.
+	* TopNtupleAnalysis-00-02-19
 
 2016-08-30 Noam Tal Hod <hod@cern.ch>
 	* Added 2HDM setup This is very preliminary and requrires some extra
 	non-ATLAS tools/packages to be there on top of AnalysisTop. Please
 	consault the README file(s).
+	* TopNtupleAnalysis-00-02-18
 
 2016-08-12 Samuel Calvet <scalvet@cern.ch>
 	* Cleaning in MM codes
