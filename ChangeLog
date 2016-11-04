@@ -1,9 +1,10 @@
 2016-11-04 Sanmay Ganguly <sanmay.ganguly@cern.ch>
 	* Update rates for muon channel
 	* The real rate parametrization is changed to lepPt-topoetcone
+	* TopNtupleAnalysis-00-02-23
 
 2016-10-07 Sanmay Ganguly <sanmay.ganguly@cern.ch>
-	*Update rates for muon channel 
+	* Update rates for muon channel 
 	* TopNtupleAnalysis-00-02-22
 
 2016-09-09 Noam Tal Hod <hod@cern.ch>
