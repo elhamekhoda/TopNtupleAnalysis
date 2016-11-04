@@ -72,7 +72,16 @@ MMUtils::MMUtils(const int isBtagged, const std::string &eff_filename2015, const
     
     eff_map_resolved_mu_2016 = 	(TH2F*) m_eff_rootfile2016.Get("eff_LepPt_DR_sbin_resolved_mu");
     if(eff_map_resolved_mu_2016)	eff_map_resolved_mu_2016->SetDirectory(0);
+
+    eff_map_resolved_mu_2016_lDR =  (TH2F*) m_eff_rootfile2016.Get("eff_lepPt_topoetcone_lowDR_resolved_mu");
+    if(eff_map_resolved_mu_2016_lDR)        eff_map_resolved_mu_2016_lDR->SetDirectory(0);
+
+    eff_map_resolved_mu_2016_mDR =  (TH2F*) m_eff_rootfile2016.Get("eff_lepPt_topoetcone_medDR_resolved_mu");
+    if(eff_map_resolved_mu_2016_mDR)        eff_map_resolved_mu_2016_mDR->SetDirectory(0);
           
+    eff_map_resolved_mu_2016_hDR =  (TH2F*) m_eff_rootfile2016.Get("eff_lepPt_topoetcone_highDR_resolved_mu");
+    if(eff_map_resolved_mu_2016_hDR)        eff_map_resolved_mu_2016_hDR->SetDirectory(0);
+
     eff_map_boosted_e_2016 = 	(TH2F*) m_eff_rootfile2016.Get("eff_pTdr_boosted_e");
     if(eff_map_boosted_e_2016)	eff_map_boosted_e_2016->SetDirectory(0);
     
@@ -111,6 +120,9 @@ MMUtils::~MMUtils(){
 
   delete eff_map_resolved_e_2016  ;
   delete eff_map_resolved_mu_2016  ;
+  delete eff_map_resolved_mu_2016_lDR  ;
+  delete eff_map_resolved_mu_2016_mDR  ;
+  delete eff_map_resolved_mu_2016_hDR  ;
   delete eff_map_boosted_e_2016 ;
   delete eff_map_boosted_mu_2016 ;
   
@@ -254,9 +266,17 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
 
     float topoet_min(-5.);
     float topoet_limit(30);
+
+    if(closejl_DR > 0.6)
+    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016_hDR, lepPt, topoetcone); 
+    else if(closejl_DR < 0.6 && closejl_DR > 0.4)
+    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016_mDR, lepPt, topoetcone);
+    else
+    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016_lDR, lepPt, topoetcone);
+    //get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016, lepPt, closejl_DR);
     
-    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016, lepPt, closejl_DR);
-    
+    /*
+    // --- for rates without W+Jets scaling in python
     if(m_isBtagged==0) {
 
       lepPt_limit = 95;
@@ -275,8 +295,8 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
        lepPt_min = std::min(lepPt, lepPt_limit);
        topoet_min = std::min(topoetcone, topoet_limit);
 
-       if(lepPt_min > 30 && lepPt_min < 30 && topoet_min > 10)
-       topoet_min = 9;
+       if(lepPt_min > 100 && topoet_min > 3 && topoet_min < 10)
+       topoet_min = 1;
       } // if(closejl_DR < 0.4)
       else {
        lepPt_limit = 600;
@@ -285,20 +305,44 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
        lepPt_min = std::min(lepPt, lepPt_limit);
        topoet_min = std::min(topoetcone, topoet_limit);
 
-       if(lepPt_min > 100) topoet_min = 4;
+       if(lepPt_min > 100 && topoet_min > 6) topoet_min = 4;
 
-       if(lepPt_min > 50 && lepPt_min < 100  && topoet_min > 10 )
-       topoet_min = 9;
+      // if(lepPt_min > 50 && lepPt_min < 100  && topoet_min > 10 )
+      // topoet_min = 9;
 
       }
 
     } // if(m_isBtagged==0)
-    
-    //lepPt_min = std::min(lepPt, lepPt_limit);
-    //topoet_min = std::min(topoetcone, topoet_limit);
+   */ 
+  
+    if(m_isBtagged==0) {
+
+      lepPt_min = std::min(lepPt, lepPt_limit);
+      topoet_min = std::min(topoetcone, topoet_limit);
+      if(topoet_min < 1 && lepPt_min >=100)
+       topoet_min = 2;
+
+    } // if(m_isBtagged==0)
+    else {
+
+      if(closejl_DR >= 0.4) {
+
+       lepPt_min = std::min(lepPt, lepPt_limit);
+       topoet_min = std::min(topoetcone, topoet_limit);
+       if(topoet_min > 6 && lepPt_min >=100)
+       topoet_min = 5;
+   
+
+      } // if(closejl_DR >= 0.4)
+
+    } // if(m_isBtagged==0)
 
 
     //if(topoet_min < -2) topoet_min = -1.99;
+
+    //lepPt_min = std::min(lepPt, lepPt_limit);
+    //topoet_min = std::min(topoetcone, topoet_limit);
+
 
     if(m_isBtagged==0)
      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2016_mDR, lepPt_min, topoet_min);

@@ -11,8 +11,8 @@
 #include <string>
 #include "TopNtupleAnalysis/HistogramService.h"
 
-AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList)
-  : Analysis(filename, systList), m_electron(electron), m_boosted(boosted),
+AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList, int dsid)
+  : Analysis(filename, systList), m_electron(electron), m_boosted(boosted), m_dsid(dsid),
     m_neutrinoBuilder("MeV"),  m_chi2("MeV") {
   
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
@@ -23,6 +23,7 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   IniHistograms(suffix0, btag0);
   std::string suffix1(""), btag1("btag1_");
   IniHistograms(suffix1, btag1);
+
 
   /*
   suffix = "corr1.0_";
@@ -563,17 +564,17 @@ void AnaTtresQCD::GetRealHistograms(const Event &evt, double weight, const std::
 	  h->h2D(btag + "eff_lepPt_met_highDR",	"", suffix)->Fill(lept.Pt()*1e-3, MET, weight);
 	  h->h2D(btag + "eff_lepPt_cosDPhi_highDR",	"", suffix)->Fill(lept.Pt()*1e-3, cosDPhi , weight);
 	  h->h2D(btag + "eff_mwt_met_map_highDR", 	"", suffix)->Fill(MET, mWt, weight);
-	 	  
+	  h->h2D(btag + "eff_lepPt_topoetcone_highDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight); 	  
         }else if(closejl_deltaR>0.4){
           h->h2D(btag + "eff_lepPt_met_medDR",		"", suffix)->Fill(lept.Pt()*1e-3, MET, weight);
 	  h->h2D(btag + "eff_lepPt_cosDPhi_medDR",	"", suffix)->Fill(lept.Pt()*1e-3, cosDPhi , weight);
 	  h->h2D(btag + "eff_mwt_met_map_medDR", 	"", suffix)->Fill(MET, mWt, weight);
-	 	  
+	  h->h2D(btag + "eff_lepPt_topoetcone_medDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight);	  
         }else{
           h->h2D(btag + "eff_lepPt_met_lowDR",		"", suffix)->Fill(lept.Pt()*1e-3, MET, weight);
 	  h->h2D(btag + "eff_lepPt_cosDPhi_lowDR",	"", suffix)->Fill(lept.Pt()*1e-3, cosDPhi , weight);
 	  h->h2D(btag + "eff_mwt_met_map_lowDR", 	"", suffix)->Fill(MET, mWt, weight);
-	 	  
+	  h->h2D(btag + "eff_lepPt_topoetcone_lowDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight);	  
         }//if	
 			
    }//if (closejl_deltaR<99) 
@@ -700,6 +701,30 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
 	lept  = evt.muon()[0].mom();
         sd0    = evt.muon()[0].sd0();
   }//m_electron
+
+
+  // -------------- GEN LEPTON MATCHING --------- //
+  if(m_dsid == 410000) {
+
+  TLorentzVector lgen;
+
+  if(fabs(evt.MC_Wdecay1_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 15)
+   lgen = evt.MC_Wdecay1_from_t();
+
+  else if(fabs(evt.MC_Wdecay2_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 15)
+   lgen = evt.MC_Wdecay2_from_t();
+
+  else if(fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 13  || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 15)
+   lgen = evt.MC_Wdecay1_from_tbar();
+
+  else if(fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 15)
+   lgen = evt.MC_Wdecay2_from_tbar();
+
+  if (lept.DeltaR(lgen) > 0.2) return;
+
+  } // if(m_dsid == 410000)
+  // --------------- GEN LEPTON MATCHING --------- //
+
   HistogramService *h = &m_hSvc;
  
   TLorentzVector met = evt.met();
@@ -1633,6 +1658,13 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
 	m_hSvc.create2DVar(suffix+"eff_lepPt_cosDPhi_lowDR",    "; Pt of lepton [GeV]; Cos( #Delta #phi(met, lept) )", eff_N_pT_bins, eff_pT_bins_rmu, CdPhiBinN, CdPhiBin);
 	m_hSvc.create2DVar(suffix+"eff_lepPt_cosDPhi_highDR",   "; Pt of lepton [GeV]; Cos( #Delta #phi(met, lept) )", eff_N_pT_bins, eff_pT_bins_rmu, CdPhiBinN, CdPhiBin);
 	
+        m_hSvc.create2DVar(suffix+"eff_lepPt_topoetcone",      "; Pt of lepton [GeV]; topoetcone20 [GeV]", eff_N_pT_bins, eff_pT_bins_rmu, topoetconeBinN, topoetconeBin);
+        m_hSvc.create2DVar(suffix+"eff_lepPt_topoetcone_lowDR",      "; Pt of lepton [GeV]; topoetcone20 [GeV]", eff_N_pT_bins, eff_pT_bins_rmu, topoetconeBinN, topoetconeBin);
+        m_hSvc.create2DVar(suffix+"eff_lepPt_topoetcone_medDR",      "; Pt of lepton [GeV]; topoetcone20 [GeV]", eff_N_pT_bins, eff_pT_bins_rmu, topoetconeBinN, topoetconeBin);
+        m_hSvc.create2DVar(suffix+"eff_lepPt_topoetcone_highDR",      "; Pt of lepton [GeV]; topoetcone20 [GeV]", eff_N_pT_bins, eff_pT_bins_rmu, topoetconeBinN, topoetconeBin);
+        m_hSvc.create1DVar(suffix+"eff_topoetcone_effBins",    "; topoetcone [GeV]; Events", topoetconeBinN, topoetconeBin);
+
+
 	
 	
   	//Fake 1D     

@@ -17,7 +17,7 @@
 
 class AnaTtresQCD : public Analysis {
   public:
-    AnaTtresQCD(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList);
+    AnaTtresQCD(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList, int dsid);
     virtual ~AnaTtresQCD();
 
     void run(const Event &e, double weight, const std::string &syst);
@@ -46,6 +46,8 @@ class AnaTtresQCD : public Analysis {
 
     TtresNeutrinoBuilder m_neutrinoBuilder;
     TtresChi2 m_chi2;
+
+    int m_dsid;
 };
 
 #endif

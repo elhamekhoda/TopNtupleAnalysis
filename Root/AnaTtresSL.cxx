@@ -81,6 +81,8 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
 
   //m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN1, varBin1);  
   m_hSvc.create1D("lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
+  m_hSvc.create1D("lepPt_genm",    "; Pt of lept [GeV]; Events", 100, 25, 525);
+  m_hSvc.create1D("lepPt_fromb",    "; Pt of lept [GeV]; Events", 100, 25, 525);
   m_hSvc.create1D("lepEta", "; lepton #eta ; Events", 20, -2.5, 2.5);
   m_hSvc.create1D("lepPhi", "; lepton #phi [rd] ; Events", 32, -3.2, 3.2);
   m_hSvc.create1DVar("leadJetPt", "; leading Jet p_{T} [GeV]; Events", varBinN1, varBin1);  
@@ -209,7 +211,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
 
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
-
+ /*
   if (m_boosted) {
     if (!(evt.passes("bejets") || evt.passes("bmujets")))
       return;
@@ -223,6 +225,16 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   if (!m_boosted)
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
+  */
+
+  if (m_boosted)
+    if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))
+      return;
+
+  if (!m_boosted)
+    if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
+      return;
+
 
   if (!m_boosted)	if(evt.jet().size()<4)	return;
 
@@ -261,7 +273,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     l = evt.muon()[0].mom();
 
     isTight = evt.muon()[0].isTight();
-    
+    /*
     //Muon trigers
     trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
     trig2 = evt.muon()[0].HLT_mu50();
@@ -275,7 +287,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     //if (s!="_Loose")
     if (isTight)
        if (trig_prescaled && !trig_unprescaled)	return;
-           
+   */           
   }//m_electron
 
   // Duplicated event removal after the selection  
@@ -285,7 +297,51 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   //    return;
   //}
   //
-  
+  TLorentzVector lgen;
+
+  if(fabs(evt.MC_Wdecay1_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 15)
+   lgen = evt.MC_Wdecay1_from_t();
+
+  else if(fabs(evt.MC_Wdecay2_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 15)
+   lgen = evt.MC_Wdecay2_from_t();
+
+  else if(fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 13  || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 15)
+   lgen = evt.MC_Wdecay1_from_tbar();
+
+  else if(fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 15)
+   lgen = evt.MC_Wdecay2_from_tbar();
+ 
+  bool isGenM = l.DeltaR(lgen) < 0.2;
+
+  TLorentzVector bgen = evt.MC_b_from_t();
+  TLorentzVector b_bar_gen = evt.MC_b_from_tbar();
+
+  bool isFromB = l.DeltaR(bgen) < 0.5 || l.DeltaR(b_bar_gen) < 0.5;
+ 
+  float sd0(99);
+
+  if (m_electron) {
+        isTight = evt.electron()[0].isTightPP();
+        sd0    = evt.electron()[0].sd0();
+  } else{
+        isTight = evt.muon()[0].isTight();
+        sd0    = evt.muon()[0].sd0();
+  }//m_electron
+
+  TLorentzVector met = evt.met();
+
+  float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3;
+  float MET = evt.met().Perp()*1e-3;
+  if(m_electron){
+  if( (MET>20) || (MET+mWt)>60)     return;
+  }else{
+  if( (MET<20) || (MET+mWt)<60)     return;
+  if(fabs(sd0)<5)                   return;
+  }//if
+  //
+
+  std::cout<<"DELTA_R = "<<l.DeltaR(lgen)<<std::endl;
+
   std::string suffix = s;
   //if (s=="_Loose")	suffix = "";
   
@@ -294,6 +350,10 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   h->h2D("weight_leptPt", "", suffix)->Fill(l.Perp()*1e-3, weight);
 
   h->h1D("lepPt", "", suffix)->Fill(l.Perp()*1e-3, weight);
+  if(isGenM)
+  h->h1D("lepPt_genm", "", suffix)->Fill(l.Perp()*1e-3, weight);
+  else if(isFromB)
+  h->h1D("lepPt_fromb", "", suffix)->Fill(l.Perp()*1e-3, weight);
   h->h1D("lepPt_effBins", "", suffix)->Fill(l.Perp()*1e-3, weight);
   h->h1D("lepEta", "", suffix)->Fill(l.Eta(), weight);
   h->h1D("lepPhi", "", suffix)->Fill(l.Phi(), weight);

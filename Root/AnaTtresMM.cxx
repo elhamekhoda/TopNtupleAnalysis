@@ -12,8 +12,8 @@
 #include <string>
 #include "TopNtupleAnalysis/HistogramService.h"
 
-AnaTtresMM::AnaTtresMM(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList)
-  : Analysis(filename, systList), m_electron(electron), m_boosted(boosted),
+AnaTtresMM::AnaTtresMM(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList, int dsid)
+  : Analysis(filename, systList), m_electron(electron), m_boosted(boosted), m_dsid(dsid),
     m_neutrinoBuilder("MeV"), m_chi2("MeV") {
 
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
@@ -613,7 +613,6 @@ void AnaTtresMM::runMatrixMethod_QCDVR2j_2016(const Event &evt, double weight, c
   if(status)
   chi2Value = chi2ming1;
 
-
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
   float MET = evt.met().Perp()*1e-3;
  
@@ -839,6 +838,29 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
   float chi2Value = 1000000; // log10(1000000) = 6
   if(status)
   chi2Value = chi2ming1;
+
+  // ----------------- GEN LEPTON MATCHING -------------------- //
+  if(m_dsid == 410000) {
+
+  TLorentzVector lgen;
+
+  if(fabs(evt.MC_Wdecay1_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 15)
+   lgen = evt.MC_Wdecay1_from_t();
+
+  else if(fabs(evt.MC_Wdecay2_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 15)
+   lgen = evt.MC_Wdecay2_from_t();
+
+  else if(fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 13  || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 15)
+   lgen = evt.MC_Wdecay1_from_tbar();
+
+  else if(fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 15)
+   lgen = evt.MC_Wdecay2_from_tbar();
+
+  if (l.DeltaR(lgen) > 0.2) return;
+
+  } // if(m_dsid == 410000)
+ // ------------- GEN LEPTON MATCHING --------- //
+
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
   float MET = evt.met().Perp()*1e-3;

@@ -60,6 +60,9 @@ class MMUtils{
 
     TH2F * eff_map_resolved_e_2016;
     TH2F * eff_map_resolved_mu_2016;
+    TH2F * eff_map_resolved_mu_2016_lDR;
+    TH2F * eff_map_resolved_mu_2016_mDR;
+    TH2F * eff_map_resolved_mu_2016_hDR;
     TH2F * eff_map_boosted_e_2016;
     TH2F * eff_map_boosted_mu_2016;
 	
