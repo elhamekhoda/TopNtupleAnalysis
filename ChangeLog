@@ -1,3 +1,8 @@
+2016-11-05 Sanmay Ganguly <sanmay.ganguly@cern.ch>
+	* Added boundary in muon channel dr > 0.4 fake rate to stop at 100
+	GeV.
+	* TopNtupleAnalysis-00-02-24
+
 2016-11-04 Sanmay Ganguly <sanmay.ganguly@cern.ch>
 	* Update rates for muon channel
 	* The real rate parametrization is changed to lepPt-topoetcone
