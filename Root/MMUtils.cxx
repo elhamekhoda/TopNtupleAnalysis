@@ -109,6 +109,7 @@ MMUtils::MMUtils(const int isBtagged, const std::string &eff_filename2015, const
 }
   
 MMUtils::~MMUtils(){ 
+  /*
   delete eff_map_resolved_e_2015  ;
   delete eff_map_resolved_mu_2015  ;
   delete eff_map_boosted_e_2015 ;
@@ -135,6 +136,7 @@ MMUtils::~MMUtils(){
     
   delete fake_pt_boosted_e_2015;  
   delete fake_dr_boosted_mu_2015;
+  */
 } 
 
 void MMUtils::get2Drates(float &rate, float &rate_err, TH2F* rate_map, float x, float y){
@@ -327,10 +329,12 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
 
       if(closejl_DR >= 0.4) {
 
-       lepPt_min = std::min(lepPt, lepPt_limit);
+       lepPt_min = std::min(lepPt, (float) 99.);
        topoet_min = std::min(topoetcone, topoet_limit);
-       if(topoet_min > 6 && lepPt_min >=100)
-       topoet_min = 5;
+       //lepPt_min = std::min(lepPt, lepPt_limit);
+       //topoet_min = std::min(topoetcone, topoet_limit);
+       //if(topoet_min > 6 && lepPt_min >=100)
+       //topoet_min = 5;
    
 
       } // if(closejl_DR >= 0.4)
