@@ -340,6 +340,22 @@ class AnaTtresSL(Analysis):
 					'bmu': 'bmujets_2015,bmujets_2016',
 					're': 'rejets_2015,rejets_2016',
 					'rmu': 'rmujets_2015,rmujets_2016',
+					'be0': 'bejets_2015,bejets_2016',
+					'bmu0': 'bmujets_2015,bmujets_2016',
+					're0': 'rejets_2015,rejets_2016',
+					'rmu0': 'rmujets_2015,rmujets_2016',
+					'be1': 'bejets_2015,bejets_2016',
+					'bmu1': 'bmujets_2015,bmujets_2016',
+					're1': 'rejets_2015,rejets_2016',
+					'rmu1': 'rmujets_2015,rmujets_2016',
+					'be2': 'bejets_2015,bejets_2016',
+					'bmu2': 'bmujets_2015,bmujets_2016',
+					're2': 'rejets_2015,rejets_2016',
+					'rmu2': 'rmujets_2015,rmujets_2016',
+					'be3': 'bejets_2015,bejets_2016',
+					'bmu3': 'bmujets_2015,bmujets_2016',
+					're3': 'rejets_2015,rejets_2016',
+					'rmu3': 'rmujets_2015,rmujets_2016',
 					'be2015': 'bejets_2015',
 					'bmu2015': 'bmujets_2015',
 					're2015': 'rejets_2015',
@@ -404,6 +420,19 @@ class AnaTtresSL(Analysis):
 		#		nBtag += 1
 		if nBtag < 1:
 			return False
+
+		if self.ch in ['be0', 'bmu0', 're0', 'rmu0']:
+			if sel.Btagcat != 0:
+				return False
+		if self.ch in ['be1', 'bmu1', 're1', 'rmu1']:
+			if sel.Btagcat != 1:
+				return False
+		if self.ch in ['be2', 'bmu2', 're2', 'rmu2']:
+			if sel.Btagcat != 2:
+				return False
+		if self.ch in ['be3', 'bmu3', 're3', 'rmu3']:
+			if sel.Btagcat != 3:
+				return False
 
 		# veto events in nominal ttbar overlapping with the mtt sliced samples
 		# commented now as it is not available in mc15c

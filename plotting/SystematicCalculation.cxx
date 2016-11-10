@@ -276,11 +276,11 @@ void SystematicCalculator::calculate(const std::string &histogram) {
     for (int j = 0; j < i->second._item.size(); ++j) {
       Sample &one_item = i->second._item[j];
       //one_item.nominal and one_item.syst(map of string, Hist)
-      one_item.nominal = Hist(histogram, "", one_item.fname);
+      one_item.nominal = Hist(histogram, "", one_item.fname)*one_item.scale;
       for (map<string, unique_ptr<Syst> >::const_iterator k = _syst.begin(); k != _syst.end(); ++k) {
         const string &systName = k->first;
         Syst *thisSyst = k->second.get();
-        one_item.syst[systName] = thisSyst->get(histogram, one_item.fname);
+        one_item.syst[systName] = thisSyst->get(histogram, one_item.fname)*one_item.scale;
       }
     }
   }

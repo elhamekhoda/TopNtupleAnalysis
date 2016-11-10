@@ -7,10 +7,10 @@ using namespace std;
 
 Sample::Sample(const string &_fname, const string &_legname, const string &_latex, const string &_plot,
                const string &_legendstyle, int _linestyle, int _linecolor, int _fillstyle, int _fillcolor, int _markerstyle,
-               float _markersize, const string &_option)
+               float _markersize, const string &_option, const float _scale)
   : fname(_fname), legname(_legname), name_latex(_latex), name_plot(_plot),
     legendstyle(_legendstyle), linestyle(_linestyle), linecolor(_linecolor), fillstyle(_fillstyle), fillcolor(_fillcolor), markerstyle(_markerstyle),
-    markersize(_markersize), option(_option) {
+    markersize(_markersize), option(_option), scale(_scale) {
   
 }
 
@@ -45,8 +45,8 @@ SampleSet::SampleSet() {
 
 void SampleSet::add(const string &_fname, const string &_legname, const string &_latex, const string &_plot,
                     const string &_legendstyle, int _linestyle, int _linecolor, int _fillstyle, int _fillcolor, int _markerstyle,
-                    float _markersize, const string &_option) {
-  _item.push_back(Sample(_fname, _legname, _latex, _plot, _legendstyle, _linestyle, _linecolor, _fillstyle, _fillcolor, _markerstyle, _markersize, _option));
+                    float _markersize, const string &_option, const float _scale) {
+  _item.push_back(Sample(_fname, _legname, _latex, _plot, _legendstyle, _linestyle, _linecolor, _fillstyle, _fillcolor, _markerstyle, _markersize, _option, _scale));
 }
 
 shared_ptr<TGraphAsymmErrors> SampleSet::makeBand(bool isRatio) {
@@ -174,9 +174,9 @@ void SampleSetConfiguration::addType(const std::string &type) {
 
 void SampleSetConfiguration::add(const std::string &type, const std::string &fname, const std::string &legname, const string &_latex, const string &_plot,
                                  const string &_legendstyle, int _linestyle, int _linecolor, int _fillstyle, int _fillcolor, int _markerstyle,
-                                 float _markersize, const string &_option) {
+                                 float _markersize, const string &_option, const float _scale) {
 
-  _stack[type].add(fname, legname, _latex, _plot, _legendstyle, _linestyle, _linecolor, _fillstyle, _fillcolor, _markerstyle, _markersize, _option);
+  _stack[type].add(fname, legname, _latex, _plot, _legendstyle, _linestyle, _linecolor, _fillstyle, _fillcolor, _markerstyle, _markersize, _option, _scale);
 }
 
 SampleSet &SampleSetConfiguration::operator [](const string &name) {

@@ -23,7 +23,7 @@ Sample: "Signal"
   HistoFile: "%s"
 ''' % ('hist_'+i))
       if 'eft' in i:
-      f.write('''
+        f.write('''
 Systematic: "eftScale"
   Title: "EFT scale unc."
   Type: HISTO
@@ -90,13 +90,9 @@ def jobSubmit(suf):
 #system('cp -f hist_zprime2000.root hist_bkg.root') ## use a dummy signal for the background only fit
 #jobSubmit('bkg')
 
-#fixFile('ttres_template.config', 'ttres_eftbkg.config', "eftbkg", True)
-#system('cp -f hist_eftl30c1.root hist_eftbkg.root') ## use a dummy signal for the background only fit
-#jobSubmit('eftbkg')
-
 # now go over to signal
 for t in signalList:
-  if t != 'eft':
+  if t != 'eft10':
     continue
   for i in signalList[t]:
     fixFile('ttres_template.config', 'ttres_'+i+'.config', i, False)

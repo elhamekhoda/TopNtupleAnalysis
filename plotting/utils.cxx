@@ -32,6 +32,7 @@ std::map<std::string, std::vector<std::string> > syst = std::map<std::string, st
 std::map<std::string, std::string> title = std::map<std::string, std::string>();
 std::map<std::string, std::string> latex = std::map<std::string, std::string>();
 std::map<std::string, int> fillColor = std::map<std::string, int>();
+std::map<std::string, float> scale = std::map<std::string, float>();
 
 
 std::map<std::string, std::vector<std::string> > syst_model = std::map<std::string, std::vector<std::string> >();
@@ -82,6 +83,9 @@ void loadConfig(const std::string &file) {
       title[el[1]] = el[3];
       latex[el[1]] = el[4];
       fillColor[el[1]] = std::atoi(el[5].c_str());
+      scale[el[1]] = 1.0;
+      if (el.size() >= 7)
+        scale[el[1]] = std::atof(el[6].c_str());
     } else if (el[0] == "syst") {
       syst[el[1]] = std::vector<std::string>();
       syst[el[1]].push_back(el[2]);
@@ -1662,25 +1666,26 @@ SampleSetConfiguration makeConfigurationPlots(const string &prefix, const string
     std::string longTitle = title[id];
     std::string latexTitle = latex[id];
     int fillC = fillColor[id];
-	if (prefix != "") {
+    float sc = scale[id];
+    if (prefix != "") {
       if (it->first.find("data") != std::string::npos) {
         if (!isMcOnly)
           stackConfig.add("Data", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
-                                "PL", 1, kBlack, 1,    0, 20, 1, "e");
+                                "PL", 1, kBlack, 1,    0, 20, 1, "e", sc);
       } else {
         stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
-                                "F", 1, kBlack, 1001,      fillC, 1, 0, "hist");
+                                "F", 1, kBlack, 1001,      fillC, 1, 0, "hist", sc);
       }
 	} else {
       if (it->first.find("data") != std::string::npos) {
         if (!isMcOnly)
           stackConfig.add("Data", Form("%s_%s.root", channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
-                                "PL", 1, kBlack, 1,    0, 20, 1, "e");
+                                "PL", 1, kBlack, 1,    0, 20, 1, "e", sc);
       } else {
         stackConfig.add("MC", Form("%s_%s.root", channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
-                                "F", 1, kBlack, 1001,      fillC, 1, 0, "hist");
+                                "F", 1, kBlack, 1001,      fillC, 1, 0, "hist", sc);
       }
-	}
+    }
   }
 
   return stackConfig;

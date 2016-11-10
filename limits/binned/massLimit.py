@@ -4,7 +4,6 @@ from inputs import *
 
 from ROOT import *
 
-
 def stampATLAS(text, x, y):
   t = TLatex()
   t.SetNDC()
@@ -25,7 +24,7 @@ def stampLumiText(lumi, x, y, text, size):
   t.SetTextSize(size)
   t.DrawLatex(x,y, text+", "+str(lumi)+" fb^{-1}")
 
-def plot(t):
+def plot(t, mu = False):
   gStyle.SetOptStat(0)
   gStyle.SetPadTickX(1)
   gStyle.SetPadTickY(1)
@@ -42,21 +41,29 @@ def plot(t):
   if minm == maxm:
     maxm += 0.5 
     minm -= 0.5 
-  h = TH1F("h", "", 50, minm, maxm);
   if 'eft' in t:
-    h.GetYaxis().SetRangeUser(0, 15);
-  else:
-    h.GetYaxis().SetRangeUser(1e-2, 2000);
-  if "eft" in t:
-    h.GetYaxis().SetTitle("c_{Vv}");
-  else:
+    maxm = eff[t][-1]
+    minm = eff[t][0]
+    tmp = maxm
+    maxm = minm
+    minm = tmp
+  h = TH1F("h", "", 50, minm, maxm);
+  miny = 1e-2
+  maxy = 2000
+  if 'eft' in t:
+    miny = 10
+    maxy = 400
+  h.GetYaxis().SetRangeUser(miny, maxy);
+  if not ('eft' in t and mu):
     h.GetYaxis().SetTitle("#sigma #times BR [pb]");
+  else:
+    h.GetYaxis().SetTitle("#sigma_{lim} / #sigma_{EFT}");
   if 'zprime' in t:
     h.GetXaxis().SetTitle("m_{Z'} [TeV]");
   elif 'kkG' in t:
     h.GetXaxis().SetTitle("m_{G_{KK}} [TeV]");
-  elif 'eft' in t:
-    h.GetXaxis().SetTitle("#Lambda [TeV]");
+  if 'eft' in t:
+    h.GetXaxis().SetTitle("c_{Vv} #Lambda^{-2} [TeV^{-2}]");
   h.GetXaxis().SetTitleOffset(0.9);
   h.GetXaxis().SetLabelSize(0.05);
   h.GetXaxis().SetTitleSize(0.05);
@@ -82,6 +89,13 @@ def plot(t):
     muexp_p1 = abs(-muexp + hi.GetBinContent(4))
     muexp_m1 = abs(-muexp + hi.GetBinContent(5))
     muexp_m2 = abs(-muexp + hi.GetBinContent(6))
+    if 'eft' in t and not mu:
+      muexp = muexp*xs[t][I]
+      muobs = muobs*xs[t][I]
+      muexp_m1 = muexp_m1*xs[t][I]
+      muexp_p1 = muexp_p1*xs[t][I]
+      muexp_m2 = muexp_m2*xs[t][I]
+      muexp_p2 = muexp_p2*xs[t][I]
     ftxt = open('lim_'+signalList[t][i]+'.txt', 'w')
     ftxt.write('muobs     '+str(muobs)+'\n')
     ftxt.write('muexp     '+str(muexp)+'\n')
@@ -91,16 +105,19 @@ def plot(t):
     ftxt.write('muexp_m2  '+str(muexp_m2)+'\n')
     ftxt.write('xsec      '+str(xs[t][i])+'\n')
     ftxt.close()
-    print t,'\t',mass[t][I]*1000,"GeV\texp: ", muexp, "\tobs:",muobs,"pb"
-    sigma1.SetPoint(i, mass[t][I], muexp)
+    print t,'\t',mass[t][I],"TeV\texp: ", muexp, "\tobs:",muobs,"pb"
+    x = mass[t][I]
+    if 'eft' in t:
+      x = eff[t][I]
+    sigma1.SetPoint(i, x, muexp)
     sigma1.SetPointError(i, 0, 0, muexp_m1, muexp_p1)
-    sigma2.SetPoint(i, mass[t][I], muexp)
+    sigma2.SetPoint(i, x, muexp)
     sigma2.SetPointError(i, 0, 0, muexp_m2, muexp_p2)
-    xsec12.SetPoint(i, mass[t][I], xs[t][I])
+    xsec12.SetPoint(i, x, xs[t][I])
     if 'zprime' in t:
-      xsec3.SetPoint(i, mass[t][I], xs3[t][I])
-    nom.SetPoint(i, mass[t][I], muexp)
-    obs.SetPoint(i, mass[t][I], muobs)
+      xsec3.SetPoint(i, x, xs3[t][I])
+    nom.SetPoint(i, x, muexp)
+    obs.SetPoint(i, x, muobs)
     i+=1
   
   nom.SetLineWidth(2);
@@ -145,7 +162,7 @@ def plot(t):
   if 'zprime' in t:
     xsec3.Draw("L")
   l.Draw()
-  if not 'eft':
+  if not 'eft' in t:
     clim.SetLogy(1)
 
   gPad.RedrawAxis()
@@ -153,12 +170,17 @@ def plot(t):
   stampATLAS("Internal", 0.15, 0.83)
   stampLumiText(15.8, 0.15, 0.75, "#sqrt{s} = 13 TeV", 0.04)
 
-  clim.SaveAs("mass_limit_%s.eps" % t)
-  clim.SaveAs("mass_limit_%s.png" % t)
-  clim.SaveAs("mass_limit_%s.pdf" % t)
-  clim.SaveAs("mass_limit_%s.C" % t)
+  suf = ""
+  if mu:
+    suf = "_mu"
+
+  clim.SaveAs("mass_limit_%s%s.eps" % (t, suf))
+  clim.SaveAs("mass_limit_%s%s.png" % (t, suf))
+  clim.SaveAs("mass_limit_%s%s.pdf" % (t, suf))
+  clim.SaveAs("mass_limit_%s%s.C" % (t, suf))
 
 #plot('zprime')
 #plot('kkG')
-plot('eft')
+plot('eft10', mu=True)
+plot('eft10', mu=False)
 

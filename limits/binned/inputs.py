@@ -22,9 +22,14 @@ signalList['kkG'] = ['kkgrav400',
               'kkgrav2000',
               'kkgrav3000']
 
-signalList['eft'] = ['eftl30c1',
-              'eftl35c1',
-              'eftl40c1']
+signalList['eft10'] = [
+              'eftl40c10',
+              'eftl45c10',
+              'eftl50c10',
+              'eftl55c10',
+              'eftl60c10',
+              'eftl100c10',
+	      ]
 
 xs         = {}
 xs['zprime'] = [70.2764206532*1.3,
@@ -48,9 +53,22 @@ xs['kkG'] = [7.19,
 			 0.00498,
 			 0.000248
 			 ]
-xs['eft'] = [1,
-             1,
-             1]
+
+def sigmaEFT(c, L):
+  I = 11.77
+  S = 2.262
+  #return 1
+  return c*I*(L**(-2)) + c**2*S*(L**(-4))
+
+xs['eft10'] = [
+             sigmaEFT(10.0, 4.0),
+             sigmaEFT(10.0, 4.5),
+             sigmaEFT(10.0, 5.0),
+             sigmaEFT(10.0, 5.5),
+             sigmaEFT(10.0, 6.0),
+             sigmaEFT(10.0, 10.0),
+	     ]
+
 mass = {}
 mass['zprime'] = [0.4,
               0.5,
@@ -73,9 +91,19 @@ mass['kkG'] = [0.4,
 			   2,
 			   3]
 
-mass['eft'] = [3.0,
-               3.5,
-               4.0]
+
+mass['eft10'] = [
+               4.0,
+               4.5,
+               5.0,
+               5.5,
+               6.0,
+               10.0,
+	       ]
+
+eff = {}
+eff['eft10'] = [ 10*(i**(-2)) for i in mass['eft10']]
+
 xs3 = {}
 xs3['zprime'] = [169.871785472*1.3,
               98.4603402069*1.3,

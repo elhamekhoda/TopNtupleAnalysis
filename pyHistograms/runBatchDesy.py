@@ -22,6 +22,7 @@ def main():
 	# change this for your output directory
 	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_highmet'
 	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jes'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jesbtagcat'
 
 	# number of files per job
 	nFilesPerJob = 40
@@ -53,54 +54,65 @@ def main():
 	# 25 ns datasets
 	names   = []
 
-	names  += ['tt']
-	names  += ['tthm']
-	names  += ['ttv']
-	names  += ['wbbjets']
-	names  += ['wccjets']
-	names  += ['wcjets']
-	names  += ['wljets']
-	names  += ['singletop']
+	#names  += ['tt']
+	#names  += ['tthm']
+	#names  += ['ttv']
+	#names  += ['wbbjets']
+	#names  += ['wccjets']
+	#names  += ['wcjets']
+	#names  += ['wljets']
+	#names  += ['singletop']
 
-	names  += ['zjets']
-	names  += ["data"]
+	#names  += ['zjets']
+	#names  += ['vv']
+
+	#names  += ["data"]
 	names  += ['qcde', 'qcdmu']
-	names  += ['vv']
-	names  += ['zprime400']
-	names  += ['zprime500']
-	names  += ['zprime750']
-	names  += ['zprime1000']
-	names  += ['zprime1250']
-	names  += ['zprime1500']
-	names  += ['zprime1750']
-	names  += ['zprime2000']
-	names  += ['zprime2250']
-	names  += ['zprime2500']
-	names  += ['zprime2750']
-	names  += ['zprime3000']
-	names  += ['zprime4000']
-	names  += ['zprime5000']
-	names  += ['kkgrav400']
-	names  += ['kkgrav500']
-	names  += ['kkgrav750']
-	names  += ['kkgrav1000']
-	names  += ['kkgrav2000']
-	names  += ['kkgrav3000']
-	names  += ['ttsyst']
-	names  += ['ttpdf']
-	names  += ['ttpowhegherwig']
-	names  += ['ttmcatnloherwig']
-	names  += ['ttradhi', 'ttradlo']
 
-	names   = []
-	names  += ['eftl30c1']
-	names  += ['eftl35c1']
-	names  += ['eftl40c1']
-	#names  += ['eftl45c1']
-	#names  += ['eftl50c1']
-	#names  += ['eftl55c1']
-	#names  += ['eftl60c1']
-	###names   = ["qcde", "qcdmu"]
+	#names  += ['zprime400']
+	#names  += ['zprime500']
+	#names  += ['zprime750']
+	#names  += ['zprime1000']
+	#names  += ['zprime1250']
+	#names  += ['zprime1500']
+	#names  += ['zprime1750']
+	#names  += ['zprime2000']
+	#names  += ['zprime2250']
+	#names  += ['zprime2500']
+	#names  += ['zprime2750']
+	#names  += ['zprime3000']
+	#names  += ['zprime4000']
+	#names  += ['zprime5000']
+	#names  += ['kkgrav400']
+	#names  += ['kkgrav500']
+	#names  += ['kkgrav750']
+	#names  += ['kkgrav1000']
+	#names  += ['kkgrav2000']
+	#names  += ['kkgrav3000']
+
+	#names  += ['ttsyst']
+	#names  += ['ttpdf']
+	#names  += ['ttpowhegherwig']
+	#names  += ['ttmcatnloherwig']
+	#names  += ['ttradhi', 'ttradlo']
+
+	##names  += ['eftl30c1']
+	##names  += ['eftl35c1']
+	##names  += ['eftl40c1']
+	##names  += ['eftl45c1']
+	##names  += ['eftl50c1']
+	##names  += ['eftl55c1']
+	##names  += ['eftl60c1']
+	##names  += ['eftl100c1']
+
+	#names  += ['eftl30c10']
+	#names  += ['eftl35c10']
+	#names  += ['eftl40c10']
+	#names  += ['eftl45c10']
+	#names  += ['eftl50c10']
+	#names  += ['eftl55c10']
+	#names  += ['eftl60c10']
+	#names  += ['eftl100c10']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -146,9 +158,18 @@ def main():
 					'eftl35c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 					'eftl40c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 					'eftl45c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
-					'eftl55c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl50c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 					'eftl55c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 					'eftl60c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl100c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl30c10': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl35c10': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl40c10': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl45c10': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl50c10': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl55c10': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl60c10': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
+					'eftl100c10': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 		   }
 	
 	import TopExamples.grid
@@ -341,6 +362,15 @@ def main():
 					'eftl50c1': ' --EFT 5000,1',
 					'eftl55c1': ' --EFT 5500,1',
 					'eftl60c1': ' --EFT 6000,1',
+					'eftl100c1': ' --EFT 10000,1',
+					'eftl30c10': ' --EFT 3000,10',
+					'eftl35c10': ' --EFT 3500,10',
+					'eftl40c10': ' --EFT 4000,10',
+					'eftl45c10': ' --EFT 4500,10',
+					'eftl50c10': ' --EFT 5000,10',
+					'eftl55c10': ' --EFT 5500,10',
+					'eftl60c10': ' --EFT 6000,10',
+					'eftl100c10': ' --EFT 10000,10',
 					}
 			extra = extraEFT[sn]
 	
@@ -382,9 +412,14 @@ def main():
 			fr.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
 			fr.write('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
 			fr.write('lsetup rcsetup\n')
+			#fr.write('rcSetup Top,2.4.18\n')
 			fr.write('cd TopNtupleAnalysis/pyHistograms\n')
 			#out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root,be2015:'+outputDir+'/be2015_'+jobName+'.root,bmu2015:'+outputDir+'/bmu2015_'+jobName+'.root,re2015:'+outputDir+'/re2015_'+jobName+'.root,rmu2015:'+outputDir+'/rmu2015_'+jobName+'.root,be2016:'+outputDir+'/be2016_'+jobName+'.root,bmu2016:'+outputDir+'/bmu2016_'+jobName+'.root,re2016:'+outputDir+'/re2016_'+jobName+'.root,rmu2016:'+outputDir+'/rmu2016_'+jobName+'.root'
-			out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root'
+			#out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root'
+			out = 'be3:'+outputDir+'/be3_'+jobName+'.root,bmu3:'+outputDir+'/bmu3_'+jobName+'.root,re3:'+outputDir+'/re3_'+jobName+'.root,rmu3:'+outputDir+'/rmu3_'+jobName+'.root'
+			out += ',be2:'+outputDir+'/be2_'+jobName+'.root,bmu2:'+outputDir+'/bmu2_'+jobName+'.root,re2:'+outputDir+'/re2_'+jobName+'.root,rmu2:'+outputDir+'/rmu2_'+jobName+'.root'
+			out += ',be1:'+outputDir+'/be1_'+jobName+'.root,bmu1:'+outputDir+'/bmu1_'+jobName+'.root,re1:'+outputDir+'/re1_'+jobName+'.root,rmu1:'+outputDir+'/rmu1_'+jobName+'.root'
+			out += ',be0:'+outputDir+'/be0_'+jobName+'.root,bmu0:'+outputDir+'/bmu0_'+jobName+'.root,re0:'+outputDir+'/re0_'+jobName+'.root,rmu0:'+outputDir+'/rmu0_'+jobName+'.root'
 			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
 			fr.close()
 			os.system('chmod a+x '+runfile)

@@ -28,6 +28,7 @@ class Sample {
     int markerstyle;
     float markersize;
     string option;
+    float scale;
 
     Hist nominal;
     map<string, Hist> syst;
@@ -36,7 +37,7 @@ class Sample {
     Sample(const string &_fname = "", const string &_legname = "", const string &_latex = "", const string &_plot = "",
            const string &_legendstyle = "F", int _linestyle = 1, int _linecolor = kBlack, int _fillstyle = 1001, int _fillcolor = 0,
            int _markerstyle = 1,
-           float _markersize = 0, const string &_option = "hist");
+           float _markersize = 0, const string &_option = "hist", const float _scale = 1.0);
 
     /*
      * Return TH1D with the proper style.
@@ -54,7 +55,7 @@ class SampleSet {
     void add(const string &_fname = "", const string &_legname = "", const string &_latex = "", const string &_plot = "",
              const string &_legendstyle = "F", int _linestyle = 1, int _linecolor = kBlack, int _fillstyle = 1001, int _fillcolor = 0,
              int _markerstyle = 1,
-             float _markersize = 0, const string &_option = "hist");
+             float _markersize = 0, const string &_option = "hist", const float _scale = 1.0);
 
     /*
      * Return TGraphErrors with systematic error band of SampleSet st.
@@ -91,7 +92,7 @@ class SampleSetConfiguration {
     void addType(const std::string &type);
     void add(const std::string &type, const std::string &fname, const std::string &legname, const string &_latex, const string &_plot,
              const string &_legendstyle = "LP", int _linestyle = 1, int _linecolor = kBlack, int _fillstyle = 0, int _fillcolor = 0, int _markerstyle = 1,
-             float _markersize = 1.0, const string &_option = "e1");
+             float _markersize = 1.0, const string &_option = "e1", const float _scale = 1.0);
     SampleSet &operator [](const string &name);
     int n();
 
