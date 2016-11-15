@@ -1,3 +1,6 @@
+2016-11-15 Sanmay Ganguly <sanmay.ganguly@cern.ch>
+	* Added the rates for AnalysisTop-2.4.21
+
 2016-11-05 Sanmay Ganguly <sanmay.ganguly@cern.ch>
 	* Added boundary in muon channel dr > 0.4 fake rate to stop at 100
 	GeV.
