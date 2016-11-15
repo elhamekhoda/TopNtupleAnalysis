@@ -452,26 +452,26 @@ int main(int argc, char **argv) {
     
   if (runMM){ // >= 2 jets
   	// MMUtils(isBtagged, real2015, fake2015, real2016, fake2016)
-	MM_0b_re  = new MMUtils(0, "scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", // real2015
-				   "scripts/QCDestimation/110816_fakeRates_re_0b/fake.root",	// fake2015
+	MM_0b_re  = new MMUtils(0, "scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
+				   "scripts/QCDestimation/RATES_2015/resolved_e_btag0_fake.root",	// fake2015
 				
-				"scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",	// real2016
-				"scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root");	// fake2016
+		         	   "scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",	// real2016
+				   "scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root");	// fake2016
 				
-	MM_1b_re  = new MMUtils(1, "scripts/QCDestimation/110816_realRates_re_inc/eff_ttbar.root", // real2015  
-				   "scripts/QCDestimation/110816_fakeRates_re_in1b/fake.root",	// fake2015
+	MM_1b_re  = new MMUtils(1, "scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015  
+				   "scripts/QCDestimation/RATES_2015/resolved_e_btag1_fake.root",	// fake2015
 				
 				   "scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016 
 				   "scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"); // fake2016
 
-	MM_0b_rmu = new MMUtils(0, "scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root",// real2015  
-				   "scripts/QCDestimation/110816_fakeRates_rmu_0b/fake.root",	// fake2015
+	MM_0b_rmu = new MMUtils(0, "scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015  
+				   "scripts/QCDestimation/RATES_2015/resolved_mu_btag0_fake.root",	// fake2015
 				
 				  "scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",	// real2016  
 				  "scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root");// fake2016
 				
-	MM_1b_rmu = new MMUtils(1, "scripts/QCDestimation/110816_realRates_rmu_inc/eff_ttbar.root",// real2015  
-				   "scripts/QCDestimation/110816_fakeRates_rmu_in1b/fake.root",	// fake2015
+	MM_1b_rmu = new MMUtils(1, "scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015  
+				   "scripts/QCDestimation/RATES_2015/resolved_mu_btag1_fake.root",// fake2015
 				
 				   "scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",	// real2016
 				   "scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root");// fake2016
@@ -804,14 +804,14 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresSL(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
-  } else if(analysis == "AnaTtresSL_QCDVR2j_2015" ||analysis == "AnaTtresSL_QCDCR2j_2015" || analysis == "AnaTtresSL_WjetsCR2j_2015" || analysis == "AnaTtresSL_SR4j_2015" || analysis == "AnaTtresSL_QCDVR4j_2015"
-         || analysis == "AnaTtresSL_QCDVR2j_2016" ||analysis == "AnaTtresSL_QCDCR2j_2016" || analysis == "AnaTtresSL_QCDSR2j_2016" || analysis == "AnaTtresSL_QCDCR4j_2016" || analysis == "AnaTtresSL_QCDVR4j_2016"){
+  } else if(analysis == "AnaTtresSL_QCDVR1_2j_2015" || analysis == "AnaTtresSL_QCDVR2_2j_2015" ||analysis == "AnaTtresSL_QCDCR2j_2015" || analysis == "AnaTtresSL_QCDCR4j_2015" || analysis == "AnaTtresSL_WjetsCR2j_2015" || analysis == "AnaTtresSL_SR4j_2015" || analysis == "AnaTtresSL_QCDVR1_4j_2015" || analysis == "AnaTtresSL_QCDVR2_4j_2015" 
+         || analysis == "AnaTtresSL_QCDVR1_2j_2016" || analysis == "AnaTtresSL_QCDVR2_2j_2016" ||analysis == "AnaTtresSL_QCDCR2j_2016" || analysis == "AnaTtresSL_QCDSR2j_2016" || analysis == "AnaTtresSL_QCDCR4j_2016" || analysis == "AnaTtresSL_QCDVR1_4j_2016" || analysis == "AnaTtresSL_QCDVR2_4j_2016"){
     vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal, opt_dsid)); // resolved electron
     vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal, opt_dsid)); // resolved muon    
     vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal, opt_dsid)); // boosted  electron
     vec_analysis.push_back(new AnaTtresMM(outList[3], false, true,  systsListWithBlankNominal, opt_dsid)); // boosted  muon 
   } 
-    else if(analysis == "AnaTtresWQCDreal_2015"||analysis == "AnaTtresQCDfake_2015"||analysis == "AnaTtresWQCDfake_2015"
+    else if(analysis == "AnaTtresWQCDreal_2015"|| analysis == "AnaTtresQCDreal_2015"|| analysis == "AnaTtresQCDfake_2015"||analysis == "AnaTtresWQCDfake_2015"
          || analysis == "AnaTtresWQCDreal_2016"|| analysis == "AnaTtresQCDreal_2016"|| analysis == "AnaTtresQCDfake_2016"||analysis == "AnaTtresWQCDfake_2016") {
     vec_analysis.push_back(new AnaTtresQCD(outList[0], true,  false, systsListWithBlankNominal, opt_dsid) ); //resolved electron
     vec_analysis.push_back(new AnaTtresQCD(outList[1], false, false, systsListWithBlankNominal, opt_dsid) ); // resolved muon
@@ -1460,7 +1460,7 @@ int main(int argc, char **argv) {
             }
           	  
 	  }           
-           else if (analysis=="AnaTtresSL_QCDVR2j_2015") { // QCD vvalidation region for muon channel, >=2 jets; 3< |d_0Sig| < 5
+           else if (analysis=="AnaTtresSL_QCDVR1_2j_2015") { // QCD vvalidation region for muon channel, >=2 jets; 3< |d_0Sig| < 5
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
 	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
@@ -1478,12 +1478,35 @@ int main(int argc, char **argv) {
 		  }//if  
 	       }//runMM
 
-               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2j_2015(sel, weight, suffix);
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR1_2j_2015(sel, weight, suffix);
             }
 	 
 	  }
+
+          else if (analysis=="AnaTtresSL_QCDVR2_2j_2015") { // QCD vvalidation region for muon channel, >=2 jets; 3< |d_0Sig| < 5
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+                bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
+                bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
+
+                if (runMM) {
+
+                   if(nBtagged==0){
+                     if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }else{
+                     if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }//if  
+               }//runMM
+
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2_2j_2015(sel, weight, suffix);
+            }
+
+          }
           
-           else if (analysis=="AnaTtresSL_QCDVR2j_2016") { // QCD vvalidation region, >=2 jets; 3< |d_0Sig| < 5
+           else if (analysis=="AnaTtresSL_QCDVR1_2j_2016") { // QCD vvalidation region, >=2 jets; 3< |d_0Sig| < 5
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
 	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
@@ -1501,11 +1524,35 @@ int main(int argc, char **argv) {
 		  }//if  
 	       }//runMM
 
-               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2j_2016(sel, weight, suffix);
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR1_2j_2016(sel, weight, suffix);
             }
 	 
 	  }
          
+          else if (analysis=="AnaTtresSL_QCDVR2_2j_2016") { // QCD vvalidation region, >=2 jets; 3< |d_0Sig| < 5
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+                bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
+                bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
+
+                if (runMM) {
+
+                   if(nBtagged==0){
+                     if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }else{
+                     if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }//if  
+               }//runMM
+
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2_2j_2016(sel, weight, suffix);
+            }
+
+          }
+
+
             else if (analysis=="AnaTtresSL_WjetsCR2j_2015") { // W+jets enriched control region, >=2 jets
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
@@ -1572,7 +1619,31 @@ int main(int argc, char **argv) {
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDCR4j_2016(sel, weight, suffix);
             }
 
- 	  }               
+ 	  } 
+
+        else if (analysis=="AnaTtresSL_QCDCR4j_2015") { // resolved control region, >=4 jets
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+                bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
+                bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
+
+                if (runMM) {
+
+                   if(nBtagged==0){
+                     if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }else{
+                     if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }//if  
+               }//runMM
+
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDCR4j_2015(sel, weight, suffix);
+            }
+
+          }
+              
 
             else if (analysis=="AnaTtresSL_SR4j_2015") { // resolved channel (4jets, no chi2) and boosted channel (large jet Pt > 300 GeV)
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
@@ -1596,7 +1667,7 @@ int main(int argc, char **argv) {
             }	 
 	  
 	  } 
-            else if (analysis=="AnaTtresSL_QCDVR4j_2015") { // QCD vvalidation region, >=4 jets; 3< |d_0Sig| < 5
+            else if (analysis=="AnaTtresSL_QCDVR1_4j_2015") { // QCD vvalidation region, >=4 jets; 3< |d_0Sig| < 5
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
 	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
@@ -1614,10 +1685,34 @@ int main(int argc, char **argv) {
 		  }//if  
 	       }//runMM
 
-               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR4j_2015(sel, weight, suffix);
-            }	 
-	  
-	  }else if (analysis=="AnaTtresSL_QCDVR4j_2016") { // QCD vvalidation region, >=4 jets; 3< |d_0Sig| < 5
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR1_4j_2015(sel, weight, suffix);
+            }	
+           }
+
+           else if (analysis=="AnaTtresSL_QCDVR2_4j_2015") { // QCD vvalidation region, >=4 jets; 3< |d_0Sig| < 5
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+                bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
+                bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
+
+                if (runMM) {
+
+                   if(nBtagged==0){
+                     if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }else{
+                     if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }//if  
+               }//runMM
+
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2_4j_2015(sel, weight, suffix);
+            }
+ 	  
+	  }
+
+            else if (analysis=="AnaTtresSL_QCDVR1_4j_2016") { // QCD vvalidation region, >=4 jets; 3< |d_0Sig| < 5
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
 	        bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
@@ -1635,14 +1730,43 @@ int main(int argc, char **argv) {
 		  }//if  
 	       }//runMM
 
-               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR4j_2016(sel, weight, suffix);
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR1_4j_2016(sel, weight, suffix);
             }	 
 	  
 	  }
-	  else if (analysis=="AnaTtresWQCDreal_2015") { // to generate the real rates, >=2 jets
+
+          else if (analysis=="AnaTtresSL_QCDVR2_4j_2016") { // QCD vvalidation region, >=4 jets; 3< |d_0Sig| < 5
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+                bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());
+                bool isboost((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isBoosted());
+
+                if (runMM) {
+
+                   if(nBtagged==0){
+                     if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }else{
+                     if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }//if  
+               }//runMM
+
+               (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2_4j_2016(sel, weight, suffix);
+            }
+
+          }
+          
+
+	    else if (analysis=="AnaTtresWQCDreal_2015") { // to generate the real rates, >=2 jets
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
 		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runRealRateWQCDCR_2015(sel, weight, suffix);
-	  } 
+	  }
+            else if (analysis=="AnaTtresQCDreal_2015") { // to generate the real rates, >=4 jets
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna)
+                (dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runRealRateQCDCR_2015(sel, weight, suffix);
+          }
             else if (analysis=="AnaTtresWQCDreal_2016") { // to generate the real rates, >=2 jets
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) 
 		(dynamic_cast<AnaTtresQCD*>(vec_analysis[iAna]))->runRealRateWQCDCR_2016(sel, weight, suffix);

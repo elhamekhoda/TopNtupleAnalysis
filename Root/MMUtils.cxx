@@ -26,7 +26,7 @@ MMUtils::MMUtils(const int isBtagged, const std::string &eff_filename2015, const
     std::cout << "MMUtils:: Going to use  " << std::endl;
     std::cout << "  for 2015:" << eff_filename2015 << " and " << fake_filename2015 << std::endl;
     std::cout << "  for 2016:" << eff_filename2016 << " and " << fake_filename2016 << std::endl;
-    
+    // ------------------------ 2015 files ----------------------------------------------------//
     TFile m_eff_rootfile2015(eff_filename2015.c_str(), "r");
     
     //eff_map_resolved_e_2015 = 	(TH2F*) m_eff_rootfile2015.Get("eff_pTdr_resolved_e");
@@ -35,8 +35,18 @@ MMUtils::MMUtils(const int isBtagged, const std::string &eff_filename2015, const
     eff_map_resolved_e_2015 = 	(TH2F*) m_eff_rootfile2015.Get("eff_lepPt_topoetcone_resolved_e");
     if(eff_map_resolved_e_2015)	eff_map_resolved_e_2015->SetDirectory(0);
     
-    eff_map_resolved_mu_2015 = 	(TH2F*) m_eff_rootfile2015.Get("eff_pTdr_resolved_mu");
+    eff_map_resolved_mu_2015 = 	(TH2F*) m_eff_rootfile2015.Get("eff_LepPt_DR_resolved_mu");
     if(eff_map_resolved_mu_2015)	eff_map_resolved_mu_2015->SetDirectory(0);
+
+    eff_map_resolved_mu_2015_lDR =  (TH2F*) m_eff_rootfile2015.Get("eff_lepPt_topoetcone_lowDR_resolved_mu");
+    if(eff_map_resolved_mu_2015_lDR)        eff_map_resolved_mu_2015_lDR->SetDirectory(0);
+
+    eff_map_resolved_mu_2015_mDR =  (TH2F*) m_eff_rootfile2015.Get("eff_lepPt_topoetcone_medDR_resolved_mu");
+    if(eff_map_resolved_mu_2015_mDR)        eff_map_resolved_mu_2015_mDR->SetDirectory(0);
+
+    eff_map_resolved_mu_2015_hDR =  (TH2F*) m_eff_rootfile2015.Get("eff_lepPt_topoetcone_highDR_resolved_mu");
+    if(eff_map_resolved_mu_2015_hDR)        eff_map_resolved_mu_2015_hDR->SetDirectory(0);
+
           
     eff_map_boosted_e_2015 = 	(TH2F*) m_eff_rootfile2015.Get("eff_pTdr_boosted_e");
     if(eff_map_boosted_e_2015)	eff_map_boosted_e_2015->SetDirectory(0);
@@ -49,19 +59,30 @@ MMUtils::MMUtils(const int isBtagged, const std::string &eff_filename2015, const
     fake_map_resolved_e_2015 =        (TH2F*)m_fake_rootfile2015.Get("2Dfake_lepPt_topoetcone_resolved_e");
     if(fake_map_resolved_e_2015)      fake_map_resolved_e_2015->SetDirectory(0);
 
+    /*
     fake_map_resolved_mu_2015_lDR =    (TH2F*)m_fake_rootfile2015.Get("2Dfake_mwt_met_map_lowDR_resolved_mu");
     if(fake_map_resolved_mu_2015_lDR)  fake_map_resolved_mu_2015_lDR->SetDirectory(0);
     fake_map_resolved_mu_2015_mDR =    (TH2F*)m_fake_rootfile2015.Get("2Dfake_mwt_met_map_medDR_resolved_mu");
     if(fake_map_resolved_mu_2015_mDR)  fake_map_resolved_mu_2015_mDR->SetDirectory(0);
     fake_map_resolved_mu_2015_hDR =    (TH2F*)m_fake_rootfile2015.Get("2Dfake_mwt_met_map_highDR_resolved_mu");
     if(fake_map_resolved_mu_2015_hDR)  fake_map_resolved_mu_2015_hDR->SetDirectory(0);
-    
+    */
+    fake_map_resolved_mu_2015_lDR =    (TH2F*)m_fake_rootfile2015.Get("2Dfake_lepPt_topoetcone_lowDR_resolved_mu");
+    if(fake_map_resolved_mu_2015_lDR)  fake_map_resolved_mu_2015_lDR->SetDirectory(0);
+    fake_map_resolved_mu_2015_mDR =    (TH2F*)m_fake_rootfile2015.Get("2Dfake_lepPt_topoetcone_resolved_mu");
+    if(fake_map_resolved_mu_2015_mDR)  fake_map_resolved_mu_2015_mDR->SetDirectory(0);
+    fake_map_resolved_mu_2015_hDR =    (TH2F*)m_fake_rootfile2015.Get("2Dfake_lepPt_topoetcone_highDR_resolved_mu");
+    if(fake_map_resolved_mu_2015_hDR)  fake_map_resolved_mu_2015_hDR->SetDirectory(0);
+
+       
+ 
     fake_pt_boosted_e_2015 = 	(TH1F*)m_fake_rootfile2015.Get("fakeRate_pt_boosted_e");
     if(fake_pt_boosted_e_2015)	fake_pt_boosted_e_2015->SetDirectory(0);
     
     fake_dr_boosted_mu_2015  = 	(TH1F*)m_fake_rootfile2015.Get("fakeRate_dr_boosted_mu");
     if(fake_dr_boosted_mu_2015)	fake_dr_boosted_mu_2015->SetDirectory(0); 
 
+    // --------------------- 2016 files ------------------------------------------- //
     TFile m_eff_rootfile2016(eff_filename2016.c_str(), "r");
     
     //eff_map_resolved_e_2016 = 	(TH2F*) m_eff_rootfile2016.Get("eff_pTdr_resolved_e");
@@ -211,13 +232,75 @@ void MMUtils::getRatesBoostedEl(float &realRate, float &realRate_err, float &fak
 void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float closejl_pT, float cosDPhi, float met, float mwt, float DPhi, float topoetcone, const unsigned int runNumber){
 
  if (runNumber<290000){//2015
+
     float met_min(0);
     float met_limit(95);
-    
+
     float mwt_min(0);
     float mwt_limit(95);
+
+    float lepPt_min(0.);
+    float lepPt_limit(100);
+
+    float topoet_min(-5.);
+    float topoet_limit(10);
+
+    lepPt_min = std::min(lepPt, lepPt_limit);
+    topoet_min = std::min(topoetcone, topoet_limit);
+
+
+    if(closejl_DR < 0.4) {
+    if(lepPt_min > 30. && lepPt_min <= 35. && topoet_min > 3 && topoet_min <=10) topoet_min = 2;
+    if(lepPt_min > 35. && lepPt_min <= 40. && topoet_min > 6 && topoet_min <=10) topoet_min = 5;
+    }
+    if(closejl_DR < 0.6 && closejl_DR > 0.4) {
+    if(lepPt_min > 85. && lepPt_min <= 100. && topoet_min > 10 && topoet_min <=30) topoet_min = 7;
+    }
+   
+    if(closejl_DR > 0.6)
+    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2015_hDR, lepPt_min, topoet_min);
+    else if(closejl_DR < 0.6 && closejl_DR > 0.4)
+    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2015_mDR, lepPt_min, topoet_min);
+    else
+    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2015_lDR, lepPt_min, topoet_min);
+
+    // ---- fake rates 2015 ----//
+    lepPt_min = 0.;
+    lepPt_limit = 99.;
+
+    topoet_min = -5.;
+    topoet_limit = 30;
+
+
+    if(m_isBtagged==0) {
+
+      lepPt_min = std::min(lepPt, lepPt_limit);
+      topoet_min = std::min(topoetcone, topoet_limit);
+      if(topoet_min > 1 && topoet_min < 3 && lepPt_min > 50 && lepPt_min <=100)
+       topoet_min = 0;
+
+    } // if(m_isBtagged==0)
+    else {
+      lepPt_min = std::min(lepPt, lepPt_limit);
+      topoet_min = std::min(topoetcone, topoet_limit);
+
+    }
+
+    if(m_isBtagged==0)
+     get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2015_mDR, lepPt_min, topoet_min);
+    else {
+    if(closejl_DR < 0.4)
+    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2015_lDR, lepPt_min, topoet_min);
+    else
+    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2015_hDR, lepPt_min, topoet_min);
+    }
+
     
-    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2015, lepPt, closejl_DR); 
+    if (fakeRate<0) fakeRate=0;
+
+
+    /* old 2015 rates
+    //get2Drates(realRate, realRate_err, eff_map_resolved_mu_2015, lepPt, closejl_DR); 
    
     if(closejl_DR > 0.6){
 
@@ -255,6 +338,7 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
       if (fakeRate<0) fakeRate=0;
             
     }//if
+    */
   }
   else{//2016
     float met_min(0);
@@ -327,7 +411,7 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
     } // if(m_isBtagged==0)
     else {
 
-      if(closejl_DR >= 0.4) {
+      //if(closejl_DR >= 0.4) {
 
        lepPt_min = std::min(lepPt, (float) 99.);
        topoet_min = std::min(topoetcone, topoet_limit);
@@ -337,7 +421,7 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
        //topoet_min = 5;
    
 
-      } // if(closejl_DR >= 0.4)
+     // } // if(closejl_DR >= 0.4)
 
     } // if(m_isBtagged==0)
 
@@ -432,12 +516,51 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
 void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float absEta, float cosDPhi, float mwt, float topoetcone, const unsigned int runNumber){
 
  if (runNumber<290000){//2015
-    get2Drates(realRate, realRate_err, eff_map_resolved_e_2015, lepPt, topoetcone);   
-    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_2015, lepPt, topoetcone);
+    get2Drates(realRate, realRate_err, eff_map_resolved_e_2015, lepPt, topoetcone);  
+
+    float lepPt_min(0.);
+    float lepPt_limit(700);
+
+    float topoet_min(-5.);
+    float topoet_limit(30);
+ 
+    lepPt_min = std::min(lepPt, lepPt_limit);
+    topoet_min = std::min(topoetcone, topoet_limit);
+
+    if(m_isBtagged==0) {
+    if(lepPt_min > 120 && lepPt_min < 150 && topoet_min > -8. && topoet_min < 1.)
+    topoet_min = 2.;
+    //if(lepPt_min > 100 && lepPt_min < 120 && topoet_min > 1. && topoet_min < 3.)
+    //topoet_min = 0.;
+    }
+    else { // if b-tagged == 1
+    if(lepPt_min > 120 && lepPt_min < 150 && topoet_min > -8. && topoet_min < 1.)
+    topoet_min = 2.;
+    
+    if(lepPt_min > 150 && topoet_min > -8. && topoet_min < 1.)
+    lepPt_min = 90.;
+    } 
+
+    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_2015, lepPt_min, topoet_min);
  }
  else {
-    get2Drates(realRate, realRate_err, eff_map_resolved_e_2016, lepPt, topoetcone);   
-    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_2016, lepPt, topoetcone);
+    get2Drates(realRate, realRate_err, eff_map_resolved_e_2016, lepPt, topoetcone);  
+
+    float lepPt_min(0.);
+    float lepPt_limit(700);
+
+    float topoet_min(-5.);
+    float topoet_limit(30);
+
+    lepPt_min = std::min(lepPt, lepPt_limit);
+    topoet_min = std::min(topoetcone, topoet_limit);
+
+    if(m_isBtagged==0) {
+    if(lepPt_min > 40 && lepPt_min < 50 && topoet_min > 10. && topoet_min < 30.)
+    topoet_min = 8.;
+    }
+ 
+    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_2016, lepPt_min, topoet_min);
  } 
     return;
 }
@@ -536,7 +659,7 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
      if(realRate>0 && fakeRate>0)  Weight = fakeRate*realRate/(realRate - fakeRate);
      else{
 	  //   if(realRate==0)std::cerr << "Error: realRate equal to " << realRate << "  (anti-tight) " << mWt << std::endl;	   
-     	  //   if(fakeRate==0)std::cerr << "Error: fakeRate equal to " << fakeRate << "  (anti-tight) " << mWt << " " << cosDPhi << std::endl;
+     	     //if(fakeRate==0)std::cerr << "Error: fakeRate equal to " << fakeRate << "  (anti-tight) " << mWt << " " << cosDPhi << std::endl;
      	     Weight = 0;
      }       
    
