@@ -519,7 +519,8 @@ void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fa
     get2Drates(realRate, realRate_err, eff_map_resolved_e_2015, lepPt, topoetcone);  
 
     float lepPt_min(0.);
-    float lepPt_limit(700);
+    //float lepPt_limit(700);
+    float lepPt_limit(695);
 
     float topoet_min(-5.);
     float topoet_limit(30);
@@ -547,7 +548,8 @@ void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fa
     get2Drates(realRate, realRate_err, eff_map_resolved_e_2016, lepPt, topoetcone);  
 
     float lepPt_min(0.);
-    float lepPt_limit(700);
+    //float lepPt_limit(700);
+    float lepPt_limit(695);
 
     float topoet_min(-5.);
     float topoet_limit(30);
