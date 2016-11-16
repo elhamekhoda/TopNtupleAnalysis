@@ -22,7 +22,7 @@ def main():
 	# change this for your output directory
 	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_highmet'
 	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jes'
-	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jesbtagcat'
+	#outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jesbtagcat'
 
 	# number of files per job
 	nFilesPerJob = 40
@@ -120,8 +120,8 @@ def main():
 					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
 					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_11571ipb_EXOT4',
-					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_11571ipb_EXOT4',
-					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_11571ipb_EXOT4',
+					'qcde': 'Data15_13TeV_25ns_EXOT4,Data16_13TeV_25ns_207_11571ipb_EXOT4',
+					'qcdmu': 'Data15_13TeV_25ns_EXOT4,Data16_13TeV_25ns_207_11571ipb_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', #,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'tthm': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'ttv':'MC15c_13TeV_25ns_FS_EXOT4_ttbarV',
@@ -415,11 +415,11 @@ def main():
 			#fr.write('rcSetup Top,2.4.18\n')
 			fr.write('cd TopNtupleAnalysis/pyHistograms\n')
 			#out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root,be2015:'+outputDir+'/be2015_'+jobName+'.root,bmu2015:'+outputDir+'/bmu2015_'+jobName+'.root,re2015:'+outputDir+'/re2015_'+jobName+'.root,rmu2015:'+outputDir+'/rmu2015_'+jobName+'.root,be2016:'+outputDir+'/be2016_'+jobName+'.root,bmu2016:'+outputDir+'/bmu2016_'+jobName+'.root,re2016:'+outputDir+'/re2016_'+jobName+'.root,rmu2016:'+outputDir+'/rmu2016_'+jobName+'.root'
-			#out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root'
-			out = 'be3:'+outputDir+'/be3_'+jobName+'.root,bmu3:'+outputDir+'/bmu3_'+jobName+'.root,re3:'+outputDir+'/re3_'+jobName+'.root,rmu3:'+outputDir+'/rmu3_'+jobName+'.root'
-			out += ',be2:'+outputDir+'/be2_'+jobName+'.root,bmu2:'+outputDir+'/bmu2_'+jobName+'.root,re2:'+outputDir+'/re2_'+jobName+'.root,rmu2:'+outputDir+'/rmu2_'+jobName+'.root'
-			out += ',be1:'+outputDir+'/be1_'+jobName+'.root,bmu1:'+outputDir+'/bmu1_'+jobName+'.root,re1:'+outputDir+'/re1_'+jobName+'.root,rmu1:'+outputDir+'/rmu1_'+jobName+'.root'
-			out += ',be0:'+outputDir+'/be0_'+jobName+'.root,bmu0:'+outputDir+'/bmu0_'+jobName+'.root,re0:'+outputDir+'/re0_'+jobName+'.root,rmu0:'+outputDir+'/rmu0_'+jobName+'.root'
+			out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root'
+			#out = 'be3:'+outputDir+'/be3_'+jobName+'.root,bmu3:'+outputDir+'/bmu3_'+jobName+'.root,re3:'+outputDir+'/re3_'+jobName+'.root,rmu3:'+outputDir+'/rmu3_'+jobName+'.root'
+			#out += ',be2:'+outputDir+'/be2_'+jobName+'.root,bmu2:'+outputDir+'/bmu2_'+jobName+'.root,re2:'+outputDir+'/re2_'+jobName+'.root,rmu2:'+outputDir+'/rmu2_'+jobName+'.root'
+			#out += ',be1:'+outputDir+'/be1_'+jobName+'.root,bmu1:'+outputDir+'/bmu1_'+jobName+'.root,re1:'+outputDir+'/re1_'+jobName+'.root,rmu1:'+outputDir+'/rmu1_'+jobName+'.root'
+			#out += ',be0:'+outputDir+'/be0_'+jobName+'.root,bmu0:'+outputDir+'/bmu0_'+jobName+'.root,re0:'+outputDir+'/re0_'+jobName+'.root,rmu0:'+outputDir+'/rmu0_'+jobName+'.root'
 			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
 			fr.close()
 			os.system('chmod a+x '+runfile)
