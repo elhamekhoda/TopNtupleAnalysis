@@ -182,8 +182,8 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2015(const Event &evt, double weight, c
     if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
 
-  if (m_boosted)	return;
-  else			if(evt.jet().size()<4)	return;
+  if (m_boosted)       if(evt.largeJet().size()<1)  return;
+  if (!m_boosted)      if(evt.jet().size()<4)	return;
 
   HistogramService *h = &m_hSvc;
 
@@ -558,7 +558,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2015(const Event &evt, double weight,
   if (!m_boosted)
     if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
-
+/*
   int nLargeRjets(0);
   if (m_boosted){
   
@@ -572,6 +572,9 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2015(const Event &evt, double weight,
     if (nLargeRjets==0)	return;
   
   } else	if(evt.jet().size()<4)	return;
+*/
+  if (m_boosted)       if(evt.largeJet().size()<1)  return;
+  if(!m_boosted)       if(evt.jet().size()<4)  return;
 
   HistogramService *h = &m_hSvc;
   
@@ -648,7 +651,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2015(const Event &evt, double weight,
   if (!m_boosted)
     if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))
       return;
-
+/*
   int nLargeRjets(0);
   if (m_boosted){
   
@@ -662,6 +665,10 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2015(const Event &evt, double weight,
     if (nLargeRjets==0)	return;
   
   } else	if(evt.jet().size()<4)	return;
+*/
+  if (m_boosted)       if(evt.largeJet().size()<1)  return;
+  if(!m_boosted)       if(evt.jet().size()<4)  return;
+
 
   HistogramService *h = &m_hSvc;
   
@@ -1248,6 +1255,8 @@ void AnaTtresMM::runMatrixMethod_QCDSR2j_2016(const Event &evt, double weight, c
 
 void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, const std::string &suffix) {
 
+  //if(evt.runNumber_or_RandomRunNumber() > 302872) return;
+
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
 
@@ -1263,6 +1272,7 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
     if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
+  if (m_boosted)       if(evt.largeJet().size()<1)  return;
   if (!m_boosted)	if(evt.jet().size()<4)	return;
 
   HistogramService *h = &m_hSvc;
@@ -1403,6 +1413,8 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
 
 void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2016(const Event &evt, double weight, const std::string &suffix) {
 
+  //if(evt.runNumber_or_RandomRunNumber() > 302872) return; 
+
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
 
@@ -1418,6 +1430,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2016(const Event &evt, double weight,
     if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
+  if (m_boosted)       if(evt.largeJet().size()<1)  return;
   if (!m_boosted)	if(evt.jet().size()<4)	return;
 
   HistogramService *h = &m_hSvc;
@@ -1537,6 +1550,8 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2016(const Event &evt, double weight,
 
 void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2016(const Event &evt, double weight, const std::string &suffix) {
 
+  //if(evt.runNumber_or_RandomRunNumber() > 302872) return;
+
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
 
@@ -1552,6 +1567,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2016(const Event &evt, double weight,
     if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
       return;
 
+  if (m_boosted)       if(evt.largeJet().size()<1)  return;
   if (!m_boosted)	if(evt.jet().size()<4)	return;
 
   HistogramService *h = &m_hSvc;
