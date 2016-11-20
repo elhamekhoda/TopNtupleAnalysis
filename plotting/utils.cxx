@@ -1546,7 +1546,7 @@ void stampText(const std::string &text, float x, float y, float size) {
 void stampLumiText(float lumi, float x, float y, const std::string &text, float size) {
   if (lumi == 0) return;
   std::stringstream ss;
-  ss.precision(2);
+  ss.precision(3);
   ss << "#int L dt = " << std::fabs(lumi) << " fb^{-1}, " << text;
   TLatex l;
   l.SetNDC();
