@@ -6,7 +6,7 @@ import socket, random, re
 
 # change those:
 setdir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418'
-mydir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jes/TRexFitter'
+mydir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jes/TRexFitter_trs'
 
 def fixFile(template, final, i, doBOnlyFit):
   fr = open(template, 'r')
@@ -31,6 +31,7 @@ Systematic: "eftScale"
   HistoNameSufDown: "eftScaledw"
   Samples: Signal
   Symmetrisation: TwoSided
+  Smoothing: 40
 ''')
       continue
     
@@ -53,6 +54,8 @@ def jobSubmit(suf):
 	runfile = 'submit_%s.sh' % suf
 	logfile = mydir+'/stdout_%s.txt'%suf
 	queue = 'long.q'
+	if 'bkg' in suf:
+		queue = 'short.q'
 	email = 'dferreir@cern.ch'
 	jobName = 'ttlim_%s'%suf
 	fr = open(runfile, 'w')

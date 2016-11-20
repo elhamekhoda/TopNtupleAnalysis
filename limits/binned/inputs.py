@@ -28,7 +28,7 @@ signalList['eft10'] = [
               'eftl50c10',
               'eftl55c10',
               'eftl60c10',
-              'eftl100c10',
+              #'eftl100c10',
 	      ]
 
 xs         = {}
@@ -58,7 +58,7 @@ def sigmaEFT(c, L):
   I = 11.77
   S = 2.262
   #return 1
-  return c*I*(L**(-2)) + c**2*S*(L**(-4))
+  return (c*I*(L**(-2)) + c**2*S*(L**(-4)))
 
 xs['eft10'] = [
              sigmaEFT(10.0, 4.0),
@@ -66,7 +66,7 @@ xs['eft10'] = [
              sigmaEFT(10.0, 5.0),
              sigmaEFT(10.0, 5.5),
              sigmaEFT(10.0, 6.0),
-             sigmaEFT(10.0, 10.0),
+             #sigmaEFT(10.0, 10.0),
 	     ]
 
 mass = {}
@@ -98,7 +98,7 @@ mass['eft10'] = [
                5.0,
                5.5,
                6.0,
-               10.0,
+               #10.0,
 	       ]
 
 eff = {}
