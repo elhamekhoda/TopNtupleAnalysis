@@ -6,7 +6,8 @@ PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418/TopNtupleAnalysis/plott
 rm -f hist_*.root
 for histogram in mtt mttPos mttNeg ; do
     for ch in be bmu re rmu ; do
-        $PLOTTING  -c $ch -h $histogram -l $LUMI --saveTH1 ${histogram}${ch}  --smoothen 1 -C config_limit.txt
+        #$PLOTTING  -c $ch -h $histogram -l $LUMI --saveTH1 ${histogram}${ch}  --smoothen 1 -C config_limit.txt
+        $PLOTTING  -c $ch -h $histogram -l $LUMI --saveTH1 ${histogram}${ch}  --smoothen 0 -C config_limit_nosmooth.txt
     done
 done
 

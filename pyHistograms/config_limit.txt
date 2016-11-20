@@ -18,9 +18,14 @@ sample    kkgrav750    kkgrav750                            "KKgraviton750"     
 sample    kkgrav1000   kkgrav1000                           "KKgraviton1000"      "KKgraviton1000"     10
 sample    kkgrav2000   kkgrav2000                           "KKgraviton2000"      "KKgraviton2000"     10
 sample    kkgrav3000   kkgrav3000                           "KKgraviton3000"      "KKgraviton3000"     10
-sample    eftl30c1     eftl30c1                             "EFTL30c1"            "EFTL30C1"           10
-sample    eftl35c1     eftl35c1                             "EFTL35c1"            "EFTL35C1"           10
-sample    eftl40c1     eftl40c1                             "EFTL40c1"            "EFTL40C1"           10
+sample    eftl30c10    eftl30c10                            "EFTL30c10"           "EFTL30C10"          10
+sample    eftl35c10    eftl35c10                            "EFTL35c10"           "EFTL35C10"          10
+sample    eftl40c10    eftl40c10                            "EFTL40c10"           "EFTL40C10"          10
+sample    eftl45c10    eftl45c10                            "EFTL45c10"           "EFTL45C10"          10
+sample    eftl50c10    eftl50c10                            "EFTL50c10"           "EFTL50C10"          10
+sample    eftl55c10    eftl55c10                            "EFTL55c10"           "EFTL55C10"          10
+sample    eftl60c10    eftl60c10                            "EFTL60c10"           "EFTL60C10"          10
+sample    eftl100c10   eftl100c10                           "EFTL100c10"          "EFTL100C10"         10
 sample    data         data                                 "data"                "data"               1
 sample    tt           ttall                                "t#bar{t}"            "$t\bar{t}$"         0
 sample    wbbjets      wbbjets                              "W+bb+jets"           "$W$+bb+jets"        416
@@ -46,7 +51,7 @@ syst      muisolstat "muon isolation (stat)"          muIsolStatSF__1up         
 syst      muisolsyst "muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down                                  N
 syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      N
 syst      jvt        "JVT"                            jvtSF__1up                                 jvtSF__1down                                         N
-syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft
+syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,wbbjets,wccjets,wcjets,wljets
 syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft
 syst      wbb        "W+bb fraction"                  wbb__1up                                   wbb__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft
 syst      wcc        "W+cc fraction"                  wcc__1up                                   wcc__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft

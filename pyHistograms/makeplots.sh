@@ -4,13 +4,15 @@ LUMI=14.76518
 PLOTTING=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418/TopNtupleAnalysis/plotting/plot
 PLOTCOMP=/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418/TopNtupleAnalysis/plotting/plotCompareNominal
 
-for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
+#for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
+for ch in be bmu re rmu ; do
     $PLOTTING -c $ch -h yields -l $LUMI -C config.txt >yields_${ch}.txt
     $PLOTTING -c $ch -h yieldsPos -l $LUMI -C config.txt >yieldsPos_${ch}.txt
     $PLOTTING -c $ch -h yieldsNeg -l $LUMI -C config.txt >yieldsNeg_${ch}.txt
 done
 
-for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
+#for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
+for ch in be bmu re rmu ; do
     $PLOTTING -c $ch -h closestJetDr  -l $LUMI --xTitle "min #Delta R (jet, lepton)" --yTitle "Events / 0.1" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h lepPt --normBinWidth 20 -l $LUMI --rebin 4 --xTitle "Lepton p_{T} [GeV]" --yTitle "Events / 20 GeV" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h lepEta  -l $LUMI  --xTitle "Lepton #eta" --yTitle "Events / 0.25" --stamp 0 -C config.txt
@@ -18,7 +20,6 @@ for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2
     $PLOTTING -c $ch -h nTrkBtagJets -l $LUMI --xTitle "Number of b-tagged track jets" --yTitle "Events" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h MET --normBinWidth 20 -l $LUMI --yTitle "Events / 20 GeV" --xTitle "E_{T}^{miss} [GeV]" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h MET_phi -l $LUMI --yTitle "Events / 0.2" --xTitle "E_{T}^{miss} #phi [rd]" --stamp 0 -C config.txt
-    $PLOTTING -c $ch -h mwt -l $LUMI --yTitle "Events / 10 GeV" --xTitle "m_{WT} [GeV]" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h closeJetPt -l $LUMI --normBinWidth 10 --yTitle "Events / 10 GeV" --xTitle "Selected jet p_{T} [GeV]" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h largeJetPt -l $LUMI --normBinWidth 20 --yTitle "Events / 20 GeV" --xTitle "Large-R jet p_{T} [GeV]" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h largeJetM -l $LUMI  --yTitle "Events / 10 GeV" --xTitle "Large-R jet mass [GeV]" --stamp 0 -C config.txt
@@ -35,12 +36,12 @@ for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2
     $PLOTTING -c $ch -h trueMtt --mcOnly 1 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "true m_{t#bar{t}}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
 done
 
-for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
+
+#for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
+for ch in be bmu re rmu ; do
 
     $PLOTCOMP --logY 1 --mcOnly 1 --syst qcd__1up,qcd__1down --systTitles "QCD up,QCD down" -l $LUMI -c $ch -h mtt -o syst_${ch}_mtt_qcd.pdf
     $PLOTCOMP --mcOnly 0 --syst qcd__1up,qcd__1down --systTitles "QCD up,QCD down" -l $LUMI -c $ch -h MET -o syst_${ch}_MET_qcd.pdf
-    $PLOTCOMP --mcOnly 0 --syst qcd__1up,qcd__1down --systTitles "QCD up,QCD down" -l $LUMI -c $ch -h mwt -o syst_${ch}_mwt_qcd.pdf
-    $PLOTCOMP --mcOnly 0 --syst WJETS__1up,WJETS__1down --systTitles "Wjets 100% up,Wjets 100% down" -l $LUMI -c $ch -h mwt -o syst_${ch}_mwt_wjets100p.pdf
 
     # systematics in mtt
     $PLOTCOMP --logY 1 --mcOnly 1 -c $ch -h mtt -l $LUMI --other ttpowhegherwig,ttmcatnloherwig --titles "Powheg+Herwig,MC@NLO+Herwig" -o systmodel_${ch}_mtt_mcgen.pdf
@@ -146,15 +147,16 @@ for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2
     done
 done
 
-for ch in be bmu re rmu re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
+#for ch in be bmu re rmu re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
+for ch in be bmu re rmu ; do
     $PLOTTING -c $ch -h mtt --mcOnly 1 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h mttPos --mcOnly 1 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}^{+}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h mttNeg --mcOnly 1 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}^{-}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
 done
 
-for ch in bmu2015 be2015 ; do
-    $PLOTTING -c $ch -h mtt --mcOnly 0 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
-    $PLOTTING -c $ch -h mttPos --mcOnly 0 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}^{+}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
-    $PLOTTING -c $ch -h mttNeg --mcOnly 0 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}^{-}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
-done
+#for ch in bmu2015 be2015 ; do
+#    $PLOTTING -c $ch -h mtt --mcOnly 0 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
+#    $PLOTTING -c $ch -h mttPos --mcOnly 0 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}^{+}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
+#    $PLOTTING -c $ch -h mttNeg --mcOnly 0 --normBinWidth 100 --logY 1 -l $LUMI --xTitle "m_{t#bar{t}}^{-}" --yTitle "Events / 100 GeV" --stamp 0 -C config.txt
+#done
 
