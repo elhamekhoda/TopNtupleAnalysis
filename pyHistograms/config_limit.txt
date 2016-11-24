@@ -115,8 +115,8 @@ syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up            
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     S
 syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbjets,wccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
-syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.050
-syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.050
+syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.50
+syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.50
 syst_flat ttxsec     "ttbar cross section"            "ttall"                0.056                                      -0.061
 syst_model ttgen     "ttbar gen."                    "ttall"                 ttpowhegherwig                            ttmcatnloherwig               S
 syst_model ttps      "ttbar p. shower"               "ttall"                 ttsyst                                    ttpowhegherwig                S
