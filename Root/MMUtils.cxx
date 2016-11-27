@@ -276,8 +276,8 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
 
       lepPt_min = std::min(lepPt, lepPt_limit);
       topoet_min = std::min(topoetcone, topoet_limit);
-      if(topoet_min > 1 && topoet_min < 3 && lepPt_min > 50 && lepPt_min <=100)
-       topoet_min = 0;
+      if(topoet_min > 1 && topoet_min < 6 && lepPt_min > 50 && lepPt_min <=100)
+       topoet_min = 7;
 
     } // if(m_isBtagged==0)
     else {
