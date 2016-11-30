@@ -589,7 +589,7 @@ class AnaTtresSL(Analysis):
 					dr = jets[k].DeltaR(tjets[t])
 					if dr < 0.4 and tb[t]:
 						tagged = True
-					btag.push_back(tagged)
+				btag.push_back(tagged)
 			met = ROOT.TLorentzVector(sel.met_met, 0, sel.met_phi, sel.met_met)
 			res_info = helpers.wrapperC.getMtt(l, jets, btag, met)
 			mtt = res_info["mtt"]
