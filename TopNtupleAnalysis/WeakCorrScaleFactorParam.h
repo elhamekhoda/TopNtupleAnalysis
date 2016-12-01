@@ -45,7 +45,7 @@ public:
         GU
     };
     WeakCorrScaleFactorParam(TString mapfile="EWcorr_param.root");    
-    ~WeakCorrScaleFactorParam();
+    virtual ~WeakCorrScaleFactorParam();
     ScaleFactor getScaleFactor(const double& shat, const double& z, const int& type);
     ScaleFactor getScaleFactor(
         float& MC_t_pt,

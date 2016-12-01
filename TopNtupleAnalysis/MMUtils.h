@@ -20,7 +20,7 @@ class MMUtils{
 
   public:
     MMUtils(const int isBtagged, const std::string &eff_filename2015, const std::string &fake_filename2015, const std::string &eff_filename2016, const std::string &fake_filename2016); 
-    ~MMUtils();
+    virtual ~MMUtils();
 
     float getMMweights(const Event &evt, const int runMM_StatErr, const bool isElectron, const bool isBoosted, const unsigned int runNumber);
     
