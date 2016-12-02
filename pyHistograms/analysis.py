@@ -132,13 +132,13 @@ class AnaTtresSL(Analysis):
                 self.add("mttLow1r", 20,300,1000)
                 self.add("mttLow2", 25,300,800)
                 self.add("mttLow2r", 25,300,800)
-		self.addVar("mtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
-		self.addVar("mttr", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
-		self.addVar("mttPos", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
-		self.addVar("mttNeg", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
-		self.addVar("trueMtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
-		self.addVar("trueMttr", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
-		self.add("btagSF", 50, 0, 2)
+		#self.addVar("mtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
+		self.add("mtt", 600 , 0, 6000)
+		self.add("mttr", 600, 0, 6000)
+		self.add("mttPos", 600, 0, 6000)
+		self.add("mttNeg", 600, 0, 6000)
+		self.add("trueMtt", 600, 0, 6000)
+		self.add("trueMttr", 600, 0, 6000)
 
 		self.add("largeJet_tau32_wta", 20, 0, 1)
 		self.add("largeJet_tau21_wta", 20, 0, 1)
@@ -575,8 +575,6 @@ class AnaTtresSL(Analysis):
 				self.h["mttNeg"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
 			self.h["largeJetPtMtt"][syst].Fill(lj.Perp()/(closeJet+nu+l+lj).M(), w)
 			mtt = (closeJet+nu+l+lj).M()*1e-3
-			if mtt > 1.1e3:
-				self.h["btagSF"][syst].Fill(helpers.applyBtagSFFromFile(sel, syst), w)
 		elif 're' in self.ch or 'rmu' in self.ch:
 			jets = ROOT.vector('TLorentzVector')()
 			#jets = []
@@ -591,12 +589,12 @@ class AnaTtresSL(Analysis):
 						tagged = True
 				btag.push_back(tagged)
 			met = ROOT.TLorentzVector(sel.met_met, 0, sel.met_phi, sel.met_met)
-			res_info = helpers.wrapperC.getMtt(l, jets, btag, met)
-			mtt = res_info["mtt"]
-			mtl = res_info["mtl"]
-			mth = res_info["mth"]
-			mwh = res_info["mwh"]
-			chi2 = res_info["chi2"]
+			helpers.wrapperC.getMtt(l, jets, btag, met)
+			mtt = helpers.wrapperC.res_mtt()
+			mtl = helpers.wrapperC.res_mtl()
+			mth = helpers.wrapperC.res_mth()
+			mwh = helpers.wrapperC.res_mwh()
+			chi2 = helpers.wrapperC.res_chi2()
                         w0 = w/self.w2HDM
 			self.h["mtt"][syst].Fill(mtt*1e-3, w)
 			self.h["mttr"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))
@@ -608,8 +606,6 @@ class AnaTtresSL(Analysis):
 				self.h["mttPos"][syst].Fill(mtt*1e-3, w)
 			elif lQ < 0:
 				self.h["mttNeg"][syst].Fill(mtt*1e-3, w)
-			if mtt > 1.1e3:
-				self.h["btagSF"][syst].Fill(helpers.applyBtagSFFromFile(sel, syst), w)
 			self.h["mtlep_res"][syst].Fill(mtl*1e-3, w)
 			self.h["mthad_res"][syst].Fill(mth*1e-3, w)
 			self.h["mwhad_res"][syst].Fill(mwh*1e-3, w)

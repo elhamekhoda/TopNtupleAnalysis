@@ -5,6 +5,7 @@ import math
 import sys
 sys.path.append('2HDM')
 #import T2HDM
+ROOT.gROOT.SetBatch(True)
 
 
 def initBinds():
@@ -21,13 +22,6 @@ def initBinds():
 #include "TopNtupleAnalysis/LargeJet.h"
 #include "TopNtupleAnalysis/MObject.h"
 
-/*
-#include "xAODBTaggingEfficiency/BTaggingEfficiencyTool.h"
-#include "CalibrationDataInterface/CalibrationDataVariables.h"
-#include "CalibrationDataInterface/CalibrationDataInterfaceROOT.h"
-#include "PATInterfaces/SystematicRegistry.h"
-*/
-
 #include "TLorentzVector.h"
 #include <vector>
 #include <cstdlib>
@@ -39,29 +33,16 @@ class WrapperExtras {
   public:
     TtresNeutrinoBuilder m_neutrinoBuilder;
     TtresChi2 m_chi2;
-    WeakCorr::WeakCorrScaleFactorParam m_ewkTool;
-    //PMGCorrsAndSysts m_pmg;
-    MMUtils m_mm_b0_boosted_e;
-    MMUtils m_mm_b1_boosted_e;
+    WeakCorrScaleFactorParam m_ewkTool;
     MMUtils m_mm_b0_res_e;
     MMUtils m_mm_b1_res_e;
-    MMUtils m_mm_b0_boosted_mu;
-    MMUtils m_mm_b1_boosted_mu;
     MMUtils m_mm_b0_res_mu;
     MMUtils m_mm_b1_res_mu;
 
-    //BTaggingEfficiencyTool m_btageff;
+    bool m_status;
 
     WrapperExtras()
                     : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root"),
-                      m_mm_b0_boosted_e(0, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
-		                           "../scripts/QCDestimation/RATES_2015/resolved_e_btag0_fake.root",       // fake2015
-					   "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",        // real2016
-					   "../scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root"),      // fake2016
-                      m_mm_b1_boosted_e(1, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
-		                           "../scripts/QCDestimation/RATES_2015/resolved_e_btag1_fake.root",       // fake2015
-					   "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016
-					   "../scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"), // fake2016
 
                       m_mm_b0_res_e(0, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
 		                           "../scripts/QCDestimation/RATES_2015/resolved_e_btag0_fake.root",       // fake2015
@@ -71,14 +52,6 @@ class WrapperExtras {
 		                           "../scripts/QCDestimation/RATES_2015/resolved_e_btag1_fake.root",       // fake2015
 					   "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016
 					   "../scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"), // fake2016
-                      m_mm_b0_boosted_mu(0, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
-		                            "../scripts/QCDestimation/RATES_2015/resolved_mu_btag0_fake.root",      // fake2015
-					    "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",        // real2016
-					    "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"), // fake2016
-                      m_mm_b1_boosted_mu(1, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
-		                            "../scripts/QCDestimation/RATES_2015/resolved_mu_btag1_fake.root",// fake2015
-					    "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",       // real2016
-					    "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root"), // fake2016
 
                       m_mm_b0_res_mu(0, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
 		                            "../scripts/QCDestimation/RATES_2015/resolved_mu_btag0_fake.root",      // fake2015
@@ -88,31 +61,11 @@ class WrapperExtras {
 		                            "../scripts/QCDestimation/RATES_2015/resolved_mu_btag1_fake.root",// fake2015
 					    "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",       // real2016
 					    "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root") // fake2016
-                      //m_btageff("BTaggingEfficiencyTool")
     {
       m_chi2.Init(TtresChi2::DATA2015_MC15C);
-      /*
-      if (!m_btageff.setProperty("TaggerName", "MV2c10")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("OperatingPoint", "FixedCutBEff_70")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("JetAuthor", "AntiKt2PV0TrackJets")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("EfficiencyFileName", "../share/2016-20_7-13TeV-MC15-CDI-June27_v1.root")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("ScaleFactorFileName", "../share/2016-20_7-13TeV-MC15-CDI-June27_v1.root")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("ScaleFactorBCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("ScaleFactorCCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("ScaleFactorTCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("ScaleFactorLightCalibration", "default")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("ExcludeFromEigenVectorTreatment", "")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("EfficiencyBCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("EfficiencyCCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("EfficiencyTCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.setProperty("EfficiencyLightCalibrations", "410000;410004;410006;410187")) std::cout << "Failed to set b-tagging property." << std::endl;
-      if (!m_btageff.initialize()) std::cout << "Failed to initialize b-tagging eff." << std::endl;
-      CP::SystematicSet s = m_btageff.affectingSystematics();
-      //for (CP::SystematicSet::const_iterator it = s.begin(); it != s.end(); it++) {
-      //  std::cout << "Syst. " << it->name() << std::endl;
-      //}
-      */
     }
+    virtual ~WrapperExtras() { }
+
     TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
       std::vector<TLorentzVector *> vec_nu = m_neutrinoBuilder.candidatesFromWMass_Rotation(&l, met, met_phi, true);
       TLorentzVector nu;
@@ -123,60 +76,38 @@ class WrapperExtras {
       }
       return nu;
     }
-
-    std::map<std::string, double> getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
-      // inputs 
-      // LEPTON --> TLorentzVector for your lepton
-      // vjets -->  std::vector<TLorentzVector*> for the jets
-      // vjets_btagged --> std::vector<bool> to say if the jets are btagged or not
-      // met --> TLorentzVector for your MET
-
-      // outputs, they will be filled by the TTBarLeptonJetsBuilder_chi2
-      int  igj3, igj4; // index for the Whad
-      int igb3, igb4; // index for the b's
-      int  ign1;  // index for the neutrino (because chi2 can test both pz solution)
-      double chi2ming1, chi2ming1H, chi2ming1L;
-
-      std::vector<TLorentzVector *> vjets;
-      std::vector<bool> vjets_btagged;
+    void getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
+      m_chi2.setLepton(lep);
+      m_chi2.setMET(met);
+      m_chi2.clearJet();
       for (size_t z = 0; z < jets.size(); ++z) {
-        vjets.push_back(new TLorentzVector(0,0,0,0));
-        vjets[z]->SetPtEtaPhiE(jets[z].Perp(), jets[z].Eta(), jets[z].Phi(), jets[z].E());
-        // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTagingxAODEDM
-        // https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks
-        vjets_btagged.push_back(btag[z]);
+        m_chi2.addJet(jets[z], btag[z]);
       }
-      bool status = m_chi2.findMinChiSquare(&lep, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L); 
-    
-      float chi2Value = 1000000; // log10(1000000) = 6
-      float mwh = -1;
-      float mtl = -1;
-      float mth = -1;
-      float mtt = -1;
-
-      if (status) {
-        chi2Value = chi2ming1;
-        mwh = m_chi2.getResult_Mwh();
-        mtl = m_chi2.getResult_Mtl();
-        mth = m_chi2.getResult_Mth();
-        mtt = m_chi2.getResult_Mtt();
-      }
-    
-      for (size_t z = 0; z < vjets.size(); ++z) {
-        delete vjets[z];
-      }
-      vjets.clear();
-      vjets_btagged.clear();
-      std::map<std::string, double> ret;
-      ret["mtt"] = mtt;
-      ret["mtl"] = mtl;
-      ret["mth"] = mth;
-      ret["mwh"] = mwh;
-      ret["chi2"] = chi2Value;
-      return ret;
+      m_status = m_chi2.findMinChiSquareSimple();
+      m_chi2.clearJet();
+    }
+    double res_mtt() {
+      if (!m_status) return -1;
+      return m_chi2.getResult_Mtt();
+    }
+    double res_mtl() {
+      if (!m_status) return -1;
+      return m_chi2.getResult_Mtl();
+    }
+    double res_mth() {
+      if (!m_status) return -1;
+      return m_chi2.getResult_Mth();
+    }
+    double res_mwh() {
+      if (!m_status) return -1;
+      return m_chi2.getResult_Mwh();
+    }
+    double res_chi2() {
+      if (!m_status) return 1000000;
+      return m_chi2.getResult_Chi2All();
     }
     double getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var = 0) {
-      WeakCorr::ScaleFactor sf; 
+      float sf; 
       float t_pt = top.Perp();
       float t_eta = top.Eta();
       float t_phi = top.Phi();
@@ -186,56 +117,9 @@ class WrapperExtras {
       float tbar_eta = topbar.Eta();
       float tbar_phi = topbar.Phi();
       float tbar_m = topbar.M();
-      sf = m_ewkTool.getScaleFactor(t_pt, t_eta, t_phi, t_m, tbar_pt, tbar_eta, tbar_phi, tbar_m, initial_type);
-      if (var == 1) {
-        return sf.up;
-      } else if (var == 2) {
-        return sf.down;
-      }
-      return sf.nominal;
+      sf = m_ewkTool.getScaleFactor(t_pt, t_eta, t_phi, t_m, tbar_pt, tbar_eta, tbar_phi, tbar_m, initial_type, var);
+      return sf;
     }
-	/*
-    float getBtaggingSF(std::vector<TLorentzVector> jet, std::vector<int> flavour, std::vector<float> mv2c10, std::vector<bool> vetoSyst, std::string syst = "") {
-      m_btageff.setMapIndex("B", 0);
-      m_btageff.setMapIndex("C", 0);
-      m_btageff.setMapIndex("T", 0);
-      m_btageff.setMapIndex("Light", 0);
-
-      float btagsf = 1.0;
-      for (int k = 0; k < jet.size(); ++k) {
-	    float sf = 1;
-            Analysis::CalibrationDataVariables v;
-            v.jetPt = jet[k].Perp();
-            v.jetEta = jet[k].Eta();
-            v.jetTagWeight = mv2c10[k];
-            v.jetAuthor = "AntiKt2PV0TrackJets";
-            if (vetoSyst[k]) {
-              if (!m_btageff.applySystematicVariation(CP::SystematicSet())) {
-                std::cout << "Could not apply the sys variation " << "" << std::endl;
-                exit(-1);
-              }
-            } else {
-              if (!m_btageff.applySystematicVariation(CP::SystematicSet(syst))) {
-                std::cout << "Could not apply the sys variation " << syst << std::endl;
-                exit(-1);
-              }
-            }
-
-            if (mv2c10[k] > 0.6455) {
-              if (!m_btageff.getScaleFactor(flavour[k], v, sf)) {
-                std::cout << "Could not get btag SF for " << syst << ", jet pt, eta, weight = " << v.jetPt << ", " << v.jetEta << ", " << v.jetTagWeight << std::endl;
-                exit(-1);
-              }
-            } else {
-              if (!m_btageff.getInefficiencyScaleFactor(flavour[k], v, sf)) {
-                std::cout << "Could not get btag ineff. SF for " << syst << ", jet pt, eta, weight = " << v.jetPt << ", " << v.jetEta << ", " << v.jetTagWeight << std::endl;                exit(-1);
-              }
-            }
-            btagsf *= sf;
-      }
-      return btagsf;
-    }
-    */
     double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger, float topoetcone20, int runNumber) {
       Event e;
       e.met(met.Px(), met.Py());
@@ -257,17 +141,17 @@ class WrapperExtras {
       }
       double w = 0;
       if (!btags && boosted && isElectron) {
-        w = m_mm_b0_boosted_e.getMMweights(e, 0, isElectron, boosted, runNumber);
+        w = m_mm_b0_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
       } else if (btags && boosted && isElectron) {
-        w = m_mm_b1_boosted_e.getMMweights(e, 0, isElectron, boosted, runNumber);
+        w = m_mm_b1_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
       } else if (!btags && !boosted && isElectron) {
         w = m_mm_b0_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
       } else if (btags && !boosted && isElectron) {
         w = m_mm_b1_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
       } else if (!btags && boosted && !isElectron) {
-        w = m_mm_b0_boosted_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
+        w = m_mm_b0_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
       } else if (btags && boosted && !isElectron) {
-        w = m_mm_b1_boosted_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
+        w = m_mm_b1_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
       } else if (!btags && !boosted && !isElectron) {
         w = m_mm_b0_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
       } else if (btags && !boosted && !isElectron) {
@@ -287,29 +171,21 @@ class WrapperExtras {
     double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
       double eftw = getEFTWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2, 1.0);
       double smw  = getSMWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
-      //double smw  = getEFTWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2, 0.0);
-      //double s = (t+tbar).M2();
-      //double tm = (i1-t).M2();
-      //double u = (i1-tbar).M2();
-      //std::stringstream str;
-      //for (int i = 0; i < f_pid.size(); ++i) { str << f_pid[i] << " "; }
-      //double test = s/(4e3*4e3*4*3.14159*alphaS(Q2));
-      //if (i1_pid != 21 && f_pid.size() == 0 && std::sqrt(s) > 2000)
-      //  std::cout << "EFT/SM = " << eftw << "/" << smw << "-1 = " << eftw/smw-1<<", i1, i2 = " << i1_pid<< ", " << i2_pid << ", s,t,u = " << s << ", " << tm << ", " << u << ", Q2 = " << Q2 << ", aS = " << alphaS(Q2) << ", nj = " << f_pid.size() << str.str() << ", analyt = " << test << "  -> " << (eftw/smw-1)/test << std::endl;
       return eftw/smw - 1.0;
     }
 };
 '''
     ROOT.gInterpreter.ProcessLine("gSystem->AddIncludePath(\" -I../../RootCoreBin/include \") ")
-    ROOT.gInterpreter.ProcessLine("gSystem->AddIncludePath(\" -I../ \") ")
     ROOT.gInterpreter.ProcessLine(".include ../../RootCoreBin/include ")
-    ROOT.gInterpreter.ProcessLine(".include .. ")
-    ROOT.gInterpreter.ProcessLine("gROOT->LoadMacro(\"/cvmfs/atlas.cern.ch/repo/sw/ASG/AnalysisTop/2.4.12/RootCore/scripts/load_packages.C\")")
+    ROOT.gInterpreter.ProcessLine("gROOT->LoadMacro(\"/cvmfs/atlas.cern.ch/repo/sw/ASG/AnalysisTop/2.4.21/RootCore/scripts/load_packages.C\")")
     ROOT.gInterpreter.ProcessLine("load_packages()");
     ROOT.gInterpreter.ProcessLine(bind_neutrino)
-    return ROOT.WrapperExtras()
 
-wrapperC = initBinds()
+initBinds()
+print "Generated Python to C++ bindings."
+wrapperC = ROOT.WrapperExtras()
+print "Called constructor."
+
 
 ## Initialise the T2HDM class and load the precompiled modules
 nameX = ""

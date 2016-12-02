@@ -70,6 +70,17 @@ class TtresChi2{
 
   bool findMinChiSquare(TLorentzVector*, const std::vector<TLorentzVector*>*, const std::vector<bool>*, TLorentzVector*, int&, int&, int&, int&, int&, double&, double&, double&);
 
+  std::vector<TLorentzVector> m_jet;
+  std::vector<bool> m_btag;
+  TLorentzVector m_met;
+  TLorentzVector m_lepton;
+
+  bool findMinChiSquareSimple();
+  void setLepton(TLorentzVector l);
+  void setMET(TLorentzVector MET);
+  void clearJet();
+  void addJet(TLorentzVector j, int b);
+
   bool findMinChiSquare_HighMass(TLorentzVector*, const std::vector<TLorentzVector*>*, const std::vector<bool>*, TLorentzVector*, int&, int&, int&, int&, double&, double&, double&);
 
   bool findMinChiSquare_VeryHighMass(TLorentzVector*, const std::vector<TLorentzVector*>*, const std::vector<bool>*, TLorentzVector*, int&, int&, int&, double&, double&, double&);

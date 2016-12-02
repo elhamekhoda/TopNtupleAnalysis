@@ -829,7 +829,7 @@ int main(int argc, char **argv) {
   SampleXsection sampleXsection;
   sampleXsection.readFromFile("../TopDataPreparation/data/XSection-MC15-13TeV.data");
 
-  WeakCorr::WeakCorrScaleFactorParam ewkTool("share/EWcorr_param.root");
+  WeakCorrScaleFactorParam ewkTool("share/EWcorr_param.root");
 
   unsigned long procEvents = 0;
 
@@ -1060,7 +1060,7 @@ int main(int argc, char **argv) {
               float MC_tbar_phi = sel.MC_tbar().Phi();
               float MC_tbar_m = sel.MC_tbar().M();
               int initial_type = mt.i("initial_type");
-              WeakCorr::ScaleFactor sf; 
+              ScaleFactor sf; 
               sf = ewkTool.getScaleFactor(MC_t_pt,    MC_t_eta,    MC_t_phi,    MC_t_m, \
                                           MC_tbar_pt, MC_tbar_eta, MC_tbar_phi, MC_tbar_m, \
                                           initial_type);

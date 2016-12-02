@@ -31,7 +31,6 @@
 
 // class Hathor;
 // class Lhapdf;
-namespace WeakCorr {
 
 class WeakCorrScaleFactorParam {
   
@@ -57,6 +56,16 @@ public:
         float& MC_tbar_phi,
         float& MC_tbar_m,
         int& type);
+    float getScaleFactor(
+        float MC_t_pt,
+        float MC_t_eta,
+        float MC_t_phi,
+        float MC_t_m,
+        float MC_tbar_pt,
+        float MC_tbar_eta,
+        float MC_tbar_phi,
+        float MC_tbar_m,
+        int type, int var);
     double getWeight(const double& shat, const double& z, const int& type);
     double getWeight(
         float& MC_t_pt,
@@ -79,6 +88,5 @@ private:
     TH2F* m_fgg;
     double m_mt;
 };
-} // namespace WeakCorr
 
 #endif //WEAKCORRSCALEFACTORPARAM_H
