@@ -5,6 +5,8 @@
 // Visit launchpad.net/madgraph5 and amcatnlo.web.cern.ch
 //==========================================================================
 
+#ifndef NOEFT
+
 #include <iostream> 
 #include <iomanip> 
 #include "TopNtupleAnalysis/Parameters_sm.h"
@@ -223,3 +225,4 @@ void Parameters_sm::printDependentCouplings()
 }
 
 
+#endif

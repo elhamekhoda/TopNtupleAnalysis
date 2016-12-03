@@ -5,6 +5,8 @@
 // Visit launchpad.net/madgraph5 and amcatnlo.web.cern.ch
 //==========================================================================
 
+#ifndef NOEFT
+
 #include <iostream> 
 #include <iomanip> 
 #include "TopNtupleAnalysis/Parameters_TopEffTh.h"
@@ -437,4 +439,6 @@ void Parameters_TopEffTh::printDependentCouplings()
       setw(10) << GC_86 << endl;
 }
 
+
+#endif
 

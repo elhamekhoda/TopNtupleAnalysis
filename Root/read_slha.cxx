@@ -1,3 +1,5 @@
+#ifndef NOEFT
+
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -144,3 +146,6 @@ void SLHAReader::set_block_entry(string block_name, int index,
   indices.push_back(index);
   set_block_entry(block_name, indices, value);
 }
+
+#endif
+

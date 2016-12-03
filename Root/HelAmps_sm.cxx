@@ -5,6 +5,9 @@
 // Visit launchpad.net/madgraph5 and amcatnlo.web.cern.ch
 //==========================================================================
 
+
+#ifndef NOEFT
+
 #include "TopNtupleAnalysis/HelAmps_sm.h"
 #include <complex> 
 #include <cmath> 
@@ -768,4 +771,7 @@ void VVV1P0_1(complex<double> V2[], complex<double> V3[], complex<double> COUP,
 
 
 }  // end namespace $(namespace)s_sm
+
+
+#endif
 

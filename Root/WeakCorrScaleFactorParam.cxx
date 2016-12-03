@@ -11,7 +11,7 @@
 #include "TLorentzVector.h"
 #include "TFile.h"
 
-WeakCorr::WeakCorrScaleFactorParam::WeakCorrScaleFactorParam(TString mapfile) :
+WeakCorrScaleFactorParam::WeakCorrScaleFactorParam(TString mapfile) :
     m_fuu(0),
     m_fdd(0),
     m_fgg(0),
@@ -25,13 +25,13 @@ WeakCorr::WeakCorrScaleFactorParam::WeakCorrScaleFactorParam(TString mapfile) :
     }
 }
 
-WeakCorr::WeakCorrScaleFactorParam::~WeakCorrScaleFactorParam() {
+WeakCorrScaleFactorParam::~WeakCorrScaleFactorParam() {
     delete m_fuu;
     delete m_fdd;
     delete m_fgg;
 }
 
-bool WeakCorr::WeakCorrScaleFactorParam::init(TString mapfile) {
+bool WeakCorrScaleFactorParam::init(TString mapfile) {
     TFile infile(mapfile.Data(), "READ");
     TH2F* hist = dynamic_cast<TH2F*>(infile.Get("Fuu"));
     if (!hist) return false;
@@ -48,7 +48,7 @@ bool WeakCorr::WeakCorrScaleFactorParam::init(TString mapfile) {
     return true;
 }
 
-WeakCorr::ScaleFactor WeakCorr::WeakCorrScaleFactorParam::getScaleFactor(const double& shat, const double& z, const int& type) {
+ScaleFactor WeakCorrScaleFactorParam::getScaleFactor(const double& shat, const double& z, const int& type) {
     ScaleFactor sf;
     sf.nominal = getWeight(shat, z, type);
     // 10% uncertainty on correction (F being the relative correction):
@@ -61,7 +61,7 @@ WeakCorr::ScaleFactor WeakCorr::WeakCorrScaleFactorParam::getScaleFactor(const d
     return sf;
 }
 
-WeakCorr::ScaleFactor WeakCorr::WeakCorrScaleFactorParam::getScaleFactor(
+ScaleFactor WeakCorrScaleFactorParam::getScaleFactor(
         float& MC_t_pt,
         float& MC_t_eta,
         float& MC_t_phi,
@@ -83,7 +83,32 @@ WeakCorr::ScaleFactor WeakCorr::WeakCorrScaleFactorParam::getScaleFactor(
     return sf;    
 }
 
-double WeakCorr::WeakCorrScaleFactorParam::getWeight(const double& shat, const double& z, const int& type) {
+float WeakCorrScaleFactorParam::getScaleFactor(
+        float MC_t_pt,
+        float MC_t_eta,
+        float MC_t_phi,
+        float MC_t_m,
+        float MC_tbar_pt,
+        float MC_tbar_eta,
+        float MC_tbar_phi,
+        float MC_tbar_m,
+        int type, int var) {
+    float sf;
+    sf = getWeight(MC_t_pt,MC_t_eta,MC_t_phi,MC_t_m,MC_tbar_pt,MC_tbar_eta,MC_tbar_phi,MC_tbar_m,type);
+    // 10% uncertainty on correction (F being the relative correction):
+    // nominal = 1 + F
+    // up   = 1 + F + 0.1*F = nominal + 0.1*(nominal - 1) = 1.1*nominal - 0.1
+    // down = 1 + F - 0.1*F = nominal - 0.1*(nominal - 1) = 0.9*nominal + 0.1
+    // up/down mean stronger/less correction, i.e. down > nominal in case of negative correction
+    if (var == 1) {
+      sf = 1.1 * sf - 0.1;
+    } else if (var == 2) {
+      sf = 0.9 * sf + 0.1;
+    }
+    return sf;    
+}
+
+double WeakCorrScaleFactorParam::getWeight(const double& shat, const double& z, const int& type) {
     if (!m_fuu || !m_fdd  || !m_fgg) {
         return -1.;
     }
@@ -108,7 +133,7 @@ double WeakCorr::WeakCorrScaleFactorParam::getWeight(const double& shat, const d
     return weight;
 }
 
-double WeakCorr::WeakCorrScaleFactorParam::getWeight(
+double WeakCorrScaleFactorParam::getWeight(
         float& MC_t_pt,
         float& MC_t_eta,
         float& MC_t_phi,
@@ -156,3 +181,4 @@ double WeakCorr::WeakCorrScaleFactorParam::getWeight(
     return weight;
     
 }
+

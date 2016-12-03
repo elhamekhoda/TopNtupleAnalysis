@@ -1,4 +1,6 @@
 
+#ifndef NOEFT
+
 #include "TopNtupleAnalysis/EFTLib.h"
 
 #include <cmath>
@@ -534,4 +536,4 @@ double getSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVecto
   return 0;
 }
 
-
+#endif

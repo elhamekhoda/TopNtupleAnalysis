@@ -328,6 +328,22 @@ bool TtresChi2::findMinChiSquare_AllRanges(TLorentzVector* L, const std::vector<
   return status;
 }
 
+
+bool TtresChi2::findMinChiSquareSimple(TLorentzVector lep, const std::vector<TLorentzVector> jet, const std::vector<bool> btag, TLorentzVector met) {
+  int  igj3, igj4; // index for the Whad
+  int igb3, igb4; // index for the b's
+  int  ign1;  // index for the neutrino (because chi2 can test both pz solution)
+  double chi2ming1, chi2ming1H, chi2ming1L;
+
+  std::vector<TLorentzVector *> j;
+  for (int k = 0; k < jet.size(); ++k) {
+    j.push_back(new TLorentzVector(jet[k]));
+  }
+  bool status = findMinChiSquare(&lep, &j, &btag, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
+  for (int k = 0; k < j.size(); ++k) delete j[k];
+  return status;
+}
+
 //_________________________________________________________________________________________________
 bool TtresChi2::findMinChiSquare(TLorentzVector* L, const std::vector<TLorentzVector*>* jetVector,  const std::vector<bool>* isJetBtagged, TLorentzVector* MET, int& i_q1_W, int& i_q2_W, int& i_b_had, int& i_b_lep, int& ign1, double& chi2ming1, double& chi2ming1H, double& chi2ming1L){
   if(m_debug>0) std::cout << "entering TtresChi2::findMinChiSquare()" << std::endl;
