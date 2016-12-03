@@ -4,6 +4,9 @@
 // By the MadGraph5_aMC@NLO Development Team
 // Visit launchpad.net/madgraph5 and amcatnlo.web.cern.ch
 //==========================================================================
+//
+
+#ifndef NOEFT
 
 #ifndef HelAmps_sm_H
 #define HelAmps_sm_H
@@ -70,3 +73,6 @@ void VVV1P0_1(complex<double> V2[], complex<double> V3[], complex<double> COUP,
 }  // end namespace MG5_sm
 
 #endif  // HelAmps_sm_H
+
+#endif
+

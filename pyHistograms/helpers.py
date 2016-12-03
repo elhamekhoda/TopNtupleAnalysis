@@ -5,186 +5,6 @@ import math
 import sys
 sys.path.append('2HDM')
 #import T2HDM
-ROOT.gROOT.SetBatch(True)
-
-
-def initBinds():
-    bind_neutrino = '''
-
-#include "TopNtupleAnalysis/TtresNeutrinoBuilder.h"
-#include "TopNtupleAnalysis/TtresChi2.h"
-#include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
-#include "TopNtupleAnalysis/MMUtils.h"
-#include "TopNtupleAnalysis/Event.h"
-#include "TopNtupleAnalysis/Electron.h"
-#include "TopNtupleAnalysis/Muon.h"
-#include "TopNtupleAnalysis/Jet.h"
-#include "TopNtupleAnalysis/LargeJet.h"
-#include "TopNtupleAnalysis/MObject.h"
-
-#include "TLorentzVector.h"
-#include <vector>
-#include <cstdlib>
-#include <sstream>
-
-#include "TopNtupleAnalysis/EFTLib.h"
-
-class WrapperExtras {
-  public:
-    TtresNeutrinoBuilder m_neutrinoBuilder;
-    TtresChi2 m_chi2;
-    WeakCorrScaleFactorParam m_ewkTool;
-    MMUtils m_mm_b0_res_e;
-    MMUtils m_mm_b1_res_e;
-    MMUtils m_mm_b0_res_mu;
-    MMUtils m_mm_b1_res_mu;
-
-    bool m_status;
-
-    WrapperExtras()
-                    : m_neutrinoBuilder("MeV"), m_chi2("MeV"), m_ewkTool("../share/EWcorr_param.root"),
-
-                      m_mm_b0_res_e(0, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
-		                           "../scripts/QCDestimation/RATES_2015/resolved_e_btag0_fake.root",       // fake2015
-					   "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",        // real2016
-					   "../scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root"),      // fake2016
-                      m_mm_b1_res_e(1, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
-		                           "../scripts/QCDestimation/RATES_2015/resolved_e_btag1_fake.root",       // fake2015
-					   "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016
-					   "../scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"), // fake2016
-
-                      m_mm_b0_res_mu(0, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
-		                            "../scripts/QCDestimation/RATES_2015/resolved_mu_btag0_fake.root",      // fake2015
-					    "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",        // real2016
-					    "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"), // fake2016
-                      m_mm_b1_res_mu(1, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
-		                            "../scripts/QCDestimation/RATES_2015/resolved_mu_btag1_fake.root",// fake2015
-					    "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",       // real2016
-					    "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root") // fake2016
-    {
-      m_chi2.Init(TtresChi2::DATA2015_MC15C);
-    }
-    virtual ~WrapperExtras() { }
-
-    TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
-      std::vector<TLorentzVector *> vec_nu = m_neutrinoBuilder.candidatesFromWMass_Rotation(&l, met, met_phi, true);
-      TLorentzVector nu;
-      if (vec_nu.size() > 0) {
-        nu = *(vec_nu[0]);
-        for (size_t z = 0; z < vec_nu.size(); ++z) delete vec_nu[z];
-        vec_nu.clear();
-      }
-      return nu;
-    }
-    void getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
-      m_chi2.setLepton(lep);
-      m_chi2.setMET(met);
-      m_chi2.clearJet();
-      for (size_t z = 0; z < jets.size(); ++z) {
-        m_chi2.addJet(jets[z], btag[z]);
-      }
-      m_status = m_chi2.findMinChiSquareSimple();
-      m_chi2.clearJet();
-    }
-    double res_mtt() {
-      if (!m_status) return -1;
-      return m_chi2.getResult_Mtt();
-    }
-    double res_mtl() {
-      if (!m_status) return -1;
-      return m_chi2.getResult_Mtl();
-    }
-    double res_mth() {
-      if (!m_status) return -1;
-      return m_chi2.getResult_Mth();
-    }
-    double res_mwh() {
-      if (!m_status) return -1;
-      return m_chi2.getResult_Mwh();
-    }
-    double res_chi2() {
-      if (!m_status) return 1000000;
-      return m_chi2.getResult_Chi2All();
-    }
-    double getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var = 0) {
-      float sf; 
-      float t_pt = top.Perp();
-      float t_eta = top.Eta();
-      float t_phi = top.Phi();
-      float t_m = top.M();
-
-      float tbar_pt = topbar.Perp();
-      float tbar_eta = topbar.Eta();
-      float tbar_phi = topbar.Phi();
-      float tbar_m = topbar.M();
-      sf = m_ewkTool.getScaleFactor(t_pt, t_eta, t_phi, t_m, tbar_pt, tbar_eta, tbar_phi, tbar_m, initial_type, var);
-      return sf;
-    }
-    double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger, float topoetcone20, int runNumber) {
-      Event e;
-      e.met(met.Px(), met.Py());
-      if (isElectron) {
-        e.electron().push_back(Electron(lep));
-        e.electron()[0].setTightPP(isTight);
-        e.electron()[0].topoetcone20() = topoetcone20;
-        e.electron()[0].sd0() = sd0;
-      } else {
-        e.muon().push_back(Muon(lep));
-    	e.muon()[0].sd0() = sd0;
-    	e.muon()[0].setTight(isTight);
-    	e.muon()[0].HLT_mu20_iloose_L1MU15() = muonTrigger;
-    	e.muon()[0].HLT_mu50() = muonTrigger;
-    	e.muon()[0].topoetcone20() = topoetcone20;
-      }
-      for (int k = 0; k < jet.size(); ++k) {
-        e.jet().push_back(Jet(jet[k]));
-      }
-      double w = 0;
-      if (!btags && boosted && isElectron) {
-        w = m_mm_b0_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
-      } else if (btags && boosted && isElectron) {
-        w = m_mm_b1_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
-      } else if (!btags && !boosted && isElectron) {
-        w = m_mm_b0_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
-      } else if (btags && !boosted && isElectron) {
-        w = m_mm_b1_res_e.getMMweights(e, 0, isElectron, boosted, runNumber);
-      } else if (!btags && boosted && !isElectron) {
-        w = m_mm_b0_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
-      } else if (btags && boosted && !isElectron) {
-        w = m_mm_b1_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
-      } else if (!btags && !boosted && !isElectron) {
-        w = m_mm_b0_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
-      } else if (btags && !boosted && !isElectron) {
-        w = m_mm_b1_res_mu.getMMweights(e, 0, isElectron, boosted, runNumber);
-      }
-      return w;
-    }
-    void initPDF(const std::string &s = "NNPDF21_lo_as_0130_100") {
-      initPDFForReweighting(s.c_str(), 0);
-    }
-    double alphaS(double Q2) {
-      return pdfAlphaS(Q2);
-    }
-    void setEFT(float eftLambda, float eftCvv) {
-      initEFTModels(eftLambda, eftCvv);
-    }
-    double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
-      double eftw = getEFTWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2, 1.0);
-      double smw  = getSMWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
-      return eftw/smw - 1.0;
-    }
-};
-'''
-    ROOT.gInterpreter.ProcessLine("gSystem->AddIncludePath(\" -I../../RootCoreBin/include \") ")
-    ROOT.gInterpreter.ProcessLine(".include ../../RootCoreBin/include ")
-    ROOT.gInterpreter.ProcessLine("gROOT->LoadMacro(\"/cvmfs/atlas.cern.ch/repo/sw/ASG/AnalysisTop/2.4.21/RootCore/scripts/load_packages.C\")")
-    ROOT.gInterpreter.ProcessLine("load_packages()");
-    ROOT.gInterpreter.ProcessLine(bind_neutrino)
-
-initBinds()
-print "Generated Python to C++ bindings."
-wrapperC = ROOT.WrapperExtras()
-print "Called constructor."
 
 
 ## Initialise the T2HDM class and load the precompiled modules
@@ -317,7 +137,7 @@ def applyBtagSF(sel, s):
         syst = "FT_EFF_Eigen_extrapolation__1%s" % (direction)
     elif 'btageSF_1' in s:
         syst = "FT_EFF_Eigen_extrapolation from charm__1%s" % (direction)
-    return wrapperC.getBtaggingSF(jetList, jetFlavour, jetWeight, vetoSyst, syst)
+    return getBtaggingSF(jetList, jetFlavour, jetWeight, vetoSyst, syst)
 
 # same as above, but it reads the SFs from the file
 def applyBtagSFFromFile(sel, s):
@@ -407,11 +227,11 @@ def applyEWK(sel, s):
     topbar = ROOT.TLorentzVector()
     topbar.SetPtEtaPhiM(sel.MC_tbar_pt, sel.MC_tbar_eta, sel.MC_tbar_phi, sel.MC_tbar_m)
     if s == 'ttEWK__1up':
-        w = wrapperC.getEWK(top, topbar, sel.initial_type, 1)
+        w = ROOT.getEWK(top, topbar, sel.initial_type, 1)
     elif s == 'ttEWK__1down':
-        w = wrapperC.getEWK(top, topbar, sel.initial_type, 2)
+        w = ROOT.getEWK(top, topbar, sel.initial_type, 2)
     else:
-        w = wrapperC.getEWK(top, topbar, sel.initial_type, 0)
+        w = ROOT.getEWK(top, topbar, sel.initial_type, 0)
     return w
 
 
@@ -634,7 +454,7 @@ def getEFTSMWeight(sel, s = ""):
     	Q2 *= 4
     elif 'eftScale' in s and 'down' in s:
     	Q2 *= 0.25
-    w = wrapperC.getEFTSMWeight(i1_pid, i2_pid, f_pid, i1, i2, top, topbar, f, Q2)
+    w = getEFTSMWeight(i1_pid, i2_pid, f_pid, i1, i2, top, topbar, f, Q2)
     return w
 
 
@@ -677,7 +497,7 @@ def get2HDMWeight(sel):
     pCpp = getMomenta(sel,topologySM_name)
     pPython = T2HDM.invert_momenta(pCpp)
     Q2 = (sel.MC_Q_me/1000.)*(sel.MC_Q_me/1000.)
-    alphaS = wrapperC.alphaS(Q2)
+    alphaS = alphaS(Q2)
     nhel = 0 # sum over all helicities
     me2SM = T2HDM.modules[topologySM_lib].get_me(pPython,alphaS,nhel) ### calculate the SM ME^2
     me2XX = T2HDM.modules[topologyXX_lib].get_me(pPython,alphaS,nhel) ### calculate the X ME^2
@@ -697,7 +517,7 @@ listWjets22.extend(range(363436, 363483+1))
 #    for i in range(0, len(sel.akt4truthjet_pt)):
 #        if sel.akt4truthjet_pt[i] > 20e3 and fabs(sel.akt4truthjet_eta[i]) < 4.5:
 #	    njet += 1
-#    return wrapperC.getWjets22Weight(njet)
+#    return ROOT.wrapperC.getWjets22Weight(njet)
 
 # list of systematics related to changes in the weights only
 weightSF = {'' : ['pileup', 'leptonSF', 'jvt'],

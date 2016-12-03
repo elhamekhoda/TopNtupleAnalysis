@@ -4,6 +4,9 @@
 // By the MadGraph5_aMC@NLO Development Team
 // Visit launchpad.net/madgraph5 and amcatnlo.web.cern.ch
 //==========================================================================
+//
+
+#ifndef NOEFT
 
 #ifndef HelAmps_TopEffTh_H
 #define HelAmps_TopEffTh_H
@@ -504,3 +507,5 @@ void VVVVV5P0_1(complex<double> V2[], complex<double> V3[], complex<double>
 }  // end namespace MG5_TopEffTh
 
 #endif  // HelAmps_TopEffTh_H
+
+#endif

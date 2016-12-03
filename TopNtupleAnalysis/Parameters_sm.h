@@ -4,6 +4,8 @@
 // By the MadGraph5_aMC@NLO Development Team
 // Visit launchpad.net/madgraph5 and amcatnlo.web.cern.ch
 //==========================================================================
+//
+#ifndef NOEFT
 
 #ifndef Parameters_sm_H
 #define Parameters_sm_H
@@ -64,3 +66,4 @@ class Parameters_sm
 
 #endif  // Parameters_sm_H
 
+#endif

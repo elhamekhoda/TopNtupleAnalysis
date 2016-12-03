@@ -7,15 +7,15 @@ def main():
 	# input directory
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
-	pattern = 'user.dferreir.*14082016v2_output.root'
+	pattern = 'user.dferreir.*13112016v*_output.root'
 	#pattern_mtt = 'user.dferreir.*14082016v1_output.root'
-	pattern_data = 'user.dferreir.00*14082016v1_output.root'
+	pattern_data = 'user.dferreir.00*13112016v*_output.root'
 
-	pattern_syst = 'user.dferreir.*14082016Systv1_output.root'
-	pattern_pdf = 'user.dferreir.*14082016PDFv1_output.root'
+	pattern_syst = 'user.dferreir.*13112016Systv*_output.root'
+	pattern_pdf = 'user.dferreir.*13112016PDFv*_output.root'
 	# for QCD e
-	pattern_qcde = 'user.dferreir.*14082016QCDev1_output.root'
-	pattern_qcdmu = 'user.dferreir.*14082016QCDmuv1_output.root'
+	pattern_qcde = 'user.dferreir.*13112016QCDev*_output.root'
+	pattern_qcdmu = 'user.dferreir.*13112016QCDmuv*_output.root'
 	theScope = 'user.dferreir'
 	
 	# output directory

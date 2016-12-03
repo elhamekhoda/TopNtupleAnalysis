@@ -5,6 +5,8 @@
 // Visit launchpad.net/madgraph5 and amcatnlo.web.cern.ch
 //==========================================================================
 
+#ifndef NOEFT
+
 #ifndef Parameters_TopEffTh_H
 #define Parameters_TopEffTh_H
 
@@ -70,4 +72,6 @@ class Parameters_TopEffTh
 }; 
 
 #endif  // Parameters_TopEffTh_H
+
+#endif
 

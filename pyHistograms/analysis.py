@@ -330,7 +330,7 @@ class AnaTtresSL(Analysis):
 		jets = ROOT.vector('TLorentzVector')()
 		for k in range(0, len(sel.jet_pt)):
 			jets.push_back(ROOT.TLorentzVector(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k]))
-		w = helpers.wrapperC.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger, topoetcone20, runNumber)
+		w = ROOT.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger, topoetcone20, runNumber)
 		return w
 
 	def selectChannel(self, sel, syst, w):
@@ -532,7 +532,7 @@ class AnaTtresSL(Analysis):
 		self.h["vtxz"][syst].Fill(sel.vtxz, w)
 		##TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
 		##double getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
-		nu = helpers.wrapperC.getNu(l, sel.met_met, sel.met_phi)
+		nu = ROOT.getNu(l, sel.met_met, sel.met_phi)
 		if 'be' in self.ch or 'bmu' in self.ch:
 			goodJetIdx = -1
 			closeJetIdx = -1
@@ -589,12 +589,17 @@ class AnaTtresSL(Analysis):
 						tagged = True
 				btag.push_back(tagged)
 			met = ROOT.TLorentzVector(sel.met_met, 0, sel.met_phi, sel.met_met)
-			helpers.wrapperC.getMtt(l, jets, btag, met)
-			mtt = helpers.wrapperC.res_mtt()
-			mtl = helpers.wrapperC.res_mtl()
-			mth = helpers.wrapperC.res_mth()
-			mwh = helpers.wrapperC.res_mwh()
-			chi2 = helpers.wrapperC.res_chi2()
+			mtt = -1
+			mtl = -1
+			mth = -1
+			mwh = -1
+			chi2 = 100000
+			ROOT.getMtt(l, jets, btag, met)
+			mtt = ROOT.res_mtt()
+			mtl = ROOT.res_mtl()
+			mth = ROOT.res_mth()
+			mwh = ROOT.res_mwh()
+			chi2 = ROOT.res_chi2()
                         w0 = w/self.w2HDM
 			self.h["mtt"][syst].Fill(mtt*1e-3, w)
 			self.h["mttr"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))

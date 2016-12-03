@@ -83,6 +83,7 @@ def main():
 
 	#print sumOfWeights
 	 
+	print "Loading xsec."
 	loadXsec(Xsec, "../scripts/XSection-MC15-13TeV-ttres.data")
 	loadXsec(Xsec, "../../TopDataPreparation/data/XSection-MC15-13TeV.data")
 	#loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
@@ -91,6 +92,7 @@ def main():
 	isWjets = False
 	doEWK = False
 
+	print "Loading first event"
 	mt_load = TChain("nominal")
 	addFilesInChain(mt_load, options.files, 20)
 	ent = mt_load.GetEntries()
@@ -101,8 +103,15 @@ def main():
 			isWjets = True
 		if sel.mcChannelNumber in helpers.listEWK:
 			doEWK = True
-		if isWjets or doEWK:
-			break
+		break
+
+	doQCD = False
+	doRew = False
+	if options.qcd != "False":
+		doQCD = True
+	if options.EFT != '':
+		doRew = True
+
 
 	# systematics list
 	if options.systs == 'all':
@@ -295,5 +304,14 @@ def main():
 		analysisCode[k].end()
 
 if __name__ == "__main__":
+	print "Initialising binds now."
+    	ROOT.gROOT.ProcessLine(".x $ROOTCOREDIR/scripts/load_packages.C")
+    	print "loading library"
+   	ROOT.gROOT.ProcessLine(".L wrapper.C+")
+    	print "initialising wrapper"
+    	#ROOT.gSystem.Load("wrapper_C.so")
+    	ROOT.initWrapper()
+	#initBinds()
+	print "Calling main"
 	main()
 

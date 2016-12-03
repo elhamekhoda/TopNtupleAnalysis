@@ -1,3 +1,5 @@
+#ifndef NOEFT
+
 #ifndef READ_SLHA
 #define READ_SLHA
 
@@ -44,6 +46,8 @@ class SLHAReader
   private:
     map<string, SLHABlock> _blocks;
 };
+
+#endif
 
 #endif
 

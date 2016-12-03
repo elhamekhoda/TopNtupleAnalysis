@@ -1,3 +1,5 @@
+#ifndef NOEFT
+
 #ifndef TOPEFTWEIGHT_H
 #define TOPEFTWEIGHT_H
 // Using EFT for the top production at LO
@@ -63,3 +65,6 @@ private:
 };
 
 #endif //TOPEFTWEIGHT_H
+
+#endif
+
