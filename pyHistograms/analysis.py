@@ -333,7 +333,7 @@ class AnaTtresSL(Analysis):
 		jets = ROOT.vector('TLorentzVector')()
 		for k in range(0, len(sel.jet_pt)):
 			j = ROOT.TLorentzVector()
-			j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k]))
+			j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k])
 			jets.push_back(j)
 		w = ROOT.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger, topoetcone20, runNumber)
 		return w
