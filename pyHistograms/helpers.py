@@ -100,7 +100,9 @@ def applyBtagSF(sel, s):
     jetWeight = ROOT.vector('float')()
     vetoSyst = ROOT.vector('bool')()
     for k in range(0, len(sel.tjet_pt)):
-        jetList.push_back(ROOT.TLorentzVector(sel.tjet_pt[k], sel.tjet_eta[k], sel.tjet_phi[k], sel.tjet_e[k]))
+        j = ROOT.TLorentzVector()
+        j.SetPtEtaPhiE(sel.tjet_pt[k], sel.tjet_eta[k], sel.tjet_phi[k], sel.tjet_e[k])
+        jetList.push_back(j)
         jetFlavour.push_back(int(sel.tjet_label[k]))
         jetWeight.push_back(float(sel.tjet_mv2c10[k]))
         ptbin = -1
@@ -183,7 +185,8 @@ def applyBtagSFFromFile(sel, s):
     btagsf = 1.0
     # loop over track jets
     for bidx in range(0, len(sel.tjet_mv2c20)):
-        pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
+        pb = ROOT.TLorentzVector()
+        pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
         # and apply object definition cuts (should already have been applied)
         if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
             # if we requested to vary only jets in a specific pt bin, check if this jet is in the pt bin

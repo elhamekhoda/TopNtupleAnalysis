@@ -18,10 +18,9 @@ def main():
 	
 	# output directory
 	# change this for your output directory
-	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_highmet'
-	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jes'
-	#outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jesbtagcat'
-	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr2421'
+	#outputDir = '/eos/atlas/user/d/dferreir/topana/hists_top2421'
+	outputDir = '/afs/cern.ch/user/d/dferreir/work/private/topana/Top2421/TopNtupleAnalysis/pyHistograms/hist_2421'
+	outputDir2 = 'root://eosatlas.cern.ch//eos/atlas/user/d/dferreir/topana/hists_top2421'
 
 	# number of files per job
 	nFilesPerJob = 40
@@ -29,14 +28,15 @@ def main():
 
 	# use it to setup AnalysisTop
 	# change this for the place where you setup RootCore
-	rundir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2421'
+	rundir = '/afs/cern.ch/work/d/dferreir/private/topana/Top2421'
 
 	# email to use to tell us when the job is done
 	email = 'dferreir@cern.ch'
 
 	# queue to submit to
-	#queue = '1nd'
-	queue = 'short.q'
+	queue = '2nd'
+	#queue = '8nh'
+	#queue = 'short.q'
 
 	# the default is AnaTtresSL, which produces many control pltos for tt res.
 	# The Mtt version produces a TTree to do the limit setting
@@ -54,15 +54,15 @@ def main():
 
 	names  += ['tt']
 	names  += ['tthm']
-	names  += ['ttv']
-	names  += ['wbbjets']
-	names  += ['wccjets']
-	names  += ['wcjets']
-	names  += ['wljets']
-	names  += ['singletop']
+	#names  += ['ttv']
+	#names  += ['wbbjets']
+	#names  += ['wccjets']
+	#names  += ['wcjets']
+	#names  += ['wljets']
+	#names  += ['singletop']
 
-	names  += ['zjets']
-	names  += ['vv']
+	#names  += ['zjets']
+	#names  += ['vv']
 
 	#names  += ["data"]
 	#names  += ['qcde', 'qcdmu']
@@ -224,9 +224,9 @@ def main():
 
 		nFilesPerJobEffective = nFilesPerJob
 		if 'tthm' in sn:
-			nFilesPerJobEffective = 2
+			nFilesPerJobEffective = 1
 		elif 'tt' in sn:
-			nFilesPerJobEffective = 3
+			nFilesPerJobEffective = 1
 		elif 'eft' in sn:
 			nFilesPerJobEffective = 1
 		elif 'singletop' in sn:
@@ -376,25 +376,27 @@ def main():
 			logfile = outputDir+"/stdout_"+jobName+'.txt'
 			runfile = outputDir+"/run_"+jobName+'.sh'
 			fr = open(runfile, 'w')
-			fr.write('#!/bin/sh\n')
-			fr.write('#$ -cwd\n')
-			fr.write('#$ -j y\n')
-			fr.write('#$ -l cvmfs\n')
-			fr.write('#$ -l distro=sld6\n')
-			fr.write('#$ -l arch=amd64\n')
-			fr.write('#$ -l h_vmem=5G\n')
-			fr.write('#$ -o '+logfile+'\n')
-			fr.write('#$ -q '+queue+'\n')
-			fr.write('#$ -m '+'as'+'\n')
-			fr.write('#$ -M '+email+'\n')
-			fr.write('#$ -N tpy_'+jobName+'\n')
-			# bsub options
-			#fr.write('#$ -e '+logfile+'\n')
+			#fr.write('#!/bin/sh\n')
+			#fr.write('#$ -cwd\n')
+			#fr.write('#$ -j y\n')
+			#fr.write('#$ -l cvmfs\n')
+			#fr.write('#$ -l distro=sld6\n')
+			#fr.write('#$ -l arch=amd64\n')
+			#fr.write('#$ -l h_vmem=5G\n')
 			#fr.write('#$ -o '+logfile+'\n')
 			#fr.write('#$ -q '+queue+'\n')
-			#fr.write('#$ -N '+''+'\n')
-			#fr.write('#$ -u '+email+'\n')
-			#fr.write('#$ -J tnapy_'+jobName+'\n')
+			#fr.write('#$ -m '+'as'+'\n')
+			#fr.write('#$ -M '+email+'\n')
+			#fr.write('#$ -N tpy_'+jobName+'\n')
+			# bsub options
+			fr.write('#BSUB -C 0\n')
+			fr.write('#BSUB -e '+logfile+'\n')
+			fr.write('#BSUB -o '+logfile+'\n')
+			fr.write('#BSUB -q '+queue+'\n')
+			#fr.write('#$ -N '+'tpy_'+jobName+'\n')
+			fr.write('#BSUB -u '+email+'\n')
+			fr.write('#BSUB -J tnapy_'+jobName+'\n')
+			fr.write('export EOS_MGM_URL=root://eosatlas.cern.ch\n')
 			fr.write('cd '+rundir+'\n')
 			fr.write('export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase\n')
 			fr.write('export DQ2_LOCAL_SITE_ID=DESY-HH_SCRATCHDISK \n')
@@ -402,20 +404,19 @@ def main():
 			fr.write('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
 			fr.write('export DISPLAY=\n')
 			fr.write('lsetup rcsetup\n')
-			#fr.write('rcSetup Top,2.4.21\n')
 			fr.write('cd TopNtupleAnalysis/pyHistograms\n')
-			#out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root,be2015:'+outputDir+'/be2015_'+jobName+'.root,bmu2015:'+outputDir+'/bmu2015_'+jobName+'.root,re2015:'+outputDir+'/re2015_'+jobName+'.root,rmu2015:'+outputDir+'/rmu2015_'+jobName+'.root,be2016:'+outputDir+'/be2016_'+jobName+'.root,bmu2016:'+outputDir+'/bmu2016_'+jobName+'.root,re2016:'+outputDir+'/re2016_'+jobName+'.root,rmu2016:'+outputDir+'/rmu2016_'+jobName+'.root'
-			out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root'
-			out += ',be3:'+outputDir+'/be3_'+jobName+'.root,bmu3:'+outputDir+'/bmu3_'+jobName+'.root,re3:'+outputDir+'/re3_'+jobName+'.root,rmu3:'+outputDir+'/rmu3_'+jobName+'.root'
-			out += ',be2:'+outputDir+'/be2_'+jobName+'.root,bmu2:'+outputDir+'/bmu2_'+jobName+'.root,re2:'+outputDir+'/re2_'+jobName+'.root,rmu2:'+outputDir+'/rmu2_'+jobName+'.root'
-			out += ',be1:'+outputDir+'/be1_'+jobName+'.root,bmu1:'+outputDir+'/bmu1_'+jobName+'.root,re1:'+outputDir+'/re1_'+jobName+'.root,rmu1:'+outputDir+'/rmu1_'+jobName+'.root'
-			out += ',be0:'+outputDir+'/be0_'+jobName+'.root,bmu0:'+outputDir+'/bmu0_'+jobName+'.root,re0:'+outputDir+'/re0_'+jobName+'.root,rmu0:'+outputDir+'/rmu0_'+jobName+'.root'
+			#out = 'be,'+outputDir+'/be_'+jobName+'.root\;bmu,'+outputDir+'/bmu_'+jobName+'.root\;re,'+outputDir+'/re_'+jobName+'.root\;rmu,'+outputDir+'/rmu_'+jobName+'.root\;be2015,'+outputDir+'/be2015_'+jobName+'.root\;bmu2015,'+outputDir+'/bmu2015_'+jobName+'.root\;re2015,'+outputDir+'/re2015_'+jobName+'.root\;rmu2015,'+outputDir+'/rmu2015_'+jobName+'.root\;be2016,'+outputDir+'/be2016_'+jobName+'.root\;bmu2016,'+outputDir+'/bmu2016_'+jobName+'.root\;re2016,'+outputDir+'/re2016_'+jobName+'.root\;rmu2016,'+outputDir+'/rmu2016_'+jobName+'.root'
+			out = 'be,'+outputDir2+'/be_'+jobName+'.root\;bmu,'+outputDir2+'/bmu_'+jobName+'.root\;re,'+outputDir2+'/re_'+jobName+'.root\;rmu,'+outputDir2+'/rmu_'+jobName+'.root'
+			out += '\;be3,'+outputDir2+'/be3_'+jobName+'.root\;bmu3,'+outputDir2+'/bmu3_'+jobName+'.root\;re3,'+outputDir2+'/re3_'+jobName+'.root\;rmu3,'+outputDir2+'/rmu3_'+jobName+'.root'
+			out += '\;be2,'+outputDir2+'/be2_'+jobName+'.root\;bmu2,'+outputDir2+'/bmu2_'+jobName+'.root\;re2,'+outputDir2+'/re2_'+jobName+'.root\;rmu2,'+outputDir2+'/rmu2_'+jobName+'.root'
+			out += '\;be1,'+outputDir2+'/be1_'+jobName+'.root\;bmu1,'+outputDir2+'/bmu1_'+jobName+'.root\;re1,'+outputDir2+'/re1_'+jobName+'.root\;rmu1,'+outputDir2+'/rmu1_'+jobName+'.root'
+			out += '\;be0,'+outputDir2+'/be0_'+jobName+'.root\;bmu0,'+outputDir2+'/bmu0_'+jobName+'.root\;re0,'+outputDir2+'/re0_'+jobName+'.root\;rmu0,'+outputDir2+'/rmu0_'+jobName+'.root'
 			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
 			fr.close()
 			os.system('chmod a+x '+runfile)
-			subcmd = 'qsub '+runfile
+			subcmd = 'bsub <'+runfile
 			os.system(subcmd)
-			sys.exit(0)
+			#sys.exit(0)
 
 if __name__ == '__main__':
 	import os

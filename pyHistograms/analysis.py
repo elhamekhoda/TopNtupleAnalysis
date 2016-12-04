@@ -15,7 +15,8 @@ class Analysis:
 	eftCvv = 0
         w2HDM = 1
 	def __init__(self, channel, suf, outputFile):
-		self.fi = ROOT.TFile(outputFile, "recreate")
+		print "Analysis initialisation for channel %s for output file %s" % (channel, outputFile)
+		self.fi = ROOT.TFile.Open(outputFile, "recreate")
 		self.ch = channel
 		self.histSuffixes = suf
 		self.noMttSlices = False
@@ -297,7 +298,8 @@ class AnaTtresSL(Analysis):
 
 		nBtag = 0
 		for bidx in range(0, len(sel.tjet_mv2c10)):
-			pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
+			pb = ROOT.TLorentzVector()
+			pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
 			if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
 				if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
 					nBtag += 1
@@ -305,7 +307,8 @@ class AnaTtresSL(Analysis):
 		#if 'be' in self.ch or 'bmu' in self.ch:
 		#	isBoosted = 1
 
-		met = ROOT.TLorentzVector(sel.met_met, 0, sel.met_phi, sel.met_met)
+		met = ROOT.TLorentzVector()
+		met.SetPtEtaPhiE(sel.met_met, 0, sel.met_phi, sel.met_met)
 		l = ROOT.TLorentzVector()
 		lisTight = 0
 		lsd0 = 0
@@ -329,7 +332,9 @@ class AnaTtresSL(Analysis):
 			topoetcone20 = sel.mu_topoetcone20[0]
 		jets = ROOT.vector('TLorentzVector')()
 		for k in range(0, len(sel.jet_pt)):
-			jets.push_back(ROOT.TLorentzVector(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k]))
+			j = ROOT.TLorentzVector()
+			j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k]))
+			jets.push_back(j)
 		w = ROOT.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger, topoetcone20, runNumber)
 		return w
 
@@ -411,7 +416,8 @@ class AnaTtresSL(Analysis):
 		# apply b-tagging cut
 		nBtag = 0
 		for bidx in range(0, len(sel.tjet_mv2c10)):
-			pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
+			pb = ROOT.TLorentzVector()
+			pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
 			if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
 				if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
 					nBtag += 1
@@ -517,7 +523,8 @@ class AnaTtresSL(Analysis):
 		tjets = []
 		tb = []
 		for bidx in range(0, len(sel.tjet_mv2c10)):
-			pb = ROOT.TLorentzVector(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
+			pb = ROOT.TLorentzVector()
+			pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
 			if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
 				tjets.append(pb)
 				b = False
@@ -581,14 +588,17 @@ class AnaTtresSL(Analysis):
 			btag = ROOT.vector('bool')()
 			#btag = []
 			for k in range(0, len(sel.jet_pt)):
-				jets.push_back(ROOT.TLorentzVector(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k]))
+				j = ROOT.TLorentzVector()
+				j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k])
+				jets.push_back(j)
 				tagged = False
 				for t in range(0, len(tjets)):
 					dr = jets[k].DeltaR(tjets[t])
 					if dr < 0.4 and tb[t]:
 						tagged = True
 				btag.push_back(tagged)
-			met = ROOT.TLorentzVector(sel.met_met, 0, sel.met_phi, sel.met_met)
+			met = ROOT.TLorentzVector()
+			met.SetPtEtaPhiE(sel.met_met, 0, sel.met_phi, sel.met_met)
 			mtt = -1
 			mtl = -1
 			mth = -1

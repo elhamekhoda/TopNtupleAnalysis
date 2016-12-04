@@ -196,8 +196,8 @@ def main():
 		else:
 			histSuffixes.append(item)
 	channels = {}
-	for k in options.output.split(','):
-		channels[k.split(':')[0]] = k.split(':')[1]
+	for k in options.output.split(';'):
+		channels[k.split(',')[0]] = k.split(',')[1]
 	analysisCode = {}
 	import analysis
 	#print "Systematics: ", histSuffixes
@@ -307,9 +307,9 @@ if __name__ == "__main__":
 	print "Initialising binds now."
     	ROOT.gROOT.ProcessLine(".x $ROOTCOREDIR/scripts/load_packages.C")
     	print "loading library"
-   	ROOT.gROOT.ProcessLine(".L wrapper.C+")
+   	#ROOT.gROOT.ProcessLine(".L wrapper.C+")
+    	ROOT.gSystem.Load("wrapper_C.so")
     	print "initialising wrapper"
-    	#ROOT.gSystem.Load("wrapper_C.so")
     	ROOT.initWrapper()
 	#initBinds()
 	print "Calling main"
