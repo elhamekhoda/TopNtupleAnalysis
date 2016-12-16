@@ -39,6 +39,30 @@ bool &LargeJet::good() {
   return m_good;
 }
 
+void LargeJet::setGood_sb(bool b) {
+  m_good_sb = b;
+}
+
+bool LargeJet::good_sb() const {
+  return m_good_sb;
+}
+
+bool &LargeJet::good_sb() {
+  return m_good_sb;
+}
+
+void LargeJet::setnotGood(bool b) {
+  m_notgood = b;
+}
+
+bool LargeJet::notgood() const {
+  return m_notgood;
+}
+
+bool &LargeJet::notgood() {
+  return m_notgood;
+}
+
 const int LargeJet::trueFlavour() const {
   return m_trueFlavour;
 }

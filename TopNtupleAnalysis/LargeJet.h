@@ -25,9 +25,17 @@ class LargeJet : public MObject {
     double &split12();
     const double split12() const;
 
+    bool notgood() const;
+    bool &notgood();
+    void setnotGood(bool);
+
     bool good() const;
     bool &good();
     void setGood(bool);
+
+    bool good_sb() const;
+    bool &good_sb();
+    void setGood_sb(bool);
 
     float &subs(const std::string &s);
     const float subs(const std::string &s) const;
@@ -37,6 +45,8 @@ class LargeJet : public MObject {
 
     int m_trueFlavour;
     bool m_good;
+    bool m_good_sb;
+    bool m_notgood;
 
     std::map<std::string, float> m_subs;
 };

@@ -69,6 +69,14 @@ float &Electron::Dz0() {
   return m_Dz0;
 }
 
+const float Electron::charge() const {
+  return m_el_charge;
+}
+
+float &Electron::charge() {
+  return m_el_charge;
+}
+
 const float Electron::d0() const {
   return m_d0;
 }
@@ -131,6 +139,30 @@ float &Electron::topoetcone20() {
 }
 
 //Triggers
+
+const bool Electron::HLT_e26_lhtight_nod0_ivarloose() const {
+  return m_HLT_e26_lhtight_nod0_ivarloose;
+}
+
+bool &Electron::HLT_e26_lhtight_nod0_ivarloose(){
+  return m_HLT_e26_lhtight_nod0_ivarloose;
+}
+
+const bool Electron::HLT_e60_lhmedium_nod0() const {
+  return m_HLT_e60_lhmedium_nod0;
+}
+
+bool &Electron::HLT_e60_lhmedium_nod0(){
+  return m_HLT_e60_lhmedium_nod0;
+}
+
+const bool Electron::HLT_e140_lhloose_nod0() const {
+  return m_HLT_e140_lhloose_nod0;
+}
+
+bool &Electron::HLT_e140_lhloose_nod0(){
+  return m_HLT_e140_lhloose_nod0;
+}
 
 const bool Electron::HLT_e24_lhmedium_iloose_L1EM20VH() const {
   return m_HLT_e24_lhmedium_iloose_L1EM20VH;

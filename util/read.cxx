@@ -19,6 +19,8 @@
 #include "TopNtupleAnalysis/Analysis.h"
 #include "TopNtupleAnalysis/AnaTtresSL.h"
 #include "TopNtupleAnalysis/AnaTtresSLMtt.h"
+#include "TopNtupleAnalysis/AnaTtresWJ.h"
+#include "TopNtupleAnalysis/AnaTtresSB.h"
 #include "TopNtupleAnalysis/AnaTtresQCD.h"
 #include "TopNtupleAnalysis/AnaTtresMM.h"
 
@@ -804,6 +806,22 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresSL(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
+ }else if (analysis == "AnaTtresWJ") {
+    vec_analysis.push_back(new AnaTtresWJ(outList[0], true,  false, systsListWithBlankNominal)); // resolved electron
+    vec_analysis.push_back(new AnaTtresWJ(outList[1], false, false, systsListWithBlankNominal)); // resolved muon    
+    vec_analysis.push_back(new AnaTtresWJ(outList[2], true,  true,  systsListWithBlankNominal)); // boosted  electron
+    vec_analysis.push_back(new AnaTtresWJ(outList[3], false, true,  systsListWithBlankNominal)); // boosted  muon
+  } else if (analysis == "AnaTtresSB")  {
+    vec_analysis.push_back(new AnaTtresSB(outList[0], true,  false, false, false, systsListWithBlankNominal)); // resolved electron
+    vec_analysis.push_back(new AnaTtresSB(outList[1], false, false, false, false, systsListWithBlankNominal)); // resolved muon    
+    vec_analysis.push_back(new AnaTtresSB(outList[2], true,  true, false, false,  systsListWithBlankNominal)); // boosted  electron
+    vec_analysis.push_back(new AnaTtresSB(outList[3], false, true, false, false,  systsListWithBlankNominal)); // boosted  muon
+    vec_analysis.push_back(new AnaTtresSB(outList[4], true,  false, true, false, systsListWithBlankNominal )); // semi boosted  electron 
+    vec_analysis.push_back(new AnaTtresSB(outList[5], false, false, true, false, systsListWithBlankNominal )); //  muon semi boost
+    vec_analysis.push_back(new AnaTtresSB(outList[6], true,  true,  true, false, systsListWithBlankNominal )); //  electron overlap_boost          
+    vec_analysis.push_back(new AnaTtresSB(outList[7], false, true , true, false, systsListWithBlankNominal )); //   muon  overlap_boost         
+    vec_analysis.push_back(new AnaTtresSB(outList[8], true,  false,  true, true, systsListWithBlankNominal )); //   electron overlap_resolve          
+    vec_analysis.push_back(new AnaTtresSB(outList[9], false, false, true, true, systsListWithBlankNominal  )); //  muon  overlap_resolve         
   } else if(analysis == "AnaTtresSL_QCDVR1_2j_2015" || analysis == "AnaTtresSL_QCDVR2_2j_2015" ||analysis == "AnaTtresSL_QCDCR2j_2015" || analysis == "AnaTtresSL_QCDCR4j_2015" || analysis == "AnaTtresSL_WjetsCR2j_2015" || analysis == "AnaTtresSL_SR4j_2015" || analysis == "AnaTtresSL_QCDVR1_4j_2015" || analysis == "AnaTtresSL_QCDVR2_4j_2015" 
          || analysis == "AnaTtresSL_QCDVR1_2j_2016" || analysis == "AnaTtresSL_QCDVR2_2j_2016" ||analysis == "AnaTtresSL_QCDCR2j_2016" || analysis == "AnaTtresSL_QCDSR2j_2016" || analysis == "AnaTtresSL_QCDCR4j_2016" || analysis == "AnaTtresSL_QCDVR1_4j_2016" || analysis == "AnaTtresSL_QCDVR2_4j_2016"){
     vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal, opt_dsid)); // resolved electron
@@ -1438,6 +1456,49 @@ int main(int argc, char **argv) {
             }
           	  
 	  }  
+         else if (analysis=="AnaTtresWJ") { // signal region
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+                bool iselect((dynamic_cast<AnaTtresWJ*>(vec_analysis[iAna]))->isElectron());
+                bool isboost((dynamic_cast<AnaTtresWJ*>(vec_analysis[iAna]))->isBoosted());
+                if (runMM) {
+
+                   if(nBtagged==0){
+                     if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
+                     else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
+
+                   }else{
+                     if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
+                     else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
+
+                   }//if
+                }//runMM
+
+                vec_analysis[iAna]->run(sel, weight, suffix);
+            }
+          }
+          else if (analysis=="AnaTtresSB") { // signal region
+            for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
+                bool iselect((dynamic_cast<AnaTtresSB*>(vec_analysis[iAna]))->isElectron());
+                bool isboost((dynamic_cast<AnaTtresSB*>(vec_analysis[iAna]))->isBoosted());
+                if (runMM) {
+
+                   if(nBtagged==0){
+                     if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
+                     else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
+
+                   }else{
+                     if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
+                     else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);// use w+jets rates (>=2 jets) everywhere for the time being
+
+                   }//if
+                }//runMM
+
+                vec_analysis[iAna]->run(sel, weight, suffix);
+            }
+          }
+
+
+
             else if (analysis=="AnaTtresSL_QCDCR2j_2016") { // QCD control region, >=2 jets
             for (size_t iAna = 0; iAna < vec_analysis.size(); ++iAna) {
 	        bool iselect((dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->isElectron());

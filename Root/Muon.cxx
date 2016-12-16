@@ -35,6 +35,14 @@ bool Muon::isTight() const {
   return m_tight;
 }
 
+const float Muon::charge() const {
+  return m_mu_charge;
+}
+
+float &Muon::charge() {
+  return m_mu_charge;
+}
+
 const float Muon::Dz0() const {
   return m_Dz0;
 }
@@ -187,13 +195,13 @@ const TLorentzVector &Muon::momTrk() const {
   return m_momTrk;
 }
 
-int Muon::charge() const {
+/*float Muon::charge() const {
   return m_charge;
 }
 int &Muon::charge() {
   return m_charge;
 }
-
+*/
 void Muon::setST(bool b) {
   m_st = b;
 }

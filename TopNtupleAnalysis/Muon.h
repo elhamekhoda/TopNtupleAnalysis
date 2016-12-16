@@ -20,6 +20,9 @@ class Muon : public MObject {
     bool isTight() const;
     void setTight(char t);
 
+    const float charge() const;
+    float &charge();
+
     const float Dz0() const;
     float &Dz0();
 
@@ -71,9 +74,9 @@ class Muon : public MObject {
     TLorentzVector &momTrk();
     const TLorentzVector &momTrk() const;
 
-    int charge() const;
+    /*int charge() const;
     int &charge();
-
+*/
     void setST(bool b);
     bool st() const;
 
@@ -106,7 +109,7 @@ class Muon : public MObject {
     TLorentzVector m_momID;
     TLorentzVector m_momTrk;
 
-    int m_charge;
+    float m_mu_charge;
     bool m_st;
     bool m_sa;
     bool m_cb;

@@ -30,6 +30,9 @@ class Electron : public MObject {
     const float Dz0() const;
     float &Dz0();
     
+    const float charge() const;
+    float &charge();
+
     const float d0() const;
     float &d0();
 
@@ -53,6 +56,15 @@ class Electron : public MObject {
     
     const float topoetcone20() const;
     float &topoetcone20();
+    
+    const bool HLT_e26_lhtight_nod0_ivarloose() const;
+    bool &HLT_e26_lhtight_nod0_ivarloose();
+    
+    const bool HLT_e60_lhmedium_nod0() const;
+    bool &HLT_e60_lhmedium_nod0();
+    
+    const bool HLT_e140_lhloose_nod0() const;
+    bool &HLT_e140_lhloose_nod0();
     
     const bool HLT_e24_lhmedium_iloose_L1EM20VH() const;
     bool &HLT_e24_lhmedium_iloose_L1EM20VH();
@@ -82,6 +94,7 @@ class Electron : public MObject {
     float m_Dz0;
     float m_d0;
     float m_sd0;
+    float m_el_charge;
     float m_ptvarcone20;
     float m_topoetcone20;
     int m_author;
@@ -91,6 +104,9 @@ class Electron : public MObject {
     int m_isEM;
     
     bool m_HLT_e24_lhmedium_iloose_L1EM20VH;    
+    bool m_HLT_e26_lhtight_nod0_ivarloose;    
+    bool m_HLT_e60_lhmedium_nod0;    
+    bool m_HLT_e140_lhloose_nod0;    
     bool m_HLT_e24_lhmedium_L1EM18VH;
     bool m_HLT_e24_lhmedium_L1EM20VH;
     bool m_HLT_e60_lhmedium;
