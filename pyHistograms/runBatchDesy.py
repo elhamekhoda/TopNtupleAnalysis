@@ -7,24 +7,24 @@ def main():
 	# for standard data and MC
 
 	# change this for your samples
-	pattern = 'user.dferreir.*13112016v*_output.root'
-	pattern_data = 'user.dferreir.00*13112016v*_output.root'
-	pattern_syst = 'user.dferreir.*13112016Systv*_output.root'
-	pattern_pdf = 'user.dferreir.*13112016PDFv*_output.root'
+	pattern = 'user.dferreir.*04122016v*_output.root'
+	pattern_data = 'user.dferreir.00*04122016v*_output.root'
+	pattern_syst = 'user.dferreir.*04122016Systv*_output.root'
+	pattern_pdf = 'user.dferreir.*04122016PDFv*_output.root'
 	# for QCD e
-	pattern_qcde = 'user.dferreir.*13112016QCDev2_output.root'
-	pattern_qcdmu = 'user.dferreir.*13112016QCDmuv2_output.root'
+	pattern_qcde = 'user.dferreir.*04122016QCDev*_output.root'
+	pattern_qcdmu = 'user.dferreir.*04122016QCDmuv*_output.root'
 	theScope = 'user.dferreir'
 	
 	# output directory
 	# change this for your output directory
 	#outputDir = '/eos/atlas/user/d/dferreir/topana/hists_top2421'
-	outputDir = '/afs/cern.ch/user/d/dferreir/work/private/topana/Top2421/TopNtupleAnalysis/pyHistograms/hist_2421'
-	outputDir2 = 'root://eosatlas.cern.ch//eos/atlas/user/d/dferreir/topana/hists_top2421'
+	outputDir = '/afs/cern.ch/user/d/dferreir/work/private/topana/Top2421/TopNtupleAnalysis/pyHistograms/hist_2421_all1'
+	outputDir2 = '/eos/user/d/dferreir/hists_top2421_all1'
 
 	# number of files per job
-	nFilesPerJob = 40
-	#nFilesPerJob = 8
+	#nFilesPerJob = 40
+	nFilesPerJob = 8
 
 	# use it to setup AnalysisTop
 	# change this for the place where you setup RootCore
@@ -34,7 +34,8 @@ def main():
 	email = 'dferreir@cern.ch'
 
 	# queue to submit to
-	queue = '2nd'
+	queue = '1nd'
+	#queue = '1nw'
 	#queue = '8nh'
 	#queue = 'short.q'
 
@@ -48,6 +49,10 @@ def main():
 	# leave it for nominal to run only the nominal
 	#systematics = 'nominal'
 	systematics = 'all'
+	systematics = 'all1'
+	#systematics = 'all2'
+	#systematics = 'all3'
+	#systematics = 'all4'
 	
 	# 25 ns datasets
 	names   = []
@@ -232,9 +237,9 @@ def main():
 		elif 'singletop' in sn:
 			nFilesPerJobEffective = 5
 		elif 'kkgrav' in sn:
-			nFilesPerJobEffective = 2
+			nFilesPerJobEffective = 1
 		elif 'zprime' in sn:
-			nFilesPerJobEffective = 2
+			nFilesPerJobEffective = 1
 		elif 'data' in sn or 'qcd' in sn:
 			nFilesPerJobEffective = 300
 
@@ -294,6 +299,8 @@ def main():
 					for fname in pfns:
 						if 'DESY-HH_LOCALGROUPDISK' in pfns[fname]:
 							files.append(pfns[fname]['DESY-HH_LOCALGROUPDISK'])
+						elif 'DESY-ZN_LOCALGROUPDISK' in pfns[fname]:
+							files.append(pfns[fname]['DESY-ZN_LOCALGROUPDISK'])
 						else:
 							#print "File %s is not available in DESY! It is available on " % fname, pfns[fname]
 							k = pfns[fname].keys()[0]
@@ -374,6 +381,7 @@ def main():
 				f.write(item)
 			f.close()
 			logfile = outputDir+"/stdout_"+jobName+'.txt'
+			os.system('rm -f %s' % logfile)
 			runfile = outputDir+"/run_"+jobName+'.sh'
 			fr = open(runfile, 'w')
 			#fr.write('#!/bin/sh\n')
@@ -393,10 +401,13 @@ def main():
 			fr.write('#BSUB -e '+logfile+'\n')
 			fr.write('#BSUB -o '+logfile+'\n')
 			fr.write('#BSUB -q '+queue+'\n')
+			#fr.write('#BSUB -M 5000000\n')
 			#fr.write('#$ -N '+'tpy_'+jobName+'\n')
 			fr.write('#BSUB -u '+email+'\n')
 			fr.write('#BSUB -J tnapy_'+jobName+'\n')
-			fr.write('export EOS_MGM_URL=root://eosatlas.cern.ch\n')
+			fr.write('export TMPDIR=$PWD\n')
+			fr.write("echo Temporary dir is $TMPDIR\n")
+			fr.write('export EOS_MGM_URL=root://eosuser.cern.ch\n')
 			fr.write('cd '+rundir+'\n')
 			fr.write('export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase\n')
 			fr.write('export DQ2_LOCAL_SITE_ID=DESY-HH_SCRATCHDISK \n')
@@ -405,16 +416,19 @@ def main():
 			fr.write('export DISPLAY=\n')
 			fr.write('lsetup rcsetup\n')
 			fr.write('cd TopNtupleAnalysis/pyHistograms\n')
+			tmpDir = '$TMPDIR'
+
 			#out = 'be,'+outputDir+'/be_'+jobName+'.root\;bmu,'+outputDir+'/bmu_'+jobName+'.root\;re,'+outputDir+'/re_'+jobName+'.root\;rmu,'+outputDir+'/rmu_'+jobName+'.root\;be2015,'+outputDir+'/be2015_'+jobName+'.root\;bmu2015,'+outputDir+'/bmu2015_'+jobName+'.root\;re2015,'+outputDir+'/re2015_'+jobName+'.root\;rmu2015,'+outputDir+'/rmu2015_'+jobName+'.root\;be2016,'+outputDir+'/be2016_'+jobName+'.root\;bmu2016,'+outputDir+'/bmu2016_'+jobName+'.root\;re2016,'+outputDir+'/re2016_'+jobName+'.root\;rmu2016,'+outputDir+'/rmu2016_'+jobName+'.root'
-			out = 'be,'+outputDir2+'/be_'+jobName+'.root\;bmu,'+outputDir2+'/bmu_'+jobName+'.root\;re,'+outputDir2+'/re_'+jobName+'.root\;rmu,'+outputDir2+'/rmu_'+jobName+'.root'
-			out += '\;be3,'+outputDir2+'/be3_'+jobName+'.root\;bmu3,'+outputDir2+'/bmu3_'+jobName+'.root\;re3,'+outputDir2+'/re3_'+jobName+'.root\;rmu3,'+outputDir2+'/rmu3_'+jobName+'.root'
-			out += '\;be2,'+outputDir2+'/be2_'+jobName+'.root\;bmu2,'+outputDir2+'/bmu2_'+jobName+'.root\;re2,'+outputDir2+'/re2_'+jobName+'.root\;rmu2,'+outputDir2+'/rmu2_'+jobName+'.root'
-			out += '\;be1,'+outputDir2+'/be1_'+jobName+'.root\;bmu1,'+outputDir2+'/bmu1_'+jobName+'.root\;re1,'+outputDir2+'/re1_'+jobName+'.root\;rmu1,'+outputDir2+'/rmu1_'+jobName+'.root'
-			out += '\;be0,'+outputDir2+'/be0_'+jobName+'.root\;bmu0,'+outputDir2+'/bmu0_'+jobName+'.root\;re0,'+outputDir2+'/re0_'+jobName+'.root\;rmu0,'+outputDir2+'/rmu0_'+jobName+'.root'
+			out = 'be,'+tmpDir+'/be_'+jobName+'.root\;bmu,'+tmpDir+'/bmu_'+jobName+'.root\;re,'+tmpDir+'/re_'+jobName+'.root\;rmu,'+tmpDir+'/rmu_'+jobName+'.root'
+			out += '\;be3,'+tmpDir+'/be3_'+jobName+'.root\;bmu3,'+tmpDir+'/bmu3_'+jobName+'.root\;re3,'+tmpDir+'/re3_'+jobName+'.root\;rmu3,'+tmpDir+'/rmu3_'+jobName+'.root'
+			out += '\;be2,'+tmpDir+'/be2_'+jobName+'.root\;bmu2,'+tmpDir+'/bmu2_'+jobName+'.root\;re2,'+tmpDir+'/re2_'+jobName+'.root\;rmu2,'+tmpDir+'/rmu2_'+jobName+'.root'
+			out += '\;be1,'+tmpDir+'/be1_'+jobName+'.root\;bmu1,'+tmpDir+'/bmu1_'+jobName+'.root\;re1,'+tmpDir+'/re1_'+jobName+'.root\;rmu1,'+tmpDir+'/rmu1_'+jobName+'.root'
+			out += '\;be0,'+tmpDir+'/be0_'+jobName+'.root\;bmu0,'+tmpDir+'/bmu0_'+jobName+'.root\;re0,'+tmpDir+'/re0_'+jobName+'.root\;rmu0,'+tmpDir+'/rmu0_'+jobName+'.root'
 			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
+			fr.write('cp %s/*_%s.root %s/' % (tmpDir, jobName, outputDir2))
 			fr.close()
 			os.system('chmod a+x '+runfile)
-			subcmd = 'bsub <'+runfile
+			subcmd = 'bsub <'+runfile + "|tee "+logfile
 			os.system(subcmd)
 			#sys.exit(0)
 

@@ -7,15 +7,15 @@ def main():
 	# input directory
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
 	# for standard data and MC
-	pattern = 'user.dferreir.*13112016v*_output.root'
+	pattern = 'user.dferreir.*04122016v*_output.root'
 	#pattern_mtt = 'user.dferreir.*14082016v1_output.root'
-	pattern_data = 'user.dferreir.00*13112016v*_output.root'
+	pattern_data = 'user.dferreir.00*04122016v*_output.root'
 
-	pattern_syst = 'user.dferreir.*13112016Systv*_output.root'
-	pattern_pdf = 'user.dferreir.*13112016PDFv*_output.root'
+	pattern_syst = 'user.dferreir.*04122016Systv*_output.root'
+	pattern_pdf = 'user.dferreir.*04122016PDFv*_output.root'
 	# for QCD e
-	pattern_qcde = 'user.dferreir.*13112016QCDev*_output.root'
-	pattern_qcdmu = 'user.dferreir.*13112016QCDmuv*_output.root'
+	pattern_qcde = 'user.dferreir.*04122016QCDev*_output.root'
+	pattern_qcdmu = 'user.dferreir.*04122016QCDmuv*_output.root'
 	theScope = 'user.dferreir'
 	
 	# output directory
@@ -220,6 +220,8 @@ def main():
 					for fname in pfns:
 						if 'DESY-HH_LOCALGROUPDISK' in pfns[fname]:
 							files.append(pfns[fname]['DESY-HH_LOCALGROUPDISK'])
+						elif 'DESY-ZN_LOCALGROUPDISK' in pfns[fname]:
+							files.append(pfns[fname]['DESY-ZN_LOCALGROUPDISK'])
 						else:
 							#print "File %s is not available in DESY! It is available on " % fname, pfns[fname]
 							k = pfns[fname].keys()[0]

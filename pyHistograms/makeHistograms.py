@@ -114,7 +114,7 @@ def main():
 
 
 	# systematics list
-	if options.systs == 'all':
+	if 'all' in options.systs:
 		systList = []
 		systList.append('nominal')
 		if isWjets:
@@ -178,6 +178,20 @@ def main():
 		# medium systematics for large-R jets
 		#systematics += ',LARGERJET_Medium_JET_Rtrk_Modelling_Tau32__1up,LARGERJET_Medium_JET_Rtrk_TotalStat_Kin__1down,LARGERJET_Medium_JET_Rtrk_Tracking_Tau32__1down,LARGERJET_Medium_JET_Rtrk_Modelling_Kin__1down,LARGERJET_Medium_JET_Rtrk_Tracking_Kin__1down,LARGERJET_Medium_JET_Rtrk_Baseline_Kin__1down,LARGERJET_Medium_JET_Rtrk_Baseline_Kin__1up,LARGERJET_Medium_JET_Rtrk_Tracking_Kin__1up,LARGERJET_Medium_JET_Rtrk_TotalStat_Tau32__1up,LARGERJET_Medium_JET_Rtrk_TotalStat_Tau32__1down,LARGERJET_Medium_JET_Rtrk_TotalStat_Kin__1up,LARGERJET_Medium_JET_Rtrk_Baseline_Tau32__1down,LARGERJET_Medium_JET_Rtrk_Modelling_Tau32__1down,LARGERJET_Medium_JET_Rtrk_Baseline_Tau32__1up,LARGERJET_Medium_JET_Rtrk_Tracking_Tau32__1up,LARGERJET_Medium_JET_Rtrk_Modelling_Kin__1up'
 		systList.extend(systematics.split(','))
+		l = int(len(systList)/4)
+		systListTmp = []
+		if 'all1' in options.systs:
+			systListTmp.extend(systList[0:l])
+		if 'all2' in options.systs:
+			systListTmp.extend(systList[l:2*l])
+		if 'all3' in options.systs:
+			systListTmp.extend(systList[2*l:3*l])
+		if 'all4' in options.systs:
+			systListTmp.extend(systList[3*l:])
+		if 'all,' in options.systs:
+			systListTmp = systList
+		systList = systListTmp
+		print "--> Setup to run over following systs.", systList
 	elif options.systs == 'pdf':
 		systList = []
 		systList.append('nominal')
@@ -304,14 +318,14 @@ def main():
 		analysisCode[k].end()
 
 if __name__ == "__main__":
-	print "Initialising binds now."
+	print "-> Initialising binds now."
     	ROOT.gROOT.ProcessLine(".x $ROOTCOREDIR/scripts/load_packages.C")
-    	print "loading library"
+    	print "-> Loading library."
    	#ROOT.gROOT.ProcessLine(".L wrapper.C+")
     	ROOT.gSystem.Load("wrapper_C.so")
-    	print "initialising wrapper"
+    	print "-> Initialising wrapper"
     	ROOT.initWrapper()
-	#initBinds()
-	print "Calling main"
+	print "-> Calling main"
 	main()
+	print "The end."
 
