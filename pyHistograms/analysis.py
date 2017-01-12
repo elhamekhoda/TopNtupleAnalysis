@@ -2,18 +2,24 @@ import helpers
 import ROOT
 import math
 from array import array
-
+from ROOT import std
 
 class Analysis:
 	ch = ''
 	fi = None
 	histSuffixes = [] # systematic copies of histograms
-	h = {} # map of histogram names to map of systematics to histograms
+	h = {} # map of histogram names to map of systematics to histograms 
+        trees = {} # dictionary for debug trees
+        branches = {} # dictionary for debug trees branches
 	noMttSlices = False
 	applyMET = 0
 	eftLambda = -1
 	eftCvv = 0
         w2HDM = 1
+        me2SM = -1
+        me2XX = -1
+        alphaS = -1
+        doTree = False
 	def __init__(self, channel, suf, outputFile):
 		print "Analysis initialisation for channel %s for output file %s" % (channel, outputFile)
 		self.fi = ROOT.TFile.Open(outputFile, "recreate")
@@ -24,7 +30,13 @@ class Analysis:
 		self.eftLambda = -1
 		self.eftCvv = -1
 		self.w2HDM = 1
+                self.me2SM = -1
+                self.me2XX = -1
+                self.alphaS = -1
+                self.doTree = False
 		self.h = {}
+                self.trees = {}
+                self.branches = {}
 		self.keep = '' # can be 'bb', 'cc', 'c' or 'l' and only applies to W+jets
 
 	def add(self, hName, nBins, xLow, xHigh):
@@ -35,6 +47,56 @@ class Analysis:
 			self.h[hName][s] = ROOT.TH1D(hName+self.ch+s, "", nBins, xLow, xHigh)
 			self.h[hName][s].Sumw2()
 			self.h[hName][s].SetDirectory(0)
+
+        def clearBranches(self,tName):
+		if(not self.doTree): return
+		for s in self.histSuffixes:
+			for bname in self.branches[tName][s]:
+				self.branches[tName][s][bname].clear()
+
+	def addTree(self,tName):
+		if(not self.doTree): return
+		self.trees[tName] = {}
+		self.branches[tName] = {}
+		print "adding tree",tName
+		#self.fi.cd()
+		for s in self.histSuffixes:
+			#print "adding ttree with name ", tName+self.ch+s
+			self.trees[tName][s] = ROOT.TTree(tName+self.ch+s,tName+self.ch+s)
+			self.trees[tName][s].SetDirectory(0)
+			self.branches[tName][s] = {}
+			self.branches[tName][s]["eventNumber"] = std.vector(float)()
+			self.trees[tName][s].Branch("eventNumber",self.branches[tName][s]["eventNumber"])
+			self.branches[tName][s]["runNumber"] = std.vector(float)()
+			self.trees[tName][s].Branch("runNumber",self.branches[tName][s]["runNumber"])
+			self.branches[tName][s]["mcChannelNumber"] = std.vector(float)()
+			self.trees[tName][s].Branch("mcChannelNumber",self.branches[tName][s]["mcChannelNumber"])
+			self.branches[tName][s]["aS"] = std.vector(float)()
+			self.trees[tName][s].Branch("aS",self.branches[tName][s]["aS"])
+			self.branches[tName][s]["w"] = std.vector(float)()
+			self.trees[tName][s].Branch("w",self.branches[tName][s]["w"])
+			self.branches[tName][s]["w0"] = std.vector(float)()
+			self.trees[tName][s].Branch("w0",self.branches[tName][s]["w0"])
+			self.branches[tName][s]["w2HDM"] = std.vector(float)()
+			self.trees[tName][s].Branch("w2HDM",self.branches[tName][s]["w2HDM"])
+			self.branches[tName][s]["me2SM"] = std.vector(float)()
+			self.trees[tName][s].Branch("me2SM",self.branches[tName][s]["me2SM"])
+			self.branches[tName][s]["me2XX"] = std.vector(float)()
+			self.trees[tName][s].Branch("me2XX",self.branches[tName][s]["me2XX"])
+			self.branches[tName][s]["id"] = std.vector(float)()
+			self.trees[tName][s].Branch("id",self.branches[tName][s]["id"])
+			self.branches[tName][s]["px"] = std.vector(float)()
+			self.trees[tName][s].Branch("px",self.branches[tName][s]["px"])
+			self.branches[tName][s]["py"] = std.vector(float)()
+			self.trees[tName][s].Branch("py",self.branches[tName][s]["py"])
+			self.branches[tName][s]["pz"] = std.vector(float)()
+			self.trees[tName][s].Branch("pz",self.branches[tName][s]["pz"])
+			self.branches[tName][s]["e"] = std.vector(float)()
+			self.trees[tName][s].Branch("e",self.branches[tName][s]["e"])
+			self.branches[tName][s]["mttReco"] = std.vector(float)()
+			self.trees[tName][s].Branch("mttReco",self.branches[tName][s]["mttReco"])
+			self.branches[tName][s]["mttTrue"] = std.vector(float)()
+			self.trees[tName][s].Branch("mttTrue",self.branches[tName][s]["mttTrue"])
 
 	def addVar(self, hName, nBinsList):
 		ar = array("d", nBinsList)
@@ -60,6 +122,22 @@ class Analysis:
 			for s in self.histSuffixes:
 				#print "writing histogram with name ", hName+s, " in file ",self.fi.GetName()
 				self.h[hName][s].Write(hName+s)
+                if(self.doTree):
+			for tName in self.trees:
+				for s in self.histSuffixes:
+					self.trees[tName][s].Write(tName+s)
+		if(helpers.nameX!=""):
+			out_nameX = ROOT.TNamed("nameX",helpers.nameX)
+			out_nameX.Write()
+			out_mX = ROOT.TVectorF(1)
+			out_mX[0] = helpers.mX
+			out_mX.Write("mX")
+			out_sba = ROOT.TVectorF(1)
+			out_sba[0] = helpers.sba
+			out_sba.Write("sba")
+			out_tanb = ROOT.TVectorF(1)
+			out_tanb[0] = helpers.tanb
+			out_tanb.Write("tanb")
 		self.fi.Close()
 
 	def getWeight(self, sel, s):
@@ -96,6 +174,13 @@ class AnaTtresSL(Analysis):
 		self.eftLambda = -1
 		self.eftCvv = 0
 		self.w2HDM = 1
+		self.me2SM = -1
+		self.me2XX = -1
+		self.alphaS = -1
+                ########################
+                ### make debug tree ####
+                self.addTree("debug") ##
+                ########################
 		# make histograms
 		self.add("yields", 1, 0.5, 1.5)
 		self.add("yieldsPos", 1, 0.5, 1.5)
@@ -125,14 +210,6 @@ class AnaTtresSL(Analysis):
 		self.addVar("mthad_res", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
 		self.add("mwhad_res", 40, 0, 400)
 		self.add("chi2", 50, -3, 7)
-                self.add("trueMttLow1", 20,300,1000)
-                self.add("trueMttLow1r", 20,300,1000)
-                self.add("trueMttLow2", 25,300,800)
-                self.add("trueMttLow2r", 25,300,800)
-                self.add("mttLow1", 20,300,1000)
-                self.add("mttLow1r", 20,300,1000)
-                self.add("mttLow2", 25,300,800)
-                self.add("mttLow2r", 25,300,800)
 		#self.addVar("mtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
 		self.add("mtt", 600 , 0, 6000)
 		self.add("mttr", 600, 0, 6000)
@@ -140,7 +217,10 @@ class AnaTtresSL(Analysis):
 		self.add("mttNeg", 600, 0, 6000)
 		self.add("trueMtt", 600, 0, 6000)
 		self.add("trueMttr", 600, 0, 6000)
-
+                self.addVar("mtt8TeV", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+                self.addVar("mtt8TeVr",[0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+		self.addVar("trueMtt8TeV",  [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+                self.addVar("trueMtt8TeVr", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
 		self.add("largeJet_tau32_wta", 20, 0, 1)
 		self.add("largeJet_tau21_wta", 20, 0, 1)
 
@@ -161,8 +241,11 @@ class AnaTtresSL(Analysis):
 
                 # for 2HDM
                 self.w2HDM = 1
+                self.me2SM = -1
+                self.me2XX = -1
+                self.alphaS = -1
                 if(helpers.nameX != ""):
-                        self.w2HDM = helpers.get2HDMWeight(sel)
+                        self.w2HDM,self.me2SM,self.me2XX,self.alphaS = helpers.get2HDMWeight(sel)
                         weight *= self.w2HDM
 
 		# W+jets C/A and HF syst. variations
@@ -393,7 +476,7 @@ class AnaTtresSL(Analysis):
 					passORChannels = True
 					break
 			passSel[i] = passORChannels
-
+		
 		if not passSel[self.ch]:
 			return False
 
@@ -449,6 +532,11 @@ class AnaTtresSL(Analysis):
 
 
 	def run(self, sel, syst, wo, wTruth):
+
+                ###############################
+                self.clearBranches("debug") ### call with "" to switch off
+                ###############################
+
 		if sel.mcChannelNumber in helpers.listWjets22:
 			flag = sel.Wfilter_Sherpa_nT
 			if self.keep == 'bb':
@@ -475,14 +563,20 @@ class AnaTtresSL(Analysis):
 			if sel.met_met*1e-3 < self.applyMET:
 				return
 
-		if sel.mcChannelNumber != 0 and hasattr(sel, "MC_ttbar_beforeFSR_m"):
+		if(sel.mcChannelNumber != 0 and hasattr(sel, "MC_ttbar_beforeFSR_m") and sel.mcChannelNumber not in [407200, 407201, 407202, 407203, 407204]):
                         w0 = w/self.w2HDM
 			self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
 			self.h["trueMttr"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
-                        self.h["trueMttLow1"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
-                        self.h["trueMttLow1r"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
-                        self.h["trueMttLow2"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
-                        self.h["trueMttLow2r"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
+                        self.h["trueMtt8TeV"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
+                        self.h["trueMtt8TeVr"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
+                if(sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+                        pME = helpers.getTruth4momenta(sel)
+                        truPttbar = pME[2]+pME[3]
+                        w0 = w/self.w2HDM
+                        self.h["trueMtt"][syst].Fill(truPttbar.M(), w)
+                        self.h["trueMttr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
+                        self.h["trueMtt8TeV"][syst].Fill(truPttbar.M(), w)
+                        self.h["trueMtt8TeVr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
 		self.h["yields"][syst].Fill(1, w)
 		self.h["runNumber"][syst].Fill(sel.runNumber, w)
 		l = ROOT.TLorentzVector()
@@ -561,7 +655,8 @@ class AnaTtresSL(Analysis):
 			lj.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx], sel.ljet_eta[goodJetIdx], sel.ljet_phi[goodJetIdx], sel.ljet_m[goodJetIdx])
 			closeJet = ROOT.TLorentzVector()
 			closeJet.SetPtEtaPhiE(sel.jet_pt[closeJetIdx], sel.jet_eta[closeJetIdx], sel.jet_phi[closeJetIdx], sel.jet_e[closeJetIdx])
-			
+		
+                        w0 = w/self.w2HDM	
 			self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
 			self.h["largeJetM"][syst].Fill(lj.M()*1e-3, w)
 			self.h["largeJetEta"][syst].Fill(lj.Eta(), w)
@@ -570,12 +665,9 @@ class AnaTtresSL(Analysis):
 			self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx], w)
 			self.h["mtlep_boo"][syst].Fill((closeJet+nu+l).M()*1e-3, w)
 			self.h["mtt"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
-                        w0 = w/self.w2HDM
 			self.h["mttr"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w0*(self.w2HDM-1.))
-                        self.h["mttLow1"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
-                        self.h["mttLow1r"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w0*(self.w2HDM-1.))
-                        self.h["mttLow2"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
-                        self.h["mttLow2r"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w0*(self.w2HDM-1.))
+                        self.h["mtt8TeV"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
+                        self.h["mtt8TeVr"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w0*(self.w2HDM-1.))
 			if lQ > 0:
 				self.h["mttPos"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
 			elif lQ < 0:
@@ -613,10 +705,8 @@ class AnaTtresSL(Analysis):
                         w0 = w/self.w2HDM
 			self.h["mtt"][syst].Fill(mtt*1e-3, w)
 			self.h["mttr"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))
-			self.h["mttLow1"][syst].Fill(mtt*1e-3, w)
-			self.h["mttLow1r"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))
-			self.h["mttLow2"][syst].Fill(mtt*1e-3, w)
-			self.h["mttLow2r"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))
+                        self.h["mtt8TeV"][syst].Fill(mtt*1e-3, w)
+                        self.h["mtt8TeVr"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))
 			if lQ > 0:
 				self.h["mttPos"][syst].Fill(mtt*1e-3, w)
 			elif lQ < 0:
@@ -625,6 +715,30 @@ class AnaTtresSL(Analysis):
 			self.h["mthad_res"][syst].Fill(mth*1e-3, w)
 			self.h["mwhad_res"][syst].Fill(mwh*1e-3, w)
 			self.h["chi2"][syst].Fill(chi2, w)
+                        ################################
+                        ### fill the tree ##############
+                        tName = "debug"
+                        if(self.doTree and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+                           self.branches[tName][syst]["eventNumber"].push_back(sel.eventNumber)
+                           self.branches[tName][syst]["runNumber"].push_back(sel.runNumber)
+                           self.branches[tName][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
+                           self.branches[tName][syst]["aS"].push_back(self.alphaS)
+                           self.branches[tName][syst]["w"].push_back(w)
+                           self.branches[tName][syst]["w0"].push_back(w0)
+                           self.branches[tName][syst]["w2HDM"].push_back(self.w2HDM)
+                           self.branches[tName][syst]["me2SM"].push_back(self.me2SM)
+                           self.branches[tName][syst]["me2XX"].push_back(self.me2XX)
+                           self.branches[tName][syst]["mttReco"].push_back(mtt*1e-3)
+                           self.branches[tName][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                           for i in xrange(sel.MC_id_me.size()):
+                              self.branches[tName][syst]["id"].push_back(sel.MC_id_me[i])
+                              self.branches[tName][syst]["px"].push_back(sel.MC_px_me[i])
+                              self.branches[tName][syst]["py"].push_back(sel.MC_py_me[i])
+                              self.branches[tName][syst]["pz"].push_back(sel.MC_pz_me[i])
+                              self.branches[tName][syst]["e"].push_back(sel.MC_e_me[i])
+                        ###################################################
+                        if(self.doTree): self.trees[tName][syst].Fill() ###
+                        ###################################################
 	def end(self):
 		#print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
 		self.write()

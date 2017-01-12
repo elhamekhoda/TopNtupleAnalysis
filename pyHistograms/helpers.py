@@ -4,7 +4,6 @@ from array import array
 import math
 import sys
 sys.path.append('2HDM')
-#import T2HDM
 
 
 ## Initialise the T2HDM class and load the precompiled modules
@@ -12,8 +11,6 @@ nameX = ""
 noX   = ""
 mX    = -1
 tanb  = -1
-stanb = "-1"
-itanb = -1
 typeX = -1
 sba   = -999
 cutsX = ""
@@ -25,8 +22,6 @@ def init2HDM(MH,MA,SBA,TANB,TYPE):
   global noX
   global mX
   global tanb
-  global stanb
-  global itanb
   global typeX
   global sba
   global cutsX
@@ -36,17 +31,14 @@ def init2HDM(MH,MA,SBA,TANB,TYPE):
   noX   = "h" if(nameX=="A") else "h1"
   mX    = MH if(MH>0) else MA
   tanb  = TANB
-  stanb = '%.2f' % tanb
-  typeX = T2HDM.model.typeX ## can be also modified but should match the generation step
-  sba   = T2HDM.model.sba   ## can be also modified but should match the generation step
-  cutsX = T2HDM.model.cuts  ## can be also modified but should match the generation step
-  T2HDM.setParameters(nameX,mX,cutsX,typeX,sba)
-  itanb = T2HDM.getItanb(tanb)
-  print "itanb=",itanb
-  T2HDM.setModules(nameX,"All",itanb)
-  print "cuts:",cutsX
-  print T2HDM.modules
-
+  typeX = TYPE
+  sba   = SBA
+  #############################################
+  T2HDM.reset(nameX,mX,typeX,sba,tanb,True) ###
+  #############################################
+  print "cuts:",T2HDM.model.cuts
+  print "parameters:",T2HDM.model.parameters
+  print T2HDM.model.modules
 
 
 def loadXsec(m, fName):
@@ -241,12 +233,12 @@ def applyEWK(sel, s):
 '''
 SM topo's         |  H/A matched topo's  | H/A partially matched topo's
 ------------------+----------------------+-------------------------------
-P0_gg_ttx         |  P0_gg_ttx           |  
+P0_gg_ttx         |  P0_gg_ttx           |
 P0_uux_ttx        |  P0_uux_ttx          |  P0_bbx_ttx
 P1_uux_ttxg       |  P1_uux_ttxg         |  P1_bbx_ttxg
-P1_gux_ttxux      |  P1_gux_ttxux        |  P1_gbx_ttxbx 
+P1_gux_ttxux      |  P1_gux_ttxux        |  P1_gbx_ttxbx
 P1_gu_ttxu        |  P1_gu_ttxu          |  P1_gb_ttxb
-P1_gg_ttxg        |  P1_gg_ttxg          |  
+P1_gg_ttxg        |  P1_gg_ttxg          |
 P2_gu_ttxgu       |  P2_gu_ttxgu         |  P2_gb_ttxgb
 P2_uxux_ttxuxux   |  P2_uxux_ttxuxux     |  P2_bxbx_ttxbxbx
 P2_uxcx_ttxuxcx   |  P2_uxcx_ttxuxcx     |  P2_uxbx_ttxuxbx
@@ -254,10 +246,10 @@ P2_uux_ttxuux     |  P2_uux_ttxuux       |  P2_bbx_ttxbbx
 P2_uux_ttxgg      |  P2_uux_ttxgg        |  P2_bbx_ttxgg
 P2_uux_ttxccx     |  P2_uux_ttxccx       |  P2_uux_ttxbbx  P2_bbx_ttxuux(?)
 P2_uu_ttxuu       |  P2_uu_ttxuu         |  P2_bb_ttxbb
-P2_ucx_ttxucx     |  P2_ucx_ttxucx       |  P2_ubx_ttxubx   
+P2_ucx_ttxucx     |  P2_ucx_ttxucx       |  P2_ubx_ttxubx
 P2_uc_ttxuc       |  P2_uc_ttxuc         |  P2_ub_ttxub
 P2_gux_ttxgux     |  P2_gux_ttxgux       |  P2_gbx_ttxgbx
-P2_gg_ttxgg       |  P2_gg_ttxgg         |     
+P2_gg_ttxgg       |  P2_gg_ttxgg         |
 P2_gg_ttxuux      |  P2_gg_ttxuux        |  P2_gg_ttxbbx
 
 H/A unmatched topo's:
@@ -282,7 +274,7 @@ def getTopology(prod,id1,id2=999):
     elif(idsum==0 and id1>=CHM and prod=="uux"): topology = "ccx"
     elif(idsum>GLU and idsum<2*GLU):             topology = "gu"
     elif(idsum<GLU and idsum>=GLU-TOP):          topology = "gux"
-    elif(absidsum<2*TOP):                    
+    elif(absidsum<2*TOP):
         if(id1>0           and absidsub==0):     topology = "uu"
         if(id1<0           and absidsub==0):     topology = "uxux"
         if(id1>0 and id2>0 and absidsub>0):      topology = "uc"
@@ -351,7 +343,6 @@ def correct2HDMTopology(sel,topology):
     topology = topoparts[0]+"_"+prod+"_ttx"+decay
     for i in xrange(3,len(topoparts)): topology += "_"+topoparts[i]
     return topology
-
 def getMomenta(sel,topology):
     n = len(sel.MC_id_me)
     topoparts = topology.split("_")
@@ -391,7 +382,7 @@ def getMomenta(sel,topology):
     t  = 2 if(sel.MC_id_me[2]>0) else 3
     tx = 3 if(sel.MC_id_me[2]>0) else 2
     me.update({"t1":{"id":sel.MC_id_me[t], "idx":t}})
-    me.update({"t2":{"id":sel.MC_id_me[tx],"idx":tx}}) 
+    me.update({"t2":{"id":sel.MC_id_me[tx],"idx":tx}})
     ### Fill extra partons' momenta ###
     if(n==5):
         if(decay=="g" or decay=="u" or decay=="ux"):
@@ -427,6 +418,7 @@ def getMomenta(sel,topology):
     if(n>5): p.append([ sel.MC_e_me[me["j2"]["idx"]], sel.MC_px_me[me["j2"]["idx"]], sel.MC_py_me[me["j2"]["idx"]], sel.MC_pz_me[me["j2"]["idx"]] ])
     return p
 
+
 def getEFTSMWeight(sel, s = ""):
     #double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
     if sel.mcChannelNumber == 0:
@@ -461,12 +453,17 @@ def getEFTSMWeight(sel, s = ""):
     return w
 
 
+def getTruth4momenta(sel):
+    p = []
+    for i in xrange(len(sel.MC_px_me)):
+       p.append(ROOT.TLorentzVector())
+       p[i].SetPxPyPzE(sel.MC_px_me[i],sel.MC_py_me[i],sel.MC_pz_me[i],sel.MC_e_me[i])
+    return p
+
 def print2HDM(sel,topology,alphaS,ids,pCpp,me2XX,me2SM):
-    pt1 = ROOT.TLorentzVector()
-    pt2 = ROOT.TLorentzVector()
-    pt1.SetPxPyPzE(sel.MC_px_me[2],sel.MC_py_me[2],sel.MC_pz_me[2],sel.MC_e_me[2])
-    pt2.SetPxPyPzE(sel.MC_px_me[3],sel.MC_py_me[3],sel.MC_pz_me[3],sel.MC_e_me[3])
-    if(abs((pt1+pt2).M()-mX)<100):
+    pME = getTruth4momenta(sel)
+    truPttbar = (pME[2]+pME[3]).M()
+    if(abs(truPttbar.M()-mX)<100):
        weightX = me2XX/me2SM
        print "# 2HDM setup: mX=%g, sba=%g, tanb=%g, type=%g --> topo=%s, mtt=%g, me2XX/me2SM=%g/%g=%g" % (mX,sba,tanb,typeX,topology,(pt1+pt2).M(),me2XX,me2SM,weightX)
        print "# ME ids are: ",ids
@@ -478,8 +475,6 @@ def print2HDM(sel,topology,alphaS,ids,pCpp,me2XX,me2SM):
        print "]"
        print "used p =", pCpp
 
-
-
 def get2HDMWeight(sel):
     if sel.mcChannelNumber == 0:
         return 1
@@ -489,25 +484,26 @@ def get2HDMWeight(sel):
     topologyXX_name = topologySM_name+"_no_"+noX
     topologyXX_name = correct2HDMTopology(sel,topologyXX_name)
     topologySM_lib = 'matrix2SM'+stripTopology(topologySM_name)+'py'
-    topologyXX_lib = 'matrix2'+nameX+str(itanb)+stripTopology(topologyXX_name)+'py'
+    topologyXX_lib = 'matrix2'+nameX+stripTopology(topologyXX_name)+'py'
     ids = []
     for i in xrange(sel.MC_id_me.size()): ids.append(sel.MC_id_me[i])
-    if(topologySM_lib not in T2HDM.modules or topologyXX_lib not in T2HDM.modules):
-        print "topology %s or %s (or both) is not in T2HDM.modules" % (topologySM_lib,topologyXX_lib) 
+    if(topologySM_lib not in T2HDM.model.modules or topologyXX_lib not in T2HDM.model.modules):
+        print "topology %s or %s (or both) is not in T2HDM.model.modules" % (topologySM_lib,topologyXX_lib)
         print "ME id's are: ",ids
         return 1
-
     pCpp = getMomenta(sel,topologySM_name)
     pPython = T2HDM.invert_momenta(pCpp)
-    Q2 = (sel.MC_Q_me/1000.)*(sel.MC_Q_me/1000.)
-    alphaS = alphaS(Q2)
+    Q2 = sel.MC_Q_me*sel.MC_Q_me
+    alphaS = ROOT.alphaS(Q2)
     nhel = 0 # sum over all helicities
-    me2SM = T2HDM.modules[topologySM_lib].get_me(pPython,alphaS,nhel) ### calculate the SM ME^2
-    me2XX = T2HDM.modules[topologyXX_lib].get_me(pPython,alphaS,nhel) ### calculate the X ME^2
-    weightX = me2XX/me2SM                                             ### calculate the weight
-    #print2HDM(sel,topologySM_name,alphaS,ids,pCpp,me2XX,me2SM)        ### print basic info
-    
-    return weightX
+    me2SM = T2HDM.model.modules[topologySM_lib].get_me(pPython,alphaS,nhel) ### calculate the SM ME^2
+    me2XX = T2HDM.model.modules[topologyXX_lib].get_me(pPython,alphaS,nhel) ### calculate the X ME^2
+    weightX = me2XX/me2SM                                                   ### calculate the weight
+    #print2HDM(sel,topologySM_name,alphaS,ids,pCpp,me2XX,me2SM)             ### print basic info
+    if(weightX>100.): weightX = 1.                                          ### protection
+    return (weightX,me2SM,me2XX,alphaS)
+
+
 
 
 listWjets22 = []

@@ -5,7 +5,8 @@ To generate libs locally:
   * tar -zxvf MG5_aMC_v2.4.3_HEFTff.tar.gz
   * cd MG5_aMC_v2_4_3/
   * make sure that models/HEFTff/restrict_default.dat has a weird suffix such that it is non-readable for MG
-  * you can run the processes just to get a feeling e.g. as:
+  * if you don't have it already, copy the "run" directory from here to the MG base path (it has 3 run cards - see below)
+  * from the MG base path, you can run the processes just to get a feeling e.g. as:
     ./bin/mg5_aMC run/proc.H.dat
     ./bin/mg5_aMC run/proc.A.dat
     ./bin/mg5_aMC run/proc.SM.dat
@@ -31,8 +32,11 @@ setting up 2HDM:
   * cd ../../
 
 makeing the libs:
-  * edit the __init__ function of t2HDM class in T2HDM.py  to tune the model parameters
   * python makeMatrix.py
+
+resetting the libs:
+  * have a look at resetMatrix.py and execute this:
+  * python resetMatrix.py
 
 if some libs give nonsense ME^2 values:
   * libraries are in "workpath" as specified in T2HDM.py

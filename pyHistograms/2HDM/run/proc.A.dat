@@ -1,0 +1,7 @@
+import model HEFTff
+define j = g u c d s b u~ c~ d~ s~ b~
+define p = g u c d s b u~ c~ d~ s~ b~
+generate p p > t t~ / h HIW=1 HIG=1 QED=1 QCD=99 @0
+add process p p > t t~ j / h HIW=1 HIG=1 QED=1 QCD=99 @1
+add process p p > t t~ j j / h HIW=1 HIG=1 QED=1 QCD=99 @2
+output standalone pp-A-ttjets

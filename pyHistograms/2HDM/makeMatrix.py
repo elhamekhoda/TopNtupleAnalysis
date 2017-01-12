@@ -10,4 +10,4 @@ import os
 ##################
 
 ### the class is already initialised, make the libraries
-T2HDM.test2HDM()
+T2HDM.make()

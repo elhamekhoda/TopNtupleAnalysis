@@ -9,20 +9,21 @@ preparation (in this dir):
 setuptools
   * go to: https://pypi.python.org/pypi/setuptools
   * wget the last version
-  * tar -zxv setuptools-XX.YY.ZZ.tar.gz
+  * unzip / tar -zxv setuptools-XX.YY.ZZ.tar.gz
   * cd setuptools-XX.YY.ZZ/
   * python setup.py install --prefix=$PWD/../installed
-  * it will complain about '../local/installed/lib/python2.7/site-packages' not being inside PYTHONPATH, so add it as in: 
-    mkdir -p ../installed/lib/python2.7/site-packages
-    export PYTHONPATH=$PWD/../installed/lib/python2.7/site-packages:$PYTHONPATH
-    export PATH=$PWD/../installed/bin:$PATH
+    * it will complain about '../local/installed/lib/python2.7/site-packages' not being inside PYTHONPATH, so add it as in: 
+       mkdir -p ../installed/lib/python2.7/site-packages
+       export PYTHONPATH=$PWD/../installed/lib/python2.7/site-packages:$PYTHONPATH
+       export PATH=$PWD/../installed/bin:$PATH
+    * repeat the installation step
   * cd .. [!!! IMPORTANT !!!]
     
 install pip
-  * easy_insta!ll --prefix=$PWD/installed pip
+  * easy_install --prefix=$PWD/installed pip
 
 install numpy
-  * pip install numpy --prefix=$HOME/local/installed
+  * pip install numpy --prefix=$PWD/installed
 
 to use after installation
   * source setup.sh

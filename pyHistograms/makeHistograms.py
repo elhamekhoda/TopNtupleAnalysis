@@ -228,8 +228,8 @@ def main():
 		eftStr = options.EFT.split(",")
 		eftLambda = float(eftStr[0])
 		eftCvv = float(eftStr[1])
-		helpers.wrapperC.initPDF(options.pdfForWeight)
-		helpers.wrapperC.setEFT(eftLambda, eftCvv)
+		helpers.ROOT.initPDF(options.pdfForWeight)
+		helpers.ROOT.setEFT(eftLambda, eftCvv)
         if options.SCALAR != "":
                 scalarStr  = options.SCALAR.split(",")
                 scalarMH   = float(scalarStr[0])
@@ -237,7 +237,7 @@ def main():
                 scalarSBA  = float(scalarStr[2])
                 scalarTANB = float(scalarStr[3])
                 scalarTYPE = int(scalarStr[4])
-                helpers.wrapperC.initPDF(options.pdfForWeight)
+                helpers.ROOT.initPDF(options.pdfForWeight)
                 helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
                 print "2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE)
 	for k in channels:
@@ -321,8 +321,8 @@ if __name__ == "__main__":
 	print "-> Initialising binds now."
     	ROOT.gROOT.ProcessLine(".x $ROOTCOREDIR/scripts/load_packages.C")
     	print "-> Loading library."
-   	#ROOT.gROOT.ProcessLine(".L wrapper.C+")
-    	ROOT.gSystem.Load("wrapper_C.so")
+   	ROOT.gROOT.ProcessLine(".L wrapper.C+")
+    	#ROOT.gSystem.Load("wrapper_C.so")
     	print "-> Initialising wrapper"
     	ROOT.initWrapper()
 	print "-> Calling main"
