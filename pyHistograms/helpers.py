@@ -343,6 +343,7 @@ def correct2HDMTopology(sel,topology):
     topology = topoparts[0]+"_"+prod+"_ttx"+decay
     for i in xrange(3,len(topoparts)): topology += "_"+topoparts[i]
     return topology
+
 def getMomenta(sel,topology):
     n = len(sel.MC_id_me)
     topoparts = topology.split("_")
@@ -500,7 +501,7 @@ def get2HDMWeight(sel):
     me2XX = T2HDM.model.modules[topologyXX_lib].get_me(pPython,alphaS,nhel) ### calculate the X ME^2
     weightX = me2XX/me2SM                                                   ### calculate the weight
     #print2HDM(sel,topologySM_name,alphaS,ids,pCpp,me2XX,me2SM)             ### print basic info
-    if(weightX>100.): weightX = 1.                                          ### protection
+    if(weightX>5 and nameX=="H"): weightX = 1.                              ### protection for a potential bug (?) in the mg model implementation
     return (weightX,me2SM,me2XX,alphaS)
 
 

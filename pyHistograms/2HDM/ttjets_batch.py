@@ -29,10 +29,13 @@ srcdir  = basedir+"TopNtupleAnalysis/pyHistograms/"
 jobdir  = "/afs/cern.ch/user/h/hod/data/jobs/"
 logdir  = "/afs/cern.ch/user/h/hod/data/logs/"
 figdir  = "/afs/cern.ch/user/h/hod/data/figs/"
+outdir  = "///"+figdir
 
-runnums = ["410000", "407200", "407201", "407202", "407203", "407204"]
+runnums = ["410000", "40720X"]
+#runnums = ["410000", "407200", "407201", "407202", "407203", "407204"]
 #runnums = ["407200", "407201", "407202", "407203", "407204"]
 #runnums = ["410000"]
+#runnums = ["40720X"]
 
 MH=-1
 MA=-1
@@ -43,9 +46,17 @@ else:
    MH=-1
    MA=M
 
+'''
+decision = raw_input("do you want to run "+mode+"? [yes/Yes/YES/no]...")
+if(decision==("yes") or decision==("Yes") or decision==("Yes")):
+   print "running!"
+else:
+   print "quitting!"
+   quit()
+'''
 
 for runnum in runnums:
-   isTTjets = (int(runnum)>=407200 and int(runnum)<=407204)
+   isTTjets = (runnum=="40720X") #(int(runnum)>=407200 and int(runnum)<=407204)
    if(ForceSignalOnly and not isTTjets): continue
    niterations = 2 if(isTTjets and not ForceSignalOnly) else 1
    for iteration in xrange(niterations):
@@ -87,13 +98,15 @@ for runnum in runnums:
          fjob.write('cd '+srcdir+'2HDM/local/\n')
          fjob.write('source setup.sh\n')
          fjob.write('cd '+srcdir+'\n')
+         fjob.write('rm -f '+ffigpattern+'\n')
+         fjob.write('rm -f '+flogname+'\n')
          if(isTTjets and isSignal):
-            #fjob.write("./makeHistograms.py  --files input_EXOT4_"+runnum+"_j"+sjob+".txt  --analysis AnaTtresSL  --output re,////tmp/hod/re."+jobconf+".root\;rmu,////tmp/hod/rmu."+jobconf+".root,be:////tmp/hod/be."+jobconf+".root\;bmu,////tmp/hod/bmu."+jobconf+".root  --systs nominal  --SCALAR "+jobopt+"\n")
-            fjob.write("./makeHistograms.py  --files input_EXOT4_"+runnum+"_j"+sjob+".txt  --analysis AnaTtresSL  --output re,////tmp/hod/re."+jobconf+".root\;rmu,////tmp/hod/rmu."+jobconf+".root  --systs nominal  --SCALAR "+jobopt+"\n")
+            #fjob.write("./makeHistograms.py  --files input_EXOT4_"+runnum+"_j"+sjob+".txt  --analysis AnaTtresSL  --output re,"+outdir+"re."+jobconf+".root\;rmu,"+outdir+"rmu."+jobconf+".root,be:"+outdir+"be."+jobconf+".root\;bmu,"+outdir+"bmu."+jobconf+".root  --systs nominal  --SCALAR "+jobopt+"\n")
+            fjob.write("./makeHistograms.py  --files input_EXOT4_"+runnum+"_j"+sjob+".txt  --analysis AnaTtresSL  --output re,"+outdir+"re."+jobconf+".root\;rmu,"+outdir+"rmu."+jobconf+".root  --systs nominal  --SCALAR "+jobopt+"\n")
          else:
-            #fjob.write("./makeHistograms.py  --files input_EXOT4_"+runnum+"_j"+sjob+".txt  --analysis AnaTtresSL  --output re,////tmp/hod/re."+jobconf+".root\;rmu,////tmp/hod/rmu."+jobconf+".root,be:////tmp/hod/be."+jobconf+".root\;bmu,////tmp/hod/bmu."+jobconf+".root  --systs nominal\n")
-            fjob.write("./makeHistograms.py  --files input_EXOT4_"+runnum+"_j"+sjob+".txt  --analysis AnaTtresSL  --output re,////tmp/hod/re."+jobconf+".root\;rmu,////tmp/hod/rmu."+jobconf+".root  --systs nominal\n")
-         fjob.write('/bin/cp -f /tmp/hod/*.root '+figdir+'\n')
+            #fjob.write("./makeHistograms.py  --files input_EXOT4_"+runnum+"_j"+sjob+".txt  --analysis AnaTtresSL  --output re,"+outdir+"re."+jobconf+".root\;rmu,"+outdir+"rmu."+jobconf+".root,be:"+outdir+"be."+jobconf+".root\;bmu,"+outdir+"bmu."+jobconf+".root  --systs nominal\n")
+            fjob.write("./makeHistograms.py  --files input_EXOT4_"+runnum+"_j"+sjob+".txt  --analysis AnaTtresSL  --output re,"+outdir+"re."+jobconf+".root\;rmu,"+outdir+"rmu."+jobconf+".root  --systs nominal\n")
+         #fjob.write('/bin/cp -f /tmp/hod/*.root '+figdir+'\n')
          fjob.write('echo "host = $HOSTNAME"\n')
 
          ### submit the job

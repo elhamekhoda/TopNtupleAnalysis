@@ -31,7 +31,8 @@ jobdir  = "/afs/cern.ch/user/h/hod/data/jobs/"
 logdir  = "/afs/cern.ch/user/h/hod/data/logs/"
 figdir  = "/afs/cern.ch/user/h/hod/data/figs/"
 
-runnums = ["410000", "407200", "407201", "407202", "407203", "407204"]
+runnums = ["410000", "40720X"]
+#runnums = ["410000", "407200", "407201", "407202", "407203", "407204"]
 #runnums = ["407200", "407201", "407202", "407203", "407204"]
 #runnums = ["410000"]
 channels = ["re","rmu"]
@@ -46,8 +47,9 @@ else:
    MA=M
 
 
+problems = []
 for runnum in runnums:
-   isTTjets = (int(runnum)>=407200 and int(runnum)<=407204)
+   isTTjets = (runnum=="40720X") #(int(runnum)>=407200 and int(runnum)<=407204)
    if(ForceSignalOnly and not isTTjets): continue
    niterations = 2 if(isTTjets and not ForceSignalOnly) else 1
    for iteration in xrange(niterations):
@@ -67,8 +69,11 @@ for runnum in runnums:
 
          ### check log file
          flogname = logdir+jobconf+".log"
+         fjobname = jobdir+jobconf+".sh"
          if(not os.path.isfile(flogname)):
             print "missing log file:",flogname
+            job = "bsub -q 1nd -o "+flogname+" "+fjobname
+            if(job not in problems): problems.append(job)
          else:
             flog = open(flogname)
             lines = flog.readlines()
@@ -80,12 +85,23 @@ for runnum in runnums:
                nlastlines -= 1
             if(nlastlines==0):
                print "log file missing patterns:",flogname
+               job = "bsub -q 1nd -o "+flogname+" "+fjobname
+               if(job not in problems): problems.append(job)
 
             ### check root file
             for channel in channels:
                ffigname = figdir+channel+"."+jobconf+".root"
                if(not os.path.isfile(ffigname)):
                   print "missing root file:",ffigname
+                  job = "bsub -q 1nd -o "+flogname+" "+fjobname
+                  if(job not in problems): problems.append(job)
                else:
                   if(os.path.getsize(ffigname)/1000<25):
                      print "too small root file:",ffigname
+                     job = "bsub -q 1nd -o "+flogname+" "+fjobname
+                     if(job not in problems): problems.append(job)
+
+
+target = open(jobdir+"failed_jobs.sh",'a')
+for problem in problems:
+   target.write(problem+"\n")

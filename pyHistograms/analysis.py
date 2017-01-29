@@ -20,6 +20,7 @@ class Analysis:
         me2XX = -1
         alphaS = -1
         doTree = False
+        tName  = "debug"
 	def __init__(self, channel, suf, outputFile):
 		print "Analysis initialisation for channel %s for output file %s" % (channel, outputFile)
 		self.fi = ROOT.TFile.Open(outputFile, "recreate")
@@ -34,6 +35,7 @@ class Analysis:
                 self.me2XX = -1
                 self.alphaS = -1
                 self.doTree = False
+                self.tName  = "debug"
 		self.h = {}
                 self.trees = {}
                 self.branches = {}
@@ -48,55 +50,56 @@ class Analysis:
 			self.h[hName][s].Sumw2()
 			self.h[hName][s].SetDirectory(0)
 
-        def clearBranches(self,tName):
-		if(not self.doTree): return
+        def clearBranches(self):
+		if(not self.doTree or helpers.nameX==""): return
+                tname = self.tName+self.ch
 		for s in self.histSuffixes:
-			for bname in self.branches[tName][s]:
-				self.branches[tName][s][bname].clear()
+			for bname in self.branches[tname][s]:
+				self.branches[tname][s][bname].clear()
 
-	def addTree(self,tName):
-		if(not self.doTree): return
-		self.trees[tName] = {}
-		self.branches[tName] = {}
-		print "adding tree",tName
+	def addTree(self):
+		if(not self.doTree or helpers.nameX==""): return
+                tname = self.tName+self.ch
+		self.trees[tname] = {}
+		self.branches[tname] = {}
 		#self.fi.cd()
 		for s in self.histSuffixes:
-			#print "adding ttree with name ", tName+self.ch+s
-			self.trees[tName][s] = ROOT.TTree(tName+self.ch+s,tName+self.ch+s)
-			self.trees[tName][s].SetDirectory(0)
-			self.branches[tName][s] = {}
-			self.branches[tName][s]["eventNumber"] = std.vector(float)()
-			self.trees[tName][s].Branch("eventNumber",self.branches[tName][s]["eventNumber"])
-			self.branches[tName][s]["runNumber"] = std.vector(float)()
-			self.trees[tName][s].Branch("runNumber",self.branches[tName][s]["runNumber"])
-			self.branches[tName][s]["mcChannelNumber"] = std.vector(float)()
-			self.trees[tName][s].Branch("mcChannelNumber",self.branches[tName][s]["mcChannelNumber"])
-			self.branches[tName][s]["aS"] = std.vector(float)()
-			self.trees[tName][s].Branch("aS",self.branches[tName][s]["aS"])
-			self.branches[tName][s]["w"] = std.vector(float)()
-			self.trees[tName][s].Branch("w",self.branches[tName][s]["w"])
-			self.branches[tName][s]["w0"] = std.vector(float)()
-			self.trees[tName][s].Branch("w0",self.branches[tName][s]["w0"])
-			self.branches[tName][s]["w2HDM"] = std.vector(float)()
-			self.trees[tName][s].Branch("w2HDM",self.branches[tName][s]["w2HDM"])
-			self.branches[tName][s]["me2SM"] = std.vector(float)()
-			self.trees[tName][s].Branch("me2SM",self.branches[tName][s]["me2SM"])
-			self.branches[tName][s]["me2XX"] = std.vector(float)()
-			self.trees[tName][s].Branch("me2XX",self.branches[tName][s]["me2XX"])
-			self.branches[tName][s]["id"] = std.vector(float)()
-			self.trees[tName][s].Branch("id",self.branches[tName][s]["id"])
-			self.branches[tName][s]["px"] = std.vector(float)()
-			self.trees[tName][s].Branch("px",self.branches[tName][s]["px"])
-			self.branches[tName][s]["py"] = std.vector(float)()
-			self.trees[tName][s].Branch("py",self.branches[tName][s]["py"])
-			self.branches[tName][s]["pz"] = std.vector(float)()
-			self.trees[tName][s].Branch("pz",self.branches[tName][s]["pz"])
-			self.branches[tName][s]["e"] = std.vector(float)()
-			self.trees[tName][s].Branch("e",self.branches[tName][s]["e"])
-			self.branches[tName][s]["mttReco"] = std.vector(float)()
-			self.trees[tName][s].Branch("mttReco",self.branches[tName][s]["mttReco"])
-			self.branches[tName][s]["mttTrue"] = std.vector(float)()
-			self.trees[tName][s].Branch("mttTrue",self.branches[tName][s]["mttTrue"])
+			print "adding ttree with name ", tname+s
+			self.trees[tname][s] = ROOT.TTree(tname+s,tname+s)
+			self.trees[tname][s].SetDirectory(0)
+			self.branches[tname][s] = {}
+			self.branches[tname][s]["eventNumber"] = std.vector(float)()
+			self.trees[tname][s].Branch("eventNumber",self.branches[tname][s]["eventNumber"])
+			self.branches[tname][s]["runNumber"] = std.vector(float)()
+			self.trees[tname][s].Branch("runNumber",self.branches[tname][s]["runNumber"])
+			self.branches[tname][s]["mcChannelNumber"] = std.vector(float)()
+			self.trees[tname][s].Branch("mcChannelNumber",self.branches[tname][s]["mcChannelNumber"])
+			self.branches[tname][s]["aS"] = std.vector(float)()
+			self.trees[tname][s].Branch("aS",self.branches[tname][s]["aS"])
+			self.branches[tname][s]["w"] = std.vector(float)()
+			self.trees[tname][s].Branch("w",self.branches[tname][s]["w"])
+			self.branches[tname][s]["w0"] = std.vector(float)()
+			self.trees[tname][s].Branch("w0",self.branches[tname][s]["w0"])
+			self.branches[tname][s]["w2HDM"] = std.vector(float)()
+			self.trees[tname][s].Branch("w2HDM",self.branches[tname][s]["w2HDM"])
+			self.branches[tname][s]["me2SM"] = std.vector(float)()
+			self.trees[tname][s].Branch("me2SM",self.branches[tname][s]["me2SM"])
+			self.branches[tname][s]["me2XX"] = std.vector(float)()
+			self.trees[tname][s].Branch("me2XX",self.branches[tname][s]["me2XX"])
+			self.branches[tname][s]["id"] = std.vector(float)()
+			self.trees[tname][s].Branch("id",self.branches[tname][s]["id"])
+			self.branches[tname][s]["px"] = std.vector(float)()
+			self.trees[tname][s].Branch("px",self.branches[tname][s]["px"])
+			self.branches[tname][s]["py"] = std.vector(float)()
+			self.trees[tname][s].Branch("py",self.branches[tname][s]["py"])
+			self.branches[tname][s]["pz"] = std.vector(float)()
+			self.trees[tname][s].Branch("pz",self.branches[tname][s]["pz"])
+			self.branches[tname][s]["e"] = std.vector(float)()
+			self.trees[tname][s].Branch("e",self.branches[tname][s]["e"])
+			self.branches[tname][s]["mttReco"] = std.vector(float)()
+			self.trees[tname][s].Branch("mttReco",self.branches[tname][s]["mttReco"])
+			self.branches[tname][s]["mttTrue"] = std.vector(float)()
+			self.trees[tname][s].Branch("mttTrue",self.branches[tname][s]["mttTrue"])
 
 	def addVar(self, hName, nBinsList):
 		ar = array("d", nBinsList)
@@ -122,10 +125,11 @@ class Analysis:
 			for s in self.histSuffixes:
 				#print "writing histogram with name ", hName+s, " in file ",self.fi.GetName()
 				self.h[hName][s].Write(hName+s)
-                if(self.doTree):
-			for tName in self.trees:
+                if(self.doTree and helpers.nameX!=""):
+			tname = self.tName+self.ch
+			for tname in self.trees:
 				for s in self.histSuffixes:
-					self.trees[tName][s].Write(tName+s)
+					self.trees[tname][s].Write(tname+s)
 		if(helpers.nameX!=""):
 			out_nameX = ROOT.TNamed("nameX",helpers.nameX)
 			out_nameX.Write()
@@ -179,7 +183,7 @@ class AnaTtresSL(Analysis):
 		self.alphaS = -1
                 ########################
                 ### make debug tree ####
-                self.addTree("debug") ##
+                self.addTree() #########
                 ########################
 		# make histograms
 		self.add("yields", 1, 0.5, 1.5)
@@ -533,9 +537,9 @@ class AnaTtresSL(Analysis):
 
 	def run(self, sel, syst, wo, wTruth):
 
-                ###############################
-                self.clearBranches("debug") ### call with "" to switch off
-                ###############################
+                ########################
+                self.clearBranches() ###
+                ########################
 
 		if sel.mcChannelNumber in helpers.listWjets22:
 			flag = sel.Wfilter_Sherpa_nT
@@ -717,28 +721,31 @@ class AnaTtresSL(Analysis):
 			self.h["chi2"][syst].Fill(chi2, w)
                         ################################
                         ### fill the tree ##############
-                        tName = "debug"
-                        if(self.doTree and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
-                           self.branches[tName][syst]["eventNumber"].push_back(sel.eventNumber)
-                           self.branches[tName][syst]["runNumber"].push_back(sel.runNumber)
-                           self.branches[tName][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
-                           self.branches[tName][syst]["aS"].push_back(self.alphaS)
-                           self.branches[tName][syst]["w"].push_back(w)
-                           self.branches[tName][syst]["w0"].push_back(w0)
-                           self.branches[tName][syst]["w2HDM"].push_back(self.w2HDM)
-                           self.branches[tName][syst]["me2SM"].push_back(self.me2SM)
-                           self.branches[tName][syst]["me2XX"].push_back(self.me2XX)
-                           self.branches[tName][syst]["mttReco"].push_back(mtt*1e-3)
-                           self.branches[tName][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                        tname = self.tName+self.ch
+                        if(self.doTree and helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+                           self.branches[tname][syst]["eventNumber"].push_back(sel.eventNumber)
+                           self.branches[tname][syst]["runNumber"].push_back(sel.runNumber)
+                           self.branches[tname][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
+                           self.branches[tname][syst]["aS"].push_back(self.alphaS)
+                           self.branches[tname][syst]["w"].push_back(w)
+                           self.branches[tname][syst]["w0"].push_back(w0)
+                           self.branches[tname][syst]["w2HDM"].push_back(self.w2HDM)
+                           self.branches[tname][syst]["me2SM"].push_back(self.me2SM)
+                           self.branches[tname][syst]["me2XX"].push_back(self.me2XX)
+                           self.branches[tname][syst]["mttReco"].push_back(mtt*1e-3)
+                           pME = helpers.getTruth4momenta(sel)
+                           truPttbar = pME[2]+pME[3]
+                           self.branches[tname][syst]["mttTrue"].push_back(truPttbar.M())
                            for i in xrange(sel.MC_id_me.size()):
-                              self.branches[tName][syst]["id"].push_back(sel.MC_id_me[i])
-                              self.branches[tName][syst]["px"].push_back(sel.MC_px_me[i])
-                              self.branches[tName][syst]["py"].push_back(sel.MC_py_me[i])
-                              self.branches[tName][syst]["pz"].push_back(sel.MC_pz_me[i])
-                              self.branches[tName][syst]["e"].push_back(sel.MC_e_me[i])
-                        ###################################################
-                        if(self.doTree): self.trees[tName][syst].Fill() ###
-                        ###################################################
+                              self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
+                              self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
+                              self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
+                              self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
+                              self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
+                           ##################################
+                           ### fill the tree ################
+                           self.trees[tname][syst].Fill() ###
+                           ##################################
 	def end(self):
 		#print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
 		self.write()

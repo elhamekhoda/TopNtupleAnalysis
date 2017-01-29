@@ -18,4 +18,5 @@ def splitinput(fin,nfilesperjob):
             fout.writelines(g)
 
 ## global data structures
-splits = {"410000":{"njobs":26,"nfilesperjob":1}, "407200":{"njobs":5,"nfilesperjob":1}, "407201":{"njobs":2,"nfilesperjob":1}, "407202":{"njobs":3,"nfilesperjob":1}, "407203":{"njobs":2,"nfilesperjob":1}, "407204":{"njobs":3,"nfilesperjob":1}}
+#splits = {"410000":{"njobs":26,"nfilesperjob":1}, "407200":{"njobs":5,"nfilesperjob":1}, "407201":{"njobs":2,"nfilesperjob":1}, "407202":{"njobs":3,"nfilesperjob":1}, "407203":{"njobs":2,"nfilesperjob":1}, "407204":{"njobs":3,"nfilesperjob":1}}
+splits = {"410000":{"njobs":26,"nfilesperjob":1}, "40720X":{"njobs":15,"nfilesperjob":1}}

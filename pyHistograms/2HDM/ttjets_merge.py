@@ -33,6 +33,15 @@ sSBA  = str(SBA).replace(".","")
 sTANB = str(TANB).replace(".","")
 model  = ".s"+str(S)+"_m"+str(M)+"_sba"+sSBA+"_tanb"+sTANB+"_t"+str(TYPE)
 
+'''
+decision = raw_input("do you want to run "+mode+"? [yes/Yes/YES/no]...")
+if(decision==("yes") or decision==("Yes") or decision==("Yes")):
+   print "running!"
+else:
+   print "quitting!"
+   quit()
+'''
+
 def mergeoutput(path,pattern):
    mergedname = path+pattern.replace("j*","merged")
    p = subprocess.Popen("rm -f "+mergedname, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -43,31 +52,20 @@ def mergeoutput(path,pattern):
 
 figdir  = "/afs/cern.ch/user/h/hod/data/figs/"
 
-runnums = ["410000", "407200", "407201", "407202", "407203", "407204"]
+runnums = ["410000", "40720X"]
+#runnums = ["410000", "407200", "407201", "407202", "407203", "407204"]
 #runnums = ["407200", "407201", "407202", "407203", "407204"]
 channels = ["re","rmu"]
 #channels = ["re","rmu","be","bmu"]
-allfiles = {"re":"","rmu":""}
 
 for runnum in runnums:
-   isTTjets = (int(runnum)>=407200 and int(runnum)<=407204)
+   isTTjets = (runnum=="40720X") #(int(runnum)>=407200 and int(runnum)<=407204)
    for channel in channels:
       if(not ForceSignalOnly):
-         ## e.g. re.407200.j01.root
+         ## e.g. re.40720X.j01.root
          pattern = channel+"."+runnum+".j*.root"
          mergeoutput(figdir,pattern)
       if(isTTjets):
-         ## e.g. re.407200.sA_m500_sba1_tanb03_t2.j01.root
+         ## e.g. re.40720X.sA_m500_sba1_tanb03_t2.j01.root
          pattern = channel+"."+runnum+model+".j*.root"
          mergeoutput(figdir,pattern)
-         allfiles[channel] += figdir+pattern+" "
-
-for channel in channels:
-   if(allfiles[channel]!=""):
-      allmergedname = figdir+channel+model+".allmerged.root"
-      p = subprocess.Popen("rm -f "+allmergedname, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      out, err = p.communicate()
-      p = subprocess.Popen("hadd -f "+allmergedname+"  "+allfiles[channel], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      out, err = p.communicate()
-      print out
-
