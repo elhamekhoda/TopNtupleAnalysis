@@ -1,3 +1,7 @@
+2016-11-19 Sanmay Ganguly <sanmay.ganguly@cern.ch>
+	* Combined the resolved and boosted channel for muon rates
+	* TopNtupleAnalysis-00-02-27
+
 2016-01-12 Noam Tal Hod <hod@cern.ch>
 	* major update for the 2HDM signals
 	* TopNtupleAnalysis-00-02-26
