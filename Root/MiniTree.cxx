@@ -220,7 +220,7 @@ void MiniTree::read(int event, Event &e) {
     e.largeJet()[k].mom().SetPtEtaPhiE(vf("ljet_pt")->at(k), vf("ljet_eta")->at(k), vf("ljet_phi")->at(k), vf("ljet_e")->at(k));
     e.largeJet()[k].split12() = vf("ljet_sd12")->at(k);
     e.largeJet()[k].setGood((vi("ljet_good")->at(k) == 1)?true:false);
-    e.largeJet()[k].setGood_sb((vi("ljet_good_sb")->at(k) == 1)?true:false);
+    if(vi("ljet_good_sb"))e.largeJet()[k].setGood_sb((vi("ljet_good_sb")->at(k) == 1)?true:false);
     e.largeJet()[k].setnotGood((vi("ljet_notgood")->at(k) == 1)?true:false);
     e.largeJet()[k].trueFlavour() = 0; //TODO ljet_trueflav==0?-99:ljet_trueflav->at(k);
     e.largeJet()[k].subs("tau32") = vf("ljet_tau32")->at(k);
@@ -263,8 +263,8 @@ void MiniTree::read(int event, Event &e) {
   if (i("bmujetsQCDCR_2015")) 	e.passes().push_back("bmujetsQCDCR_2015");  
   if (i("rejetsIncluR_2015")) 	e.passes().push_back("rejetsIncluR_2015");
   if (i("bejetsIncluR_2015")) 	e.passes().push_back("bejetsIncluR_2015");
-  //if (i("rejetsIncluR_2016"))   e.passes().push_back("rejetsIncluR_2016");
-  //if (i("bejetsIncluR_2016"))   e.passes().push_back("bejetsIncluR_2016");
+  if (i("rejetsIncluR_2016"))   e.passes().push_back("rejetsIncluR_2016");
+  if (i("bejetsIncluR_2016"))   e.passes().push_back("bejetsIncluR_2016");
 
   if (i("bejets_semiB_2015")) 	e.passes().push_back("bejets_semiB");
   if (i("bmujets_semiB_2015")) 	e.passes().push_back("bmujets_semiB");

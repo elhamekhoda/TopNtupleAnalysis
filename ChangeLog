@@ -1,4 +1,7 @@
-2016-11-19 Sanmay Ganguly <sanmay.ganguly@cern.ch>
+2017-02-08 Samuel Calvet <scalvet@cern.ch>
+	* bug fix in branch definitions
+	
+2017-02-03  Sanmay Ganguly <sanmay.ganguly@cern.ch>
 	* Combined the resolved and boosted channel for muon rates
 	* TopNtupleAnalysis-00-02-27
 
@@ -6,6 +9,9 @@
 	* major update for the 2HDM signals
 	* TopNtupleAnalysis-00-02-26
 
+2016-12-16 Hannah Carson
+	* Analyses for boosted W+jets SF
+	
 2016-11-19 Sanmay Ganguly <sanmay.ganguly@cern.ch>
 	* Added the rates for AnalysisTop-2.4.21 with full 2016 luminosity
 	* TopNtupleAnalysis-00-02-25
