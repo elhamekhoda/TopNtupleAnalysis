@@ -90,6 +90,116 @@ Hist Hist::operator -(Hist a) const {
   return me;
 }
 
+Hist Hist::smoothStatOnly(Hist &nom, double target) {
+  //if (_size-2 < 3) return *this;
+  // need at least 3 bins to smoothen it
+
+  Hist me(*this);
+  double pre_yield = me.yield();
+
+  std::vector<int> bc;
+  std::vector<double> val;
+  std::vector<double> err;
+  std::vector<double> valn;
+  std::vector<double> errn;
+  for (int k = 0; k < _size; ++k) {
+    val.push_back(me[k]);
+    err.push_back(std::pow(me.e(k), 2));
+    bc.push_back(1);
+    valn.push_back(nom[k]);
+    errn.push_back(std::pow(nom.e(k), 2));
+  }
+
+  std::multimap<double, int> errors;
+  while (true) {
+    errors.clear();
+    for (int k = 0; k < val.size(); ++k) {
+      if (val[k] != 0) {
+        double v = std::fabs(val[k]/valn[k]);
+        double e = std::sqrt(err[k])/std::fabs(val[k]);
+        double en = std::sqrt(errn[k])/std::fabs(valn[k]);
+        double v_err = v*std::sqrt(std::pow(e/val[k],2) + std::pow(en/valn[k],2));
+        if (v_err > target*v) {
+          errors.insert(std::pair<double, int>(-std::sqrt(err[k])/std::fabs(val[k]), k));
+        }
+      }
+    }
+    if (errors.size() < 1 || val.size() <= 2)
+      break;
+    int first = errors.begin()->second;
+    bool mergeLeft = false;
+    bool mergeRight = false;
+    if (first == 0) mergeRight = true;
+    if (first == val.size()-1) mergeLeft = true;
+    if (!mergeLeft && !mergeRight) {
+      double errLeft = 999e5;
+      if (val[first-1] != 0) errLeft = std::sqrt(err[first-1])/std::fabs(val[first-1]);
+      double errRight = 999e5;
+      if (val[first+1] != 0) errRight = std::sqrt(err[first+1])/std::fabs(val[first+1]);
+      if (errLeft > errRight) {
+        mergeLeft = true;
+      } else {
+        mergeRight = true;
+      }
+    }
+    if (mergeLeft) {
+      double mergeVal = val[first] + val[first-1];
+      double mergeErr = err[first] + err[first-1];
+      double mergeValN = valn[first] + valn[first-1];
+      double mergeErrN = errn[first] + errn[first-1];
+      val[first] = mergeVal;
+      err[first] = mergeErr;
+      bc[first] += bc[first-1];
+      valn[first] = mergeValN;
+      errn[first] = mergeErrN;
+      val.erase(val.begin()+first-1);
+      err.erase(err.begin()+first-1);
+      valn.erase(valn.begin()+first-1);
+      errn.erase(errn.begin()+first-1);
+      bc.erase(bc.begin()+first-1);
+    } else if (mergeRight) {
+      double mergeVal = val[first] + val[first+1];
+      double mergeErr = err[first] + err[first+1];
+      double mergeValN = valn[first] + valn[first+1];
+      double mergeErrN = errn[first] + errn[first+1];
+      val[first] = mergeVal;
+      err[first] = mergeErr;
+      valn[first] = mergeValN;
+      errn[first] = mergeErrN;
+      bc[first] += bc[first+1];
+      val.erase(val.begin()+first+1);
+      err.erase(err.begin()+first+1);
+      valn.erase(valn.begin()+first+1);
+      errn.erase(errn.begin()+first+1);
+      bc.erase(bc.begin()+first+1);
+    } else {
+      break;
+    }
+  }
+
+  int pos = 1;
+  for (int k = 0; k < val.size(); ++k) {
+    double v = val[k]/valn[k];
+    double e = v*(std::sqrt(err[k]/val[k]/val[k] + errn[k]/valn[k]/valn[k]));
+    for (int m = 0; m < bc[k]; ++m) {
+      me[pos] = nom[pos]*(1+v);
+      me.e(pos) = std::sqrt(std::pow(nom.e(pos), 2) + std::pow(nom.e(pos)*v, 2) + std::pow(nom[pos]*e, 2));
+      ++pos;
+    }
+  }
+
+
+  // keep the normalisation fixed before and after smoothing
+  //double nb = _size;
+  //double perbin = (pre_yield - me.yield())/nb;
+  //for (unsigned int i = 0; i < _size; ++i)
+  //  me[i] += perbin;
+  //if (me.yield() != 0)
+  //  me *= pre_yield/me.yield();
+
+  return me;
+}
+
 Hist Hist::smooth(int nbins) {
   //if (_size-2 < 3) return *this;
   // need at least 3 bins to smoothen it

@@ -80,6 +80,7 @@ class Hist {
      * Smoothen it.
      *
      */
+    Hist smoothStatOnly(Hist &nom, double target = 0.001);
     Hist smooth(int smoothLevel = 1);
     Hist smoothRun1(Hist &nominal, int smoothLevel = 1);
 

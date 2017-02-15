@@ -31,8 +31,9 @@ Hist HistDiff::get(const string &name, const string &fname) {
   Hist hb(name, _b, fname);
   if (_smoothLevel <= 0)
     return (ha - hb);
-  Hist ha_smooth = ha.smoothRun1(hb, _smoothLevel);
-  return (ha_smooth - hb);
+  //Hist ha_smooth = ha.smoothRun1(hb, _smoothLevel);
+  Hist hsmooth = (ha - hb).smoothStatOnly(hb);
+  return hsmooth;
 }
 
 HistDiffMany::HistDiffMany(std::vector<std::string> &file, std::vector<string> &list, std::vector<std::string> &sample, int smoothLevel) {
@@ -61,8 +62,9 @@ Hist HistDiffMany::get(const string &name, const string &fname) {
     if (_smoothLevel <= 0) {
       ret += (ha - hb).power(2.0);
     } else {
-      Hist ha_smooth = ha.smoothRun1(hb, _smoothLevel);
-      ret += (ha_smooth - hb).power(2.0);
+      //Hist ha_smooth = ha.smoothRun1(hb, _smoothLevel);
+      Hist hsmooth = (ha -hb).smoothStatOnly(hb);
+      ret += hsmooth.power(2.0);
     }
   }
   ret.squareRoot();
@@ -148,8 +150,8 @@ Hist Relative::get(const string &name, const string &fname) {
   Hist hnom(name, "", fname);
   if (_smoothLevel <= 0)
     return hnom*hb*_scale/ha - hnom;
-  Hist ha_smooth = (hnom*hb*_scale/ha).smoothRun1(hnom, _smoothLevel);
-  return ha_smooth - hnom;
+  Hist hsmooth = (hnom*hb*_scale/ha - hnom).smoothStatOnly(hnom);
+  return hsmooth;
   //return (ha-hb)*0.5;
 }
 
@@ -177,7 +179,8 @@ Hist RelativeISRFSR::get(const string &name, const string &fname) {
   if (_smoothLevel <= 0)
     return (hnom*hd/hc*_factor); // == (hnom*hd/hc + hnom) - hnom, where the first term can be seen as the variation histogram
   //return (hnom*hd/hc).abs();
-  Hist ha_smooth = (hnom*hd/hc*_factor + hnom).smoothRun1(hnom, _smoothLevel);
-  return ha_smooth - hnom;
+  //Hist ha_smooth = (hnom*hd/hc*_factor + hnom).smoothRun1(hnom, _smoothLevel);
+  Hist hsmooth = (hnom*hd/hc*_factor).smoothStatOnly(hnom);
+  return hsmooth;
 }
 
