@@ -4,8 +4,7 @@ import HQTTtResonancesTools.DC15MC13TeV_25ns_mc15c_EXOT4
 import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
 
 def main():
-	# input directory
-	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
+	useFileOnGrid = 0
 	# for standard data and MC
 	pattern = 'user.dferreir.*04122016v*_output.root'
 	#pattern_mtt = 'user.dferreir.*14082016v1_output.root'
@@ -17,6 +16,15 @@ def main():
 	pattern_qcde = 'user.dferreir.*04122016QCDev*_output.root'
 	pattern_qcdmu = 'user.dferreir.*04122016QCDmuv*_output.root'
 	theScope = 'user.dferreir'
+	
+	if not useFileOnGrid:
+		theScope = 'user.scalvet'
+		# input directory
+		#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
+		ntuplesDir = '/AtlasDisk/group/Zprime/AT-2.4.25v1/SR/' #trk
+		ntuplesDir = '/AtlasDisk/group/Zprime/AT-2.4.25v2/SR/' #calo
+		pattern = 'user.scalvet.*.AT2425.v1.0SR_output.root'
+		pattern = 'user.scalvet.*.AT2425.v2.0SR_output.root'
 	
 	# output directory
 	outputDir = '.'
@@ -119,6 +127,7 @@ def main():
 	datasets = []
 	for l in response:
 		datasets.append(l)
+		
 	#response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_qcde})
 	#datasets_qcde = []
 	#for l in response:
@@ -159,7 +168,6 @@ def main():
 				sample = samples[0]
 			else:
 				sample.datasets.extend(samples[0].datasets)
-
 		# go over all directories in the ntuplesDir
 		ds = datasets
 		suf = 'all'
@@ -187,6 +195,7 @@ def main():
 			# remove path and get only dir name in justfile
 			#justfile = d.split('/')[-1]
 			dsid_dir = d.split('.')[2] # get the DSID of the directory
+			
 			# this will include all directories, so check if this director is in the sample
 	
 			# now go over the list of datasets in sample
@@ -196,42 +205,48 @@ def main():
 					s = s.split(':')[1] # skip mc15_13TeV
 				dsid_sample = s.split('.')[1] # get DSID
 				if dsid_dir == dsid_sample: # this dataset belongs in the sample in the big for loop
-					# get all files in the directory
-					#files = glob.glob(d+'/*.root*')
-
-					from subprocess import Popen, PIPE
-					process = Popen(["rucio", "list-file-replicas", "--protocols", "root", d], stdout=PIPE)
-					(output, err) = process.communicate()
-					#exit_code = process.wait()
-					pfns = {}
-					for line in output.split('\n'):
-						outline = line.split()
-						if not 'root://' in line:
-							continue
-						fname = outline[3]
-						site = outline[10][0:-1]
-						pfno = outline[11]
-						idx = pfno.find('/', len("root://")+2)
-						pfn = pfno[:idx] + "/" + pfno[idx:]
-						if not fname in pfns:
-							pfns[fname] = {}
-						pfns[fname][site] = pfn
-					files = []
-					for fname in pfns:
-						if 'DESY-HH_LOCALGROUPDISK' in pfns[fname]:
-							files.append(pfns[fname]['DESY-HH_LOCALGROUPDISK'])
-						elif 'DESY-ZN_LOCALGROUPDISK' in pfns[fname]:
-							files.append(pfns[fname]['DESY-ZN_LOCALGROUPDISK'])
-						else:
-							#print "File %s is not available in DESY! It is available on " % fname, pfns[fname]
-							k = pfns[fname].keys()[0]
-							files.append(pfns[fname][k])
+					if not useFileOnGrid:
+						#print ntuplesDir+'/'+d
+						# get all files in the directory
+						files = glob.glob(ntuplesDir+'/'+d+'/*.root*')
+						#print files
+					else:
+						from subprocess import Popen, PIPE
+						process = Popen(["rucio", "list-file-replicas", "--protocols", "root", d], stdout=PIPE)
+						(output, err) = process.communicate()
+						#exit_code = process.wait()
+						pfns = {}
+						for line in output.split('\n'):
+							outline = line.split()
+							if not 'root://' in line:
+								continue
+							fname = outline[3]
+							site = outline[10][0:-1]
+							pfno = outline[11]
+							idx = pfno.find('/', len("root://")+2)
+							pfn = pfno[:idx] + "/" + pfno[idx:]
+							if not fname in pfns:
+								pfns[fname] = {}
+							pfns[fname][site] = pfn
+						files = []
+						for fname in pfns:
+							if 'DESY-HH_LOCALGROUPDISK' in pfns[fname]:
+								files.append(pfns[fname]['DESY-HH_LOCALGROUPDISK'])
+							elif 'DESY-ZN_LOCALGROUPDISK' in pfns[fname]:
+								files.append(pfns[fname]['DESY-ZN_LOCALGROUPDISK'])
+							else:
+								#print "File %s is not available in DESY! It is available on " % fname, pfns[fname]
+								k = pfns[fname].keys()[0]
+								files.append(pfns[fname][k])
+						
 					# and write it in ht elist of input files to process
 					for item in files:
 						if not '.part' in item:
 							f.write(item+'\n')
-					# go to the next directory in the same sample
-					break
+					
+					if useFileOnGrid:
+						# go to the next directory in the same sample
+						break
 		f.close()
 	
 if __name__ == '__main__':

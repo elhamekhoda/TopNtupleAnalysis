@@ -68,7 +68,7 @@ cd pyHistograms
 
 # the following make a list of all input MC files (adapt it to point to the input files list)
 # by default it reads the files directly from the Grid to avoid downloading them
-python makeInputLists.py
+python makeInputsList.py
 
 # this generates the text files with the sum of weights
 # using the input files above
@@ -85,6 +85,7 @@ AnaTtresSL in analysis.py is set up to have the be, bmu, re, rmu channels as wel
 a new class in analysis.py of your choice and define different channels.
 
 Check runBatchDesy.py to check how to submit it to the Grid.
+Check runBatchLPC.py to check how to submit it on a local cluster.
 
 Auxiliary scripts
 ---------------------------
