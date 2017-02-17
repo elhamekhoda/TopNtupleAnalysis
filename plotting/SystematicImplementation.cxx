@@ -173,14 +173,40 @@ Hist RelativeISRFSR::get(const string &name, const string &fname) {
   Hist ha(name, "", _a);
   Hist hb(name, "", _b);
   Hist hnom(name, "", fname);
-  Hist hc = ha + hb;
+  //Hist hc = ha + hb;
   Hist hd = ha - hb;
   //hc *= 0.5;
   if (_smoothLevel <= 0)
-    return (hnom*hd/hc*_factor); // == (hnom*hd/hc + hnom) - hnom, where the first term can be seen as the variation histogram
+    return (hd*_factor); // == (hnom*hd/hc + hnom) - hnom, where the first term can be seen as the variation histogram
   //return (hnom*hd/hc).abs();
   //Hist ha_smooth = (hnom*hd/hc*_factor + hnom).smoothRun1(hnom, _smoothLevel);
-  Hist hsmooth = (hnom*hd/hc*_factor).smoothStatOnly(hnom);
+  Hist hsmooth = (hd*_factor).smoothStatOnly(hnom);
+  return hsmooth;
+}
+
+RelativeNominal::RelativeNominal(const string &a, const vector<string> &only, int smoothLevel, float factor) {
+  _a = a;
+  _only = only;
+  _smoothLevel = smoothLevel;
+  _factor = factor;
+}
+
+Hist RelativeNominal::get(const string &name, const string &fname) {
+  bool good = false;
+  for (int i = 0; i < _only.size(); ++i) {
+    if (fname.find(_only[i]) != string::npos) good = true;
+  }
+  if (!good) return Hist();
+
+  Hist ha(name, "", _a);
+  Hist hnom(name, "", fname);
+  Hist hd = ha - hnom;
+  //hc *= 0.5;
+  if (_smoothLevel <= 0)
+    return (hd*_factor); // == (hnom*hd/hc + hnom) - hnom, where the first term can be seen as the variation histogram
+  //return (hnom*hd/hc).abs();
+  //Hist ha_smooth = (hnom*hd/hc*_factor + hnom).smoothRun1(hnom, _smoothLevel);
+  Hist hsmooth = (hd*_factor).smoothStatOnly(hnom);
   return hsmooth;
 }
 

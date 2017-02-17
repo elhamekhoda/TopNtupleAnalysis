@@ -131,7 +131,7 @@ class Relative : public Syst{
  * Systematic variation class
  * that takes the nominal histogram in two files
  * a and b, given in the constructor, and returns, bin by bin,
- * (a-b)/(a+b).
+ * (a-b).
  * If the vector only is non-empty, it specifies that this is only to be applied
  * to the sample whose file name is given in the contents of "only".
  */
@@ -143,6 +143,24 @@ class RelativeISRFSR : public Syst{
   float _factor;
   int _smoothLevel;
   RelativeISRFSR(const string &a, const string &b, const vector<string> &only, int smoothLevel = 0, float factor = 1.0);
+  Hist get(const string &name, const string &fname);
+};
+
+/*
+ * Systematic variation class
+ * that takes the nominal histogram in a file
+ * a, given in the constructor, and returns, bin by bin,
+ * (a-nominal).
+ * If the vector only is non-empty, it specifies that this is only to be applied
+ * to the sample whose file name is given in the contents of "only".
+ */
+class RelativeNominal : public Syst{
+  public:
+  string _a;
+  vector<string> _only;
+  float _factor;
+  int _smoothLevel;
+  RelativeNominal(const string &a, const vector<string> &only, int smoothLevel = 0, float factor = 1.0);
   Hist get(const string &name, const string &fname);
 };
 

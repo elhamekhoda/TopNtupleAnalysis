@@ -35,6 +35,7 @@ std::map<std::string, int> fillColor = std::map<std::string, int>();
 std::map<std::string, float> scale = std::map<std::string, float>();
 
 
+std::map<std::string, std::vector<std::string> > syst_model_nominal = std::map<std::string, std::vector<std::string> >();
 std::map<std::string, std::vector<std::string> > syst_model = std::map<std::string, std::vector<std::string> >();
 std::map<std::string, std::vector<std::string> > syst_flat = std::map<std::string, std::vector<std::string> >();
 std::map<std::string, std::vector<std::string> > syst_pdf = std::map<std::string, std::vector<std::string> >();
@@ -94,6 +95,10 @@ void loadConfig(const std::string &file) {
       syst_model[el[1]] = std::vector<std::string>();
       syst_model[el[1]].push_back(el[2]);
       for (int l = 3; l < el.size(); ++l) syst_model[el[1]].push_back(el[l]);
+    } else if (el[0] == "syst_model_nominal") {
+      syst_model_nominal[el[1]] = std::vector<std::string>();
+      syst_model_nominal[el[1]].push_back(el[2]);
+      for (int l = 3; l < el.size(); ++l) syst_model_nominal[el[1]].push_back(el[l]);
     } else if (el[0] == "syst_flat") {
       syst_flat[el[1]] = std::vector<std::string>();
       syst_flat[el[1]].push_back(el[2]);
@@ -1884,6 +1889,30 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
       } else {
         systCalc.add(name+"up", new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), it->second[2].c_str()), Form("%s_%s.root", channel.c_str(), it->second[3].c_str()), pattern, this_smooth, 1), it->second[0]+" up");
         systCalc.add(name+"dw", new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), it->second[2].c_str()), Form("%s_%s.root", channel.c_str(), it->second[3].c_str()), pattern, this_smooth, -1), it->second[0]+" dw");
+      }
+    }
+  }
+
+  for (std::map<std::string, std::vector<std::string> >::iterator it = syst_model_nominal.begin(); it != syst_model_nominal.end(); ++it) {
+    std::string name = it->first;
+    vector<string> pattern;
+    pattern.push_back(it->second[1]);
+    int this_smooth = smooth;
+    if (this_smooth > 0 && it->second.size() == 4) this_smooth = it->second[3] == "S";
+
+    if (!updw) {
+      if (pref != "") {
+        systCalc.add(name.c_str(), new RelativeNominal(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), pattern, this_smooth, 1), it->second[0]);
+      } else {
+        systCalc.add(name.c_str(), new RelativeNominal(Form("%s_%s.root", channel.c_str(), it->second[2].c_str()), pattern, this_smooth, 1), it->second[0]);
+      }
+    } else {
+      if (pref != "") {
+        systCalc.add(name+"up", new RelativeNominal(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), pattern, this_smooth, 1), it->second[0]+"up");
+        systCalc.add(name+"dw", new RelativeNominal(Form("%s_%s_%s.root", pref.c_str(), channel.c_str(), it->second[2].c_str()), pattern, this_smooth, -1), it->second[0]+"dw");
+      } else {
+        systCalc.add(name+"up", new RelativeNominal(Form("%s_%s.root", channel.c_str(), it->second[2].c_str()), pattern, this_smooth, 1), it->second[0]+" up");
+        systCalc.add(name+"dw", new RelativeNominal(Form("%s_%s.root", channel.c_str(), it->second[2].c_str()), pattern, this_smooth, -1), it->second[0]+" dw");
       }
     }
   }
