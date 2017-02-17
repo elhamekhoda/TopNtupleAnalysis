@@ -142,7 +142,7 @@ class RelativeISRFSR : public Syst{
   vector<string> _only;
   float _factor;
   int _smoothLevel;
-  RelativeISRFSR(const string &a, const string &b, const vector<string> &only, int smoothLevel = 0, float factor = 1.0);
+  RelativeISRFSR(const string &a, const string &b, const vector<string> &only, int smoothLevel = 0, float factor = 0.5);
   Hist get(const string &name, const string &fname);
 };
 

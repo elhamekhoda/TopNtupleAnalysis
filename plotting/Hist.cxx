@@ -177,7 +177,7 @@ Hist Hist::smoothStatOnly(Hist &nom, double target) {
     }
   }
 
-  int pos = 1;
+  int pos = 0;
   for (int k = 0; k < val.size(); ++k) {
     double v = val[k]/valn[k];
     double e = v*(std::sqrt(err[k]/val[k]/val[k] + errn[k]/valn[k]/valn[k]));
