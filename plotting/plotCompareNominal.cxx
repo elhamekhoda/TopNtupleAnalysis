@@ -204,25 +204,25 @@ int main(int argc, char **argv) {
         std::string st = other_titles[0];
         st += std::string(" smooth");
         nsyst_items.push_back(s); nsyst_titles.push_back(st);
-		if (prefix != "") {
+        if (prefix != "") {
           systCalc.add(s, new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
                                              Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
-                                             pat, true), st);
-		} else {
+                                             pat, true, 0.5), st);
+        } else {
           systCalc.add(s, new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
                                              Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
-                                             pat, true), st);
-	    }
+                                             pat, true, 0.5), st);
+        }
       }
       nsyst_items.push_back(other_items[0]); nsyst_titles.push_back(other_titles[0]);
       if (prefix != "") {
         systCalc.add(other_items[0], new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
                                                         Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
-                                                        pat, false), other_titles[0]);
+                                                        pat, false, 0.5), other_titles[0]);
 	  } else {
         systCalc.add(other_items[0], new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
                                                         Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
-                                                        pat, false), other_titles[0]);
+                                                        pat, false, 0.5), other_titles[0]);
 	  }
 
       if (smooth) {
@@ -234,22 +234,49 @@ int main(int argc, char **argv) {
         if (prefix != "") {
           systCalc.add(s, new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
                                              Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
-                                             pat, true), st);
+                                             pat, true, 0.5), st);
 		} else {
           systCalc.add(s, new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
                                              Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
-                                             pat, true), st);
+                                             pat, true, 0.5), st);
 		}
       }
       nsyst_items.push_back(other_items[1]); nsyst_titles.push_back(other_titles[1]);
       if (prefix != "") {
         systCalc.add(other_items[1], new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
                                                         Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
-                                                        pat, false), other_titles[1]);
+                                                        pat, false, 0.5), other_titles[1]);
 	  } else {
         systCalc.add(other_items[1], new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
                                                         Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
-                                                        pat, false), other_titles[1]);
+                                                        pat, false, 0.5), other_titles[1]);
+	  }
+    }
+    // compare with nominal
+    if (other_items.size() == 1) {
+      std::vector<std::string> pat;
+      pat.push_back("ttall");
+      if (smooth) {
+        std::string s = other_items[0];
+        s += std::string("_smooth");
+        std::string st = other_titles[0];
+        st += std::string(" smooth");
+        nsyst_items.push_back(s); nsyst_titles.push_back(st);
+        if (prefix != "") {
+          systCalc.add(s, new RelativeNominal(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
+                                             pat, true, 1), st);
+        } else {
+          systCalc.add(s, new RelativeNominal(Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
+                                             pat, true, 1), st);
+        }
+      }
+      nsyst_items.push_back(other_items[0]); nsyst_titles.push_back(other_titles[0]);
+      if (prefix != "") {
+        systCalc.add(other_items[0], new RelativeNominal(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
+                                                        pat, false, 1), other_titles[0]);
+	  } else {
+        systCalc.add(other_items[0], new RelativeNominal(Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
+                                                        pat, false, 1), other_titles[0]);
 	  }
     }
     //addAllSystematics(systCalc, prefix, channel, false);
