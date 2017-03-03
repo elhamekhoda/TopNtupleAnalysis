@@ -18,14 +18,14 @@ sample    kkgrav750    kkgrav750                            "KKgraviton750"     
 sample    kkgrav1000   kkgrav1000                           "KKgraviton1000"      "KKgraviton1000"     10
 sample    kkgrav2000   kkgrav2000                           "KKgraviton2000"      "KKgraviton2000"     10
 sample    kkgrav3000   kkgrav3000                           "KKgraviton3000"      "KKgraviton3000"     10
-sample    eftl30c10    eftl30c10                            "EFTL30c10"           "EFTL30C10"          10
-sample    eftl35c10    eftl35c10                            "EFTL35c10"           "EFTL35C10"          10
-sample    eftl40c10    eftl40c10                            "EFTL40c10"           "EFTL40C10"          10
-sample    eftl45c10    eftl45c10                            "EFTL45c10"           "EFTL45C10"          10
-sample    eftl50c10    eftl50c10                            "EFTL50c10"           "EFTL50C10"          10
-sample    eftl55c10    eftl55c10                            "EFTL55c10"           "EFTL55C10"          10
-sample    eftl60c10    eftl60c10                            "EFTL60c10"           "EFTL60C10"          10
-sample    eftl100c10   eftl100c10                           "EFTL100c10"          "EFTL100C10"         10
+#sample    eftl30c10    eftl30c10                            "EFTL30c10"           "EFTL30C10"          10
+#sample    eftl35c10    eftl35c10                            "EFTL35c10"           "EFTL35C10"          10
+#sample    eftl40c10    eftl40c10                            "EFTL40c10"           "EFTL40C10"          10
+#sample    eftl45c10    eftl45c10                            "EFTL45c10"           "EFTL45C10"          10
+#sample    eftl50c10    eftl50c10                            "EFTL50c10"           "EFTL50C10"          10
+#sample    eftl55c10    eftl55c10                            "EFTL55c10"           "EFTL55C10"          10
+#sample    eftl60c10    eftl60c10                            "EFTL60c10"           "EFTL60C10"          10
+#sample    eftl100c10   eftl100c10                           "EFTL100c10"          "EFTL100C10"         10
 sample    data         data                                 "data"                "data"               1
 sample    tt           ttall                                "t#bar{t}"            "$t\bar{t}$"         0
 sample    wbbjets      wbbjets                              "W+bb+jets"           "$W$+bb+jets"        416
@@ -38,7 +38,7 @@ sample    qcde         qcde                                 "QCD (e)"           
 sample    qcdmu        qcdmu                                "QCD (#mu)"           "QCD ($\mu$)"        902
 sample    vv           vv                                   "diboson"             "diboson"            5
 sample    ttv          ttv                                  "ttV"                 "$t\bar{t}V$"        7
-syst_flat lumi          "luminosity"                         "ttall,singletop,zjets,vv,ttv,zprime,kkgrav,eft"                 0.029                     -0.029
+syst_flat lumi          "luminosity"                         "ttall,singletop,zjets,vv,ttv,zprime,kkgrav,eft"                 0.041                     -0.041
 syst      etrig      "electron trigger"               eTrigSF__1up                               eTrigSF__1down                                       N
 syst      erec       "electron reconstruction"        eRecoSF__1up                               eRecoSF__1down                                       N
 syst      eid        "electron ID"                    eIDSF__1up                                 eIDSF__1down                                         N
@@ -115,11 +115,12 @@ syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up            
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     N
 syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbjets,wccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
-syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.050
-syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.050
+syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.50
+syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.50
 syst_flat ttxsec     "ttbar cross section"            "ttall"                0.056                                      -0.061
 syst_model ttgen     "ttbar gen."                    "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
-syst_model ttps      "ttbar p. shower"               "ttall"                 ttsyst                                    ttpowhegherwig                N
+syst_model_nominal ttps "ttbar p. shower"            "ttall"                 ttpowhegherwig                N
+#syst_model ttps      "ttbar p. shower"               "ttall"                  ttpowhegherwig                           ttall                         N
 syst_model ttisrfsr  "ttbar ISR/FSR"                 "ttall"                 ttradlo                                   ttradhi                       N
 #syst_pdf   ttpdf     "ttbar PDF"                     "ttall"                ttpdf                                     pdf_PDF4LHC15_nlo_30          30
 syst_pdf_simple   ttpdf0    "PDF0"                   "ttall"                 ttpdf                                      pdf_PDF4LHC15_nlo_30           0
