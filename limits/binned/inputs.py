@@ -1,6 +1,7 @@
 
 signalList = {}
-signalList['zprime'] = ['zprime400',
+signalList['zprime'] = [
+	      'zprime400',
               'zprime500',
               'zprime750',
               'zprime1000',
@@ -15,7 +16,8 @@ signalList['zprime'] = ['zprime400',
               'zprime4000',
               'zprime5000']
 
-signalList['kkG'] = ['kkgrav400',
+signalList['kkG'] = [
+	      'kkgrav400',
               'kkgrav500',
               'kkgrav750',
               'kkgrav1000',
@@ -32,7 +34,8 @@ signalList['eft10'] = [
 	      ]
 
 xs         = {}
-xs['zprime'] = [70.2764206532*1.3,
+xs['zprime'] = [
+	      70.2764206532*1.3,
               40.1252717501*1.3,
               10.7025592052*1.3,
               3.69900238076*1.3,
@@ -46,7 +49,8 @@ xs['zprime'] = [70.2764206532*1.3,
               0.0166807659717*1.3,
               0.00212729713173*1.3,
               0.000330792326516*1.3]
-xs['kkG'] = [7.19,
+xs['kkG'] = [
+	     7.19,
              5.84,
              1.18,
 			 0.289,
@@ -70,7 +74,8 @@ xs['eft10'] = [
 	     ]
 
 mass = {}
-mass['zprime'] = [0.4,
+mass['zprime'] = [
+	      0.4,
               0.5,
               0.75,
               1.0, 
@@ -84,7 +89,8 @@ mass['zprime'] = [0.4,
               3,
               4,
               5]
-mass['kkG'] = [0.4,
+mass['kkG'] = [
+			   0.4,
 			   0.5,
 			   0.75,
 			   1,
@@ -105,7 +111,8 @@ eff = {}
 eff['eft10'] = [ 10*(i**(-2)) for i in mass['eft10']]
 
 xs3 = {}
-xs3['zprime'] = [169.871785472*1.3,
+xs3['zprime'] = [
+	      169.871785472*1.3,
               98.4603402069*1.3,
               26.5283913791*1.3,
               9.2179234009*1.3,

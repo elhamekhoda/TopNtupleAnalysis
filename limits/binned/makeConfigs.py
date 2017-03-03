@@ -1,26 +1,14 @@
 #!/usr/bin/env python
-from os import system,getcwd,path
+from os import system,getcwd
 from time import time
 from inputs import *
 import socket, random, re
 
-site="DESY"
-if socket.gethostname().find("clratl") != -1:
-	site="LPC"
-print "@"+site+"! "
-
 # change those:
-if site=="DESY":
-   setdir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2418'
-   mydir = '/nfs/dust/atlas/user/danilo/hists_sr2418_jes/TRexFitter_trs'
-elif site=="LPC":
-   mydir = '/AtlasDisk/users/scalvet/Zprime/LimitSetting/TopNtupleAnalysis/limits/binned/Jamboree/test1/TRExFitter'
-   version="firstTest"
-   version="secondTest"
+setdir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2421'
+mydir = '/nfs/dust/atlas/user/danilo/hists_2421/TRexFitter'
 
-
-
-def fixFile(template, final, i, doBOnlyFit):
+def fixFile(template, final, sig, dirname, doBOnlyFit):
   fr = open(template, 'r')
   f = open(final, 'w')
 
@@ -33,8 +21,8 @@ Sample: "Signal"
   LineColor: 632
   NormFactor: "SigXsecOverSM",0,0,100
   HistoFile: "%s"
-''' % ('hist_'+i))
-      if 'eft' in i:
+''' % ('hist_'+sig))
+      if 'eft' in sig:
         f.write('''
 Systematic: "eftScale"
   Title: "EFT scale unc."
@@ -48,13 +36,13 @@ Systematic: "eftScale"
       continue
     
     nline = line
-    if 'FitTtres' in nline:
-      nline = nline.replace('FitTtres', 'FitTtres_'+i)
-    if 'JobTtres' in nline:
-      nline = nline.replace('JobTtres', 'JobTtres_'+i)
+    if 'Ttres' in nline:
+      nline = nline.replace('Ttres', 'Ttres_'+dirname)
+    if 'SystControlPlots' in nline and (not doBOnlyFit):
+      nline = nline.replace('TRUE', 'FALSE')
     if 'FitType' in nline and doBOnlyFit:
       nline = nline.replace('SPLUSB', 'BONLY')
-    if 'eft' in i and 'Binning: ' in nline:
+    if 'eft' in sig and 'Binning: ' in nline:
       nline = "  Binning: 2000,6000\n"
     f.write(nline)
 
@@ -62,82 +50,14 @@ Systematic: "eftScale"
   fr.close()
 
 
-def jobSubmit(suf):
-	if site=="DESY":
-		jobSubmitDESY(suf)
-	elif site=="LPC":
-		jobSubmitLPC(suf)
-
-
-def jobSubmitLPC(stuf):
-        print stuf
-	
-        here = getcwd()
-        configName = 'ttres_'+stuf+'.config'
-	
-	system('mkdir -p '+version)
-	if path.exists(version+"/t.tar.gz")==False:
-		print "Making tarball..."
-		com = "tar -czf "+version+"/t.tar.gz --exclude="+version+"/*root --exclude=inputFiles/ --exclude=JobTtres *"
-		system(com)
-	
-	system('cp '+configName+' '+version)
-	
-        scriptName=version+"/script_"+stuf+".sh"
-        f = open(scriptName,'w')       
-        f.write('#!/bin/bash\n')
-        f.write('echo running on $HOSTNAME\n')
-        f.write('\n')
-	
-        workDir = re.sub('\.','',str(time())+`random.randint(0, 1000000)`)
-        WORKDIR = "/users_local1/$LOGNAME/"+workDir
-               
-        f.write('\n' + 'mkdir -p '+WORKDIR+'\n')
-        f.write('\n' + 'cd '+WORKDIR+'\n')
-        f.write('export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase\n')
-        f.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
-        f.write('localSetupROOT\n')
-        f.write('\n')
-        f.write('cp -f '+here+"/"+version+'/t.tar.gz .\n')
-        f.write('tar -xzvf t.tar.gz\n')
-        f.write('echo "untaring done!" \n\n')
-        f.write('cp -f '+here+"/"+version+'/'+configName+' .\n')
-        f.write('./myFit.exe h '+configName+' > log_'+stuf+'_h\n')
-        f.write('./myFit.exe d '+configName+' > log_'+stuf+'_d\n')
-        f.write('./myFit.exe w '+configName+' > log_'+stuf+'_w\n')
-        f.write('./myFit.exe f '+configName+' > log_'+stuf+'_f\n')
-        f.write('./myFit.exe p '+configName+' > log_'+stuf+'_p\n')
-        if configName.find("bkg")!=-1:
-                #do nothing
-                a=1
-        else:
-                f.write('./myFit.exe l '+configName+' > log_'+stuf+'_l\n')
-                f.write('./myFit.exe s '+configName+' > log_'+stuf+'_s\n')
-                #f.write('./myFit.exe r '+configName+' > log_'+stuf+'_r\n')
-       
-       
-       
-        outDir = './JobTtres_'+stuf
-       
-        f.write('cp -rf '+outDir+' '+here+'/'+version+'\n')
-        f.write('cp -f log_'+stuf+'_*  '+here+'/'+version+'/'+outDir+'/\n')
-        f.write('rm -rf '+WORKDIR+'\n')
-        f.close()
-       
-        com= 'qsub -N '+stuf+' -q multi64sl6@clratlserv05  -e '+here+'/'+version+' -o '+here+'/'+version+' '+scriptName
-        #com= 'qsub -N '+stuf+' -q fast64sl6@clratlserv03  -e '+here+'/'+version+' -o '+here+'/'+version+' '+scriptName
-               
-        print com
-
-
-def jobSubmitDESY(suf):
-	runfile = 'submit_%s.sh' % suf
-	logfile = mydir+'/stdout_%s.txt'%suf
+def jobSubmit(suf, extra = ""):
+	runfile = 'submit_%s%s.sh' % (suf, extra)
+	logfile = mydir+'/stdout_%s%s.txt'%(suf, extra)
 	queue = 'long.q'
 	if 'bkg' in suf:
 		queue = 'short.q'
 	email = 'dferreir@cern.ch'
-	jobName = 'ttlim_%s'%suf
+	jobName = 'ttlim_%s%s'%(suf, extra)
 	fr = open(runfile, 'w')
 	fr.write('#!/bin/sh\n')
 	fr.write('#$ -cwd\n')
@@ -157,27 +77,34 @@ def jobSubmitDESY(suf):
 	fr.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
 	fr.write('lsetup rcsetup\n')
 	fr.write('cd '+mydir+'\n')
-	fr.write('./myFit.exe h ttres_%s.config\n'%suf)
-	fr.write('./myFit.exe d ttres_%s.config\n'%suf)
-	fr.write('./myFit.exe w ttres_%s.config\n'%suf)
-	fr.write('./myFit.exe f ttres_%s.config\n'%suf)
-	fr.write('./myFit.exe p ttres_%s.config\n'%suf)
+	fr.write('./myFit.exe h ttres_%s%s.config\n'%(suf, extra))
+	fr.write('./myFit.exe d ttres_%s%s.config\n'%(suf, extra))
+	fr.write('./myFit.exe w ttres_%s%s.config\n'%(suf, extra))
+	fr.write('./myFit.exe f ttres_%s%s.config\n'%(suf, extra))
+	fr.write('./myFit.exe p ttres_%s%s.config\n'%(suf, extra))
 	if not 'bkg' in suf:
 		fr.write('./myFit.exe l ttres_%s.config\n'%suf)
 		fr.write('./myFit.exe s ttres_%s.config\n'%suf)
 	fr.close()
 	system('chmod a+x %s'%runfile)
 	system('qsub %s'%runfile)
+	#system('./%s > %s 2>&1 '% (runfile, logfile))
 
 
 # B ONLY fit
-fixFile('ttres_template.config', 'ttres_bkg.config', "bkg", True)
-system('cp -f hist_zprime2000.root hist_bkg.root') ## use a dummy signal for the background only fit
-jobSubmit('bkg')
+suf = ""
+import sys
+if len(sys.argv) > 1:
+  suf = sys.argv[1]
+fixFile('ttres.config', 'ttres_bkg%s.config' % suf, "bkg%s" %suf, "bkg%s" %suf, True)
+system('cp -f hist_zprime1000.root hist_bkg%s.root' %suf) ## use a dummy signal for the background only fit
+jobSubmit('bkg%s' %suf)
 
 # now go over to signal
 for t in signalList:
+  if "eft" in t:
+    continue
   for i in signalList[t]:
-    fixFile('ttres_template.config', 'ttres_'+i+'.config', i, False)
-    jobSubmit(i)
+    fixFile('ttres.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
+    jobSubmit("%s%s" % (i, suf))
 

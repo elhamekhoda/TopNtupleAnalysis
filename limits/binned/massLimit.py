@@ -78,10 +78,10 @@ def plot(t, mu = False):
   sigma2 = TGraphAsymmErrors(length);
   i=0
   for I in range(0,length):
-    if path.exists("JobTtres_"+signalList[t][I]+"/Limits/JobTtres_"+signalList[t][I]+".root")==0:
-    	print "missing JobTtres_"+signalList[t][I]+"/Limits/JobTtres_"+signalList[t][I]+".root"
+    if path.exists("Ttres_"+signalList[t][I]+"/Limits/Ttres_"+signalList[t][I]+".root")==0:
+    	print "missing Ttres_"+signalList[t][I]+"/Limits/Ttres_"+signalList[t][I]+".root"
     	continue
-    f = TFile("JobTtres_"+signalList[t][I]+"/Limits/JobTtres_"+signalList[t][I]+".root")
+    f = TFile("Ttres_"+signalList[t][I]+"/Limits/Ttres_"+signalList[t][I]+".root")
     hi = f.Get("limit")
     muobs = hi.GetBinContent(1)
     muexp = hi.GetBinContent(2)
@@ -89,7 +89,7 @@ def plot(t, mu = False):
     muexp_p1 = abs(-muexp + hi.GetBinContent(4))
     muexp_m1 = abs(-muexp + hi.GetBinContent(5))
     muexp_m2 = abs(-muexp + hi.GetBinContent(6))
-    if 'eft' in t and not mu:
+    if ('eft' in t and not mu) or True:
       muexp = muexp*xs[t][I]
       muobs = muobs*xs[t][I]
       muexp_m1 = muexp_m1*xs[t][I]
@@ -168,7 +168,7 @@ def plot(t, mu = False):
   gPad.RedrawAxis()
 
   stampATLAS("Internal", 0.15, 0.83)
-  stampLumiText(15.8, 0.15, 0.75, "#sqrt{s} = 13 TeV", 0.04)
+  stampLumiText(36.5, 0.15, 0.75, "#sqrt{s} = 13 TeV", 0.04)
 
   suf = ""
   if mu:
@@ -179,8 +179,8 @@ def plot(t, mu = False):
   clim.SaveAs("mass_limit_%s%s.pdf" % (t, suf))
   clim.SaveAs("mass_limit_%s%s.C" % (t, suf))
 
-#plot('zprime')
-#plot('kkG')
-plot('eft10', mu=True)
-plot('eft10', mu=False)
+plot('zprime')
+plot('kkG')
+#plot('eft10', mu=True)
+#plot('eft10', mu=False)
 
