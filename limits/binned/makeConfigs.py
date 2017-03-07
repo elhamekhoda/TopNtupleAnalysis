@@ -42,6 +42,8 @@ Systematic: "eftScale"
       nline = nline.replace('TRUE', 'FALSE')
     if 'FitType' in nline and doBOnlyFit:
       nline = nline.replace('SPLUSB', 'BONLY')
+    if 'POIAsimov' in nline and 'inj' in dirname:
+      nline = nline.replace('POIAsimov: 0', 'POIAsimov: 1')
     if 'eft' in sig and 'Binning: ' in nline:
       nline = "  Binning: 2000,6000\n"
     f.write(nline)
@@ -96,15 +98,18 @@ suf = ""
 import sys
 if len(sys.argv) > 1:
   suf = sys.argv[1]
-fixFile('ttres.config', 'ttres_bkg%s.config' % suf, "bkg%s" %suf, "bkg%s" %suf, True)
-system('cp -f hist_zprime1000.root hist_bkg%s.root' %suf) ## use a dummy signal for the background only fit
-jobSubmit('bkg%s' %suf)
+#fixFile('ttres.config', 'ttres_bkg%s.config' % suf, "bkg%s" %suf, "bkg%s" %suf, True)
+#system('cp -f hist_zprime1000.root hist_bkg%s.root' %suf) ## use a dummy signal for the background only fit
+#jobSubmit('bkg%s' %suf)
+
+fixFile('ttres.config', 'ttres_zprime2000_inj%s.config' % suf, "zprime2000%s" %suf, "zprime2000_inj%s" %suf, False)
+jobSubmit('zprime2000_inj%s' %suf)
 
 # now go over to signal
-for t in signalList:
-  if "eft" in t:
-    continue
-  for i in signalList[t]:
-    fixFile('ttres.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
-    jobSubmit("%s%s" % (i, suf))
+#for t in signalList:
+#  if "eft" in t:
+#    continue
+#  for i in signalList[t]:
+#    fixFile('ttres.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
+#    jobSubmit("%s%s" % (i, suf))
 

@@ -159,8 +159,11 @@ def plot(t, dir1, dir2, mu = False):
   clim.SaveAs("ratio_mass_limit_%s%s.pdf" % (t, suf))
   clim.SaveAs("ratio_mass_limit_%s%s.C" % (t, suf))
 
-plot('zprime', 'manybins_boosted_cat3', 'manybins_boosted')
-plot('kkG', 'manybins_boosted_cat3', 'manybins_boosted')
+#plot('zprime', 'manybins_boosted_cat3', 'manybins_boosted')
+#plot('kkG', 'manybins_boosted_cat3', 'manybins_boosted')
+
+plot('zprime', 'manybins_boosted_cat3_and0', 'manybins_boosted_cat3')
+plot('kkG', 'manybins_boosted_cat3_and0', 'manybins_boosted_cat3')
 #plot('eft10', mu=True)
 #plot('eft10', mu=False)
 
