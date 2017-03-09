@@ -260,77 +260,32 @@ class AnaTtresSL(Analysis):
 		nj = 4
 		if len(sel.jet_pt) < 4:
 			nj = 2
-		year = "2015"
-		if sel.runNumber > 297730:
-			year = "2016"
 		frac = {}
-		frac["2015"] = {}
-		frac["2016"] = {}
-		frac["2015"][2] = {}
-		frac["2016"][2] = {}
-		frac["2015"][4] = {}
-		frac["2016"][4] = {}
+		frac[2] = {}
+		frac[4] = {}
 
-		frac["2015"][2]['e'] = {'bb': 0.091, 'cc': 0.070, 'c': 0.226, 'l': 0.613}
-		frac["2015"][2]['mu'] = {'bb': 0.088, 'cc': 0.065, 'c': 0.216, 'l': 0.631}
-
-		frac["2016"][2]['e'] = {'bb': 0.090, 'cc': 0.067, 'c': 0.232, 'l': 0.611}
-		frac["2016"][2]['mu'] = {'bb': 0.089, 'cc': 0.065, 'c': 0.221, 'l': 0.625}
-
-		frac["2015"][4]['e'] = {'bb': 0.140, 'cc': 0.157, 'c': 0.220, 'l': 0.483}
-		frac["2015"][4]['mu'] = {'bb': 0.153, 'cc': 0.155, 'c': 0.210, 'l': 0.482}
-
-		frac["2016"][4]['e'] = {'bb': 0.148, 'cc': 0.155, 'c': 0.211, 'l': 0.487}
-		frac["2016"][4]['mu'] = {'bb': 0.146, 'cc': 0.149, 'c': 0.213, 'l': 0.492}
+		frac[2]['e'] = {'bb': 0.090, 'cc': 0.067, 'c': 0.232, 'l': 0.611}
+		frac[2]['mu'] = {'bb': 0.089, 'cc': 0.065, 'c': 0.221, 'l': 0.625}
+		frac[4]['e'] = {'bb': 0.148, 'cc': 0.155, 'c': 0.211, 'l': 0.487}
+		frac[4]['mu'] = {'bb': 0.146, 'cc': 0.149, 'c': 0.213, 'l': 0.492}
 
 		f_ca_map = {}
-		f_ca_map["2015"] = {}
-		f_ca_map["2016"] = {}
-
-		f_ca_map["2015"][2] = {'e': 1.01, 'mu': 1.02}
-		f_ca_map["2016"][2] = {'e': 0.91, 'mu': 1.11}
-
-		f_ca_map["2015"][4] = {'e': 0.76, 'mu': 0.94}
-		f_ca_map["2016"][4] = {'e': 0.90, 'mu': 0.82}
+		f_ca_map[2] = {'e': 0.91, 'mu': 1.11}
+		f_ca_map[4] = {'e': 0.90, 'mu': 0.82}
 
 		flav_map = {}
-		flav_map["2015"] = {}
-		flav_map["2016"] = {}
-		flav_map["2015"][2] = {}
-		flav_map["2016"][2] = {}
-		flav_map["2015"][4] = {}
-		flav_map["2016"][4] = {}
+		flav_map[2] = {}
+		flav_map[4] = {}
 
-		flav_map["2015"][2]["e"] = {'bb': 1.57, 'cc': 1.57, 'c': 1.00, 'l': 0.85}
-		flav_map["2016"][2]["e"] = {'bb': 2.06, 'cc': 2.06, 'c': 1.00, 'l': 0.73}
+		flav_map[2][""] = {"e": {'bb': 2.06, 'cc': 2.06, 'c': 1.00, 'l': 0.73}, "mu": {'bb': 1.70, 'cc': 1.70, 'c': 1.00, 'l': 0.83}}
+		flav_map[4][""] = {"e": {'bb': 1.73, 'cc': 1.73, 'c': 0.84, 'l': 0.61}, "mu": {'bb': 1.52, 'cc': 1.52, 'c': 0.89, 'l': 0.74}}
 
-		flav_map["2015"][2]["mu"] = {'bb': 1.49, 'cc': 1.49, 'c': 1.00, 'l': 0.88}
-		flav_map["2016"][2]["mu"] = {'bb': 1.70, 'cc': 1.70, 'c': 1.00, 'l': 0.83}
-
-		flav_map["2015"][4]["e"] = {'bb': 1.43, 'cc': 1.43, 'c': 0.91, 'l': 0.78}
-		flav_map["2016"][4]["e"] = {'bb': 1.73, 'cc': 1.73, 'c': 0.84, 'l': 0.61}
-
-		flav_map["2015"][4]["mu"] = {'bb': 1.37, 'cc': 1.37, 'c': 0.91, 'l': 0.80}
-		flav_map["2016"][4]["mu"] = {'bb': 1.52, 'cc': 1.52, 'c': 0.89, 'l': 0.74}
-		for c in frac[year][nj]:
-			for f in frac[year][nj][c]:
-				frac[year][nj][c][f] *= flav_map[year][nj][c][f]
-		flav_map_unc = {}
-		flav_map_unc["2015"] = {}
-		flav_map_unc["2016"] = {}
-		flav_map_unc["2015"]["e"] = {}
-		flav_map_unc["2016"]["e"] = {}
-		flav_map_unc["2015"]["mu"] = {}
-		flav_map_unc["2016"]["mu"] = {}
-		flav_map_unc["2015"]['e'] = {'bb': 0.253, 'cc': 0.253, 'c': 0.50, 'l': 0.123}
-		flav_map_unc["2015"]['mu'] = {'bb': 0.100, 'cc': 0.100, 'c': 0.50, 'l': 0.041}
-		flav_map_unc["2016"]['e'] = {'bb': 0.043, 'cc': 0.043, 'c': 0.50, 'l': 0.031}
-		flav_map_unc["2016"]['mu'] = {'bb': 0.046, 'cc': 0.046, 'c': 0.50, 'l': 0.023}
-		#flav_map_unc["2015"]['e'] = {'bb': 0.500, 'cc': 0.500, 'c': 0.50, 'l': 0.500}
-		#flav_map_unc["2015"]['mu'] = {'bb': 0.500, 'cc': 0.500, 'c': 0.50, 'l': 0.500}
-		#flav_map_unc["2016"]['e'] = {'bb': 0.500, 'cc': 0.500, 'c': 0.50, 'l': 0.500}
-		#flav_map_unc["2016"]['mu'] = {'bb': 0.500, 'cc': 0.500, 'c': 0.50, 'l': 0.500}
-
+		syst = ""
+		if s in flav_map[nj]:
+			syst = s
+		for c in frac[nj][syst]:
+			for f in frac[nj][c]:
+				frac[nj][c][f] *= flav_map[nj][syst][c][f]
 		chan = ''
 		if len(sel.el_pt) == 1:
 			chan = 'e'
@@ -347,30 +302,12 @@ class AnaTtresSL(Analysis):
 				flav = 'c'
 			elif flag == 5:
 				flav = 'l'
-			f_ca = f_ca_map[year][nj][chan]
+			f_ca = f_ca_map[nj][chan]
 			norm = 1.0
-			hfweight = flav_map[year][nj][chan][flav]
-			flavunc = ''
-			if 'wbb__' in s:
-				flavunc = 'bb'
-			elif 'wcc__' in s:
-				flavunc = 'cc'
-			elif 'wc__' in s:
-				flavunc = 'c'
-			elif 'wl__' in s:
-				flavunc = 'l'
-			updown = 0
-			if '1up' in s:
-				updown = 1
-			elif '1down' in s:
-				updown = -1
+			hfweight = flav_map[nj][syst][chan][flav]
 			norm = 0
 			for f in ['bb', 'cc', 'c', 'l']:
-				if flavunc == f:
-					norm += (1+updown*flav_map_unc[year][chan][f])*frac[year][nj][chan][f]
-					hfweight *= (1+updown*flav_map_unc[year][chan][f])
-				else:
-					norm += frac[year][nj][chan][f]
+				norm += frac[nj][chan][f]
 			if s == "wnorm__1up":
 				f_ca *= 1.10
 			elif s == "wnorm__1down":
