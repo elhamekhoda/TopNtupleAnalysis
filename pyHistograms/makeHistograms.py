@@ -120,14 +120,6 @@ def main():
 		if isWjets:
 			systList.append('wnorm__1up')
 			systList.append('wnorm__1down')
-			systList.append('wbb__1up')
-			systList.append('wbb__1down')
-			systList.append('wcc__1up')
-			systList.append('wcc__1down')
-			systList.append('wc__1up')
-			systList.append('wc__1down')
-			systList.append('wl__1up')
-			systList.append('wl__1down')
 		for i in range(0, 4):
 			systList.append('btagbSF_'+str(i)+'__1up')
 			systList.append('btagbSF_'+str(i)+'__1down')
@@ -266,7 +258,7 @@ def main():
 	for s in systList:
 		# s is nominal, or the name of systematic
 		treeName = s # systematic name is the same as the TTree name
-		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'wbb_' in treeName or 'wcc_' in treeName or 'wc_' in treeName or 'wl_' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName:
+		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName:
 			treeName = 'nominal'
 		if options.qcd != "False":
 			treeName += '_Loose'
