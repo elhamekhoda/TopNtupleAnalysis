@@ -92,7 +92,8 @@ syst_flat singletop  "single top cross sec."          "singletop"            0.0
 syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.050
 syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.050
 syst_flat ttxsec     "ttbar cross section"            "ttall"                   0.056                                      -0.061
-syst_model ttgen     "ttbar gen."                    "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
+syst_model_nominal ttgen "ttbar gen."                    "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
+#syst_model ttgen     "ttbar gen."                    "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
 syst_model_nominal ttps "ttbar p. shower"            "ttall"                 ttpowhegherwig                N
 #syst_model ttps      "ttbar p. shower"               "ttall"                  ttpowhegherwig                           ttall                         N
 syst_model ttisrfsr  "ttbar ISR/FSR"                 "ttall"                 ttradlo                                   ttradhi                       N
