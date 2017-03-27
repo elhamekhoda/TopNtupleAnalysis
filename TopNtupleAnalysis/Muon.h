@@ -86,6 +86,9 @@ class Muon : public MObject {
     void setCB(bool b);
     bool cb() const;
 
+    const int truematch() const;
+    int &truematch();
+
   protected:
     float m_mi;
     bool m_tight;
@@ -113,6 +116,8 @@ class Muon : public MObject {
     bool m_st;
     bool m_sa;
     bool m_cb;
+
+    int m_truematch;
 
 };
 

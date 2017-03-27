@@ -146,6 +146,7 @@ void MiniTree::read(int event, Event &e) {
     //e.electron()[k].setMI(vf("el_miniiso")->at(k));
     e.electron()[k].setTightPP(false);
     if (vc("el_isTight"))	e.electron()[k].setTightPP(vc("el_isTight")->at(k));
+    if (vi("el_trmatch"))       e.electron()[k].truematch() = vi("el_trmatch")->at(k);
     e.electron()[k].caloMom() = e.electron()[k].mom();
     e.electron()[k].trkMom() = e.electron()[k].mom();
     e.electron()[k].Dz0() = vf("el_delta_z0_sintheta")->at(k);
@@ -179,6 +180,7 @@ void MiniTree::read(int event, Event &e) {
     e.muon()[k].setMI(0);
     e.muon()[k].setTight(false);
     if (vc("mu_isTight"))	e.muon()[k].setTight(vc("mu_isTight")->at(k));
+    if (vi("mu_trmatch"))       e.muon()[k].truematch() = vi("mu_trmatch")->at(k);
     e.muon()[k].Dz0() = vf("mu_delta_z0_sintheta")->at(k);
     e.muon()[k].d0() = vf("mu_d0")->at(k);
     e.muon()[k].charge() = vf("mu_charge")->at(k);

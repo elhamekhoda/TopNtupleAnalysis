@@ -7,12 +7,12 @@
 #include <cmath>
 
 Muon::Muon()
-  : MObject(), m_mi(-1), m_tight(false), m_Dz0(0), m_z0_exPV(0), m_d0(0), m_sd0(1), m_author(0), m_passTrkCuts(false) {
+  : MObject(), m_mi(-1), m_tight(false), m_Dz0(0), m_z0_exPV(0), m_d0(0), m_sd0(1), m_author(0), m_passTrkCuts(false), m_truematch(-99) {
   m_type = MObject::mu;
 }
 
 Muon::Muon(const TLorentzVector &v)
-  : MObject(v, MObject::mu), m_mi(-1), m_tight(false), m_Dz0(0), m_z0_exPV(0), m_d0(0), m_sd0(1), m_author(0), m_passTrkCuts(false) {
+  : MObject(v, MObject::mu), m_mi(-1), m_tight(false), m_Dz0(0), m_z0_exPV(0), m_d0(0), m_sd0(1), m_author(0), m_passTrkCuts(false), m_truematch(-99) {
 }
 
 Muon::~Muon() {
@@ -118,6 +118,15 @@ const int Muon::author() const {
 int &Muon::author() {
   return m_author;
 }
+
+const int Muon::truematch() const {
+  return m_truematch;
+}
+int &Muon::truematch() {
+  return m_truematch;
+}
+
+
 
 const bool Muon::passTrkCuts() const {
   return m_passTrkCuts;

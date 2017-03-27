@@ -9,12 +9,12 @@
 #include <iostream>
 
 Electron::Electron()
-  : MObject(), m_mi(-1), m_isTightPP(false), m_mom_calo(0,0,0,0), m_mom_trk(0,0,0,0) {
+  : MObject(), m_mi(-1), m_isTightPP(false), m_mom_calo(0,0,0,0), m_mom_trk(0,0,0,0), m_truematch(-99) {
   m_type = MObject::e;
 }
 
 Electron::Electron(const TLorentzVector &v)
-  : MObject(v, MObject::e), m_mi(-1), m_isTightPP(false), m_mom_calo(v), m_mom_trk(v) {
+  : MObject(v, MObject::e), m_mi(-1), m_isTightPP(false), m_mom_calo(v), m_mom_trk(v), m_truematch(-99) {
 }
 
 Electron::~Electron() {
@@ -137,6 +137,14 @@ const float Electron::topoetcone20() const {
 float &Electron::topoetcone20() {
   return m_topoetcone20;
 }
+
+const int Electron::truematch() const {
+  return m_truematch;
+}
+int &Electron::truematch() {
+  return m_truematch;
+}
+
 
 //Triggers
 

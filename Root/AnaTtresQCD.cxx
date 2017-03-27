@@ -23,6 +23,9 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   IniHistograms(suffix0, btag0);
   std::string suffix1(""), btag1("btag1_");
   IniHistograms(suffix1, btag1);
+  std::string suffix2(""), btag2("btag2_");
+  IniHistograms(suffix2, btag2);
+
 
 
   /*
@@ -326,6 +329,8 @@ void AnaTtresQCD::runRealRateQCDCR_2015(const Event &evt, double weight, const s
      GetRealHistograms(evt, weight, suffix, "btag0_");
      if(nTrkBtagged >= 1)
      GetRealHistograms(evt, weight, suffix, "btag1_");
+     if(nTrkBtagged >= 2)
+     GetRealHistograms(evt, weight, suffix, "btag2_");
 	
    }
 	
@@ -473,6 +478,8 @@ void AnaTtresQCD::runRealRateWQCDCR_2016(const Event &evt, double weight, const 
      GetRealHistograms(evt, weight, suffix, "btag0_");
      if(nTrkBtagged >= 1)
      GetRealHistograms(evt, weight, suffix, "btag1_");
+     if(nTrkBtagged >= 2)
+     GetRealHistograms(evt, weight, suffix, "btag2_");
 	
    }
 }//AnaTtresQCD::runRealRateWQCDCR_2016
@@ -616,6 +623,8 @@ void AnaTtresQCD::runRealRateQCDCR_2016(const Event &evt, double weight, const s
      GetRealHistograms(evt, weight, suffix, "btag0_");
      if(nTrkBtagged >= 1)
      GetRealHistograms(evt, weight, suffix, "btag1_");
+     if(nTrkBtagged >= 2)
+     GetRealHistograms(evt, weight, suffix, "btag2_");
 	
    }
 }//AnaTtresQCD::runRealRateQCDCR_2016
@@ -711,7 +720,7 @@ void AnaTtresQCD::GetRealHistograms(const Event &evt, double weight, const std::
 	  h->h2D(btag + "eff_lepPt_met_highDR",	"", suffix)->Fill(lept.Pt()*1e-3, MET, weight);
 	  h->h2D(btag + "eff_lepPt_cosDPhi_highDR",	"", suffix)->Fill(lept.Pt()*1e-3, cosDPhi , weight);
 	  h->h2D(btag + "eff_mwt_met_map_highDR", 	"", suffix)->Fill(MET, mWt, weight);
-	  h->h2D(btag + "eff_lepPt_topoetcone_highDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight); 	  
+	//  h->h2D(btag + "eff_lepPt_topoetcone_highDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight); 	  
         }else if(closejl_deltaR>0.4){
           h->h2D(btag + "eff_lepPt_met_medDR",		"", suffix)->Fill(lept.Pt()*1e-3, MET, weight);
 	  h->h2D(btag + "eff_lepPt_cosDPhi_medDR",	"", suffix)->Fill(lept.Pt()*1e-3, cosDPhi , weight);
@@ -721,8 +730,13 @@ void AnaTtresQCD::GetRealHistograms(const Event &evt, double weight, const std::
           h->h2D(btag + "eff_lepPt_met_lowDR",		"", suffix)->Fill(lept.Pt()*1e-3, MET, weight);
 	  h->h2D(btag + "eff_lepPt_cosDPhi_lowDR",	"", suffix)->Fill(lept.Pt()*1e-3, cosDPhi , weight);
 	  h->h2D(btag + "eff_mwt_met_map_lowDR", 	"", suffix)->Fill(MET, mWt, weight);
-	  h->h2D(btag + "eff_lepPt_topoetcone_lowDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight);	  
+	//  h->h2D(btag + "eff_lepPt_topoetcone_lowDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight);	  
         }//if	
+
+        if(closejl_deltaR<0.4)
+        h->h2D(btag + "eff_lepPt_topoetcone_lowDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight);
+        else
+        h->h2D(btag + "eff_lepPt_topoetcone_highDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight);
 			
    }//if (closejl_deltaR<99) 
 
@@ -742,7 +756,7 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
 
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
-
+  /*
   if (m_boosted)
     if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015")))
       return;
@@ -752,47 +766,29 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
       return;
   
   if (!m_boosted)	if(evt.jet().size()<4)	return;
+  */
+
+  if (!m_boosted)
+    if (!( (evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015") && evt.jet().size()>=4) || evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015") ))
+      return;
       
     
   bool isTight;
   TLorentzVector lept; 
   float sd0(99);
+  int isTrueMatch;
 
   if (m_electron) {	
 	isTight = evt.electron()[0].isTightPP();
 	lept  = evt.electron()[0].mom();
 	sd0    = evt.electron()[0].sd0();
-
+        isTrueMatch = evt.electron()[0].truematch();
   } else{
 	isTight = evt.muon()[0].isTight();
 	lept  = evt.muon()[0].mom();
         sd0    = evt.muon()[0].sd0();
-		
+	isTrueMatch = evt.muon()[0].truematch();	
   }//m_electron
-
-  // ---------- GEN LEPTON MATCHING ------------- //
-  if(m_dsid == 410000) {
-
-  TLorentzVector lgen;
-
-  if(fabs(evt.MC_Wdecay1_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 15)
-   lgen = evt.MC_Wdecay1_from_t();
-
-  else if(fabs(evt.MC_Wdecay2_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 15)
-   lgen = evt.MC_Wdecay2_from_t();
-
-  else if(fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 13  || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 15)
-   lgen = evt.MC_Wdecay1_from_tbar();
-
-  else if(fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 15)
-   lgen = evt.MC_Wdecay2_from_tbar();
-
-  if (lept.DeltaR(lgen) > 0.2) return;
-
-  } // if(m_dsid == 410000)
-  // --------------- GEN LEPTON MATCHING --------- //
-  //
-
 
 
   HistogramService *h = &m_hSvc;
@@ -806,6 +802,9 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
       if( (MET>20) || (MET+mWt)>60)	return;
       if(fabs(sd0)>3)			return;
   }//if
+
+  // -- checking if the lepton is MCTruthClassifier matched -- //
+  if(isTrueMatch == 0) return;
  
   int nTrkBtagged = 0;
   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
@@ -829,6 +828,8 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
   GetFakeHistograms(evt, weight, "", suffix, "btag0_");
   if(nTrkBtagged >= 1)
   GetFakeHistograms(evt, weight, "", suffix, "btag1_");
+  if(nTrkBtagged >= 2)
+  GetFakeHistograms(evt, weight, "", suffix, "btag2_");
  
   
 } // runFakeRateQCDCR_2015
@@ -843,6 +844,7 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
 
+  /*
   if (m_boosted)
     if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))
       return;
@@ -852,11 +854,17 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
       return;
   
   if (!m_boosted)	if(evt.jet().size()<4)	return;
-         
+  */
+
+  if (!m_boosted)
+    if (!( (evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016") && evt.jet().size()>=4) || evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016") ))
+      return;
+       
  
   bool isTight;
   TLorentzVector lept; 
   float sd0(99);
+  int isTrueMatch;
 
   //---- extra addition for log10(chi2) ---- //
   int  igj3, igj4; // index for the Whad
@@ -893,34 +901,15 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
 	isTight = evt.electron()[0].isTightPP();
 	lept  = evt.electron()[0].mom();
 	sd0    = evt.electron()[0].sd0();
+        isTrueMatch = evt.electron()[0].truematch();
   } else{
 	isTight = evt.muon()[0].isTight();
 	lept  = evt.muon()[0].mom();
         sd0    = evt.muon()[0].sd0();
+        isTrueMatch = evt.muon()[0].truematch();
   }//m_electron
 
 
-  // -------------- GEN LEPTON MATCHING --------- //
-  if(m_dsid == 410000) {
-
-  TLorentzVector lgen;
-
-  if(fabs(evt.MC_Wdecay1_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 15)
-   lgen = evt.MC_Wdecay1_from_t();
-
-  else if(fabs(evt.MC_Wdecay2_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 15)
-   lgen = evt.MC_Wdecay2_from_t();
-
-  else if(fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 13  || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 15)
-   lgen = evt.MC_Wdecay1_from_tbar();
-
-  else if(fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 15)
-   lgen = evt.MC_Wdecay2_from_tbar();
-
-  if (lept.DeltaR(lgen) > 0.2) return;
-
-  } // if(m_dsid == 410000)
-  // --------------- GEN LEPTON MATCHING --------- //
 
   HistogramService *h = &m_hSvc;
  
@@ -948,6 +937,11 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
           nTrkBtagged += 1;
   }//for 
  
+  // -- checking if the lepton is MCTruthClassifier matched -- //
+  if(isTrueMatch == 0) return;
+  
+
+
     if(std::isnan(weight)) {
   std::cout<<"Weight is Nan, making it  0"<<std::endl;
   weight = 0;
@@ -964,7 +958,8 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   GetFakeHistograms(evt, weight, "", suffix, "btag0_");
   if(nTrkBtagged >= 1)
   GetFakeHistograms(evt, weight, "", suffix, "btag1_");
-
+  if(nTrkBtagged >= 2)
+  GetFakeHistograms(evt, weight, "", suffix, "btag2_");
   
 } // runFakeRateQCDCR_2016
 
@@ -1563,7 +1558,8 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   int pT_binsN_re_highEta = sizeof(fake_pT_bins_re_highEta)/sizeof(double) - 1;
 
   
-  Double_t fake_pT_bins_rmu[] 	 	= {25, 30, 35, 40, 50, 100, 700};  
+  Double_t fake_pT_bins_rmu[]           = {25, 30, 35, 40, 50, 70, 100, 700}; // --- for 2016
+  //Double_t fake_pT_bins_rmu[]           = {25, 30, 50, 100, 700}; // --- for 2015 
   Double_t fake_pT_bins_lDR_rmu[] 	= {25, 30, 40, 50, 100, 700}; 
   Double_t fake_pT_bins_mDR_rmu[] 	= {25, 30, 35, 40, 50, 100, 700}; 
   Double_t fake_pT_bins_hDR_rmu[] 	= {25, 30, 35, 40, 50, 100, 700}; 
@@ -1924,8 +1920,8 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
 	//chi2
 	m_hSvc.create1D(suffix+"fake_chi2", "; log(#chi^{2}) ; Events", 50, -3, 7);
 	m_hSvc.create2DVar(suffix+"fake_lepPt_topoetcone",   	"; Pt of lepton [GeV]; topoetcone20 [GeV]", fake_N_pT_bins, fake_pT_bins_rmu, topoetconeBinN, topoetconeBin);
-        m_hSvc.create2DVar(suffix+"fake_lepPt_topoetcone_lowDR",      "; Pt of lepton [GeV]; topoetcone20 [GeV]", fake_N_pT_bins_lDR, fake_pT_bins_lDR_rmu, topoetconeBinN, topoetconeBin);
-        m_hSvc.create2DVar(suffix+"fake_lepPt_topoetcone_highDR",      "; Pt of lepton [GeV]; topoetcone20 [GeV]", fake_N_pT_bins, fake_pT_bins_rmu, topoetconeBinN, topoetconeBin);
+        m_hSvc.create2DVar(suffix+"fake_lepPt_topoetcone_lowDR",      "; Pt of lepton [GeV]; topoetcone20 [GeV]", fake_N_pT_bins, fake_pT_bins_rmu, topoetconeBinN, topoetconeBin);
+        m_hSvc.create2DVar(suffix+"fake_lepPt_topoetcone_highDR",     "; Pt of lepton [GeV]; topoetcone20 [GeV]", fake_N_pT_bins, fake_pT_bins_rmu, topoetconeBinN, topoetconeBin);
 	m_hSvc.create1DVar(suffix+"fake_topoetcone_effBins",    "; topoetcone [GeV]; Events", topoetconeBinN, topoetconeBin);
 
 

@@ -84,6 +84,10 @@ class Electron : public MObject {
     bool pass() const;
     bool passLoose() const;
 
+    const int truematch() const;
+    int &truematch();
+
+
   protected:
     float m_mi;
     bool m_isTightPP;
@@ -113,6 +117,8 @@ class Electron : public MObject {
     bool m_HLT_e120_lhloose;
     
     int m_GSF_trk_index;
+  
+    int m_truematch;
 };
 
 #endif
