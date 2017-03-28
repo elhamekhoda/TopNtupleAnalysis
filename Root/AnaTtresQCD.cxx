@@ -11,8 +11,8 @@
 #include <string>
 #include "TopNtupleAnalysis/HistogramService.h"
 
-AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList, int dsid)
-  : Analysis(filename, systList), m_electron(electron), m_boosted(boosted), m_dsid(dsid),
+AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList, int dsid, bool isData)
+  : Analysis(filename, systList), m_electron(electron), m_boosted(boosted), m_dsid(dsid), m_isData(isData),
     m_neutrinoBuilder("MeV"),  m_chi2("MeV") {
   
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
@@ -804,6 +804,7 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
   }//if
 
   // -- checking if the lepton is MCTruthClassifier matched -- //
+  if(!m_isData)
   if(isTrueMatch == 0) return;
  
   int nTrkBtagged = 0;
@@ -938,8 +939,8 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   }//for 
  
   // -- checking if the lepton is MCTruthClassifier matched -- //
+  if(!m_isData)
   if(isTrueMatch == 0) return;
-  
 
 
     if(std::isnan(weight)) {
