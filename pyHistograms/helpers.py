@@ -510,6 +510,8 @@ def get2HDMWeight(sel):
 listWjets22 = []
 listWjets22.extend(range(363330, 363354+1))
 listWjets22.extend(range(363436, 363483+1))
+# 2.2.1
+listWjets22.extend(range(364156, 364197+1))
 #def applyWjets22Weight(sel):
 #    if not sel.mcChannelNumber in listWjets22:
 #        return 1.0
