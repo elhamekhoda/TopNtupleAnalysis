@@ -54,7 +54,7 @@ void MiniTree::read(int event, Event &e) {
   e.mu_original() = f("mu_original");
   e.weight_mc() = f("weight_mc");
   e.weight_pileup() = f("weight_pileup");
-  e.weight_bTagSF() = f("weight_bTagSF_70");
+  e.weight_bTagSF() = f("weight_trackjet_bTagSF_70");
   e.weight_leptonSF() = f("weight_leptonSF");
   e.weight_Sherpa22_corr() = f("weight_Sherpa22_corr");
   e.Wfilter_Sherpa_nT() = i("Wfilter_Sherpa_nT");

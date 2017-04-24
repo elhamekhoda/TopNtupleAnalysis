@@ -23,8 +23,8 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
   IniHistograms(suffix0, btag0);
   std::string suffix1(""), btag1("btag1_");
   IniHistograms(suffix1, btag1);
-  std::string suffix2(""), btag2("btag2_");
-  IniHistograms(suffix2, btag2);
+  //std::string suffix2(""), btag2("btag2_");
+  //IniHistograms(suffix2, btag2);
 
 
 
@@ -790,6 +790,44 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
 	isTrueMatch = evt.muon()[0].truematch();	
   }//m_electron
 
+  /*
+  //---- extra addition for log10(chi2) ---- //
+  int  igj3, igj4; // index for the Whad
+  int igb3, igb4; // index for the b's
+  int  ign1;  // index for the neutrino (because chi2 can test both pz solution)
+  double chi2ming1, chi2ming1H, chi2ming1L;
+
+  std::vector<TLorentzVector *> vjets;
+  std::vector<bool> vjets_btagged;
+
+  for (size_t z = 0; z < evt.jet().size(); ++z) {
+      vjets.push_back(new TLorentzVector(0,0,0,0));
+      vjets[z]->SetPtEtaPhiE(evt.jet()[z].mom().Perp(), evt.jet()[z].mom().Eta(), evt.jet()[z].mom().Phi(), evt.jet()[z].mom().E());
+
+      TLorentzVector tmpAk4Jet = evt.jet()[z].mom();
+      bool is_btagged(false), is_bmatched(false);
+ 
+      for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx)
+       {
+         TLorentzVector tmpTJet = evt.tjet()[bidx].mom();
+         if(tmpAk4Jet.DeltaR(tmpTJet) <= 0.4){
+         if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())
+          is_btagged = true;
+          // break;
+          }
+        } // for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx) 
+
+      vjets_btagged.push_back(is_btagged);
+    } // for (size_t z = 0; z < evt.jet().size(); ++z
+
+
+  TLorentzVector met = evt.met();
+  bool status = m_chi2.findMinChiSquare(&lept, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
+
+  float chi2Value = 1000000; // log10(1000000) = 6
+  if(status) 
+  chi2Value = chi2ming1;
+  */
 
   HistogramService *h = &m_hSvc;
   
@@ -803,10 +841,11 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
       if(fabs(sd0)>3)			return;
   }//if
 
+  /*
   // -- checking if the lepton is MCTruthClassifier matched -- //
   if(!m_isData)
   if(isTrueMatch == 0) return;
- 
+ */
   int nTrkBtagged = 0;
   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
        if (evt.tjet()[bidx].btag_mv2c10_70_trk() && evt.tjet()[bidx].pass_trk())
@@ -829,10 +868,11 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
   GetFakeHistograms(evt, weight, "", suffix, "btag0_");
   if(nTrkBtagged >= 1)
   GetFakeHistograms(evt, weight, "", suffix, "btag1_");
-  if(nTrkBtagged >= 2)
+ /* if(nTrkBtagged >= 2 && log10(chi2Value) > 1.5)
   GetFakeHistograms(evt, weight, "", suffix, "btag2_");
  
-  
+  for (size_t z = 0; z < evt.jet().size(); ++z) {delete vjets[z];}
+  */ 
 } // runFakeRateQCDCR_2015
 
 
@@ -867,6 +907,20 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   float sd0(99);
   int isTrueMatch;
 
+
+  if (m_electron) {	
+	isTight = evt.electron()[0].isTightPP();
+	lept  = evt.electron()[0].mom();
+	sd0    = evt.electron()[0].sd0();
+        isTrueMatch = evt.electron()[0].truematch();
+  } else{
+	isTight = evt.muon()[0].isTight();
+	lept  = evt.muon()[0].mom();
+        sd0    = evt.muon()[0].sd0();
+        isTrueMatch = evt.muon()[0].truematch();
+  }//m_electron
+
+ /* 
   //---- extra addition for log10(chi2) ---- //
   int  igj3, igj4; // index for the Whad
   int igb3, igb4; // index for the b's
@@ -877,8 +931,8 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   std::vector<bool> vjets_btagged;
 
   for (size_t z = 0; z < evt.jet().size(); ++z) {
-      vjets.push_back(new TLorentzVector(0,0,0,0));
-      vjets[z]->SetPtEtaPhiE(evt.jet()[z].mom().Perp(), evt.jet()[z].mom().Eta(), evt.jet()[z].mom().Phi(), evt.jet()[z].mom().E());
+       vjets.push_back(new TLorentzVector(0,0,0,0));
+       vjets[z]->SetPtEtaPhiE(evt.jet()[z].mom().Perp(), evt.jet()[z].mom().Eta(), evt.jet()[z].mom().Phi(), evt.jet()[z].mom().E());
 
       TLorentzVector tmpAk4Jet = evt.jet()[z].mom();
       bool is_btagged(false), is_bmatched(false);
@@ -896,23 +950,7 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
       vjets_btagged.push_back(is_btagged);
     } // for (size_t z = 0; z < evt.jet().size(); ++z
 
-
-
-  if (m_electron) {	
-	isTight = evt.electron()[0].isTightPP();
-	lept  = evt.electron()[0].mom();
-	sd0    = evt.electron()[0].sd0();
-        isTrueMatch = evt.electron()[0].truematch();
-  } else{
-	isTight = evt.muon()[0].isTight();
-	lept  = evt.muon()[0].mom();
-        sd0    = evt.muon()[0].sd0();
-        isTrueMatch = evt.muon()[0].truematch();
-  }//m_electron
-
-
-
-  HistogramService *h = &m_hSvc;
+  
  
   TLorentzVector met = evt.met();
   bool status = m_chi2.findMinChiSquare(&lept, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
@@ -920,10 +958,12 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   float chi2Value = 1000000; // log10(1000000) = 6
   if(status) 
   chi2Value = chi2ming1;
- 
+  */
+
+  HistogramService *h = &m_hSvc;
+
   float mWt = sqrt(2. * lept.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(lept)) ))*1e-3; 
   float MET = evt.met().Perp()*1e-3;
-  //std::cout<<"REACHED HERE"<<std::endl;    
   if(m_electron){
       if( (MET>20) || (MET+mWt)>60)	return;
   }else{
@@ -938,10 +978,10 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
           nTrkBtagged += 1;
   }//for 
  
-  // -- checking if the lepton is MCTruthClassifier matched -- //
+ /* // -- checking if the lepton is MCTruthClassifier matched -- //
   if(!m_isData)
   if(isTrueMatch == 0) return;
-
+  */
 
     if(std::isnan(weight)) {
   std::cout<<"Weight is Nan, making it  0"<<std::endl;
@@ -952,16 +992,17 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   std::cout<<"Weight is Inf, making it  0"<<std::endl;
   weight = 0;
   }
-  //if(log10(chi2Value) < 6)
-  //std::cout<<"FILLING HISTO, logChi2 = "<<log10(chi2Value)<<std::endl;
+
   GetFakeHistograms(evt, weight, "", suffix, "");
   if(nTrkBtagged == 0)
   GetFakeHistograms(evt, weight, "", suffix, "btag0_");
   if(nTrkBtagged >= 1)
   GetFakeHistograms(evt, weight, "", suffix, "btag1_");
-  if(nTrkBtagged >= 2)
+  /*if(nTrkBtagged >= 2 && log10(chi2Value) > 1.5)
   GetFakeHistograms(evt, weight, "", suffix, "btag2_");
-  
+ 
+  for (size_t z = 0; z < evt.jet().size(); ++z) {delete vjets[z];} 
+  */ 
 } // runFakeRateQCDCR_2016
 
 
@@ -1559,8 +1600,8 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   int pT_binsN_re_highEta = sizeof(fake_pT_bins_re_highEta)/sizeof(double) - 1;
 
   
-  Double_t fake_pT_bins_rmu[]           = {25, 30, 35, 40, 50, 70, 100, 700}; // --- for 2016
-  //Double_t fake_pT_bins_rmu[]           = {25, 30, 50, 100, 700}; // --- for 2015 
+  //Double_t fake_pT_bins_rmu[]           = {25, 30, 35, 40, 50, 70, 100, 700}; // --- for 2016
+  Double_t fake_pT_bins_rmu[]           = {25, 30, 50, 100, 700}; // --- for 2015 
   Double_t fake_pT_bins_lDR_rmu[] 	= {25, 30, 40, 50, 100, 700}; 
   Double_t fake_pT_bins_mDR_rmu[] 	= {25, 30, 35, 40, 50, 100, 700}; 
   Double_t fake_pT_bins_hDR_rmu[] 	= {25, 30, 35, 40, 50, 100, 700}; 
@@ -1575,9 +1616,8 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   Double_t fake_leptEta_bins_bmu[]    	= {0.0, 1.6 ,2.5};
   Double_t fake_closeLJpT_bins_bmu[] 	= {20, 40, 60, 80, 100, 700}; 
 
-  //double topoetconeBin[] = {-8, -5, -2, 1, 3, 6, 10, 30}; 
-  //double topoetconeBin[] = {-8, 1, 6, 10, 30}; // --- for 2015 
-  double topoetconeBin[] = {-8, 1, 3, 6, 10, 30}; // --- for 2016
+  //double topoetconeBin[] = {-8, 1, 3, 6, 10, 30}; // --- for 2016
+  double topoetconeBin[] = {-8, 1, 6, 10, 30}; // --- for 2015
   int topoetconeBinN = sizeof(topoetconeBin)/sizeof(double) - 1;
     
   int eff_N_pT_bins(0);
