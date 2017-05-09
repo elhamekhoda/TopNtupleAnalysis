@@ -162,9 +162,9 @@ class Analysis:
 		if channel in helpers.listEWK and not self.noMttSlices:
 			weight *= helpers.applyEWK(sel, s)
 
-		# this applies the W+jets Sherpa 2.2 nJets reweighting correction
-		#weight *= helpers.applyWjets22Weight(sel)
-		weight *= sel.weight_Sherpa22_corr
+		# this applies the W+jets Sherpa 2.2.0 nJets reweighting correction
+		# WARNING: disable this if using 2.2.1
+		#weight *= sel.weight_Sherpa22_corr
 
 		return weight
 
@@ -258,39 +258,75 @@ class AnaTtresSL(Analysis):
 		f_ca = 1.0
 
 		nj = 4
-		if len(sel.jet_pt) < 4:
+		if len(sel.jet_pt) > 4:
+			nj = 5
+		if len(sel.jet_pt) < 2:
 			nj = 2
-		frac = {}
-		frac[2] = {}
-		frac[4] = {}
 
-		frac[2]['e'] = {'bb': 0.090, 'cc': 0.067, 'c': 0.232, 'l': 0.611}
-		frac[2]['mu'] = {'bb': 0.089, 'cc': 0.065, 'c': 0.221, 'l': 0.625}
-		frac[4]['e'] = {'bb': 0.148, 'cc': 0.155, 'c': 0.211, 'l': 0.487}
-		frac[4]['mu'] = {'bb': 0.146, 'cc': 0.149, 'c': 0.213, 'l': 0.492}
+		# flavour fractions at pretag level
+		frac = {}
+
+		frac[2] = {'el': {}, 'mu': {}}
+		frac[3] = {'el': {}, 'mu': {}}
+		frac[4] = {'el': {}, 'mu': {}}
+		frac[5] = {'el': {}, 'mu': {}}
+
+		frac[2]['el'][""] = {'bb': 0.089, 'cc': 0.067, 'c': 0.230, 'l': 0.615}
+		frac[3]['el'][""] = {'bb': 0.113, 'cc': 0.103, 'c': 0.235, 'l': 0.549}
+		frac[4]['el'][""] = {'bb': 0.138, 'cc': 0.143, 'c': 0.218, 'l': 0.501}
+		frac[5]['el'][""] = {'bb': 0.147, 'cc': 0.155, 'c': 0.213, 'l': 0.485}
+		frac[2]['mu'][""] = {'bb': 0.087, 'cc': 0.064, 'c': 0.221, 'l': 0.627}
+		frac[3]['mu'][""] = {'bb': 0.110, 'cc': 0.102, 'c': 0.229, 'l': 0.559}
+		frac[4]['mu'][""] = {'bb': 0.133, 'cc': 0.135, 'c': 0.220, 'l': 0.511}
+		frac[5]['mu'][""] = {'bb': 0.142, 'cc': 0.150, 'c': 0.214, 'l': 0.493}
 
 		f_ca_map = {}
-		f_ca_map[2] = {'e': 0.91, 'mu': 1.11}
-		f_ca_map[4] = {'e': 0.90, 'mu': 0.82}
+		f_ca_map[2] = {'el': {}, 'mu': {}}
+		f_ca_map[3] = {'el': {}, 'mu': {}}
+		f_ca_map[4] = {'el': {}, 'mu': {}}
+		f_ca_map[5] = {'el': {}, 'mu': {}}
+		f_ca_map[2]['el'][""] = 0.964803
+		f_ca_map[3]['el'][""] = 1.069296
+		f_ca_map[4]['el'][""] = 0.901530
+		f_ca_map[5]['el'][""] = 0.906417
+		f_ca_map[2]['mu'][""] = 1.071133
+		f_ca_map[3]['mu'][""] = 0.948485
+		f_ca_map[4]['mu'][""] = 0.917743
+		f_ca_map[5]['mu'][""] = 0.727740
 
 		flav_map = {}
 		flav_map[2] = {}
+		flav_map[3] = {}
 		flav_map[4] = {}
+		flav_map[5] = {}
 
-		flav_map[2][""] = {"e": {'bb': 2.06, 'cc': 2.06, 'c': 1.00, 'l': 0.73}, "mu": {'bb': 1.70, 'cc': 1.70, 'c': 1.00, 'l': 0.83}}
-		flav_map[4][""] = {"e": {'bb': 1.73, 'cc': 1.73, 'c': 0.84, 'l': 0.61}, "mu": {'bb': 1.52, 'cc': 1.52, 'c': 0.89, 'l': 0.74}}
+		flav_map[2] = {'el': {}, 'mu': {}}
+		flav_map[3] = {'el': {}, 'mu': {}}
+		flav_map[4] = {'el': {}, 'mu': {}}
+		flav_map[5] = {'el': {}, 'mu': {}}
 
-		syst = ""
-		if s in flav_map[nj]:
-			syst = s
-		for c in frac[nj][syst]:
-			for f in frac[nj][c]:
-				frac[nj][c][f] *= flav_map[nj][syst][c][f]
+		flav_map[2]["el"][""] = {'bb': 1.598722, 'cc': 1.598722, 'c': 1.000000, 'l': 0.848511}
+		flav_map[3]["el"][""] = {'bb': 1.527778, 'cc': 1.527778, 'c': 0.955624, 'l': 0.810858}
+		flav_map[4]["el"][""] = {'bb': 1.463839, 'cc': 1.463839, 'c': 0.915630, 'l': 0.776923}
+		flav_map[5]["el"][""] = {'bb': 1.395853, 'cc': 1.395853, 'c': 0.873105, 'l': 0.740840}
+
+		flav_map[2]["mu"][""] = {'bb': 1.451829, 'cc': 1.451829, 'c': 1.000000,'l': 0.890714}
+		flav_map[3]["mu"][""] = {'bb': 1.403216, 'cc': 1.403216, 'c': 0.966516,'l': 0.860890}
+		flav_map[4]["mu"][""] = {'bb': 1.362731, 'cc': 1.362731, 'c': 0.938631,'l': 0.836052}
+		flav_map[5]["mu"][""] = {'bb': 1.309749, 'cc': 1.309749, 'c': 0.902137,'l': 0.803547}
+
 		chan = ''
 		if len(sel.el_pt) == 1:
-			chan = 'e'
+			chan = 'el'
 		elif len(sel.mu_pt) == 1:
 			chan = 'mu'
+
+		syst = ""
+		if s in flav_map[nj][chan]:
+			syst = s
+		for f in frac[nj][chan][syst]:
+			frac[nj][chan][syst][f] *= flav_map[nj][chan][syst][f]
+
 		flav = ''
 		if sel.mcChannelNumber in helpers.listWjets22:
 			flag = sel.Wfilter_Sherpa_nT
@@ -302,12 +338,12 @@ class AnaTtresSL(Analysis):
 				flav = 'c'
 			elif flag == 5:
 				flav = 'l'
-			f_ca = f_ca_map[nj][chan]
+			f_ca = f_ca_map[nj][chan][syst]
 			norm = 1.0
-			hfweight = flav_map[nj][syst][chan][flav]
+			hfweight = flav_map[nj][chan][syst][flav]
 			norm = 0
 			for f in ['bb', 'cc', 'c', 'l']:
-				norm += frac[nj][chan][f]
+				norm += frac[nj][chan][syst][f]
 			if s == "wnorm__1up":
 				f_ca *= 1.10
 			elif s == "wnorm__1down":
