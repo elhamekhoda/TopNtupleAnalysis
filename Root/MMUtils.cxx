@@ -240,7 +240,7 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
     float mwt_limit(95);
 
     float lepPt_min(0.);
-    float lepPt_limit(100);
+    float lepPt_limit(150);
 
     float topoet_min(-5.);
     float topoet_limit(10);
@@ -249,20 +249,11 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
     topoet_min = std::min(topoetcone, topoet_limit);
 
 
-    if(closejl_DR < 0.4) {
-    if(lepPt_min > 30. && lepPt_min <= 35. && topoet_min > 3 && topoet_min <=10) topoet_min = 2;
-    if(lepPt_min > 35. && lepPt_min <= 40. && topoet_min > 6 && topoet_min <=10) topoet_min = 5;
-    }
-    if(closejl_DR < 0.6 && closejl_DR > 0.4) {
-    if(lepPt_min > 85. && lepPt_min <= 100. && topoet_min > 10 && topoet_min <=30) topoet_min = 7;
-    }
-   
-    if(closejl_DR > 0.6)
-    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2015_hDR, lepPt_min, topoet_min);
-    else if(closejl_DR < 0.6 && closejl_DR > 0.4)
-    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2015_mDR, lepPt_min, topoet_min);
-    else
+    if(closejl_DR < 0.4)
     get2Drates(realRate, realRate_err, eff_map_resolved_mu_2015_lDR, lepPt_min, topoet_min);
+    else
+    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2015_hDR, lepPt_min, topoet_min);
+
 
     // ---- fake rates 2015 ----//
     lepPt_min = 0.;
@@ -274,19 +265,32 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
 
     if(m_isBtagged==0) {
 
+      if(closejl_DR < 0.4) lepPt_limit = 500;
+      else lepPt_limit = 99;
+
       lepPt_min = std::min(lepPt, lepPt_limit);
       topoet_min = std::min(topoetcone, topoet_limit);
-      if(topoet_min > 1 && topoet_min < 6 && lepPt_min > 50 && lepPt_min <=100)
-       topoet_min = 7;
-
+    
+      if(closejl_DR < 0.4) {
+      if(lepPt_min >= 100 && topoet_min >= 1 && topoet_min < 6)
+      topoet_min = 7;
+      }
+  
     } // if(m_isBtagged==0)
+    else if(m_isBtagged==2) {
+      lepPt_limit = 500;
+      lepPt_min = std::min(lepPt, lepPt_limit);
+      topoet_min = std::min(topoetcone, topoet_limit);
+
+      if(lepPt_min >= 100 && topoet_min >= 6 && topoet_min < 10)
+      topoet_min = 5;         
+    } // else if(m_isBtagged==2)
     else {
       lepPt_min = std::min(lepPt, lepPt_limit);
       topoet_min = std::min(topoetcone, topoet_limit);
-
     }
 
-    if(m_isBtagged==0)
+    if(m_isBtagged==2)
      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2015_mDR, lepPt_min, topoet_min);
     else {
     if(closejl_DR < 0.4)
@@ -308,47 +312,44 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
     float mwt_limit(95);
 
     float lepPt_min(0.);
-    float lepPt_limit(600);
+    float lepPt_limit(300);
 
     float topoet_min(-5.);
     float topoet_limit(30);
 
-    if(closejl_DR > 0.6)
-    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016_hDR, lepPt, topoetcone); 
-    else if(closejl_DR < 0.6 && closejl_DR > 0.4)
-    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016_mDR, lepPt, topoetcone);
+    lepPt_min = std::min(lepPt, lepPt_limit);
+    topoet_min = std::min(topoetcone, topoet_limit);
+
+    if(closejl_DR < 0.4)
+    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016_lDR, lepPt_min, topoet_min);
     else
-    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016_lDR, lepPt, topoetcone);
-    //get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016, lepPt, closejl_DR);
+    get2Drates(realRate, realRate_err, eff_map_resolved_mu_2016_hDR, lepPt_min, topoet_min);
     
   
     if(m_isBtagged==0) {
-
-      lepPt_min = std::min(lepPt, lepPt_limit);
-      topoet_min = std::min(topoetcone, topoet_limit);
-      if(topoet_min < 1 && lepPt_min >=100)
-       topoet_min = 2;
-
+  
+      if(closejl_DR >= 0.4) {
+        if(lepPt_min >= 100 && topoet_min >= 10)
+        topoet_min = 9;
+      } // if(closejl_DR >= 0.4)
     } // if(m_isBtagged==0)
-    else {
+    if(m_isBtagged==1) {
+      
+      if(closejl_DR >= 0.4) {
+      if(lepPt_min >= 70 && lepPt_min <= 100 && topoet_min >= 10)
+      lepPt_min = 60;      
+      if(lepPt_min >= 100 && topoet_min >= 10)
+      topoet_min = 7;
+      } // if(closejl_DR >= 0.4)
+    } // if(m_isBtagged==1)
+   if(m_isBtagged==2) {
+        // -- checking for inclusive dR only -- //  
+        if(topoet_min > 6 && topoet_min < 10 && lepPt_min >=100)
+        topoet_min = 5;
 
-      //if(closejl_DR >= 0.4) {
+    } // if(m_isBtagged==2)
 
-       lepPt_min = std::min(lepPt, (float) 99.);
-       topoet_min = std::min(topoetcone, topoet_limit);
-   
-
-        if(closejl_DR >= 0.4) {
-        if(topoet_min > 10 && lepPt_min >=50 && lepPt_min <100)
-        topoet_min = 8;
-        } // if(closejl_DR >= 0.4)
-
-    } // if(m_isBtagged==0)
-
-
-
-
-    if(m_isBtagged==0)
+    if(m_isBtagged==2)
      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2016_mDR, lepPt_min, topoet_min);
     else {
     if(closejl_DR < 0.4)
@@ -360,6 +361,13 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
 
     if(fakeRate>realRate) {
     std::cout<<"REACHED HERE = "<<std::endl;
+    if(m_isBtagged==2) {
+    
+    int lepPtBin = fake_map_resolved_mu_2016_mDR->GetXaxis()->FindBin(lepPt_min);
+    int topoetBin = fake_map_resolved_mu_2016_mDR->GetYaxis()->FindBin(topoet_min);
+    std::cout<<"FakeRate = "<<fakeRate<<", RealRate = "<<realRate<<", xbin = "<<lepPtBin<<", ybin = "<<topoetBin<<std::endl;
+    } // if(m_isBtagged==2)
+    else {    
     if(closejl_DR < 0.4) {
     int lepPtBin = fake_map_resolved_mu_2016_lDR->GetXaxis()->FindBin(lepPt_min);
     int topoetBin = fake_map_resolved_mu_2016_lDR->GetYaxis()->FindBin(topoet_min);
@@ -374,55 +382,10 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
     std::cout<<"DR > 0.4"<<std::endl; 
     std::cout<<"FakeRate = "<<fakeRate<<", RealRate = "<<realRate<<", xbin = "<<lepPtBin<<", ybin = "<<topoetBin<<std::endl;
     } // if(closejl_DR > 0.4)
-    }
+    } // else
 
-    //if (fakeRate>1) fakeRate=0.9;
-    /*
-    if(closejl_DR > 0.6){
+    } // if(fakeRate>realRate)
 
-      mwt_limit = 195;
-      met_limit=140;
-      
-      if(met>140)mwt_limit=40;
-      
-      mwt_min = std::min(mwt, mwt_limit);
-      met_min = std::min(met, met_limit);
-      
-      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2016_hDR, met_min, mwt_min);
-      
-      if (fakeRate<0) fakeRate=0;
-      
-    }else if(closejl_DR > 0.4){
-      if(m_isBtagged==0){
-         if(met<40)	mwt_limit = 95;
-         else 		mwt_limit = 195;
-      } 
-      else {
-      		mwt_limit = 195;
-      		met_limit = 195;
-      }
-      mwt_min = std::min(mwt, mwt_limit);
-      met_min = std::min(met, met_limit);
-      
-      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2016_mDR, met_min, mwt_min);
-      
-      if (fakeRate<0) fakeRate=0;
-            
-    }else{
-    
-      	mwt_limit = 195;
-        met_limit = 140;
-    
-      mwt_min = std::min(mwt, mwt_limit);
-      met_min = std::min(met, met_limit);
-      
-      get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2016_lDR, met_min, mwt_min);
- 
-      if (fakeRate<0) fakeRate=0;
-            
-    }//if
-
-    */
   }
   
   return;
@@ -444,18 +407,6 @@ void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fa
     lepPt_min = std::min(lepPt, lepPt_limit);
     topoet_min = std::min(topoetcone, topoet_limit);
 
-    if(m_isBtagged==0) {
-    if(lepPt_min > 120 && lepPt_min < 150 && topoet_min > -8. && topoet_min < 1.)
-    topoet_min = 2.;
-    if(lepPt_min > 50 && lepPt_min < 60 && topoet_min > 6. && topoet_min < 10.)
-    lepPt_min = 45.;
-    }
-    else { // if b-tagged == 1
-    if(lepPt_min > 120  && topoet_min > -8. && topoet_min < 1.)
-    topoet_min = 2.;
-    
-    } 
-
     get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_2015, lepPt_min, topoet_min);
  }
  else {
@@ -470,12 +421,6 @@ void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fa
 
     lepPt_min = std::min(lepPt, lepPt_limit);
     topoet_min = std::min(topoetcone, topoet_limit);
-
-    /*
-    if(m_isBtagged==0) {
-    if(lepPt_min > 40 && lepPt_min < 50 && topoet_min > 10. && topoet_min < 30.)
-    topoet_min = 8.;
-    } */
  
     get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_2016, lepPt_min, topoet_min);
  } 
