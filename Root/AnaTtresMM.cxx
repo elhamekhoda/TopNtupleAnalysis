@@ -12,8 +12,8 @@
 #include <string>
 #include "TopNtupleAnalysis/HistogramService.h"
 
-AnaTtresMM::AnaTtresMM(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList, int dsid)
-  : Analysis(filename, systList), m_electron(electron), m_boosted(boosted), m_dsid(dsid),
+AnaTtresMM::AnaTtresMM(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList, int dsid, bool isData)
+  : Analysis(filename, systList), m_electron(electron), m_boosted(boosted), m_dsid(dsid), m_isData(isData),
     m_neutrinoBuilder("MeV"), m_chi2("MeV") {
 
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
@@ -21,9 +21,11 @@ AnaTtresMM::AnaTtresMM(const std::string &filename, bool electron, bool boosted,
   std::string suffix = "";
   std::string btag0 = "btag0_";
   std::string btag1 = "btag1_";
+  std::string btag2 = "btag2_";
   IniHistograms(suffix);
   IniHistograms(btag0);
   IniHistograms(btag1);
+  //IniHistograms(btag2);
   
   
   
@@ -189,42 +191,19 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2015(const Event &evt, double weight, c
 
   bool isTight = false;
   float d0sig(99);
-    
+  int isTrueMatch; 
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
     isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
-
+    isTrueMatch = evt.electron()[0].truematch();
   } else {
     l = evt.muon()[0].mom();
     isTight = evt.muon()[0].isTight();
     d0sig = evt.muon()[0].sd0();
-               
+    isTrueMatch = evt.muon()[0].truematch();           
   }//m_electron
-
-
-  // ----------------- GEN LEPTON MATCHING -------------------- //
-  if(m_dsid == 410000) {
-
-  TLorentzVector lgen;
-
-  if(fabs(evt.MC_Wdecay1_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 15)
-   lgen = evt.MC_Wdecay1_from_t();
-
-  else if(fabs(evt.MC_Wdecay2_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 15)
-   lgen = evt.MC_Wdecay2_from_t();
-
-  else if(fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 13  || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 15)
-   lgen = evt.MC_Wdecay1_from_tbar();
-
-  else if(fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 15)
-   lgen = evt.MC_Wdecay2_from_tbar();
-
-  if (l.DeltaR(lgen) > 0.2) return;
-
-  } // if(m_dsid == 410000)
- // ------------- GEN LEPTON MATCHING --------- //
 
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -237,6 +216,12 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2015(const Event &evt, double weight, c
       if( (MET>20) || (MET+mWt)>60)	return;
       if(fabs(d0sig)>3)			return;
   }//if
+
+  // -- checking if the lepton is MCTruthClassifier matched -- //
+  //if(!m_isData)
+  //if(isTrueMatch == 0) return;
+  
+
 
   //deltaR between lepton and the closest narrow jet
   float closejl_deltaR  = 99;
@@ -277,8 +262,9 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2015(const Event &evt, double weight, c
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
-    
-    
+  //if(nTrkBtagged >= 2)
+  //GetHistograms(evt, weight, "btag2_", suffix);
+      
   
 }//runMatrixMethod_QCDCR4j_2015
 
@@ -630,6 +616,8 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2015(const Event &evt, double weight,
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  //if(nTrkBtagged >= 2)
+  //GetHistograms(evt, weight, "btag2_", suffix);
 
 
 }//AnaTtresMM::runMatrixMethod_QCDVR1_4j_2015
@@ -668,7 +656,6 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2015(const Event &evt, double weight,
 */
   if (m_boosted)       if(evt.largeJet().size()<1)  return;
   if(!m_boosted)       if(evt.jet().size()<4)  return;
-
 
   HistogramService *h = &m_hSvc;
   
@@ -724,6 +711,8 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2015(const Event &evt, double weight,
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  //if(nTrkBtagged >= 2)
+  //GetHistograms(evt, weight, "btag2_", suffix);
 
 
 }//AnaTtresMM::runMatrixMethod_QCDVR2_4j_2015
@@ -1279,18 +1268,19 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
   
   bool isTight = false;
   float d0sig(99);
+  int isTrueMatch;
     
   TLorentzVector l;
   if (m_electron) {
     l = evt.electron()[0].mom();
     isTight = evt.electron()[0].isTightPP();
     d0sig = evt.electron()[0].sd0();
-
+    isTrueMatch = evt.electron()[0].truematch();
   } else {
     l = evt.muon()[0].mom();
     isTight = evt.muon()[0].isTight();
     d0sig = evt.muon()[0].sd0();
-           
+    isTrueMatch = evt.muon()[0].truematch();       
   }//m_electron
 
 
@@ -1331,27 +1321,6 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
   if(status)
   chi2Value = chi2ming1;
 
-  // ----------------- GEN LEPTON MATCHING -------------------- //
-  if(m_dsid == 410000) {
-
-  TLorentzVector lgen;
-
-  if(fabs(evt.MC_Wdecay1_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay1_from_t_pdgId()) == 15)
-   lgen = evt.MC_Wdecay1_from_t();
-
-  else if(fabs(evt.MC_Wdecay2_from_t_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_t_pdgId()) == 15)
-   lgen = evt.MC_Wdecay2_from_t();
-
-  else if(fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 13  || fabs(evt.MC_Wdecay1_from_tbar_pdgId()) == 15)
-   lgen = evt.MC_Wdecay1_from_tbar();
-
-  else if(fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 11 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 13 || fabs(evt.MC_Wdecay2_from_tbar_pdgId()) == 15)
-   lgen = evt.MC_Wdecay2_from_tbar();
-
-  if (l.DeltaR(lgen) > 0.2) return;
-
-  } // if(m_dsid == 410000)
- // ------------- GEN LEPTON MATCHING --------- //
 
 
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3; 
@@ -1364,6 +1333,12 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
       if(fabs(d0sig)>3)			return;
       //if(log10(chi2Value) < 1.5 || log10(chi2Value) > 6)        return;
   }//if
+
+  // -- checking if the lepton is MCTruthClassifier matched -- //
+  //if(!m_isData)
+  // if(isTrueMatch == 0) return;
+
+
   
   int nTrkBtagged = 0; 
   for (size_t bidx = 0; bidx < evt.tjet().size(); ++bidx){
@@ -1405,6 +1380,8 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  //if(nTrkBtagged >= 2 && log10(chi2Value) > 1.5)
+  //GetHistograms(evt, weight, "btag2_", suffix);
   
 
 
@@ -1538,12 +1515,13 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2016(const Event &evt, double weight,
   weight = 0;
   }
 
-
   GetHistograms(evt, weight, "", suffix);
   if(nTrkBtagged == 0)
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  //if(nTrkBtagged >= 2 && log10(chi2Value) > 1.5)
+  //GetHistograms(evt, weight, "btag2_", suffix);
 
 }//runMatrixMethod_QCDVR1_4j_2016
 
@@ -1675,12 +1653,13 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2016(const Event &evt, double weight,
   weight = 0;
   }
 
-
   GetHistograms(evt, weight, "", suffix);
   if(nTrkBtagged == 0)
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+//  if(nTrkBtagged >= 2 && log10(chi2Value) > 1.5)
+//  GetHistograms(evt, weight, "btag2_", suffix);
 
 }//runMatrixMethod_QCDVR2_4j_2016
 
