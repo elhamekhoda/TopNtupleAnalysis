@@ -17,7 +17,7 @@
 
 class AnaTtresMM : public Analysis {
   public:
-    AnaTtresMM(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList, int dsid);
+    AnaTtresMM(const std::string &filename, bool electron, bool boosted, std::vector<std::string> &systList, int dsid, bool isData);
     virtual ~AnaTtresMM();
 
     void run(const Event &e, double weight, const std::string &syst);
@@ -61,6 +61,8 @@ class AnaTtresMM : public Analysis {
     std::string _tree_syst;
 
     int m_dsid;
+
+    bool m_isData;
 };
 
 #endif
