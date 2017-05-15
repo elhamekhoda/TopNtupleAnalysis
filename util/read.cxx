@@ -451,6 +451,9 @@ int main(int argc, char **argv) {
   MMUtils * MM_0b_rmu     = NULL;
   MMUtils * MM_1b_re      = NULL;
   MMUtils * MM_1b_rmu     = NULL;
+  MMUtils * MM_2b_re      = NULL;
+  MMUtils * MM_2b_rmu     = NULL;
+
     
   if (runMM){ // >= 2 jets
   	// MMUtils(isBtagged, real2015, fake2015, real2016, fake2016)
@@ -466,6 +469,13 @@ int main(int argc, char **argv) {
 				   "scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016 
 				   "scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"); // fake2016
 
+        MM_2b_re  = new MMUtils(2, "scripts/QCDestimation/RATES_2015/resolved_e_btag2_eff_ttbar.root", // real2015  
+                                   "scripts/QCDestimation/RATES_2015/resolved_e_btag2_fake.root",       // fake2015
+
+                                   "scripts/QCDestimation/RATES_2016/resolved_e_btag2_eff_ttbar.root",   // real2016 
+                                   "scripts/QCDestimation/RATES_2016/resolved_e_btag2_fake.root"); // fake2016
+
+
 	MM_0b_rmu = new MMUtils(0, "scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015  
 				   "scripts/QCDestimation/RATES_2015/resolved_mu_btag0_fake.root",	// fake2015
 				
@@ -477,6 +487,12 @@ int main(int argc, char **argv) {
 				
 				   "scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",	// real2016
 				   "scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root");// fake2016
+
+        MM_2b_rmu = new MMUtils(2, "scripts/QCDestimation/RATES_2015/resolved_mu_btag2_eff_ttbar.root",// real2015  
+                                   "scripts/QCDestimation/RATES_2015/resolved_mu_btag2_fake.root",// fake2015
+
+                                   "scripts/QCDestimation/RATES_2016/resolved_mu_btag2_eff_ttbar.root",       // real2016
+                                   "scripts/QCDestimation/RATES_2016/resolved_mu_btag2_fake.root");// fake2016 
 	  
   } 
 
@@ -824,10 +840,10 @@ int main(int argc, char **argv) {
     vec_analysis.push_back(new AnaTtresSB(outList[9], false, false, true, true, systsListWithBlankNominal  )); //  muon  overlap_resolve         
   } else if(analysis == "AnaTtresSL_QCDVR1_2j_2015" || analysis == "AnaTtresSL_QCDVR2_2j_2015" ||analysis == "AnaTtresSL_QCDCR2j_2015" || analysis == "AnaTtresSL_QCDCR4j_2015" || analysis == "AnaTtresSL_WjetsCR2j_2015" || analysis == "AnaTtresSL_SR4j_2015" || analysis == "AnaTtresSL_QCDVR1_4j_2015" || analysis == "AnaTtresSL_QCDVR2_4j_2015" 
          || analysis == "AnaTtresSL_QCDVR1_2j_2016" || analysis == "AnaTtresSL_QCDVR2_2j_2016" ||analysis == "AnaTtresSL_QCDCR2j_2016" || analysis == "AnaTtresSL_QCDSR2j_2016" || analysis == "AnaTtresSL_QCDCR4j_2016" || analysis == "AnaTtresSL_QCDVR1_4j_2016" || analysis == "AnaTtresSL_QCDVR2_4j_2016"){
-    vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal, opt_dsid)); // resolved electron
-    vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal, opt_dsid)); // resolved muon    
-    vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal, opt_dsid)); // boosted  electron
-    vec_analysis.push_back(new AnaTtresMM(outList[3], false, true,  systsListWithBlankNominal, opt_dsid)); // boosted  muon 
+    vec_analysis.push_back(new AnaTtresMM(outList[0], true,  false, systsListWithBlankNominal, opt_dsid, isData)); // resolved electron
+    vec_analysis.push_back(new AnaTtresMM(outList[1], false, false, systsListWithBlankNominal, opt_dsid, isData)); // resolved muon    
+    vec_analysis.push_back(new AnaTtresMM(outList[2], true,  true,  systsListWithBlankNominal, opt_dsid, isData)); // boosted  electron
+    vec_analysis.push_back(new AnaTtresMM(outList[3], false, true,  systsListWithBlankNominal, opt_dsid, isData)); // boosted  muon 
   } 
     else if(analysis == "AnaTtresWQCDreal_2015"|| analysis == "AnaTtresQCDreal_2015"|| analysis == "AnaTtresQCDfake_2015"||analysis == "AnaTtresWQCDfake_2015"
          || analysis == "AnaTtresWQCDreal_2016"|| analysis == "AnaTtresQCDreal_2016"|| analysis == "AnaTtresQCDfake_2016"||analysis == "AnaTtresWQCDfake_2016") {
@@ -1670,11 +1686,14 @@ int main(int argc, char **argv) {
 		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
-		  }else{  
+		  }else if (nBtagged>=1){  
 		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
-		  }//if  
+		  }/* else {
+                     if(iselect)        weight = MM_2b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_2b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                  }//if */ 
 	       }//runMM
 
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDCR4j_2016(sel, weight, suffix);
@@ -1693,11 +1712,14 @@ int main(int argc, char **argv) {
                      if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
                      else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 
-                  }else{
+                  }else if (nBtagged>=1){
                      if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
                      else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 
-                  }//if  
+                  } /*else {
+                     if(iselect)        weight = MM_2b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_2b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                  }//if*/  
                }//runMM
 
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDCR4j_2015(sel, weight, suffix);
@@ -1739,11 +1761,14 @@ int main(int argc, char **argv) {
 		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
-		  }else{  
+		  }else if (nBtagged>=1){  
 		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
-		  }//if  
+		  } /*else {
+                     if(iselect)        weight = MM_2b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_2b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                  }//if */ 
 	       }//runMM
 
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR1_4j_2015(sel, weight, suffix);
@@ -1761,11 +1786,15 @@ int main(int argc, char **argv) {
                      if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
                      else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 
-                  }else{
+                  }else if (nBtagged>=1){
                      if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
                      else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 
-                  }//if  
+                  } /*else {
+                     if(iselect)        weight = MM_2b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_2b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+
+                  }//if  */
                }//runMM
 
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2_4j_2015(sel, weight, suffix);
@@ -1784,11 +1813,14 @@ int main(int argc, char **argv) {
 		     if(iselect)	weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     else		weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 	  	     
-		  }else{  
+		  }else if (nBtagged>=1){  
 		     if(iselect)	weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     else		weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 		     
-		  }//if  
+		  } /*else {
+                     if(iselect)        weight = MM_2b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_2b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                  }//if */  
 	       }//runMM
 
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR1_4j_2016(sel, weight, suffix);
@@ -1807,11 +1839,14 @@ int main(int argc, char **argv) {
                      if(iselect)        weight = MM_0b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
                      else               weight = MM_0b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 
-                  }else{
+                  }else if (nBtagged>=1){
                      if(iselect)        weight = MM_1b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
                      else               weight = MM_1b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
 
-                  }//if  
+                  } /*else {
+                     if(iselect)        weight = MM_2b_re->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                     else               weight = MM_2b_rmu->getMMweights(sel, runMM_StatErr, iselect, 0, runNumber);
+                  }//if */  
                }//runMM
 
                (dynamic_cast<AnaTtresMM*>(vec_analysis[iAna]))->runMatrixMethod_QCDVR2_4j_2016(sel, weight, suffix);
