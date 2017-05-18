@@ -18,7 +18,7 @@ for ch in be bmu re rmu ; do
     $PLOTTING -c $ch -h lepEta  -l $LUMI  --xTitle "Lepton #eta" --yTitle "Events / 0.25" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h nJets -l $LUMI --xTitle "Number of jets" --yTitle "Events" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h nTrkBtagJets -l $LUMI --xTitle "Number of b-tagged track jets" --yTitle "Events" --stamp 0 -C config.txt
-    $PLOTTING -c $ch -h mTW --normBinWidth 20 -l $LUMI --yTitle "Events / 10 GeV" --xTitle "m_{T,W} [GeV]" --stamp 0 -C config.txt
+    $PLOTTING -c $ch -h mwt --normBinWidth 20 -l $LUMI --yTitle "Events / 20 GeV" --xTitle "m_{T,W} [GeV]" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h MET --normBinWidth 20 -l $LUMI --yTitle "Events / 20 GeV" --xTitle "E_{T}^{miss} [GeV]" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h MET_phi -l $LUMI --yTitle "Events / 0.2" --xTitle "E_{T}^{miss} #phi [rd]" --stamp 0 -C config.txt
     $PLOTTING -c $ch -h closeJetPt -l $LUMI --normBinWidth 10 --yTitle "Events / 10 GeV" --xTitle "Selected jet p_{T} [GeV]" --stamp 0 -C config.txt
