@@ -31,9 +31,9 @@ def plot(t, mu = False):
 
   clim = TCanvas("clim", "", 800, 600);
   if not 'eft' in t:
-    l = TLegend(0.5,0.45,0.87,0.89)
-  else:
     l = TLegend(0.5,0.6,0.87,0.89)
+  else:
+    l = TLegend(0.5,0.65,0.87,0.89)
   l.SetBorderSize(0)
 
   maxm = mass[t][-1]
@@ -48,8 +48,8 @@ def plot(t, mu = False):
     maxm = minm
     minm = tmp
   h = TH1F("h", "", 50, minm, maxm);
-  miny = 1e-2
-  maxy = 2000
+  miny = 1e-3
+  maxy = xs[t][0]*100
   if 'eft' in t:
     miny = 10
     maxy = 400
@@ -62,6 +62,8 @@ def plot(t, mu = False):
     h.GetXaxis().SetTitle("m_{Z'} [TeV]");
   elif 'kkG' in t:
     h.GetXaxis().SetTitle("m_{G_{KK}} [TeV]");
+  elif 'kkgluon' in t:
+    h.GetXaxis().SetTitle("m_{g_{KK}} [TeV]");
   if 'eft' in t:
     h.GetXaxis().SetTitle("c_{Vv} #Lambda^{-2} [TeV^{-2}]");
   h.GetXaxis().SetTitleOffset(0.9);
@@ -89,13 +91,13 @@ def plot(t, mu = False):
     muexp_p1 = abs(-muexp + hi.GetBinContent(4))
     muexp_m1 = abs(-muexp + hi.GetBinContent(5))
     muexp_m2 = abs(-muexp + hi.GetBinContent(6))
-    if ('eft' in t and not mu) or True:
-      muexp = muexp*xs[t][I]
-      muobs = muobs*xs[t][I]
-      muexp_m1 = muexp_m1*xs[t][I]
-      muexp_p1 = muexp_p1*xs[t][I]
-      muexp_m2 = muexp_m2*xs[t][I]
-      muexp_p2 = muexp_p2*xs[t][I]
+    #if ('eft' in t and not mu) or True:
+    #  muexp = muexp*xs[t][I]
+    #  muobs = muobs*xs[t][I]
+    #  muexp_m1 = muexp_m1*xs[t][I]
+    #  muexp_p1 = muexp_p1*xs[t][I]
+    #  muexp_m2 = muexp_m2*xs[t][I]
+    #  muexp_p2 = muexp_p2*xs[t][I]
     ftxt = open('lim_'+signalList[t][i]+'.txt', 'w')
     ftxt.write('muobs     '+str(muobs)+'\n')
     ftxt.write('muexp     '+str(muexp)+'\n')
@@ -150,6 +152,8 @@ def plot(t, mu = False):
     l.AddEntry(xsec12, "LO Z'_{#it{TC2}} #Gamma=1.2% cross section #times 1.3", "L")
   elif 'kkG' in t:
     l.AddEntry(xsec12, "LO KK graviton cross section", "L")
+  elif 'kkgluon' in t:
+    l.AddEntry(xsec12, "LO KK gluon #Gamma=30% cross section", "L")
   if 'zprime' in t:
     l.AddEntry(xsec3, "LO Z'_{#it{TC2}} #Gamma=3% cross section #times 1.3", "L")
 
@@ -168,7 +172,7 @@ def plot(t, mu = False):
   gPad.RedrawAxis()
 
   stampATLAS("Internal", 0.15, 0.83)
-  stampLumiText(36.5, 0.15, 0.75, "#sqrt{s} = 13 TeV", 0.04)
+  stampLumiText(36.1, 0.15, 0.75, "#sqrt{s} = 13 TeV", 0.04)
 
   suf = ""
   if mu:
@@ -181,6 +185,7 @@ def plot(t, mu = False):
 
 plot('zprime')
 plot('kkG')
+plot('kkgluon')
 #plot('eft10', mu=True)
 #plot('eft10', mu=False)
 

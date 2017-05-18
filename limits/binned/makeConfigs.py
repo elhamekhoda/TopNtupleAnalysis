@@ -5,8 +5,8 @@ from inputs import *
 import socket, random, re
 
 # change those:
-setdir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2421'
-mydir = '/nfs/dust/atlas/user/danilo/hists_2421/TRexFitter'
+setdir = '/nfs/dust/atlas/user/danilo/topana2429'
+mydir = '/nfs/dust/atlas/user/danilo/result2429_all/TRExFitter'
 
 def fixFile(template, final, sig, dirname, doBOnlyFit):
   fr = open(template, 'r')
@@ -56,8 +56,8 @@ def jobSubmit(suf, extra = ""):
 	runfile = 'submit_%s%s.sh' % (suf, extra)
 	logfile = mydir+'/stdout_%s%s.txt'%(suf, extra)
 	queue = 'long.q'
-	if 'bkg' in suf:
-		queue = 'short.q'
+	#if 'bkg' in suf:
+	#	queue = 'short.q'
 	email = 'dferreir@cern.ch'
 	jobName = 'ttlim_%s%s'%(suf, extra)
 	fr = open(runfile, 'w')
@@ -98,18 +98,23 @@ suf = ""
 import sys
 if len(sys.argv) > 1:
   suf = sys.argv[1]
-#fixFile('ttres.config', 'ttres_bkg%s.config' % suf, "bkg%s" %suf, "bkg%s" %suf, True)
-#system('cp -f hist_zprime1000.root hist_bkg%s.root' %suf) ## use a dummy signal for the background only fit
-#jobSubmit('bkg%s' %suf)
+fixFile('ttres.config', 'ttres_bkg%s.config' % suf, "bkg%s" %suf, "bkg%s" %suf, True)
+system('cp -f hist_zprime1000.root hist_bkg%s.root' %suf) ## use a dummy signal for the background only fit
+jobSubmit('bkg%s' %suf)
 
-fixFile('ttres.config', 'ttres_zprime2000_inj%s.config' % suf, "zprime2000%s" %suf, "zprime2000_inj%s" %suf, False)
-jobSubmit('zprime2000_inj%s' %suf)
+fixFile('ttres.config', 'ttres_bkgsig%s.config' % suf, "bkgsig%s" %suf, "bkgsig%s" %suf, False)
+system('cp -f hist_zprime1000.root hist_bkgsig%s.root' %suf) ## use a dummy signal
+jobSubmit('bkgsig%s' %suf)
+
+fixFile('ttres.config', 'ttres_bkginj%s.config' % suf, "bkginj%s" %suf, "bkginj%s" %suf, False)
+system('cp -f hist_zprime1000.root hist_bkginj%s.root' %suf) ## use a dummy signal
+jobSubmit('bkginj%s' %suf)
 
 # now go over to signal
-#for t in signalList:
-#  if "eft" in t:
-#    continue
-#  for i in signalList[t]:
-#    fixFile('ttres.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
-#    jobSubmit("%s%s" % (i, suf))
+for t in signalList:
+  if "eft" in t:
+    continue
+  for i in signalList[t]:
+    fixFile('ttres.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
+    jobSubmit("%s%s" % (i, suf))
 
