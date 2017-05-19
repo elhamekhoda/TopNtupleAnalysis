@@ -21,7 +21,7 @@ class FitRes:
         corr = numpy.matrix([])
 
 def loadSpectrum(sampleName, histName, syst):
-    if sampleName != "bkg":
+    if sampleName != "bkgsum":
         print "hist_{:}.root".format(sampleName)
         f = TFile("hist_{:}.root".format(sampleName))
         print f
@@ -33,12 +33,12 @@ def loadSpectrum(sampleName, histName, syst):
         return h
     # it is == bkg, so sum all backgrounds
     h = None
-    for i in ["ttbar", "Zjets", "Wjets", "VV", "singletop", "QCDe", "QCDmu"]:
+    for i in ["tt", "wjets", "singletop", "qcde", "qcdmu", "other"]:
         if h == None:
             h1 = loadSpectrum(i, histName, syst)
             if not h1:
                return h1
-            h = h1.Clone("bkg{:}{:}".format(histName, syst))
+            h = h1.Clone("bkgsum{:}{:}".format(histName, syst))
             continue
         h.Add(loadSpectrum(i, histName, syst))
     return h
@@ -329,13 +329,18 @@ def MakeAllPostfitPlots(inputFile, sampleList, output, outputPF):
     fr = readParams(inputFile)
     outputFile = TFile(output, "RECREATE")
     outputFilePF = TFile(outputPF, "RECREATE")
-    shortNameForGamma = {'xboostede':'be', 'xboostedmu':'bmu'}
+    shortNameForGamma = {
+                         'xmttbe3':'be3', 'xmttbe2':'be2', "xmttbe1":"be1",
+                         'xmttbmu3':'bmu3', 'xmttbmu2':'bmu2', "xmttbmu1":"bmu1",
+                         'xmttre3':'re3', 'xmttre2':'re2', "xmttre1":"re1",
+                         'xmttrmu3':'rmu3', 'xmttrmu2':'rmu2', "xmttrmu1":"rmu1",
+			}
     for sampleName in sampleList:
-        for histName in ["xboostede", "xboostedmu"]:
+        for histName in ["xmttbe3", "xmttbe2", "xmttbe1", "xmttbmu3", "xmttbmu2", "xmttbmu1", "xmttre3", "xmttre2", "xmttre1", "xmttrmu3", "xmttrmu2", "xmttrmu1"]:
             print "Sample", sampleName," hist",histName
             MakePostfitPlot(fr, sampleName, histName, outputFile, outputFilePF, shortNameForGamma[histName])
     outputFile.Close()
     outputFilePF.Close()
 
 if __name__ == "__main__":
-    MakeAllPostfitPlots("params_bonly.txt", ["ttbar", "Wjets", "Zjets", "singletop", "VV", "QCDe", "QCDmu", "Zprime400", "Zprime500", "Zprime750", "Zprime1000", "Zprime1250", "Zprime1500", "Zprime1750", "Zprime2000", "Zprime2250", "Zprime2500", "Zprime2750", "Zprime3000", "Zprime4000", "Zprime5000", "bkg"], "spectrum_prefit.root", "spectrum_postfit.root")
+    MakeAllPostfitPlots("params_bonly.txt", ["tt", "wjets", "singletop", "other", "qcde", "qcdmu", "zprime400", "zprime500", "zprime750", "zprime1000", "zprime1250", "zprime1500", "zprime1750", "zprime2000", "zprime2250", "zprime2500", "zprime2750", "zprime3000", "zprime4000", "zprime5000", "kkg500", "kkg1000", "kkg1500", "kkg2000", "kkg2500", "kkg3000", "kkg3500", "kkg4000", "kkg4500", "kkg5000", "kkgrav400", "kkgrav500", "kkgrav750", "kkgrav1000", "kkgrav2000", "kkgrav3000", "bkgsum"], "spectrum_prefit.root", "spectrum_postfit.root")
