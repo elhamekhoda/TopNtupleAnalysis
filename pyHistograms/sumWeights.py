@@ -59,6 +59,18 @@ def main():
 				for pdfName in sorted(pdfSumOfWeights[channel].keys()):
 					for pdfNumber in range(0, len(pdfSumOfWeights[channel][pdfName])):
 						pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", pdfName, "", pdfNumber, "", pdfSumOfWeights[channel][pdfName][pdfNumber]))
+
+			sumOfWeights = {} # map of DSID to sum of weights
+			t_sumWeights = TChain("sumWeights")
+			addFilesInChain(t_sumWeights, f)
+			for k in range(0, t_sumWeights.GetEntries()):
+				t_sumWeights.GetEntry(k)
+				if not t_sumWeights.dsid in sumOfWeights:
+					sumOfWeights[t_sumWeights.dsid] = 0
+				sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
+
+			for channel in sorted(sumOfWeights.keys()):
+				pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", "nominal", "", -1, "", sumOfWeights[channel]))
 			pfs.close()
 		else:
 			sumOfWeights = {} # map of DSID to sum of weights

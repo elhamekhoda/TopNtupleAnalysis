@@ -67,7 +67,10 @@ def main():
 					pdfSumOfWeights[int(line_spl[0])] = {}
 				if not line_spl[1] in pdfSumOfWeights[int(line_spl[0])]:
 					pdfSumOfWeights[int(line_spl[0])][line_spl[1]] = {}
-				pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
+				if line_spl[1] == "nominal": # nominal for PDF variation sample
+					sumOfWeights[int(line_spl[0])] = float(line_spl[3])
+				else:
+					pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
 			pfs.close()
 
 		fs = open("sumOfWeights_new.txt")

@@ -43,7 +43,7 @@ std::map<std::string, std::vector<std::string> > syst_pdf_simple = std::map<std:
 
 float lumi_scale = -0.0;
 int logY = 0;
-int smooth = 1;
+int smooth = 0;
 
 using namespace std;
 

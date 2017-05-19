@@ -4,17 +4,18 @@ import HQTTtResonancesTools.DC15MC13TeV_25ns_mc15c_EXOT4
 import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
 
 def main():
-	useFileOnGrid = 0
+	useFileOnGrid = 1
 	# for standard data and MC
-	pattern = 'user.dferreir.*04122016v*_output.root'
+	pattern = 'user.dferreir.*15032017v*_output.root'
+	pattern2 = 'user.dferreir.*07042017v*_output.root'
 	#pattern_mtt = 'user.dferreir.*14082016v1_output.root'
-	pattern_data = 'user.dferreir.00*04122016v*_output.root'
+	pattern_data = 'user.dferreir.00*15032017v*_output.root'
 
-	pattern_syst = 'user.dferreir.*04122016Systv*_output.root'
-	pattern_pdf = 'user.dferreir.*04122016PDFv*_output.root'
+	pattern_syst = 'user.dferreir.*15032017Systv*_output.root'
+	pattern_pdf = 'user.dferreir.*15032017PDFv*_output.root'
 	# for QCD e
-	pattern_qcde = 'user.dferreir.*04122016QCDev*_output.root'
-	pattern_qcdmu = 'user.dferreir.*04122016QCDmuv*_output.root'
+	pattern_qcde = 'user.dferreir.*15032017QCDev*_output.root'
+	pattern_qcdmu = 'user.dferreir.*15032017QCDmuv*_output.root'
 	theScope = 'user.dferreir'
 	
 	if not useFileOnGrid:
@@ -70,11 +71,22 @@ def main():
 	names  += ['ttradhi', 'ttradlo']
 	names  += ['eftl30c1']
 
+	names  += ['kkg500']
+	names  += ['kkg1000']
+	names  += ['kkg1500']
+	names  += ['kkg2000']
+	names  += ['kkg2500']
+	names  += ['kkg3000']
+	names  += ['kkg3500']
+	names  += ['kkg4000']
+	names  += ['kkg4500']
+	names  += ['kkg5000']
+
 	mapToSamples = {
-					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
+					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
@@ -87,7 +99,7 @@ def main():
 					'ttradhi':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadHi',
 					'ttradlo':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadLo',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
-					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
+					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets221',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
 					'zprime400': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime400',
 					'zprime500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime500',
@@ -109,6 +121,16 @@ def main():
 					'kkgrav1000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt1000',
 					'kkgrav2000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt2000',
 					'kkgrav3000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt3000',
+					'kkg500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon500',
+					'kkg1000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1000',
+					'kkg1500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1500',
+					'kkg2000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2000',
+					'kkg2500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2500',
+					'kkg3000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3000',
+					'kkg3500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3500',
+					'kkg4000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4000',
+					'kkg4500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4500',
+					'kkg5000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon5000',
 					'eftl30c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 		   }
 	
@@ -125,6 +147,10 @@ def main():
 	rucio = rucio.client.Client()
 	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern})
 	datasets = []
+	for l in response:
+		datasets.append(l)
+
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern2})
 	for l in response:
 		datasets.append(l)
 		

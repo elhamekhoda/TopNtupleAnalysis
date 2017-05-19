@@ -7,20 +7,23 @@ def main():
 	# for standard data and MC
 
 	# change this for your samples
-	pattern = 'user.dferreir.*04122016v*_output.root'
-	pattern_data = 'user.dferreir.00*04122016v*_output.root'
-	pattern_syst = 'user.dferreir.*04122016Systv*_output.root'
-	pattern_pdf = 'user.dferreir.*04122016PDFv*_output.root'
+	pattern = 'user.dferreir.*15032017v*_output.root'
+	pattern2 = 'user.dferreir.*07042017v*_output.root'
+	pattern_data = 'user.dferreir.00*15032017v*_output.root'
+	pattern_syst = 'user.dferreir.*15032017Systv*_output.root'
+	pattern_pdf = 'user.dferreir.*15032017PDFv*_output.root'
 	# for QCD e
-	pattern_qcde = 'user.dferreir.*04122016QCDev*_output.root'
-	pattern_qcdmu = 'user.dferreir.*04122016QCDmuv*_output.root'
+	pattern_qcde = 'user.dferreir.*15032017QCDev*_output.root'
+	pattern_qcdmu = 'user.dferreir.*15032017QCDmuv*_output.root'
 	theScope = 'user.dferreir'
 	
 	# output directory
 	# change this for your output directory
 	#outputDir = '/eos/atlas/user/d/dferreir/topana/hists_top2421'
-	outputDir = '/afs/cern.ch/user/d/dferreir/work/private/topana/Top2421/TopNtupleAnalysis/pyHistograms/hist_2421_all1'
-	outputDir2 = '/eos/user/d/dferreir/hists_top2421_all1'
+	outputDir = '/afs/cern.ch/user/d/dferreir/work/private/topana/Top2429/TopNtupleAnalysis/pyHistograms/hists2429_all'
+	outputDir2 = '/eos/user/d/dferreir/hists2429_all'
+	#outputDir = '/afs/cern.ch/user/d/dferreir/work/private/topana/Top2429/TopNtupleAnalysis/pyHistograms/hists2429'
+	#outputDir2 = '/eos/user/d/dferreir/hists2429'
 
 	# number of files per job
 	#nFilesPerJob = 40
@@ -28,13 +31,13 @@ def main():
 
 	# use it to setup AnalysisTop
 	# change this for the place where you setup RootCore
-	rundir = '/afs/cern.ch/work/d/dferreir/private/topana/Top2421'
+	rundir = '/afs/cern.ch/work/d/dferreir/private/topana/Top2429'
 
 	# email to use to tell us when the job is done
 	email = 'dferreir@cern.ch'
 
 	# queue to submit to
-	queue = '1nd'
+	queue = '1nw'
 	#queue = '1nw'
 	#queue = '8nh'
 	#queue = 'short.q'
@@ -48,8 +51,8 @@ def main():
 	
 	# leave it for nominal to run only the nominal
 	#systematics = 'nominal'
-	systematics = 'all'
-	systematics = 'all1'
+	systematics = 'all,'
+	#systematics = 'all1'
 	#systematics = 'all2'
 	#systematics = 'all3'
 	#systematics = 'all4'
@@ -57,20 +60,19 @@ def main():
 	# 25 ns datasets
 	names   = []
 
-	names  += ['tt']
-	names  += ['tthm']
+	#names  += ["data"]
+	#names  += ['qcde', 'qcdmu']
+
+	#names  += ['tt']
+	#names  += ['tthm']
 	#names  += ['ttv']
 	#names  += ['wbbjets']
 	#names  += ['wccjets']
 	#names  += ['wcjets']
 	#names  += ['wljets']
 	#names  += ['singletop']
-
 	#names  += ['zjets']
 	#names  += ['vv']
-
-	#names  += ["data"]
-	#names  += ['qcde', 'qcdmu']
 
 	#names  += ['zprime400']
 	#names  += ['zprime500']
@@ -93,10 +95,21 @@ def main():
 	#names  += ['kkgrav2000']
 	#names  += ['kkgrav3000']
 
+	#names  += ['kkg500']
+	#names  += ['kkg1000']
+	#names  += ['kkg1500']
+	#names  += ['kkg2000']
+	#names  += ['kkg2500']
+	#names  += ['kkg3000']
+	#names  += ['kkg3500']
+	#names  += ['kkg4000']
+	#names  += ['kkg4500']
+	#names  += ['kkg5000']
+
 	#names  += ['ttsyst']
 	#names  += ['ttpdf']
 	#names  += ['ttpowhegherwig']
-	#names  += ['ttmcatnloherwig']
+	######names  += ['ttmcatnloherwig']  # same as ttpdf nominal result, so why rerun it?
 	#names  += ['ttradhi', 'ttradlo']
 
 	#names  += ['eftl30c10']
@@ -109,13 +122,13 @@ def main():
 	#names  += ['eftl100c10']
 
 	mapToSamples = {
-					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_33257ipb_EXOT4',
-					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_33257ipb_EXOT4',
-					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_33257ipb_EXOT4',
+					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
+					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
+					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', #,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'tthm': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'ttv':'MC15c_13TeV_25ns_FS_EXOT4_ttbarV',
@@ -126,7 +139,7 @@ def main():
 					'ttradhi':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadHi',
 					'ttradlo':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadLo',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
-					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
+					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets221',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
 					'zprime400': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime400',
 					'zprime500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime500',
@@ -148,6 +161,16 @@ def main():
 					'kkgrav1000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt1000',
 					'kkgrav2000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt2000',
 					'kkgrav3000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt3000',
+					'kkg500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon500',
+					'kkg1000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1000',
+					'kkg1500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1500',
+					'kkg2000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2000',
+					'kkg2500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2500',
+					'kkg3000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3000',
+					'kkg3500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3500',
+					'kkg4000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4000',
+					'kkg4500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4500',
+					'kkg5000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon5000',
 					'eftl30c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 					'eftl35c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 					'eftl40c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
@@ -179,6 +202,9 @@ def main():
 	rucio = rucio.client.Client()
 	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern})
 	datasets = []
+	for l in response:
+		datasets.append(l)
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern2})
 	for l in response:
 		datasets.append(l)
 	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_qcde})
@@ -239,6 +265,8 @@ def main():
 		elif 'kkgrav' in sn:
 			nFilesPerJobEffective = 1
 		elif 'zprime' in sn:
+			nFilesPerJobEffective = 1
+		elif 'kkg' in sn:
 			nFilesPerJobEffective = 1
 		elif 'data' in sn or 'qcd' in sn:
 			nFilesPerJobEffective = 300
@@ -413,18 +441,18 @@ def main():
 			fr.write('export DQ2_LOCAL_SITE_ID=DESY-HH_SCRATCHDISK \n')
 			fr.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
 			fr.write('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
+			fr.write('export XrdSecDEBUG=2\n')
 			fr.write('export DISPLAY=\n')
 			fr.write('lsetup rcsetup\n')
 			fr.write('cd TopNtupleAnalysis/pyHistograms\n')
 			tmpDir = '$TMPDIR'
-
-			#out = 'be,'+outputDir+'/be_'+jobName+'.root\;bmu,'+outputDir+'/bmu_'+jobName+'.root\;re,'+outputDir+'/re_'+jobName+'.root\;rmu,'+outputDir+'/rmu_'+jobName+'.root\;be2015,'+outputDir+'/be2015_'+jobName+'.root\;bmu2015,'+outputDir+'/bmu2015_'+jobName+'.root\;re2015,'+outputDir+'/re2015_'+jobName+'.root\;rmu2015,'+outputDir+'/rmu2015_'+jobName+'.root\;be2016,'+outputDir+'/be2016_'+jobName+'.root\;bmu2016,'+outputDir+'/bmu2016_'+jobName+'.root\;re2016,'+outputDir+'/re2016_'+jobName+'.root\;rmu2016,'+outputDir+'/rmu2016_'+jobName+'.root'
 			out = 'be,'+tmpDir+'/be_'+jobName+'.root\;bmu,'+tmpDir+'/bmu_'+jobName+'.root\;re,'+tmpDir+'/re_'+jobName+'.root\;rmu,'+tmpDir+'/rmu_'+jobName+'.root'
 			out += '\;be3,'+tmpDir+'/be3_'+jobName+'.root\;bmu3,'+tmpDir+'/bmu3_'+jobName+'.root\;re3,'+tmpDir+'/re3_'+jobName+'.root\;rmu3,'+tmpDir+'/rmu3_'+jobName+'.root'
 			out += '\;be2,'+tmpDir+'/be2_'+jobName+'.root\;bmu2,'+tmpDir+'/bmu2_'+jobName+'.root\;re2,'+tmpDir+'/re2_'+jobName+'.root\;rmu2,'+tmpDir+'/rmu2_'+jobName+'.root'
 			out += '\;be1,'+tmpDir+'/be1_'+jobName+'.root\;bmu1,'+tmpDir+'/bmu1_'+jobName+'.root\;re1,'+tmpDir+'/re1_'+jobName+'.root\;rmu1,'+tmpDir+'/rmu1_'+jobName+'.root'
 			out += '\;be0,'+tmpDir+'/be0_'+jobName+'.root\;bmu0,'+tmpDir+'/bmu0_'+jobName+'.root\;re0,'+tmpDir+'/re0_'+jobName+'.root\;rmu0,'+tmpDir+'/rmu0_'+jobName+'.root'
 			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
+			fr.write('echo Status code $?\n')
 			fr.write('cp %s/*_%s.root %s/' % (tmpDir, jobName, outputDir2))
 			fr.close()
 			os.system('chmod a+x '+runfile)
