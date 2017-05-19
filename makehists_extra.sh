@@ -1,7 +1,7 @@
 
 LUMI=36.1
 
-PLOTTING=/afs/cern.ch/work/d/dferreir/private/topana/Top2429/TopNtupleAnalysis/plotting/plot
+PLOTTING=/nfs/dust/atlas/user/danilo/topana2429/TopNtupleAnalysis/plotting/plot
 
 rm -f hist_*.root
 #for histogram in mtt mttPos mttNeg ; do

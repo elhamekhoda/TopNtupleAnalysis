@@ -1,8 +1,8 @@
 
 LUMI=36.1
 
-PLOTTING=/afs/cern.ch/work/d/dferreir/private/topana/Top2429/TopNtupleAnalysis/plotting/plot
-PLOTCOMP=/afs/cern.ch/work/d/dferreir/private/topana/Top2429/TopNtupleAnalysis/plotting/plotCompareNominal
+PLOTTING=/nfs/dust/atlas/user/danilo/topana2429/TopNtupleAnalysis/plotting/plot
+PLOTCOMP=/nfs/dust/atlas/user/danilo/topana2429/TopNtupleAnalysis/plotting/plotCompareNominal
 
 #for ch in be bmu re rmu be2015 bmu2015 re2015 rmu2015 be2016 bmu2016 re2016 rmu2016 ; do
 for ch in be bmu re rmu be3 bmu3 re3 rmu3 be2 bmu2 re2 rmu2 be1 bmu1 re1 rmu1 beX bmuX reX rmuX ; do
