@@ -5,6 +5,26 @@ from ROOT import *
 import numpy
 #from numpy import *
 
+hackSyst = {
+           "pileupsfup": "pileupup",
+           "pileupsfdw": "pileupdw",
+           }
+
+scaleSyst = {
+            "qcde_booup": 1.5,
+            "qcde_boodw": 0.5,
+            "qcde_resup": 1.5,
+            "qcde_resdw": 0.5,
+            "qcdmu_booup": 1.5,
+            "qcdmu_boodw": 0.5,
+            "qcdmu_resup": 1.5,
+            "qcdmu_resdw": 0.5,
+            "ttxsecup": 0.056,
+            "ttxsecdw": -0.061,
+            "singletopup": 0.053,
+            "singletopdw": -0.053,
+            }
+
 class FitRes:
 
     name = []
@@ -25,8 +45,15 @@ def loadSpectrum(sampleName, histName, syst):
         print "hist_{:}.root".format(sampleName)
         f = TFile("hist_{:}.root".format(sampleName))
         print f
-        print "{:}{:}".format(histName, syst)
-        h = f.Get("{:}{:}".format(histName, syst))
+        systGet = syst
+        if syst in hackSyst:
+          systGet = hackSyst[syst]
+        print "{:}{:}".format(histName, systGet)
+        h = f.Get("{:}{:}".format(histName, systGet))
+        if not h: # get nominal and scale
+            h = f.Get("{:}".format(histName))
+            if syst in scaleSyst:
+                h.Scale(scaleSyst[syst])
         print h
         if h:
             h.SetDirectory(0)
