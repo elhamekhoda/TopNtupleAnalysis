@@ -10,7 +10,7 @@ sample    zprime2250   zprime2250                           "Zprime2250"        
 sample    zprime2500   zprime2500                           "Zprime2500"          "Zprime2500"         10
 sample    zprime2750   zprime2750                           "Zprime2750"          "Zprime2750"         10
 sample    zprime3000   zprime3000                           "Zprime3000"          "Zprime3000"         10
-#sample    zprime4000   zprime4000                           "Zprime4000"          "Zprime4000"         10
+sample    zprime4000   zprime4000                           "Zprime4000"          "Zprime4000"         10
 sample    zprime5000   zprime5000                           "Zprime5000"          "Zprime5000"         10
 sample    kkgrav400    kkgrav400                            "KKgraviton400"       "KKgraviton400"      10
 sample    kkgrav500    kkgrav500                            "KKgraviton500"       "KKgraviton500"      10
@@ -98,7 +98,7 @@ syst      muresms    "muon res. (MS)"                 MUON_MS__1up              
 syst      muresid    "muon res. (ID)"                 MUON_ID__1up                               MUON_ID__1down                                       N
 syst      muscale    "muon scale"                     MUON_SCALE__1up                            MUON_SCALE__1down                                    N
 syst      muresbias  "muon res. bias"                 MUON_SAGITTA_RESBIAS__1up                  MUON_SAGITTA_RESBIAS__1down                          N
-syst      muresbias  "muon rho"                       MUON_SAGITTA_RHO__1up                      MUON_SAGITTA_RHO__1down                              N
+syst      muresrho   "muon rho"                       MUON_SAGITTA_RHO__1up                      MUON_SAGITTA_RHO__1down                              N
 syst      akt10model "anti-$k_t$ R=1.0 comb. modelling" LARGERJET_Strong_JET_Comb_Modelling_All__1up LARGERJET_Strong_JET_Comb_Modelling_All__1down    N
 syst      akt10baseline "anti-$k_t$ R=1.0 comb. baseline" LARGERJET_Strong_JET_Comb_Baseline_All__1up LARGERJET_Strong_JET_Comb_Baseline_All__1down    N
 syst      akt10track "anti-$k_t$ R=1.0 comb. tracking" LARGERJET_Strong_JET_Comb_Tracking_All__1up LARGERJET_Strong_JET_Comb_Tracking_All__1down    N
@@ -133,9 +133,9 @@ syst_flat singletop  "single top cross sec."          "singletop"            0.0
 syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.50
 syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.50
 syst_flat ttxsec     "ttbar cross section"            "ttall"                0.056                                      -0.061
-syst_model_nominal ttgen "ttbar gen."                    "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
-syst_model_nominal ttps "ttbar p. shower"            "ttall"                 ttpowhegherwig                N
-#syst_model ttps      "ttbar p. shower"               "ttall"                  ttpowhegherwig                           ttall                         N
+#syst_model ttgen     "ttbar gen."                     "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
+syst_model ttgen     "ttbar gen."                     "ttall"                 ttpowhegherwig                            ttpdf                         N
+syst_model_nominal ttps "ttbar p. shower"            "ttall"                 ttpowhegherwig                                                           N
 syst_model ttisrfsr  "ttbar ISR/FSR"                 "ttall"                 ttradlo                                   ttradhi                       N
 #syst_pdf   ttpdf     "ttbar PDF"                     "ttall"                ttpdf                                     pdf_PDF4LHC15_nlo_30          30
 syst_pdf_simple   ttpdf0    "PDF0"                   "ttall"                 ttpdf                                      pdf_PDF4LHC15_nlo_30           0

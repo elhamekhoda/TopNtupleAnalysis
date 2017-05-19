@@ -10,7 +10,7 @@ sample    8aqcde        qcde                                 "QCD (e)"          
 sample    8bqcdmu       qcdmu                                "QCD (#mu)"           "QCD ($\mu$)"        902
 sample    9vv           vv                                   "diboson"             "diboson"            5
 sample    91ttv         ttv                                  "ttV"                 "$t\bar{t}V$"        7
-syst_flat lumi          "luminosity"                         "ttall,singletop,zjets,vv,ttv,zprime,kkgrav,tt,kkg"                 0.041                     -0.041
+syst_flat lumi          "luminosity"                         "ttall,singletop,zjets,vv,ttv,zprime,kkgrav,tt,kkg"                 0.032                     -0.032
 syst      etrig      "electron trigger"               eTrigSF__1up                               eTrigSF__1down                                       N
 syst      erec       "electron reconstruction"        eRecoSF__1up                               eRecoSF__1down                                       N
 syst      eid        "electron ID"                    eIDSF__1up                                 eIDSF__1down                                         N
@@ -60,7 +60,7 @@ syst      muresms    "muon res. (MS)"                 MUON_MS__1up              
 syst      muresid    "muon res. (ID)"                 MUON_ID__1up                               MUON_ID__1down                                       N
 syst      muscale    "muon scale"                     MUON_SCALE__1up                            MUON_SCALE__1down                                    N
 syst      muresbias  "muon res. bias"                 MUON_SAGITTA_RESBIAS__1up                  MUON_SAGITTA_RESBIAS__1down                          N
-syst      muresbias  "muon rho"                       MUON_SAGITTA_RHO__1up                      MUON_SAGITTA_RHO__1down                              N
+syst      muresrho   "muon rho"                       MUON_SAGITTA_RHO__1up                      MUON_SAGITTA_RHO__1down                              N
 syst      akt10model "anti-$k_t$ R=1.0 comb. modelling" LARGERJET_Strong_JET_Comb_Modelling_All__1up LARGERJET_Strong_JET_Comb_Modelling_All__1down    N
 syst      akt10baseline "anti-$k_t$ R=1.0 comb. baseline" LARGERJET_Strong_JET_Comb_Baseline_All__1up LARGERJET_Strong_JET_Comb_Baseline_All__1down    N
 syst      akt10track "anti-$k_t$ R=1.0 comb. tracking" LARGERJET_Strong_JET_Comb_Tracking_All__1up LARGERJET_Strong_JET_Comb_Tracking_All__1down    N
@@ -97,8 +97,8 @@ syst_flat singletop  "single top cross sec."          "singletop"            0.0
 syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.050
 syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.050
 syst_flat ttxsec     "ttbar cross section"            "ttall"                   0.056                                      -0.061
-syst_model_nominal ttgen "ttbar gen."                    "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
-#syst_model ttgen     "ttbar gen."                    "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
+#syst_model ttgen     "ttbar gen."                     "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
+syst_model ttgen     "ttbar gen."                     "ttall"                 ttpowhegherwig                            ttpdf                         N
 syst_model_nominal ttps "ttbar p. shower"            "ttall"                 ttpowhegherwig                N
 #syst_model ttps      "ttbar p. shower"               "ttall"                  ttpowhegherwig                           ttall                         N
 syst_model ttisrfsr  "ttbar ISR/FSR"                 "ttall"                 ttradlo                                   ttradhi                       N
