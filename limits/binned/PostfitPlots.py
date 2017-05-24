@@ -4,6 +4,10 @@
 from ROOT import *
 import numpy
 #from numpy import *
+import array
+
+boo_rebin = [480,560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4100,4300,4500,4700,4900,5500,6000]
+res_rebin = [430, 510, 600, 670, 720, 770, 790, 810, 850, 870, 910, 950, 970, 990, 1010, 1050, 1100, 1220, 1290, 1440, 2000]
 
 hackSyst = {
            "pileupsfup": "pileupup",
@@ -44,7 +48,6 @@ def loadSpectrum(sampleName, histName, syst):
     if sampleName != "bkgsum":
         print "hist_{:}.root".format(sampleName)
         f = TFile("hist_{:}.root".format(sampleName))
-        print f
         systGet = syst
         if syst in hackSyst:
           systGet = hackSyst[syst]
@@ -53,10 +56,17 @@ def loadSpectrum(sampleName, histName, syst):
         if not h: # get nominal and scale
             h = f.Get("{:}".format(histName))
             if syst in scaleSyst:
+                h = h.Clone("{:}{:}".format(histName, systGet))
                 h.Scale(scaleSyst[syst])
-        print h
         if h:
             h.SetDirectory(0)
+            if "be" in histName or "bmu" in histName:
+              hnew = h.Rebin(len(boo_rebin)-1, h.GetName()+"R", array.array('d', boo_rebin))
+              hnew.SetDirectory(0)
+            else:
+              hnew = h.Rebin(len(res_rebin)-1, h.GetName()+"R", array.array('d', res_rebin))
+              hnew.SetDirectory(0)
+            h = hnew
         return h
     # it is == bkg, so sum all backgrounds
     h = None
@@ -75,6 +85,7 @@ def copySpectrum(sampleName, histName, syst, newname):
     if h == None:
         if 'dw' in syst:
             h = loadSpectrum(sampleName, histName, syst.replace('dw', 'up', 1))
+    print syst
     hc = h.Clone(newname)
     return hc
 
@@ -86,7 +97,7 @@ def loadZero(h):
     for i in xrange(h.GetNbinsX()+1):
         h.SetBinContent(i, 0)
         h.SetBinError(i, 0)
-    h.Sumw2()
+    #h.Sumw2()
 
 def histSqrt(h):
     for i in xrange(h.GetNbinsX()+1):
