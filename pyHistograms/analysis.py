@@ -155,7 +155,11 @@ class Analysis:
 		weight = 1.0
 		for item in listWeights:
 			wItem = getattr(sel, 'weight_'+item)
-			weight *= wItem
+			if 'indiv_' in item:
+				for k in wItem:
+					weight *= k
+			else:
+				weight *= wItem
 
 		# this applies the EWK weight
 		channel = sel.mcChannelNumber
