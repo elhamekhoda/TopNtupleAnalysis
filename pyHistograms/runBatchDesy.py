@@ -15,13 +15,19 @@ def main():
 	# for QCD e
 	pattern_qcde = 'user.dferreir.*15032017QCDev*_output.root'
 	pattern_qcdmu = 'user.dferreir.*15032017QCDmuv*_output.root'
+
+	# for new syst on parton shower
+	#pattern_newsyst = 'user.dferreir.*07062017SystNewv*_output.root'
+	pattern_newsyst1 = 'user.dferreir.*19062017SystNewv1_output.root'
+	pattern_newsyst3 = 'user.dferreir.*19062017SystNewv3_output.root'
+
 	theScope = 'user.dferreir'
 	
 	# output directory
 	# change this for your output directory
 	#outputDir = '/eos/atlas/user/d/dferreir/topana/hists_top2421'
-	outputDir = '/afs/cern.ch/user/d/dferreir/work/private/topana/Top2429/TopNtupleAnalysis/pyHistograms/hists2429_all'
-	outputDir2 = '/eos/user/d/dferreir/hists2429_all'
+	outputDir = '/afs/cern.ch/user/d/dferreir/work/private/topana/results/hists2429_test'
+	outputDir2 = '/eos/user/d/dferreir/hists2429_test'
 	#outputDir = '/afs/cern.ch/user/d/dferreir/work/private/topana/Top2429/TopNtupleAnalysis/pyHistograms/hists2429'
 	#outputDir2 = '/eos/user/d/dferreir/hists2429'
 
@@ -37,7 +43,7 @@ def main():
 	email = 'dferreir@cern.ch'
 
 	# queue to submit to
-	queue = '1nw'
+	queue = '1nd'
 	#queue = '1nw'
 	#queue = '8nh'
 	#queue = 'short.q'
@@ -50,8 +56,8 @@ def main():
 	analysisType='AnaTtresSL'
 	
 	# leave it for nominal to run only the nominal
-	#systematics = 'nominal'
-	systematics = 'all,'
+	systematics = 'nominal'
+	#systematics = 'all,'
 	#systematics = 'all1'
 	#systematics = 'all2'
 	#systematics = 'all3'
@@ -60,8 +66,12 @@ def main():
 	# 25 ns datasets
 	names   = []
 
-	#names  += ["data"]
+	names  += ["data"]
 	#names  += ['qcde', 'qcdmu']
+
+	#names  += ['ttsystaf2']
+	#names  += ['ttpowhegherwig7af2']
+	#names  += ['ttpowhegherwigaf2']
 
 	#names  += ['tt']
 	#names  += ['tthm']
@@ -109,7 +119,7 @@ def main():
 	#names  += ['ttsyst']
 	#names  += ['ttpdf']
 	#names  += ['ttpowhegherwig']
-	######names  += ['ttmcatnloherwig']  # same as ttpdf nominal result, so why rerun it?
+	#######names  += ['ttmcatnloherwig']  # same as ttpdf nominal result, so why rerun it?
 	#names  += ['ttradhi', 'ttradlo']
 
 	#names  += ['eftl30c10']
@@ -133,6 +143,9 @@ def main():
 					'tthm': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'ttv':'MC15c_13TeV_25ns_FS_EXOT4_ttbarV',
 					'ttsyst':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia',
+					'ttsystaf2':'MC15c_13TeV_25ns_AF2_EXOT4_ttbarPowhegPythia',
+					'ttpowhegherwig7af2':'MC15c_13TeV_25ns_AF2_EXOT4_ttbarPowhegHerwig7',
+					'ttpowhegherwigaf2':'MC15c_13TeV_25ns_AF2_EXOT4_ttbarPowhegHerwig',
 					'ttpdf':'MC15c_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF',
 					'ttpowhegherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwig',
 					'ttmcatnloherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwig',
@@ -226,6 +239,16 @@ def main():
 	for l in response:
 		datasets_data.append(l)
 
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_newsyst1})
+	datasets_newsyst1 = []
+	for l in response:
+		datasets_newsyst1.append(l)
+
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_newsyst3})
+	datasets_newsyst3 = []
+	for l in response:
+		datasets_newsyst3.append(l)
+
 	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_syst})
 	datasets_syst = []
 	for l in response:
@@ -254,7 +277,9 @@ def main():
 		nFile = 0
 
 		nFilesPerJobEffective = nFilesPerJob
-		if 'tthm' in sn:
+		if 'af2' in sn:
+			nFilesPerJobEffective = 8
+		elif 'tthm' in sn:
 			nFilesPerJobEffective = 1
 		elif 'tt' in sn:
 			nFilesPerJobEffective = 1
@@ -288,6 +313,12 @@ def main():
 			ds = datasets_pdf
 		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:
 			ds = datasets_syst
+		elif sn in ['ttsystaf2']:
+			ds = datasets_newsyst3
+		elif sn in ['ttpowhegherwig7af2']:
+			ds = datasets_newsyst1
+		elif sn in ['ttpowhegherwigaf2']:
+			ds = datasets_newsyst3
 		elif sn == 'data':
 			ds = datasets_data
 		for d in ds:
@@ -362,8 +393,11 @@ def main():
 		elif "pdf" in sn:
 			isData = ' --pdf PDF4LHC15_nlo_30 --noMttSlices '
 			theSysts = "pdf"
-		elif "ttsyst" in sn:
+		elif sn == "ttsyst":
 			isData = ' --noMttSlices '
+			theSysts = "nominal"
+		elif "ttsystaf2" in sn or "ttpowhegherwig7af2" in sn:
+			isData = ' --noMttSlices --af2 '
 			theSysts = "nominal"
 		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:
 			theSysts = "nominal"
@@ -451,6 +485,7 @@ def main():
 			out += '\;be2,'+tmpDir+'/be2_'+jobName+'.root\;bmu2,'+tmpDir+'/bmu2_'+jobName+'.root\;re2,'+tmpDir+'/re2_'+jobName+'.root\;rmu2,'+tmpDir+'/rmu2_'+jobName+'.root'
 			out += '\;be1,'+tmpDir+'/be1_'+jobName+'.root\;bmu1,'+tmpDir+'/bmu1_'+jobName+'.root\;re1,'+tmpDir+'/re1_'+jobName+'.root\;rmu1,'+tmpDir+'/rmu1_'+jobName+'.root'
 			out += '\;be0,'+tmpDir+'/be0_'+jobName+'.root\;bmu0,'+tmpDir+'/bmu0_'+jobName+'.root\;re0,'+tmpDir+'/re0_'+jobName+'.root\;rmu0,'+tmpDir+'/rmu0_'+jobName+'.root'
+			out += '\;ovre,'+tmpDir+'/ovre_'+jobName+'.root\;ovrmu,'+tmpDir+'/ovrmu_'+jobName+'.root'
 			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
 			fr.write('echo Status code $?\n')
 			fr.write('cp %s/*_%s.root %s/' % (tmpDir, jobName, outputDir2))
