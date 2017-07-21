@@ -97,6 +97,10 @@ def main():
 	######names  += ['ttmcatnloherwig']  # same as ttpdf nominal result, so why rerun it?
 	#names  += ['ttradhi', 'ttradlo']
 
+	#names  += ['ttsystaf2']
+	#names  += ['ttpowhegherwigaf2']
+	#names  += ['ttpowhegherwig7af2']
+
 	#names  += ['eftl30c10']
 	#names  += ['eftl35c10']
 	#names  += ['eftl40c10']
@@ -183,7 +187,9 @@ def main():
 	import os
 	import sys
 	# get list of processed datasets
-	dirs = glob.glob(ntuplesDir+'/user.*')
+
+	dirs = glob.glob(ntuplesDir+'/user.dferreir.*15032017v*')
+	dirs.extend(glob.glob(ntuplesDir+'/user.dferreir.*07042017v*'))
 
 	# each "sample" below means an item in the list names above
 	# there may contain multiple datasets
@@ -229,6 +235,23 @@ def main():
 		
 		# go over all directories in the ntuplesDir
 		ds = dirs
+		if sn == 'qcde':
+			ds = glob.glob(ntuplesDir+'/*QCDe*')
+		elif sn == 'qcdmu':
+			ds = glob.glob(ntuplesDir+'/*QCDmu*')
+		elif sn == 'ttpdf':
+			ds = glob.glob(ntuplesDir+'/*PDFv*')
+		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:
+			ds = glob.glob(ntuplesDir+'/*Systv*')
+		elif sn in ['ttsystaf2']:
+			ds = glob.glob(ntuplesDir+'/*SystNewv3*')
+		elif sn in ['ttpowhegherwig7af2']:
+			ds = glob.glob(ntuplesDir+'/*SystNewv1*')
+		elif sn in ['ttpowhegherwigaf2']:
+			ds = glob.glob(ntuplesDir+'/*SystNewv3*')
+		elif sn == 'data':
+			ds = glob.glob(ntuplesDir+'/user.dferreir.00*15032017v*')
+
 		for d in ds:
 			# remove path and get only dir name in justfile
 			justfile = d.split('/')[-1]
