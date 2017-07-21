@@ -521,6 +521,8 @@ listWjets22.extend(range(364156, 364197+1))
 #	    njet += 1
 #    return ROOT.wrapperC.getWjets22Weight(njet)
 
+doPRW = True
+
 # list of systematics related to changes in the weights only
 weightSF = {'' : ['pileup', 'leptonSF', 'jvt'], #, 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
             'eChargeSF__1up': ['pileup', 'leptonSF', 'jvt', 'indiv_SF_EL_ChargeID_UP'],

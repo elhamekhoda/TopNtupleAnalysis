@@ -33,6 +33,8 @@
 
 #include "TopNtupleAnalysis/EFTLib.h"
 
+#include "NNLOReweighter/NNLOReweighter.h"
+
 TtresChi2 m_chi2("MeV");
 bool m_status;
 WeakCorrScaleFactorParam m_ewkTool("../share/EWcorr_param.root");
@@ -62,6 +64,8 @@ MMUtils m_mm_b1_res_mu(1, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_t
 		      "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root"); // fake2016
 */
 
+NNLOReweighter *m_NNLO = 0;
+
 void initWrapper() {
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
   m_status = false;
@@ -81,7 +85,21 @@ void initWrapper() {
 		      "../scripts/QCDestimation/RATES_2015/resolved_mu_btag1_fake.root",// fake2015
 		      "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",       // real2016
 		      "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root"); // fake2016
+  m_NNLO = new NNLOReweighter();
 }
+
+void InitNNLO(int mcChannelNumber) {
+  m_NNLO->SetSampleID(mcChannelNumber);
+  m_NNLO->Init();
+}
+
+double getNNLOWeight(double ttbarPt, double topPt, bool sequential) {
+  if (sequential) {
+    return m_NNLO->GetTtbarAndTopPtWeight(ttbarPt, topPt);
+  }
+  return m_NNLO->GetExtendedTopPtWeight(topPt);
+}
+
 
 void getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
   m_status = m_chi2.findMinChiSquareSimple(lep, jets, btag, met);

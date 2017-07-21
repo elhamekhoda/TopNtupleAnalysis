@@ -154,12 +154,10 @@ class Analysis:
 		listWeights = helpers.weightSF[k]
 		weight = 1.0
 		for item in listWeights:
+			if 'pileup' in item and not helpers.doPRW:
+				continue
 			wItem = getattr(sel, 'weight_'+item)
-			if 'indiv_' in item:
-				for k in wItem:
-					weight *= k
-			else:
-				weight *= wItem
+			weight *= wItem
 
 		# this applies the EWK weight
 		channel = sel.mcChannelNumber
@@ -432,7 +430,10 @@ class AnaTtresSL(Analysis):
 					'be2016': 'bejets_2016',
 					'bmu2016': 'bmujets_2016',
 					're2016': 'rejets_2016',
-					'rmu2016': 'rmujets_2016'}
+					'rmu2016': 'rmujets_2016',
+					'ovre': 'rejets_2015,rejets_2016',
+					'ovrmu': 'rmujets_2015,rmujets_2016',
+                         }
 		passSel = {}
 		for i in mapSel:
 			passSel[i] = True
@@ -445,12 +446,12 @@ class AnaTtresSL(Analysis):
 				elif self.applyQCD == "mu" and "ejets" in item:
 					continue
 				hardPass = True
-				if 'be' in i or 'bmu' in i:
-					hardPass = False
-					for k in range(0, len(sel.ljet_pt)):
-						if sel.ljet_good[k] and sel.ljet_pt[k] > 300e3:
-							hardPass = True
-							break
+				#if 'be' in i or 'bmu' in i:
+				#	hardPass = False
+				#	for k in range(0, len(sel.ljet_pt)):
+				#		if sel.ljet_good[k] and sel.ljet_pt[k] > 300e3:
+				#			hardPass = True
+				#			break
 
 				passChannel = getattr(sel, item)
 				if passChannel and hardPass:
@@ -462,34 +463,34 @@ class AnaTtresSL(Analysis):
 			return False
 
 		# bugfix for no large-R jet requirement in QCD
-		if 'be' in self.ch or 'bmu' in self.ch:
-			passes = False
-			for i in range(0, len(sel.ljet_pt)):
-				if sel.ljet_good[i]:
-					passes = True
-					break
-			if not passes:
-				return False
+		#if 'be' in self.ch or 'bmu' in self.ch:
+		#	passes = False
+		#	for i in range(0, len(sel.ljet_pt)):
+		#		if sel.ljet_good[i]:
+		#			passes = True
+		#			break
+		#	if not passes:
+		#		return False
 
 		# veto resolved event if it passes the boosted channel
-		if 're' in self.ch or 'rmu' in self.ch:
+		if ('re' in self.ch or 'rmu' in self.ch) and not "ov" in self.ch:
 			#if sel.bejets or sel.bmujets or sel.bmujetsmet80:
 			if passSel['be'] or passSel['bmu']:
 				return False
 
 		# apply b-tagging cut
-		nBtag = 0
-		for bidx in range(0, len(sel.tjet_mv2c10)):
-			pb = ROOT.TLorentzVector()
-			pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
-			if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
-				if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
-					nBtag += 1
+		#nBtag = 0
+		#for bidx in range(0, len(sel.tjet_mv2c10)):
+		#	pb = ROOT.TLorentzVector()
+		#	pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
+		#	if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
+		#		if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
+		#			nBtag += 1
 		#for bidx in range(0, len(sel.jet_mv2c10)):
 		#	if sel.jet_mv2c10[bidx] > 0.8244273:
 		#		nBtag += 1
-		if nBtag < 1:
-			return False
+		#if nBtag < 1:
+		#	return False
 
 		if self.ch in ['be0', 'bmu0', 're0', 'rmu0']:
 			if sel.Btagcat != 0:
@@ -656,6 +657,15 @@ class AnaTtresSL(Analysis):
 			self.h["largeJetPtMtt"][syst].Fill(lj.Perp()/(closeJet+nu+l+lj).M(), w)
 			mtt = (closeJet+nu+l+lj).M()*1e-3
 		elif 're' in self.ch or 'rmu' in self.ch:
+			if len(sel.ljet_pt) >= 1:
+				lj = ROOT.TLorentzVector()
+				lj.SetPtEtaPhiM(sel.ljet_pt[0], sel.ljet_eta[0], sel.ljet_phi[0], sel.ljet_m[0])
+				self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
+				self.h["largeJetM"][syst].Fill(lj.M()*1e-3, w)
+				self.h["largeJetEta"][syst].Fill(lj.Eta(), w)
+				self.h["largeJetPhi"][syst].Fill(lj.Phi(), w)
+	  			self.h["largeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[0], w)
+				self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[0], w)
 			jets = ROOT.vector('TLorentzVector')()
 			#jets = []
 			btag = ROOT.vector('bool')()

@@ -48,8 +48,17 @@ def main():
 	parser.add_option("-p", "--pdfForWeight",
 							 dest="pdfForWeight", default="NNPDF30_nlo_as_0118", # this is the PDF used for LO, so it should be used for the alphaS
 				  help="PDF to use to get alpha_S when doing either the EFT or the scalar model reweighting.", metavar="PDF")
+
+	parser.add_option("-F", "--af2",
+							 action='store_true', dest="af2", default=False,
+							 help="Is this AF2?", metavar="BOOL")
+
+	parser.add_option("-w", "--noPRW",
+							 action='store_true', dest="noPRW", default=False,
+							 help="Don't do pile up reweighting.", metavar="BOOL")
 	 
 	(options, args) = parser.parse_args()
+	helpers.doPRW = not options.noPRW
 	 
 	pdfList = options.pdf.split(',')
 	Xsec = {}
@@ -57,6 +66,8 @@ def main():
 	sumOfWeights = {} # map of DSID to sum of weights
 	# TODO
 	pdfSumOfWeights = {} # map of DSID to map of PDF variation names to sum of weights
+
+	sumOfWeightsAF2 = {} # map of DSID to sum of weights
 	
 	if not options.data:
 		if options.pdf != "":
@@ -82,6 +93,12 @@ def main():
 		for line in fs.readlines():
 			line_spl = line.split()
 			sumOfWeights[int(line_spl[0])] = float(line_spl[1])
+		fs.close()
+
+		fs = open("sumOfWeightssystaf2_new.txt")
+		for line in fs.readlines():
+			line_spl = line.split()
+			sumOfWeightsAF2[int(line_spl[0])] = float(line_spl[1])
 		fs.close()
 
 	#print sumOfWeights
@@ -120,6 +137,8 @@ def main():
 	if 'all' in options.systs:
 		systList = []
 		systList.append('nominal')
+		systList.append('ttNNLO_seq__1up')
+		systList.append('ttNNLO_topPt__1up')
 		if isWjets:
 			systList.append('wnorm__1up')
 			systList.append('wnorm__1down')
@@ -256,10 +275,12 @@ def main():
                         analysisCode[k].scalarTYPE = scalarTYPE
 		print k, analysisCode[k], channels[k]
 	 
+	isFirstEvent = True
+
 	for s in systList:
 		# s is nominal, or the name of systematic
 		treeName = s # systematic name is the same as the TTree name
-		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName:
+		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName or 'ttNNLO_' in treeName:
 			treeName = 'nominal'
 		if options.qcd != "False":
 			treeName += '_Loose'
@@ -275,6 +296,13 @@ def main():
 			if k % 10000 == 0:
 				print "(tree = ",treeName,", syst = ",suffix,") Entry ", k, "/", mt.GetEntries()
 			sel = readEvent(mt)
+			if isFirstEvent:
+				if not options.data and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532, 410009, 410120, 410121, 407009, 407010, 407011, 407012, 410004, 410003, 410002, 410001, 410500, 410159, 410501, 410502, 410503, 410504, 410505, 410506, 410509, 410511, 410512, 410225, 410250, 410251, 410252]: #410525]:
+					m = sel.mcChannelNumber
+					if sel.mcChannelNumber in [301528, 301529, 301530, 301531, 301532]:
+						m = 410000
+					ROOT.InitNNLO(m)
+				isFirstEvent = False
 
 			# common part of the weight
 			weight = 1
@@ -283,11 +311,18 @@ def main():
 				channel = sel.mcChannelNumber
 				weight *= Xsec[channel]
 				if not 'pdf_' in suffix:
-					if not channel in sumOfWeights:
-						print "Could not find DSID ",channel, " in sum of weights."
-						weight = 0
+					if not options.af2:
+						if not channel in sumOfWeights:
+							print "Could not find DSID ",channel, " in sum of weights."
+							weight = 0
+						else:
+							weight /= sumOfWeights[channel]
 					else:
-						weight /= sumOfWeights[channel]
+						if not channel in sumOfWeightsAF2:
+							print "Could not find DSID ",channel, " in sum of weights."
+							weight = 0
+						else:
+							weight /= sumOfWeightsAF2[channel]
 				else:
 					pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
 					pdfNumber = int(suffix.rsplit('_', 1)[1])
@@ -305,6 +340,11 @@ def main():
 					pdfNumber = int(suffix.rsplit('_', 1)[1])
 					pdfAttr = getattr(sel, pdfName)
 					weight_reco *= pdfAttr[pdfNumber]
+				if not options.data and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532, 410009, 410120, 410121, 407009, 407010, 407011, 407012, 410004, 410003, 410002, 410001, 410500, 410159, 410501, 410502, 410503, 410504, 410505, 410506, 410509, 410511, 410512, 10225, 410250, 410251, 410252]: #410525]:
+					if 'ttNNLO_seq_' in suffix:
+						weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_beforeFSR_pt, sel.MC_t_pt, True)
+					if 'ttNNLO_topPt_' in suffix:
+						weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_beforeFSR_pt, sel.MC_t_pt, False)
 				analysisCode[ana].run(sel, suffix, weight*weight_reco, weight)
 	 
 	for k in analysisCode:

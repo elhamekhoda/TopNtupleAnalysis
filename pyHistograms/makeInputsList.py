@@ -12,6 +12,9 @@ def main():
 	pattern_data = 'user.dferreir.00*15032017v*_output.root'
 
 	pattern_syst = 'user.dferreir.*15032017Systv*_output.root'
+	#pattern_newsyst = 'user.dferreir.*07062017SystNewv*_output.root'
+	pattern_newsyst1 = 'user.dferreir.*19062017SystNewv1_output.root'
+	pattern_newsyst3 = 'user.dferreir.*19062017SystNewv3_output.root'
 	pattern_pdf = 'user.dferreir.*15032017PDFv*_output.root'
 	# for QCD e
 	pattern_qcde = 'user.dferreir.*15032017QCDev*_output.root'
@@ -33,54 +36,57 @@ def main():
 	# 25 ns datasets
 	names   = []
 
-	names  += ['tt']
-	names  += ['tthm']
-	names  += ['ttv']
-	names  += ['wbbjets']
-	#names  += ['wccjets']
-	#names  += ['wcjets']
-	#names  += ['wljets']
-	names  += ['zjets']
-	#names  += ["data"]
-	#names  += ['qcde', 'qcdmu']
-	names  += ['singletop']
-	names  += ['vv']
-	names  += ['zprime400']
-	names  += ['zprime500']
-	names  += ['zprime750']
-	names  += ['zprime1000']
-	names  += ['zprime1250']
-	names  += ['zprime1500']
-	names  += ['zprime1750']
-	names  += ['zprime2000']
-	names  += ['zprime2250']
-	names  += ['zprime2500']
-	names  += ['zprime2750']
-	names  += ['zprime3000']
-	names  += ['zprime4000']
-	names  += ['zprime5000']
-	names  += ['kkgrav400']
-	names  += ['kkgrav500']
-	names  += ['kkgrav750']
-	names  += ['kkgrav1000']
-	names  += ['kkgrav2000']
-	names  += ['kkgrav3000']
-	names  += ['ttpdf']
-	names  += ['ttpowhegherwig']
-	names  += ['ttmcatnloherwig']
-	names  += ['ttradhi', 'ttradlo']
-	names  += ['eftl30c1']
+	#names  += ['tt']
+	#names  += ['tthm']
+	#names  += ['ttv']
+	#names  += ['wbbjets']
+	##names  += ['wccjets']
+	##names  += ['wcjets']
+	##names  += ['wljets']
+	#names  += ['zjets']
+	##names  += ["data"]
+	##names  += ['qcde', 'qcdmu']
+	#names  += ['singletop']
+	#names  += ['vv']
+	#names  += ['zprime400']
+	#names  += ['zprime500']
+	#names  += ['zprime750']
+	#names  += ['zprime1000']
+	#names  += ['zprime1250']
+	#names  += ['zprime1500']
+	#names  += ['zprime1750']
+	#names  += ['zprime2000']
+	#names  += ['zprime2250']
+	#names  += ['zprime2500']
+	#names  += ['zprime2750']
+	#names  += ['zprime3000']
+	#names  += ['zprime4000']
+	#names  += ['zprime5000']
+	#names  += ['kkgrav400']
+	#names  += ['kkgrav500']
+	#names  += ['kkgrav750']
+	#names  += ['kkgrav1000']
+	#names  += ['kkgrav2000']
+	#names  += ['kkgrav3000']
+	#names  += ['ttpdf']
+	#names  += ['ttpowhegherwig']
+	#names  += ['ttmcatnloherwig']
+	#names  += ['ttradhi', 'ttradlo']
+	#names  += ['eftl30c1']
 
-	names  += ['kkg500']
-	names  += ['kkg1000']
-	names  += ['kkg1500']
-	names  += ['kkg2000']
-	names  += ['kkg2500']
-	names  += ['kkg3000']
-	names  += ['kkg3500']
-	names  += ['kkg4000']
-	names  += ['kkg4500']
-	names  += ['kkg5000']
+	#names  += ['kkg500']
+	#names  += ['kkg1000']
+	#names  += ['kkg1500']
+	#names  += ['kkg2000']
+	#names  += ['kkg2500']
+	#names  += ['kkg3000']
+	#names  += ['kkg3500']
+	#names  += ['kkg4000']
+	#names  += ['kkg4500']
+	#names  += ['kkg5000']
+
+	#names  += ['ttsystaf2', 'ttpowhegherwig7af2']
+	names  += ['ttpowhegherwigaf2']
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
@@ -93,6 +99,9 @@ def main():
 					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', #,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'tthm':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
 					'ttv':'MC15c_13TeV_25ns_FS_EXOT4_ttbarV',
+					'ttsystaf2':'MC15c_13TeV_25ns_AF2_EXOT4_ttbarPowhegPythia',
+					'ttpowhegherwig7af2':'MC15c_13TeV_25ns_AF2_EXOT4_ttbarPowhegHerwig7',
+					'ttpowhegherwigaf2':'MC15c_13TeV_25ns_AF2_EXOT4_ttbarPowhegHerwig',
 					'ttpdf':'MC15c_13TeV_25ns_FS_EXOT4_ttbaraMcAtNlo_PDF',
 					'ttpowhegherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegHerwig',
 					'ttmcatnloherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwig',
@@ -181,6 +190,16 @@ def main():
 	#datasets_data = []
 	#for l in response:
 	#	datasets_data.append(l)
+
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_newsyst1})
+	datasets_newsyst1 = []
+	for l in response:
+		datasets_newsyst1.append(l)
+
+	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_newsyst3})
+	datasets_newsyst3 = []
+	for l in response:
+		datasets_newsyst3.append(l)
 	
 	# each "sample" below means an item in the list names above
 	# there may contain multiple datasets
@@ -211,6 +230,15 @@ def main():
 		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:
 			ds = datasets_syst
 			suf = 'syst'
+		elif sn in ['ttsystaf2']:
+			ds = datasets_newsyst3
+			suf = 'systaf2'
+		elif sn in ['ttpowhegherwig7af2']:
+			ds = datasets_newsyst1
+			suf = 'systaf2'
+		elif sn in ['ttpowhegherwigaf2']:
+			ds = datasets_newsyst3
+			suf = 'systaf2'
 		elif sn == 'data':
 			ds = datasets_data
 			suf = 'data'
