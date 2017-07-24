@@ -45,6 +45,9 @@ def main():
 	parser.add_option("-E", "--EFT",
 							 dest="EFT", default="",
 				  help="Parameters to use when reweighting LO ttbar to an EFT setup with a lambda and cvv configuration. Set lambda to a negative value to disable this.", metavar="LAMBDA,CVV")
+	parser.add_option("-K", "--KKgluon",
+							 dest="KKgluon", default="",
+				  help="Parameters to use when reweighting KK gluon samples. The parameter should be the destination width as an integer, which is a percentage of the mass.", metavar="WIDTH")
 	parser.add_option("-p", "--pdfForWeight",
 							 dest="pdfForWeight", default="NNPDF30_nlo_as_0118", # this is the PDF used for LO, so it should be used for the alphaS
 				  help="PDF to use to get alpha_S when doing either the EFT or the scalar model reweighting.", metavar="PDF")
@@ -127,10 +130,13 @@ def main():
 
 	doQCD = False
 	doRew = False
+	doKKgluonRew = False
 	if options.qcd != "False":
 		doQCD = True
 	if options.EFT != '':
 		doRew = True
+	if options.KKgluon != '':
+		doKKgluonRew = True
 
 
 	# systematics list
@@ -229,6 +235,7 @@ def main():
 	#print "Systematics: ", histSuffixes
 	#print "To loop over: ", systList
 	anaClass = getattr(analysis, options.analysis) 
+	KKgluonWidth = -1
 	eftLambda = -1
 	eftCvv = 0
         scalarMH   = -1
@@ -236,6 +243,8 @@ def main():
         scalarSBA  = -999
         scalarTANB = -1
         scalarTYPE = -1
+	if options.KKgluon != "":
+		KKgluonWidth = float(options.KKgluon.split(","))
 	if options.EFT != "":
 		eftStr = options.EFT.split(",")
 		eftLambda = float(eftStr[0])
@@ -262,6 +271,8 @@ def main():
 			analysisCode[k].noMttSlices = True
 		if options.applyMET != "":
 			analysisCode[k].applyMET = float(options.applyMET)
+		if options.KKgluon != "":
+			analysisCode[k].KKgluonWidth = KKgluonWidth
 		if options.EFT != "":
 			eftStr = options.EFT.split(",")
 			analysisCode[k].eftLambda = eftLambda

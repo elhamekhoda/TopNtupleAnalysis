@@ -15,6 +15,7 @@ class Analysis:
 	applyMET = 0
 	eftLambda = -1
 	eftCvv = 0
+	KKgluonWidth = -1
         w2HDM = 1
         me2SM = -1
         me2XX = -1
@@ -30,6 +31,7 @@ class Analysis:
 		self.applyMET = 0
 		self.eftLambda = -1
 		self.eftCvv = -1
+		self.KKgluonWidth = -1
 		self.w2HDM = 1
                 self.me2SM = -1
                 self.me2XX = -1
@@ -179,6 +181,7 @@ class AnaTtresSL(Analysis):
 		self.applyMET = 0
 		self.eftLambda = -1
 		self.eftCvv = 0
+		self.KKgluonWidth = -1
 		self.w2HDM = 1
 		self.me2SM = -1
 		self.me2XX = -1
@@ -244,6 +247,10 @@ class AnaTtresSL(Analysis):
 		# for EFT
 		if self.eftLambda > 0:
 			weight *= helpers.getEFTSMWeight(sel, s)
+
+		# for KK gluon width reweighting
+		if self.KKgluonWidth > 0:
+			weight *= helpers.getKKgluonWidthWeight(self.KKgluonWidth, sel, s)
 
                 # for 2HDM
                 self.w2HDM = 1

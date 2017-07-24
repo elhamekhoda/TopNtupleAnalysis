@@ -419,6 +419,54 @@ def getMomenta(sel,topology):
     if(n>5): p.append([ sel.MC_e_me[me["j2"]["idx"]], sel.MC_px_me[me["j2"]["idx"]], sel.MC_py_me[me["j2"]["idx"]], sel.MC_pz_me[me["j2"]["idx"]] ])
     return p
 
+def getKKgluonWidthWeight(width, sel, s = ""):
+    # mass in GeV integer
+    # width in percent of the mass (integer)
+    # s-hat in GeV^2
+
+    # mass in TeV
+    massMap = {307522: 0.5, 307523: 1.0, 307524: 1.5, 307527: 2.0, 307528: 2.5, 307529: 3.0, 307530: 3.5, 307531: 4.0, 307532: 4.5, 307533: 5.0}
+    try:
+        mass = massMap[sel.mcChannelNumber]*1e3 # convert to GeV
+    except: # no mc id in this map, do not reweight
+        return 1.0
+    #top = ROOT.TLorentzVector()
+    #topbar = ROOT.TLorentzVector()
+    #if sel.MC_id_me[2] > 0:
+    #    top.SetPxPyPzE(sel.MC_px_me[2], sel.MC_py_me[2], sel.MC_pz_me[2], sel.MC_e_me[2])
+    #    topbar.SetPxPyPzE(sel.MC_px_me[3], sel.MC_py_me[3], sel.MC_pz_me[3], sel.MC_e_me[3])
+    #else:
+    #    top.SetPxPyPzE(sel.MC_px_me[3], sel.MC_py_me[3], sel.MC_pz_me[3], sel.MC_e_me[3])
+    #    topbar.SetPxPyPzE(sel.MC_px_me[2], sel.MC_py_me[2], sel.MC_pz_me[2], sel.MC_e_me[2])
+    #shatt = (top + topbar).M2()
+    shatt = ((sel.MC_ttbar_beforeFSR_m*1e-3)**2.0) # convert from MeV to GeV and then square
+
+    # define constants here
+    gL = 1.0  # Left handed coupling
+    widthgenerated = 30 # generation with 30% width
+    widthdict = {10:0, 15:1, 20:2, 25:3, 30:4, 35:5, 40:6} #width in % of the mass corresponding to the elements of the coupling tuples, in order. 
+    couplings = {3000: (3.31916, 4.21030, 4.94376, 5.58176, 6.15408, 6.67759, 7.16300),   
+                 2000: (3.24571, 4.12691, 4.85131, 5.48118, 6.04603, 6,56261, 7.04151),
+                 1000: (3.15336, 4.03605, 4.76074, 5.39045, 5.95493, 6.47103, 6.94941), 
+                 4000: (3.37301, 4.27332, 5.01479, 5.66009, 6.23910, 6.76882, 7.26003)}
+    gammag = widthgenerated * mass / 100.0
+    gamma  = width*mass/100.0
+
+    # Breit Wigner reweight
+    bw1 =   (1./( (shatt-mass*mass)*(shatt-mass*mass) + (shatt*gammag/mass)*(shatt*gammag/mass) ));
+    bw =    (1./( (shatt-mass*mass)*(shatt-mass*mass) + (shatt*gamma/mass)*(shatt*gamma/mass) ));
+    # now calculating the V-A 
+    mtop = 172.5  
+    x = mtop*mtop/ shatt
+    genpos = widthdict[widthgenerated]
+    gR30 = couplings[mass][genpos]
+    reqpos =  widthdict[width]
+    gRW =  couplings[mass][reqpos]
+    weinumgen = 1 - x * ( ( gL*gL +gR30 *gR30 -6*gR30 *gL) / (gL *gL + gR30 * gR30 ) )
+    weinum = 1 - x * ( ( gL*gL +gRW *gRW -6*gRW *gL) / (gL *gL + gRW * gRW ) )
+    wr = (bw/bw1) * (weinum / weinumgen)
+    return wr 
+
 
 def getEFTSMWeight(sel, s = ""):
     #double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
