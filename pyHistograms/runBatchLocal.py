@@ -109,6 +109,18 @@ def main():
 	#names  += ['eftl55c10']
 	#names  += ['eftl60c10']
 	#names  += ['eftl100c10']
+	
+	#for k in ["10", "15", "20", "25", "30", "35", "40"]:
+	#	names  += ['kkg500w%s'%k]
+	#	names  += ['kkg1000w%s'%k]
+	#	names  += ['kkg1500w%s'%k]
+	#	names  += ['kkg2000w%s'%k]
+	#	names  += ['kkg2500w%s'%k]
+	#	names  += ['kkg3000w%s'%k]
+	#	names  += ['kkg3500w%s'%k]
+	#	names  += ['kkg4000w%s'%k]
+	#	names  += ['kkg4500w%s'%k]
+	#	names  += ['kkg5000w%s'%k]
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
@@ -163,6 +175,84 @@ def main():
 					'kkg4000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4000',
 					'kkg4500': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4500',
 					'kkg5000': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon5000',
+
+					'kkg500w10': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon500',
+					'kkg1000w10': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1000',
+					'kkg1500w10': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1500',
+					'kkg2000w10': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2000',
+					'kkg2500w10': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2500',
+					'kkg3000w10': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3000',
+					'kkg3500w10': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3500',
+					'kkg4000w10': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4000',
+					'kkg4500w10': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4500',
+					'kkg5000w10': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon5000',
+
+					'kkg500w15': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon500',
+					'kkg1000w15': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1000',
+					'kkg1500w15': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1500',
+					'kkg2000w15': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2000',
+					'kkg2500w15': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2500',
+					'kkg3000w15': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3000',
+					'kkg3500w15': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3500',
+					'kkg4000w15': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4000',
+					'kkg4500w15': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4500',
+					'kkg5000w15': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon5000',
+
+					'kkg500w20': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon500',
+					'kkg1000w20': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1000',
+					'kkg1500w20': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1500',
+					'kkg2000w20': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2000',
+					'kkg2500w20': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2500',
+					'kkg3000w20': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3000',
+					'kkg3500w20': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3500',
+					'kkg4000w20': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4000',
+					'kkg4500w20': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4500',
+					'kkg5000w20': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon5000',
+
+					'kkg500w25': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon500',
+					'kkg1000w25': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1000',
+					'kkg1500w25': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1500',
+					'kkg2000w25': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2000',
+					'kkg2500w25': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2500',
+					'kkg3000w25': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3000',
+					'kkg3500w25': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3500',
+					'kkg4000w25': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4000',
+					'kkg4500w25': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4500',
+					'kkg5000w25': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon5000',
+
+					'kkg500w30': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon500',
+					'kkg1000w30': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1000',
+					'kkg1500w30': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1500',
+					'kkg2000w30': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2000',
+					'kkg2500w30': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2500',
+					'kkg3000w30': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3000',
+					'kkg3500w30': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3500',
+					'kkg4000w30': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4000',
+					'kkg4500w30': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4500',
+					'kkg5000w30': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon5000',
+
+					'kkg500w35': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon500',
+					'kkg1000w35': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1000',
+					'kkg1500w35': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1500',
+					'kkg2000w35': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2000',
+					'kkg2500w35': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2500',
+					'kkg3000w35': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3000',
+					'kkg3500w35': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3500',
+					'kkg4000w35': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4000',
+					'kkg4500w35': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4500',
+					'kkg5000w35': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon5000',
+
+					'kkg500w40': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon500',
+					'kkg1000w40': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1000',
+					'kkg1500w40': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon1500',
+					'kkg2000w40': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2000',
+					'kkg2500w40': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon2500',
+					'kkg3000w40': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3000',
+					'kkg3500w40': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon3500',
+					'kkg4000w40': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4000',
+					'kkg4500w40': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon4500',
+					'kkg5000w40': 'MC15c_13TeV_25ns_FS_EXOT4_KKgluon5000',
+
 					'eftl30c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 					'eftl35c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
 					'eftl40c1': 'MC15c_13TeV_25ns_FS_EXOT4_ttbarLO',
@@ -335,6 +425,18 @@ def main():
 					'eftl100c10': ' --EFT 10000,10',
 					}
 			extra = extraEFT[sn]
+		if 'kkg' in sn and "0w" in sn:
+			width = sn.split("w")
+			extraKKgluon = {
+					'10': ' --KKgluon 10',
+					'15': ' --KKgluon 15',
+					'20': ' --KKgluon 20',
+					'25': ' --KKgluon 25',
+					'30': ' --KKgluon 30',
+					'35': ' --KKgluon 35',
+					'40': ' --KKgluon 40',
+					}
+			extra = extraKKgluon[width]
 	
 		#extra += '  --applyMET 80 '
 
