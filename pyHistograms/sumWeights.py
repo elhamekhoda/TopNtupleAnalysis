@@ -19,10 +19,10 @@ def main():
 	parser = OptionParser()
 	parser.add_option("-f", "--files",
 							 #dest="files", default="/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_all.txt,/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_syst.txt,/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_pdf.txt",
-							 dest="files", default="inputSW_all.txt,inputSW_syst.txt,inputSW_pdf.txt",
+							 dest="files", default="inputSW_all.txt,inputSW_syst.txt,inputSW_pdf.txt,inputSW_systaf2.txt",
 				  help="Text file with list of input files.", metavar="FILELIST")
 	parser.add_option("-t", "--types",
-							 dest="types", default=",syst,pdf",
+							 dest="types", default=",syst,pdf,systaf2",
 				  help="Categories they should be added in.", metavar="LIST")
 	parser.add_option("-s", "--suffix",
 							 dest="suffix", default="_new",
