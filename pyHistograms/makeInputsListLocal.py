@@ -6,7 +6,7 @@ import HQTTtResonancesTools.DC15MC13TeV_25ns_mc15c_EXOT4
 import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
 
 def main():
-	ntuples_dir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
+	ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
 	
 	# output directory
 	outputDir = '.'
@@ -194,9 +194,7 @@ def main():
 						if not '.part' in item:
 							f.write(item+'\n')
 					
-					if useFileOnGrid:
-						# go to the next directory in the same sample
-						break
+					break
 		f.close()
 	
 if __name__ == '__main__':
