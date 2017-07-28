@@ -245,13 +245,13 @@ class AnaTtresSL(Analysis):
 		btagsf = helpers.applyBtagSFFromFile(sel, s)
 		weight *= btagsf
 
-		if s == "singletopup":
+		if s == "singletopup" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
 			weight *= 1+0.053
-		if s == "singletopdw":
+		if s == "singletopdw" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
 			weight *= 1-0.053
-		if s == "ttxsecup":
+		if s == "ttxsecup" and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
 			weight *= 1+0.056
-		if s == "ttxsecdw":
+		if s == "ttxsecdw" and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
 			weight *= 1-0.061
 
 		# for EFT
