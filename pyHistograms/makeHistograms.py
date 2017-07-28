@@ -62,6 +62,9 @@ def main():
 	 
 	(options, args) = parser.parse_args()
 	helpers.doPRW = not options.noPRW
+
+    	print "-> Initialising wrapper"
+    	ROOT.initWrapper(options.data)
 	 
 	pdfList = options.pdf.split(',')
 	Xsec = {}
@@ -173,6 +176,10 @@ def main():
 		systList.append('btageSF_0__1down')
 		systList.append('btageSF_1__1up')
 		systList.append('btageSF_1__1down')
+		systList.append('ttxsecup')
+		systList.append('ttxsecdw')
+		systList.append('singletopup')
+		systList.append('singletopdw')
 		systList.extend(weightChangeSystematics)
 		systList.remove('')
 		if doEWK:
@@ -367,8 +374,6 @@ if __name__ == "__main__":
     	print "-> Loading library."
    	ROOT.gROOT.ProcessLine(".L wrapper.C+")
     	#ROOT.gSystem.Load("wrapper_C.so")
-    	print "-> Initialising wrapper"
-    	ROOT.initWrapper()
 	print "-> Calling main"
 	main()
 	print "The end."

@@ -5,7 +5,7 @@ import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
 
 def main():
 	# for standard data and MC
-	ntuples_dir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
+	ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
 
 	# output directory
 	# change this for your output directory
@@ -25,7 +25,7 @@ def main():
 
 	# queue to submit to
 	queue = 'long.q'
-	queue = 'short.q'
+	#queue = 'short.q'
 
 	# the default is AnaTtresSL, which produces many control pltos for tt res.
 	# The Mtt version produces a TTree to do the limit setting
@@ -45,19 +45,21 @@ def main():
 	# 25 ns datasets
 	names   = []
 
-	names  += ["data"]
-	names  += ['qcde', 'qcdmu']
+	#names  += ["data"]
+	#names  += ['qcde', 'qcdmu']
 
 	#names  += ['tt']
-	#names  += ['tthm']
-	#names  += ['ttv']
+
+	names  += ['tthm']
+	names  += ['ttv']
+	names  += ['singletop']
+	names  += ['zjets']
+	names  += ['vv']
+
 	#names  += ['wbbjets']
 	#names  += ['wccjets']
 	#names  += ['wcjets']
 	#names  += ['wljets']
-	#names  += ['singletop']
-	#names  += ['zjets']
-	#names  += ['vv']
 
 	#names  += ['zprime400']
 	#names  += ['zprime500']
@@ -316,7 +318,7 @@ def main():
 		elif 'kkg' in sn:
 			nFilesPerJobEffective = 1
 		elif 'data' in sn or 'qcd' in sn:
-			nFilesPerJobEffective = 300
+			nFilesPerJobEffective = 400
 
 		# write list of files to be read when processing this sample
 		f = open(outputDir+"/input_"+sn+'.txt', 'w')
@@ -473,7 +475,7 @@ def main():
 			##fr.write('#$ -N '+'tpy_'+jobName+'\n')
 			#fr.write('#BSUB -u '+email+'\n')
 			#fr.write('#BSUB -J tnapy_'+jobName+'\n')
-			fr.write('export TMPDIR=$PWD\n')
+			fr.write('export TMPDIR=%s\n' % outputDir2)
 			fr.write("echo Temporary dir is $TMPDIR\n")
 			fr.write('export EOS_MGM_URL=root://eosuser.cern.ch\n')
 			fr.write('cd '+rundir+'\n')
@@ -493,13 +495,13 @@ def main():
 			out += '\;be0,'+tmpDir+'/be0_'+jobName+'.root\;bmu0,'+tmpDir+'/bmu0_'+jobName+'.root\;re0,'+tmpDir+'/re0_'+jobName+'.root\;rmu0,'+tmpDir+'/rmu0_'+jobName+'.root'
 			fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+'\n')
 			fr.write('echo Status code $?\n')
-			fr.write('cp %s/*_%s.root %s/' % (tmpDir, jobName, outputDir2))
+			#fr.write('cp %s/*_%s.root %s/' % (tmpDir, jobName, outputDir2))
 			fr.close()
 			os.system('chmod a+x '+runfile)
 			#subcmd = 'bsub <'+runfile + "|tee "+logfile
 			subcmd = 'qsub '+runfile + "|tee "+logfile
 			os.system(subcmd)
-			sys.exit(0)
+			#sys.exit(0)
 
 if __name__ == '__main__':
 	import os

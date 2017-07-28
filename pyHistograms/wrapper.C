@@ -66,25 +66,27 @@ MMUtils m_mm_b1_res_mu(1, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_t
 
 NNLOReweighter *m_NNLO = 0;
 
-void initWrapper() {
+void initWrapper(bool dt = true) {
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
   m_status = false;
-  m_mm_b0_res_e = new MMUtils(0, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
+  if (dt) {
+    m_mm_b0_res_e = new MMUtils(0, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
 		     "../scripts/QCDestimation/RATES_2015/resolved_e_btag0_fake.root",       // fake2015
 		     "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",        // real2016
 		     "../scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root");      // fake2016
-  m_mm_b1_res_e = new MMUtils(1, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
+    m_mm_b1_res_e = new MMUtils(1, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
 		     "../scripts/QCDestimation/RATES_2015/resolved_e_btag1_fake.root",       // fake2015
 		     "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016
 		     "../scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"); // fake2016
-  m_mm_b0_res_mu = new MMUtils(0, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
+    m_mm_b0_res_mu = new MMUtils(0, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
 		      "../scripts/QCDestimation/RATES_2015/resolved_mu_btag0_fake.root",      // fake2015
 		      "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",        // real2016
 		      "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"); // fake2016
-  m_mm_b1_res_mu = new MMUtils(1, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
+    m_mm_b1_res_mu = new MMUtils(1, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
 		      "../scripts/QCDestimation/RATES_2015/resolved_mu_btag1_fake.root",// fake2015
 		      "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",       // real2016
 		      "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root"); // fake2016
+  }
   m_NNLO = new NNLOReweighter();
 }
 

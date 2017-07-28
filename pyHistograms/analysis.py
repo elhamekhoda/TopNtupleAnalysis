@@ -3,6 +3,7 @@ import ROOT
 import math
 from array import array
 from ROOT import std
+from wjets import *
 
 class Analysis:
 	ch = ''
@@ -244,6 +245,15 @@ class AnaTtresSL(Analysis):
 		btagsf = helpers.applyBtagSFFromFile(sel, s)
 		weight *= btagsf
 
+		if s == "singletopup":
+			weight *= 1+0.053
+		if s == "singletopdw":
+			weight *= 1-0.053
+		if s == "ttxsecup":
+			weight *= 1+0.056
+		if s == "ttxsecdw":
+			weight *= 1-0.061
+
 		# for EFT
 		if self.eftLambda > 0:
 			weight *= helpers.getEFTSMWeight(sel, s)
@@ -273,56 +283,11 @@ class AnaTtresSL(Analysis):
 			nj = 2
 
 		# flavour fractions at pretag level
-		frac = {}
-
-		frac[2] = {'el': {}, 'mu': {}}
-		frac[3] = {'el': {}, 'mu': {}}
-		frac[4] = {'el': {}, 'mu': {}}
-		frac[5] = {'el': {}, 'mu': {}}
-
-		frac[2]['el'][""] = {'bb': 0.089, 'cc': 0.067, 'c': 0.230, 'l': 0.615}
-		frac[3]['el'][""] = {'bb': 0.113, 'cc': 0.103, 'c': 0.235, 'l': 0.549}
-		frac[4]['el'][""] = {'bb': 0.138, 'cc': 0.143, 'c': 0.218, 'l': 0.501}
-		frac[5]['el'][""] = {'bb': 0.147, 'cc': 0.155, 'c': 0.213, 'l': 0.485}
-		frac[2]['mu'][""] = {'bb': 0.087, 'cc': 0.064, 'c': 0.221, 'l': 0.627}
-		frac[3]['mu'][""] = {'bb': 0.110, 'cc': 0.102, 'c': 0.229, 'l': 0.559}
-		frac[4]['mu'][""] = {'bb': 0.133, 'cc': 0.135, 'c': 0.220, 'l': 0.511}
-		frac[5]['mu'][""] = {'bb': 0.142, 'cc': 0.150, 'c': 0.214, 'l': 0.493}
-
-		f_ca_map = {}
-		f_ca_map[2] = {'el': {}, 'mu': {}}
-		f_ca_map[3] = {'el': {}, 'mu': {}}
-		f_ca_map[4] = {'el': {}, 'mu': {}}
-		f_ca_map[5] = {'el': {}, 'mu': {}}
-		f_ca_map[2]['el'][""] = 0.964803
-		f_ca_map[3]['el'][""] = 1.069296
-		f_ca_map[4]['el'][""] = 0.901530
-		f_ca_map[5]['el'][""] = 0.906417
-		f_ca_map[2]['mu'][""] = 1.071133
-		f_ca_map[3]['mu'][""] = 0.948485
-		f_ca_map[4]['mu'][""] = 0.917743
-		f_ca_map[5]['mu'][""] = 0.727740
-
-		flav_map = {}
-		flav_map[2] = {}
-		flav_map[3] = {}
-		flav_map[4] = {}
-		flav_map[5] = {}
-
-		flav_map[2] = {'el': {}, 'mu': {}}
-		flav_map[3] = {'el': {}, 'mu': {}}
-		flav_map[4] = {'el': {}, 'mu': {}}
-		flav_map[5] = {'el': {}, 'mu': {}}
-
-		flav_map[2]["el"][""] = {'bb': 1.598722, 'cc': 1.598722, 'c': 1.000000, 'l': 0.848511}
-		flav_map[3]["el"][""] = {'bb': 1.527778, 'cc': 1.527778, 'c': 0.955624, 'l': 0.810858}
-		flav_map[4]["el"][""] = {'bb': 1.463839, 'cc': 1.463839, 'c': 0.915630, 'l': 0.776923}
-		flav_map[5]["el"][""] = {'bb': 1.395853, 'cc': 1.395853, 'c': 0.873105, 'l': 0.740840}
-
-		flav_map[2]["mu"][""] = {'bb': 1.451829, 'cc': 1.451829, 'c': 1.000000,'l': 0.890714}
-		flav_map[3]["mu"][""] = {'bb': 1.403216, 'cc': 1.403216, 'c': 0.966516,'l': 0.860890}
-		flav_map[4]["mu"][""] = {'bb': 1.362731, 'cc': 1.362731, 'c': 0.938631,'l': 0.836052}
-		flav_map[5]["mu"][""] = {'bb': 1.309749, 'cc': 1.309749, 'c': 0.902137,'l': 0.803547}
+		frac2 = {}
+		frac2[2] = {'el': {}, 'mu': {}}
+		frac2[3] = {'el': {}, 'mu': {}}
+		frac2[4] = {'el': {}, 'mu': {}}
+		frac2[5] = {'el': {}, 'mu': {}}
 
 		chan = ''
 		if len(sel.el_pt) == 1:
@@ -333,8 +298,10 @@ class AnaTtresSL(Analysis):
 		syst = ""
 		if s in flav_map[nj][chan]:
 			syst = s
-		for f in frac[nj][chan][syst]:
-			frac[nj][chan][syst][f] *= flav_map[nj][chan][syst][f]
+		import copy
+		frac2[nj][chan][syst] = copy.deepcopy(frac[nj][chan][syst])
+		for f in frac2[nj][chan][syst]:
+			frac2[nj][chan][syst][f] *= flav_map[nj][chan][syst][f]
 
 		flav = ''
 		if sel.mcChannelNumber in helpers.listWjets22:
@@ -352,7 +319,7 @@ class AnaTtresSL(Analysis):
 			hfweight = flav_map[nj][chan][syst][flav]
 			norm = 0
 			for f in ['bb', 'cc', 'c', 'l']:
-				norm += frac[nj][chan][syst][f]
+				norm += frac2[nj][chan][syst][f]
 			if s == "wnorm__1up":
 				f_ca *= 1.10
 			elif s == "wnorm__1down":
