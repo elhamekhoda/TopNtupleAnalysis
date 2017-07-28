@@ -3,90 +3,38 @@ from os import path
 
 from ROOT import *
 
-#Internal = True
-Internal = False
+Internal = True
+#Internal = False
+
+files = "/nfs/dust/atlas/user/danilo/ntuples_2429/"
+
+label_signal = "Z'"
+did_list = []
+# zprime
+did_list = range(301322, 301335+1)
+# KK grav
+#did_list = range(305012, 305017+1)
+# KK gluon 30%
+#did_list = range(307522, 307533+1)
+
+
+chs  = []
+
+chs += ["be"]
+#chs += ["be%d" % i for i in [0,1,2,3]]
+
+chs += ["bmu"]
+#chs += ["bmu%d" % i for i in [0,1,2,3]]
+
+chs += ["re"]
+#chs += ["re%d" % i for i in [0,1,2,3]]
+
+chs += ["rmu"]
+#chs += ["rmu%d" % i for i in [0,1,2,3]]
 
 gStyle.SetOptStat(0)
 gStyle.SetPadTickX(1)
 gStyle.SetPadTickY(1)
-
-cacc = TCanvas("cacc", "", 800, 600);
-cacc.SetBottomMargin(0.2)
-cacc.SetLeftMargin(0.14)
-l = TLegend(0.7,0.75,0.87,0.89)
-l.SetBorderSize(0)
-
-ct = TChain("truth")
-cn = TChain("nominal")
-
-ht_e = TH1F("ht_e", "", 20, 0.0, 5.0)
-hn_e = TH1F("hn_e", "", 20, 0.0, 5.0)
-hr_e = TH1F("hr_e", "", 20, 0.0, 5.0)
-
-ht_mu = TH1F("ht_mu", "", 20, 0.0, 5.0)
-hn_mu = TH1F("hn_mu", "", 20, 0.0, 5.0)
-hr_mu = TH1F("hr_mu", "", 20, 0.0, 5.0)
-
-def setStyle(h, col, sty):
-    h.GetYaxis().SetRangeUser(0, 10);
-    h.GetYaxis().SetTitle("Acceptance #times Efficiency [%]");
-    h.GetXaxis().SetTitle("m_{t#bar{t}} [TeV]");
-    h.GetXaxis().SetTitleOffset(1.0);
-    h.GetYaxis().SetTitleOffset(1.0);
-    h.GetXaxis().SetLabelSize(0.05);
-    h.GetXaxis().SetTitleSize(0.05);
-    h.GetYaxis().SetLabelSize(0.05);
-    h.GetYaxis().SetTitleSize(0.05);
-    h.SetLineWidth(3);
-    h.SetLineStyle(sty);
-    h.SetLineColor(col);
-
-setStyle(ht_e, kRed,  1)
-setStyle(hn_e, kRed,  1)
-setStyle(hr_e, kRed,  1)
-
-setStyle(ht_mu, kBlue, 2)
-setStyle(hn_mu, kBlue, 2)
-setStyle(hr_mu, kBlue, 2)
-
-files = "/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/12032016Accv1/"
-import glob
-for d in glob.glob(files+"/*"):
-    for f in glob.glob(d+"/*"):
-        ct.Add(f)
-        cn.Add(f)
-
-for i in xrange(ct.GetEntries()):
-    ct.GetEntry(i)
-    ht_e.Fill(ct.MC_ttbar_beforeFSR_m*1e-6, ct.weight_mc)
-    ht_mu.Fill(ct.MC_ttbar_beforeFSR_m*1e-6, ct.weight_mc)
-
-for i in xrange(cn.GetEntries()):
-    cn.GetEntry(i)
-    if len(cn.el_pt) == 1 and len(cn.mu_pt) == 0:
-        #hn_e.Fill(cn.MC_ttbar_afterFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
-        hn_e.Fill(cn.MC_ttbar_beforeFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
-    elif len(cn.el_pt) == 0 and len(cn.mu_pt) == 1:
-        #hn_mu.Fill(cn.MC_ttbar_afterFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
-        hn_mu.Fill(cn.MC_ttbar_beforeFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
-    else:
-        print "Neither electron nor muon! Panic!"
-
-hr_e.Divide(hn_e, ht_e, 1, 1, "B")
-hr_mu.Divide(hn_mu, ht_mu, 1, 1, "B")
-hr_e.Scale(100)
-hr_mu.Scale(100)
-
-hr_e.GetYaxis().SetRangeUser(0, 10);
-hr_e.Draw("hist");
-hr_mu.Draw("hist same");
-  
-l.AddEntry(hr_e, "e+jets", "L")
-l.AddEntry(hr_mu, "#mu+jets", "L")
-
-l.Draw()
-
-gPad.RedrawAxis()
 
 def stampATLAS(text, x, y):
   t = TLatex()
@@ -117,17 +65,139 @@ def stampText(x, y, text, size):
   t.SetTextSize(size)
   t.DrawLatex(x,y, text)
 
-if Internal:
-    stampATLAS("Simulation Internal", 0.18, 0.83)
-else:
-    stampATLAS("Simulation", 0.18, 0.83)
-stampLumiText(3.2, 0.18, 0.75, "#sqrt{s} = 13 TeV", 0.05)
-stampText(0.18, 0.70, "Z'", 0.05)
 
-suf = ""
-if not Internal:
+def setStyle(h, col, sty):
+    h.GetYaxis().SetRangeUser(0, 10);
+    h.GetYaxis().SetTitle("Acceptance #times Efficiency [%]");
+    h.GetXaxis().SetTitle("m_{t#bar{t}} [TeV]");
+    h.GetXaxis().SetTitleOffset(1.0);
+    h.GetYaxis().SetTitleOffset(1.0);
+    h.GetXaxis().SetLabelSize(0.05);
+    h.GetXaxis().SetTitleSize(0.05);
+    h.GetYaxis().SetLabelSize(0.05);
+    h.GetYaxis().SetTitleSize(0.05);
+    h.SetLineWidth(3);
+    h.SetLineStyle(sty);
+    h.SetLineColor(col);
+
+def cutChannel(ct, i):
+  p = False
+  if "be" in i:
+    if ct.bejets_2015 or ct.bejets_2016:
+      p = True
+  elif "bmu" in i:
+    if ct.bmujets_2015 or ct.bmujets_2016:
+      p = True
+  elif "re" in i:
+    if ct.rejets_2015 or ct.rejets_2016:
+      p = True
+  elif "rmu" in i:
+    if ct.rmujets_2015 or ct.rmujets_2016:
+      p = True
+  if p:
+    b = -1
+    if "3" in i:
+      b = 3
+    elif "2" in i:
+      b = 2
+    elif "1" in i:
+      b = 1
+    elif "0" in i:
+      b = 0
+    if b > 0:
+      if ct.Btagcat != b:
+        p = False
+    else: # remove btag category 0
+      if ct.Btagcat == 0:
+        p = False
+  return p
+
+ct = TChain("truth")
+cn = TChain("nominal")
+
+ht = {}
+hn = {}
+hr = {}
+for i in chs:
+  ht[i] = TH1F("ht_%s"%i, "", 20, 0.0, 5.0)
+  hn[i] = TH1F("hn_%s"%i, "", 20, 0.0, 5.0)
+  hr[i] = TH1F("hr_%s"%i, "", 20, 0.0, 5.0)
+
+for i in chs:
+  st_color = kRed
+  st_line = 1
+  if "be" in i:
+    st_color = kRed
+    st_line = 1
+  if "bmu" in i:
+    st_color = kRed
+    st_line = 2
+  if "re" in i:
+    st_color = kBlue
+    st_line = 1
+  if "rmu" in i:
+    st_color = kBlue
+    st_line = 2
+  setStyle(ht[i], st_color,  st_line)
+  setStyle(hn[i], st_color,  st_line)
+  setStyle(hr[i], st_color,  st_line)
+
+import glob
+for did in did_list:
+  for d in glob.glob(files+"/user.dferreir.%d.*"%did):
+    for f in glob.glob(d+"/*"):
+      ct.Add(f)
+      cn.Add(f)
+
+for i in xrange(ct.GetEntries()):
+  ct.GetEntry(i)
+  for i in chs:
+    ht[i].Fill(ct.MC_ttbar_beforeFSR_m*1e-6, ct.weight_mc)
+
+for i in xrange(cn.GetEntries()):
+  cn.GetEntry(i)
+  for k in chs:
+    if not cutChannel(cn, k):
+      continue
+    hn[i].Fill(cn.MC_ttbar_beforeFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
+
+for k in chs:
+  hr[k].Divide(hn[k], ht[k], 1, 1, "B")
+  hr[k].Scale(100)
+  hr[k].GetYaxis().SetRangeUser(0, 10);
+
+def drawIt(hr, channels, label):
+  cacc = TCanvas("cacc", "", 800, 600);
+  cacc.SetBottomMargin(0.2)
+  cacc.SetLeftMargin(0.14)
+  l = TLegend(0.7,0.75,0.87,0.89)
+  l.SetBorderSize(0)
+
+  first = True
+  for i in channels:
+    if first:
+      hr[i].Draw("hist");
+    else:
+      hr[i].Draw("hist same");
+    first = False
+    l.AddEntry(hr[i], channels[i], "L")
+  
+  l.Draw()
+  gPad.RedrawAxis()
+
+  if Internal:
+    stampATLAS("Simulation Internal", 0.18, 0.83)
+  else:
+    stampATLAS("Simulation", 0.18, 0.83)
+  stampLumiText(3.2, 0.18, 0.75, "#sqrt{s} = 13 TeV", 0.05)
+  stampText(0.18, 0.70, label, 0.05)
+
+  suf = ""
+  if not Internal:
     suf = "_ATLASSimul"
-for i in [".eps", ".png", ".pdf"]:
+  for i in [".eps", ".png", ".pdf"]:
     cacc.SaveAs("accept"+suf+i)
 
-  
+drawIt(hr, {"be": "e+jets", "bmu": "#mu+jets"}, label_signal+", boosted")
+drawIt(hr, {"re": "e+jets", "rmu": "#mu+jets"}, label_signal+", resolved")
+
