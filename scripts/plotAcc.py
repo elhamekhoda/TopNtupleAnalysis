@@ -6,7 +6,7 @@ from ROOT import *
 Internal = True
 #Internal = False
 
-files = "/nfs/dust/atlas/user/danilo/ntuples_2429/"
+files = "/nfs/dust/atlas/user/danilo/ntuple_2429/"
 
 label_signal = "Z'"
 did_list = []
@@ -166,7 +166,7 @@ for k in chs:
   hr[k].Scale(100)
   hr[k].GetYaxis().SetRangeUser(0, 10);
 
-def drawIt(hr, channels, label):
+def drawIt(hr, channels, label, suf = ""):
   cacc = TCanvas("cacc", "", 800, 600);
   cacc.SetBottomMargin(0.2)
   cacc.SetLeftMargin(0.14)
@@ -189,15 +189,15 @@ def drawIt(hr, channels, label):
     stampATLAS("Simulation Internal", 0.18, 0.83)
   else:
     stampATLAS("Simulation", 0.18, 0.83)
-  stampLumiText(3.2, 0.18, 0.75, "#sqrt{s} = 13 TeV", 0.05)
+  stampLumiText(36.1, 0.18, 0.75, "#sqrt{s} = 13 TeV", 0.05)
   stampText(0.18, 0.70, label, 0.05)
 
-  suf = ""
+  suf += ""
   if not Internal:
-    suf = "_ATLASSimul"
+    suf += "_ATLASSimul"
   for i in [".eps", ".png", ".pdf"]:
     cacc.SaveAs("accept"+suf+i)
 
-drawIt(hr, {"be": "e+jets", "bmu": "#mu+jets"}, label_signal+", boosted")
-drawIt(hr, {"re": "e+jets", "rmu": "#mu+jets"}, label_signal+", resolved")
+drawIt(hr, {"be": "e+jets", "bmu": "#mu+jets"}, label_signal+", boosted", suf = "boosted")
+drawIt(hr, {"re": "e+jets", "rmu": "#mu+jets"}, label_signal+", resolved", suf = "resolved")
 
