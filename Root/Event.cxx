@@ -211,6 +211,12 @@ const float Event::mu_original() const {
   return m_mu_original;
 }
 
+int &Event::Btagcat() {
+  return m_Btagcat;
+}
+const int Event::Btagcat() const {
+  return m_Btagcat;
+}
 int &Event::npv() {
   return m_npv;
 }

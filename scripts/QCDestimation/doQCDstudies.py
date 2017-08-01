@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os, sys
 from ROOT import *
+from array import array
 
 gROOT.Reset()
 
@@ -10,6 +11,19 @@ gStyle.SetPalette(1)
 gStyle.SetTextSize(3)
 
 doprint = ".png,.eps,.pdf"
+
+
+doMergeYears = 0
+lep = 'e'
+year = '2015'	
+
+
+#OUTDIR = 'PLOT_17_04_26_METL_MWTL_DS3_4J_GENL_2016/'
+#OUTDIR = 'PLOT_EffRates_17_06_21_METL_MWTL_DS3_4J_GENL_2016/'
+if doMergeYears == 1 : OUTDIR = 'PLOT_New_EffRates_Merge_2015_2016/'
+else : OUTDIR = 'PLOT_New_EffRates_2015/'
+os.system('mkdir '+OUTDIR)
+
 
 def saveCanvas(canvas, name, File, OUTDIR):
         File.cd()
@@ -26,6 +40,7 @@ def saveCanvas(canvas, name, File, OUTDIR):
 	return
 
 def MergeFiles(oname, list_dir):
+	os.system('rm -f' + oname)
 	com = "hadd -f "+oname
 	for Dir in list_dir:
 		com += " "+Dir
@@ -65,6 +80,89 @@ def Rebin_2D(h1, ngx, ngy):
 
 	return h1
 
+
+def TakeAbsEta(histo, newNbins) :
+	Name = histo.GetName()
+	Nbins = histo.GetXaxis().GetNbins()
+	xtitle = histo.GetXaxis().GetTitle()
+	ytitle = histo.GetYaxis().GetTitle()
+	
+	binarray = []
+	
+	if newNbins==1 :
+		binarray.append(0)
+		binarray.append(2.5)
+	
+	elif newNbins==3 :
+		binarray.append(0)
+		binarray.append(0.7)
+		binarray.append(1.5)
+		binarray.append(2.4)
+		binarray.append(2.7)
+		
+	elif newNbins==4 :
+		binarray.append(0)
+		binarray.append(0.7)
+		binarray.append(1.5)	
+		binarray.append(2.25)
+		binarray.append(2.5)
+		
+	elif newNbins==20 :
+		#binarray = histo.GetXaxis().GetXbins()
+		b=-4
+		while b<=4:
+			#print b
+			binarray.append(b)
+			b+=8./20
+	
+	newhisto = TH1F(Name+`newNbins`, Name+`newNbins`, newNbins, array('d',binarray))
+	newhisto.GetXaxis().SetTitle(xtitle)
+	newhisto.GetYaxis().SetTitle(ytitle)
+	
+	bin = 1
+	#for newbin in binarray :
+	while bin < Nbins :
+		#newhisto.Fill(abs(histo.GetXaxis().GetBinCenter(bin)), histo.GetBinContent(bin))
+		if newNbins==20 :
+			newhisto.Fill(abs(histo.GetXaxis().GetBinCenter(bin)), histo.GetBinContent(bin))
+		else :
+			newhisto.Fill(abs(histo.GetXaxis().GetBinCenter(bin)), histo.GetBinContent(bin))
+		'''
+		if newNbins==1 :
+			newhisto.Fill(binarray[0], histo.GetBinContent(bin))
+		
+		elif newNbins==3 :
+			newhisto.Fill(fabs(histo.GetXaxis().GetBinCenter(bin)), histo.GetBinContent(bin))
+			
+			if histo.GetXaxis().GetBinCenter(bin) < binarray[0+1] :
+				newhisto.Fill((binarray[0]+binarray[0+1])/2., histo.GetBinContent(bin))
+			elif histo.GetXaxis().GetBinCenter(bin) < binarray[1+1] :
+				newhisto.Fill((binarray[1]+binarray[1+1])/2., histo.GetBinContent(bin))
+			elif histo.GetXaxis().GetBinCenter(bin) < binarray[2+1] :
+				newhisto.Fill((binarray[2]+binarray[2+1])/2., histo.GetBinContent(bin))
+			elif histo.GetXaxis().GetBinCenter(bin) < binarray[3+1] :
+				newhisto.Fill((binarray[3]+binarray[3+1])/2., histo.GetBinContent(bin))
+			
+		elif newNbins==4 :
+			if histo.GetXaxis().GetBinCenter(bin) < 0.7 :
+				newhisto.Fill(binarray[0], histo.GetBinContent(bin))
+			elif histo.GetXaxis().GetBinCenter(bin) < 1.5 :
+				newhisto.Fill(binarray[1], histo.GetBinContent(bin))
+			elif histo.GetXaxis().GetBinCenter(bin) < 2.25 :
+				newhisto.Fill(binarray[2], histo.GetBinContent(bin))
+			elif histo.GetXaxis().GetBinCenter(bin) < 2.5 :
+				newhisto.Fill(binarray[3], histo.GetBinContent(bin))
+		'''
+		#print newNbins,bin,histo.GetXaxis().GetBinCenter(bin), histo.GetBinContent(bin)
+		bin += 1
+	bin = 0
+	while bin <  newNbins:
+		#print "->",bin,newhisto.GetXaxis().GetBinCenter(bin), newhisto.GetBinContent(bin)
+		bin += 1
+	
+	return newhisto
+
+
 def effRates(inputDir):
 	
 	merge = 1
@@ -72,38 +170,84 @@ def effRates(inputDir):
 	verbose = 0
 	
 	channels  = []
-	channels += [('resolved','e' )]
+	channels += [('resolved',lep )]
+	#channels += [('resolved','e' )]
 	#channels += [('resolved','mu')]
 	#channels += [('boosted', 'e' )]
 	#channels += [('boosted', 'mu')]
 
-	outfile = TFile('eff_ttbar.root','RECREATE')
+	#outfile = TFile('eff_ttbar.root','RECREATE')
+	if doMergeYears == 1 : outfile = TFile('resolved_'+lep+'_eff_ttbar_Merged_2015_2016.root','RECREATE')
+	else : outfile = TFile('resolved_'+lep+'_eff_ttbar_'+year+'.root','RECREATE')
 	#outfile = TFile('eff_wjets_wev.root','RECREATE')
 	
 	for ichan in channels:
 
 		#if(ichan[0]=='resolved'):	regime = "r";
 		#elif(ichan[0]=='boosted'):	regime = "b";
-				
+		'''		
 		hadd_in=""
-		hadd_in = inputDir+ichan[0]+"_"+ichan[1]+"_ttbar*root"
+		#hadd_in = inputDir+ichan[0]+"_"+ichan[1]+"_ttbar*root"
+		hadd_in = inputDir+ichan[0]+"_"+ichan[1]+"_fixOR*.root"
 		#hadd_in = inputDir+regime+ichan[1]+"_nom_wev.root"
 		
-		ttbarFile = ichan[0]+"_ttbar_"+ichan[1]+".root "
+		#ttbarFile = ichan[0]+"_ttbar_"+ichan[1]+".root "
+		fixORFile = ichan[0]+"_"+ichan[1]+"_inputForRealRates_"+year+".root"
 		
-		print "hadd -f " + ttbarFile + hadd_in
-		os.system("hadd -f " + ttbarFile + hadd_in)
+		print "hadd -f " + fixORFile + hadd_in
+		os.system("hadd -f " + fixORFile + hadd_in)
 		
-		inputfile = TFile(ttbarFile,'READ')
+		inputfile = TFile(fixORFile,'READ')
+		
+		'''
 		
 		
-		parametrization1D =  ["lepPt", "minDeltaR", "cosDPhi", "MET", "d0sig", "Dz0sin", "mwt", "mwt_met", "nJets", "nTrkBtagJets","ptvarcone","topoetcone","topoetcone_effBins"]
+        	hadd_in=[]
+        	print "ls "+inputDir+ichan[0]+"_"+ichan[1]+"_fixOR*.root "
+
+        	for File in os.popen("ls "+inputDir+ichan[0]+"_"+ichan[1]+"_fixOR*.root ").readlines():
+                	hadd_in.append(File[:-1])
+			
+		# --> Merging 2015 and 2016
+		if doMergeYears == 1 :
+			for File in os.popen("ls "+inputDir2+ichan[0]+"_"+ichan[1]+"_fixOR*.root ").readlines():
+                		hadd_in.append(File[:-1])
+			fixORFile = ichan[0]+"_"+ichan[1]+"_inputForRealRates_Merged_2015_2016.root"
+		else :
+			fixORFile = ichan[0]+"_"+ichan[1]+"_inputForRealRates_"+year+".root"
+		
+		MergeFiles(fixORFile, hadd_in)
+		
+		inputfile = TFile(fixORFile,'READ')
+		
+		
+		
+		parametrization1D =  ["lepPt", "lepPt_highDR", "lepPt_lowDR", "lepEta", "lepEta_1bin", "lepEta_3bins", "lepEta_4bins", "lepEta_20bins", "minDeltaR", "cosDPhi", "MET", "d0sig", "Dz0sin", "mwt", "mwt_met", "nJets", "nTrkBtagJets","ptvarcone","topoetcone","topoetcone_effBins"]
 		#parametrization1D += ["lepPhi", "MET_phi", "DeltaPhi", "minDeltaR_tjet_effBins","minDeltaR_tjet", "mwt_effBins", "mwt_met_effBins", "Dz0sin"]
 		
 		for ipar in parametrization1D:
-		
+			
+			'''
 			histo_t = inputfile.Get("eff_"+ipar).Clone()		   
 			histo_l = inputfile.Get("eff_"+ipar+"_Loose").Clone()
+			histo_l.Add(histo_t,+1)
+			'''
+			if ipar=="lepEta_1bin" :
+				histo_t = TakeAbsEta(inputfile.Get("eff_lepEta").Clone(), 1)
+				histo_l = TakeAbsEta(inputfile.Get("eff_lepEta_Loose").Clone(), 1)
+			elif ipar=="lepEta_3bins" :
+				histo_t = TakeAbsEta(inputfile.Get("eff_lepEta").Clone(), 3)
+				histo_l = TakeAbsEta(inputfile.Get("eff_lepEta_Loose").Clone(), 3)
+			elif ipar=="lepEta_4bins" :
+				histo_t = TakeAbsEta(inputfile.Get("eff_lepEta").Clone(), 4)
+				histo_l = TakeAbsEta(inputfile.Get("eff_lepEta_Loose").Clone(), 4)
+			elif ipar=="lepEta_20bins" :
+				histo_t = TakeAbsEta(inputfile.Get("eff_lepEta").Clone(), 20)
+				histo_l = TakeAbsEta(inputfile.Get("eff_lepEta_Loose").Clone(), 20)
+			else :
+				histo_t = inputfile.Get("eff_"+ipar).Clone()		   
+				histo_l = inputfile.Get("eff_"+ipar+"_Loose").Clone()
+			
 			histo_l.Add(histo_t,+1)
 						
 			#histo_t.Scale(lumi)
@@ -132,22 +276,27 @@ def effRates(inputDir):
                		c.Modified()
 			outfile.cd()
 			h_ratio.Write("realRate_"+ipar+"_"+ichan[0]+"_"+ichan[1])	               			
-			saveCanvas(c, "h_real_"+ipar+"_"+ichan[0]+"_"+ichan[1], outfile, "real_plots")
+			#saveCanvas(c, "h_real_"+ipar+"_"+ichan[0]+"_"+ichan[1], outfile, "real_plots")
+			saveCanvas(c, "h_real_"+ipar+"_"+ichan[0]+"_"+ichan[1], outfile, OUTDIR+ichan[0]+'_'+ichan[1]+'_'+"real_plots")
+			
+		if(ichan[1].find("e")!=-1) :
+		 parametrization2D = ["LepPt_DR", "mwt_met_map", "mwt_met_map_lowDR", "mwt_met_map_medDR", "mwt_met_map_highDR", "lepPt_topoetcone"]
+		else :
+		 parametrization2D = ["LepPt_DR", "LepPt_DR_mbin", "LepPt_DR_sbin", "mwt_met_map", "mwt_met_map_lowDR", "mwt_met_map_medDR", "mwt_met_map_highDR", "lepPt_topoetcone_lowDR", "lepPt_topoetcone_lowDR", "lepPt_topoetcone_medDR", "lepPt_topoetcone_highDR"]
 		
-		parametrization2D = ["LepPt_DR", "mwt_met_map", "mwt_met_map_lowDR", "mwt_met_map_medDR", "mwt_met_map_highDR", "lepPt_topoetcone"]
 		for ipar in parametrization2D:
-
+			'''
 			if(ipar.find("LepPt_DR")!=-1):
 				histo_t = inputfile.Get("eff_"+ipar).Clone() 		   
 				histo_l = inputfile.Get("eff_"+ipar+"_Loose").Clone()
 				histo_l.Add(histo_t,+1)	
 				name = 'pTdr'		
-
-			else:
-				histo_t = inputfile.Get("eff_"+ipar).Clone() 		   
-				histo_l = inputfile.Get("eff_"+ipar+"_Loose").Clone()
-				histo_l.Add(histo_t,+1)
-				name = ipar
+			'''
+			#else:
+			histo_t = inputfile.Get("eff_"+ipar).Clone() 		   
+			histo_l = inputfile.Get("eff_"+ipar+"_Loose").Clone()
+			histo_l.Add(histo_t,+1)
+			name = ipar
 			
 						
 			# ---> 2D fake rates: leptPt vs leptEta
@@ -184,7 +333,8 @@ def effRates(inputDir):
 			l.SetTextColor(kBlack)
 			#l.DrawLatex(0.1,0.92, "#intLdt ="+`lumi/1000.`[:3]+" fb^{-1}")	
 			h2D_ratio.Write('eff_'+name+'_'+ichan[0]+'_'+ichan[1])
-			saveCanvas(c2, "2Dh_"+name+"_"+ichan[0]+"_"+ichan[1], outfile, "real_plots")
+			#saveCanvas(c2, "2Dh_"+name+"_"+ichan[0]+"_"+ichan[1], outfile, "real_plots")
+			saveCanvas(c2, "2Dh_"+name+"_"+ichan[0]+"_"+ichan[1], outfile, OUTDIR+ichan[0]+'_'+ichan[1]+'_'+"real_plots")
 		
 
 	return
@@ -626,9 +776,11 @@ def fakeRates(inputDir, lumi):
 #Produce eff rate plots
 
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/030816_ePreTag_v1.0_2j_realRates/'
-inputDir = '/AtlasDisk/users/sanmay/TTBar/AnalysisTop-2.4.16/LPCTools_New/ProduceMiniTuple/COMB_REALRATES/'
+#inputDir = '/AtlasDisk/users/sanmay/TTBar/AnalysisTop-2.4.16/LPCTools_New/ProduceMiniTuple/COMB_REALRATES/'
+inputDir  = ' /AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/NewReal_RB_4j_realRates_'+year+'_'+lep+'/'
+inputDir2 = ' /AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/NewReal_RB_4j_realRates_2015_'+lep+'/'
 
-if 0:
+if 1:
 	effRates(inputDir)
 
 
@@ -644,7 +796,7 @@ inputDir = '/AtlasDisk/users/sanmay/TTBar/AnalysisTop-2.4.16/LPCTools_New/Produc
 lumi = 3200+11571
 
 
-if 1:	
+if 0:	
 	fakeRates(inputDir, lumi)
 
 

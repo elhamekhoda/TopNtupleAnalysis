@@ -48,6 +48,7 @@ void MiniTree::read(int event, Event &e) {
     }
   }
 
+  e.Btagcat() = i("Btagcat"); 
   e.npv() = ui("npv"); 
   e.vtxz() = f("vtxz");
   e.mu() = f("mu");

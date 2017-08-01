@@ -89,6 +89,9 @@ class Event {
     const int hfor() const;
     int &hfor();
 
+    int &Btagcat();
+    const int Btagcat() const;
+    
     int &npv();
     const int npv() const;
 
@@ -255,6 +258,7 @@ class Event {
     float m_mu;
     float m_mu_original;
 
+    int m_Btagcat;
     int m_npv;
     float m_vtxz;
     float m_rho;

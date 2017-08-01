@@ -208,6 +208,7 @@ void AnaTtresQCD::runRealRateQCDCR_2015(const Event &evt, double weight, const s
       return;
 
   if (!m_boosted)	if(evt.jet().size()<4)	return; 
+  //if(evt.jet().size()<2)	return; 
   
   HistogramService *h = &m_hSvc;
 	  
@@ -683,6 +684,7 @@ void AnaTtresQCD::GetRealHistograms(const Event &evt, double weight, const std::
         h->h2D(btag + "eff_LepPt_DR_mbin",   "", suffix)->Fill(lept.Perp()*1e-3, closejl_deltaR, weight);
         h->h2D(btag + "eff_LepPt_DR_sbin",   "", suffix)->Fill(lept.Perp()*1e-3, closejl_deltaR, weight);
 	h->h1D(btag + "eff_lepPt", 	"", suffix)->Fill(lept.Perp()*1e-3, weight);
+	h->h1D(btag + "eff_lepEta",  	"", suffix)->Fill(lept.Eta()     , weight);
         h->h1D(btag + "eff_minDeltaR", "", suffix)->Fill(closejl_deltaR, weight);
         h->h1D(btag + "eff_Dz0sin", 	"", suffix)->Fill(Dz0, weight);
         h->h1D(btag + "eff_d0sig",  	"", suffix)->Fill(d0sig, weight);
@@ -734,9 +736,15 @@ void AnaTtresQCD::GetRealHistograms(const Event &evt, double weight, const std::
         }//if	
 
         if(closejl_deltaR<0.4)
-        h->h2D(btag + "eff_lepPt_topoetcone_lowDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight);
+	{
+           h->h2D(btag + "eff_lepPt_topoetcone_lowDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight);
+	   h->h1D(btag + "eff_lepPt_lowDR",  "", suffix)->Fill(lept.Pt()*1e-3 , weight);
+	}
         else
-        h->h2D(btag + "eff_lepPt_topoetcone_highDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight);
+	{
+           h->h2D(btag + "eff_lepPt_topoetcone_highDR",  "", suffix)->Fill(lept.Pt()*1e-3 ,topoetcone*1e-3 , weight);
+	   h->h1D(btag + "eff_lepPt_highDR",  "", suffix)->Fill(lept.Pt()*1e-3 , weight);
+	}
 			
    }//if (closejl_deltaR<99) 
 
@@ -769,7 +777,7 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
   */
 
   if (!m_boosted)
-    if (!( (evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015") && evt.jet().size()>=4) || evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015") ))
+    if (!( ((evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")) && evt.jet().size()>=4) || evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015") ))
       return;
       
     
@@ -898,7 +906,8 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   */
 
   if (!m_boosted)
-    if (!( (evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016") && evt.jet().size()>=4) || evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016") ))
+    if (!( ((evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")) && evt.jet().size()>=4) || evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016") ))
+    //if (!( ((evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")) && evt.jet().size()>=4) ))
       return;
        
  
@@ -919,6 +928,7 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
         sd0    = evt.muon()[0].sd0();
         isTrueMatch = evt.muon()[0].truematch();
   }//m_electron
+
 
  /* 
   //---- extra addition for log10(chi2) ---- //
@@ -955,6 +965,9 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   TLorentzVector met = evt.met();
   bool status = m_chi2.findMinChiSquare(&lept, &vjets, &vjets_btagged, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
 
+
+  for (size_t z = 0; z < evt.jet().size(); ++z) { delete vjets[z];  }
+  
   float chi2Value = 1000000; // log10(1000000) = 6
   if(status) 
   chi2Value = chi2ming1;
@@ -1240,6 +1253,7 @@ void AnaTtresQCD::GetFakeHistograms(const Event &evt, const double weight, const
      h->h1D(btag +prefix+"fake_lepPt_effBins", 	"", suffix)->Fill(lept.Pt()*1e-3 , weight);
      h->h1D(btag +prefix+"fake_lepPt",	  	"", suffix)->Fill(lept.Pt()*1e-3 , weight); 
      h->h1D(btag +prefix+"fake_lepEta",  	"", suffix)->Fill(lept.Eta()     , weight);
+     h->h1D(btag +prefix+"fake_lepEta_80bins",  "", suffix)->Fill(lept.Eta()     , weight);
      h->h1D(btag +prefix+"fake_lepPhi",  	"", suffix)->Fill(lept.Phi()     , weight);
 
      h->h1D(btag +prefix+"fake_minDeltaR_effBins", 	"", suffix)->Fill(closejl_deltaR , weight); 
@@ -1430,11 +1444,13 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   Double_t eff_pT_bins_be[]     = {30, 40, 60, 120, 700};
   Double_t eff_pT_bins_bmu[]    = {25, 35, 50, 100, 700};
 
-  Double_t DR_bins_re[]  	= {0., 0.4, 0.6, 1.0, 1.5, 7.0};
+  //Double_t DR_bins_re[]  	= {0., 0.4, 0.6, 1.0, 1.5, 2.5, 7.0};
+  Double_t DR_bins_re[]  	= {0., 0.4, 0.5, 0.7, 1.0, 1.5, 2.5, 7.0};
   
   //Double_t DR_bins_rmu[] 	= {0., 0.4, 7.0};
   //Double_t DR_bins_rmu[]        = {0., 0.2, 0.35, 0.4, 0.5, 0.55, 0.6, 1.0, 1.5, 2.5, 7.0};
-  Double_t DR_bins_rmu[]        = {0., 0.4, 0.6, 1.0, 1.5, 2.5, 7.0};
+  //Double_t DR_bins_rmu[]        = {0., 0.4, 0.6, 1.0, 1.5, 2.5, 7.0};
+  Double_t DR_bins_rmu[]        = {0., 0.4, 0.5, 0.7, 1.0, 1.5, 2.5, 7.0};
   Double_t DR_bins_rmu_mbin[]   = {0., 0.2, 0.4, 0.6, 1.0, 1.5, 2.5, 7.0};
   Double_t DR_bins_rmu_sbin[]   = {0., 0.1, 0.2, 0.3, 0.4, 0.6, 1.0, 1.5, 2.5, 7.0};
   
@@ -1454,6 +1470,7 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   m_hSvc.create1D(suffix+"eff_cosDPhi",  	"; Cos( #Delta #phi(met, lept) ); Events", 50, -1, 1);  
   m_hSvc.create1D(suffix+"eff_nJets",           "; number of jets ; Events", 10, -0.5, 9.5);
   m_hSvc.create1D(suffix+"eff_nTrkBtagJets",    "; number of b-tagged track jets ; Events", 10, 0, 10);
+  m_hSvc.create1D(suffix+"eff_lepEta",         	"; lepton #eta; Events", 20, -4.0, 4.0);
     
   //Matched reco leptons  
   m_hSvc.create2D(suffix+"eff_MaLep_pt_eta", "; pt of Matched lepton [GeV]; #eta of Matched lepton", 40, 0, 500, 24, -3., 3.);
@@ -1545,6 +1562,7 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   m_hSvc.create1D(suffix+"fake_minDeltaR_tjet",      		"; min #Delta R(lep, tjet); Events", 70, 0, 7); 
   m_hSvc.create1D(suffix+"fake_lepPhi",         		"; lepton #phi; Events", 20, -4.0, 4.0);  
   m_hSvc.create1D(suffix+"fake_lepEta",         		"; lepton #eta; Events", 20, -4.0, 4.0); 
+  m_hSvc.create1D(suffix+"fake_lepEta_80bins",         		"; lepton #eta; Events", 80, -4.0, 4.0); 
   m_hSvc.create1D(suffix+"fake_ptvarcone",         		"; ptvarcone; Events", 50, -10, 40); 
   m_hSvc.create1D(suffix+"fake_topoetcone",         		"; topoetcone; Events", 40, -10, 30); 
    
@@ -1600,8 +1618,8 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   int pT_binsN_re_highEta = sizeof(fake_pT_bins_re_highEta)/sizeof(double) - 1;
 
   
-  //Double_t fake_pT_bins_rmu[]           = {25, 30, 35, 40, 50, 70, 100, 700}; // --- for 2016
-  Double_t fake_pT_bins_rmu[]           = {25, 30, 50, 100, 700}; // --- for 2015 
+  Double_t fake_pT_bins_rmu[]           = {25, 30, 35, 40, 50, 70, 100, 700}; // --- for 2016
+  //Double_t fake_pT_bins_rmu[]           = {25, 30, 50, 100, 700}; // --- for 2015 
   Double_t fake_pT_bins_lDR_rmu[] 	= {25, 30, 40, 50, 100, 700}; 
   Double_t fake_pT_bins_mDR_rmu[] 	= {25, 30, 35, 40, 50, 100, 700}; 
   Double_t fake_pT_bins_hDR_rmu[] 	= {25, 30, 35, 40, 50, 100, 700}; 
@@ -1616,8 +1634,8 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
   Double_t fake_leptEta_bins_bmu[]    	= {0.0, 1.6 ,2.5};
   Double_t fake_closeLJpT_bins_bmu[] 	= {20, 40, 60, 80, 100, 700}; 
 
-  //double topoetconeBin[] = {-8, 1, 3, 6, 10, 30}; // --- for 2016
-  double topoetconeBin[] = {-8, 1, 6, 10, 30}; // --- for 2015
+  double topoetconeBin[] = {-8, 1, 3, 6, 10, 30}; // --- for 2016
+  //double topoetconeBin[] = {-8, 1, 6, 10, 30}; // --- for 2015
   int topoetconeBinN = sizeof(topoetconeBin)/sizeof(double) - 1;
     
   int eff_N_pT_bins(0);
@@ -1650,6 +1668,8 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
      	//Eff
   	m_hSvc.create2DVar(suffix+"eff_LepPt_DR", 	"; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", eff_N_pT_bins, eff_pT_bins_be, N_DR_bins, DR_bins_be);
 	m_hSvc.create1DVar(suffix+"eff_lepPt",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_be);
+	m_hSvc.create1DVar(suffix+"eff_lepPt_lowDR",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_be);
+	m_hSvc.create1DVar(suffix+"eff_lepPt_highDR",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_be);
         m_hSvc.create1DVar(suffix+"eff_minDeltaR",  	"; min #Delta R(lep, jet); Events", N_DR_bins, DR_bins_be);
 	
 	m_hSvc.create2DVar(suffix+"eff_lepPt_cosDPhi",	        "; Pt of lepton [GeV]; Cos( #Delta #phi(met, lept) )", eff_N_pT_bins, eff_pT_bins_be, CdPhiBinN, CdPhiBin);
@@ -1720,6 +1740,8 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
      	//Eff
   	m_hSvc.create2DVar(suffix+"eff_LepPt_DR", 	"; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", eff_N_pT_bins, eff_pT_bins_bmu, N_DR_bins, DR_bins_bmu);
 	m_hSvc.create1DVar(suffix+"eff_lepPt",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_bmu);
+	m_hSvc.create1DVar(suffix+"eff_lepPt_lowDR",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_bmu);
+	m_hSvc.create1DVar(suffix+"eff_lepPt_highDR",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_bmu);
         m_hSvc.create1DVar(suffix+"eff_minDeltaR",  	"; min #Delta R(lep, jet); Events", N_DR_bins, DR_bins_bmu);
 	
 	m_hSvc.create2DVar(suffix+"eff_lepPt_cosDPhi",	        "; Pt of lepton [GeV]; Cos( #Delta #phi(met, lept) )", eff_N_pT_bins, eff_pT_bins_bmu, CdPhiBinN, CdPhiBin);
@@ -1796,6 +1818,8 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
        	//Eff
  	m_hSvc.create2DVar(suffix+"eff_LepPt_DR", 	"; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", eff_N_pT_bins, eff_pT_bins_re, N_DR_bins, DR_bins_re);
 	m_hSvc.create1DVar(suffix+"eff_lepPt",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_re);
+	m_hSvc.create1DVar(suffix+"eff_lepPt_lowDR",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_re);
+	m_hSvc.create1DVar(suffix+"eff_lepPt_highDR",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_re);
         m_hSvc.create1DVar(suffix+"eff_minDeltaR",  	"; min #Delta R(lep, jet); Events", N_DR_bins, DR_bins_re);
 	
 	m_hSvc.create2DVar(suffix+"eff_lepPt_cosDPhi",	        "; Pt of lepton [GeV]; Cos( #Delta #phi(met, lept) )", eff_N_pT_bins, eff_pT_bins_re, CdPhiBinN, CdPhiBin);
@@ -1887,6 +1911,8 @@ void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
         m_hSvc.create2DVar(suffix+"eff_LepPt_DR_mbin",       "; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", eff_N_pT_bins, eff_pT_bins_rmu, N_DR_bins_mbin, DR_bins_rmu_mbin);
         m_hSvc.create2DVar(suffix+"eff_LepPt_DR_sbin",       "; Pt of Matched lepton [GeV]; min #Delta R(lep, jet)", eff_N_pT_bins, eff_pT_bins_rmu, N_DR_bins_sbin, DR_bins_rmu_sbin);
         m_hSvc.create1DVar(suffix+"eff_lepPt",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_rmu);
+	m_hSvc.create1DVar(suffix+"eff_lepPt_lowDR",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_rmu);
+	m_hSvc.create1DVar(suffix+"eff_lepPt_highDR",  	"; lepton p_{T} [GeV]; Events", eff_N_pT_bins, eff_pT_bins_rmu);
         m_hSvc.create1DVar(suffix+"eff_minDeltaR",  	"; min #Delta R(lep, jet); Events", N_DR_bins, DR_bins_rmu);
 	
 	m_hSvc.create2DVar(suffix+"eff_lepPt_cosDPhi",	        "; Pt of lepton [GeV]; Cos( #Delta #phi(met, lept) )", eff_N_pT_bins, eff_pT_bins_rmu, CdPhiBinN, CdPhiBin);

@@ -25,6 +25,8 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.m_tree->Branch("cat",    &_tree_cat);
   m_hSvc.m_tree->Branch("syst",   &_tree_syst);
 
+  double varBin_lepPt[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 190, 500};
+  int varBinN_lepPt = sizeof(varBin_lepPt)/sizeof(double) - 1;
 
   double varBin1[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500};
   int varBinN1 = sizeof(varBin1)/sizeof(double) - 1;
@@ -81,7 +83,8 @@ AnaTtresSL::AnaTtresSL(const std::string &filename, bool electron, bool boosted,
   m_hSvc.create1D("yields", "; One ; Events", 1, 0.5, 1.5);
 
   //m_hSvc.create1DVar("lepPt", "; lepton p_{T} [GeV]; Events", varBinN1, varBin1);  
-  m_hSvc.create1D("lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
+  //m_hSvc.create1D("lepPt",    "; Pt of lept [GeV]; Events", 100, 25, 525);
+  m_hSvc.create1DVar("lepPt",    "; Pt of lept [GeV]; Events", varBinN_lepPt, varBin_lepPt);
   m_hSvc.create1D("lepPt_genm",    "; Pt of lept [GeV]; Events", 100, 25, 525);
   m_hSvc.create1D("lepPt_fromb",    "; Pt of lept [GeV]; Events", 100, 25, 525);
   m_hSvc.create1D("lepEta", "; lepton #eta ; Events", 20, -2.5, 2.5);
@@ -206,7 +209,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   // check channel
   //
   char name[200];
-
+  
   if (m_electron && (evt.electron().size() != 1 || evt.muon().size() != 0))
     return;
 
@@ -227,18 +230,46 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     if (!(evt.passes("rejets") || evt.passes("rmujets")))
       return;
   */
+  
+  if (m_boosted){
+    if (!(evt.passes("bejets_2015") || evt.passes("bmujets_2015") || evt.passes("bejets_2016") || evt.passes("bmujets_2016"))) return;
+  }
 
-  if (m_boosted)
-    if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))
-      return;
-
-  if (!m_boosted)
-    if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))
-      return;
-
+  if (!m_boosted){
+    if (!(evt.passes("rejets_2015") || evt.passes("rmujets_2015") || evt.passes("rejets_2016") || evt.passes("rmujets_2016"))) return;
+    if ( (evt.passes("bejets_2015") || evt.passes("bmujets_2015") || evt.passes("bejets_2016") || evt.passes("bmujets_2016"))) return;
+  }
 
   if (!m_boosted)	if(evt.jet().size()<4)	return;
-
+  //Make sure the pT threshold is correct (useful for fake tuples)
+    int goodljet_idx = -1;
+  if (m_boosted){  
+    for (size_t idx=0; idx < evt.largeJet().size(); ++idx) {
+      //std::cout << "jet " << goodljet_idx << " pt = " << evt.largeJet()[goodljet_idx].mom().Perp() << ", good = " << evt.largeJet()[goodljet_idx].good() << std::endl;
+      /*
+      if ((m_electron && evt.largeJet()[idx].good() && evt.largeJet()[idx].mom().Perp()*1e-3>300)
+         ||(!m_electron && (goodljet_idx==-1  || evt.largeJet()[idx].mom().M()> evt.largeJet()[goodljet_idx].mom().M()) && evt.largeJet()[idx].mom().Perp()*1e-3>300)  ){
+      //if (evt.largeJet()[idx].good() && evt.largeJet()[idx].mom().Perp()*1e-3>300){
+        goodljet_idx=idx;
+        break;
+      }
+      */
+      
+      if ((m_electron && evt.largeJet()[idx].good() && evt.largeJet()[idx].mom().Perp()*1e-3>300)){
+        goodljet_idx=idx;
+        break;
+      
+      }
+       if(!m_electron && evt.largeJet()[idx].mom().Perp()*1e-3>300){
+          if (goodljet_idx==-1){ goodljet_idx=idx;}
+          else if(evt.largeJet()[idx].mom().M()> evt.largeJet()[goodljet_idx].mom().M()){ goodljet_idx=idx;}
+      
+      }
+    }
+    if (goodljet_idx<0) return;
+    
+   } 
+  
   HistogramService *h = &m_hSvc;
   
   bool trig1(0); 
@@ -255,40 +286,11 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
 
     isTight = evt.electron()[0].isTightPP();
 
-    //Electron trigers
-    trig1 = evt.electron()[0].HLT_e24_lhmedium_L1EM18VH();  // MC
-    trig2 = evt.electron()[0].HLT_e24_lhmedium_L1EM20VH();  // data only
-    trig3 = evt.electron()[0].HLT_e60_lhmedium();
-    trig4 = evt.electron()[0].HLT_e120_lhloose();
-                
-    bool trig_MC = trig1 || trig3 || trig4; 
-    bool trig_DT = trig2 || trig3 || trig4;
-            
-    if (evt.channelNumber()!=0){
-        if (!trig_MC)return;
-    }else{
-        if (!trig_DT)return;
-    }
-    
   } else {
     l = evt.muon()[0].mom();
 
     isTight = evt.muon()[0].isTight();
-    /*
-    //Muon trigers
-    trig1 = evt.muon()[0].HLT_mu20_L1MU15(); //prescaled
-    trig2 = evt.muon()[0].HLT_mu50();
-    trig3 = evt.muon()[0].HLT_mu20_iloose_L1MU15();
-    
-    bool trig_prescaled   = trig1;
-    bool trig_unprescaled = trig2 || trig3;
-    
-    if(!trig_prescaled && !trig_unprescaled) return;
-    
-    //if (s!="_Loose")
-    if (isTight)
-       if (trig_prescaled && !trig_unprescaled)	return;
-   */           
+         
   }//m_electron
 
   // Duplicated event removal after the selection  
@@ -330,18 +332,13 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   }//m_electron
 
   TLorentzVector met = evt.met();
-
   float mWt = sqrt(2. * l.Perp() * evt.met().Perp() * (1. - cos(evt.met().DeltaPhi(l)) ))*1e-3;
   float MET = evt.met().Perp()*1e-3;
-  if(m_electron){
-  if( (MET>20) || (MET+mWt)>60)     return;
-  }else{
   if( (MET<20) || (MET+mWt)<60)     return;
-  if(fabs(sd0)<5)                   return;
-  }//if
-  //
+  if(evt.Btagcat()==0) return;
+  
 
-  std::cout<<"DELTA_R = "<<l.DeltaR(lgen)<<std::endl;
+  //std::cout<<"DELTA_R = "<<l.DeltaR(lgen)<<std::endl;
 
   std::string suffix = s;
   //if (s=="_Loose")	suffix = "";
@@ -358,7 +355,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
   h->h1D("lepPt_effBins", "", suffix)->Fill(l.Perp()*1e-3, weight);
   h->h1D("lepEta", "", suffix)->Fill(l.Eta(), weight);
   h->h1D("lepPhi", "", suffix)->Fill(l.Phi(), weight);
-
+  
   h->h1D("MET_phi", "", suffix)->Fill(evt.met().Phi(), weight);
 
   const TLorentzVector &j = evt.jet()[0].mom();
@@ -434,7 +431,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
      h->h1D(nameJet_phi, "", suffix)->Fill(jetPhi_vector[i], weight);    
   
   }//for
-  
+
   float mtt = -1;
   
   //missing et
@@ -480,7 +477,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
 
   h->h1D("trueMtt", "", suffix)->Fill(evt.MC_ttbar_beforeFSR().M()*1e-3, weight);
   _tree_truemtt = evt.MC_ttbar_beforeFSR().M()*1e-3;
-  if (m_boosted && (evt.passes("bejets") || evt.passes("bmujets"))) {
+  if (m_boosted ) {
     
     size_t close_idx = 0;
     for (; close_idx < evt.jet().size(); ++close_idx)
@@ -488,14 +485,18 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
         break;
     const TLorentzVector &sj = evt.jet()[close_idx].mom();
     h->h1D("closeJetPt", "", suffix)->Fill(sj.Perp()*1e-3, weight);
-    
-    size_t goodljet_idx = 0;
-    for (; goodljet_idx < evt.largeJet().size(); ++goodljet_idx) {
+    /*
+    int goodljet_idx = -1;
+    for (size_t idx=0; idx < evt.largeJet().size(); ++idx) {
       //std::cout << "jet " << goodljet_idx << " pt = " << evt.largeJet()[goodljet_idx].mom().Perp() << ", good = " << evt.largeJet()[goodljet_idx].good() << std::endl;
-      if (evt.largeJet()[goodljet_idx].good())
+      if (evt.largeJet()[idx].good())
+      {
+        goodljet_idx = idx;
         break;
+      }
     }
-    
+    */
+
     //std::cout << "idx = " << goodljet_idx << "/" << evt.largeJet().size() << std::endl;
     const TLorentzVector &lj = evt.largeJet()[goodljet_idx].mom();
     h->h1D("largeJetPt", "", suffix)->Fill(lj.Perp()*1e-3, weight);
@@ -509,7 +510,7 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
 
     h->h1D("largeJet_tau21", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau21"), weight);
     h->h1D("largeJet_tau21_wta", "", suffix)->Fill(evt.largeJet()[goodljet_idx].subs("tau21_wta"), weight);
-    
+ 
     // recalc. mtt
     // lepton = l
     // large-R jet = hadronic top = lj
@@ -530,12 +531,12 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     _tree_mtt = mtt*1e-3;
     _tree_weight = weight;
     _tree_cat = -1;
-    if (evt.passes("bejets") && m_boosted && m_electron) _tree_cat = 0;
-    if (evt.passes("bmujets") && m_boosted && !m_electron) _tree_cat = 1;
+    if (m_boosted && m_electron) _tree_cat = 0;
+    if (m_boosted && !m_electron) _tree_cat = 1;
     _tree_syst = s;
     h->m_tree->Fill();
-    
-  }else if (!m_boosted && (evt.passes("rejets") || evt.passes("rmujets"))) {
+
+  }else {
     
     // inputs 
     // LEPTON --> TLorentzVector for your lepton
@@ -701,8 +702,8 @@ void AnaTtresSL::run(const Event &evt, double weight, const std::string &s) {
     _tree_weight = weight;
     _tree_syst = s;
     _tree_cat = -1;
-    if (evt.passes("rejets") && !m_boosted && m_electron) _tree_cat = 2;
-    if (evt.passes("rmujets") && !m_boosted && !m_electron) _tree_cat = 3;
+    if (!m_boosted && m_electron) _tree_cat = 2;
+    if (!m_boosted && !m_electron) _tree_cat = 3;
     h->m_tree->Fill();
   }
 
