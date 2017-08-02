@@ -251,7 +251,7 @@ def main():
         scalarTANB = -1
         scalarTYPE = -1
 	if options.KKgluon != "":
-		KKgluonWidth = float(options.KKgluon.split(","))
+		KKgluonWidth = float(options.KKgluon.split(",")[0])
 	if options.EFT != "":
 		eftStr = options.EFT.split(",")
 		eftLambda = float(eftStr[0])
