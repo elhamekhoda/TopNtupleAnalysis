@@ -14,55 +14,57 @@ def main():
 	# 25 ns datasets
 	names   = []
 
-	names  += ['tt']
-	names  += ['tthm']
-	names  += ['ttv']
-	names  += ['wbbjets']
-	names  += ['zjets']
-	##names  += ["data"]
-	##names  += ['qcde', 'qcdmu']
-	names  += ['singletop']
-	names  += ['vv']
-	names  += ['zprime400']
-	names  += ['zprime500']
-	names  += ['zprime750']
-	names  += ['zprime1000']
-	names  += ['zprime1250']
-	names  += ['zprime1500']
-	names  += ['zprime1750']
-	names  += ['zprime2000']
-	names  += ['zprime2250']
-	names  += ['zprime2500']
-	names  += ['zprime2750']
-	names  += ['zprime3000']
-	names  += ['zprime4000']
-	names  += ['zprime5000']
-	names  += ['kkgrav400']
-	names  += ['kkgrav500']
-	names  += ['kkgrav750']
-	names  += ['kkgrav1000']
-	names  += ['kkgrav2000']
-	names  += ['kkgrav3000']
+	names  += ['wbbjetspdf']
+
+	#names  += ['tt']
+	#names  += ['tthm']
+	#names  += ['ttv']
+	#names  += ['wbbjets']
+	#names  += ['zjets']
+	###names  += ["data"]
+	###names  += ['qcde', 'qcdmu']
+	#names  += ['singletop']
+	#names  += ['vv']
+	#names  += ['zprime400']
+	#names  += ['zprime500']
+	#names  += ['zprime750']
+	#names  += ['zprime1000']
+	#names  += ['zprime1250']
+	#names  += ['zprime1500']
+	#names  += ['zprime1750']
+	#names  += ['zprime2000']
+	#names  += ['zprime2250']
+	#names  += ['zprime2500']
+	#names  += ['zprime2750']
+	#names  += ['zprime3000']
+	#names  += ['zprime4000']
+	#names  += ['zprime5000']
+	#names  += ['kkgrav400']
+	#names  += ['kkgrav500']
+	#names  += ['kkgrav750']
+	#names  += ['kkgrav1000']
+	#names  += ['kkgrav2000']
+	#names  += ['kkgrav3000']
 	names  += ['ttpdf']
-	names  += ['ttpowhegherwig']
-	names  += ['ttmcatnloherwig']
-	names  += ['ttradhi', 'ttradlo']
-	#names  += ['eftl30c1']
+	#names  += ['ttpowhegherwig']
+	#names  += ['ttmcatnloherwig']
+	#names  += ['ttradhi', 'ttradlo']
+	##names  += ['eftl30c1']
 
-	names  += ['kkg500']
-	names  += ['kkg1000']
-	names  += ['kkg1500']
-	names  += ['kkg2000']
-	names  += ['kkg2500']
-	names  += ['kkg3000']
-	names  += ['kkg3500']
-	names  += ['kkg4000']
-	names  += ['kkg4500']
-	names  += ['kkg5000']
+	#names  += ['kkg500']
+	#names  += ['kkg1000']
+	#names  += ['kkg1500']
+	#names  += ['kkg2000']
+	#names  += ['kkg2500']
+	#names  += ['kkg3000']
+	#names  += ['kkg3500']
+	#names  += ['kkg4000']
+	#names  += ['kkg4500']
+	#names  += ['kkg5000']
 
-	names  += ['ttsystaf2']
-	names  += ['ttpowhegherwigaf2']
-	names  += ['ttpowhegherwig7af2']
+	#names  += ['ttsystaf2']
+	#names  += ['ttpowhegherwigaf2']
+	#names  += ['ttpowhegherwig7af2']
 
 
 	mapToSamples = {
@@ -70,6 +72,10 @@ def main():
 					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wbbjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wccjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wcjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wljetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
@@ -171,6 +177,9 @@ def main():
 		elif sn == 'data':
 			ds = glob.glob(ntuplesDir+'/user.dferreir.00*15032017v*')
 			suf = 'data'
+		elif sn in ['wbbjetspdf', 'wccjetspdf', 'wcjetspdf', 'wljetspdf']:
+			ds = glob.glob(ntuplesDir+'/*PDFv*')
+			suf = 'pdf'
 		# write list of files to be read when processing this sample
 		f = open(outputDir+"/inputSW_%s.txt" % suf, 'a')
 		

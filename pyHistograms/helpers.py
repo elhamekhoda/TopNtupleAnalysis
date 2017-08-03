@@ -449,8 +449,8 @@ def getKKgluonWidthWeight(width, sel, s = ""):
                  2000: (3.24571, 4.12691, 4.85131, 5.48118, 6.04603, 6,56261, 7.04151),
                  1000: (3.15336, 4.03605, 4.76074, 5.39045, 5.95493, 6.47103, 6.94941), 
                  4000: (3.37301, 4.27332, 5.01479, 5.66009, 6.23910, 6.76882, 7.26003)}
-    gammag = widthgenerated * mass / 100.0
-    gamma  = width*mass/100.0
+    gammag = widthgenerated * mass / 100
+    gamma  = width*mass/100
 
     # Breit Wigner reweight
     bw1 =   (1./( (shatt-mass*mass)*(shatt-mass*mass) + (shatt*gammag/mass)*(shatt*gammag/mass) ));

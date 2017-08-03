@@ -50,16 +50,11 @@ def main():
 
 	#names  += ['tt']
 
-	names  += ['tthm']
-	names  += ['ttv']
-	names  += ['singletop']
-	names  += ['zjets']
-	names  += ['vv']
-
-	#names  += ['wbbjets']
-	#names  += ['wccjets']
-	#names  += ['wcjets']
-	#names  += ['wljets']
+	#names  += ['tthm']
+	#names  += ['ttv']
+	#names  += ['singletop']
+	#names  += ['zjets']
+	#names  += ['vv']
 
 	#names  += ['zprime400']
 	#names  += ['zprime500']
@@ -81,7 +76,6 @@ def main():
 	#names  += ['kkgrav1000']
 	#names  += ['kkgrav2000']
 	#names  += ['kkgrav3000']
-
 	#names  += ['kkg500']
 	#names  += ['kkg1000']
 	#names  += ['kkg1500']
@@ -96,12 +90,17 @@ def main():
 	#names  += ['ttsyst']
 	#names  += ['ttpdf']
 	#names  += ['ttpowhegherwig']
-	######names  += ['ttmcatnloherwig']  # same as ttpdf nominal result, so why rerun it?
+	#######names  += ['ttmcatnloherwig']  # same as ttpdf nominal result, so why rerun it?
 	#names  += ['ttradhi', 'ttradlo']
 
 	#names  += ['ttsystaf2']
 	#names  += ['ttpowhegherwigaf2']
 	#names  += ['ttpowhegherwig7af2']
+
+	#names  += ['wbbjets']
+	#names  += ['wccjets']
+	#names  += ['wcjets']
+	#names  += ['wljets']
 
 	#names  += ['eftl30c10']
 	#names  += ['eftl35c10']
@@ -112,23 +111,23 @@ def main():
 	#names  += ['eftl60c10']
 	#names  += ['eftl100c10']
 	
-	#for k in ["10", "15", "20", "25", "30", "35", "40"]:
-	#	names  += ['kkg500w%s'%k]
-	#	names  += ['kkg1000w%s'%k]
-	#	names  += ['kkg1500w%s'%k]
-	#	names  += ['kkg2000w%s'%k]
-	#	names  += ['kkg2500w%s'%k]
-	#	names  += ['kkg3000w%s'%k]
-	#	names  += ['kkg3500w%s'%k]
-	#	names  += ['kkg4000w%s'%k]
-	#	names  += ['kkg4500w%s'%k]
-	#	names  += ['kkg5000w%s'%k]
+	for k in ["10", "15", "20", "25", "30", "35", "40"]:
+		names  += ['kkg1000w%s'%k]
+		names  += ['kkg2000w%s'%k]
+		names  += ['kkg3000w%s'%k]
+		names  += ['kkg4000w%s'%k]
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+
+					'wbbjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wccjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wcjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wljetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+
 					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
@@ -343,6 +342,8 @@ def main():
 			ds = glob.glob(ntuplesDir+'/*SystNewv3*')
 		elif sn == 'data':
 			ds = glob.glob(ntuplesDir+'/user.dferreir.00*15032017v*')
+		elif sn in ['wbbjetspdf', 'wccjetspdf', 'wcjetspdf', 'wljetspdf']:
+			ds = glob.glob(ntuplesDir+'/*PDFv*')
 
 		for d in ds:
 			# remove path and get only dir name in justfile
@@ -428,7 +429,7 @@ def main():
 					}
 			extra = extraEFT[sn]
 		if 'kkg' in sn and "0w" in sn:
-			width = sn.split("w")
+			width = sn.split("w")[1]
 			extraKKgluon = {
 					'10': ' --KKgluon 10',
 					'15': ' --KKgluon 15',
