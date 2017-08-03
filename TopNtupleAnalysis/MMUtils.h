@@ -19,7 +19,7 @@
 class MMUtils{
 
   public:
-    MMUtils(const int isBtagged,const int etaCorr, const int DRCorr, const std::string &eff_filename2015, const std::string &fake_filename2015, const std::string &eff_filename2016, const std::string &fake_filename2016); 
+    MMUtils(const int isBtagged,const int etaCorr, const int DRCorr, const std::string &eff_filename2016, const std::string &fake_filename2016); 
     virtual ~MMUtils();
 
     float getMMweights(const Event &evt, const int runMM_StatErr, const bool isElectron, const bool isBoosted, const unsigned int runNumber);
@@ -30,9 +30,7 @@ class MMUtils{
     float getDRCorrectionFactorTools(TH1F* lepPt_lowDR, TH1F* lepPt_highDR, TH2F* lepPt_minDeltaR, float lepPt, float closejl_DR);
     void get2Drates(float &rate, float &rate_err, TH2F* rate_map, float x, float y);
     void get1Drates(float &rate, float &rate_err, TH1F* rate_map, float x);
-    
-    void getRatesBoostedMu(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, const unsigned int runNumber);
-    void getRatesBoostedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float absEta, float cosDPhi, const unsigned int runNumber);
+
     void getRatesResolvedMu(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float absEta, float cosDPhi, float met, float mwt, float DPhi, float topoetcone, const unsigned int runNumber);
     void getRatesResolvedEl(float &realRate, float &realRate_err, float &fakeRate, float &fakeRate_err, float lepPt, float closejl_DR, float closejl_pT, float cosDPhi, float mwt, float topoetcone, const unsigned int runNumber);
     

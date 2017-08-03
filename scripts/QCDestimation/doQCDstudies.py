@@ -15,13 +15,13 @@ doprint = ".png,.eps,.pdf"
 
 doMergeYears = 0
 lep = 'e'
-year = '2015'	
+year = '2016'
 
 
 #OUTDIR = 'PLOT_17_04_26_METL_MWTL_DS3_4J_GENL_2016/'
 #OUTDIR = 'PLOT_EffRates_17_06_21_METL_MWTL_DS3_4J_GENL_2016/'
-if doMergeYears == 1 : OUTDIR = 'PLOT_New_EffRates_Merge_2015_2016/'
-else : OUTDIR = 'PLOT_New_EffRates_2015/'
+if doMergeYears == 1 : OUTDIR = 'PLOT_EffRates_Merge_2015_2016/'
+else : OUTDIR = 'PLOT_EffRates_'+year+'/'
 os.system('mkdir '+OUTDIR)
 
 
@@ -777,8 +777,8 @@ def fakeRates(inputDir, lumi):
 
 #inputDir = '/AtlasDisk/users/romano/fakeStudies/2.3.41/LPCTools/ProduceMiniTuple/030816_ePreTag_v1.0_2j_realRates/'
 #inputDir = '/AtlasDisk/users/sanmay/TTBar/AnalysisTop-2.4.16/LPCTools_New/ProduceMiniTuple/COMB_REALRATES/'
-inputDir  = ' /AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/NewReal_RB_4j_realRates_'+year+'_'+lep+'/'
-inputDir2 = ' /AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/NewReal_RB_4j_realRates_2015_'+lep+'/'
+inputDir  = ' /AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/NewReal_4j_realRates_'+year+'_'+lep+'/'
+inputDir2 = ' /AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/NewReal_4j_realRates_2015_'+lep+'/'
 
 if 1:
 	effRates(inputDir)

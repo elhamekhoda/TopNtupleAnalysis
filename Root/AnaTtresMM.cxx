@@ -19,20 +19,46 @@ AnaTtresMM::AnaTtresMM(const std::string &filename, bool electron, bool boosted,
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
 
   std::string suffix = "";
-  std::string btag0 = "btag0_";
-  std::string btag1 = "btag1_";
-  std::string btag2 = "btag2_";
+  std::string Njets2_btag0 = "2jets_btag0_";
+  std::string Njets2_btag1 = "2jets_btag1_";
+  
+  std::string Njets3_btag0 = "3jets_btag0_";
+  std::string Njets3_btag1 = "3jets_btag1_";
+  
+  std::string Njets2or3_btag0 = "2or3jets_btag0_";
+  std::string Njets2or3_btag1 = "2or3jets_btag1_";
+  
+  std::string Njets4_btag0 = "4jets_btag0_";
+  std::string Njets4_btag1 = "4jets_btag1_";
+  std::string Njets4_btag2 = "4jets_btag2_";
+  
+  /*
   std::string hm0 = "btag0_HM_";
   std::string hm1 = "btag1_HM_";
   std::string HDR0 = "btag0_HDR_";
   std::string HDR1 = "btag1_HDR_";
+  */
+  
   IniHistograms(suffix);
-  IniHistograms(btag0);
-  IniHistograms(btag1);
+  IniHistograms(Njets2_btag0);
+  IniHistograms(Njets2_btag1);
+  
+  IniHistograms(Njets3_btag0);
+  IniHistograms(Njets3_btag1);
+  
+  IniHistograms(Njets2or3_btag0);
+  IniHistograms(Njets2or3_btag1);
+  
+  IniHistograms(Njets4_btag0);
+  IniHistograms(Njets4_btag1);
+  IniHistograms(Njets4_btag2);
+  
+  /*
   IniHistograms(hm0);
   IniHistograms(hm1);
   IniHistograms(HDR0);
   IniHistograms(HDR1);
+  */
   //IniHistograms(btag2);
   
   
@@ -165,11 +191,44 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2015(const Event &evt, double weight, c
   }//for
 
   GetHistograms(evt, weight, "", suffix);
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  /*
   if(nTrkBtagged == 0)
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
-    
+  */
     
   
 }//runMatrixMethod_QCDCR2j_2015
@@ -183,6 +242,7 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2015(const Event &evt, double weight, c
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
 
+  /*
   if (m_boosted) {
     	if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015")))  	return;
     	if (evt.largeJet().size()<1)  							return;
@@ -191,6 +251,12 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2015(const Event &evt, double weight, c
 	if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))   	return;
 	if ( evt.jet().size()<4)  							return;
   }
+  */
+  
+  if (!m_boosted)
+    if (!( evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015") || evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015") )) return;
+  
+  if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
 
@@ -263,10 +329,44 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2015(const Event &evt, double weight, c
   }//for
 
   GetHistograms(evt, weight, "", suffix);
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  /*
   if(nTrkBtagged == 0)
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  */
   //if(nTrkBtagged >= 2)
   //GetHistograms(evt, weight, "btag2_", suffix);
       
@@ -334,10 +434,44 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_2j_2015(const Event &evt, double weight,
   }
   
   GetHistograms(evt, weight, "", suffix);
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  /*
   if(nTrkBtagged == 0)
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  */
 
 }//AnaTtresMM::runMatrixMethod_QCDVR1_2j_2015
 
@@ -400,10 +534,44 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_2j_2015(const Event &evt, double weight,
   }
   
   GetHistograms(evt, weight, "", suffix);
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  /*
   if(nTrkBtagged == 0)
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  */
 
 }//AnaTtresMM::runMatrixMethod_QCDVR2_2j_2015
 
@@ -541,6 +709,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2015(const Event &evt, double weight,
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
 
+  /*
   if (m_boosted) {
     	if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015")))  	return;
     	if (evt.largeJet().size()<1)  							return;
@@ -549,6 +718,13 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2015(const Event &evt, double weight,
 	if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))   	return;
 	if ( evt.jet().size()<4)  							return;
   }
+  */
+  
+  if (!m_boosted)
+    if (!( evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015") || evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015") )) return;
+  
+  if(evt.jet().size()<2)	return;
+  
 /*
   int nLargeRjets(0);
   if (m_boosted){
@@ -615,10 +791,45 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2015(const Event &evt, double weight,
   }//for
   //std::cout<<"REACHED HERE, wt = "<<weight<<std::endl;
   GetHistograms(evt, weight, "", suffix);
+  
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  /*
   if(nTrkBtagged == 0)
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  */
   //if(nTrkBtagged >= 2)
   //GetHistograms(evt, weight, "btag2_", suffix);
 
@@ -634,6 +845,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2015(const Event &evt, double weight,
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
 
+  /*
   if (m_boosted) {
     	if (!(evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015")))  	return;
     	if (evt.largeJet().size()<1)  							return;
@@ -642,6 +854,13 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2015(const Event &evt, double weight,
 	if (!(evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")))   	return;
 	if ( evt.jet().size()<4)  							return;
   }
+  */
+  
+  if (!m_boosted)
+    if (!( evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015") || evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015") )) return;
+  
+  if(evt.jet().size()<2)	return;
+  
 /*
   int nLargeRjets(0);
   if (m_boosted){
@@ -708,10 +927,44 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2015(const Event &evt, double weight,
   }//for
   //std::cout<<"REACHED HERE, wt = "<<weight<<std::endl;
   GetHistograms(evt, weight, "", suffix);
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  /*
   if(nTrkBtagged == 0)
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  */
   //if(nTrkBtagged >= 2)
   //GetHistograms(evt, weight, "btag2_", suffix);
 
@@ -872,10 +1125,44 @@ void AnaTtresMM::runMatrixMethod_QCDCR2j_2016(const Event &evt, double weight, c
  
 
   GetHistograms(evt, weight, "", suffix);
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  /*
   if(nTrkBtagged == 0)
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix); 
+  */
  
 } // runMatrixMethod_QCDCR2j_2016
 
@@ -1008,10 +1295,44 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_2j_2016(const Event &evt, double weight,
   }
 
   GetHistograms(evt, weight, "", suffix);
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  /*
   if(nTrkBtagged == 0) 
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  */
   
 }//AnaTtresMM::runMatrixMethod_QCDVR1_2j_2016
 
@@ -1144,10 +1465,44 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_2j_2016(const Event &evt, double weight,
   }
 
   GetHistograms(evt, weight, "", suffix);
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  /*
   if(nTrkBtagged == 0) 
   GetHistograms(evt, weight, "btag0_",suffix );
   if(nTrkBtagged >= 1)
   GetHistograms(evt, weight, "btag1_", suffix);
+  */
   
 }//AnaTtresMM::runMatrixMethod_QCDVR2_2j_2016
 
@@ -1254,6 +1609,7 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
 
+  /*
   if (m_boosted) {
     	if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))  	return;
     	if (evt.largeJet().size()<1)  							return;
@@ -1262,13 +1618,14 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
 	if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))   	return;
 	if ( evt.jet().size()<4)  							return;
   }
+  */
   
-  /*if (!m_boosted)
-  {
-    if (!( ((evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")) && evt.jet().size()>=4) || evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016") )) return;
+  if (!m_boosted)
+    if (!( evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016") || evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016") )) return;
     //if (!( ((evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")) && evt.jet().size()>=4) )) return;
     //return;
-  }*/
+  
+  if(evt.jet().size()<2)	return;
  
   HistogramService *h = &m_hSvc;
   
@@ -1379,9 +1736,42 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
   weight = 0;
   }
   //std::cout<<"FILLING HISTO, weight = "<<weight<<std::endl;
-  //std::cout << "TEST" << std::endl;
+  
   GetHistograms(evt, weight, "", suffix);
-  //std::cout << "TEST 2" << std::endl;
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  
+  /*
   if(nTrkBtagged == 0)
     {
        GetHistograms(evt, weight, "btag0_",suffix );
@@ -1406,6 +1796,7 @@ void AnaTtresMM::runMatrixMethod_QCDCR4j_2016(const Event &evt, double weight, c
             GetHistograms(evt, weight, "btag1_HDR_", suffix);
          }
     }
+    */
   //if(nTrkBtagged >= 2 && log10(chi2Value) > 1.5)
   //GetHistograms(evt, weight, "btag2_", suffix);
   
@@ -1424,6 +1815,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2016(const Event &evt, double weight,
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
 
+  /*
   if (m_boosted) {
     	if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))  	return;
     	if (evt.largeJet().size()<1)  							return;
@@ -1432,6 +1824,14 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2016(const Event &evt, double weight,
 	if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))   	return;
 	if ( evt.jet().size()<4)  							return;
   }
+  */
+  
+  if (!m_boosted)
+    if (!( evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016") || evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016") )) return;
+    //if (!( ((evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")) && evt.jet().size()>=4) )) return;
+    //return;
+  
+  if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
   
@@ -1539,6 +1939,41 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2016(const Event &evt, double weight,
   }
 
   GetHistograms(evt, weight, "", suffix);
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  
+  
+  /*
   if(nTrkBtagged == 0)
     {
        GetHistograms(evt, weight, "btag0_",suffix );
@@ -1563,6 +1998,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR1_4j_2016(const Event &evt, double weight,
             GetHistograms(evt, weight, "btag1_HDR_", suffix);
          }
     }
+    */
   //if(nTrkBtagged >= 2 && log10(chi2Value) > 1.5)
   //GetHistograms(evt, weight, "btag2_", suffix);
 
@@ -1579,6 +2015,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2016(const Event &evt, double weight,
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
 
+  /*
   if (m_boosted) {
     	if (!(evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016")))  	return;
     	if (evt.largeJet().size()<1)  							return;
@@ -1587,6 +2024,14 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2016(const Event &evt, double weight,
 	if (!(evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")))   	return;
 	if ( evt.jet().size()<4)  							return;
   }
+  */
+  
+  if (!m_boosted)
+    if (!( evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016") || evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016") )) return;
+    //if (!( ((evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")) && evt.jet().size()>=4) )) return;
+    //return;
+  
+  if(evt.jet().size()<2)	return;
 
   HistogramService *h = &m_hSvc;
   
@@ -1694,6 +2139,40 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2016(const Event &evt, double weight,
   }
 
   GetHistograms(evt, weight, "", suffix);
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "3jets_btag1_", suffix);
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "2or3jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "2or3jets_btag1_", suffix);
+	  }
+  else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetHistograms(evt, weight, "4jets_btag0_", suffix);
+     		if(nTrkBtagged >= 1)
+     		GetHistograms(evt, weight, "4jets_btag1_", suffix);
+     		if(nTrkBtagged >= 2)
+     		GetHistograms(evt, weight, "4jets_btag2_", suffix);
+	  }
+  
+  
+  /*
   if(nTrkBtagged == 0)
     {
        GetHistograms(evt, weight, "btag0_",suffix );
@@ -1718,6 +2197,7 @@ void AnaTtresMM::runMatrixMethod_QCDVR2_4j_2016(const Event &evt, double weight,
             GetHistograms(evt, weight, "btag1_HDR_", suffix);
          }
     }
+    */
 //  if(nTrkBtagged >= 2 && log10(chi2Value) > 1.5)
 //  GetHistograms(evt, weight, "btag2_", suffix);
 

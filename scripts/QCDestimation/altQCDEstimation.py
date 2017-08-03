@@ -12,15 +12,15 @@ gStyle.SetTextSize(3)
 doprint = ".png,.eps,.pdf"
 
 doHadd = 1
-doBothYear = 0
+doBothYear = 1
 lep = 'mu'
-year = '2015'
+year = '2016'
 
 #OUTDIR = 'PLOT_17_04_04_METL_MWTL_DS3_Combined_4J_GENL_ALT_2015/'
 #OUTDIR = 'PLOT_17_06_05_NEW_QCDCR_METL_MWTL_DS3_DelR2.8_4j_fakeRates_2016_e/'
 #OUTDIR = 'Debug_FakeRates_e_2016/'
-if doBothYear : OUTDIR = 'New_FakeRates_RB_Merged_2015_2016_'+lep+'/'
-else : OUTDIR = 'New_FakeRates_RB_'+year+'_'+lep+'/'
+if doBothYear : OUTDIR = 'FakeRates_RB_Merged_2015_2016_'+lep+'/'
+else : OUTDIR = 'FakeRates_RB_'+year+'_'+lep+'/'
 #OUTDIR = 'Test_h2DRebin_New_FakeRates_DRCorr_RplusB_2016_mu/'
 os.system('mkdir '+OUTDIR)
 
@@ -245,7 +245,8 @@ def fakeRates(inputDir, lumi, lumiP):
 
 
 
-        for ibtag in ["btag0_","btag1_","btag2_"] :
+        #for ibtag in ["btag0_","btag1_","btag2_"] :
+	for ibtag in ["2jets_btag0_","2jets_btag1_","3jets_btag0_","3jets_btag1_","2or3jets_btag0_","2or3jets_btag1_","4jets_btag0_","4jets_btag1_","4jets_btag2_"] :
 
             outfile = TFile(OUTDIR+ichan[0]+'_'+ichan[1]+'_'+ibtag+"fake.root","RECREATE")
             #outfile.cd()
@@ -556,8 +557,8 @@ def fakeRates(inputDir, lumi, lumiP):
 #inputDir = '/AtlasDisk/users/sanmay/TTBar/AnalysisTop-2.4.29/LPCTools/ProduceMiniTuple/17_03_28_NEW_QCDCR_METL_MWTL_DS3_4j_fakeRates_2015_e/'
 #inputDir = '/AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/17_06_05_NEW_QCDCR_METL_MWTL_DS3_DelR2.8_4j_fakeRates_2016_e/'
 #inputDir = '/AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/Debug_4j_fakeRates_2016_e/'
-inputDir =  '/AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/NewFake_RB_4j_fakeRates_'+year+'_'+lep+'/'
-inputDir2 = '/AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/NewFake_RB_4j_fakeRates_2015_'+lep+'/'
+inputDir =  '/AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/NewFake_4j_fakeRates_'+year+'_'+lep+'/'
+inputDir2 = '/AtlasDisk/users/barbe/FakeRates/AnalysisTop-2.4.29_TopNtupleAnalysis/LPCTools/ProduceMiniTuple/NewFake_4j_fakeRates_2015_'+lep+'/'
 
 if year == '2015' :
 	ver = '2015'

@@ -19,10 +19,31 @@ AnaTtresQCD::AnaTtresQCD(const std::string &filename, bool electron, bool booste
 
   std::string suffix(""), btag("");
   IniHistograms(suffix, btag);
-  std::string suffix0(""), btag0("btag0_");
-  IniHistograms(suffix0, btag0);
-  std::string suffix1(""), btag1("btag1_");
-  IniHistograms(suffix1, btag1);
+  
+  std::string suffix0(""), Njets2_btag0("2jets_btag0_");
+  IniHistograms(suffix0, Njets2_btag0);
+  std::string suffix1(""), Njets2_btag1("2jets_btag1_");
+  IniHistograms(suffix1, Njets2_btag1);
+  
+  std::string Njets3_btag0("3jets_btag0_");
+  IniHistograms(suffix0, Njets3_btag0);
+  std::string Njets3_btag1("3jets_btag1_");
+  IniHistograms(suffix1, Njets3_btag1);
+  
+  std::string Njets2or3_btag0("2or3jets_btag0_");
+  IniHistograms(suffix0, Njets2or3_btag0);
+  std::string Njets2or3_btag1("2or3jets_btag1_");
+  IniHistograms(suffix1, Njets2or3_btag1);
+  
+  std::string Njets4_btag0("4jets_btag0_");
+  IniHistograms(suffix0, Njets4_btag0);
+  std::string Njets4_btag1("4jets_btag1_");
+  IniHistograms(suffix1, Njets4_btag1);
+  std::string suffix2(""), Njets4_btag2("4jets_btag2_");
+  IniHistograms(suffix2, Njets4_btag2);
+  
+  
+  
   //std::string suffix2(""), btag2("btag2_");
   //IniHistograms(suffix2, btag2);
 
@@ -199,6 +220,7 @@ void AnaTtresQCD::runRealRateQCDCR_2015(const Event &evt, double weight, const s
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
 
+/*
   if (m_boosted)
     if (!(evt.passes("bejets_2015") || evt.passes("bmujets_2015")))
       return;
@@ -208,7 +230,16 @@ void AnaTtresQCD::runRealRateQCDCR_2015(const Event &evt, double weight, const s
       return;
 
   if (!m_boosted)	if(evt.jet().size()<4)	return; 
+  */
   //if(evt.jet().size()<2)	return; 
+  
+  
+  if (!m_boosted)
+    if (!( evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015") || evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015") ))
+      return;
+  
+  if(evt.jet().size()<2)	return;
+  
   
   HistogramService *h = &m_hSvc;
 	  
@@ -325,13 +356,38 @@ void AnaTtresQCD::runRealRateQCDCR_2015(const Event &evt, double weight, const s
 		
   if (leptMa_pdgId!=0)	{
 
-     GetRealHistograms(evt, weight, suffix, "");
-     if(nTrkBtagged == 0)
-     GetRealHistograms(evt, weight, suffix, "btag0_");
-     if(nTrkBtagged >= 1)
-     GetRealHistograms(evt, weight, suffix, "btag1_");
-     if(nTrkBtagged >= 2)
-     GetRealHistograms(evt, weight, suffix, "btag2_");
+	GetRealHistograms(evt, weight, suffix, "");
+
+	if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "2jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "2jets_btag1_");
+	  }
+	else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "3jets_btag1_");
+	  }
+	if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "2or3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "2or3jets_btag1_");
+	  }
+	else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "4jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "4jets_btag1_");
+     		if(nTrkBtagged >= 2)
+     		GetRealHistograms(evt, weight, suffix, "4jets_btag2_");
+	  }
 	
    }
 	
@@ -475,12 +531,48 @@ void AnaTtresQCD::runRealRateWQCDCR_2016(const Event &evt, double weight, const 
   if (leptMa_pdgId!=0)	{
 
      GetRealHistograms(evt, weight, suffix, "");
+     
+     
+     if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "2jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "2jets_btag1_");
+	  }
+	else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "3jets_btag1_");
+	  }
+	if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "2or3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "2or3jets_btag1_");
+	  }
+	else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "4jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "4jets_btag1_");
+     		if(nTrkBtagged >= 2)
+     		GetRealHistograms(evt, weight, suffix, "4jets_btag2_");
+	  }
+     
+     
+     /*
      if(nTrkBtagged == 0)
      GetRealHistograms(evt, weight, suffix, "btag0_");
      if(nTrkBtagged >= 1)
      GetRealHistograms(evt, weight, suffix, "btag1_");
      if(nTrkBtagged >= 2)
      GetRealHistograms(evt, weight, suffix, "btag2_");
+     */
 	
    }
 }//AnaTtresQCD::runRealRateWQCDCR_2016
@@ -494,6 +586,7 @@ void AnaTtresQCD::runRealRateQCDCR_2016(const Event &evt, double weight, const s
   if (!m_electron && (evt.electron().size() != 0 || evt.muon().size() != 1))
     return;
   //std::cout<<"HERE"<<std::endl;
+  /*
   if (m_boosted)
     if (!(evt.passes("bejets_2016") || evt.passes("bmujets_2016")))
       return;
@@ -502,6 +595,13 @@ void AnaTtresQCD::runRealRateQCDCR_2016(const Event &evt, double weight, const s
     if (!(evt.passes("rejets_2016") || evt.passes("rmujets_2016")))
       return;
   if (!m_boosted)	if(evt.jet().size()<4)	return;
+  */
+  
+  if (!m_boosted)
+    if (!( evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016") || evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016") ))
+      return;
+  
+  if(evt.jet().size()<2)	return;
  
   HistogramService *h = &m_hSvc;
   //Pre-selection: 
@@ -620,12 +720,47 @@ void AnaTtresQCD::runRealRateQCDCR_2016(const Event &evt, double weight, const s
   if (leptMa_pdgId!=0)	{
 
      GetRealHistograms(evt, weight, suffix, "");
+     
+     
+     if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "2jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "2jets_btag1_");
+	  }
+	else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "3jets_btag1_");
+	  }
+	if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "2or3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "2or3jets_btag1_");
+	  }
+	else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetRealHistograms(evt, weight, suffix, "4jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetRealHistograms(evt, weight, suffix, "4jets_btag1_");
+     		if(nTrkBtagged >= 2)
+     		GetRealHistograms(evt, weight, suffix, "4jets_btag2_");
+	  }
+	  
+     /* 
      if(nTrkBtagged == 0)
      GetRealHistograms(evt, weight, suffix, "btag0_");
      if(nTrkBtagged >= 1)
      GetRealHistograms(evt, weight, suffix, "btag1_");
      if(nTrkBtagged >= 2)
      GetRealHistograms(evt, weight, suffix, "btag2_");
+     */
 	
    }
 }//AnaTtresQCD::runRealRateQCDCR_2016
@@ -777,8 +912,10 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
   */
 
   if (!m_boosted)
-    if (!( ((evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015")) && evt.jet().size()>=4) || evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015") ))
+    if (!( evt.passes("rejetsIncluR_2015") || evt.passes("rmujetsQCDCR_2015") || evt.passes("bejetsIncluR_2015") || evt.passes("bmujetsQCDCR_2015") ))
       return;
+      
+  if(evt.jet().size()<2)	return;
       
     
   bool isTight;
@@ -872,10 +1009,45 @@ void AnaTtresQCD::runFakeRateQCDCR_2015(const Event &evt, double weight, const s
   //if(log10(chi2Value) < 6)
   //  //std::cout<<"FILLING HISTO, logChi2 = "<<log10(chi2Value)<<std::endl;
   GetFakeHistograms(evt, weight, "", suffix, "");
-  if(nTrkBtagged == 0)
+  
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "2jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "2jets_btag1_");
+	  }
+  else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "3jets_btag1_");
+	  }
+  if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "2or3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "2or3jets_btag1_");
+	  }
+   else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "4jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "4jets_btag1_");
+     		if(nTrkBtagged >= 2)
+     		GetFakeHistograms(evt, weight, "", suffix, "4jets_btag2_");
+	  }
+  
+  
+  
+  /*if(nTrkBtagged == 0)
   GetFakeHistograms(evt, weight, "", suffix, "btag0_");
   if(nTrkBtagged >= 1)
-  GetFakeHistograms(evt, weight, "", suffix, "btag1_");
+  GetFakeHistograms(evt, weight, "", suffix, "btag1_");*/
  /* if(nTrkBtagged >= 2 && log10(chi2Value) > 1.5)
   GetFakeHistograms(evt, weight, "", suffix, "btag2_");
  
@@ -906,9 +1078,11 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   */
 
   if (!m_boosted)
-    if (!( ((evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")) && evt.jet().size()>=4) || evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016") ))
+    if (!( evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016") || evt.passes("bejetsIncluR_2016") || evt.passes("bmujetsQCDCR_2016") ))
     //if (!( ((evt.passes("rejetsIncluR_2016") || evt.passes("rmujetsQCDCR_2016")) && evt.jet().size()>=4) ))
       return;
+  
+  if(evt.jet().size()<2)	return;
        
  
   bool isTight;
@@ -1007,10 +1181,43 @@ void AnaTtresQCD::runFakeRateQCDCR_2016(const Event &evt, double weight, const s
   }
 
   GetFakeHistograms(evt, weight, "", suffix, "");
-  if(nTrkBtagged == 0)
+  
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "2jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "2jets_btag1_");
+	  }
+   else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "3jets_btag1_");
+	  }
+   if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "2or3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "2or3jets_btag1_");
+	  }
+    else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "4jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "4jets_btag1_");
+     		if(nTrkBtagged >= 2)
+     		GetFakeHistograms(evt, weight, "", suffix, "4jets_btag2_");
+	  }
+  
+  /*if(nTrkBtagged == 0)
   GetFakeHistograms(evt, weight, "", suffix, "btag0_");
   if(nTrkBtagged >= 1)
-  GetFakeHistograms(evt, weight, "", suffix, "btag1_");
+  GetFakeHistograms(evt, weight, "", suffix, "btag1_");*/
   /*if(nTrkBtagged >= 2 && log10(chi2Value) > 1.5)
   GetFakeHistograms(evt, weight, "", suffix, "btag2_");
  
@@ -1141,10 +1348,43 @@ void AnaTtresQCD::runFakeRateWQCDCR_2016(const Event &evt, double weight, const 
 
 
   GetFakeHistograms(evt, weight, "", suffix, "");
-  if(nTrkBtagged == 0)
+  
+  if(evt.jet().size() == 2)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "2jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "2jets_btag1_");
+	  }
+	else if(evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "3jets_btag1_");
+	  }
+	 if(evt.jet().size() == 2 || evt.jet().size() == 3)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "2or3jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "2or3jets_btag1_");
+	  }
+	else if(evt.jet().size() >= 4)
+	  {
+     		if(nTrkBtagged == 0)
+     		GetFakeHistograms(evt, weight, "", suffix, "4jets_btag0_");
+     		if(nTrkBtagged >= 1)
+     		GetFakeHistograms(evt, weight, "", suffix, "4jets_btag1_");
+     		if(nTrkBtagged >= 2)
+     		GetFakeHistograms(evt, weight, "", suffix, "4jets_btag2_");
+	  }
+  
+  
+  /*if(nTrkBtagged == 0)
   GetFakeHistograms(evt, weight, "", suffix, "btag0_");
   if(nTrkBtagged >= 1)
-  GetFakeHistograms(evt, weight, "", suffix, "btag1_");
+  GetFakeHistograms(evt, weight, "", suffix, "btag1_");*/
 
       
 } //AnaTtresQCD::runFakeRateWQCDCR_2016
@@ -1433,11 +1673,11 @@ void AnaTtresQCD::get2Drates(float &rate, float &rate_err, TH2F* rate_map, float
 
 
 
-void AnaTtresQCD::IniHistograms(std::string &suffix,  std::string &btag){
+void AnaTtresQCD::IniHistograms(std::string &suffix0,  std::string &btag){
 
   //****Efficiency studies
   
-  suffix = btag + suffix;
+  std::string suffix = btag + suffix0;
    
   Double_t eff_pT_bins_re[]     = {30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 120, 150, 300, 700};
   Double_t eff_pT_bins_rmu[]    = {25, 30, 35, 40, 50, 60, 70, 85, 100, 150, 300, 700};
