@@ -8,15 +8,6 @@ Internal = True
 
 files = "/nfs/dust/atlas/user/danilo/ntuple_2429/"
 
-label_signal = "Z'"
-did_list = []
-# zprime
-did_list = range(301322, 301335+1)
-# KK grav
-#did_list = range(305012, 305017+1)
-# KK gluon 30%
-#did_list = range(307522, 307533+1)
-
 
 chs  = []
 
@@ -112,60 +103,6 @@ def cutChannel(ct, i):
         p = False
   return p
 
-ct = TChain("truth")
-cn = TChain("nominal")
-
-ht = {}
-hn = {}
-hr = {}
-for i in chs:
-  ht[i] = TH1F("ht_%s"%i, "", 20, 0.0, 5.0)
-  hn[i] = TH1F("hn_%s"%i, "", 20, 0.0, 5.0)
-  hr[i] = TH1F("hr_%s"%i, "", 20, 0.0, 5.0)
-
-for i in chs:
-  st_color = kRed
-  st_line = 1
-  if "be" in i:
-    st_color = kRed
-    st_line = 1
-  if "bmu" in i:
-    st_color = kRed
-    st_line = 2
-  if "re" in i:
-    st_color = kBlue
-    st_line = 1
-  if "rmu" in i:
-    st_color = kBlue
-    st_line = 2
-  setStyle(ht[i], st_color,  st_line)
-  setStyle(hn[i], st_color,  st_line)
-  setStyle(hr[i], st_color,  st_line)
-
-import glob
-for did in did_list:
-  for d in glob.glob(files+"/user.dferreir.%d.*"%did):
-    for f in glob.glob(d+"/*"):
-      ct.Add(f)
-      cn.Add(f)
-
-for i in xrange(ct.GetEntries()):
-  ct.GetEntry(i)
-  for i in chs:
-    ht[i].Fill(ct.MC_ttbar_beforeFSR_m*1e-6, ct.weight_mc)
-
-for i in xrange(cn.GetEntries()):
-  cn.GetEntry(i)
-  for k in chs:
-    if not cutChannel(cn, k):
-      continue
-    hn[i].Fill(cn.MC_ttbar_beforeFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
-
-for k in chs:
-  hr[k].Divide(hn[k], ht[k], 1, 1, "B")
-  hr[k].Scale(100)
-  hr[k].GetYaxis().SetRangeUser(0, 10);
-
 def drawIt(hr, channels, label, suf = ""):
   cacc = TCanvas("cacc", "", 800, 600);
   cacc.SetBottomMargin(0.2)
@@ -198,6 +135,85 @@ def drawIt(hr, channels, label, suf = ""):
   for i in [".eps", ".png", ".pdf"]:
     cacc.SaveAs("accept"+suf+i)
 
-drawIt(hr, {"be": "e+jets", "bmu": "#mu+jets"}, label_signal+", boosted", suf = "boosted")
-drawIt(hr, {"re": "e+jets", "rmu": "#mu+jets"}, label_signal+", resolved", suf = "resolved")
+def doIt(signal):
+  ct = TChain("truth")
+  cn = TChain("nominal")
+  import array
+  binning = array.array('d', [x*0.25 for x in range(0, int(4.0/0.25))]+[4.0, 5.0])
+
+  ht = {}
+  hn = {}
+  hr = {}
+  for i in chs:
+    ht[i] = TH1F("ht_%s"%i, "", len(binning)-1, binning)
+    hn[i] = TH1F("hn_%s"%i, "", len(binning)-1, binning)
+    hr[i] = TH1F("hr_%s"%i, "", len(binning)-1, binning)
+
+  did_list = []
+  if signal == "Zp":
+    # zprime
+    did_list = range(301322, 301335+1)
+    suf_signal = "Zp"
+    label_signal = "Z'"
+  elif signal == "KKgrav":
+    # KK grav
+    did_list = range(305012, 305017+1)
+    suf_signal = "KKgrav"
+    label_signal = "Kaluza-Klein graviton"
+  elif signal == "KKgluon":
+    # KK gluon 30%
+    did_list = range(307522, 307533+1)
+    suf_signal = "KKgluon"
+    label_signal = "Kaluza-Klein gluon #Lambda=30%"
+
+  import glob
+  for did in did_list:
+    for d in glob.glob(files+"/user.dferreir.%d.*"%did):
+      for f in glob.glob(d+"/*"):
+        ct.Add(f)
+        cn.Add(f)
+
+  for i in xrange(ct.GetEntries()):
+    ct.GetEntry(i)
+    for k in chs:
+      ht[k].Fill(ct.MC_ttbar_beforeFSR_m*1e-6, ct.weight_mc)
+
+  for i in xrange(cn.GetEntries()):
+    cn.GetEntry(i)
+    for k in chs:
+      if not cutChannel(cn, k):
+        continue
+      hn[k].Fill(cn.MC_ttbar_beforeFSR_m*1e-6, cn.weight_mc*cn.weight_leptonSF*cn.weight_trackjet_bTagSF_70)
+
+  for k in chs:
+    hr[k].Divide(hn[k], ht[k], 1, 1, "B")
+    hr[k].Scale(100)
+    hr[k].GetYaxis().SetRangeUser(0, 10);
+
+  for i in chs:
+    st_color = kRed
+    st_line = 1
+    if "be" in i:
+      st_color = kRed
+      st_line = 1
+    if "bmu" in i:
+      st_color = kRed
+      st_line = 2
+    if "re" in i:
+      st_color = kBlue
+      st_line = 1
+    if "rmu" in i:
+      st_color = kBlue
+      st_line = 2
+    setStyle(ht[i], st_color,  st_line)
+    setStyle(hn[i], st_color,  st_line)
+    setStyle(hr[i], st_color,  st_line)
+
+
+  drawIt(hr, {"be": "e+jets", "bmu": "#mu+jets"}, label_signal+", boosted", suf = "boosted%s"%suf_signal)
+  drawIt(hr, {"re": "e+jets", "rmu": "#mu+jets"}, label_signal+", resolved", suf = "resolved%s"%suf_signal)
+
+# call it
+for i in ["Zp", "KKgluon", "KKgrav"]:
+  doIt(i)
 
