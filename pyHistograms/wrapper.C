@@ -40,29 +40,9 @@ bool m_status;
 WeakCorrScaleFactorParam m_ewkTool("../share/EWcorr_param.root");
 TtresNeutrinoBuilder m_neutrinoBuilder("MeV");
 
-MMUtils *m_mm_b0_res_e = 0;
-MMUtils *m_mm_b1_res_e = 0;
-MMUtils *m_mm_b0_res_mu = 0;
-MMUtils *m_mm_b1_res_mu = 0;
+std::vector<MMUtils *> mm_mu(20);
+std::vector<MMUtils *> mm_e(20);
 
-/*
-MMUtils m_mm_b0_res_e(0, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
-		     "../scripts/QCDestimation/RATES_2015/resolved_e_btag0_fake.root",       // fake2015
-		     "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",        // real2016
-		     "../scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root");      // fake2016
-MMUtils m_mm_b1_res_e(1, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
-		     "../scripts/QCDestimation/RATES_2015/resolved_e_btag1_fake.root",       // fake2015
-		     "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016
-		     "../scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"); // fake2016
-MMUtils m_mm_b0_res_mu(0, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
-		      "../scripts/QCDestimation/RATES_2015/resolved_mu_btag0_fake.root",      // fake2015
-		      "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",        // real2016
-		      "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"); // fake2016
-MMUtils m_mm_b1_res_mu(1, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
-		      "../scripts/QCDestimation/RATES_2015/resolved_mu_btag1_fake.root",// fake2015
-		      "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",       // real2016
-		      "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root"); // fake2016
-*/
 
 NNLOReweighter *m_NNLO = 0;
 
@@ -70,22 +50,63 @@ void initWrapper(bool dt = true) {
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
   m_status = false;
   if (dt) {
-    m_mm_b0_res_e = new MMUtils(0, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
-		     "../scripts/QCDestimation/RATES_2015/resolved_e_btag0_fake.root",       // fake2015
-		     "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",        // real2016
-		     "../scripts/QCDestimation/RATES_2016/resolved_e_btag0_fake.root");      // fake2016
-    m_mm_b1_res_e = new MMUtils(1, "../scripts/QCDestimation/RATES_2015/resolved_e_eff_ttbar.root", // real2015
-		     "../scripts/QCDestimation/RATES_2015/resolved_e_btag1_fake.root",       // fake2015
-		     "../scripts/QCDestimation/RATES_2016/resolved_e_eff_ttbar.root",   // real2016
-		     "../scripts/QCDestimation/RATES_2016/resolved_e_btag1_fake.root"); // fake2016
-    m_mm_b0_res_mu = new MMUtils(0, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
-		      "../scripts/QCDestimation/RATES_2015/resolved_mu_btag0_fake.root",      // fake2015
-		      "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",        // real2016
-		      "../scripts/QCDestimation/RATES_2016/resolved_mu_btag0_fake.root"); // fake2016
-    m_mm_b1_res_mu = new MMUtils(1, "../scripts/QCDestimation/RATES_2015/resolved_mu_eff_ttbar.root",// real2015
-		      "../scripts/QCDestimation/RATES_2015/resolved_mu_btag1_fake.root",// fake2015
-		      "../scripts/QCDestimation/RATES_2016/resolved_mu_eff_ttbar.root",       // real2016
-		      "../scripts/QCDestimation/RATES_2016/resolved_mu_btag1_fake.root"); // fake2016
+    int runMM_etaCorr_e = 0;
+    int runMM_DRCorr_e = 0;
+    int runMM_etaCorr_mu = 0;
+    int runMM_DRCorr_mu = 1;
+    // 2jets
+    mm_e[0*10+2] = new MMUtils(0, runMM_etaCorr_e, runMM_DRCorr_e, 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_2jets_btag0_fake.root");  // fake2015+2016
+        
+    mm_e[1*10+2]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e, 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_2jets_btag1_fake.root");   // fake2015+2016
+
+
+    mm_mu[0*10+2] = new MMUtils(0, runMM_etaCorr_mu, runMM_DRCorr_mu,
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_2jets_btag0_fake.root"); // fake2015+2016
+        
+    mm_mu[1*10+2] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu, 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_2jets_btag1_fake.root"); // fake2015+2016
+    
+    // 3jets
+    mm_e[0*10+3] = new MMUtils(0, runMM_etaCorr_e, runMM_DRCorr_e,
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_3jets_btag0_fake.root");  // fake2015+2016
+        
+    mm_e[1*10+3]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e, 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_3jets_btag1_fake.root");   // fake2015+2016
+
+
+    mm_mu[0*10+3] = new MMUtils(0, runMM_etaCorr_mu, runMM_DRCorr_mu,
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_3jets_btag0_fake.root"); // fake2015+2016
+        
+    mm_mu[1*10+3] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu, 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_3jets_btag1_fake.root"); // fake2015+2016
+    
+    // 4jets    
+    mm_e[0*10+4] = new MMUtils(0, runMM_etaCorr_e, runMM_DRCorr_e, 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_4jets_btag0_fake.root");  // fake2015+2016
+        
+    mm_e[1*10+4]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e, 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_4jets_btag1_fake.root");   // fake2015+2016
+
+
+    mm_mu[0*10+4] = new MMUtils(0, runMM_etaCorr_mu, runMM_DRCorr_mu,
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag0_fake.root"); // fake2015+2016
+        
+    mm_mu[1*10+4] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu, 
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
+             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag1_fake.root"); // fake2015+2016
   }
   m_NNLO = new NNLOReweighter();
 }
@@ -174,22 +195,11 @@ double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector l
     e.jet().push_back(Jet(jet[k]));
   }
   double w = 0;
-  if (!btags && boosted && isElectron) {
-    w = m_mm_b0_res_e->getMMweights(e, 0, isElectron, boosted, runNumber);
-  } else if (btags && boosted && isElectron) {
-    w = m_mm_b1_res_e->getMMweights(e, 0, isElectron, boosted, runNumber);
-  } else if (!btags && !boosted && isElectron) {
-    w = m_mm_b0_res_e->getMMweights(e, 0, isElectron, boosted, runNumber);
-  } else if (btags && !boosted && isElectron) {
-    w = m_mm_b1_res_e->getMMweights(e, 0, isElectron, boosted, runNumber);
-  } else if (!btags && boosted && !isElectron) {
-    w = m_mm_b0_res_mu->getMMweights(e, 0, isElectron, boosted, runNumber);
-  } else if (btags && boosted && !isElectron) {
-    w = m_mm_b1_res_mu->getMMweights(e, 0, isElectron, boosted, runNumber);
-  } else if (!btags && !boosted && !isElectron) {
-    w = m_mm_b0_res_mu->getMMweights(e, 0, isElectron, boosted, runNumber);
-  } else if (btags && !boosted && !isElectron) {
-    w = m_mm_b1_res_mu->getMMweights(e, 0, isElectron, boosted, runNumber);
+  int idx = ((int) (btags >= 1))*10 + min(4, int(jet.size()));
+  if (isElectron) {
+    w = mm_e[idx]->getMMweights(e, 0, isElectron, 0, runNumber);
+  } else {
+    w = mm_mu[idx]->getMMweights(e, 0, isElectron, 0, runNumber);
   }
   return w;
 }

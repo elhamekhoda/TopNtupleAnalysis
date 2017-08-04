@@ -46,13 +46,14 @@ def main():
 	names   = []
 
 	#names  += ["data"]
-	#names  += ['qcde', 'qcdmu']
+	names  += ['qcde', 'qcdmu']
 
-	#names  += ['tt']
+	names  += ['tt']
+	names  += ['tthm']
 
-	#names  += ['tthm']
+	names  += ['singletop']
+
 	#names  += ['ttv']
-	#names  += ['singletop']
 	#names  += ['zjets']
 	#names  += ['vv']
 
@@ -111,11 +112,11 @@ def main():
 	#names  += ['eftl60c10']
 	#names  += ['eftl100c10']
 	
-	for k in ["10", "15", "20", "25", "30", "35", "40"]:
-		names  += ['kkg1000w%s'%k]
-		names  += ['kkg2000w%s'%k]
-		names  += ['kkg3000w%s'%k]
-		names  += ['kkg4000w%s'%k]
+	#for k in ["10", "15", "20", "25", "30", "35", "40"]:
+	#	names  += ['kkg1000w%s'%k]
+	#	names  += ['kkg2000w%s'%k]
+	#	names  += ['kkg3000w%s'%k]
+	#	names  += ['kkg4000w%s'%k]
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',

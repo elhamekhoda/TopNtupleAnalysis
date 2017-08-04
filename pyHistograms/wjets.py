@@ -34,60 +34,60 @@ flav_map[2]['mu'][""] = {'bb': 1.554668, 'cc': 1.554668, 'c': 1.000000, 'l': 0.8
 flav_map[3]['mu'][""] = {'bb': 1.495210, 'cc': 1.495210, 'c': 0.961755, 'l': 0.842008}
 flav_map[4]['mu'][""] = {'bb': 1.441507, 'cc': 1.441507, 'c': 0.927212, 'l': 0.811766}
 flav_map[5]['mu'][""] = {'bb': 1.376113, 'cc': 1.376113, 'c': 0.885149, 'l': 0.774940}
-# Xsec_ttbar_up 
-flav_map[2]['el']["Xsec_ttbar_up"] = {'bb': 1.402477, 'cc': 1.402477, 'c': 1.000000, 'l': 0.899785}
-flav_map[3]['el']["Xsec_ttbar_up"] = {'bb': 1.361655, 'cc': 1.361655, 'c': 0.970893, 'l': 0.873594}
-flav_map[4]['el']["Xsec_ttbar_up"] = {'bb': 1.322592, 'cc': 1.322592, 'c': 0.943040, 'l': 0.848533}
-flav_map[5]['el']["Xsec_ttbar_up"] = {'bb': 1.281123, 'cc': 1.281123, 'c': 0.913472, 'l': 0.821928}
-flav_map[2]['mu']["Xsec_ttbar_up"] = {'bb': 1.556236, 'cc': 1.556236, 'c': 1.000000, 'l': 0.875139}
-flav_map[3]['mu']["Xsec_ttbar_up"] = {'bb': 1.496556, 'cc': 1.496556, 'c': 0.961651, 'l': 0.841578}
-flav_map[4]['mu']["Xsec_ttbar_up"] = {'bb': 1.442664, 'cc': 1.442664, 'c': 0.927021, 'l': 0.811272}
-flav_map[5]['mu']["Xsec_ttbar_up"] = {'bb': 1.377054, 'cc': 1.377054, 'c': 0.884862, 'l': 0.774377}
-# Xsec_ttbar_down 
-flav_map[2]['el']["Xsec_ttbar_down"] = {'bb': 1.404276, 'cc': 1.404276, 'c': 1.000000, 'l': 0.899336}
-flav_map[3]['el']["Xsec_ttbar_down"] = {'bb': 1.363224, 'cc': 1.363224, 'c': 0.970767, 'l': 0.873046}
-flav_map[4]['el']["Xsec_ttbar_down"] = {'bb': 1.323952, 'cc': 1.323952, 'c': 0.942800, 'l': 0.847895}
-flav_map[5]['el']["Xsec_ttbar_down"] = {'bb': 1.282270, 'cc': 1.282270, 'c': 0.913119, 'l': 0.821201}
-flav_map[2]['mu']["Xsec_ttbar_down"] = {'bb': 1.553332, 'cc': 1.553332, 'c': 1.000000, 'l': 0.875791}
-flav_map[3]['mu']["Xsec_ttbar_down"] = {'bb': 1.494063, 'cc': 1.494063, 'c': 0.961844, 'l': 0.842374}
-flav_map[4]['mu']["Xsec_ttbar_down"] = {'bb': 1.440521, 'cc': 1.440521, 'c': 0.927375, 'l': 0.812186}
-flav_map[5]['mu']["Xsec_ttbar_down"] = {'bb': 1.375311, 'cc': 1.375311, 'c': 0.885394, 'l': 0.775420}
-# Xsec_ST_up 
-flav_map[2]['el']["Xsec_ST_up"] = {'bb': 1.363253, 'cc': 1.363253, 'c': 1.000000, 'l': 0.909551}
-flav_map[3]['el']["Xsec_ST_up"] = {'bb': 1.327337, 'cc': 1.327337, 'c': 0.973655, 'l': 0.885589}
-flav_map[4]['el']["Xsec_ST_up"] = {'bb': 1.292778, 'cc': 1.292778, 'c': 0.948304, 'l': 0.862531}
-flav_map[5]['el']["Xsec_ST_up"] = {'bb': 1.255883, 'cc': 1.255883, 'c': 0.921240, 'l': 0.837915}
-flav_map[2]['mu']["Xsec_ST_up"] = {'bb': 1.518687, 'cc': 1.518687, 'c': 1.000000, 'l': 0.883568}
-flav_map[3]['mu']["Xsec_ST_up"] = {'bb': 1.464238, 'cc': 1.464238, 'c': 0.964147, 'l': 0.851889}
-flav_map[4]['mu']["Xsec_ST_up"] = {'bb': 1.414826, 'cc': 1.414826, 'c': 0.931611, 'l': 0.823141}
-flav_map[5]['mu']["Xsec_ST_up"] = {'bb': 1.354355, 'cc': 1.354355, 'c': 0.891793, 'l': 0.787959}
-# Xsec_ST_down 
-flav_map[2]['el']["Xsec_ST_down"] = {'bb': 1.438501, 'cc': 1.438501, 'c': 1.000000, 'l': 0.890815}
-flav_map[3]['el']["Xsec_ST_down"] = {'bb': 1.393001, 'cc': 1.393001, 'c': 0.968370, 'l': 0.862638}
-flav_map[4]['el']["Xsec_ST_down"] = {'bb': 1.349683, 'cc': 1.349683, 'c': 0.938257, 'l': 0.835813}
-flav_map[5]['el']["Xsec_ST_down"] = {'bb': 1.303931, 'cc': 1.303931, 'c': 0.906451, 'l': 0.807480}
-flav_map[2]['mu']["Xsec_ST_down"] = {'bb': 1.586092, 'cc': 1.586092, 'c': 1.000000, 'l': 0.868437}
-flav_map[3]['mu']["Xsec_ST_down"] = {'bb': 1.522134, 'cc': 1.522134, 'c': 0.959676, 'l': 0.833418}
-flav_map[4]['mu']["Xsec_ST_down"] = {'bb': 1.464604, 'cc': 1.464604, 'c': 0.923404, 'l': 0.801918}
-flav_map[5]['mu']["Xsec_ST_down"] = {'bb': 1.394852, 'cc': 1.394852, 'c': 0.879427, 'l': 0.763727}
-# Xsec_Wt_up 
-flav_map[2]['el']["Xsec_Wt_up"] = {'bb': 1.403603, 'cc': 1.403603, 'c': 1.000000, 'l': 0.899504}
-flav_map[3]['el']["Xsec_Wt_up"] = {'bb': 1.362637, 'cc': 1.362637, 'c': 0.970814, 'l': 0.873251}
-flav_map[4]['el']["Xsec_Wt_up"] = {'bb': 1.323443, 'cc': 1.323443, 'c': 0.942890, 'l': 0.848134}
-flav_map[5]['el']["Xsec_Wt_up"] = {'bb': 1.281841, 'cc': 1.281841, 'c': 0.913251, 'l': 0.821473}
-flav_map[2]['mu']["Xsec_Wt_up"] = {'bb': 1.554777, 'cc': 1.554777, 'c': 1.000000, 'l': 0.875466}
-flav_map[3]['mu']["Xsec_Wt_up"] = {'bb': 1.495304, 'cc': 1.495304, 'c': 0.961748, 'l': 0.841978}
-flav_map[4]['mu']["Xsec_Wt_up"] = {'bb': 1.441588, 'cc': 1.441588, 'c': 0.927199, 'l': 0.811731}
-flav_map[5]['mu']["Xsec_Wt_up"] = {'bb': 1.376178, 'cc': 1.376178, 'c': 0.885129, 'l': 0.774900}
-# Xsec_Wt_down 
-flav_map[2]['el']["Xsec_Wt_down"] = {'bb': 1.403296, 'cc': 1.403296, 'c': 1.000000, 'l': 0.899580}
-flav_map[3]['el']["Xsec_Wt_down"] = {'bb': 1.362369, 'cc': 1.362369, 'c': 0.970835, 'l': 0.873344}
-flav_map[4]['el']["Xsec_Wt_down"] = {'bb': 1.323211, 'cc': 1.323211, 'c': 0.942931, 'l': 0.848242}
-flav_map[5]['el']["Xsec_Wt_down"] = {'bb': 1.281645, 'cc': 1.281645, 'c': 0.913311, 'l': 0.821597}
-flav_map[2]['mu']["Xsec_Wt_down"] = {'bb': 1.554559, 'cc': 1.554559, 'c': 1.000000, 'l': 0.875515}
-flav_map[3]['mu']["Xsec_Wt_down"] = {'bb': 1.495116, 'cc': 1.495116, 'c': 0.961763, 'l': 0.842038}
-flav_map[4]['mu']["Xsec_Wt_down"] = {'bb': 1.441427, 'cc': 1.441427, 'c': 0.927226, 'l': 0.811800}
-flav_map[5]['mu']["Xsec_Wt_down"] = {'bb': 1.376047, 'cc': 1.376047, 'c': 0.885169, 'l': 0.774979}
+# ttxsecup 
+flav_map[2]['el']["ttxsecup"] = {'bb': 1.402477, 'cc': 1.402477, 'c': 1.000000, 'l': 0.899785}
+flav_map[3]['el']["ttxsecup"] = {'bb': 1.361655, 'cc': 1.361655, 'c': 0.970893, 'l': 0.873594}
+flav_map[4]['el']["ttxsecup"] = {'bb': 1.322592, 'cc': 1.322592, 'c': 0.943040, 'l': 0.848533}
+flav_map[5]['el']["ttxsecup"] = {'bb': 1.281123, 'cc': 1.281123, 'c': 0.913472, 'l': 0.821928}
+flav_map[2]['mu']["ttxsecup"] = {'bb': 1.556236, 'cc': 1.556236, 'c': 1.000000, 'l': 0.875139}
+flav_map[3]['mu']["ttxsecup"] = {'bb': 1.496556, 'cc': 1.496556, 'c': 0.961651, 'l': 0.841578}
+flav_map[4]['mu']["ttxsecup"] = {'bb': 1.442664, 'cc': 1.442664, 'c': 0.927021, 'l': 0.811272}
+flav_map[5]['mu']["ttxsecup"] = {'bb': 1.377054, 'cc': 1.377054, 'c': 0.884862, 'l': 0.774377}
+# ttxsecdw 
+flav_map[2]['el']["ttxsecdw"] = {'bb': 1.404276, 'cc': 1.404276, 'c': 1.000000, 'l': 0.899336}
+flav_map[3]['el']["ttxsecdw"] = {'bb': 1.363224, 'cc': 1.363224, 'c': 0.970767, 'l': 0.873046}
+flav_map[4]['el']["ttxsecdw"] = {'bb': 1.323952, 'cc': 1.323952, 'c': 0.942800, 'l': 0.847895}
+flav_map[5]['el']["ttxsecdw"] = {'bb': 1.282270, 'cc': 1.282270, 'c': 0.913119, 'l': 0.821201}
+flav_map[2]['mu']["ttxsecdw"] = {'bb': 1.553332, 'cc': 1.553332, 'c': 1.000000, 'l': 0.875791}
+flav_map[3]['mu']["ttxsecdw"] = {'bb': 1.494063, 'cc': 1.494063, 'c': 0.961844, 'l': 0.842374}
+flav_map[4]['mu']["ttxsecdw"] = {'bb': 1.440521, 'cc': 1.440521, 'c': 0.927375, 'l': 0.812186}
+flav_map[5]['mu']["ttxsecdw"] = {'bb': 1.375311, 'cc': 1.375311, 'c': 0.885394, 'l': 0.775420}
+# singletopup 
+flav_map[2]['el']["singletopup"] = {'bb': 1.363253, 'cc': 1.363253, 'c': 1.000000, 'l': 0.909551}
+flav_map[3]['el']["singletopup"] = {'bb': 1.327337, 'cc': 1.327337, 'c': 0.973655, 'l': 0.885589}
+flav_map[4]['el']["singletopup"] = {'bb': 1.292778, 'cc': 1.292778, 'c': 0.948304, 'l': 0.862531}
+flav_map[5]['el']["singletopup"] = {'bb': 1.255883, 'cc': 1.255883, 'c': 0.921240, 'l': 0.837915}
+flav_map[2]['mu']["singletopup"] = {'bb': 1.518687, 'cc': 1.518687, 'c': 1.000000, 'l': 0.883568}
+flav_map[3]['mu']["singletopup"] = {'bb': 1.464238, 'cc': 1.464238, 'c': 0.964147, 'l': 0.851889}
+flav_map[4]['mu']["singletopup"] = {'bb': 1.414826, 'cc': 1.414826, 'c': 0.931611, 'l': 0.823141}
+flav_map[5]['mu']["singletopup"] = {'bb': 1.354355, 'cc': 1.354355, 'c': 0.891793, 'l': 0.787959}
+# singletopdw 
+flav_map[2]['el']["singletopdw"] = {'bb': 1.438501, 'cc': 1.438501, 'c': 1.000000, 'l': 0.890815}
+flav_map[3]['el']["singletopdw"] = {'bb': 1.393001, 'cc': 1.393001, 'c': 0.968370, 'l': 0.862638}
+flav_map[4]['el']["singletopdw"] = {'bb': 1.349683, 'cc': 1.349683, 'c': 0.938257, 'l': 0.835813}
+flav_map[5]['el']["singletopdw"] = {'bb': 1.303931, 'cc': 1.303931, 'c': 0.906451, 'l': 0.807480}
+flav_map[2]['mu']["singletopdw"] = {'bb': 1.586092, 'cc': 1.586092, 'c': 1.000000, 'l': 0.868437}
+flav_map[3]['mu']["singletopdw"] = {'bb': 1.522134, 'cc': 1.522134, 'c': 0.959676, 'l': 0.833418}
+flav_map[4]['mu']["singletopdw"] = {'bb': 1.464604, 'cc': 1.464604, 'c': 0.923404, 'l': 0.801918}
+flav_map[5]['mu']["singletopdw"] = {'bb': 1.394852, 'cc': 1.394852, 'c': 0.879427, 'l': 0.763727}
+# wnorm__1up 
+flav_map[2]['el']["wnorm__1up"] = {'bb': 1.403603, 'cc': 1.403603, 'c': 1.000000, 'l': 0.899504}
+flav_map[3]['el']["wnorm__1up"] = {'bb': 1.362637, 'cc': 1.362637, 'c': 0.970814, 'l': 0.873251}
+flav_map[4]['el']["wnorm__1up"] = {'bb': 1.323443, 'cc': 1.323443, 'c': 0.942890, 'l': 0.848134}
+flav_map[5]['el']["wnorm__1up"] = {'bb': 1.281841, 'cc': 1.281841, 'c': 0.913251, 'l': 0.821473}
+flav_map[2]['mu']["wnorm__1up"] = {'bb': 1.554777, 'cc': 1.554777, 'c': 1.000000, 'l': 0.875466}
+flav_map[3]['mu']["wnorm__1up"] = {'bb': 1.495304, 'cc': 1.495304, 'c': 0.961748, 'l': 0.841978}
+flav_map[4]['mu']["wnorm__1up"] = {'bb': 1.441588, 'cc': 1.441588, 'c': 0.927199, 'l': 0.811731}
+flav_map[5]['mu']["wnorm__1up"] = {'bb': 1.376178, 'cc': 1.376178, 'c': 0.885129, 'l': 0.774900}
+# wnorm__1down 
+flav_map[2]['el']["wnorm__1down"] = {'bb': 1.403296, 'cc': 1.403296, 'c': 1.000000, 'l': 0.899580}
+flav_map[3]['el']["wnorm__1down"] = {'bb': 1.362369, 'cc': 1.362369, 'c': 0.970835, 'l': 0.873344}
+flav_map[4]['el']["wnorm__1down"] = {'bb': 1.323211, 'cc': 1.323211, 'c': 0.942931, 'l': 0.848242}
+flav_map[5]['el']["wnorm__1down"] = {'bb': 1.281645, 'cc': 1.281645, 'c': 0.913311, 'l': 0.821597}
+flav_map[2]['mu']["wnorm__1down"] = {'bb': 1.554559, 'cc': 1.554559, 'c': 1.000000, 'l': 0.875515}
+flav_map[3]['mu']["wnorm__1down"] = {'bb': 1.495116, 'cc': 1.495116, 'c': 0.961763, 'l': 0.842038}
+flav_map[4]['mu']["wnorm__1down"] = {'bb': 1.441427, 'cc': 1.441427, 'c': 0.927226, 'l': 0.811800}
+flav_map[5]['mu']["wnorm__1down"] = {'bb': 1.376047, 'cc': 1.376047, 'c': 0.885169, 'l': 0.774979}
 # MET_SoftTrk_ResoPara 
 flav_map[2]['el']["MET_SoftTrk_ResoPara"] = {'bb': 1.378557, 'cc': 1.378557, 'c': 1.000000, 'l': 0.905764}
 flav_map[3]['el']["MET_SoftTrk_ResoPara"] = {'bb': 1.340804, 'cc': 1.340804, 'c': 0.972614, 'l': 0.880958}
@@ -1063,60 +1063,60 @@ frac[2]['mu'][""] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
 frac[3]['mu'][""] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
 frac[4]['mu'][""] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
 frac[5]['mu'][""] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# Xsec_ttbar_up 
-frac[2]['el']["Xsec_ttbar_up"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["Xsec_ttbar_up"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["Xsec_ttbar_up"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["Xsec_ttbar_up"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["Xsec_ttbar_up"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["Xsec_ttbar_up"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["Xsec_ttbar_up"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["Xsec_ttbar_up"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# Xsec_ttbar_down 
-frac[2]['el']["Xsec_ttbar_down"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["Xsec_ttbar_down"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["Xsec_ttbar_down"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["Xsec_ttbar_down"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["Xsec_ttbar_down"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["Xsec_ttbar_down"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["Xsec_ttbar_down"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["Xsec_ttbar_down"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# Xsec_ST_up 
-frac[2]['el']["Xsec_ST_up"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["Xsec_ST_up"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["Xsec_ST_up"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["Xsec_ST_up"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["Xsec_ST_up"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["Xsec_ST_up"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["Xsec_ST_up"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["Xsec_ST_up"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# Xsec_ST_down 
-frac[2]['el']["Xsec_ST_down"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["Xsec_ST_down"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["Xsec_ST_down"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["Xsec_ST_down"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["Xsec_ST_down"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["Xsec_ST_down"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["Xsec_ST_down"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["Xsec_ST_down"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# Xsec_Wt_up 
-frac[2]['el']["Xsec_Wt_up"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["Xsec_Wt_up"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["Xsec_Wt_up"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["Xsec_Wt_up"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["Xsec_Wt_up"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["Xsec_Wt_up"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["Xsec_Wt_up"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["Xsec_Wt_up"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# Xsec_Wt_down 
-frac[2]['el']["Xsec_Wt_down"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["Xsec_Wt_down"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["Xsec_Wt_down"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["Xsec_Wt_down"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["Xsec_Wt_down"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["Xsec_Wt_down"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["Xsec_Wt_down"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["Xsec_Wt_down"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# ttxsecup 
+frac[2]['el']["ttxsecup"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["ttxsecup"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["ttxsecup"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["ttxsecup"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["ttxsecup"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["ttxsecup"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["ttxsecup"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["ttxsecup"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# ttxsecdw 
+frac[2]['el']["ttxsecdw"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["ttxsecdw"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["ttxsecdw"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["ttxsecdw"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["ttxsecdw"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["ttxsecdw"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["ttxsecdw"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["ttxsecdw"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# singletopup 
+frac[2]['el']["singletopup"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["singletopup"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["singletopup"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["singletopup"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["singletopup"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["singletopup"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["singletopup"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["singletopup"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# singletopdw 
+frac[2]['el']["singletopdw"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["singletopdw"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["singletopdw"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["singletopdw"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["singletopdw"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["singletopdw"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["singletopdw"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["singletopdw"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# wnorm__1up 
+frac[2]['el']["wnorm__1up"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["wnorm__1up"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["wnorm__1up"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["wnorm__1up"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["wnorm__1up"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["wnorm__1up"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["wnorm__1up"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["wnorm__1up"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# wnorm__1down 
+frac[2]['el']["wnorm__1down"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["wnorm__1down"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["wnorm__1down"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["wnorm__1down"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["wnorm__1down"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["wnorm__1down"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["wnorm__1down"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["wnorm__1down"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
 # MET_SoftTrk_ResoPara 
 frac[2]['el']["MET_SoftTrk_ResoPara"] = {'bb': 0.093845,'cc': 0.063846,'c': 0.208855,'l': 0.633454}
 frac[3]['el']["MET_SoftTrk_ResoPara"] = {'bb': 0.117044,'cc': 0.098130,'c': 0.219249,'l': 0.565578}
@@ -2092,60 +2092,60 @@ f_ca_map[2]['mu'][""] =  1.178331
 f_ca_map[3]['mu'][""] =  1.161164
 f_ca_map[4]['mu'][""] =  1.142417
 f_ca_map[5]['mu'][""] =  1.062010
-# Xsec_ttbar_up 
-f_ca_map[2]['el']["Xsec_ttbar_up"] =  1.161057
-f_ca_map[3]['el']["Xsec_ttbar_up"] =  1.246696
-f_ca_map[4]['el']["Xsec_ttbar_up"] =  1.321584
-f_ca_map[5]['el']["Xsec_ttbar_up"] =  1.105726
-f_ca_map[2]['mu']["Xsec_ttbar_up"] =  1.178328
-f_ca_map[3]['mu']["Xsec_ttbar_up"] =  1.161188
-f_ca_map[4]['mu']["Xsec_ttbar_up"] =  1.142448
-f_ca_map[5]['mu']["Xsec_ttbar_up"] =  1.061996
-# Xsec_ttbar_down 
-f_ca_map[2]['el']["Xsec_ttbar_down"] =  1.161079
-f_ca_map[3]['el']["Xsec_ttbar_down"] =  1.246689
-f_ca_map[4]['el']["Xsec_ttbar_down"] =  1.321605
-f_ca_map[5]['el']["Xsec_ttbar_down"] =  1.105710
-f_ca_map[2]['mu']["Xsec_ttbar_down"] =  1.178334
-f_ca_map[3]['mu']["Xsec_ttbar_down"] =  1.161143
-f_ca_map[4]['mu']["Xsec_ttbar_down"] =  1.142390
-f_ca_map[5]['mu']["Xsec_ttbar_down"] =  1.062021
-# Xsec_ST_up 
-f_ca_map[2]['el']["Xsec_ST_up"] =  1.158796
-f_ca_map[3]['el']["Xsec_ST_up"] =  1.243775
-f_ca_map[4]['el']["Xsec_ST_up"] =  1.317420
-f_ca_map[5]['el']["Xsec_ST_up"] =  1.102379
-f_ca_map[2]['mu']["Xsec_ST_up"] =  1.176944
-f_ca_map[3]['mu']["Xsec_ST_up"] =  1.158418
-f_ca_map[4]['mu']["Xsec_ST_up"] =  1.139190
-f_ca_map[5]['mu']["Xsec_ST_up"] =  1.059512
-# Xsec_ST_down 
-f_ca_map[2]['el']["Xsec_ST_down"] =  1.163058
-f_ca_map[3]['el']["Xsec_ST_down"] =  1.249246
-f_ca_map[4]['el']["Xsec_ST_down"] =  1.325246
-f_ca_map[5]['el']["Xsec_ST_down"] =  1.108644
-f_ca_map[2]['mu']["Xsec_ST_down"] =  1.179545
-f_ca_map[3]['mu']["Xsec_ST_down"] =  1.163566
-f_ca_map[4]['mu']["Xsec_ST_down"] =  1.145237
-f_ca_map[5]['mu']["Xsec_ST_down"] =  1.064199
-# Xsec_Wt_up 
-f_ca_map[2]['el']["Xsec_Wt_up"] =  1.161071
-f_ca_map[3]['el']["Xsec_Wt_up"] =  1.246692
-f_ca_map[4]['el']["Xsec_Wt_up"] =  1.321597
-f_ca_map[5]['el']["Xsec_Wt_up"] =  1.105716
-f_ca_map[2]['mu']["Xsec_Wt_up"] =  1.178331
-f_ca_map[3]['mu']["Xsec_Wt_up"] =  1.161165
-f_ca_map[4]['mu']["Xsec_Wt_up"] =  1.142419
-f_ca_map[5]['mu']["Xsec_Wt_up"] =  1.062009
-# Xsec_Wt_down 
-f_ca_map[2]['el']["Xsec_Wt_down"] =  1.161067
-f_ca_map[3]['el']["Xsec_Wt_down"] =  1.246693
-f_ca_map[4]['el']["Xsec_Wt_down"] =  1.321594
-f_ca_map[5]['el']["Xsec_Wt_down"] =  1.105719
-f_ca_map[2]['mu']["Xsec_Wt_down"] =  1.178331
-f_ca_map[3]['mu']["Xsec_Wt_down"] =  1.161162
-f_ca_map[4]['mu']["Xsec_Wt_down"] =  1.142414
-f_ca_map[5]['mu']["Xsec_Wt_down"] =  1.062011
+# ttxsecup 
+f_ca_map[2]['el']["ttxsecup"] =  1.161057
+f_ca_map[3]['el']["ttxsecup"] =  1.246696
+f_ca_map[4]['el']["ttxsecup"] =  1.321584
+f_ca_map[5]['el']["ttxsecup"] =  1.105726
+f_ca_map[2]['mu']["ttxsecup"] =  1.178328
+f_ca_map[3]['mu']["ttxsecup"] =  1.161188
+f_ca_map[4]['mu']["ttxsecup"] =  1.142448
+f_ca_map[5]['mu']["ttxsecup"] =  1.061996
+# ttxsecdw 
+f_ca_map[2]['el']["ttxsecdw"] =  1.161079
+f_ca_map[3]['el']["ttxsecdw"] =  1.246689
+f_ca_map[4]['el']["ttxsecdw"] =  1.321605
+f_ca_map[5]['el']["ttxsecdw"] =  1.105710
+f_ca_map[2]['mu']["ttxsecdw"] =  1.178334
+f_ca_map[3]['mu']["ttxsecdw"] =  1.161143
+f_ca_map[4]['mu']["ttxsecdw"] =  1.142390
+f_ca_map[5]['mu']["ttxsecdw"] =  1.062021
+# singletopup 
+f_ca_map[2]['el']["singletopup"] =  1.158796
+f_ca_map[3]['el']["singletopup"] =  1.243775
+f_ca_map[4]['el']["singletopup"] =  1.317420
+f_ca_map[5]['el']["singletopup"] =  1.102379
+f_ca_map[2]['mu']["singletopup"] =  1.176944
+f_ca_map[3]['mu']["singletopup"] =  1.158418
+f_ca_map[4]['mu']["singletopup"] =  1.139190
+f_ca_map[5]['mu']["singletopup"] =  1.059512
+# singletopdw 
+f_ca_map[2]['el']["singletopdw"] =  1.163058
+f_ca_map[3]['el']["singletopdw"] =  1.249246
+f_ca_map[4]['el']["singletopdw"] =  1.325246
+f_ca_map[5]['el']["singletopdw"] =  1.108644
+f_ca_map[2]['mu']["singletopdw"] =  1.179545
+f_ca_map[3]['mu']["singletopdw"] =  1.163566
+f_ca_map[4]['mu']["singletopdw"] =  1.145237
+f_ca_map[5]['mu']["singletopdw"] =  1.064199
+# wnorm__1up 
+f_ca_map[2]['el']["wnorm__1up"] =  1.161071
+f_ca_map[3]['el']["wnorm__1up"] =  1.246692
+f_ca_map[4]['el']["wnorm__1up"] =  1.321597
+f_ca_map[5]['el']["wnorm__1up"] =  1.105716
+f_ca_map[2]['mu']["wnorm__1up"] =  1.178331
+f_ca_map[3]['mu']["wnorm__1up"] =  1.161165
+f_ca_map[4]['mu']["wnorm__1up"] =  1.142419
+f_ca_map[5]['mu']["wnorm__1up"] =  1.062009
+# wnorm__1down 
+f_ca_map[2]['el']["wnorm__1down"] =  1.161067
+f_ca_map[3]['el']["wnorm__1down"] =  1.246693
+f_ca_map[4]['el']["wnorm__1down"] =  1.321594
+f_ca_map[5]['el']["wnorm__1down"] =  1.105719
+f_ca_map[2]['mu']["wnorm__1down"] =  1.178331
+f_ca_map[3]['mu']["wnorm__1down"] =  1.161162
+f_ca_map[4]['mu']["wnorm__1down"] =  1.142414
+f_ca_map[5]['mu']["wnorm__1down"] =  1.062011
 # MET_SoftTrk_ResoPara 
 f_ca_map[2]['el']["MET_SoftTrk_ResoPara"] =  1.165139
 f_ca_map[3]['el']["MET_SoftTrk_ResoPara"] =  1.252028
