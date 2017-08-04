@@ -139,7 +139,7 @@ def doIt(signal):
   ct = TChain("truth")
   cn = TChain("nominal")
   import array
-  binning = array.array('d', [x*0.25 for x in range(0, int(4.0/0.25))]+[4.0, 5.0])
+  binning = array.array('d', [x*0.25 for x in range(0, int(1.0/0.25))]+[1.0+x*0.5 for x in range(0, int(3.0/0.5))]+[5.0])
 
   ht = {}
   hn = {}
