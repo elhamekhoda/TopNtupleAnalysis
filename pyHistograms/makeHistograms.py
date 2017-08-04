@@ -151,6 +151,14 @@ def main():
 		if isWjets:
 			systList.append('wnorm__1up')
 			systList.append('wnorm__1down')
+			systList.append('ttgenup')
+			systList.append('ttgendw')
+			systList.append('ttpsup')
+			systList.append('ttpsdw')
+			systList.append('ttisrfsrup')
+			systList.append('ttisrfsrdw')
+			for k in range(0, 30+1):
+				systList.append('pdf_PDF4LHC30_nlo_30_%d' % (k))
 		for i in range(0, 4):
 			systList.append('btagbSF_'+str(i)+'__1up')
 			systList.append('btagbSF_'+str(i)+'__1down')
