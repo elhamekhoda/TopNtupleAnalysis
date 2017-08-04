@@ -1,3 +1,7 @@
+2017-08-04 William Barbe <william.barbe@clermont.in2p3.fr>
+	* Fixed a bug for low-Dr 0b rates
+	* TopNtupleAnalysis-00-02-31
+
 2017-08-03 Samuel Calvet <scalvet@cern.ch>
 	* Remove useless old QCD rates
 

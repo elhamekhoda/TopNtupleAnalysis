@@ -213,8 +213,15 @@ float MMUtils::getFakeDRCorrectionFactor(bool isElectron, float lepPt, float clo
 {
 
  	  if(isElectron) return getDRCorrectionFactorTools(fake_lepPt_lowDR_e_2016,  fake_lepPt_highDR_e_2016,  fake_map_lepPt_minDeltaR_e_2016,  lepPt, closejl_DR);
- 	  else           return getDRCorrectionFactorTools(fake_lepPt_lowDR_mu_2016,  fake_lepPt_highDR_mu_2016,  fake_map_lepPt_minDeltaR_mu_2016,  lepPt, closejl_DR);
-
+ 	  else {
+	  	if(m_isBtagged>0){
+	  		  return getDRCorrectionFactorTools(fake_lepPt_lowDR_mu_2016,  fake_lepPt_highDR_mu_2016,  fake_map_lepPt_minDeltaR_mu_2016,  lepPt, closejl_DR);
+	  	}else{
+	  		  float min(99.);
+			  if (lepPt<min)min=lepPt;
+			  return getDRCorrectionFactorTools(fake_lepPt_lowDR_mu_2016,  fake_lepPt_highDR_mu_2016,  fake_map_lepPt_minDeltaR_mu_2016,  min, closejl_DR);
+		}
+	  }
 }
 
 
@@ -297,7 +304,7 @@ void MMUtils::getRatesResolvedMu(float &realRate, float &realRate_err, float &fa
 	   else get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2016_hDR, lepPt_min, topoet_min);
       	}
 	else{
-		get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2016_hDR, lepPt_min, topoet_min);
+		get2Drates(fakeRate, fakeRate_err, fake_map_resolved_mu_2016_lDR, lepPt_min, topoet_min);
 	}
     }
     else if(m_isBtagged==1) {
