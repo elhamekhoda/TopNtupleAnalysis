@@ -216,14 +216,26 @@ int main(int argc, char **argv) {
       }
       nsyst_items.push_back(other_items[0]); nsyst_titles.push_back(other_titles[0]);
       if (prefix != "") {
-        systCalc.add(other_items[0], new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
-                                                        Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
-                                                        pat, false, 0.5), other_titles[0]);
+        systCalc.add(other_items[0], new RelativeNominal(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
+                                                        pat, false, 1), other_titles[0]);
+        systCalc.add(other_items[1], new RelativeNominal(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
+                                                        pat, false, 1), other_titles[1]);
 	  } else {
-        systCalc.add(other_items[0], new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
-                                                        Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
-                                                        pat, false, 0.5), other_titles[0]);
+        systCalc.add(other_items[0], new RelativeNominal(Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
+                                                        pat, false, 1), other_titles[0]);
+        systCalc.add(other_items[1], new RelativeNominal(Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
+                                                        pat, false, 1), other_titles[1]);
 	  }
+      //nsyst_items.push_back(other_items[0]); nsyst_titles.push_back(other_titles[0]);
+      //if (prefix != "") {
+      //  systCalc.add(other_items[0], new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
+      //                                                  Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
+      //                                                  pat, false, 0.5), other_titles[0]);
+	//  } else {
+      //  systCalc.add(other_items[0], new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
+      //                                                  Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
+      //                                                  pat, false, 0.5), other_titles[0]);
+	//  }
 
       if (smooth) {
         std::string s = other_items[1];

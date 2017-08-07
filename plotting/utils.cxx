@@ -27,7 +27,7 @@
 
 int _stamp = 0;
 std::map<std::string, std::string> name = std::map<std::string, std::string>();
-std::map<std::string, std::vector<std::string> > syst = std::map<std::string, std::vector<std::string> >();
+std::multimap<std::string, std::vector<std::string> > syst = std::multimap<std::string, std::vector<std::string> >();
 
 std::map<std::string, std::string> title = std::map<std::string, std::string>();
 std::map<std::string, std::string> latex = std::map<std::string, std::string>();
@@ -35,11 +35,11 @@ std::map<std::string, int> fillColor = std::map<std::string, int>();
 std::map<std::string, float> scale = std::map<std::string, float>();
 
 
-std::map<std::string, std::vector<std::string> > syst_model_nominal = std::map<std::string, std::vector<std::string> >();
-std::map<std::string, std::vector<std::string> > syst_model = std::map<std::string, std::vector<std::string> >();
-std::map<std::string, std::vector<std::string> > syst_flat = std::map<std::string, std::vector<std::string> >();
-std::map<std::string, std::vector<std::string> > syst_pdf = std::map<std::string, std::vector<std::string> >();
-std::map<std::string, std::vector<std::string> > syst_pdf_simple = std::map<std::string, std::vector<std::string> >();
+std::multimap<std::string, std::vector<std::string> > syst_model_nominal = std::multimap<std::string, std::vector<std::string> >();
+std::multimap<std::string, std::vector<std::string> > syst_model = std::multimap<std::string, std::vector<std::string> >();
+std::multimap<std::string, std::vector<std::string> > syst_flat = std::multimap<std::string, std::vector<std::string> >();
+std::multimap<std::string, std::vector<std::string> > syst_pdf = std::multimap<std::string, std::vector<std::string> >();
+std::multimap<std::string, std::vector<std::string> > syst_pdf_simple = std::multimap<std::string, std::vector<std::string> >();
 
 float lumi_scale = -0.0;
 int logY = 0;
@@ -88,29 +88,32 @@ void loadConfig(const std::string &file) {
       if (el.size() >= 7)
         scale[el[1]] = std::atof(el[6].c_str());
     } else if (el[0] == "syst") {
-      syst[el[1]] = std::vector<std::string>();
-      syst[el[1]].push_back(el[2]);
-      for (int l = 3; l < el.size(); ++l) syst[el[1]].push_back(el[l]);
+      std::multimap<std::string, std::vector<std::string> >::iterator it = syst.insert(std::pair<std::string, std::vector<std::string> >(el[1], std::vector<std::string>()));
+      it->second.push_back(el[2]);
+      for (int l = 3; l < el.size(); ++l) it->second.push_back(el[l]);
     } else if (el[0] == "syst_model") {
-      syst_model[el[1]] = std::vector<std::string>();
-      syst_model[el[1]].push_back(el[2]);
-      for (int l = 3; l < el.size(); ++l) syst_model[el[1]].push_back(el[l]);
+      std::multimap<std::string, std::vector<std::string> >::iterator it = syst_model.insert(std::pair<std::string, std::vector<std::string> >(el[1], std::vector<std::string>()));
+      it->second.push_back(el[2]);
+      for (int l = 3; l < el.size(); ++l) it->second.push_back(el[l]);
     } else if (el[0] == "syst_model_nominal") {
-      syst_model_nominal[el[1]] = std::vector<std::string>();
-      syst_model_nominal[el[1]].push_back(el[2]);
-      for (int l = 3; l < el.size(); ++l) syst_model_nominal[el[1]].push_back(el[l]);
+      std::multimap<std::string, std::vector<std::string> >::iterator it = syst_model_nominal.insert(std::pair<std::string, std::vector<std::string> >(el[1], std::vector<std::string>()));
+      it->second.push_back(el[2]);
+      for (int l = 3; l < el.size(); ++l) it->second.push_back(el[l]);
     } else if (el[0] == "syst_flat") {
-      syst_flat[el[1]] = std::vector<std::string>();
-      syst_flat[el[1]].push_back(el[2]);
-      for (int l = 3; l < el.size(); ++l) syst_flat[el[1]].push_back(el[l]);
+      std::multimap<std::string, std::vector<std::string> >::iterator it = syst_flat.insert(std::pair<std::string, std::vector<std::string> >(el[1], std::vector<std::string>()));
+      it->second.push_back(el[2]);
+      for (int l = 3; l < el.size(); ++l)
+        it->second.push_back(el[l]);
     } else if (el[0] == "syst_pdf") {
-      syst_pdf[el[1]] = std::vector<std::string>();
-      syst_pdf[el[1]].push_back(el[2]);
-      for (int l = 3; l < el.size(); ++l) syst_pdf[el[1]].push_back(el[l]);
+      std::multimap<std::string, std::vector<std::string> >::iterator it = syst_pdf.insert(std::pair<std::string, std::vector<std::string> >(el[1], std::vector<std::string>()));
+      it->second.push_back(el[2]);
+      for (int l = 3; l < el.size(); ++l)
+        it->second.push_back(el[l]);
     } else if (el[0] == "syst_pdf_simple") {
-      syst_pdf_simple[el[1]] = std::vector<std::string>();
-      syst_pdf_simple[el[1]].push_back(el[2]);
-      for (int l = 3; l < el.size(); ++l) syst_pdf_simple[el[1]].push_back(el[l]);
+      std::multimap<std::string, std::vector<std::string> >::iterator it = syst_pdf_simple.insert(std::pair<std::string, std::vector<std::string> >(el[1], std::vector<std::string>()));
+      it->second.push_back(el[2]);
+      for (int l = 3; l < el.size(); ++l)
+        it->second.push_back(el[l]);
     }
   }
 }
@@ -1839,7 +1842,7 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
   // syst      "short name"    "latex name"           sufix_up         sufix_dw          [S|N]     excludebkg1,excludebk2
   // or:
   // syst      "short name"    "latex name"           sufix            -                 [S|N]     excludebkg1,excludebkg2
-  for (std::map<std::string, std::vector<std::string> >::iterator it = syst.begin(); it != syst.end(); ++it) {
+  for (std::multimap<std::string, std::vector<std::string> >::iterator it = syst.begin(); it != syst.end(); ++it) {
     std::string name = it->first;
     int this_smooth = smooth;
     if (this_smooth > 0) this_smooth = it->second[3] == "S";
@@ -1869,7 +1872,7 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
       std::cout << "To ignore the down sufix variation, just use sufix_dw = - (the hyphen symbol)." << std::endl;
     }
   }
-  for (std::map<std::string, std::vector<std::string> >::iterator it = syst_model.begin(); it != syst_model.end(); ++it) {
+  for (std::multimap<std::string, std::vector<std::string> >::iterator it = syst_model.begin(); it != syst_model.end(); ++it) {
     std::string name = it->first;
     vector<string> pattern;
     pattern.push_back(it->second[1]);
@@ -1893,7 +1896,7 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     }
   }
 
-  for (std::map<std::string, std::vector<std::string> >::iterator it = syst_model_nominal.begin(); it != syst_model_nominal.end(); ++it) {
+  for (std::multimap<std::string, std::vector<std::string> >::iterator it = syst_model_nominal.begin(); it != syst_model_nominal.end(); ++it) {
     std::string name = it->first;
     vector<string> pattern;
     pattern.push_back(it->second[1]);
@@ -1918,7 +1921,7 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
   }
 
   // HistDiffMany
-  for (std::map<std::string, std::vector<std::string> >::iterator it = syst_pdf.begin(); it != syst_pdf.end(); ++it) {
+  for (std::multimap<std::string, std::vector<std::string> >::iterator it = syst_pdf.begin(); it != syst_pdf.end(); ++it) {
     std::string name = it->first;
     std::vector<std::string> sample;
     std::vector<std::string> filesuf;
@@ -1944,7 +1947,7 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     systCalc.add(name.c_str(), new HistDiffMany(filenam, patterns, sample, this_smooth), it->second[0]);
   }
 
-  for (std::map<std::string, std::vector<std::string> >::iterator it = syst_pdf_simple.begin(); it != syst_pdf_simple.end(); ++it) {
+  for (std::multimap<std::string, std::vector<std::string> >::iterator it = syst_pdf_simple.begin(); it != syst_pdf_simple.end(); ++it) {
     std::string name = it->first;
     std::vector<std::string> sample;
     std::vector<std::string> filesuf;
@@ -1977,7 +1980,7 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
 	}
   }
 
-  for (std::map<std::string, std::vector<std::string> >::iterator it = syst_flat.begin(); it != syst_flat.end(); ++it) {
+  for (std::multimap<std::string, std::vector<std::string> >::iterator it = syst_flat.begin(); it != syst_flat.end(); ++it) {
     std::string name = it->first;
     vector<string> pattern;
     //pattern.push_back(it->second[1]);

@@ -19,7 +19,7 @@ double SystematicCalculatorBase::totalSystInSample(Sample &item) {
   double total = 0;
   for (map<string, Hist>::const_iterator k = item.syst.begin(); k != item.syst.end(); ++k) {
     string systName = k->first;
-    total += pow(item.syst[systName].yield(), 2);
+    total += pow(k->second.yield(), 2);
   }
   return sqrt(total);
 }
@@ -280,7 +280,10 @@ void SystematicCalculator::calculate(const std::string &histogram) {
       for (map<string, unique_ptr<Syst> >::const_iterator k = _syst.begin(); k != _syst.end(); ++k) {
         const string &systName = k->first;
         Syst *thisSyst = k->second.get();
-        one_item.syst[systName] = thisSyst->get(histogram, one_item.fname)*one_item.scale;
+	if (one_item.syst.find(systName) == one_item.syst.end())
+          one_item.syst[systName] = thisSyst->get(histogram, one_item.fname)*one_item.scale;
+	else
+          one_item.syst[systName] += thisSyst->get(histogram, one_item.fname)*one_item.scale;
       }
     }
   }

@@ -23,7 +23,7 @@ class SystematicCalculatorBase {
     // maps systematic unc. names to a Syst class that implements
     // it, given a histogram name and a file that identifies the sample to vary
     // Each implementation of this will have its own systematic map
-    map<string, unique_ptr<Syst> > _syst;
+    multimap<string, unique_ptr<Syst> > _syst;
 
     map<string, string> _syst_title;
 
