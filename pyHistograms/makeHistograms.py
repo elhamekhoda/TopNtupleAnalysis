@@ -158,7 +158,7 @@ def main():
 			systList.append('ttisrfsrup')
 			systList.append('ttisrfsrdw')
 			for k in range(0, 30+1):
-				systList.append('pdf_PDF4LHC30_nlo_30_%d' % (k))
+				systList.append('pdf_PDF4LHC15_nlo_30_%d' % (k))
 		for i in range(0, 4):
 			systList.append('btagbSF_'+str(i)+'__1up')
 			systList.append('btagbSF_'+str(i)+'__1down')
@@ -308,6 +308,12 @@ def main():
 		treeName = s # systematic name is the same as the TTree name
 		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName or 'ttNNLO_' in treeName:
 			treeName = 'nominal'
+		if isWjets and (('ttgen' in treeName) or ('ttps' in treeName) or ('ttisrfsr' in treeName) or ('pdf_PDF4LHC15_nlo_30' in treeName) or ('ttxsec' in treeName) or ('singletop' in treeName)): # DANGER remember to change when doing W+jets PDF variation
+			treeName = 'nominal'
+		if 'ttxsec' in treeName and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
+			treeName = 'nominal'
+		if 'singletop' in treeName and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
+			treeName = 'nominal'
 		if options.qcd != "False":
 			treeName += '_Loose'
 		mt = TChain(treeName)
@@ -336,7 +342,7 @@ def main():
 				weight *= sel.weight_mc
 				channel = sel.mcChannelNumber
 				weight *= Xsec[channel]
-				if not 'pdf_' in suffix:
+				if options.systs != 'pdf': #'pdf_' in suffix:
 					if not options.af2:
 						if not channel in sumOfWeights:
 							print "Could not find DSID ",channel, " in sum of weights."
@@ -361,7 +367,7 @@ def main():
 
 			for ana in analysisCode:
 				weight_reco = analysisCode[ana].getWeight(sel, suffix)
-				if 'pdf_' in suffix:
+				if options.systs == 'pdf': #'pdf_' in suffix:
 					pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
 					pdfNumber = int(suffix.rsplit('_', 1)[1])
 					pdfAttr = getattr(sel, pdfName)
