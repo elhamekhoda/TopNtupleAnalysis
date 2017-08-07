@@ -48,7 +48,7 @@ sample    qcde         qcde                                 "QCD (e)"           
 sample    qcdmu        qcdmu                                "QCD (#mu)"           "QCD ($\mu$)"        902
 sample    vv           vv                                   "diboson"             "diboson"            5
 sample    ttv          ttv                                  "ttV"                 "$t\bar{t}V$"        7
-syst_flat lumi          "luminosity"                         "ttall,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg"                 0.041                     -0.041
+syst_flat lumi          "luminosity"                         "ttall,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg"                 0.021                     -0.021
 syst      etrig      "electron trigger"               eTrigSF__1up                               eTrigSF__1down                                       N
 syst      erec       "electron reconstruction"        eRecoSF__1up                               eRecoSF__1down                                       N
 syst      eid        "electron ID"                    eIDSF__1up                                 eIDSF__1down                                         N
@@ -63,10 +63,6 @@ syst      pileup     "pile up"                        pileupSF__1up             
 syst      jvt        "JVT"                            jvtSF__1up                                 jvtSF__1down                                         N
 syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,wbbjets,wccjets,wcjets,wljets,kkg
 syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-#syst      wbb        "W+bb fraction"                  wbb__1up                                   wbb__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-#syst      wcc        "W+cc fraction"                  wcc__1up                                   wcc__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-#syst      wc         "W+c fraction"                   wc__1up                                    wc__1down                                            N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-#syst      wl         "W+l fraction"                   wl__1up                                    wl__1down                                            N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      eres       "electron res."                  EG_RESOLUTION_ALL__1up                     EG_RESOLUTION_ALL__1down                             N
 syst      escale     "electron scale"                 EG_SCALE_ALL__1up                          EG_SCALE_ALL__1down                                  N
 syst      akt4jer    "anti-$k_t$ R=0.4 JER"           JET_JER_SINGLE_NP__1up                     -                                                    N
@@ -128,14 +124,15 @@ syst      btagl9     "b-tagging l mistag (E9)"        btaglSF_9__1up            
 syst      btagl10    "b-tagging l mistag (E10)"       btaglSF_10__1up                            btaglSF_10__1down                                    N
 syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     N
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     N
-syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbjets,wccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg
+#syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbjets,wccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
 syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.50
 syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.50
 syst_flat ttxsec     "ttbar cross section"            "ttall"                0.056                                      -0.061
 #syst_model ttgen     "ttbar gen."                     "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
 syst_model ttgen     "ttbar gen."                     "ttall"                 ttpowhegherwig                            ttpdf                         N
-syst_model_nominal ttps "ttbar p. shower"            "ttall"                 ttpowhegherwig                                                           N
+#syst_model_nominal ttps "ttbar p. shower"            "ttall"                 ttpowhegherwig                                                           N
+syst_model ttps      "ttbar p. shower"               "ttall"                 ttpowhegherwig7af2                        ttsystaf2                     N
 syst_model ttisrfsr  "ttbar ISR/FSR"                 "ttall"                 ttradlo                                   ttradhi                       N
 #syst_pdf   ttpdf     "ttbar PDF"                     "ttall"                ttpdf                                     pdf_PDF4LHC15_nlo_30          30
 syst_pdf_simple   ttpdf0    "PDF0"                   "ttall"                 ttpdf                                      pdf_PDF4LHC15_nlo_30           0
@@ -169,3 +166,135 @@ syst_pdf_simple   ttpdf27   "PDF27"                  "ttall"                 ttp
 syst_pdf_simple   ttpdf28   "PDF28"                  "ttall"                 ttpdf                                      pdf_PDF4LHC15_nlo_30           28
 syst_pdf_simple   ttpdf29   "PDF29"                  "ttall"                 ttpdf                                      pdf_PDF4LHC15_nlo_30           29
 syst_pdf_simple   ttpdf30   "PDF30"                  "ttall"                 ttpdf                                      pdf_PDF4LHC15_nlo_30           30
+
+syst_pdf_simple   ttpdf0    "PDF0"                   "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           0
+syst_pdf_simple   ttpdf1    "PDF1"                   "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           1
+syst_pdf_simple   ttpdf2    "PDF2"                   "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           2
+syst_pdf_simple   ttpdf3    "PDF3"                   "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           3
+syst_pdf_simple   ttpdf4    "PDF4"                   "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           4
+syst_pdf_simple   ttpdf5    "PDF5"                   "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           5
+syst_pdf_simple   ttpdf6    "PDF6"                   "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           6
+syst_pdf_simple   ttpdf7    "PDF7"                   "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           7
+syst_pdf_simple   ttpdf8    "PDF8"                   "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           8
+syst_pdf_simple   ttpdf9    "PDF9"                   "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           9
+syst_pdf_simple   ttpdf10   "PDF10"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           10
+syst_pdf_simple   ttpdf11   "PDF11"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           11
+syst_pdf_simple   ttpdf12   "PDF12"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           12
+syst_pdf_simple   ttpdf13   "PDF13"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           13
+syst_pdf_simple   ttpdf14   "PDF14"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           14
+syst_pdf_simple   ttpdf15   "PDF15"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           15
+syst_pdf_simple   ttpdf16   "PDF16"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           16
+syst_pdf_simple   ttpdf17   "PDF17"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           17
+syst_pdf_simple   ttpdf18   "PDF18"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           18
+syst_pdf_simple   ttpdf19   "PDF19"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           19
+syst_pdf_simple   ttpdf20   "PDF20"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           20
+syst_pdf_simple   ttpdf21   "PDF21"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           21
+syst_pdf_simple   ttpdf22   "PDF22"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           22
+syst_pdf_simple   ttpdf23   "PDF23"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           23
+syst_pdf_simple   ttpdf24   "PDF24"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           24
+syst_pdf_simple   ttpdf25   "PDF25"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           25
+syst_pdf_simple   ttpdf26   "PDF26"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           26
+syst_pdf_simple   ttpdf27   "PDF27"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           27
+syst_pdf_simple   ttpdf28   "PDF28"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           28
+syst_pdf_simple   ttpdf29   "PDF29"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           29
+syst_pdf_simple   ttpdf30   "PDF30"                  "wbbjets"               wbbjets                                      pdf_PDF4LHC30_nlo_30           30
+
+syst_pdf_simple   ttpdf0    "PDF0"                   "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           0
+syst_pdf_simple   ttpdf1    "PDF1"                   "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           1
+syst_pdf_simple   ttpdf2    "PDF2"                   "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           2
+syst_pdf_simple   ttpdf3    "PDF3"                   "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           3
+syst_pdf_simple   ttpdf4    "PDF4"                   "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           4
+syst_pdf_simple   ttpdf5    "PDF5"                   "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           5
+syst_pdf_simple   ttpdf6    "PDF6"                   "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           6
+syst_pdf_simple   ttpdf7    "PDF7"                   "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           7
+syst_pdf_simple   ttpdf8    "PDF8"                   "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           8
+syst_pdf_simple   ttpdf9    "PDF9"                   "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           9
+syst_pdf_simple   ttpdf10   "PDF10"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           10
+syst_pdf_simple   ttpdf11   "PDF11"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           11
+syst_pdf_simple   ttpdf12   "PDF12"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           12
+syst_pdf_simple   ttpdf13   "PDF13"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           13
+syst_pdf_simple   ttpdf14   "PDF14"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           14
+syst_pdf_simple   ttpdf15   "PDF15"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           15
+syst_pdf_simple   ttpdf16   "PDF16"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           16
+syst_pdf_simple   ttpdf17   "PDF17"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           17
+syst_pdf_simple   ttpdf18   "PDF18"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           18
+syst_pdf_simple   ttpdf19   "PDF19"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           19
+syst_pdf_simple   ttpdf20   "PDF20"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           20
+syst_pdf_simple   ttpdf21   "PDF21"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           21
+syst_pdf_simple   ttpdf22   "PDF22"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           22
+syst_pdf_simple   ttpdf23   "PDF23"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           23
+syst_pdf_simple   ttpdf24   "PDF24"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           24
+syst_pdf_simple   ttpdf25   "PDF25"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           25
+syst_pdf_simple   ttpdf26   "PDF26"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           26
+syst_pdf_simple   ttpdf27   "PDF27"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           27
+syst_pdf_simple   ttpdf28   "PDF28"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           28
+syst_pdf_simple   ttpdf29   "PDF29"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           29
+syst_pdf_simple   ttpdf30   "PDF30"                  "wccjets"               wccjets                                      pdf_PDF4LHC30_nlo_30           30
+
+syst_pdf_simple   ttpdf0    "PDF0"                   "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           0
+syst_pdf_simple   ttpdf1    "PDF1"                   "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           1
+syst_pdf_simple   ttpdf2    "PDF2"                   "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           2
+syst_pdf_simple   ttpdf3    "PDF3"                   "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           3
+syst_pdf_simple   ttpdf4    "PDF4"                   "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           4
+syst_pdf_simple   ttpdf5    "PDF5"                   "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           5
+syst_pdf_simple   ttpdf6    "PDF6"                   "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           6
+syst_pdf_simple   ttpdf7    "PDF7"                   "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           7
+syst_pdf_simple   ttpdf8    "PDF8"                   "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           8
+syst_pdf_simple   ttpdf9    "PDF9"                   "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           9
+syst_pdf_simple   ttpdf10   "PDF10"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           10
+syst_pdf_simple   ttpdf11   "PDF11"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           11
+syst_pdf_simple   ttpdf12   "PDF12"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           12
+syst_pdf_simple   ttpdf13   "PDF13"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           13
+syst_pdf_simple   ttpdf14   "PDF14"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           14
+syst_pdf_simple   ttpdf15   "PDF15"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           15
+syst_pdf_simple   ttpdf16   "PDF16"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           16
+syst_pdf_simple   ttpdf17   "PDF17"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           17
+syst_pdf_simple   ttpdf18   "PDF18"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           18
+syst_pdf_simple   ttpdf19   "PDF19"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           19
+syst_pdf_simple   ttpdf20   "PDF20"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           20
+syst_pdf_simple   ttpdf21   "PDF21"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           21
+syst_pdf_simple   ttpdf22   "PDF22"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           22
+syst_pdf_simple   ttpdf23   "PDF23"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           23
+syst_pdf_simple   ttpdf24   "PDF24"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           24
+syst_pdf_simple   ttpdf25   "PDF25"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           25
+syst_pdf_simple   ttpdf26   "PDF26"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           26
+syst_pdf_simple   ttpdf27   "PDF27"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           27
+syst_pdf_simple   ttpdf28   "PDF28"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           28
+syst_pdf_simple   ttpdf29   "PDF29"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           29
+syst_pdf_simple   ttpdf30   "PDF30"                  "wcjets"               wcjets                                      pdf_PDF4LHC30_nlo_30           30
+
+syst_pdf_simple   ttpdf0    "PDF0"                   "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           0
+syst_pdf_simple   ttpdf1    "PDF1"                   "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           1
+syst_pdf_simple   ttpdf2    "PDF2"                   "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           2
+syst_pdf_simple   ttpdf3    "PDF3"                   "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           3
+syst_pdf_simple   ttpdf4    "PDF4"                   "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           4
+syst_pdf_simple   ttpdf5    "PDF5"                   "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           5
+syst_pdf_simple   ttpdf6    "PDF6"                   "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           6
+syst_pdf_simple   ttpdf7    "PDF7"                   "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           7
+syst_pdf_simple   ttpdf8    "PDF8"                   "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           8
+syst_pdf_simple   ttpdf9    "PDF9"                   "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           9
+syst_pdf_simple   ttpdf10   "PDF10"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           10
+syst_pdf_simple   ttpdf11   "PDF11"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           11
+syst_pdf_simple   ttpdf12   "PDF12"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           12
+syst_pdf_simple   ttpdf13   "PDF13"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           13
+syst_pdf_simple   ttpdf14   "PDF14"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           14
+syst_pdf_simple   ttpdf15   "PDF15"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           15
+syst_pdf_simple   ttpdf16   "PDF16"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           16
+syst_pdf_simple   ttpdf17   "PDF17"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           17
+syst_pdf_simple   ttpdf18   "PDF18"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           18
+syst_pdf_simple   ttpdf19   "PDF19"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           19
+syst_pdf_simple   ttpdf20   "PDF20"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           20
+syst_pdf_simple   ttpdf21   "PDF21"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           21
+syst_pdf_simple   ttpdf22   "PDF22"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           22
+syst_pdf_simple   ttpdf23   "PDF23"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           23
+syst_pdf_simple   ttpdf24   "PDF24"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           24
+syst_pdf_simple   ttpdf25   "PDF25"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           25
+syst_pdf_simple   ttpdf26   "PDF26"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           26
+syst_pdf_simple   ttpdf27   "PDF27"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           27
+syst_pdf_simple   ttpdf28   "PDF28"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           28
+syst_pdf_simple   ttpdf29   "PDF29"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           29
+syst_pdf_simple   ttpdf30   "PDF30"                  "wljets"               wljets                                      pdf_PDF4LHC30_nlo_30           30
+
+syst      ttgen     "ttbar generator"                ttgenup                ttgendw                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+syst      ttps      "ttbar p shower"                 ttpsup                 ttpsdw                                          N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+syst      ttisrfsr  "ttbar ISR/FSR"                  ttisrfsrup             ttisrfsrdw                                      N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
