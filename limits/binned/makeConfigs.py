@@ -6,7 +6,7 @@ import socket, random, re
 
 # change those:
 setdir = '/nfs/dust/atlas/user/danilo/topana2429'
-mydir = '/nfs/dust/atlas/user/danilo/result2429_all/TRExFitter'
+mydir = '/nfs/dust/atlas/user/danilo/hists2429_local/TRExFitter'
 
 def fixFile(template, final, sig, dirname, doBOnlyFit):
   fr = open(template, 'r')
@@ -19,7 +19,7 @@ Sample: "Signal"
   Type: SIGNAL
   Title: "Signal"
   LineColor: 632
-  NormFactor: "SigXsecOverSM",0,0,100
+  NormFactor: "SigXsecOverSM",1,0,100
   HistoFile: "%s"
 ''' % ('hist_'+sig))
       if 'eft' in sig:
@@ -80,13 +80,17 @@ def jobSubmit(suf, extra = ""):
 	fr.write('lsetup rcsetup\n')
 	fr.write('cd '+mydir+'\n')
 	fr.write('./myFit.exe h ttres_%s%s.config\n'%(suf, extra))
-	fr.write('./myFit.exe d ttres_%s%s.config\n'%(suf, extra))
+	if 'bkg' in suf:
+		fr.write('./myFit.exe d ttres_%s%s.config\n'%(suf, extra))
 	fr.write('./myFit.exe w ttres_%s%s.config\n'%(suf, extra))
 	fr.write('./myFit.exe f ttres_%s%s.config\n'%(suf, extra))
-	fr.write('./myFit.exe p ttres_%s%s.config\n'%(suf, extra))
+	if 'bkg' in suf:
+		fr.write('./myFit.exe p ttres_%s%s.config\n'%(suf, extra))
 	if not 'bkg' in suf:
 		fr.write('./myFit.exe l ttres_%s.config\n'%suf)
 		fr.write('./myFit.exe s ttres_%s.config\n'%suf)
+	if 'zprime2000' in suf:
+		fr.write('./myFit.exe r ttres_%s.config\n'%suf)
 	fr.close()
 	system('chmod a+x %s'%runfile)
 	system('qsub %s'%runfile)
@@ -102,13 +106,9 @@ fixFile('ttres.config', 'ttres_bkg%s.config' % suf, "bkg%s" %suf, "bkg%s" %suf, 
 system('cp -f hist_zprime1000.root hist_bkg%s.root' %suf) ## use a dummy signal for the background only fit
 jobSubmit('bkg%s' %suf)
 
-fixFile('ttres.config', 'ttres_bkgsig%s.config' % suf, "bkgsig%s" %suf, "bkgsig%s" %suf, False)
-system('cp -f hist_zprime1000.root hist_bkgsig%s.root' %suf) ## use a dummy signal
-jobSubmit('bkgsig%s' %suf)
-
-fixFile('ttres.config', 'ttres_bkginj%s.config' % suf, "bkginj%s" %suf, "bkginj%s" %suf, False)
-system('cp -f hist_zprime1000.root hist_bkginj%s.root' %suf) ## use a dummy signal
-jobSubmit('bkginj%s' %suf)
+#fixFile('ttres.config', 'ttres_bkginj%s.config' % suf, "bkginj%s" %suf, "bkginj%s" %suf, False)
+#system('cp -f hist_zprime1000.root hist_bkginj%s.root' %suf) ## use a dummy signal
+#jobSubmit('bkginj%s' %suf)
 
 # now go over to signal
 for t in signalList:
