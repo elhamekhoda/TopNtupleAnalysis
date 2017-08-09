@@ -3222,842 +3222,842 @@ flav_map[3]['mu']["ttisrfsrdw"] = {'bb': 1.513055, 'cc': 1.513055, 'c': 0.960377
 flav_map[4]['mu']["ttisrfsrdw"] = {'bb': 1.456825, 'cc': 1.456825, 'c': 0.924687, 'l': 0.805235}
 flav_map[5]['mu']["ttisrfsrdw"] = {'bb': 1.388551, 'cc': 1.388551, 'c': 0.881351, 'l': 0.767497}
 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_0"] =  1.161203
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_0"] =  1.246653
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_0"] =  1.321721
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_0"] =  1.105620
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_0"] =  1.178333
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_0"] =  1.161149
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_0"] =  1.142397
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_0"] =  1.062018
-# pdf_PDF4LHC_nlo_30_1 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_1"] =  1.161194
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_1"] =  1.246655
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_1"] =  1.321713
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_1"] =  1.105626
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_1"] =  1.178333
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_1"] =  1.161148
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_1"] =  1.142396
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_1"] =  1.062019
-# pdf_PDF4LHC_nlo_30_2 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_2"] =  1.161182
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_2"] =  1.246659
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_2"] =  1.321701
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_2"] =  1.105635
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_2"] =  1.178336
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_2"] =  1.161122
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_2"] =  1.142364
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_2"] =  1.062033
-# pdf_PDF4LHC_nlo_30_3 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_3"] =  1.161202
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_3"] =  1.246653
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_3"] =  1.321720
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_3"] =  1.105620
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_3"] =  1.178328
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_3"] =  1.161183
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_3"] =  1.142441
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_3"] =  1.061999
-# pdf_PDF4LHC_nlo_30_4 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_4"] =  1.161196
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_4"] =  1.246655
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_4"] =  1.321715
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_4"] =  1.105624
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_4"] =  1.178339
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_4"] =  1.161108
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_4"] =  1.142345
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_4"] =  1.062041
-# pdf_PDF4LHC_nlo_30_5 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_5"] =  1.161198
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_5"] =  1.246654
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_5"] =  1.321716
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_5"] =  1.105623
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_5"] =  1.178335
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_5"] =  1.161134
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_5"] =  1.142379
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_5"] =  1.062026
-# pdf_PDF4LHC_nlo_30_6 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_6"] =  1.161204
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_6"] =  1.246653
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_6"] =  1.321722
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_6"] =  1.105619
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_6"] =  1.178335
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_6"] =  1.161134
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_6"] =  1.142379
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_6"] =  1.062026
-# pdf_PDF4LHC_nlo_30_7 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_7"] =  1.161194
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_7"] =  1.246655
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_7"] =  1.321713
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_7"] =  1.105626
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_7"] =  1.178333
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_7"] =  1.161143
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_7"] =  1.142391
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_7"] =  1.062021
-# pdf_PDF4LHC_nlo_30_8 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_8"] =  1.161209
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_8"] =  1.246651
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_8"] =  1.321727
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_8"] =  1.105615
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_8"] =  1.178329
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_8"] =  1.161174
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_8"] =  1.142430
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_8"] =  1.062004
-# pdf_PDF4LHC_nlo_30_9 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_9"] =  1.161207
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_9"] =  1.246652
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_9"] =  1.321725
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_9"] =  1.105617
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_9"] =  1.178333
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_9"] =  1.161145
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_9"] =  1.142392
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_9"] =  1.062020
-# pdf_PDF4LHC_nlo_30_10 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_10"] =  1.161241
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_10"] =  1.246642
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_10"] =  1.321757
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_10"] =  1.105592
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_10"] =  1.178331
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_10"] =  1.161162
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_10"] =  1.142414
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_10"] =  1.062011
-# pdf_PDF4LHC_nlo_30_11 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_11"] =  1.161207
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_11"] =  1.246651
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_11"] =  1.321725
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_11"] =  1.105617
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_11"] =  1.178333
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_11"] =  1.161150
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_11"] =  1.142399
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_11"] =  1.062017
-# pdf_PDF4LHC_nlo_30_12 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_12"] =  1.161209
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_12"] =  1.246651
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_12"] =  1.321727
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_12"] =  1.105615
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_12"] =  1.178331
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_12"] =  1.161161
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_12"] =  1.142414
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_12"] =  1.062011
-# pdf_PDF4LHC_nlo_30_13 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_13"] =  1.161202
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_13"] =  1.246653
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_13"] =  1.321721
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_13"] =  1.105620
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_13"] =  1.178340
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_13"] =  1.161090
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_13"] =  1.142323
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_13"] =  1.062051
-# pdf_PDF4LHC_nlo_30_14 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_14"] =  1.161200
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_14"] =  1.246653
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_14"] =  1.321719
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_14"] =  1.105622
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_14"] =  1.178334
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_14"] =  1.161138
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_14"] =  1.142383
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_14"] =  1.062024
-# pdf_PDF4LHC_nlo_30_15 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_15"] =  1.161205
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_15"] =  1.246652
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_15"] =  1.321723
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_15"] =  1.105618
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_15"] =  1.178333
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_15"] =  1.161148
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_15"] =  1.142396
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_15"] =  1.062019
-# pdf_PDF4LHC_nlo_30_16 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_16"] =  1.161212
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_16"] =  1.246650
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_16"] =  1.321729
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_16"] =  1.105613
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_16"] =  1.178336
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_16"] =  1.161124
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_16"] =  1.142366
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_16"] =  1.062032
-# pdf_PDF4LHC_nlo_30_17 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_17"] =  1.161197
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_17"] =  1.246655
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_17"] =  1.321715
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_17"] =  1.105624
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_17"] =  1.178333
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_17"] =  1.161150
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_17"] =  1.142399
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_17"] =  1.062018
-# pdf_PDF4LHC_nlo_30_18 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_18"] =  1.161200
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_18"] =  1.246653
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_18"] =  1.321719
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_18"] =  1.105622
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_18"] =  1.178332
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_18"] =  1.161162
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_18"] =  1.142414
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_18"] =  1.062011
-# pdf_PDF4LHC_nlo_30_19 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_19"] =  1.161208
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_19"] =  1.246651
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_19"] =  1.321726
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_19"] =  1.105616
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_19"] =  1.178331
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_19"] =  1.161164
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_19"] =  1.142416
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_19"] =  1.062010
-# pdf_PDF4LHC_nlo_30_20 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_20"] =  1.161216
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_20"] =  1.246649
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_20"] =  1.321733
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_20"] =  1.105611
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_20"] =  1.178332
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_20"] =  1.161155
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_20"] =  1.142405
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_20"] =  1.062015
-# pdf_PDF4LHC_nlo_30_21 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_21"] =  1.161199
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_21"] =  1.246654
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_21"] =  1.321718
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_21"] =  1.105622
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_21"] =  1.178333
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_21"] =  1.161145
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_21"] =  1.142392
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_21"] =  1.062020
-# pdf_PDF4LHC_nlo_30_22 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_22"] =  1.161207
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_22"] =  1.246652
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_22"] =  1.321724
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_22"] =  1.105617
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_22"] =  1.178331
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_22"] =  1.161164
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_22"] =  1.142417
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_22"] =  1.062010
-# pdf_PDF4LHC_nlo_30_23 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_23"] =  1.161173
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_23"] =  1.246662
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_23"] =  1.321693
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_23"] =  1.105642
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_23"] =  1.178331
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_23"] =  1.161162
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_23"] =  1.142414
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_23"] =  1.062011
-# pdf_PDF4LHC_nlo_30_24 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_24"] =  1.161192
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_24"] =  1.246656
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_24"] =  1.321710
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_24"] =  1.105628
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_24"] =  1.178332
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_24"] =  1.161155
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_24"] =  1.142405
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_24"] =  1.062015
-# pdf_PDF4LHC_nlo_30_25 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_25"] =  1.161202
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_25"] =  1.246653
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_25"] =  1.321720
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_25"] =  1.105621
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_25"] =  1.178334
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_25"] =  1.161146
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_25"] =  1.142394
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_25"] =  1.062019
-# pdf_PDF4LHC_nlo_30_26 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_26"] =  1.161200
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_26"] =  1.246653
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_26"] =  1.321719
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_26"] =  1.105622
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_26"] =  1.178333
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_26"] =  1.161150
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_26"] =  1.142399
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_26"] =  1.062018
-# pdf_PDF4LHC_nlo_30_27 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_27"] =  1.161203
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_27"] =  1.246653
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_27"] =  1.321721
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_27"] =  1.105620
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_27"] =  1.178332
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_27"] =  1.161153
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_27"] =  1.142402
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_27"] =  1.062016
-# pdf_PDF4LHC_nlo_30_28 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_28"] =  1.161194
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_28"] =  1.246655
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_28"] =  1.321713
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_28"] =  1.105626
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_28"] =  1.178333
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_28"] =  1.161142
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_28"] =  1.142389
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_28"] =  1.062022
-# pdf_PDF4LHC_nlo_30_29 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_29"] =  1.161204
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_29"] =  1.246652
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_29"] =  1.321722
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_29"] =  1.105619
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_29"] =  1.178332
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_29"] =  1.161156
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_29"] =  1.142407
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_29"] =  1.062014
-# pdf_PDF4LHC_nlo_30_30 
-f_ca_map[2]['el']["pdf_PDF4LHC_nlo_30_30"] =  1.161202
-f_ca_map[3]['el']["pdf_PDF4LHC_nlo_30_30"] =  1.246653
-f_ca_map[4]['el']["pdf_PDF4LHC_nlo_30_30"] =  1.321721
-f_ca_map[5]['el']["pdf_PDF4LHC_nlo_30_30"] =  1.105620
-f_ca_map[2]['mu']["pdf_PDF4LHC_nlo_30_30"] =  1.178334
-f_ca_map[3]['mu']["pdf_PDF4LHC_nlo_30_30"] =  1.161140
-f_ca_map[4]['mu']["pdf_PDF4LHC_nlo_30_30"] =  1.142386
-f_ca_map[5]['mu']["pdf_PDF4LHC_nlo_30_30"] =  1.062023
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_0"] =  1.161203
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_0"] =  1.246653
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_0"] =  1.321721
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_0"] =  1.105620
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_0"] =  1.178333
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_0"] =  1.161149
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_0"] =  1.142397
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_0"] =  1.062018
+# pdf_PDF4LHC15_nlo_30_1 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_1"] =  1.161194
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_1"] =  1.246655
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_1"] =  1.321713
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_1"] =  1.105626
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_1"] =  1.178333
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_1"] =  1.161148
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_1"] =  1.142396
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_1"] =  1.062019
+# pdf_PDF4LHC15_nlo_30_2 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_2"] =  1.161182
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_2"] =  1.246659
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_2"] =  1.321701
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_2"] =  1.105635
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_2"] =  1.178336
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_2"] =  1.161122
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_2"] =  1.142364
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_2"] =  1.062033
+# pdf_PDF4LHC15_nlo_30_3 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_3"] =  1.161202
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_3"] =  1.246653
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_3"] =  1.321720
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_3"] =  1.105620
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_3"] =  1.178328
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_3"] =  1.161183
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_3"] =  1.142441
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_3"] =  1.061999
+# pdf_PDF4LHC15_nlo_30_4 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_4"] =  1.161196
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_4"] =  1.246655
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_4"] =  1.321715
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_4"] =  1.105624
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_4"] =  1.178339
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_4"] =  1.161108
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_4"] =  1.142345
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_4"] =  1.062041
+# pdf_PDF4LHC15_nlo_30_5 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_5"] =  1.161198
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_5"] =  1.246654
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_5"] =  1.321716
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_5"] =  1.105623
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_5"] =  1.178335
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_5"] =  1.161134
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_5"] =  1.142379
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_5"] =  1.062026
+# pdf_PDF4LHC15_nlo_30_6 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_6"] =  1.161204
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_6"] =  1.246653
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_6"] =  1.321722
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_6"] =  1.105619
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_6"] =  1.178335
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_6"] =  1.161134
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_6"] =  1.142379
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_6"] =  1.062026
+# pdf_PDF4LHC15_nlo_30_7 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_7"] =  1.161194
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_7"] =  1.246655
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_7"] =  1.321713
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_7"] =  1.105626
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_7"] =  1.178333
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_7"] =  1.161143
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_7"] =  1.142391
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_7"] =  1.062021
+# pdf_PDF4LHC15_nlo_30_8 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_8"] =  1.161209
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_8"] =  1.246651
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_8"] =  1.321727
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_8"] =  1.105615
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_8"] =  1.178329
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_8"] =  1.161174
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_8"] =  1.142430
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_8"] =  1.062004
+# pdf_PDF4LHC15_nlo_30_9 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_9"] =  1.161207
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_9"] =  1.246652
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_9"] =  1.321725
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_9"] =  1.105617
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_9"] =  1.178333
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_9"] =  1.161145
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_9"] =  1.142392
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_9"] =  1.062020
+# pdf_PDF4LHC15_nlo_30_10 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_10"] =  1.161241
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_10"] =  1.246642
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_10"] =  1.321757
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_10"] =  1.105592
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_10"] =  1.178331
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_10"] =  1.161162
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_10"] =  1.142414
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_10"] =  1.062011
+# pdf_PDF4LHC15_nlo_30_11 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_11"] =  1.161207
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_11"] =  1.246651
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_11"] =  1.321725
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_11"] =  1.105617
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_11"] =  1.178333
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_11"] =  1.161150
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_11"] =  1.142399
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_11"] =  1.062017
+# pdf_PDF4LHC15_nlo_30_12 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_12"] =  1.161209
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_12"] =  1.246651
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_12"] =  1.321727
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_12"] =  1.105615
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_12"] =  1.178331
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_12"] =  1.161161
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_12"] =  1.142414
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_12"] =  1.062011
+# pdf_PDF4LHC15_nlo_30_13 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_13"] =  1.161202
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_13"] =  1.246653
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_13"] =  1.321721
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_13"] =  1.105620
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_13"] =  1.178340
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_13"] =  1.161090
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_13"] =  1.142323
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_13"] =  1.062051
+# pdf_PDF4LHC15_nlo_30_14 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_14"] =  1.161200
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_14"] =  1.246653
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_14"] =  1.321719
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_14"] =  1.105622
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_14"] =  1.178334
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_14"] =  1.161138
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_14"] =  1.142383
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_14"] =  1.062024
+# pdf_PDF4LHC15_nlo_30_15 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_15"] =  1.161205
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_15"] =  1.246652
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_15"] =  1.321723
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_15"] =  1.105618
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_15"] =  1.178333
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_15"] =  1.161148
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_15"] =  1.142396
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_15"] =  1.062019
+# pdf_PDF4LHC15_nlo_30_16 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_16"] =  1.161212
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_16"] =  1.246650
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_16"] =  1.321729
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_16"] =  1.105613
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_16"] =  1.178336
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_16"] =  1.161124
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_16"] =  1.142366
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_16"] =  1.062032
+# pdf_PDF4LHC15_nlo_30_17 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_17"] =  1.161197
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_17"] =  1.246655
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_17"] =  1.321715
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_17"] =  1.105624
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_17"] =  1.178333
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_17"] =  1.161150
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_17"] =  1.142399
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_17"] =  1.062018
+# pdf_PDF4LHC15_nlo_30_18 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_18"] =  1.161200
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_18"] =  1.246653
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_18"] =  1.321719
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_18"] =  1.105622
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_18"] =  1.178332
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_18"] =  1.161162
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_18"] =  1.142414
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_18"] =  1.062011
+# pdf_PDF4LHC15_nlo_30_19 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_19"] =  1.161208
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_19"] =  1.246651
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_19"] =  1.321726
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_19"] =  1.105616
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_19"] =  1.178331
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_19"] =  1.161164
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_19"] =  1.142416
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_19"] =  1.062010
+# pdf_PDF4LHC15_nlo_30_20 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_20"] =  1.161216
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_20"] =  1.246649
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_20"] =  1.321733
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_20"] =  1.105611
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_20"] =  1.178332
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_20"] =  1.161155
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_20"] =  1.142405
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_20"] =  1.062015
+# pdf_PDF4LHC15_nlo_30_21 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_21"] =  1.161199
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_21"] =  1.246654
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_21"] =  1.321718
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_21"] =  1.105622
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_21"] =  1.178333
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_21"] =  1.161145
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_21"] =  1.142392
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_21"] =  1.062020
+# pdf_PDF4LHC15_nlo_30_22 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_22"] =  1.161207
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_22"] =  1.246652
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_22"] =  1.321724
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_22"] =  1.105617
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_22"] =  1.178331
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_22"] =  1.161164
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_22"] =  1.142417
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_22"] =  1.062010
+# pdf_PDF4LHC15_nlo_30_23 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_23"] =  1.161173
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_23"] =  1.246662
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_23"] =  1.321693
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_23"] =  1.105642
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_23"] =  1.178331
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_23"] =  1.161162
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_23"] =  1.142414
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_23"] =  1.062011
+# pdf_PDF4LHC15_nlo_30_24 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_24"] =  1.161192
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_24"] =  1.246656
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_24"] =  1.321710
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_24"] =  1.105628
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_24"] =  1.178332
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_24"] =  1.161155
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_24"] =  1.142405
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_24"] =  1.062015
+# pdf_PDF4LHC15_nlo_30_25 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_25"] =  1.161202
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_25"] =  1.246653
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_25"] =  1.321720
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_25"] =  1.105621
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_25"] =  1.178334
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_25"] =  1.161146
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_25"] =  1.142394
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_25"] =  1.062019
+# pdf_PDF4LHC15_nlo_30_26 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_26"] =  1.161200
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_26"] =  1.246653
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_26"] =  1.321719
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_26"] =  1.105622
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_26"] =  1.178333
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_26"] =  1.161150
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_26"] =  1.142399
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_26"] =  1.062018
+# pdf_PDF4LHC15_nlo_30_27 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_27"] =  1.161203
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_27"] =  1.246653
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_27"] =  1.321721
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_27"] =  1.105620
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_27"] =  1.178332
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_27"] =  1.161153
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_27"] =  1.142402
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_27"] =  1.062016
+# pdf_PDF4LHC15_nlo_30_28 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_28"] =  1.161194
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_28"] =  1.246655
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_28"] =  1.321713
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_28"] =  1.105626
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_28"] =  1.178333
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_28"] =  1.161142
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_28"] =  1.142389
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_28"] =  1.062022
+# pdf_PDF4LHC15_nlo_30_29 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_29"] =  1.161204
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_29"] =  1.246652
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_29"] =  1.321722
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_29"] =  1.105619
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_29"] =  1.178332
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_29"] =  1.161156
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_29"] =  1.142407
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_29"] =  1.062014
+# pdf_PDF4LHC15_nlo_30_30 
+f_ca_map[2]['el']["pdf_PDF4LHC15_nlo_30_30"] =  1.161202
+f_ca_map[3]['el']["pdf_PDF4LHC15_nlo_30_30"] =  1.246653
+f_ca_map[4]['el']["pdf_PDF4LHC15_nlo_30_30"] =  1.321721
+f_ca_map[5]['el']["pdf_PDF4LHC15_nlo_30_30"] =  1.105620
+f_ca_map[2]['mu']["pdf_PDF4LHC15_nlo_30_30"] =  1.178334
+f_ca_map[3]['mu']["pdf_PDF4LHC15_nlo_30_30"] =  1.161140
+f_ca_map[4]['mu']["pdf_PDF4LHC15_nlo_30_30"] =  1.142386
+f_ca_map[5]['mu']["pdf_PDF4LHC15_nlo_30_30"] =  1.062023
 
-# pdf_PDF4LHC_nlo_30_0 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_1 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_2 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_3 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_4 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_5 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_6 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_7 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_8 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_9 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_10 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_11 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_12 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_13 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_14 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_15 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_16 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_17 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_18 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_19 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_20 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_21 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_22 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_23 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_24 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_25 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_26 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_27 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_28 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_29 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
-# pdf_PDF4LHC_nlo_30_30 
-frac[2]['el']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
-frac[3]['el']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
-frac[4]['el']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
-frac[5]['el']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
-frac[2]['mu']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
-frac[3]['mu']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
-frac[4]['mu']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
-frac[5]['mu']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_0 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_1 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_2 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_3 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_4 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_5 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_6 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_7 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_8 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_9 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_10 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_11 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_12 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_13 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_14 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_15 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_16 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_17 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_18 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_19 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_20 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_21 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_22 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_23 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_24 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_25 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_26 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_27 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_28 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_29 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
+# pdf_PDF4LHC15_nlo_30_30 
+frac[2]['el']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 0.093916,'cc': 0.063787,'c': 0.208945,'l': 0.633352}
+frac[3]['el']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 0.117127,'cc': 0.098185,'c': 0.219124,'l': 0.565564}
+frac[4]['el']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 0.139564,'cc': 0.136938,'c': 0.215736,'l': 0.507762}
+frac[5]['el']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 0.147172,'cc': 0.149155,'c': 0.210933,'l': 0.492740}
+frac[2]['mu']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 0.083058,'cc': 0.062701,'c': 0.204911,'l': 0.649330}
+frac[3]['mu']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 0.105982,'cc': 0.096368,'c': 0.215590,'l': 0.582059}
+frac[4]['mu']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 0.128953,'cc': 0.131889,'c': 0.207636,'l': 0.531522}
+frac[5]['mu']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 0.138052,'cc': 0.144177,'c': 0.203654,'l': 0.514117}
 
-# pdf_PDF4LHC_nlo_30_0 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 1.414658, 'cc': 1.414658, 'c': 1.000000, 'l': 0.896751}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 1.372272, 'cc': 1.372272, 'c': 0.970038, 'l': 0.869883}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 1.331783, 'cc': 1.331783, 'c': 0.941417, 'l': 0.844217}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 1.288875, 'cc': 1.288875, 'c': 0.911086, 'l': 0.817018}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 1.553709, 'cc': 1.553709, 'c': 1.000000, 'l': 0.875705}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 1.494387, 'cc': 1.494387, 'c': 0.961819, 'l': 0.842270}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 1.440800, 'cc': 1.440800, 'c': 0.927329, 'l': 0.812067}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_0"] = {'bb': 1.375537, 'cc': 1.375537, 'c': 0.885325, 'l': 0.775284}
-# pdf_PDF4LHC_nlo_30_1 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 1.413967, 'cc': 1.413967, 'c': 1.000000, 'l': 0.896924}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 1.371670, 'cc': 1.371670, 'c': 0.970087, 'l': 0.870093}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 1.331263, 'cc': 1.331263, 'c': 0.941509, 'l': 0.844462}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 1.288436, 'cc': 1.288436, 'c': 0.911221, 'l': 0.817295}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 1.553646, 'cc': 1.553646, 'c': 1.000000, 'l': 0.875720}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 1.494332, 'cc': 1.494332, 'c': 0.961823, 'l': 0.842288}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 1.440753, 'cc': 1.440753, 'c': 0.927336, 'l': 0.812087}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_1"] = {'bb': 1.375499, 'cc': 1.375499, 'c': 0.885336, 'l': 0.775307}
-# pdf_PDF4LHC_nlo_30_2 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 1.412922, 'cc': 1.412922, 'c': 1.000000, 'l': 0.897184}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 1.370760, 'cc': 1.370760, 'c': 0.970160, 'l': 0.870412}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 1.330475, 'cc': 1.330475, 'c': 0.941648, 'l': 0.844832}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 1.287772, 'cc': 1.287772, 'c': 0.911425, 'l': 0.817716}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 1.552015, 'cc': 1.552015, 'c': 1.000000, 'l': 0.876086}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 1.492932, 'cc': 1.492932, 'c': 0.961931, 'l': 0.842735}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 1.439549, 'cc': 1.439549, 'c': 0.927535, 'l': 0.812601}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_2"] = {'bb': 1.374520, 'cc': 1.374520, 'c': 0.885635, 'l': 0.775893}
-# pdf_PDF4LHC_nlo_30_3 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 1.414619, 'cc': 1.414619, 'c': 1.000000, 'l': 0.896761}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 1.372239, 'cc': 1.372239, 'c': 0.970041, 'l': 0.869895}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 1.331755, 'cc': 1.331755, 'c': 0.941422, 'l': 0.844231}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 1.288850, 'cc': 1.288850, 'c': 0.911093, 'l': 0.817033}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 1.555917, 'cc': 1.555917, 'c': 1.000000, 'l': 0.875211}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 1.496282, 'cc': 1.496282, 'c': 0.961672, 'l': 0.841666}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 1.442429, 'cc': 1.442429, 'c': 0.927060, 'l': 0.811373}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_3"] = {'bb': 1.376862, 'cc': 1.376862, 'c': 0.884920, 'l': 0.774491}
-# pdf_PDF4LHC_nlo_30_4 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 1.414148, 'cc': 1.414148, 'c': 1.000000, 'l': 0.896879}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 1.371828, 'cc': 1.371828, 'c': 0.970074, 'l': 0.870038}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 1.331399, 'cc': 1.331399, 'c': 0.941485, 'l': 0.844398}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 1.288551, 'cc': 1.288551, 'c': 0.911185, 'l': 0.817223}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 1.551065, 'cc': 1.551065, 'c': 1.000000, 'l': 0.876299}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 1.492116, 'cc': 1.492116, 'c': 0.961994, 'l': 0.842995}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 1.438847, 'cc': 1.438847, 'c': 0.927651, 'l': 0.812900}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_4"] = {'bb': 1.373949, 'cc': 1.373949, 'c': 0.885810, 'l': 0.776234}
-# pdf_PDF4LHC_nlo_30_5 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 1.414274, 'cc': 1.414274, 'c': 1.000000, 'l': 0.896847}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 1.371938, 'cc': 1.371938, 'c': 0.970065, 'l': 0.870000}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 1.331495, 'cc': 1.331495, 'c': 0.941468, 'l': 0.844353}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 1.288631, 'cc': 1.288631, 'c': 0.911161, 'l': 0.817172}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 1.552774, 'cc': 1.552774, 'c': 1.000000, 'l': 0.875916}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 1.493584, 'cc': 1.493584, 'c': 0.961881, 'l': 0.842526}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 1.440109, 'cc': 1.440109, 'c': 0.927443, 'l': 0.812362}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_5"] = {'bb': 1.374976, 'cc': 1.374976, 'c': 0.885496, 'l': 0.775620}
-# pdf_PDF4LHC_nlo_30_6 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 1.414745, 'cc': 1.414745, 'c': 1.000000, 'l': 0.896729}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 1.372348, 'cc': 1.372348, 'c': 0.970032, 'l': 0.869856}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 1.331849, 'cc': 1.331849, 'c': 0.941406, 'l': 0.844186}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 1.288930, 'cc': 1.288930, 'c': 0.911069, 'l': 0.816982}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 1.552781, 'cc': 1.552781, 'c': 1.000000, 'l': 0.875914}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 1.493590, 'cc': 1.493590, 'c': 0.961880, 'l': 0.842525}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 1.440114, 'cc': 1.440114, 'c': 0.927442, 'l': 0.812359}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_6"] = {'bb': 1.374980, 'cc': 1.374980, 'c': 0.885495, 'l': 0.775618}
-# pdf_PDF4LHC_nlo_30_7 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 1.414013, 'cc': 1.414013, 'c': 1.000000, 'l': 0.896913}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 1.371710, 'cc': 1.371710, 'c': 0.970083, 'l': 0.870080}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 1.331297, 'cc': 1.331297, 'c': 0.941503, 'l': 0.844446}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 1.288465, 'cc': 1.288465, 'c': 0.911212, 'l': 0.817277}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 1.553367, 'cc': 1.553367, 'c': 1.000000, 'l': 0.875783}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 1.494092, 'cc': 1.494092, 'c': 0.961841, 'l': 0.842364}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 1.440546, 'cc': 1.440546, 'c': 0.927370, 'l': 0.812175}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_7"] = {'bb': 1.375331, 'cc': 1.375331, 'c': 0.885387, 'l': 0.775407}
-# pdf_PDF4LHC_nlo_30_8 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 1.415241, 'cc': 1.415241, 'c': 1.000000, 'l': 0.896606}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 1.372780, 'cc': 1.372780, 'c': 0.969997, 'l': 0.869706}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 1.332223, 'cc': 1.332223, 'c': 0.941340, 'l': 0.844011}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 1.289245, 'cc': 1.289245, 'c': 0.910972, 'l': 0.816783}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 1.555341, 'cc': 1.555341, 'c': 1.000000, 'l': 0.875340}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 1.495788, 'cc': 1.495788, 'c': 0.961711, 'l': 0.841824}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 1.442004, 'cc': 1.442004, 'c': 0.927130, 'l': 0.811554}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_8"] = {'bb': 1.376516, 'cc': 1.376516, 'c': 0.885026, 'l': 0.774698}
-# pdf_PDF4LHC_nlo_30_9 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 1.415003, 'cc': 1.415003, 'c': 1.000000, 'l': 0.896666}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 1.372573, 'cc': 1.372573, 'c': 0.970014, 'l': 0.869778}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 1.332043, 'cc': 1.332043, 'c': 0.941371, 'l': 0.844095}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 1.289094, 'cc': 1.289094, 'c': 0.911018, 'l': 0.816879}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 1.553455, 'cc': 1.553455, 'c': 1.000000, 'l': 0.875763}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 1.494169, 'cc': 1.494169, 'c': 0.961836, 'l': 0.842340}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 1.440612, 'cc': 1.440612, 'c': 0.927360, 'l': 0.812147}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_9"] = {'bb': 1.375385, 'cc': 1.375385, 'c': 0.885371, 'l': 0.775375}
-# pdf_PDF4LHC_nlo_30_10 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 1.417860, 'cc': 1.417860, 'c': 1.000000, 'l': 0.895954}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 1.375060, 'cc': 1.375060, 'c': 0.969814, 'l': 0.868909}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 1.334194, 'cc': 1.334194, 'c': 0.940992, 'l': 0.843085}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 1.290906, 'cc': 1.290906, 'c': 0.910461, 'l': 0.815731}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 1.554552, 'cc': 1.554552, 'c': 1.000000, 'l': 0.875517}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 1.495111, 'cc': 1.495111, 'c': 0.961763, 'l': 0.842039}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 1.441422, 'cc': 1.441422, 'c': 0.927226, 'l': 0.811802}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_10"] = {'bb': 1.376043, 'cc': 1.376043, 'c': 0.885170, 'l': 0.774981}
-# pdf_PDF4LHC_nlo_30_11 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 1.415031, 'cc': 1.415031, 'c': 1.000000, 'l': 0.896658}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 1.372597, 'cc': 1.372597, 'c': 0.970012, 'l': 0.869769}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 1.332065, 'cc': 1.332065, 'c': 0.941368, 'l': 0.844085}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 1.289112, 'cc': 1.289112, 'c': 0.911013, 'l': 0.816867}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 1.553774, 'cc': 1.553774, 'c': 1.000000, 'l': 0.875691}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 1.494442, 'cc': 1.494442, 'c': 0.961815, 'l': 0.842253}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 1.440847, 'cc': 1.440847, 'c': 0.927321, 'l': 0.812047}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_11"] = {'bb': 1.375576, 'cc': 1.375576, 'c': 0.885313, 'l': 0.775261}
-# pdf_PDF4LHC_nlo_30_12 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 1.415220, 'cc': 1.415220, 'c': 1.000000, 'l': 0.896612}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 1.372762, 'cc': 1.372762, 'c': 0.969999, 'l': 0.869712}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 1.332207, 'cc': 1.332207, 'c': 0.941342, 'l': 0.844019}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 1.289231, 'cc': 1.289231, 'c': 0.910976, 'l': 0.816792}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 1.554523, 'cc': 1.554523, 'c': 1.000000, 'l': 0.875524}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 1.495085, 'cc': 1.495085, 'c': 0.961765, 'l': 0.842048}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 1.441400, 'cc': 1.441400, 'c': 0.927230, 'l': 0.811812}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_12"] = {'bb': 1.376025, 'cc': 1.376025, 'c': 0.885176, 'l': 0.774992}
-# pdf_PDF4LHC_nlo_30_13 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 1.414648, 'cc': 1.414648, 'c': 1.000000, 'l': 0.896754}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 1.372263, 'cc': 1.372263, 'c': 0.970039, 'l': 0.869886}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 1.331776, 'cc': 1.331776, 'c': 0.941418, 'l': 0.844221}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 1.288868, 'cc': 1.288868, 'c': 0.911088, 'l': 0.817022}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 1.549958, 'cc': 1.549958, 'c': 1.000000, 'l': 0.876548}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 1.491165, 'cc': 1.491165, 'c': 0.962068, 'l': 0.843298}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 1.438029, 'cc': 1.438029, 'c': 0.927786, 'l': 0.813249}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_13"] = {'bb': 1.373283, 'cc': 1.373283, 'c': 0.886013, 'l': 0.776633}
-# pdf_PDF4LHC_nlo_30_14 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 1.414474, 'cc': 1.414474, 'c': 1.000000, 'l': 0.896797}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 1.372112, 'cc': 1.372112, 'c': 0.970051, 'l': 0.869939}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 1.331645, 'cc': 1.331645, 'c': 0.941442, 'l': 0.844282}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 1.288758, 'cc': 1.288758, 'c': 0.911122, 'l': 0.817091}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 1.552998, 'cc': 1.552998, 'c': 1.000000, 'l': 0.875866}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 1.493776, 'cc': 1.493776, 'c': 0.961866, 'l': 0.842465}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 1.440274, 'cc': 1.440274, 'c': 0.927415, 'l': 0.812291}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_14"] = {'bb': 1.375110, 'cc': 1.375110, 'c': 0.885455, 'l': 0.775540}
-# pdf_PDF4LHC_nlo_30_15 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 1.414864, 'cc': 1.414864, 'c': 1.000000, 'l': 0.896700}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 1.372452, 'cc': 1.372452, 'c': 0.970024, 'l': 0.869820}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 1.331939, 'cc': 1.331939, 'c': 0.941390, 'l': 0.844144}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 1.289005, 'cc': 1.289005, 'c': 0.911046, 'l': 0.816935}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 1.553646, 'cc': 1.553646, 'c': 1.000000, 'l': 0.875720}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 1.494333, 'cc': 1.494333, 'c': 0.961823, 'l': 0.842288}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 1.440753, 'cc': 1.440753, 'c': 0.927337, 'l': 0.812087}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_15"] = {'bb': 1.375499, 'cc': 1.375499, 'c': 0.885336, 'l': 0.775307}
-# pdf_PDF4LHC_nlo_30_16 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 1.415434, 'cc': 1.415434, 'c': 1.000000, 'l': 0.896558}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 1.372948, 'cc': 1.372948, 'c': 0.969984, 'l': 0.869647}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 1.332368, 'cc': 1.332368, 'c': 0.941314, 'l': 0.843943}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 1.289367, 'cc': 1.289367, 'c': 0.910934, 'l': 0.816706}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 1.552126, 'cc': 1.552126, 'c': 1.000000, 'l': 0.876061}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 1.493027, 'cc': 1.493027, 'c': 0.961924, 'l': 0.842704}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 1.439630, 'cc': 1.439630, 'c': 0.927522, 'l': 0.812566}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_16"] = {'bb': 1.374586, 'cc': 1.374586, 'c': 0.885615, 'l': 0.775853}
-# pdf_PDF4LHC_nlo_30_17 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 1.414171, 'cc': 1.414171, 'c': 1.000000, 'l': 0.896873}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 1.371848, 'cc': 1.371848, 'c': 0.970072, 'l': 0.870031}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 1.331417, 'cc': 1.331417, 'c': 0.941482, 'l': 0.844389}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 1.288566, 'cc': 1.288566, 'c': 0.911181, 'l': 0.817213}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 1.553764, 'cc': 1.553764, 'c': 1.000000, 'l': 0.875693}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 1.494434, 'cc': 1.494434, 'c': 0.961815, 'l': 0.842255}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 1.440840, 'cc': 1.440840, 'c': 0.927322, 'l': 0.812050}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_17"] = {'bb': 1.375570, 'cc': 1.375570, 'c': 0.885315, 'l': 0.775264}
-# pdf_PDF4LHC_nlo_30_18 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 1.414474, 'cc': 1.414474, 'c': 1.000000, 'l': 0.896797}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 1.372112, 'cc': 1.372112, 'c': 0.970051, 'l': 0.869939}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 1.331645, 'cc': 1.331645, 'c': 0.941442, 'l': 0.844282}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 1.288758, 'cc': 1.288758, 'c': 0.911122, 'l': 0.817091}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 1.554543, 'cc': 1.554543, 'c': 1.000000, 'l': 0.875518}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 1.495104, 'cc': 1.495104, 'c': 0.961764, 'l': 0.842042}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 1.441416, 'cc': 1.441416, 'c': 0.927228, 'l': 0.811805}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_18"] = {'bb': 1.376038, 'cc': 1.376038, 'c': 0.885172, 'l': 0.774984}
-# pdf_PDF4LHC_nlo_30_19 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 1.415089, 'cc': 1.415089, 'c': 1.000000, 'l': 0.896644}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 1.372647, 'cc': 1.372647, 'c': 0.970008, 'l': 0.869752}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 1.332108, 'cc': 1.332108, 'c': 0.941360, 'l': 0.844065}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 1.289148, 'cc': 1.289148, 'c': 0.911002, 'l': 0.816844}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 1.554652, 'cc': 1.554652, 'c': 1.000000, 'l': 0.875494}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 1.495197, 'cc': 1.495197, 'c': 0.961756, 'l': 0.842012}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 1.441496, 'cc': 1.441496, 'c': 0.927214, 'l': 0.811771}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_19"] = {'bb': 1.376103, 'cc': 1.376103, 'c': 0.885152, 'l': 0.774945}
-# pdf_PDF4LHC_nlo_30_20 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 1.415764, 'cc': 1.415764, 'c': 1.000000, 'l': 0.896475}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 1.373236, 'cc': 1.373236, 'c': 0.969961, 'l': 0.869546}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 1.332617, 'cc': 1.332617, 'c': 0.941271, 'l': 0.843826}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 1.289577, 'cc': 1.289577, 'c': 0.910870, 'l': 0.816573}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 1.554078, 'cc': 1.554078, 'c': 1.000000, 'l': 0.875623}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 1.494704, 'cc': 1.494704, 'c': 0.961795, 'l': 0.842169}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 1.441072, 'cc': 1.441072, 'c': 0.927284, 'l': 0.811951}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_20"] = {'bb': 1.375759, 'cc': 1.375759, 'c': 0.885257, 'l': 0.775151}
-# pdf_PDF4LHC_nlo_30_21 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 1.414377, 'cc': 1.414377, 'c': 1.000000, 'l': 0.896821}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 1.372028, 'cc': 1.372028, 'c': 0.970058, 'l': 0.869969}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 1.331572, 'cc': 1.331572, 'c': 0.941455, 'l': 0.844317}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 1.288696, 'cc': 1.288696, 'c': 0.911141, 'l': 0.817130}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 1.553442, 'cc': 1.553442, 'c': 1.000000, 'l': 0.875766}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 1.494157, 'cc': 1.494157, 'c': 0.961837, 'l': 0.842344}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 1.440602, 'cc': 1.440602, 'c': 0.927361, 'l': 0.812151}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_21"] = {'bb': 1.375377, 'cc': 1.375377, 'c': 0.885374, 'l': 0.775380}
-# pdf_PDF4LHC_nlo_30_22 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 1.414991, 'cc': 1.414991, 'c': 1.000000, 'l': 0.896668}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 1.372563, 'cc': 1.372563, 'c': 0.970015, 'l': 0.869782}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 1.332035, 'cc': 1.332035, 'c': 0.941373, 'l': 0.844099}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 1.289086, 'cc': 1.289086, 'c': 0.911021, 'l': 0.816883}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 1.554679, 'cc': 1.554679, 'c': 1.000000, 'l': 0.875489}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 1.495219, 'cc': 1.495219, 'c': 0.961754, 'l': 0.842005}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 1.441515, 'cc': 1.441515, 'c': 0.927211, 'l': 0.811762}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_22"] = {'bb': 1.376119, 'cc': 1.376119, 'c': 0.885147, 'l': 0.774936}
-# pdf_PDF4LHC_nlo_30_23 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 1.412180, 'cc': 1.412180, 'c': 1.000000, 'l': 0.897368}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 1.370114, 'cc': 1.370114, 'c': 0.970212, 'l': 0.870638}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 1.329916, 'cc': 1.329916, 'c': 0.941747, 'l': 0.845094}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 1.287301, 'cc': 1.287301, 'c': 0.911570, 'l': 0.818014}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 1.554549, 'cc': 1.554549, 'c': 1.000000, 'l': 0.875518}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 1.495108, 'cc': 1.495108, 'c': 0.961763, 'l': 0.842040}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 1.441419, 'cc': 1.441419, 'c': 0.927227, 'l': 0.811803}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_23"] = {'bb': 1.376041, 'cc': 1.376041, 'c': 0.885171, 'l': 0.774982}
-# pdf_PDF4LHC_nlo_30_24 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 1.413738, 'cc': 1.413738, 'c': 1.000000, 'l': 0.896980}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 1.371471, 'cc': 1.371471, 'c': 0.970103, 'l': 0.870163}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 1.331091, 'cc': 1.331091, 'c': 0.941540, 'l': 0.844543}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 1.288291, 'cc': 1.288291, 'c': 0.911266, 'l': 0.817387}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 1.554103, 'cc': 1.554103, 'c': 1.000000, 'l': 0.875618}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 1.494725, 'cc': 1.494725, 'c': 0.961793, 'l': 0.842163}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 1.441090, 'cc': 1.441090, 'c': 0.927281, 'l': 0.811943}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_24"] = {'bb': 1.375774, 'cc': 1.375774, 'c': 0.885253, 'l': 0.775143}
-# pdf_PDF4LHC_nlo_30_25 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 1.414598, 'cc': 1.414598, 'c': 1.000000, 'l': 0.896767}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 1.372220, 'cc': 1.372220, 'c': 0.970042, 'l': 0.869901}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 1.331738, 'cc': 1.331738, 'c': 0.941425, 'l': 0.844239}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 1.288837, 'cc': 1.288837, 'c': 0.911097, 'l': 0.817042}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 1.553550, 'cc': 1.553550, 'c': 1.000000, 'l': 0.875741}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 1.494250, 'cc': 1.494250, 'c': 0.961830, 'l': 0.842314}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 1.440682, 'cc': 1.440682, 'c': 0.927349, 'l': 0.812117}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_25"] = {'bb': 1.375442, 'cc': 1.375442, 'c': 0.885354, 'l': 0.775341}
-# pdf_PDF4LHC_nlo_30_26 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 1.414480, 'cc': 1.414480, 'c': 1.000000, 'l': 0.896796}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 1.372117, 'cc': 1.372117, 'c': 0.970051, 'l': 0.869937}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 1.331650, 'cc': 1.331650, 'c': 0.941441, 'l': 0.844280}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 1.288762, 'cc': 1.288762, 'c': 0.911120, 'l': 0.817089}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 1.553770, 'cc': 1.553770, 'c': 1.000000, 'l': 0.875691}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 1.494440, 'cc': 1.494440, 'c': 0.961815, 'l': 0.842253}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 1.440845, 'cc': 1.440845, 'c': 0.927322, 'l': 0.812048}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_26"] = {'bb': 1.375574, 'cc': 1.375574, 'c': 0.885314, 'l': 0.775262}
-# pdf_PDF4LHC_nlo_30_27 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 1.414669, 'cc': 1.414669, 'c': 1.000000, 'l': 0.896749}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 1.372282, 'cc': 1.372282, 'c': 0.970037, 'l': 0.869880}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 1.331792, 'cc': 1.331792, 'c': 0.941416, 'l': 0.844213}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 1.288882, 'cc': 1.288882, 'c': 0.911084, 'l': 0.817013}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 1.553963, 'cc': 1.553963, 'c': 1.000000, 'l': 0.875649}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 1.494604, 'cc': 1.494604, 'c': 0.961802, 'l': 0.842201}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 1.440987, 'cc': 1.440987, 'c': 0.927298, 'l': 0.811988}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_27"] = {'bb': 1.375689, 'cc': 1.375689, 'c': 0.885278, 'l': 0.775193}
-# pdf_PDF4LHC_nlo_30_28 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 1.413950, 'cc': 1.413950, 'c': 1.000000, 'l': 0.896927}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 1.371656, 'cc': 1.371656, 'c': 0.970088, 'l': 0.870098}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 1.331250, 'cc': 1.331250, 'c': 0.941512, 'l': 0.844468}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 1.288425, 'cc': 1.288425, 'c': 0.911224, 'l': 0.817302}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 1.553293, 'cc': 1.553293, 'c': 1.000000, 'l': 0.875800}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 1.494029, 'cc': 1.494029, 'c': 0.961846, 'l': 0.842385}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 1.440492, 'cc': 1.440492, 'c': 0.927379, 'l': 0.812199}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_28"] = {'bb': 1.375287, 'cc': 1.375287, 'c': 0.885401, 'l': 0.775434}
-# pdf_PDF4LHC_nlo_30_29 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 1.414785, 'cc': 1.414785, 'c': 1.000000, 'l': 0.896720}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 1.372383, 'cc': 1.372383, 'c': 0.970029, 'l': 0.869844}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 1.331879, 'cc': 1.331879, 'c': 0.941400, 'l': 0.844172}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 1.288955, 'cc': 1.288955, 'c': 0.911061, 'l': 0.816966}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 1.554165, 'cc': 1.554165, 'c': 1.000000, 'l': 0.875603}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 1.494778, 'cc': 1.494778, 'c': 0.961789, 'l': 0.842145}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 1.441136, 'cc': 1.441136, 'c': 0.927274, 'l': 0.811924}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_29"] = {'bb': 1.375811, 'cc': 1.375811, 'c': 0.885241, 'l': 0.775120}
-# pdf_PDF4LHC_nlo_30_30 
-flav_map[2]['el']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 1.414639, 'cc': 1.414639, 'c': 1.000000, 'l': 0.896756}
-flav_map[3]['el']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 1.372255, 'cc': 1.372255, 'c': 0.970040, 'l': 0.869889}
-flav_map[4]['el']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 1.331769, 'cc': 1.331769, 'c': 0.941420, 'l': 0.844224}
-flav_map[5]['el']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 1.288862, 'cc': 1.288862, 'c': 0.911090, 'l': 0.817025}
-flav_map[2]['mu']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 1.553114, 'cc': 1.553114, 'c': 1.000000, 'l': 0.875840}
-flav_map[3]['mu']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 1.493875, 'cc': 1.493875, 'c': 0.961858, 'l': 0.842434}
-flav_map[4]['mu']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 1.440360, 'cc': 1.440360, 'c': 0.927401, 'l': 0.812255}
-flav_map[5]['mu']["pdf_PDF4LHC_nlo_30_30"] = {'bb': 1.375180, 'cc': 1.375180, 'c': 0.885434, 'l': 0.775498}
+# pdf_PDF4LHC15_nlo_30_0 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 1.414658, 'cc': 1.414658, 'c': 1.000000, 'l': 0.896751}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 1.372272, 'cc': 1.372272, 'c': 0.970038, 'l': 0.869883}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 1.331783, 'cc': 1.331783, 'c': 0.941417, 'l': 0.844217}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 1.288875, 'cc': 1.288875, 'c': 0.911086, 'l': 0.817018}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 1.553709, 'cc': 1.553709, 'c': 1.000000, 'l': 0.875705}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 1.494387, 'cc': 1.494387, 'c': 0.961819, 'l': 0.842270}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 1.440800, 'cc': 1.440800, 'c': 0.927329, 'l': 0.812067}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_0"] = {'bb': 1.375537, 'cc': 1.375537, 'c': 0.885325, 'l': 0.775284}
+# pdf_PDF4LHC15_nlo_30_1 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 1.413967, 'cc': 1.413967, 'c': 1.000000, 'l': 0.896924}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 1.371670, 'cc': 1.371670, 'c': 0.970087, 'l': 0.870093}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 1.331263, 'cc': 1.331263, 'c': 0.941509, 'l': 0.844462}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 1.288436, 'cc': 1.288436, 'c': 0.911221, 'l': 0.817295}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 1.553646, 'cc': 1.553646, 'c': 1.000000, 'l': 0.875720}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 1.494332, 'cc': 1.494332, 'c': 0.961823, 'l': 0.842288}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 1.440753, 'cc': 1.440753, 'c': 0.927336, 'l': 0.812087}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_1"] = {'bb': 1.375499, 'cc': 1.375499, 'c': 0.885336, 'l': 0.775307}
+# pdf_PDF4LHC15_nlo_30_2 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 1.412922, 'cc': 1.412922, 'c': 1.000000, 'l': 0.897184}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 1.370760, 'cc': 1.370760, 'c': 0.970160, 'l': 0.870412}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 1.330475, 'cc': 1.330475, 'c': 0.941648, 'l': 0.844832}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 1.287772, 'cc': 1.287772, 'c': 0.911425, 'l': 0.817716}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 1.552015, 'cc': 1.552015, 'c': 1.000000, 'l': 0.876086}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 1.492932, 'cc': 1.492932, 'c': 0.961931, 'l': 0.842735}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 1.439549, 'cc': 1.439549, 'c': 0.927535, 'l': 0.812601}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_2"] = {'bb': 1.374520, 'cc': 1.374520, 'c': 0.885635, 'l': 0.775893}
+# pdf_PDF4LHC15_nlo_30_3 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 1.414619, 'cc': 1.414619, 'c': 1.000000, 'l': 0.896761}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 1.372239, 'cc': 1.372239, 'c': 0.970041, 'l': 0.869895}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 1.331755, 'cc': 1.331755, 'c': 0.941422, 'l': 0.844231}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 1.288850, 'cc': 1.288850, 'c': 0.911093, 'l': 0.817033}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 1.555917, 'cc': 1.555917, 'c': 1.000000, 'l': 0.875211}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 1.496282, 'cc': 1.496282, 'c': 0.961672, 'l': 0.841666}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 1.442429, 'cc': 1.442429, 'c': 0.927060, 'l': 0.811373}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_3"] = {'bb': 1.376862, 'cc': 1.376862, 'c': 0.884920, 'l': 0.774491}
+# pdf_PDF4LHC15_nlo_30_4 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 1.414148, 'cc': 1.414148, 'c': 1.000000, 'l': 0.896879}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 1.371828, 'cc': 1.371828, 'c': 0.970074, 'l': 0.870038}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 1.331399, 'cc': 1.331399, 'c': 0.941485, 'l': 0.844398}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 1.288551, 'cc': 1.288551, 'c': 0.911185, 'l': 0.817223}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 1.551065, 'cc': 1.551065, 'c': 1.000000, 'l': 0.876299}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 1.492116, 'cc': 1.492116, 'c': 0.961994, 'l': 0.842995}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 1.438847, 'cc': 1.438847, 'c': 0.927651, 'l': 0.812900}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_4"] = {'bb': 1.373949, 'cc': 1.373949, 'c': 0.885810, 'l': 0.776234}
+# pdf_PDF4LHC15_nlo_30_5 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 1.414274, 'cc': 1.414274, 'c': 1.000000, 'l': 0.896847}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 1.371938, 'cc': 1.371938, 'c': 0.970065, 'l': 0.870000}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 1.331495, 'cc': 1.331495, 'c': 0.941468, 'l': 0.844353}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 1.288631, 'cc': 1.288631, 'c': 0.911161, 'l': 0.817172}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 1.552774, 'cc': 1.552774, 'c': 1.000000, 'l': 0.875916}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 1.493584, 'cc': 1.493584, 'c': 0.961881, 'l': 0.842526}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 1.440109, 'cc': 1.440109, 'c': 0.927443, 'l': 0.812362}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_5"] = {'bb': 1.374976, 'cc': 1.374976, 'c': 0.885496, 'l': 0.775620}
+# pdf_PDF4LHC15_nlo_30_6 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 1.414745, 'cc': 1.414745, 'c': 1.000000, 'l': 0.896729}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 1.372348, 'cc': 1.372348, 'c': 0.970032, 'l': 0.869856}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 1.331849, 'cc': 1.331849, 'c': 0.941406, 'l': 0.844186}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 1.288930, 'cc': 1.288930, 'c': 0.911069, 'l': 0.816982}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 1.552781, 'cc': 1.552781, 'c': 1.000000, 'l': 0.875914}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 1.493590, 'cc': 1.493590, 'c': 0.961880, 'l': 0.842525}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 1.440114, 'cc': 1.440114, 'c': 0.927442, 'l': 0.812359}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_6"] = {'bb': 1.374980, 'cc': 1.374980, 'c': 0.885495, 'l': 0.775618}
+# pdf_PDF4LHC15_nlo_30_7 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 1.414013, 'cc': 1.414013, 'c': 1.000000, 'l': 0.896913}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 1.371710, 'cc': 1.371710, 'c': 0.970083, 'l': 0.870080}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 1.331297, 'cc': 1.331297, 'c': 0.941503, 'l': 0.844446}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 1.288465, 'cc': 1.288465, 'c': 0.911212, 'l': 0.817277}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 1.553367, 'cc': 1.553367, 'c': 1.000000, 'l': 0.875783}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 1.494092, 'cc': 1.494092, 'c': 0.961841, 'l': 0.842364}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 1.440546, 'cc': 1.440546, 'c': 0.927370, 'l': 0.812175}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_7"] = {'bb': 1.375331, 'cc': 1.375331, 'c': 0.885387, 'l': 0.775407}
+# pdf_PDF4LHC15_nlo_30_8 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 1.415241, 'cc': 1.415241, 'c': 1.000000, 'l': 0.896606}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 1.372780, 'cc': 1.372780, 'c': 0.969997, 'l': 0.869706}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 1.332223, 'cc': 1.332223, 'c': 0.941340, 'l': 0.844011}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 1.289245, 'cc': 1.289245, 'c': 0.910972, 'l': 0.816783}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 1.555341, 'cc': 1.555341, 'c': 1.000000, 'l': 0.875340}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 1.495788, 'cc': 1.495788, 'c': 0.961711, 'l': 0.841824}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 1.442004, 'cc': 1.442004, 'c': 0.927130, 'l': 0.811554}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_8"] = {'bb': 1.376516, 'cc': 1.376516, 'c': 0.885026, 'l': 0.774698}
+# pdf_PDF4LHC15_nlo_30_9 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 1.415003, 'cc': 1.415003, 'c': 1.000000, 'l': 0.896666}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 1.372573, 'cc': 1.372573, 'c': 0.970014, 'l': 0.869778}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 1.332043, 'cc': 1.332043, 'c': 0.941371, 'l': 0.844095}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 1.289094, 'cc': 1.289094, 'c': 0.911018, 'l': 0.816879}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 1.553455, 'cc': 1.553455, 'c': 1.000000, 'l': 0.875763}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 1.494169, 'cc': 1.494169, 'c': 0.961836, 'l': 0.842340}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 1.440612, 'cc': 1.440612, 'c': 0.927360, 'l': 0.812147}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_9"] = {'bb': 1.375385, 'cc': 1.375385, 'c': 0.885371, 'l': 0.775375}
+# pdf_PDF4LHC15_nlo_30_10 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 1.417860, 'cc': 1.417860, 'c': 1.000000, 'l': 0.895954}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 1.375060, 'cc': 1.375060, 'c': 0.969814, 'l': 0.868909}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 1.334194, 'cc': 1.334194, 'c': 0.940992, 'l': 0.843085}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 1.290906, 'cc': 1.290906, 'c': 0.910461, 'l': 0.815731}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 1.554552, 'cc': 1.554552, 'c': 1.000000, 'l': 0.875517}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 1.495111, 'cc': 1.495111, 'c': 0.961763, 'l': 0.842039}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 1.441422, 'cc': 1.441422, 'c': 0.927226, 'l': 0.811802}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_10"] = {'bb': 1.376043, 'cc': 1.376043, 'c': 0.885170, 'l': 0.774981}
+# pdf_PDF4LHC15_nlo_30_11 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 1.415031, 'cc': 1.415031, 'c': 1.000000, 'l': 0.896658}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 1.372597, 'cc': 1.372597, 'c': 0.970012, 'l': 0.869769}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 1.332065, 'cc': 1.332065, 'c': 0.941368, 'l': 0.844085}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 1.289112, 'cc': 1.289112, 'c': 0.911013, 'l': 0.816867}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 1.553774, 'cc': 1.553774, 'c': 1.000000, 'l': 0.875691}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 1.494442, 'cc': 1.494442, 'c': 0.961815, 'l': 0.842253}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 1.440847, 'cc': 1.440847, 'c': 0.927321, 'l': 0.812047}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_11"] = {'bb': 1.375576, 'cc': 1.375576, 'c': 0.885313, 'l': 0.775261}
+# pdf_PDF4LHC15_nlo_30_12 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 1.415220, 'cc': 1.415220, 'c': 1.000000, 'l': 0.896612}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 1.372762, 'cc': 1.372762, 'c': 0.969999, 'l': 0.869712}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 1.332207, 'cc': 1.332207, 'c': 0.941342, 'l': 0.844019}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 1.289231, 'cc': 1.289231, 'c': 0.910976, 'l': 0.816792}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 1.554523, 'cc': 1.554523, 'c': 1.000000, 'l': 0.875524}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 1.495085, 'cc': 1.495085, 'c': 0.961765, 'l': 0.842048}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 1.441400, 'cc': 1.441400, 'c': 0.927230, 'l': 0.811812}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_12"] = {'bb': 1.376025, 'cc': 1.376025, 'c': 0.885176, 'l': 0.774992}
+# pdf_PDF4LHC15_nlo_30_13 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 1.414648, 'cc': 1.414648, 'c': 1.000000, 'l': 0.896754}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 1.372263, 'cc': 1.372263, 'c': 0.970039, 'l': 0.869886}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 1.331776, 'cc': 1.331776, 'c': 0.941418, 'l': 0.844221}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 1.288868, 'cc': 1.288868, 'c': 0.911088, 'l': 0.817022}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 1.549958, 'cc': 1.549958, 'c': 1.000000, 'l': 0.876548}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 1.491165, 'cc': 1.491165, 'c': 0.962068, 'l': 0.843298}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 1.438029, 'cc': 1.438029, 'c': 0.927786, 'l': 0.813249}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_13"] = {'bb': 1.373283, 'cc': 1.373283, 'c': 0.886013, 'l': 0.776633}
+# pdf_PDF4LHC15_nlo_30_14 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 1.414474, 'cc': 1.414474, 'c': 1.000000, 'l': 0.896797}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 1.372112, 'cc': 1.372112, 'c': 0.970051, 'l': 0.869939}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 1.331645, 'cc': 1.331645, 'c': 0.941442, 'l': 0.844282}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 1.288758, 'cc': 1.288758, 'c': 0.911122, 'l': 0.817091}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 1.552998, 'cc': 1.552998, 'c': 1.000000, 'l': 0.875866}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 1.493776, 'cc': 1.493776, 'c': 0.961866, 'l': 0.842465}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 1.440274, 'cc': 1.440274, 'c': 0.927415, 'l': 0.812291}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_14"] = {'bb': 1.375110, 'cc': 1.375110, 'c': 0.885455, 'l': 0.775540}
+# pdf_PDF4LHC15_nlo_30_15 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 1.414864, 'cc': 1.414864, 'c': 1.000000, 'l': 0.896700}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 1.372452, 'cc': 1.372452, 'c': 0.970024, 'l': 0.869820}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 1.331939, 'cc': 1.331939, 'c': 0.941390, 'l': 0.844144}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 1.289005, 'cc': 1.289005, 'c': 0.911046, 'l': 0.816935}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 1.553646, 'cc': 1.553646, 'c': 1.000000, 'l': 0.875720}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 1.494333, 'cc': 1.494333, 'c': 0.961823, 'l': 0.842288}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 1.440753, 'cc': 1.440753, 'c': 0.927337, 'l': 0.812087}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_15"] = {'bb': 1.375499, 'cc': 1.375499, 'c': 0.885336, 'l': 0.775307}
+# pdf_PDF4LHC15_nlo_30_16 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 1.415434, 'cc': 1.415434, 'c': 1.000000, 'l': 0.896558}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 1.372948, 'cc': 1.372948, 'c': 0.969984, 'l': 0.869647}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 1.332368, 'cc': 1.332368, 'c': 0.941314, 'l': 0.843943}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 1.289367, 'cc': 1.289367, 'c': 0.910934, 'l': 0.816706}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 1.552126, 'cc': 1.552126, 'c': 1.000000, 'l': 0.876061}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 1.493027, 'cc': 1.493027, 'c': 0.961924, 'l': 0.842704}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 1.439630, 'cc': 1.439630, 'c': 0.927522, 'l': 0.812566}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_16"] = {'bb': 1.374586, 'cc': 1.374586, 'c': 0.885615, 'l': 0.775853}
+# pdf_PDF4LHC15_nlo_30_17 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 1.414171, 'cc': 1.414171, 'c': 1.000000, 'l': 0.896873}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 1.371848, 'cc': 1.371848, 'c': 0.970072, 'l': 0.870031}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 1.331417, 'cc': 1.331417, 'c': 0.941482, 'l': 0.844389}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 1.288566, 'cc': 1.288566, 'c': 0.911181, 'l': 0.817213}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 1.553764, 'cc': 1.553764, 'c': 1.000000, 'l': 0.875693}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 1.494434, 'cc': 1.494434, 'c': 0.961815, 'l': 0.842255}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 1.440840, 'cc': 1.440840, 'c': 0.927322, 'l': 0.812050}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_17"] = {'bb': 1.375570, 'cc': 1.375570, 'c': 0.885315, 'l': 0.775264}
+# pdf_PDF4LHC15_nlo_30_18 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 1.414474, 'cc': 1.414474, 'c': 1.000000, 'l': 0.896797}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 1.372112, 'cc': 1.372112, 'c': 0.970051, 'l': 0.869939}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 1.331645, 'cc': 1.331645, 'c': 0.941442, 'l': 0.844282}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 1.288758, 'cc': 1.288758, 'c': 0.911122, 'l': 0.817091}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 1.554543, 'cc': 1.554543, 'c': 1.000000, 'l': 0.875518}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 1.495104, 'cc': 1.495104, 'c': 0.961764, 'l': 0.842042}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 1.441416, 'cc': 1.441416, 'c': 0.927228, 'l': 0.811805}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_18"] = {'bb': 1.376038, 'cc': 1.376038, 'c': 0.885172, 'l': 0.774984}
+# pdf_PDF4LHC15_nlo_30_19 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 1.415089, 'cc': 1.415089, 'c': 1.000000, 'l': 0.896644}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 1.372647, 'cc': 1.372647, 'c': 0.970008, 'l': 0.869752}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 1.332108, 'cc': 1.332108, 'c': 0.941360, 'l': 0.844065}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 1.289148, 'cc': 1.289148, 'c': 0.911002, 'l': 0.816844}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 1.554652, 'cc': 1.554652, 'c': 1.000000, 'l': 0.875494}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 1.495197, 'cc': 1.495197, 'c': 0.961756, 'l': 0.842012}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 1.441496, 'cc': 1.441496, 'c': 0.927214, 'l': 0.811771}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_19"] = {'bb': 1.376103, 'cc': 1.376103, 'c': 0.885152, 'l': 0.774945}
+# pdf_PDF4LHC15_nlo_30_20 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 1.415764, 'cc': 1.415764, 'c': 1.000000, 'l': 0.896475}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 1.373236, 'cc': 1.373236, 'c': 0.969961, 'l': 0.869546}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 1.332617, 'cc': 1.332617, 'c': 0.941271, 'l': 0.843826}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 1.289577, 'cc': 1.289577, 'c': 0.910870, 'l': 0.816573}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 1.554078, 'cc': 1.554078, 'c': 1.000000, 'l': 0.875623}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 1.494704, 'cc': 1.494704, 'c': 0.961795, 'l': 0.842169}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 1.441072, 'cc': 1.441072, 'c': 0.927284, 'l': 0.811951}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_20"] = {'bb': 1.375759, 'cc': 1.375759, 'c': 0.885257, 'l': 0.775151}
+# pdf_PDF4LHC15_nlo_30_21 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 1.414377, 'cc': 1.414377, 'c': 1.000000, 'l': 0.896821}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 1.372028, 'cc': 1.372028, 'c': 0.970058, 'l': 0.869969}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 1.331572, 'cc': 1.331572, 'c': 0.941455, 'l': 0.844317}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 1.288696, 'cc': 1.288696, 'c': 0.911141, 'l': 0.817130}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 1.553442, 'cc': 1.553442, 'c': 1.000000, 'l': 0.875766}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 1.494157, 'cc': 1.494157, 'c': 0.961837, 'l': 0.842344}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 1.440602, 'cc': 1.440602, 'c': 0.927361, 'l': 0.812151}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_21"] = {'bb': 1.375377, 'cc': 1.375377, 'c': 0.885374, 'l': 0.775380}
+# pdf_PDF4LHC15_nlo_30_22 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 1.414991, 'cc': 1.414991, 'c': 1.000000, 'l': 0.896668}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 1.372563, 'cc': 1.372563, 'c': 0.970015, 'l': 0.869782}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 1.332035, 'cc': 1.332035, 'c': 0.941373, 'l': 0.844099}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 1.289086, 'cc': 1.289086, 'c': 0.911021, 'l': 0.816883}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 1.554679, 'cc': 1.554679, 'c': 1.000000, 'l': 0.875489}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 1.495219, 'cc': 1.495219, 'c': 0.961754, 'l': 0.842005}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 1.441515, 'cc': 1.441515, 'c': 0.927211, 'l': 0.811762}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_22"] = {'bb': 1.376119, 'cc': 1.376119, 'c': 0.885147, 'l': 0.774936}
+# pdf_PDF4LHC15_nlo_30_23 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 1.412180, 'cc': 1.412180, 'c': 1.000000, 'l': 0.897368}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 1.370114, 'cc': 1.370114, 'c': 0.970212, 'l': 0.870638}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 1.329916, 'cc': 1.329916, 'c': 0.941747, 'l': 0.845094}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 1.287301, 'cc': 1.287301, 'c': 0.911570, 'l': 0.818014}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 1.554549, 'cc': 1.554549, 'c': 1.000000, 'l': 0.875518}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 1.495108, 'cc': 1.495108, 'c': 0.961763, 'l': 0.842040}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 1.441419, 'cc': 1.441419, 'c': 0.927227, 'l': 0.811803}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_23"] = {'bb': 1.376041, 'cc': 1.376041, 'c': 0.885171, 'l': 0.774982}
+# pdf_PDF4LHC15_nlo_30_24 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 1.413738, 'cc': 1.413738, 'c': 1.000000, 'l': 0.896980}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 1.371471, 'cc': 1.371471, 'c': 0.970103, 'l': 0.870163}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 1.331091, 'cc': 1.331091, 'c': 0.941540, 'l': 0.844543}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 1.288291, 'cc': 1.288291, 'c': 0.911266, 'l': 0.817387}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 1.554103, 'cc': 1.554103, 'c': 1.000000, 'l': 0.875618}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 1.494725, 'cc': 1.494725, 'c': 0.961793, 'l': 0.842163}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 1.441090, 'cc': 1.441090, 'c': 0.927281, 'l': 0.811943}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_24"] = {'bb': 1.375774, 'cc': 1.375774, 'c': 0.885253, 'l': 0.775143}
+# pdf_PDF4LHC15_nlo_30_25 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 1.414598, 'cc': 1.414598, 'c': 1.000000, 'l': 0.896767}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 1.372220, 'cc': 1.372220, 'c': 0.970042, 'l': 0.869901}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 1.331738, 'cc': 1.331738, 'c': 0.941425, 'l': 0.844239}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 1.288837, 'cc': 1.288837, 'c': 0.911097, 'l': 0.817042}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 1.553550, 'cc': 1.553550, 'c': 1.000000, 'l': 0.875741}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 1.494250, 'cc': 1.494250, 'c': 0.961830, 'l': 0.842314}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 1.440682, 'cc': 1.440682, 'c': 0.927349, 'l': 0.812117}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_25"] = {'bb': 1.375442, 'cc': 1.375442, 'c': 0.885354, 'l': 0.775341}
+# pdf_PDF4LHC15_nlo_30_26 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 1.414480, 'cc': 1.414480, 'c': 1.000000, 'l': 0.896796}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 1.372117, 'cc': 1.372117, 'c': 0.970051, 'l': 0.869937}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 1.331650, 'cc': 1.331650, 'c': 0.941441, 'l': 0.844280}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 1.288762, 'cc': 1.288762, 'c': 0.911120, 'l': 0.817089}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 1.553770, 'cc': 1.553770, 'c': 1.000000, 'l': 0.875691}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 1.494440, 'cc': 1.494440, 'c': 0.961815, 'l': 0.842253}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 1.440845, 'cc': 1.440845, 'c': 0.927322, 'l': 0.812048}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_26"] = {'bb': 1.375574, 'cc': 1.375574, 'c': 0.885314, 'l': 0.775262}
+# pdf_PDF4LHC15_nlo_30_27 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 1.414669, 'cc': 1.414669, 'c': 1.000000, 'l': 0.896749}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 1.372282, 'cc': 1.372282, 'c': 0.970037, 'l': 0.869880}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 1.331792, 'cc': 1.331792, 'c': 0.941416, 'l': 0.844213}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 1.288882, 'cc': 1.288882, 'c': 0.911084, 'l': 0.817013}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 1.553963, 'cc': 1.553963, 'c': 1.000000, 'l': 0.875649}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 1.494604, 'cc': 1.494604, 'c': 0.961802, 'l': 0.842201}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 1.440987, 'cc': 1.440987, 'c': 0.927298, 'l': 0.811988}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_27"] = {'bb': 1.375689, 'cc': 1.375689, 'c': 0.885278, 'l': 0.775193}
+# pdf_PDF4LHC15_nlo_30_28 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 1.413950, 'cc': 1.413950, 'c': 1.000000, 'l': 0.896927}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 1.371656, 'cc': 1.371656, 'c': 0.970088, 'l': 0.870098}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 1.331250, 'cc': 1.331250, 'c': 0.941512, 'l': 0.844468}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 1.288425, 'cc': 1.288425, 'c': 0.911224, 'l': 0.817302}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 1.553293, 'cc': 1.553293, 'c': 1.000000, 'l': 0.875800}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 1.494029, 'cc': 1.494029, 'c': 0.961846, 'l': 0.842385}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 1.440492, 'cc': 1.440492, 'c': 0.927379, 'l': 0.812199}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_28"] = {'bb': 1.375287, 'cc': 1.375287, 'c': 0.885401, 'l': 0.775434}
+# pdf_PDF4LHC15_nlo_30_29 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 1.414785, 'cc': 1.414785, 'c': 1.000000, 'l': 0.896720}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 1.372383, 'cc': 1.372383, 'c': 0.970029, 'l': 0.869844}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 1.331879, 'cc': 1.331879, 'c': 0.941400, 'l': 0.844172}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 1.288955, 'cc': 1.288955, 'c': 0.911061, 'l': 0.816966}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 1.554165, 'cc': 1.554165, 'c': 1.000000, 'l': 0.875603}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 1.494778, 'cc': 1.494778, 'c': 0.961789, 'l': 0.842145}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 1.441136, 'cc': 1.441136, 'c': 0.927274, 'l': 0.811924}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_29"] = {'bb': 1.375811, 'cc': 1.375811, 'c': 0.885241, 'l': 0.775120}
+# pdf_PDF4LHC15_nlo_30_30 
+flav_map[2]['el']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 1.414639, 'cc': 1.414639, 'c': 1.000000, 'l': 0.896756}
+flav_map[3]['el']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 1.372255, 'cc': 1.372255, 'c': 0.970040, 'l': 0.869889}
+flav_map[4]['el']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 1.331769, 'cc': 1.331769, 'c': 0.941420, 'l': 0.844224}
+flav_map[5]['el']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 1.288862, 'cc': 1.288862, 'c': 0.911090, 'l': 0.817025}
+flav_map[2]['mu']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 1.553114, 'cc': 1.553114, 'c': 1.000000, 'l': 0.875840}
+flav_map[3]['mu']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 1.493875, 'cc': 1.493875, 'c': 0.961858, 'l': 0.842434}
+flav_map[4]['mu']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 1.440360, 'cc': 1.440360, 'c': 0.927401, 'l': 0.812255}
+flav_map[5]['mu']["pdf_PDF4LHC15_nlo_30_30"] = {'bb': 1.375180, 'cc': 1.375180, 'c': 0.885434, 'l': 0.775498}
 
