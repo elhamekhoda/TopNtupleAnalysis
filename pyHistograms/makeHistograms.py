@@ -117,6 +117,8 @@ def main():
 	# check if there is any W+jets sample there
 	isWjets = False
 	doEWK = False
+	isTtbar = False
+	isSingleTop = False
 
 	print "Loading first event"
 	mt_load = TChain("nominal")
@@ -127,6 +129,10 @@ def main():
 		sel = readEvent(mt_load)
 		if sel.mcChannelNumber in helpers.listWjets22:
 			isWjets = True
+		if sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
+			isTtbar = True
+		if sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
+			isSingleTop = True
 		if sel.mcChannelNumber in helpers.listEWK:
 			doEWK = True
 		break
@@ -310,9 +316,9 @@ def main():
 			treeName = 'nominal'
 		if isWjets and (('ttgen' in treeName) or ('ttps' in treeName) or ('ttisrfsr' in treeName) or ('pdf_PDF4LHC15_nlo_30' in treeName) or ('ttxsec' in treeName) or ('singletop' in treeName)): # DANGER remember to change when doing W+jets PDF variation
 			treeName = 'nominal'
-		if 'ttxsec' in treeName and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
+		if 'ttxsec' in treeName and isTtbar:
 			treeName = 'nominal'
-		if 'singletop' in treeName and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
+		if 'singletop' in treeName and isSingleTop:
 			treeName = 'nominal'
 		if options.qcd != "False":
 			treeName += '_Loose'
