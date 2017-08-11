@@ -320,10 +320,6 @@ class AnaTtresSL(Analysis):
 			norm = 0
 			for f in ['bb', 'cc', 'c', 'l']:
 				norm += frac2[nj][chan][syst][f]
-			if s == "wnorm__1up":
-				f_ca *= 1.10
-			elif s == "wnorm__1down":
-				f_ca *= 0.90
 			hfweight /= norm
 			weight *= f_ca*hfweight
 		return weight

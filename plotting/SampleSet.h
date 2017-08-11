@@ -113,6 +113,11 @@ class SampleSetConfiguration {
     void rebin(int r);
 
     /*
+     * Rebin plot with binning given in argument.
+     */
+    void rebinAsym(std::vector<float> &b);
+
+    /*
      * Normalise by bin width.
      */
     void normBinWidth(float s = 1.0);

@@ -45,7 +45,7 @@ def main():
 	#names  += ['kkgrav1000']
 	#names  += ['kkgrav2000']
 	#names  += ['kkgrav3000']
-	names  += ['ttpdf']
+	#names  += ['ttpdf']
 	#names  += ['ttpowhegherwig']
 	#names  += ['ttmcatnloherwig']
 	#names  += ['ttradhi', 'ttradlo']
@@ -179,7 +179,7 @@ def main():
 			suf = 'data'
 		elif sn in ['wbbjetspdf', 'wccjetspdf', 'wcjetspdf', 'wljetspdf']:
 			ds = glob.glob(ntuplesDir+'/*PDFv*')
-			suf = 'pdf'
+			suf = 'wjpdf'
 		# write list of files to be read when processing this sample
 		f = open(outputDir+"/inputSW_%s.txt" % suf, 'a')
 		

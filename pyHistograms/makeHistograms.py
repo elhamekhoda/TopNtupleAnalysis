@@ -157,6 +157,12 @@ def main():
 		if isWjets:
 			systList.append('wnorm__1up')
 			systList.append('wnorm__1down')
+			systList.append('wc__1up')
+			systList.append('wc__1down')
+			systList.append('wbb__1up')
+			systList.append('wbb__1down')
+			systList.append('wl__1up')
+			systList.append('wl__1down')
 			systList.append('ttgenup')
 			systList.append('ttgendw')
 			systList.append('ttpsup')
@@ -165,6 +171,8 @@ def main():
 			systList.append('ttisrfsrdw')
 			for k in range(0, 30+1):
 				systList.append('pdf_PDF4LHC15_nlo_30_%d' % (k))
+			systList.append('elMisIDpos_up')
+			systList.append('elMisIDpos_down')
 		for i in range(0, 4):
 			systList.append('btagbSF_'+str(i)+'__1up')
 			systList.append('btagbSF_'+str(i)+'__1down')
@@ -190,10 +198,12 @@ def main():
 		systList.append('btageSF_0__1down')
 		systList.append('btageSF_1__1up')
 		systList.append('btageSF_1__1down')
-		systList.append('ttxsecup')
-		systList.append('ttxsecdw')
-		systList.append('singletopup')
-		systList.append('singletopdw')
+		if isWjets or isTtbar:
+			systList.append('ttxsecup')
+			systList.append('ttxsecdw')
+		if isWjets or isSingleTop:
+			systList.append('singletopup')
+			systList.append('singletopdw')
 		systList.extend(weightChangeSystematics)
 		systList.remove('')
 		if doEWK:
@@ -208,7 +218,8 @@ def main():
 		#systematics += ',JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1down,JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1up'
 		#systematics += ',JET_NPScenario1_JET_GroupedNP_2__1down,JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_3__1down,JET_NPScenario1_JET_GroupedNP_3__1up,JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_1__1down'
 		# 19 NP for the akt4 jets
-		systematics += ',JET_21NP_JET_EffectiveNP_3__1down,JET_21NP_JET_EffectiveNP_6restTerm__1up,JET_21NP_JET_EffectiveNP_6restTerm__1down,JET_21NP_JET_Pileup_RhoTopology__1down,JET_21NP_JET_Pileup_OffsetNPV__1down,JET_21NP_JET_BJES_Response__1up,JET_21NP_JET_Pileup_RhoTopology__1up,JET_21NP_JET_EtaIntercalibration_TotalStat__1up,JET_21NP_JET_EffectiveNP_1__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1up,JET_21NP_JET_EffectiveNP_1__1down,JET_21NP_JET_BJES_Response__1down,JET_21NP_JET_Flavor_Response__1up,JET_21NP_JET_Pileup_OffsetMu__1up,JET_21NP_JET_EffectiveNP_4__1down,JET_21NP_JET_EffectiveNP_5__1up,JET_21NP_JET_EffectiveNP_5__1down,JET_21NP_JET_EffectiveNP_2__1down,JET_21NP_JET_PunchThrough_MC15__1down,JET_21NP_JET_EffectiveNP_2__1up,JET_21NP_JET_SingleParticle_HighPt__1up,JET_21NP_JET_EffectiveNP_3__1up,JET_21NP_JET_SingleParticle_HighPt__1down,JET_21NP_JET_Flavor_Composition__1up,JET_21NP_JET_Pileup_PtTerm__1down,JET_21NP_JET_PunchThrough_MC15__1up,JET_21NP_JET_Flavor_Response__1down,JET_21NP_JET_EtaIntercalibration_Modelling__1down,JET_21NP_JET_Flavor_Composition__1down,JET_21NP_JET_Pileup_PtTerm__1up,JET_21NP_JET_EtaIntercalibration_Modelling__1up,JET_21NP_JET_EffectiveNP_4__1up,JET_21NP_JET_Pileup_OffsetMu__1down,JET_21NP_JET_EtaIntercalibration_TotalStat__1down,JET_21NP_JET_Pileup_OffsetNPV__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1down'
+		#systematics += ',JET_21NP_JET_EffectiveNP_3__1down,JET_21NP_JET_EffectiveNP_6restTerm__1up,JET_21NP_JET_EffectiveNP_6restTerm__1down,JET_21NP_JET_Pileup_RhoTopology__1down,JET_21NP_JET_Pileup_OffsetNPV__1down,JET_21NP_JET_BJES_Response__1up,JET_21NP_JET_Pileup_RhoTopology__1up,JET_21NP_JET_EtaIntercalibration_TotalStat__1up,JET_21NP_JET_EffectiveNP_1__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1up,JET_21NP_JET_EffectiveNP_1__1down,JET_21NP_JET_BJES_Response__1down,JET_21NP_JET_Flavor_Response__1up,JET_21NP_JET_Pileup_OffsetMu__1up,JET_21NP_JET_EffectiveNP_4__1down,JET_21NP_JET_EffectiveNP_5__1up,JET_21NP_JET_EffectiveNP_5__1down,JET_21NP_JET_EffectiveNP_2__1down,JET_21NP_JET_PunchThrough_MC15__1down,JET_21NP_JET_EffectiveNP_2__1up,JET_21NP_JET_SingleParticle_HighPt__1up,JET_21NP_JET_EffectiveNP_3__1up,JET_21NP_JET_SingleParticle_HighPt__1down,JET_21NP_JET_Flavor_Composition__1up,JET_21NP_JET_Pileup_PtTerm__1down,JET_21NP_JET_PunchThrough_MC15__1up,JET_21NP_JET_Flavor_Response__1down,JET_21NP_JET_EtaIntercalibration_Modelling__1down,JET_21NP_JET_Flavor_Composition__1down,JET_21NP_JET_Pileup_PtTerm__1up,JET_21NP_JET_EtaIntercalibration_Modelling__1up,JET_21NP_JET_EffectiveNP_4__1up,JET_21NP_JET_Pileup_OffsetMu__1down,JET_21NP_JET_EtaIntercalibration_TotalStat__1down,JET_21NP_JET_Pileup_OffsetNPV__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1down'
+		systematics += ',JET_21NP_JET_EffectiveNP_3__1down,JET_21NP_JET_Pileup_RhoTopology__1down,JET_21NP_JET_Pileup_OffsetNPV__1down,JET_21NP_JET_BJES_Response__1up,JET_21NP_JET_Pileup_RhoTopology__1up,JET_21NP_JET_EtaIntercalibration_TotalStat__1up,JET_21NP_JET_EffectiveNP_1__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1up,JET_21NP_JET_EffectiveNP_1__1down,JET_21NP_JET_BJES_Response__1down,JET_21NP_JET_Flavor_Response__1up,JET_21NP_JET_Pileup_OffsetMu__1up,JET_21NP_JET_EffectiveNP_4__1down,JET_21NP_JET_EffectiveNP_5__1up,JET_21NP_JET_EffectiveNP_5__1down,JET_21NP_JET_EffectiveNP_2__1down,JET_21NP_JET_PunchThrough_MC15__1down,JET_21NP_JET_EffectiveNP_2__1up,JET_21NP_JET_SingleParticle_HighPt__1up,JET_21NP_JET_EffectiveNP_3__1up,JET_21NP_JET_SingleParticle_HighPt__1down,JET_21NP_JET_Flavor_Composition__1up,JET_21NP_JET_Pileup_PtTerm__1down,JET_21NP_JET_PunchThrough_MC15__1up,JET_21NP_JET_Flavor_Response__1down,JET_21NP_JET_EtaIntercalibration_Modelling__1down,JET_21NP_JET_Flavor_Composition__1down,JET_21NP_JET_Pileup_PtTerm__1up,JET_21NP_JET_EtaIntercalibration_Modelling__1up,JET_21NP_JET_EffectiveNP_4__1up,JET_21NP_JET_Pileup_OffsetMu__1down,JET_21NP_JET_EtaIntercalibration_TotalStat__1down,JET_21NP_JET_Pileup_OffsetNPV__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1down'
 		systematics += ',JET_21NP_JET_EffectiveNP_7__1down,JET_21NP_JET_EffectiveNP_7__1up,JET_21NP_JET_EffectiveNP_6__1up,JET_21NP_JET_EffectiveNP_6__1down,JET_21NP_JET_EffectiveNP_8restTerm__1up,JET_21NP_JET_EffectiveNP_8restTerm__1down'
 		systematics += ',MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleDown,MET_SoftTrk_ScaleUp'
 		# muon scale and resolution
@@ -216,6 +227,12 @@ def main():
 		systematics += ',MUON_ID__1down,MUON_ID__1up,MUON_MS__1down,MUON_MS__1up,MUON_SCALE__1down,MUON_SCALE__1up'
 		# strong systematics for large-R jets
 		systematics += ',LARGERJET_Strong_JET_Comb_Modelling_All__1up,LARGERJET_Strong_JET_Comb_Modelling_All__1down,LARGERJET_Strong_JET_Comb_Baseline_All__1down,LARGERJET_Strong_JET_Comb_Baseline_All__1up,LARGERJET_Strong_JET_Comb_Tracking_All__1down,LARGERJET_Strong_JET_Comb_Tracking_All__1up,LARGERJET_Strong_JET_Comb_TotalStat_All__1down,LARGERJET_Strong_JET_Comb_TotalStat_All__1up'
+		# medium systematics for large-R jets
+		systematics += ',LARGERJET_Medium_JET_Comb_Baseline_Kin__1up,LARGERJET_Medium_JET_Comb_Baseline_Kin__1down,LARGERJET_Medium_JET_Comb_Modelling_Kin__1up,LARGERJET_Medium_JET_Comb_Modelling_Kin__1down,LARGERJET_Medium_JET_Comb_TotalStat_Kin__1up,LARGERJET_Medium_JET_Comb_TotalStat_Kin__1down,LARGERJET_Medium_JET_Comb_Tracking_Kin__1up,LARGERJET_Medium_JET_Comb_Tracking_Kin__1down,LARGERJET_Medium_JET_Rtrk_Baseline_Sub__1up,LARGERJET_Medium_JET_Rtrk_Baseline_Sub__1down,LARGERJET_Medium_JET_Rtrk_Modelling_Sub__1up,LARGERJET_Medium_JET_Rtrk_Modelling_Sub__1down,LARGERJET_Medium_JET_Rtrk_TotalStat_Sub__1up,LARGERJET_Medium_JET_Rtrk_TotalStat_Sub__1down,LARGERJET_Medium_JET_Rtrk_Tracking_Sub__1up,LARGERJET_Medium_JET_Rtrk_Tracking_Sub__1down'
+		# correlate large-R jets and small-R jets
+		systematics += ',CORR_LargeRSmallR_A__1up,CORR_LargeRSmallR_A__1down,CORR_LargeRSmallR_B__1up,CORR_LargeRSmallR_B__1down,CORR_LargeRSmallR_C__1up,CORR_LargeRSmallR_C__1down'
+		# large-R jet res.
+		systematics += ',LARGERJET_JER_LARGERJET_JER_PT__1up,LARGERJET_JER_LARGERJET_JER_TAU32__1up,LARGERJET_JER_LARGERJET_JER_MASS__1up'
 		systList.extend(systematics.split(','))
 		l = int(len(systList)/4)
 		systListTmp = []
@@ -312,9 +329,9 @@ def main():
 	for s in systList:
 		# s is nominal, or the name of systematic
 		treeName = s # systematic name is the same as the TTree name
-		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName or 'ttNNLO_' in treeName:
+		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'wc__' in treeName or 'wl__' in treeName or 'wbb__' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName or 'ttNNLO_' in treeName:
 			treeName = 'nominal'
-		if isWjets and (('ttgen' in treeName) or ('ttps' in treeName) or ('ttisrfsr' in treeName) or ('pdf_PDF4LHC15_nlo_30' in treeName) or ('ttxsec' in treeName) or ('singletop' in treeName)): # DANGER remember to change when doing W+jets PDF variation
+		if isWjets and (('ttgen' in treeName) or ('ttps' in treeName) or ('ttisrfsr' in treeName) or ('pdf_PDF4LHC15_nlo_30' in treeName) or ('ttxsec' in treeName) or ('singletop' in treeName) or ('elMisIDpos' in treeName)): # DANGER remember to change when doing W+jets PDF variation
 			treeName = 'nominal'
 		if 'ttxsec' in treeName and isTtbar:
 			treeName = 'nominal'

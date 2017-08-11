@@ -679,6 +679,62 @@ void Hist::rebin(int r) {
   _size = _x.size();
 }
 
+void Hist::rebinAsym(std::vector<float> &b) {
+  if (_size <= 2) return;
+
+  vector<double> nx;
+  vector<double> ny;
+  vector<double> nye;
+  nx.push_back(_x[0]);
+  ny.push_back(_y[0]);
+  nye.push_back(_ye[0]);
+
+  double addX = _x[1];
+  double oldX = _x[1];
+  double addY = 0;
+  double addYE = 0;
+  size_t k = 0;
+  for (size_t i = 1; i < _size-1; ++i) {
+    addX = _x[i];
+    if (_x[i] < b[k]) {
+      addY += _y[i];
+      addYE += pow(_ye[i], 2);
+    } else {
+      nx.push_back(oldX);
+      ny.push_back(addY);
+      nye.push_back(sqrt(addYE));
+
+      oldX  = _x[i];
+      addY  = _y[i];
+      addYE = pow(_ye[i], 2);
+      if (k < b.size()-1) k++;
+      else {
+        for (size_t j = i+1; j < _size-1; ++j) {
+          addY  += _y[j];
+          addYE += pow(_ye[j], 2);
+	}
+        nx.push_back(oldX);
+        ny.push_back(addY);
+        nye.push_back(sqrt(addYE));
+	break;
+      }
+    }
+  }
+  if (k < b.size()-1) {
+    nx.push_back(oldX);
+    ny.push_back(addY);
+    nye.push_back(sqrt(addYE));
+  }
+  nx.push_back(_x[_size-1]);
+  ny.push_back(_y[_size-1]);
+  nye.push_back(_ye[_size-1]);
+  _x = nx;
+  _y = ny;
+  _ye = nye;
+
+  _size = _x.size();
+}
+
 void Hist::showOverflow() {
   _x.insert(_x.end(), _x[_size]+1);
 

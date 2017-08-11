@@ -4,17 +4,20 @@ import HQTTtResonancesTools.DC15MC13TeV_25ns_mc15c_EXOT4
 import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
 
 def main():
+	fcmd = open("running.txt", "w")
+
 	# for standard data and MC
-	ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
+	#ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
+	ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_corr_2429'
 
 	# output directory
 	# change this for your output directory
-	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_local'
-	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_local'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local'
 
 	# number of files per job
 	#nFilesPerJob = 40
-	nFilesPerJob = 8
+	nFilesPerJob = 5
 
 	# use it to setup AnalysisTop
 	# change this for the place where you setup RootCore
@@ -46,16 +49,22 @@ def main():
 	names   = []
 
 	#names  += ["data"]
-	names  += ['qcde', 'qcdmu']
+	#names  += ['qcde', 'qcdmu']
 
-	names  += ['tt']
-	names  += ['tthm']
+	# tt done
+	#names  += ['tt']
+	# tthm done
+	#names  += ['tthm']
 
-	names  += ['singletop']
+	#names  += ['singletop']
+	#names  += ['singletopDS']
 
 	#names  += ['ttv']
 	#names  += ['zjets']
 	#names  += ['vv']
+
+	# zprime done
+	#names  += ['zprime2000']
 
 	#names  += ['zprime400']
 	#names  += ['zprime500']
@@ -64,19 +73,22 @@ def main():
 	#names  += ['zprime1250']
 	#names  += ['zprime1500']
 	#names  += ['zprime1750']
-	#names  += ['zprime2000']
 	#names  += ['zprime2250']
 	#names  += ['zprime2500']
 	#names  += ['zprime2750']
 	#names  += ['zprime3000']
 	#names  += ['zprime4000']
 	#names  += ['zprime5000']
+
+	# kkgrav done
 	#names  += ['kkgrav400']
 	#names  += ['kkgrav500']
 	#names  += ['kkgrav750']
 	#names  += ['kkgrav1000']
 	#names  += ['kkgrav2000']
 	#names  += ['kkgrav3000']
+
+        # kkg done
 	#names  += ['kkg500']
 	#names  += ['kkg1000']
 	#names  += ['kkg1500']
@@ -87,6 +99,7 @@ def main():
 	#names  += ['kkg4000']
 	#names  += ['kkg4500']
 	#names  += ['kkg5000']
+
 
 	#names  += ['ttsyst']
 	#names  += ['ttpdf']
@@ -145,6 +158,7 @@ def main():
 					'ttradhi':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadHi',
 					'ttradlo':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadLo',
 					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
+					'singletopDS':'MC15c_13TeV_25ns_FS_EXOT4_singletop_DSall',
 					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets221',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
 					'zprime400': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime400',
@@ -282,6 +296,7 @@ def main():
 
 	dirs = glob.glob(ntuplesDir+'/user.dferreir.*15032017v*')
 	dirs.extend(glob.glob(ntuplesDir+'/user.dferreir.*07042017v*'))
+	dirs.extend(glob.glob(ntuplesDir+'/user.dferreir.*08082017v*'))
 
 	# each "sample" below means an item in the list names above
 	# there may contain multiple datasets
@@ -391,15 +406,15 @@ def main():
 		elif "pdf" in sn:
 			isData = ' --pdf PDF4LHC15_nlo_30 --noMttSlices '
 			theSysts = "pdf"
-		elif "ttsyst" in sn:
-			isData = ' --noMttSlices '
-			theSysts = "nominal"
                 elif "ttsystaf2" in sn or "ttpowhegherwig7af2" in sn:
 			isData = ' --noMttSlices --af2 '
 			theSysts = "nominal"
 		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:
 			theSysts = "nominal"
 			isData = ' --noMttSlices '
+		elif "ttsyst" in sn:
+			isData = ' --noMttSlices '
+			theSysts = "nominal"
 		
 		if "wbbjets" in sn:
 			extra = ' --WjetsHF bb '
@@ -502,8 +517,10 @@ def main():
 			os.system('chmod a+x '+runfile)
 			#subcmd = 'bsub <'+runfile + "|tee "+logfile
 			subcmd = 'qsub '+runfile + "|tee "+logfile
+			fcmd.write(subcmd+"\n")
 			os.system(subcmd)
 			#sys.exit(0)
+	fcmd.close()
 
 if __name__ == '__main__':
 	import os

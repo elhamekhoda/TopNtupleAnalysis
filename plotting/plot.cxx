@@ -54,6 +54,7 @@ int main(int argc, char **argv) {
     int mustBeBigger = 0;
     int posLegend = 0;
     int rebin = 1;
+    std::string rebinAsymStr = "";
     float yMax = -1;
     float yMin = -1;
     int arrow = 0;
@@ -82,6 +83,7 @@ int main(int argc, char **argv) {
         {"mustBeBigger",    required_argument,     0, 'M', "Widen range of the Y axis in the ratio plots.", &mustBeBigger, extendedOption::eOTInt},
         {"posLegend",       required_argument,     0, 'L', "Move legend to the left.", &posLegend, extendedOption::eOTInt},
         {"rebin",           required_argument,     0, 'r', "Rebin by this factor.", &rebin, extendedOption::eOTInt},
+        {"rebinAsym",       required_argument,     0, 'S', "Rebin with this binning.", &rebinAsymStr, extendedOption::eOTString},
         {"yMax",            required_argument,     0, 'Y', "Maximum of the Y axis.", &yMax, extendedOption::eOTFloat},
         {"yMin",            required_argument,     0, 'y', "Minimum of the Y axis.", &yMin, extendedOption::eOTFloat},
         {"arrow",           required_argument,     0, 'a', "Draw arrow.", &arrow, extendedOption::eOTInt},
@@ -140,10 +142,22 @@ int main(int argc, char **argv) {
       addAllSystematics(systCalc, prefix, channel, splitUpDw);
       systCalc.calculate(histogram);
 
+
+      std::vector<float> rebinAsym;
+      std::stringstream ss(rebinAsymStr);
+      float tmp = 0;
+      if (rebinAsymStr != "") {
+        while (ss >> tmp) {
+          rebinAsym.push_back(tmp);
+          if (ss.peek() == ',') ss.ignore();
+        }
+      }
+ 
       if (underflow) stackConfig.showUnderflow();
       if (xMax > -998.0) stackConfig.limitMaxX(xMax, true);
       if (xMin > -998.0) stackConfig.limitMinX(xMin);
       if (rebin != 1) stackConfig.rebin(rebin);
+      else if (rebinAsym.size() != 0) stackConfig.rebinAsym(rebinAsym);
       if (normBinWidth > 0) stackConfig.normBinWidth(normBinWidth);
 
       if (verbose) {

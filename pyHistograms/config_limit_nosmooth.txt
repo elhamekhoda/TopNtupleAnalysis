@@ -63,6 +63,9 @@ syst      pileup     "pile up"                        pileupSF__1up             
 syst      jvt        "JVT"                            jvtSF__1up                                 jvtSF__1down                                         N
 syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,wbbjets,wccjets,wcjets,wljets,kkg
 syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+syst      wc         "W+c SF"                         wc__1up                                    wc__1down                                            N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+syst      wbb        "W+bb stat."                     wbb__1up                                   wbb__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+syst      wl         "W+l stat."                      wl__1up                                    wl__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      eres       "electron res."                  EG_RESOLUTION_ALL__1up                     EG_RESOLUTION_ALL__1down                             N
 syst      escale     "electron scale"                 EG_SCALE_ALL__1up                          EG_SCALE_ALL__1down                                  N
 syst      akt4jer    "anti-$k_t$ R=0.4 JER"           JET_JER_SINGLE_NP__1up                     -                                                    N
@@ -298,3 +301,21 @@ syst_pdf_simple   ttpdf30   "PDF30"                  "wljets"               wlje
 syst      ttgen     "ttbar generator"                ttgenup                ttgendw                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      ttps      "ttbar p shower"                 ttpsup                 ttpsdw                                          N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      ttisrfsr  "ttbar ISR/FSR"                  ttisrfsrup             ttisrfsrdw                                      N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+syst      emisid    "Electron mid id"                elMisIDpos_up          elMisIDpos_down                                 N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+
+#syst      makt10kbaseline "anti-$k_t$ R=1.0 kin. baseline"  LARGERJET_Medium_JET_Comb_Baseline_Kin__1up   LARGERJET_Medium_JET_Comb_Baseline_Kin__1down   N
+#syst      makt10kmodel    "anti-$k_t$ R=1.0 kin. model"     LARGERJET_Medium_JET_Comb_Modelling_Kin__1up  LARGERJET_Medium_JET_Comb_Modelling_Kin__1down  N
+#syst      makt10kstat     "anti-$k_t$ R=1.0 kin. stat."     LARGERJET_Medium_JET_Comb_TotalStat_Kin__1up  LARGERJET_Medium_JET_Comb_TotalStat_Kin__1down  N
+#syst      makt10ktrack    "anti-$k_t$ R=1.0 kin. track."    LARGERJET_Medium_JET_Comb_Tracking_Kin__1up   LARGERJET_Medium_JET_Comb_Tracking_Kin__1down   N
+#syst      makt10rbaseline "anti-$k_t$ R=1.0 rtrk baseline"  LARGERJET_Medium_JET_Rtrk_Baseline_Sub__1up   LARGERJET_Medium_JET_Rtrk_Baseline_Sub__1down   N
+#syst      makt10rmodel    "anti-$k_t$ R=1.0 rtrk model"     LARGERJET_Medium_JET_Rtrk_Modelling_Sub__1up  LARGERJET_Medium_JET_Rtrk_Modelling_Sub__1down  N
+#syst      makt10rstat     "anti-$k_t$ R=1.0 rtrk stat."     LARGERJET_Medium_JET_Rtrk_TotalStat_Sub__1up  LARGERJET_Medium_JET_Rtrk_TotalStat_Sub__1down  N
+#syst      makt10rtrack    "anti-$k_t$ R=1.0 rtrk track."    LARGERJET_Medium_JET_Rtrk_Tracking_Sub__1up   LARGERJET_Medium_JET_Rtrk_Tracking_Sub__1down   N
+
+#syst      akt10jerpt      "anti-$k_t$ R=1.0 pT res."        LARGERJET_JER_LARGERJET_JER_PT__1up           -                                               N
+#syst      akt10jertau32   "anti-$k_t$ R=1.0 tau32 res."     LARGERJET_JER_LARGERJET_JER_TAU32__1up        -                                               N
+#syst      akt10jermass    "anti-$k_t$ R=1.0 mass res."      LARGERJET_JER_LARGERJET_JER_MASS__1up         -                                               N
+
+#syst      akt10corrA      "anti-$k_t$ R=1.0 corr. A"        CORR_LargeRSmallR_A__1up                      CORR_LargeRSmallR_A__1down                      N
+#syst      akt10corrB      "anti-$k_t$ R=1.0 corr. B"        CORR_LargeRSmallR_B__1up                      CORR_LargeRSmallR_B__1down                      N
+#syst      akt10corrC      "anti-$k_t$ R=1.0 corr. C"        CORR_LargeRSmallR_C__1up                      CORR_LargeRSmallR_C__1down                      N

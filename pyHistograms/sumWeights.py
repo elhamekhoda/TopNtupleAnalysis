@@ -13,19 +13,27 @@ def addFilesInChain(c, txtFileOption):
             c.Add(l)
 
 pdfList = ['PDF4LHC15_nlo_30']
+wjpdfList = [7]+range(11, 110+1)
 
 def main():
 
 	parser = OptionParser()
 	parser.add_option("-f", "--files",
 							 #dest="files", default="/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_all.txt,/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_syst.txt,/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_pdf.txt",
-							 dest="files", default="inputSW_all.txt,inputSW_syst.txt,inputSW_pdf.txt,inputSW_systaf2.txt",
+							 #dest="files", default="inputSW_all.txt,inputSW_syst.txt,inputSW_pdf.txt,inputSW_systaf2.txt",
+							 #dest="files", default="inputSW_pdf.txt",
+							 #dest="files", default="inputSW_systaf2.txt",
+							 dest="files", default="",
 				  help="Text file with list of input files.", metavar="FILELIST")
 	parser.add_option("-t", "--types",
-							 dest="types", default=",syst,pdf,systaf2",
+							 #dest="types", default=",syst,pdf,systaf2",
+							 #dest="types", default="pdf",
+							 #dest="types", default="systaf2",
+							 dest="types", default="",
 				  help="Categories they should be added in.", metavar="LIST")
 	parser.add_option("-s", "--suffix",
-							 dest="suffix", default="_new",
+							 #dest="suffix", default="_new",
+							 dest="suffix", default="_test",
 				  help="Suffix to be added in the output file.", metavar="SUFFIX")
 
 	(options, args) = parser.parse_args()
@@ -59,6 +67,38 @@ def main():
 				for pdfName in sorted(pdfSumOfWeights[channel].keys()):
 					for pdfNumber in range(0, len(pdfSumOfWeights[channel][pdfName])):
 						pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", pdfName, "", pdfNumber, "", pdfSumOfWeights[channel][pdfName][pdfNumber]))
+
+			sumOfWeights = {} # map of DSID to sum of weights
+			t_sumWeights = TChain("sumWeights")
+			addFilesInChain(t_sumWeights, f)
+			for k in range(0, t_sumWeights.GetEntries()):
+				t_sumWeights.GetEntry(k)
+				if not t_sumWeights.dsid in sumOfWeights:
+					sumOfWeights[t_sumWeights.dsid] = 0
+				sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
+
+			for channel in sorted(sumOfWeights.keys()):
+				pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", "nominal", "", -1, "", sumOfWeights[channel]))
+			pfs.close()
+		elif t == "wjpdf":
+			pdfName = "NNPDF30_nnlo_as_0118"
+			wjpdfSumOfWeights = {} # map of DSID to map of PDF variation names to sum of weights
+			t_wjpdfSumWeights = TChain("sumWeights")
+			addFilesInChain(t_wjpdfSumWeights, f)
+			for k in range(0, t_wjpdfSumWeights.GetEntries()):
+				t_wjpdfSumWeights.GetEntry(k)
+				if not t_wjpdfSumWeights.dsid in wjpdfSumOfWeights:
+					wjpdfSumOfWeights[t_wjpdfSumWeights.dsid] = {}
+				pdfAttr = t_wjpdfSumWeights.totalEventsWeighted_mc_generator_weights
+				for l in range(0, len(wjpdfList)):
+					if l not in wjpdfSumOfWeights[t_wjpdfSumWeights.dsid]:
+						wjpdfSumOfWeights[t_wjpdfSumWeights.dsid][l] = 0
+					wjpdfSumOfWeights[t_wjpdfSumWeights.dsid][l] += pdfAttr[wjpdfList[l]]
+
+			pfs = open("sumOfWeights%s%s.txt" % (t, suf), "w")
+			for channel in sorted(wjpdfSumOfWeights.keys()):
+				for pdfNumber in range(0, len(wjpdfSumOfWeights[channel])):
+					pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", pdfName, "", pdfNumber, "", wjpdfSumOfWeights[channel][pdfNumber]))
 
 			sumOfWeights = {} # map of DSID to sum of weights
 			t_sumWeights = TChain("sumWeights")

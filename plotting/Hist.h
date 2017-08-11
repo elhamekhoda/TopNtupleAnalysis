@@ -143,6 +143,11 @@ class Hist {
     void rebin(int r);
 
     /*
+     * Rebin plots with binning given by the argument.
+     */
+    void rebinAsym(std::vector<float> &b);
+
+    /*
      * Normalise by bin width.
      */
     void normBinWidth(float s = 1.0);

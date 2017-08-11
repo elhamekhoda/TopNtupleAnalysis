@@ -12,16 +12,20 @@ files = "/nfs/dust/atlas/user/danilo/ntuple_2429/"
 chs  = []
 
 chs += ["be"]
-#chs += ["be%d" % i for i in [0,1,2,3]]
+chs += ["be%d" % i for i in [0,1,2,3]]
 
 chs += ["bmu"]
-#chs += ["bmu%d" % i for i in [0,1,2,3]]
+chs += ["bmu%d" % i for i in [0,1,2,3]]
 
 chs += ["re"]
-#chs += ["re%d" % i for i in [0,1,2,3]]
+chs += ["re%d" % i for i in [0,1,2,3]]
 
 chs += ["rmu"]
-#chs += ["rmu%d" % i for i in [0,1,2,3]]
+chs += ["rmu%d" % i for i in [0,1,2,3]]
+
+chs += ["b"]
+chs += ["r"]
+chs += ["all"]
 
 gStyle.SetOptStat(0)
 gStyle.SetPadTickX(1)
@@ -84,6 +88,15 @@ def cutChannel(ct, i):
       p = True
   elif "rmu" in i:
     if ct.rmujets_2015 or ct.rmujets_2016:
+      p = True
+  elif "b" in i:
+    if ct.bejets_2015 or ct.bejets_2016 or ct.bmujets_2015 or ct.bmujets_2016:
+      p = True
+  elif "r" in i:
+    if ct.rejets_2015 or ct.rejets_2016 or ct.rmujets_2015 or ct.rmujets_2016:
+      p = True
+  elif "all" in i:
+    if ct.bejets_2015 or ct.bejets_2016 or ct.bmujets_2015 or ct.bmujets_2016 or ct.rejets_2015 or ct.rejets_2016 or ct.rmujets_2015 or ct.rmujets_2016:
       p = True
   if p:
     b = -1
@@ -188,23 +201,40 @@ def doIt(signal):
   for k in chs:
     hr[k].Divide(hn[k], ht[k], 1, 1, "B")
     hr[k].Scale(100)
-    hr[k].GetYaxis().SetRangeUser(0, 10);
+    ymax = [3, 5, 10, 15, 20]
+    ymaxHist = hr[k].GetBinContent(hr[k].GetMaximumBin())*1.1
+    bestYmax = 15
+    for j in ymax:
+      if j > ymaxHist:
+        bestYmax = j
+	break
+    hr[k].GetYaxis().SetRangeUser(0, bestYmax);
 
   for i in chs:
     st_color = kRed
     st_line = 1
+    cat = 0
+    if "3" in i: cat = 3
+    if "2" in i: cat = 2
+    if "1" in i: cat = 1
     if "be" in i:
-      st_color = kRed
+      st_color = kRed+cat
       st_line = 1
-    if "bmu" in i:
-      st_color = kRed
+    elif "bmu" in i:
+      st_color = kRed+cat
       st_line = 2
-    if "re" in i:
-      st_color = kBlue
+    elif "re" in i:
+      st_color = kBlue+cat
       st_line = 1
-    if "rmu" in i:
-      st_color = kBlue
+    elif "rmu" in i:
+      st_color = kBlue+cat
       st_line = 2
+    elif "b" in i:
+      st_color = kGreen+2
+      st_line = 1
+    elif "r" in i:
+      st_color = kMagenta
+      st_line = 1
     setStyle(ht[i], st_color,  st_line)
     setStyle(hn[i], st_color,  st_line)
     setStyle(hr[i], st_color,  st_line)
@@ -212,6 +242,13 @@ def doIt(signal):
 
   drawIt(hr, {"be": "e+jets", "bmu": "#mu+jets"}, label_signal+", boosted", suf = "boosted%s"%suf_signal)
   drawIt(hr, {"re": "e+jets", "rmu": "#mu+jets"}, label_signal+", resolved", suf = "resolved%s"%suf_signal)
+
+  drawIt(hr, {"be3": "e+jets (cat. 3)", "be2": "e+jets (cat. 2)", "be1": "e+jets (cat. 1)"}, label_signal+", boosted", suf = "becat%s"%suf_signal)
+  drawIt(hr, {"bmu3": "#mu+jets (cat. 3)", "bmu2": "#mu+jets (cat. 2)", "bmu1": "#mu+jets (cat. 1)"}, label_signal+", boosted", suf = "bmucat%s"%suf_signal)
+  drawIt(hr, {"re3": "e+jets (cat. 3)", "re2": "e+jets (cat. 2)", "re1": "e+jets (cat. 1)"}, label_signal+", resolved", suf = "recat%s"%suf_signal)
+  drawIt(hr, {"rmu3": "#mu+jets (cat. 3)", "rmu2": "#mu+jets (cat. 2)", "rmu1": "#mu+jets (cat. 1)"}, label_signal+", resolved", suf = "rmucat%s"%suf_signal)
+
+  drawIt(hr, {"b": "boosted", "r": "resolved", "all": "combination"}, label_signal, suf = "summary%s"%suf_signal)
 
 # call it
 for i in ["Zp", "KKgluon", "KKgrav"]:
