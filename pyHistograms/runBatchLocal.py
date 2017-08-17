@@ -51,9 +51,7 @@ def main():
 	#names  += ["data"]
 	#names  += ['qcde', 'qcdmu']
 
-	# tt done
 	#names  += ['tt']
-	# tthm done
 	#names  += ['tthm']
 
 	#names  += ['singletop']
@@ -61,10 +59,8 @@ def main():
 
 	#names  += ['ttv']
 	#names  += ['zjets']
-	#names  += ['vv']
 
-	# zprime done
-	#names  += ['zprime2000']
+	#names  += ['vv']
 
 	#names  += ['zprime400']
 	#names  += ['zprime500']
@@ -73,6 +69,7 @@ def main():
 	#names  += ['zprime1250']
 	#names  += ['zprime1500']
 	#names  += ['zprime1750']
+	#names  += ['zprime2000']
 	#names  += ['zprime2250']
 	#names  += ['zprime2500']
 	#names  += ['zprime2750']
@@ -80,15 +77,12 @@ def main():
 	#names  += ['zprime4000']
 	#names  += ['zprime5000']
 
-	# kkgrav done
 	#names  += ['kkgrav400']
 	#names  += ['kkgrav500']
 	#names  += ['kkgrav750']
 	#names  += ['kkgrav1000']
 	#names  += ['kkgrav2000']
 	#names  += ['kkgrav3000']
-
-        # kkg done
 	#names  += ['kkg500']
 	#names  += ['kkg1000']
 	#names  += ['kkg1500']
@@ -115,6 +109,11 @@ def main():
 	#names  += ['wccjets']
 	#names  += ['wcjets']
 	#names  += ['wljets']
+
+	names  += ['wbbjetspdf']
+	names  += ['wccjetspdf']
+	names  += ['wcjetspdf']
+	names  += ['wljetspdf']
 
 	#names  += ['eftl30c10']
 	#names  += ['eftl35c10']
@@ -403,8 +402,11 @@ def main():
 		elif "qcdmu" in sn:
 			theSysts = "nominal"
 			isData = ' -d -Q mu '
-		elif "pdf" in sn:
+		elif "ttpdf" in sn:
 			isData = ' --pdf PDF4LHC15_nlo_30 --noMttSlices '
+			theSysts = "pdf"
+		elif "jetspdf" in sn:
+			isData = ' --pdf NNPDF30_nnlo_as_0118 --noMttSlices '
 			theSysts = "pdf"
                 elif "ttsystaf2" in sn or "ttpowhegherwig7af2" in sn:
 			isData = ' --noMttSlices --af2 '
@@ -477,7 +479,7 @@ def main():
 			fr.write('#$ -l cvmfs\n')
 			fr.write('#$ -l distro=sld6\n')
 			fr.write('#$ -l arch=amd64\n')
-			fr.write('#$ -l h_vmem=5G\n')
+			fr.write('#$ -l h_vmem=8G\n')
 			fr.write('#$ -o '+logfile+'\n')
 			fr.write('#$ -q '+queue+'\n')
 			fr.write('#$ -m '+'as'+'\n')

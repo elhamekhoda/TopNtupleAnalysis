@@ -89,23 +89,35 @@ def main():
 				else:
 					pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
 			pfs.close()
+			pfs = open("sumOfWeightswjpdf_new.txt")
+			for line in pfs.readlines():
+				line_spl = line.split()
+				if not int(line_spl[0]) in pdfSumOfWeights:
+					pdfSumOfWeights[int(line_spl[0])] = {}
+				if not line_spl[1] in pdfSumOfWeights[int(line_spl[0])]:
+					pdfSumOfWeights[int(line_spl[0])][line_spl[1]] = {}
+				if line_spl[1] == "nominal": # nominal for PDF variation sample
+					sumOfWeights[int(line_spl[0])] = float(line_spl[3])
+				else:
+					pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
+			pfs.close()
+		else:
+			fs = open("sumOfWeights_new.txt")
+			for line in fs.readlines():
+				line_spl = line.split()
+				sumOfWeights[int(line_spl[0])] = float(line_spl[1])
+			fs.close()
+			fs = open("sumOfWeightssyst_new.txt")
+			for line in fs.readlines():
+				line_spl = line.split()
+				sumOfWeights[int(line_spl[0])] = float(line_spl[1])
+			fs.close()
 
-		fs = open("sumOfWeights_new.txt")
-		for line in fs.readlines():
-			line_spl = line.split()
-			sumOfWeights[int(line_spl[0])] = float(line_spl[1])
-		fs.close()
-		fs = open("sumOfWeightssyst_new.txt")
-		for line in fs.readlines():
-			line_spl = line.split()
-			sumOfWeights[int(line_spl[0])] = float(line_spl[1])
-		fs.close()
-
-		fs = open("sumOfWeightssystaf2_new.txt")
-		for line in fs.readlines():
-			line_spl = line.split()
-			sumOfWeightsAF2[int(line_spl[0])] = float(line_spl[1])
-		fs.close()
+			fs = open("sumOfWeightssystaf2_new.txt")
+			for line in fs.readlines():
+				line_spl = line.split()
+				sumOfWeightsAF2[int(line_spl[0])] = float(line_spl[1])
+			fs.close()
 
 	#print sumOfWeights
 	 
@@ -230,7 +242,7 @@ def main():
 		# medium systematics for large-R jets
 		systematics += ',LARGERJET_Medium_JET_Comb_Baseline_Kin__1up,LARGERJET_Medium_JET_Comb_Baseline_Kin__1down,LARGERJET_Medium_JET_Comb_Modelling_Kin__1up,LARGERJET_Medium_JET_Comb_Modelling_Kin__1down,LARGERJET_Medium_JET_Comb_TotalStat_Kin__1up,LARGERJET_Medium_JET_Comb_TotalStat_Kin__1down,LARGERJET_Medium_JET_Comb_Tracking_Kin__1up,LARGERJET_Medium_JET_Comb_Tracking_Kin__1down,LARGERJET_Medium_JET_Rtrk_Baseline_Sub__1up,LARGERJET_Medium_JET_Rtrk_Baseline_Sub__1down,LARGERJET_Medium_JET_Rtrk_Modelling_Sub__1up,LARGERJET_Medium_JET_Rtrk_Modelling_Sub__1down,LARGERJET_Medium_JET_Rtrk_TotalStat_Sub__1up,LARGERJET_Medium_JET_Rtrk_TotalStat_Sub__1down,LARGERJET_Medium_JET_Rtrk_Tracking_Sub__1up,LARGERJET_Medium_JET_Rtrk_Tracking_Sub__1down'
 		# correlate large-R jets and small-R jets
-		systematics += ',CORR_LargeRSmallR_A__1up,CORR_LargeRSmallR_A__1down,CORR_LargeRSmallR_B__1up,CORR_LargeRSmallR_B__1down,CORR_LargeRSmallR_C__1up,CORR_LargeRSmallR_C__1down'
+		###systematics += ',CORR_LargeRSmallR_A__1up,CORR_LargeRSmallR_A__1down,CORR_LargeRSmallR_B__1up,CORR_LargeRSmallR_B__1down,CORR_LargeRSmallR_C__1up,CORR_LargeRSmallR_C__1down'
 		# large-R jet res.
 		systematics += ',LARGERJET_JER_LARGERJET_JER_PT__1up,LARGERJET_JER_LARGERJET_JER_TAU32__1up,LARGERJET_JER_LARGERJET_JER_MASS__1up'
 		systList.extend(systematics.split(','))
@@ -362,7 +374,8 @@ def main():
 			# common part of the weight
 			weight = 1
 			if not options.data:
-				weight *= sel.weight_mc
+				if not (isWjets and options.systs == 'pdf'): # use internal weights in this case
+					weight *= sel.weight_mc
 				channel = sel.mcChannelNumber
 				weight *= Xsec[channel]
 				if options.systs != 'pdf': #'pdf_' in suffix:
@@ -379,22 +392,30 @@ def main():
 						else:
 							weight /= sumOfWeightsAF2[channel]
 				else:
-					pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
-					pdfNumber = int(suffix.rsplit('_', 1)[1])
-					if not channel in pdfSumOfWeights:
-						print "Could not find DSID ",channel, " in sum of weights."
-						weight = 0
+					if not 'pdf_' in suffix:
+						weight /= sumOfWeights[channel]
 					else:
-						weight /= pdfSumOfWeights[channel][pdfName][pdfNumber]
+						pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
+						pdfNumber = int(suffix.rsplit('_', 1)[1])
+						if not channel in pdfSumOfWeights:
+							print "Could not find DSID ",channel, " in sum of weights."
+							weight = 0
+						else:
+							weight /= pdfSumOfWeights[channel][pdfName][pdfNumber]
 					
 
 			for ana in analysisCode:
 				weight_reco = analysisCode[ana].getWeight(sel, suffix)
-				if options.systs == 'pdf': #'pdf_' in suffix:
+				if options.systs == 'pdf' and 'pdf_' in suffix and not isWjets: # for W+jets, use internal weights
 					pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
 					pdfNumber = int(suffix.rsplit('_', 1)[1])
 					pdfAttr = getattr(sel, pdfName)
 					weight_reco *= pdfAttr[pdfNumber]
+				elif (isWjets and options.systs == 'pdf' and 'pdf_' in suffix): # use internal weights in this case
+					pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
+					pdfNumber = int(suffix.rsplit('_', 1)[1])
+					wjpdfList = [7]+range(11, 110+1)
+					weight_reco *= sel.mc_generator_weights[wjpdfList[pdfNumber]]
 				if not options.data and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532, 410009, 410120, 410121, 407009, 407010, 407011, 407012, 410004, 410003, 410002, 410001, 410500, 410159, 410501, 410502, 410503, 410504, 410505, 410506, 410509, 410511, 410512, 10225, 410250, 410251, 410252]: #410525]:
 					if 'ttNNLO_seq_' in suffix:
 						weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_beforeFSR_pt, sel.MC_t_pt, True)
