@@ -267,6 +267,13 @@ def main():
 			nvar = len(pdfSumOfWeights[pdfSumOfWeights.keys()[0]][m])
 			for k in range(0, nvar):
 				systList.append('pdf_%s_%d' % (m, k))
+	elif options.systs == 'qcd':
+		systList = []
+		systList.append('nominal')
+		systList.append('qcdcenup')
+		systList.append('qcdcendw')
+		systList.append('qcdfwdup')
+		systList.append('qcdfwddw')
 	else:
 		systList = options.systs.split(',')
 	 
@@ -350,7 +357,7 @@ def main():
 		if 'singletop' in treeName and isSingleTop:
 			treeName = 'nominal'
 		if options.qcd != "False":
-			treeName += '_Loose'
+			treeName = 'nominal_Loose'
 		mt = TChain(treeName)
 		suffix = s
 		if suffix == 'nominal':

@@ -7,17 +7,17 @@ def main():
 	fcmd = open("running.txt", "w")
 
 	# for standard data and MC
-	#ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
-	ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_corr_2429'
+	ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
+	#ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_corr_2429'
 
 	# output directory
 	# change this for your output directory
-	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local'
-	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_data'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_data'
 
 	# number of files per job
 	#nFilesPerJob = 40
-	nFilesPerJob = 5
+	nFilesPerJob = 8
 
 	# use it to setup AnalysisTop
 	# change this for the place where you setup RootCore
@@ -50,6 +50,7 @@ def main():
 
 	#names  += ["data"]
 	#names  += ['qcde', 'qcdmu']
+	#names  += ['qcde']
 
 	#names  += ['tt']
 	#names  += ['tthm']
@@ -105,15 +106,15 @@ def main():
 	#names  += ['ttpowhegherwigaf2']
 	#names  += ['ttpowhegherwig7af2']
 
-	#names  += ['wbbjets']
-	#names  += ['wccjets']
-	#names  += ['wcjets']
-	#names  += ['wljets']
+	names  += ['wbbjets']
+	names  += ['wccjets']
+	names  += ['wcjets']
+	names  += ['wljets']
 
-	names  += ['wbbjetspdf']
-	names  += ['wccjetspdf']
-	names  += ['wcjetspdf']
-	names  += ['wljetspdf']
+	#names  += ['wbbjetspdf']
+	#names  += ['wccjetspdf']
+	#names  += ['wcjetspdf']
+	#names  += ['wljetspdf']
 
 	#names  += ['eftl30c10']
 	#names  += ['eftl35c10']
@@ -315,6 +316,7 @@ def main():
 		nFile = 0
 
 		nFilesPerJobEffective = nFilesPerJob
+
 		if 'af2' in sn:
 			nFilesPerJobEffective = 8
 		elif 'tthm' in sn:
@@ -397,7 +399,7 @@ def main():
 			theSysts = "nominal"
 			isData = ' -d '
 		elif "qcde" in sn:
-			theSysts = "nominal"
+			theSysts = "qcd"
 			isData = ' -d -Q e '
 		elif "qcdmu" in sn:
 			theSysts = "nominal"

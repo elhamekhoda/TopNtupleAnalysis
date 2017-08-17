@@ -324,7 +324,7 @@ class AnaTtresSL(Analysis):
 			weight *= f_ca*hfweight
 		return weight
 
-	def qcdWeight(self, sel):
+	def qcdWeight(self, sel, syst):
 		if sel.mcChannelNumber != 0:
 			return 1
 
@@ -368,6 +368,10 @@ class AnaTtresSL(Analysis):
 			j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k])
 			jets.push_back(j)
 		w = ROOT.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger, topoetcone20, runNumber)
+		if   math.fabs(l.Eta()) <= 1.5 and 'qcdcenup' in syst: w *= 1.5
+		elif math.fabs(l.Eta()) <= 1.5 and 'qcdcendw' in syst: w *= 0.5
+		elif math.fabs(l.Eta()) > 1.5 and 'qcdfwdup' in syst: w *= 2.0
+		elif math.fabs(l.Eta()) > 1.5 and 'qcdfwddw' in syst: w *= 0
 		return w
 
 	def selectChannel(self, sel, syst, w):
@@ -510,7 +514,7 @@ class AnaTtresSL(Analysis):
 
 
 		if self.applyQCD:
-			w *= self.qcdWeight(sel)
+			w *= self.qcdWeight(sel, syst)
 		if self.applyMET > 0 and not ('be' in self.ch or 'bmu' in self.ch):
 			if sel.met_met*1e-3 < self.applyMET:
 				return
