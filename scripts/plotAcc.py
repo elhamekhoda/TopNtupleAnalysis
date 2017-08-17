@@ -2,6 +2,7 @@
 from os import path
 
 from ROOT import *
+import math
 
 Internal = True
 #Internal = False
@@ -12,16 +13,16 @@ files = "/nfs/dust/atlas/user/danilo/ntuple_2429/"
 chs  = []
 
 chs += ["be"]
-chs += ["be%d" % i for i in [0,1,2,3]]
+chs += ["be%d" % i for i in [1,2,3]]
 
 chs += ["bmu"]
-chs += ["bmu%d" % i for i in [0,1,2,3]]
+chs += ["bmu%d" % i for i in [1,2,3]]
 
 chs += ["re"]
-chs += ["re%d" % i for i in [0,1,2,3]]
+chs += ["re%d" % i for i in [1,2,3]]
 
 chs += ["rmu"]
-chs += ["rmu%d" % i for i in [0,1,2,3]]
+chs += ["rmu%d" % i for i in [1,2,3]]
 
 chs += ["b"]
 chs += ["r"]
@@ -50,7 +51,10 @@ def stampLumiText(lumi, x, y, text, size):
   t.SetTextColor(1)
   t.SetTextSize(size)
   #t.DrawLatex(x,y,"#int L dt = "+str(lumi)+" fb^{-1}, "+text)
-  t.DrawLatex(x,y, text+", "+str(lumi)+" fb^{-1}")
+  if lumi > 0:
+    t.DrawLatex(x,y, text+", "+str(lumi)+" fb^{-1}")
+  else:
+    t.DrawLatex(x,y, text)
 
 def stampText(x, y, text, size):
   t = TLatex()
@@ -62,7 +66,6 @@ def stampText(x, y, text, size):
 
 
 def setStyle(h, col, sty):
-    h.GetYaxis().SetRangeUser(0, 10);
     h.GetYaxis().SetTitle("Acceptance #times Efficiency [%]");
     h.GetXaxis().SetTitle("m_{t#bar{t}} [TeV]");
     h.GetXaxis().SetTitleOffset(1.0);
@@ -123,6 +126,16 @@ def drawIt(hr, channels, label, suf = ""):
   l = TLegend(0.7,0.75,0.87,0.89)
   l.SetBorderSize(0)
 
+  bestYmax = 2.0
+  for i in channels:
+    ymaxHist = hr[i].GetBinContent(hr[i].GetMaximumBin())
+    if ymaxHist > bestYmax:
+      bestYmax = ymaxHist
+  bestYmax = math.ceil(bestYmax*1.3)*1.0
+  for i in channels:
+    #hr[i].GetYaxis().SetRangeUser(0, bestYmax);
+    hr[i].SetMaximum(bestYmax);
+
   first = True
   for i in channels:
     if first:
@@ -139,7 +152,7 @@ def drawIt(hr, channels, label, suf = ""):
     stampATLAS("Simulation Internal", 0.18, 0.83)
   else:
     stampATLAS("Simulation", 0.18, 0.83)
-  stampLumiText(36.1, 0.18, 0.75, "#sqrt{s} = 13 TeV", 0.05)
+  stampLumiText(-1, 0.18, 0.75, "#sqrt{s} = 13 TeV", 0.05)
   stampText(0.18, 0.70, label, 0.05)
 
   suf += ""
@@ -177,7 +190,7 @@ def doIt(signal):
     # KK gluon 30%
     did_list = range(307522, 307533+1)
     suf_signal = "KKgluon"
-    label_signal = "Kaluza-Klein gluon #Lambda=30%"
+    label_signal = "Kaluza-Klein gluon #Gamma=30%"
 
   import glob
   for did in did_list:
@@ -201,14 +214,6 @@ def doIt(signal):
   for k in chs:
     hr[k].Divide(hn[k], ht[k], 1, 1, "B")
     hr[k].Scale(100)
-    ymax = [3, 5, 10, 15, 20]
-    ymaxHist = hr[k].GetBinContent(hr[k].GetMaximumBin())*1.1
-    bestYmax = 15
-    for j in ymax:
-      if j > ymaxHist:
-        bestYmax = j
-	break
-    hr[k].GetYaxis().SetRangeUser(0, bestYmax);
 
   for i in chs:
     st_color = kRed

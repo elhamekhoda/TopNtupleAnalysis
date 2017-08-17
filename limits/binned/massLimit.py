@@ -24,14 +24,14 @@ def stampLumiText(lumi, x, y, text, size):
   t.SetTextSize(size)
   t.DrawLatex(x,y, text+", "+str(lumi)+" fb^{-1}")
 
-def plot(t, mu = False):
+def plot(t, inputSufix = "", mu = False):
   gStyle.SetOptStat(0)
   gStyle.SetPadTickX(1)
   gStyle.SetPadTickY(1)
 
   clim = TCanvas("clim", "", 800, 600);
   if not 'eft' in t:
-    l = TLegend(0.5,0.45,0.87,0.89)
+    l = TLegend(0.5,0.6,0.87,0.89)
   else:
     l = TLegend(0.5,0.6,0.87,0.89)
   l.SetBorderSize(0)
@@ -62,6 +62,8 @@ def plot(t, mu = False):
     h.GetXaxis().SetTitle("m_{Z'} [TeV]");
   elif 'kkG' in t:
     h.GetXaxis().SetTitle("m_{G_{KK}} [TeV]");
+  elif 'kkgluon' in t:
+    h.GetXaxis().SetTitle("m_{g_{KK}} [TeV]");
   if 'eft' in t:
     h.GetXaxis().SetTitle("c_{Vv} #Lambda^{-2} [TeV^{-2}]");
   h.GetXaxis().SetTitleOffset(0.9);
@@ -78,10 +80,10 @@ def plot(t, mu = False):
   sigma2 = TGraphAsymmErrors(length);
   i=0
   for I in range(0,length):
-    if path.exists("Ttres_"+signalList[t][I]+"/Limits/Ttres_"+signalList[t][I]+".root")==0:
-    	print "missing Ttres_"+signalList[t][I]+"/Limits/Ttres_"+signalList[t][I]+".root"
+    if path.exists("Ttres_"+signalList[t][I]+inputSufix+"/Limits/Ttres_"+signalList[t][I]+inputSufix+".root")==0:
+    	print "missing Ttres_"+signalList[t][I]+inputSufix+"/Limits/Ttres_"+signalList[t][I]+inputSufix+".root"
     	continue
-    f = TFile("Ttres_"+signalList[t][I]+"/Limits/Ttres_"+signalList[t][I]+".root")
+    f = TFile("Ttres_"+signalList[t][I]+inputSufix+"/Limits/Ttres_"+signalList[t][I]+inputSufix+".root")
     hi = f.Get("limit")
     muobs = hi.GetBinContent(1)
     muexp = hi.GetBinContent(2)
@@ -150,6 +152,8 @@ def plot(t, mu = False):
     l.AddEntry(xsec12, "LO Z'_{#it{TC2}} #Gamma=1.2% cross section #times 1.3", "L")
   elif 'kkG' in t:
     l.AddEntry(xsec12, "LO KK graviton cross section", "L")
+  elif 'kkgluon' in t:
+    l.AddEntry(xsec12, "LO KK gluon #Gamma=30% cross section", "L")
   if 'zprime' in t:
     l.AddEntry(xsec3, "LO Z'_{#it{TC2}} #Gamma=3% cross section #times 1.3", "L")
 
@@ -168,19 +172,37 @@ def plot(t, mu = False):
   gPad.RedrawAxis()
 
   stampATLAS("Internal", 0.15, 0.83)
-  stampLumiText(36.5, 0.15, 0.75, "#sqrt{s} = 13 TeV", 0.04)
+  stampLumiText(36.1, 0.15, 0.75, "#sqrt{s} = 13 TeV", 0.04)
 
   suf = ""
   if mu:
     suf = "_mu"
 
-  clim.SaveAs("mass_limit_%s%s.eps" % (t, suf))
-  clim.SaveAs("mass_limit_%s%s.png" % (t, suf))
-  clim.SaveAs("mass_limit_%s%s.pdf" % (t, suf))
-  clim.SaveAs("mass_limit_%s%s.C" % (t, suf))
+  clim.SaveAs("mass_limit_%s%s%s.eps" % (t, suf, inputSufix))
+  clim.SaveAs("mass_limit_%s%s%s.png" % (t, suf, inputSufix))
+  clim.SaveAs("mass_limit_%s%s%s.pdf" % (t, suf, inputSufix))
+  clim.SaveAs("mass_limit_%s%s%s.C" % (t, suf, inputSufix))
 
 plot('zprime')
 plot('kkG')
+plot('kkgluon')
+
 #plot('eft10', mu=True)
 #plot('eft10', mu=False)
+
+plot('zprime', '_stat')
+plot('kkG', '_stat')
+plot('kkgluon', '_stat')
+
+#plot('zprime', '_ttbarNorm')
+#plot('kkG', '_ttbarNorm')
+#plot('kkgluon', '_ttbarNorm')
+
+#plot('zprime', '_ttbarNorm_uncorr')
+#plot('kkG', '_ttbarNorm_uncorr')
+#plot('kkgluon', '_ttbarNorm_uncorr')
+
+#plot('zprime', 'nocat')
+#plot('kkG', 'nocat')
+#plot('kkgluon', 'nocat')
 

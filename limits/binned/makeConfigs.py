@@ -6,12 +6,13 @@ import socket, random, re
 
 # change those:
 setdir = '/nfs/dust/atlas/user/danilo/topana2429'
-mydir = '/nfs/dust/atlas/user/danilo/hists2429_local/TRExFitter'
+mydir = '/nfs/dust/atlas/user/danilo/plots2/TRExFitter'
 
 def fixFile(template, final, sig, dirname, doBOnlyFit):
   fr = open(template, 'r')
   f = open(final, 'w')
 
+  beginSysts = False
   for line in fr:
     if '% SIGNAL' in line:
       f.write('''
@@ -38,12 +39,17 @@ Systematic: "eftScale"
     nline = line
     if 'Ttres' in nline:
       nline = nline.replace('Ttres', 'Ttres_'+dirname)
-    if 'SystControlPlots' in nline and (not doBOnlyFit):
+    if 'SystControlPlots' in nline:# and (not doBOnlyFit):
       nline = nline.replace('TRUE', 'FALSE')
+      if 'stat' in dirname:
+        nline += '  StatOnly: TRUE\n'
     if 'FitType' in nline and doBOnlyFit:
       nline = nline.replace('SPLUSB', 'BONLY')
     if 'POIAsimov' in nline and 'inj' in dirname:
       nline = nline.replace('POIAsimov: 0', 'POIAsimov: 1')
+    if ('Systematic:' in nline or beginSysts) and 'stat' in dirname:
+      beginSysts = True
+      nline = '###'+nline
     if 'eft' in sig and 'Binning: ' in nline:
       nline = "  Binning: 2000,6000\n"
     f.write(nline)
@@ -62,10 +68,11 @@ def jobSubmit(suf, extra = ""):
 	jobName = 'ttlim_%s%s'%(suf, extra)
 	fr = open(runfile, 'w')
 	fr.write('#!/bin/sh\n')
-	fr.write('#$ -cwd\n')
+	#fr.write('#$ -cwd\n')
 	fr.write('#$ -j y\n')
 	fr.write('#$ -l cvmfs\n')
-	fr.write('#$ -l distro=sld6\n')
+	#fr.write('#$ -l distro=sld6\n')
+	fr.write('#$ -l distro=el7\n')
 	fr.write('#$ -l arch=amd64\n')
 	fr.write('#$ -l h_vmem=35G\n')
 	fr.write('#$ -o '+logfile+'\n')
@@ -89,12 +96,15 @@ def jobSubmit(suf, extra = ""):
 	if not 'bkg' in suf:
 		fr.write('./myFit.exe l ttres_%s.config\n'%suf)
 		fr.write('./myFit.exe s ttres_%s.config\n'%suf)
-	if 'zprime2000' in suf:
+	if not 'stat' in suf and ('zprime2000' in suf or 'zprime3000' in suf):
 		fr.write('./myFit.exe r ttres_%s.config\n'%suf)
 	fr.close()
 	system('chmod a+x %s'%runfile)
+	print("Running %s" % runfile)
 	system('qsub %s'%runfile)
 	#system('./%s > %s 2>&1 '% (runfile, logfile))
+	#import time
+	#time.sleep(40*60)
 
 
 # B ONLY fit
@@ -115,6 +125,17 @@ for t in signalList:
   if "eft" in t:
     continue
   for i in signalList[t]:
+    #fixFile('ttres_fittt_uncorr.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
+    #jobSubmit("%s%s" % (i, suf))
+    #fixFile('ttres_nocat.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
+    #jobSubmit("%s%s" % (i, suf))
+    #fixFile('ttres_fittt.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
+    #jobSubmit("%s%s" % (i, suf))
     fixFile('ttres.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
     jobSubmit("%s%s" % (i, suf))
+    fixFile('ttres.config', 'ttres_%s%s_stat.config' %(i, suf), i, "%s%s_stat" % (i, suf), False)
+    jobSubmit("%s%s_stat" % (i, suf))
+    if 'zprime2000' in i or 'zprime3000' in i:
+      fixFile('ttres.config', 'ttres_%s%s_inj.config' %(i, suf), i, "%s%s_inj" % (i, suf), False)
+      jobSubmit("%s%s_inj" % (i, suf))
 
