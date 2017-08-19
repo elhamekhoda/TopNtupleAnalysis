@@ -1,7 +1,8 @@
 sample    0data         data                                 "data"                "data"               1
 sample    1tt           ttall                                "t#bar{t}"            "$t\bar{t}$"         0
-sample    2wbbjets      wbbjets                              "W+bb+jets"           "$W$+bb+jets"        416
-sample    3wccjets      wccjets                              "W+cc+jets"           "$W$+cc+jets"        432
+#sample    2wbbjets      wbbjets                              "W+bb+jets"           "$W$+bb+jets"        416
+#sample    3wccjets      wccjets                              "W+cc+jets"           "$W$+cc+jets"        432
+sample    2wbbccjets    wbbccjets                            "W+bb/cc+jets"        "$W$+bb/cc+jets"     416
 sample    4wcjets       wcjets                               "W+c+jets"            "$W$+c+jets"         632
 sample    5wljets       wljets                               "W+l+jets"            "$W$+l+jets"         863
 sample    6singletop    singletop                            "single top"          "single top"         62
@@ -91,7 +92,7 @@ syst      btagl9     "b-tagging l mistag (E9)"        btaglSF_9__1up            
 syst      btagl10    "b-tagging l mistag (E10)"       btaglSF_10__1up                            btaglSF_10__1down                                    N
 syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     N
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     N
-syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbjets,wccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg
+syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbccjets,wbbjets,wccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
 syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.050
 syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.050
@@ -105,8 +106,9 @@ syst_model ttisrfsr  "ttbar ISR/FSR"                  "ttall"               ttra
 
 syst_pdf   ttpdf     "ttbar PDF"                     "ttall"                ttpdf                                        pdf_PDF4LHC15_nlo_30          30
 
-syst_pdf   ttpdf     "ttbar PDF"                     "wbbjets"              wbbjets                                      pdf_PDF4LHC15_nlo_30          30
-syst_pdf   ttpdf     "ttbar PDF"                     "wccjets"              wccjets                                      pdf_PDF4LHC15_nlo_30          30
+#syst_pdf   ttpdf     "ttbar PDF"                     "wbbjets"              wbbjets                                      pdf_PDF4LHC15_nlo_30          30
+#syst_pdf   ttpdf     "ttbar PDF"                     "wccjets"              wccjets                                      pdf_PDF4LHC15_nlo_30          30
+syst_pdf   ttpdf     "ttbar PDF"                     "wbbccjets"            wbbccjets                                    pdf_PDF4LHC15_nlo_30          30
 syst_pdf   ttpdf     "ttbar PDF"                     "wcjets"               wcjets                                       pdf_PDF4LHC15_nlo_30          30
 syst_pdf   ttpdf     "ttbar PDF"                     "wljets"               wljets                                       pdf_PDF4LHC15_nlo_30          30
 syst      ttgen     "ttbar generator"                ttgenup                ttgendw                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg

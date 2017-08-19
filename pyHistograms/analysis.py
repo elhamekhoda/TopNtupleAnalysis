@@ -42,7 +42,7 @@ class Analysis:
 		self.h = {}
                 self.trees = {}
                 self.branches = {}
-		self.keep = '' # can be 'bb', 'cc', 'c' or 'l' and only applies to W+jets
+		self.keep = '' # can be 'bb', 'cc', 'bbcc', 'c' or 'l' and only applies to W+jets
 
 	def add(self, hName, nBins, xLow, xHigh):
 		self.h[hName] = {}
@@ -500,6 +500,9 @@ class AnaTtresSL(Analysis):
 					return
 			if self.keep == 'cc':
 				if flag != 1:
+					return
+			if self.keep == 'bbcc':
+				if flag != 3 and flag != 4 and flag != 1:
 					return
 			if self.keep == 'c':
 				if flag != 2:

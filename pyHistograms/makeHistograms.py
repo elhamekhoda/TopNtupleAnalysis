@@ -26,7 +26,7 @@ def main():
 				  help="Comma-separated list of systematic uncertainties in TTrees in the input file. Use 'all' to run over all the default ones.", metavar="SYSTEMATICS")
 	parser.add_option("-W", "--WjetsHF",
 							 dest="WjetsHF", default="all",
-				  help="Which W+jets HF to keep. Can be all, bb, cc, c or l.", metavar="FLAVOURS")
+				  help="Which W+jets HF to keep. Can be all, bb, cc, bbcc, c or l.", metavar="FLAVOURS")
 	parser.add_option("-P", "--pdf",
 							 dest="pdf", default="",
 				  help="Which PDFs to reweight to.", metavar="PDFS")
@@ -181,6 +181,7 @@ def main():
 			systList.append('ttpsdw')
 			systList.append('ttisrfsrup')
 			systList.append('ttisrfsrdw')
+			systList.append('2to3ex')
 			for k in range(0, 30+1):
 				systList.append('pdf_PDF4LHC15_nlo_30_%d' % (k))
 			systList.append('elMisIDpos_up')

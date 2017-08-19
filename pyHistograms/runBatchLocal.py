@@ -7,13 +7,17 @@ def main():
 	fcmd = open("running.txt", "w")
 
 	# for standard data and MC
-	ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
-	#ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_corr_2429'
+	#ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
+	ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_corr_2429'
 
 	# output directory
 	# change this for your output directory
-	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_data'
-	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_data'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_other'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_other'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjets'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjets'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjets'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjets'
 
 	# number of files per job
 	#nFilesPerJob = 40
@@ -106,13 +110,15 @@ def main():
 	#names  += ['ttpowhegherwigaf2']
 	#names  += ['ttpowhegherwig7af2']
 
-	names  += ['wbbjets']
-	names  += ['wccjets']
+	#names  += ['wbbjets']
+	#names  += ['wccjets']
+	#names  += ['wbbccjets']
 	names  += ['wcjets']
-	names  += ['wljets']
+	#names  += ['wljets']
 
 	#names  += ['wbbjetspdf']
 	#names  += ['wccjetspdf']
+	#names  += ['wbbccjetspdf']
 	#names  += ['wcjetspdf']
 	#names  += ['wljetspdf']
 
@@ -133,11 +139,13 @@ def main():
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wbbccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 
 					'wbbjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
+					'wbbccjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wccjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wcjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wljetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
@@ -424,6 +432,8 @@ def main():
 			extra = ' --WjetsHF bb '
 		elif 'wccjets' in sn:
 			extra = ' --WjetsHF cc'
+		elif "wbbccjets" in sn:
+			extra = ' --WjetsHF bbcc '
 		elif 'wcjets' in sn:
 			extra = ' --WjetsHF c'
 		elif 'wljets' in sn:
@@ -463,7 +473,7 @@ def main():
 	
 		#extra += '  --applyMET 80 '
 
-		for job in forJobs:
+		for job in sorted(forJobs.keys()):
 			jobName = sn+'_'+job
 			infile = outputDir+"/input_"+jobName+'.txt'
 			infullfile = outputDir+"/input_"+sn+'.txt'
