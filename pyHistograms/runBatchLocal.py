@@ -18,6 +18,8 @@ def main():
 	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjets'
 	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjets'
 	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjets'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljets'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljets'
 
 	# number of files per job
 	#nFilesPerJob = 40
@@ -113,8 +115,8 @@ def main():
 	#names  += ['wbbjets']
 	#names  += ['wccjets']
 	#names  += ['wbbccjets']
-	names  += ['wcjets']
-	#names  += ['wljets']
+	#names  += ['wcjets']
+	names  += ['wljets']
 
 	#names  += ['wbbjetspdf']
 	#names  += ['wccjetspdf']

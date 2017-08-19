@@ -6,8 +6,9 @@ from ROOT import *
 Internal = True
 #Internal = False
 
-files = "/nfs/dust/atlas/user/danilo/hists2429_local/"
+files = "/nfs/dust/atlas/user/danilo/plots2/"
 
+L = 36.09e3
 
 chs  = []
 
@@ -73,7 +74,7 @@ def drawIt(hr, channels, label, suf = ""):
   l = TLegend(0.7,0.75,0.87,0.89)
   l.SetBorderSize(0)
 
-  ymax = 0.10
+  ymax = 0.1
   for i in sorted(channels.keys()):
     if hr[i].GetBinContent(hr[i].GetMaximumBin()) > ymax:
       ymax = hr[i].GetBinContent(hr[i].GetMaximumBin())
@@ -125,6 +126,8 @@ def doIt(suf, extratitle, samples, numerator):
       f[i][s] = TFile.Open("%s/%s_%s.root" % (files, i, s), "read")
       h = f[i][s].Get(histname)
       hr[i][s] = h.Rebin(len(binning) - 1, "hist_%s_%s_%s" % (histname, i, s), array.array('d', binning))
+      if not "qcd" in s:
+        hr[i][s].Scale(L)
       if s in numerator:
         if not i in hnum:
           hnum[i] = hr[i][s].Clone("hnum_%s_%s" % (histname, i))
@@ -167,9 +170,10 @@ def doIt(suf, extratitle, samples, numerator):
   drawIt(hratio, {"rmu3": "Cat. 3", "rmu2": "Cat. 2", "rmu1": "Cat. 1"}, "resolved #mu+jets "+extratitle, suf = "rmucat"+suf)
 
 # call it
-doIt("", "W+jets/Total", ["ttall", "wbbjets", "wccjets", "wcjets", "wljets", "zjets", "vv", "ttv", "singletop"], ["wbbjets", "wccjets", "wcjets", "wljets"])
-doIt("bb", "W+bb+jets/Total", ["wbbjets", "wccjets", "wcjets", "wljets", "zjets", "vv", "ttv", "singletop", "ttall"], ["wbbjets"])
-doIt("cc", "W+cc+jets/Total", ["wbbjets", "wccjets", "wcjets", "wljets", "zjets", "vv", "ttv", "singletop", "ttall"], ["wccjets"])
-doIt("c", "W+c+jets/Total", ["wbbjets", "wccjets", "wcjets", "wljets", "zjets", "vv", "ttv", "singletop", "ttall"], ["wcjets"])
-doIt("l", "W+l+jets/Total", ["wbbjets", "wccjets", "wcjets", "wljets", "zjets", "vv", "ttv", "singletop", "ttall"], ["wljets"])
+total = ["ttall", "wbbccjets", "wcjets", "wljets", "zjets", "vv", "ttv", "singletop", "qcde", "qcdmu"]
+doIt("", "W+jets/Total", total, ["wbbccjets", "wcjets", "wljets"])
+doIt("bbcc", "W+bb/cc+jets/Total", total, ["wbbccjets"])
+#doIt("cc", "W+cc+jets/Total", total, ["wccjets"])
+doIt("c", "W+c+jets/Total",   total, ["wcjets"])
+doIt("l", "W+l+jets/Total",   total, ["wljets"])
 
