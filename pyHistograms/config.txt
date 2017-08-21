@@ -92,9 +92,11 @@ syst      btagl9     "b-tagging l mistag (E9)"        btaglSF_9__1up            
 syst      btagl10    "b-tagging l mistag (E10)"       btaglSF_10__1up                            btaglSF_10__1down                                    N
 syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     N
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     N
-syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbccjets,wbbjets,wccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg
+syst      qcdcene    "QCD unc. cen. (e)"              qcdcenup                                   qcdcendw                                             N     ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcdmu,kkg
+syst      qcdfwde    "QCD unc. fwd. (e)"              qcdfwdup                                   qcdfwddw                                             N     ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcdmu,kkg
+#syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbccjets,wbbjets,wccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
-syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.050
+#syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.050
 syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.050
 syst_flat ttxsec     "ttbar cross section"            "ttall"                   0.056                                      -0.061
 

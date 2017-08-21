@@ -128,9 +128,10 @@ syst      btagl9     "b-tagging l mistag (E9)"        btaglSF_9__1up            
 syst      btagl10    "b-tagging l mistag (E10)"       btaglSF_10__1up                            btaglSF_10__1down                                    N
 syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     N
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     N
+syst      qcdcene    "QCD unc. cen. (e)"              qcdcenup                                   qcdcendw                                             N     ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcdmu,kkg
+syst      qcdfwde    "QCD unc. fwd. (e)"              qcdfwdup                                   qcdfwddw                                             N     ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcdmu,kkg
 #syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg
 syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
-syst_flat qcde       "QCD unc. (e)"                   "qcde"                 0.50                                       -0.50
 syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.50
 syst_flat ttxsec     "ttbar cross section"            "ttall"                0.056                                      -0.061
 syst_model WtDRDS    "single top DR vs. DS"           "singletop"           singletop                                    singletopDS                   N
@@ -336,6 +337,7 @@ syst      ttgen     "ttbar generator"                ttgenup                ttge
 syst      ttps      "ttbar p shower"                 ttpsup                 ttpsdw                                          N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      ttisrfsr  "ttbar ISR/FSR"                  ttisrfsrup             ttisrfsrdw                                      N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      emisid    "Electron mid id"                elMisIDpos_up          elMisIDpos_down                                 N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+syst      wExtrap   "W+jets extrap."                 2to3ex                 -                                               N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 
 syst      makt10kbaseline "anti-$k_t$ R=1.0 kin. baseline"  LARGERJET_Medium_JET_Comb_Baseline_Kin__1up   LARGERJET_Medium_JET_Comb_Baseline_Kin__1down   N
 syst      makt10kmodel    "anti-$k_t$ R=1.0 kin. model"     LARGERJET_Medium_JET_Comb_Modelling_Kin__1up  LARGERJET_Medium_JET_Comb_Modelling_Kin__1down  N
