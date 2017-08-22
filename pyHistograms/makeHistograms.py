@@ -186,6 +186,8 @@ def main():
 				systList.append('pdf_PDF4LHC15_nlo_30_%d' % (k))
 			systList.append('elMisIDpos_up')
 			systList.append('elMisIDpos_down')
+			systList.append('ttEWK__1up')
+			systList.append('ttEWK__1down')
 		for i in range(0, 4):
 			systList.append('btagbSF_'+str(i)+'__1up')
 			systList.append('btagbSF_'+str(i)+'__1down')
