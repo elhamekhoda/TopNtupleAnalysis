@@ -39,7 +39,7 @@ Systematic: "eftScale"
     nline = line
     if 'Ttres' in nline:
       nline = nline.replace('Ttres', 'Ttres_'+dirname)
-    if 'SystControlPlots' in nline:# and (not doBOnlyFit):
+    if 'SystControlPlots' in nline and ((not doBOnlyFit) or 'cat' in dirname):
       nline = nline.replace('TRUE', 'FALSE')
       if 'stat' in dirname:
         nline += '  StatOnly: TRUE\n'
@@ -116,9 +116,17 @@ fixFile('ttres.config', 'ttres_bkg%s.config' % suf, "bkg%s" %suf, "bkg%s" %suf, 
 system('cp -f hist_zprime1000.root hist_bkg%s.root' %suf) ## use a dummy signal for the background only fit
 jobSubmit('bkg%s' %suf)
 
-#fixFile('ttres.config', 'ttres_bkginj%s.config' % suf, "bkginj%s" %suf, "bkginj%s" %suf, False)
-#system('cp -f hist_zprime1000.root hist_bkginj%s.root' %suf) ## use a dummy signal
-#jobSubmit('bkginj%s' %suf)
+#fixFile('ttres_cat3.config', 'ttres_bkg_cat3%s.config' % suf, "bkg_cat3%s" %suf, "bkg_cat3%s" %suf, True)
+#system('cp -f hist_zprime1000.root hist_bkg_cat3%s.root' %suf) ## use a dummy signal for the background only fit
+#jobSubmit('bkg_cat3%s' %suf)
+#
+#fixFile('ttres_cat2.config', 'ttres_bkg_cat2%s.config' % suf, "bkg_cat2%s" %suf, "bkg_cat2%s" %suf, True)
+#system('cp -f hist_zprime1000.root hist_bkg_cat2%s.root' %suf) ## use a dummy signal for the background only fit
+#jobSubmit('bkg_cat2%s' %suf)
+#
+#fixFile('ttres_cat1.config', 'ttres_bkg_cat1%s.config' % suf, "bkg_cat1%s" %suf, "bkg_cat1%s" %suf, True)
+#system('cp -f hist_zprime1000.root hist_bkg_cat1%s.root' %suf) ## use a dummy signal for the background only fit
+#jobSubmit('bkg_cat1%s' %suf)
 
 # now go over to signal
 for t in signalList:

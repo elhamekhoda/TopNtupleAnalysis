@@ -58,12 +58,15 @@ def plot(t, inputSufix = "", mu = False):
     h.GetYaxis().SetTitle("#sigma #times BR [pb]");
   else:
     h.GetYaxis().SetTitle("#sigma_{lim} / #sigma_{EFT}");
+  name = ''
+  width = ''
   if 'zprime' in t:
     h.GetXaxis().SetTitle("m_{Z'} [TeV]");
   elif 'kkG' in t:
     h.GetXaxis().SetTitle("m_{G_{KK}} [TeV]");
   elif 'kkgluon' in t:
     h.GetXaxis().SetTitle("m_{g_{KK}} [TeV]");
+    width = '30'
   if 'eft' in t:
     h.GetXaxis().SetTitle("c_{Vv} #Lambda^{-2} [TeV^{-2}]");
   h.GetXaxis().SetTitleOffset(0.9);
@@ -98,6 +101,18 @@ def plot(t, inputSufix = "", mu = False):
     #  muexp_p1 = muexp_p1*xs[t][I]
     #  muexp_m2 = muexp_m2*xs[t][I]
     #  muexp_p2 = muexp_p2*xs[t][I]
+
+    extra_factor = 1 # ratio of cross sections in case of kkgluon width reweighting
+    if 'kkg' in signalList[t][i] and 'w' in signalList[t][i]:
+      name = signalList[t][i].split('w')[0]
+      width = signalList[t][i].split('w')[1]
+      extra_factor = xs['kkgluon']/xs['kkgluonw'+width]
+      muobs *= extra_factor
+      muexp *= extra_factor
+      muexp_p2 *= extra_factor
+      muexp_p1 *= extra_factor
+      muexp_m2 *= extra_factor
+      muexp_m1 *= extra_factor
     ftxt = open('lim_'+signalList[t][i]+'.txt', 'w')
     ftxt.write('muobs     '+str(muobs)+'\n')
     ftxt.write('muexp     '+str(muexp)+'\n')
@@ -153,7 +168,7 @@ def plot(t, inputSufix = "", mu = False):
   elif 'kkG' in t:
     l.AddEntry(xsec12, "LO KK graviton cross section", "L")
   elif 'kkgluon' in t:
-    l.AddEntry(xsec12, "LO KK gluon #Gamma=30% cross section", "L")
+    l.AddEntry(xsec12, "LO KK gluon #Gamma="+width+"% cross section", "L")
   if 'zprime' in t:
     l.AddEntry(xsec3, "LO Z'_{#it{TC2}} #Gamma=3% cross section #times 1.3", "L")
 
@@ -183,6 +198,11 @@ def plot(t, inputSufix = "", mu = False):
   clim.SaveAs("mass_limit_%s%s%s.pdf" % (t, suf, inputSufix))
   clim.SaveAs("mass_limit_%s%s%s.C" % (t, suf, inputSufix))
 
+
+plot('zprime', '_stat')
+plot('kkG', '_stat')
+plot('kkgluon', '_stat')
+
 plot('zprime')
 plot('kkG')
 plot('kkgluon')
@@ -190,9 +210,13 @@ plot('kkgluon')
 #plot('eft10', mu=True)
 #plot('eft10', mu=False)
 
-plot('zprime', '_stat')
-plot('kkG', '_stat')
-plot('kkgluon', '_stat')
+#plot('zprime', '_binning')
+#plot('kkG', '_binning')
+#plot('kkgluon', '_binning')
+
+#plot('zprime', '_binning_stat')
+#plot('kkG', '_binning_stat')
+#plot('kkgluon', '_binning_stat')
 
 #plot('zprime', '_ttbarNorm')
 #plot('kkG', '_ttbarNorm')
