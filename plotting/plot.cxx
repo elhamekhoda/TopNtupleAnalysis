@@ -152,6 +152,9 @@ int main(int argc, char **argv) {
           if (ss.peek() == ',') ss.ignore();
         }
       }
+      std::cout << "Rebinning to ";
+      for (size_t k = 0; k < rebinAsym.size(); ++k) std::cout << " " << rebinAsym[k];
+      std::cout << std::endl;
  
       if (underflow) stackConfig.showUnderflow();
       if (xMax > -998.0) stackConfig.limitMaxX(xMax, true);

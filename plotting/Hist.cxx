@@ -26,7 +26,7 @@ Hist::Hist(const string &name, const string &syst, const string &file) {
   n += syst;
   TH1 *h = (TH1 *) f->Get(n.c_str());
   if (!h) {
-    throw string("Failed to get histogram in file ")+file+string(", trying to get ")+name+string("for syst ")+syst;
+    throw string("Failed to get histogram in file ")+file+string(", trying to get ")+name+string(" for syst ")+syst;
   }
   if (file.find("data") == std::string::npos && file.find("Data") == std::string::npos &&
       file.find("QCD") == std::string::npos && file.find("qcd") == std::string::npos && lumi_scale > 0)
@@ -696,7 +696,7 @@ void Hist::rebinAsym(std::vector<float> &b) {
   size_t k = 0;
   for (size_t i = 1; i < _size-1; ++i) {
     addX = _x[i];
-    if (_x[i] < b[k]) {
+    if (k >= b.size() || _x[i] < b[k]) {
       addY += _y[i];
       addYE += pow(_ye[i], 2);
     } else {
@@ -707,20 +707,10 @@ void Hist::rebinAsym(std::vector<float> &b) {
       oldX  = _x[i];
       addY  = _y[i];
       addYE = pow(_ye[i], 2);
-      if (k < b.size()-1) k++;
-      else {
-        for (size_t j = i+1; j < _size-1; ++j) {
-          addY  += _y[j];
-          addYE += pow(_ye[j], 2);
-	}
-        nx.push_back(oldX);
-        ny.push_back(addY);
-        nye.push_back(sqrt(addYE));
-	break;
-      }
+      if (k <= b.size()-1) k++;
     }
   }
-  if (k < b.size()-1) {
+  if (k >= b.size() || _x[_size-2] < b[k]) {
     nx.push_back(oldX);
     ny.push_back(addY);
     nye.push_back(sqrt(addYE));
