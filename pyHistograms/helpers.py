@@ -420,6 +420,8 @@ def getMomenta(sel,topology):
     return p
 
 def getKKgluonWidthWeight(width, sel, s = ""):
+    if sel.MC_ttbar_beforeFSR_m < 0:
+        return 0             # strange cases where no ttbar system can be found
     # mass in GeV integer
     # width in percent of the mass (integer)
     # s-hat in GeV^2
@@ -430,6 +432,28 @@ def getKKgluonWidthWeight(width, sel, s = ""):
         mass = massMap[sel.mcChannelNumber]*1e3 # convert to GeV
     except: # no mc id in this map, do not reweight
         return 1.0
+
+    # define constants here
+    gL = 1.0  # Left handed coupling
+    #c = 0.897597901026  # this is 12 pi / (2*21) (6 flavour) sqrt(shat)
+    c = 1.7951958020 #     this is 12*pi/21 (6 flavour) 
+    #c = 1.6390918193 #   this is 12*pi/23 (5 flavour) 
+    lambd = 0.020736 # LambdaQCD^2 (lambda =0.114 GeV)
+    mtop = 172.5 # value used in Pythia GeV
+    widthgenerated = 30 # generation with 30% width
+    widthdict = {10:0, 15:1, 20:2, 25:3, 30:4, 35:5, 40:6} #width in % of the mass corresponding to the elements of the coupling tuples, in order. 
+    couplings = { 500: (3.35864, 4.36281, 5.18957, 5.90898, 6.55443, 7.1449,  7.69242), 
+                 1000: (3.15336, 4.03605, 4.76074, 5.39045, 5.95493, 6.47103, 6.94941),
+                 1500: (3.19865, 4.07595, 4.79675, 5.42331, 5.98509, 6.49881, 6.97502),
+                 2000: (3.24571, 4.12691, 4.85131, 5.48118, 6.04603, 6.56261, 7.04151),
+                 2500: (3.28571, 4.17137, 4.89963, 5.53294, 6.10091, 6.62038, 7.10198),
+                 3000: (3.31913, 4.21034, 4.94371, 5.58171, 6.15402, 6.67753, 7.16293),
+                 3500: (3.34819, 4.24361, 4.98054, 5.62167, 6.1968,  6.72291, 7.21073),
+                 4000: (3.37301, 4.27332, 5.01479, 5.66009, 6.23910, 6.76882, 7.26003),
+                 4500: (3.39536, 4.29965, 5.04467, 5.69319, 6.27514, 6.8076,  7.30138),
+                 5000: (3.41544, 4.32278, 5.07040, 5.72120, 6.30523, 6.8396,  7.33516)
+                }
+
     #top = ROOT.TLorentzVector()
     #topbar = ROOT.TLorentzVector()
     #if sel.MC_id_me[2] > 0:
@@ -441,30 +465,37 @@ def getKKgluonWidthWeight(width, sel, s = ""):
     #shatt = (top + topbar).M2()
     shatt = ((sel.MC_ttbar_beforeFSR_m*1e-3)**2.0) # convert from MeV to GeV and then square
 
-    # define constants here
-    gL = 1.0  # Left handed coupling
-    widthgenerated = 30 # generation with 30% width
-    widthdict = {10:0, 15:1, 20:2, 25:3, 30:4, 35:5, 40:6} #width in % of the mass corresponding to the elements of the coupling tuples, in order. 
-    couplings = {3000: (3.31916, 4.21030, 4.94376, 5.58176, 6.15408, 6.67759, 7.16300),   
-                 2000: (3.24571, 4.12691, 4.85131, 5.48118, 6.04603, 6,56261, 7.04151),
-                 1000: (3.15336, 4.03605, 4.76074, 5.39045, 5.95493, 6.47103, 6.94941), 
-                 4000: (3.37301, 4.27332, 5.01479, 5.66009, 6.23910, 6.76882, 7.26003)}
-    gammag = widthgenerated * mass / 100
-    gamma  = width*mass/100
+    alphastrong = c / math.log (shatt / lambd)  # running coupling constant
+    #alphastrong=0.1;
 
-    # Breit Wigner reweight
-    bw1 =   (1./( (shatt-mass*mass)*(shatt-mass*mass) + (shatt*gammag/mass)*(shatt*gammag/mass) ));
-    bw =    (1./( (shatt-mass*mass)*(shatt-mass*mass) + (shatt*gamma/mass)*(shatt*gamma/mass) ));
-    # now calculating the V-A 
-    mtop = 172.5  
-    x = mtop*mtop/ shatt
+    # uncomment these two lines if you like to reweight with fixed width, and comment corresponding lines below
+    #gammag = float(widthgenerated) * float(mass) / 100.0
+    #gamma  = float(width)*float(mass)/100.0
+
     genpos = widthdict[widthgenerated]
     gR30 = couplings[mass][genpos]
     reqpos =  widthdict[width]
     gRW =  couplings[mass][reqpos]
-    weinumgen = 1 - x * ( ( gL*gL +gR30 *gR30 -6*gR30 *gL) / (gL *gL + gR30 * gR30 ) )
-    weinum = 1 - x * ( ( gL*gL +gRW *gRW -6*gRW *gL) / (gL *gL + gRW * gRW ) )
-    wr = (bw/bw1) * (weinum / weinumgen)
+    x = mtop*mtop/ shatt
+    gvgen = (gL + gR30)/2.
+    gagen = (gL - gR30)/2.
+    gvrw  = (gL + gRW)/ 2.
+    garw  = (gL - gRW)/ 2.
+    
+    # comment these two lines to run with fixed width
+    gammag = 12.5*math.sqrt(shatt)/1120. + 1./6.* alphastrong * math.sqrt(shatt * ( 1 - 4.* x )) * ( gvgen * gvgen * (1.+2.* x) + gagen * gagen * (1. - 4.*x))
+    gamma  = 12.5*math.sqrt(shatt)/1120. + 1./6.* alphastrong * math.sqrt(shatt * ( 1 - 4.* x )) * ( gvrw  * gvrw  * (1.+2.* x) + garw  * garw  * (1. - 4.*x))
+
+    # Breit Wigner reweight
+    m2 = float (mass * mass)
+    bwgen =   (shatt-m2)*(shatt-m2) + (shatt*gammag/float(mass))*(shatt*gammag/float(mass))
+    bwrw =    (shatt-m2)*(shatt-m2) + (shatt*gamma/float(mass))*(shatt*gamma/float(mass))
+
+    # now calculating the numerator 
+    weinumgen =  (gL *gL + gR30 * gR30 ) - x * ( gL*gL + gR30*gR30 - 6*gR30*gL) 
+    weinumrw  =  (gL *gL + gRW  * gRW  ) - x * ( gL*gL + gRW *gRW  - 6*gRW *gL)
+
+    wr = (bwgen/bwrw) * (weinumrw / weinumgen)
     return wr 
 
 

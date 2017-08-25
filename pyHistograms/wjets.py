@@ -5381,3 +5381,3003 @@ flav_map[3]['mu']["ttpsdw"] = {'bb': 1.468995, 'cc': 1.468995, 'c': 0.962441, 'l
 flav_map[4]['mu']["ttpsdw"] = {'bb': 1.417640, 'cc': 1.417640, 'c': 0.928794, 'l': 0.817121}
 flav_map[5]['mu']["ttpsdw"] = {'bb': 1.354911, 'cc': 1.354911, 'c': 0.887697, 'l': 0.780965}
 
+# NNPDF30_nnlo_as_0118_0 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_0"] =  1.057527
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_0"] =  1.034623
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_0"] =  1.016598
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_0"] =  0.781657
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_0"] =  1.146228
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_0"] =  1.057240
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_0"] =  0.953119
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_0"] =  0.800967
+# NNPDF30_nnlo_as_0118_1 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_1"] =  1.007355
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_1"] =  0.981596
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_1"] =  0.972263
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_1"] =  0.751927
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_1"] =  1.142433
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_1"] =  1.011194
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_1"] =  0.919393
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_1"] =  0.777049
+# NNPDF30_nnlo_as_0118_2 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_2"] =  1.051428
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_2"] =  1.029482
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_2"] =  1.017071
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_2"] =  0.770232
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_2"] =  1.135085
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_2"] =  1.065629
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_2"] =  0.960780
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_2"] =  0.798168
+# NNPDF30_nnlo_as_0118_3 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_3"] =  1.105508
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_3"] =  1.094985
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_3"] =  1.061540
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_3"] =  0.785750
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_3"] =  1.225060
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_3"] =  1.106303
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_3"] =  0.989841
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_3"] =  0.824213
+# NNPDF30_nnlo_as_0118_4 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_4"] =  1.067491
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_4"] =  1.052921
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_4"] =  1.040196
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_4"] =  0.807740
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_4"] =  1.164649
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_4"] =  1.081803
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_4"] =  0.975666
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_4"] =  0.823238
+# NNPDF30_nnlo_as_0118_5 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_5"] =  1.039714
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_5"] =  1.006546
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_5"] =  0.978152
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_5"] =  0.742121
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_5"] =  1.121122
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_5"] =  1.033274
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_5"] =  0.926171
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_5"] =  0.772694
+# NNPDF30_nnlo_as_0118_6 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_6"] =  1.054649
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_6"] =  1.045518
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_6"] =  1.029152
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_6"] =  0.784335
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_6"] =  1.240053
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_6"] =  1.068447
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_6"] =  0.960913
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_6"] =  0.810236
+# NNPDF30_nnlo_as_0118_7 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_7"] =  1.048974
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_7"] =  1.040615
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_7"] =  1.037100
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_7"] =  0.796733
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_7"] =  1.141896
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_7"] =  1.067816
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_7"] =  0.972099
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_7"] =  0.821369
+# NNPDF30_nnlo_as_0118_8 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_8"] =  1.062042
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_8"] =  1.044337
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_8"] =  1.031149
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_8"] =  0.797452
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_8"] =  1.121395
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_8"] =  1.068427
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_8"] =  0.964804
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_8"] =  0.813016
+# NNPDF30_nnlo_as_0118_9 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_9"] =  1.057037
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_9"] =  1.023215
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_9"] =  0.999774
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_9"] =  0.779733
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_9"] =  1.071035
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_9"] =  1.042822
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_9"] =  0.943363
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_9"] =  0.789766
+# NNPDF30_nnlo_as_0118_10 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_10"] =  1.067507
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_10"] =  1.051152
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_10"] =  1.040805
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_10"] =  0.804173
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_10"] =  1.100374
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_10"] =  1.078266
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_10"] =  0.979123
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_10"] =  0.818399
+# NNPDF30_nnlo_as_0118_11 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_11"] =  1.067557
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_11"] =  1.048276
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_11"] =  1.025847
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_11"] =  0.771193
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_11"] =  1.160437
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_11"] =  1.070249
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_11"] =  0.960713
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_11"] =  0.797204
+# NNPDF30_nnlo_as_0118_12 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_12"] =  1.070102
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_12"] =  1.047429
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_12"] =  1.036201
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_12"] =  0.781825
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_12"] =  1.147558
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_12"] =  1.064580
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_12"] =  0.973181
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_12"] =  0.817511
+# NNPDF30_nnlo_as_0118_13 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_13"] =  1.077150
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_13"] =  1.055673
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_13"] =  1.030649
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_13"] =  0.795566
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_13"] =  1.185498
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_13"] =  1.077081
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_13"] =  0.962363
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_13"] =  0.805174
+# NNPDF30_nnlo_as_0118_14 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_14"] =  1.057933
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_14"] =  1.031783
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_14"] =  1.007431
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_14"] =  0.764520
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_14"] =  1.197136
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_14"] =  1.052415
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_14"] =  0.942887
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_14"] =  0.788647
+# NNPDF30_nnlo_as_0118_15 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_15"] =  1.059887
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_15"] =  1.034446
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_15"] =  1.006841
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_15"] =  0.781116
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_15"] =  1.174424
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_15"] =  1.051978
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_15"] =  0.943438
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_15"] =  0.793273
+# NNPDF30_nnlo_as_0118_16 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_16"] =  1.097501
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_16"] =  1.073061
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_16"] =  1.052883
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_16"] =  0.815095
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_16"] =  1.017217
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_16"] =  1.090142
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_16"] =  0.991586
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_16"] =  0.827828
+# NNPDF30_nnlo_as_0118_17 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_17"] =  1.052937
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_17"] =  1.024405
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_17"] =  1.006497
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_17"] =  0.777363
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_17"] =  1.191876
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_17"] =  1.049240
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_17"] =  0.940372
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_17"] =  0.796790
+# NNPDF30_nnlo_as_0118_18 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_18"] =  1.003687
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_18"] =  0.979719
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_18"] =  0.958918
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_18"] =  0.740814
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_18"] =  1.168522
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_18"] =  1.010444
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_18"] =  0.906915
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_18"] =  0.767379
+# NNPDF30_nnlo_as_0118_19 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_19"] =  1.063800
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_19"] =  1.038923
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_19"] =  1.017162
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_19"] =  0.788267
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_19"] =  1.128487
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_19"] =  1.062829
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_19"] =  0.951170
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_19"] =  0.808467
+# NNPDF30_nnlo_as_0118_20 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_20"] =  0.971490
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_20"] =  0.938942
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_20"] =  0.914665
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_20"] =  0.706251
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_20"] =  1.184156
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_20"] =  0.958054
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_20"] =  0.861246
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_20"] =  0.736082
+# NNPDF30_nnlo_as_0118_21 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_21"] =  1.087766
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_21"] =  1.059404
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_21"] =  1.034042
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_21"] =  0.779698
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_21"] =  1.194547
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_21"] =  1.080513
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_21"] =  0.964549
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_21"] =  0.803604
+# NNPDF30_nnlo_as_0118_22 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_22"] =  1.112987
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_22"] =  1.094033
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_22"] =  1.070841
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_22"] =  0.808213
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_22"] =  1.226087
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_22"] =  1.112600
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_22"] =  0.992462
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_22"] =  0.821754
+# NNPDF30_nnlo_as_0118_23 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_23"] =  1.073079
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_23"] =  1.065010
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_23"] =  1.061915
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_23"] =  0.804134
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_23"] =  1.169800
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_23"] =  1.087508
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_23"] =  0.984665
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_23"] =  0.829155
+# NNPDF30_nnlo_as_0118_24 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_24"] =  1.027407
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_24"] =  0.994827
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_24"] =  0.964456
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_24"] =  0.738527
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_24"] =  1.158137
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_24"] =  1.018837
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_24"] =  0.909371
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_24"] =  0.757771
+# NNPDF30_nnlo_as_0118_25 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_25"] =  1.075936
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_25"] =  1.066855
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_25"] =  1.053943
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_25"] =  0.812752
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_25"] =  1.146205
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_25"] =  1.090520
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_25"] =  0.988907
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_25"] =  0.832019
+# NNPDF30_nnlo_as_0118_26 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_26"] =  1.043424
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_26"] =  1.016809
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_26"] =  0.994078
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_26"] =  0.757254
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_26"] =  1.078188
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_26"] =  1.043010
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_26"] =  0.938876
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_26"] =  0.781693
+# NNPDF30_nnlo_as_0118_27 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_27"] =  1.065467
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_27"] =  1.034169
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_27"] =  1.010252
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_27"] =  0.766667
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_27"] =  1.132688
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_27"] =  1.056136
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_27"] =  0.946574
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_27"] =  0.785658
+# NNPDF30_nnlo_as_0118_28 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_28"] =  1.098042
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_28"] =  1.066207
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_28"] =  1.035608
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_28"] =  0.782933
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_28"] =  1.230366
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_28"] =  1.079179
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_28"] =  0.965855
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_28"] =  0.807652
+# NNPDF30_nnlo_as_0118_29 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_29"] =  1.076486
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_29"] =  1.071568
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_29"] =  1.072288
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_29"] =  0.816897
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_29"] =  1.118374
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_29"] =  1.096618
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_29"] =  0.997494
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_29"] =  0.845342
+# NNPDF30_nnlo_as_0118_30 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_30"] =  1.058265
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_30"] =  1.035404
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_30"] =  1.016038
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_30"] =  0.786886
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_30"] =  1.197256
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_30"] =  1.051025
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_30"] =  0.948260
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_30"] =  0.803458
+# NNPDF30_nnlo_as_0118_31 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_31"] =  1.002635
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_31"] =  0.968673
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_31"] =  0.948842
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_31"] =  0.742085
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_31"] =  1.126207
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_31"] =  0.994109
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_31"] =  0.896506
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_31"] =  0.759152
+# NNPDF30_nnlo_as_0118_32 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_32"] =  1.046038
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_32"] =  1.022715
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_32"] =  1.005527
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_32"] =  0.765998
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_32"] =  1.090613
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_32"] =  1.045924
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_32"] =  0.949265
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_32"] =  0.796160
+# NNPDF30_nnlo_as_0118_33 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_33"] =  1.061144
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_33"] =  1.048914
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_33"] =  1.027792
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_33"] =  0.794989
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_33"] =  1.208492
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_33"] =  1.069501
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_33"] =  0.958408
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_33"] =  0.837188
+# NNPDF30_nnlo_as_0118_34 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_34"] =  1.059557
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_34"] =  1.036923
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_34"] =  1.013524
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_34"] =  0.793250
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_34"] =  1.246438
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_34"] =  1.057130
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_34"] =  0.951346
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_34"] =  0.804737
+# NNPDF30_nnlo_as_0118_35 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_35"] =  1.091308
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_35"] =  1.058139
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_35"] =  1.027794
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_35"] =  0.785327
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_35"] =  1.100345
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_35"] =  1.078013
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_35"] =  0.973470
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_35"] =  0.800129
+# NNPDF30_nnlo_as_0118_36 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_36"] =  0.979822
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_36"] =  0.935539
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_36"] =  0.923045
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_36"] =  0.721584
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_36"] =  0.970383
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_36"] =  0.971243
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_36"] =  0.884423
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_36"] =  0.752774
+# NNPDF30_nnlo_as_0118_37 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_37"] =  1.082672
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_37"] =  1.043068
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_37"] =  1.012494
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_37"] =  0.783551
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_37"] =  1.064516
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_37"] =  1.068248
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_37"] =  0.958976
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_37"] =  0.791491
+# NNPDF30_nnlo_as_0118_38 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_38"] =  0.980509
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_38"] =  0.924435
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_38"] =  0.901554
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_38"] =  0.701394
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_38"] =  1.023062
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_38"] =  0.954877
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_38"] =  0.860513
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_38"] =  0.730581
+# NNPDF30_nnlo_as_0118_39 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_39"] =  1.062232
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_39"] =  1.041790
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_39"] =  1.031708
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_39"] =  0.783207
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_39"] =  1.143074
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_39"] =  1.070039
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_39"] =  0.967495
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_39"] =  0.811591
+# NNPDF30_nnlo_as_0118_40 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_40"] =  1.030290
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_40"] =  1.017430
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_40"] =  1.001740
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_40"] =  0.757733
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_40"] =  1.155306
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_40"] =  1.037628
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_40"] =  0.937994
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_40"] =  0.788519
+# NNPDF30_nnlo_as_0118_41 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_41"] =  1.038040
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_41"] =  1.003686
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_41"] =  0.971354
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_41"] =  0.734268
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_41"] =  1.121400
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_41"] =  1.026290
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_41"] =  0.917888
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_41"] =  0.762522
+# NNPDF30_nnlo_as_0118_42 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_42"] =  1.050885
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_42"] =  1.027457
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_42"] =  1.033009
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_42"] =  0.760522
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_42"] =  1.153058
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_42"] =  1.044118
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_42"] =  0.941487
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_42"] =  0.789720
+# NNPDF30_nnlo_as_0118_43 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_43"] =  1.059202
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_43"] =  1.039287
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_43"] =  1.036066
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_43"] =  0.803266
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_43"] =  1.045509
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_43"] =  1.068849
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_43"] =  0.977423
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_43"] =  0.821635
+# NNPDF30_nnlo_as_0118_44 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_44"] =  1.081543
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_44"] =  1.059096
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_44"] =  1.031761
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_44"] =  0.776234
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_44"] =  1.153907
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_44"] =  1.080650
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_44"] =  0.962766
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_44"] =  0.813168
+# NNPDF30_nnlo_as_0118_45 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_45"] =  1.061986
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_45"] =  1.033183
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_45"] =  1.012354
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_45"] =  0.787471
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_45"] =  1.050121
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_45"] =  1.058905
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_45"] =  0.958695
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_45"] =  0.795646
+# NNPDF30_nnlo_as_0118_46 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_46"] =  1.080922
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_46"] =  1.064122
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_46"] =  1.034856
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_46"] =  0.782597
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_46"] =  1.240811
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_46"] =  1.077145
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_46"] =  0.964185
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_46"] =  0.804213
+# NNPDF30_nnlo_as_0118_47 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_47"] =  1.039146
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_47"] =  0.997417
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_47"] =  0.978280
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_47"] =  0.753462
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_47"] =  1.143832
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_47"] =  1.020933
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_47"] =  0.920302
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_47"] =  0.775014
+# NNPDF30_nnlo_as_0118_48 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_48"] =  1.062350
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_48"] =  1.029200
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_48"] =  1.002302
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_48"] =  0.763666
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_48"] =  1.166959
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_48"] =  1.050122
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_48"] =  1.067799
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_48"] =  0.786936
+# NNPDF30_nnlo_as_0118_49 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_49"] =  3.456397
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_49"] =  -2.552151
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_49"] =  -1.520870
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_49"] =  -2.822561
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_49"] =  1.147244
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_49"] =  0.999377
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_49"] =  0.899482
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_49"] =  0.757910
+# NNPDF30_nnlo_as_0118_50 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_50"] =  1.075048
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_50"] =  1.061972
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_50"] =  1.046060
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_50"] =  0.793876
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_50"] =  1.251035
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_50"] =  1.076573
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_50"] =  0.969576
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_50"] =  0.816508
+# NNPDF30_nnlo_as_0118_51 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_51"] =  1.013882
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_51"] =  1.003609
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_51"] =  0.998553
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_51"] =  0.760144
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_51"] =  1.179787
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_51"] =  1.036771
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_51"] =  0.941368
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_51"] =  0.800765
+# NNPDF30_nnlo_as_0118_52 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_52"] =  1.102164
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_52"] =  1.093547
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_52"] =  1.097790
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_52"] =  0.829795
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_52"] =  1.216195
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_52"] =  1.118856
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_52"] =  1.011186
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_52"] =  0.857228
+# NNPDF30_nnlo_as_0118_53 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_53"] =  1.045060
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_53"] =  1.014396
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_53"] =  0.992048
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_53"] =  0.767031
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_53"] =  1.033124
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_53"] =  1.040652
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_53"] =  0.938236
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_53"] =  0.783976
+# NNPDF30_nnlo_as_0118_54 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_54"] =  1.028235
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_54"] =  0.984543
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_54"] =  0.937813
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_54"] =  0.667728
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_54"] =  1.149001
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_54"] =  0.980255
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_54"] =  0.911069
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_54"] =  0.781106
+# NNPDF30_nnlo_as_0118_55 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_55"] =  1.058038
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_55"] =  1.026335
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_55"] =  0.999697
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_55"] =  0.785117
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_55"] =  1.166011
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_55"] =  1.049609
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_55"] =  0.944480
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_55"] =  0.799323
+# NNPDF30_nnlo_as_0118_56 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_56"] =  1.004164
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_56"] =  1.008465
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_56"] =  1.035225
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_56"] =  0.793464
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_56"] =  1.316394
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_56"] =  1.065891
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_56"] =  0.971995
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_56"] =  0.831911
+# NNPDF30_nnlo_as_0118_57 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_57"] =  1.064507
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_57"] =  1.044999
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_57"] =  1.056850
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_57"] =  0.805276
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_57"] =  1.113730
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_57"] =  1.066627
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_57"] =  0.966841
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_57"] =  0.811703
+# NNPDF30_nnlo_as_0118_58 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_58"] =  1.089353
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_58"] =  1.084961
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_58"] =  1.062163
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_58"] =  0.808676
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_58"] =  1.177489
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_58"] =  1.097427
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_58"] =  0.982197
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_58"] =  0.814684
+# NNPDF30_nnlo_as_0118_59 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_59"] =  1.020002
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_59"] =  0.987748
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_59"] =  0.960745
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_59"] =  0.741957
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_59"] =  1.128992
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_59"] =  1.013987
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_59"] =  0.909492
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_59"] =  0.765634
+# NNPDF30_nnlo_as_0118_60 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_60"] =  1.096894
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_60"] =  1.063557
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_60"] =  1.034539
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_60"] =  0.785756
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_60"] =  1.248462
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_60"] =  1.097190
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_60"] =  0.961182
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_60"] =  0.772682
+# NNPDF30_nnlo_as_0118_61 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_61"] =  1.136698
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_61"] =  1.117151
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_61"] =  1.090506
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_61"] =  0.839156
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_61"] =  1.143129
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_61"] =  1.129752
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_61"] =  1.017128
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_61"] =  0.843085
+# NNPDF30_nnlo_as_0118_62 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_62"] =  1.062793
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_62"] =  1.031939
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_62"] =  1.003853
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_62"] =  0.769281
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_62"] =  1.112468
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_62"] =  1.022035
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_62"] =  0.898125
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_62"] =  0.749352
+# NNPDF30_nnlo_as_0118_63 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_63"] =  1.039621
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_63"] =  1.029587
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_63"] =  1.016367
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_63"] =  0.779487
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_63"] =  1.236147
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_63"] =  1.052941
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_63"] =  0.949951
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_63"] =  0.803646
+# NNPDF30_nnlo_as_0118_64 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_64"] =  1.022356
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_64"] =  0.996695
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_64"] =  0.989616
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_64"] =  0.756448
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_64"] =  1.167147
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_64"] =  1.023834
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_64"] =  0.926101
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_64"] =  0.787850
+# NNPDF30_nnlo_as_0118_65 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_65"] =  1.066792
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_65"] =  1.044988
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_65"] =  1.034795
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_65"] =  0.796038
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_65"] =  1.174100
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_65"] =  1.102599
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_65"] =  0.965178
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_65"] =  0.810880
+# NNPDF30_nnlo_as_0118_66 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_66"] =  1.067162
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_66"] =  1.035364
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_66"] =  1.009264
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_66"] =  0.773978
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_66"] =  1.061049
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_66"] =  1.057326
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_66"] =  0.953357
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_66"] =  0.795244
+# NNPDF30_nnlo_as_0118_67 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_67"] =  1.095682
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_67"] =  1.091149
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_67"] =  1.076656
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_67"] =  0.807302
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_67"] =  1.249828
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_67"] =  1.109039
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_67"] =  0.998920
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_67"] =  0.855253
+# NNPDF30_nnlo_as_0118_68 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_68"] =  1.069973
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_68"] =  1.040355
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_68"] =  1.016663
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_68"] =  0.784566
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_68"] =  1.175245
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_68"] =  1.063004
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_68"] =  0.952930
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_68"] =  0.795574
+# NNPDF30_nnlo_as_0118_69 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_69"] =  1.066113
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_69"] =  1.040568
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_69"] =  1.021610
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_69"] =  0.791647
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_69"] =  1.118376
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_69"] =  1.063867
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_69"] =  0.959519
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_69"] =  0.809984
+# NNPDF30_nnlo_as_0118_70 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_70"] =  1.054780
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_70"] =  1.025721
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_70"] =  0.999930
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_70"] =  0.758649
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_70"] =  1.121540
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_70"] =  1.048301
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_70"] =  0.939811
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_70"] =  0.783174
+# NNPDF30_nnlo_as_0118_71 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_71"] =  1.076464
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_71"] =  1.063501
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_71"] =  1.048382
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_71"] =  0.805698
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_71"] =  1.175569
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_71"] =  1.086353
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_71"] =  0.984929
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_71"] =  0.835780
+# NNPDF30_nnlo_as_0118_72 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_72"] =  0.920289
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_72"] =  0.876055
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_72"] =  0.862137
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_72"] =  0.679749
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_72"] =  1.083978
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_72"] =  0.908958
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_72"] =  0.826913
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_72"] =  0.711400
+# NNPDF30_nnlo_as_0118_73 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_73"] =  1.084847
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_73"] =  1.048041
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_73"] =  1.017440
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_73"] =  0.775542
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_73"] =  1.151922
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_73"] =  1.077712
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_73"] =  0.948208
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_73"] =  0.795710
+# NNPDF30_nnlo_as_0118_74 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_74"] =  1.053632
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_74"] =  1.020597
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_74"] =  1.005507
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_74"] =  0.771138
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_74"] =  1.122181
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_74"] =  1.052669
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_74"] =  0.947366
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_74"] =  0.793488
+# NNPDF30_nnlo_as_0118_75 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_75"] =  1.091951
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_75"] =  1.070595
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_75"] =  1.051100
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_75"] =  0.802476
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_75"] =  1.161293
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_75"] =  1.087160
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_75"] =  0.986242
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_75"] =  0.825603
+# NNPDF30_nnlo_as_0118_76 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_76"] =  1.071596
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_76"] =  1.042593
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_76"] =  1.020787
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_76"] =  0.790597
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_76"] =  1.121686
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_76"] =  1.063222
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_76"] =  0.961091
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_76"] =  0.806245
+# NNPDF30_nnlo_as_0118_77 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_77"] =  1.081166
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_77"] =  1.056444
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_77"] =  1.041260
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_77"] =  0.802228
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_77"] =  1.121901
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_77"] =  1.084735
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_77"] =  0.974655
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_77"] =  0.821292
+# NNPDF30_nnlo_as_0118_78 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_78"] =  1.136909
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_78"] =  1.121210
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_78"] =  1.099536
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_78"] =  0.822241
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_78"] =  1.274095
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_78"] =  1.136121
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_78"] =  1.014313
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_78"] =  0.863214
+# NNPDF30_nnlo_as_0118_79 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_79"] =  1.032706
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_79"] =  1.019787
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_79"] =  1.028518
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_79"] =  0.790611
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_79"] =  1.184222
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_79"] =  1.048012
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_79"] =  0.959936
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_79"] =  0.822510
+# NNPDF30_nnlo_as_0118_80 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_80"] =  1.094580
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_80"] =  1.080017
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_80"] =  1.066505
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_80"] =  0.815432
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_80"] =  1.147514
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_80"] =  1.098395
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_80"] =  0.995096
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_80"] =  0.831601
+# NNPDF30_nnlo_as_0118_81 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_81"] =  1.056697
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_81"] =  1.016240
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_81"] =  0.990588
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_81"] =  0.749381
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_81"] =  1.127068
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_81"] =  1.039941
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_81"] =  0.930801
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_81"] =  0.776220
+# NNPDF30_nnlo_as_0118_82 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_82"] =  1.079468
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_82"] =  1.056042
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_82"] =  1.032570
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_82"] =  0.782903
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_82"] =  1.172156
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_82"] =  1.080926
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_82"] =  0.969536
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_82"] =  0.805769
+# NNPDF30_nnlo_as_0118_83 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_83"] =  1.074972
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_83"] =  1.037809
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_83"] =  1.006509
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_83"] =  0.767481
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_83"] =  0.805271
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_83"] =  1.109186
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_83"] =  1.021138
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_83"] =  0.842842
+# NNPDF30_nnlo_as_0118_84 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_84"] =  1.028986
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_84"] =  1.005238
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_84"] =  0.982954
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_84"] =  0.751372
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_84"] =  1.214302
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_84"] =  1.030520
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_84"] =  0.925277
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_84"] =  0.778053
+# NNPDF30_nnlo_as_0118_85 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_85"] =  1.044828
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_85"] =  1.018665
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_85"] =  1.006908
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_85"] =  0.767017
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_85"] =  1.062990
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_85"] =  1.049319
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_85"] =  0.951904
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_85"] =  0.795666
+# NNPDF30_nnlo_as_0118_86 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_86"] =  1.107799
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_86"] =  1.095399
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_86"] =  1.084166
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_86"] =  0.827162
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_86"] =  1.178166
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_86"] =  1.118005
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_86"] =  1.005054
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_86"] =  0.847729
+# NNPDF30_nnlo_as_0118_87 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_87"] =  1.029435
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_87"] =  1.016510
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_87"] =  1.004414
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_87"] =  0.766934
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_87"] =  1.181561
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_87"] =  1.040814
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_87"] =  0.942701
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_87"] =  0.801887
+# NNPDF30_nnlo_as_0118_88 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_88"] =  1.034574
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_88"] =  1.010811
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_88"] =  0.984972
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_88"] =  0.782849
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_88"] =  1.174201
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_88"] =  1.031329
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_88"] =  0.928123
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_88"] =  0.782552
+# NNPDF30_nnlo_as_0118_89 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_89"] =  1.112747
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_89"] =  1.123131
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_89"] =  1.128344
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_89"] =  0.861216
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_89"] =  1.136146
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_89"] =  1.153154
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_89"] =  1.051216
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_89"] =  0.879925
+# NNPDF30_nnlo_as_0118_90 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_90"] =  1.064487
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_90"] =  1.016987
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_90"] =  0.989837
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_90"] =  0.788979
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_90"] =  0.992787
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_90"] =  1.032168
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_90"] =  0.934664
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_90"] =  0.788277
+# NNPDF30_nnlo_as_0118_91 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_91"] =  1.073960
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_91"] =  1.070756
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_91"] =  1.072124
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_91"] =  0.831674
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_91"] =  1.223373
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_91"] =  1.097298
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_91"] =  0.999317
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_91"] =  0.852329
+# NNPDF30_nnlo_as_0118_92 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_92"] =  1.063836
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_92"] =  1.043886
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_92"] =  1.024966
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_92"] =  0.791498
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_92"] =  1.159622
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_92"] =  1.070562
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_92"] =  0.963415
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_92"] =  0.808030
+# NNPDF30_nnlo_as_0118_93 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_93"] =  1.047535
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_93"] =  1.022736
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_93"] =  1.001866
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_93"] =  0.771077
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_93"] =  1.108004
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_93"] =  1.050021
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_93"] =  0.944890
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_93"] =  0.788528
+# NNPDF30_nnlo_as_0118_94 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_94"] =  1.040890
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_94"] =  1.028693
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_94"] =  1.008616
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_94"] =  0.779245
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_94"] =  1.286622
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_94"] =  1.040391
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_94"] =  0.939566
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_94"] =  0.795865
+# NNPDF30_nnlo_as_0118_95 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_95"] =  1.060962
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_95"] =  0.999164
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_95"] =  0.966782
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_95"] =  0.734649
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_95"] =  1.158434
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_95"] =  1.041683
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_95"] =  0.941369
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_95"] =  0.793395
+# NNPDF30_nnlo_as_0118_96 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_96"] =  1.056640
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_96"] =  1.036065
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_96"] =  1.020187
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_96"] =  0.772288
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_96"] =  1.159937
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_96"] =  1.064665
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_96"] =  0.957486
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_96"] =  0.803401
+# NNPDF30_nnlo_as_0118_97 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_97"] =  1.081842
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_97"] =  1.077567
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_97"] =  1.054978
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_97"] =  0.801586
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_97"] =  1.292201
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_97"] =  1.096309
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_97"] =  0.983874
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_97"] =  0.824284
+# NNPDF30_nnlo_as_0118_98 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_98"] =  1.066014
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_98"] =  1.024765
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_98"] =  1.006504
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_98"] =  0.775134
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_98"] =  1.192737
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_98"] =  1.050271
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_98"] =  0.942525
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_98"] =  0.791781
+# NNPDF30_nnlo_as_0118_99 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_99"] =  1.090727
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_99"] =  1.068880
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_99"] =  1.057509
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_99"] =  0.805848
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_99"] =  1.087179
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_99"] =  1.098148
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_99"] =  0.995723
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_99"] =  0.829391
+# NNPDF30_nnlo_as_0118_90 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_90"] =  1.064487
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_90"] =  1.016987
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_90"] =  0.989837
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_90"] =  0.788979
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_90"] =  0.992787
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_90"] =  1.032168
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_90"] =  0.934664
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_90"] =  0.788277
+# NNPDF30_nnlo_as_0118_91 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_91"] =  1.073960
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_91"] =  1.070756
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_91"] =  1.072124
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_91"] =  0.831674
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_91"] =  1.223373
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_91"] =  1.097298
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_91"] =  0.999317
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_91"] =  0.852329
+# NNPDF30_nnlo_as_0118_92 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_92"] =  1.063836
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_92"] =  1.043886
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_92"] =  1.024966
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_92"] =  0.791498
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_92"] =  1.159622
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_92"] =  1.070562
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_92"] =  0.963415
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_92"] =  0.808030
+# NNPDF30_nnlo_as_0118_93 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_93"] =  1.047535
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_93"] =  1.022736
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_93"] =  1.001866
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_93"] =  0.771077
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_93"] =  1.108004
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_93"] =  1.050021
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_93"] =  0.944890
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_93"] =  0.788528
+# NNPDF30_nnlo_as_0118_94 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_94"] =  1.040890
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_94"] =  1.028693
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_94"] =  1.008616
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_94"] =  0.779245
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_94"] =  1.286622
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_94"] =  1.040391
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_94"] =  0.939566
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_94"] =  0.795865
+# NNPDF30_nnlo_as_0118_95 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_95"] =  1.060962
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_95"] =  0.999164
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_95"] =  0.966782
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_95"] =  0.734649
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_95"] =  1.158434
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_95"] =  1.041683
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_95"] =  0.941369
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_95"] =  0.793395
+# NNPDF30_nnlo_as_0118_96 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_96"] =  1.056640
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_96"] =  1.036065
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_96"] =  1.020187
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_96"] =  0.772288
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_96"] =  1.159937
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_96"] =  1.064665
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_96"] =  0.957486
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_96"] =  0.803401
+# NNPDF30_nnlo_as_0118_97 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_97"] =  1.081842
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_97"] =  1.077567
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_97"] =  1.054978
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_97"] =  0.801586
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_97"] =  1.292201
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_97"] =  1.096309
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_97"] =  0.983874
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_97"] =  0.824284
+# NNPDF30_nnlo_as_0118_98 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_98"] =  1.066014
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_98"] =  1.024765
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_98"] =  1.006504
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_98"] =  0.775134
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_98"] =  1.192737
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_98"] =  1.050271
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_98"] =  0.942525
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_98"] =  0.791781
+# NNPDF30_nnlo_as_0118_99 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_99"] =  1.090727
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_99"] =  1.068880
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_99"] =  1.057509
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_99"] =  0.805848
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_99"] =  1.087179
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_99"] =  1.098148
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_99"] =  0.995723
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_99"] =  0.829391
+# NNPDF30_nnlo_as_0118_100 
+f_ca_map[2]['el']["NNPDF30_nnlo_as_0118_100"] =  1.051866
+f_ca_map[3]['el']["NNPDF30_nnlo_as_0118_100"] =  1.036895
+f_ca_map[4]['el']["NNPDF30_nnlo_as_0118_100"] =  1.027505
+f_ca_map[5]['el']["NNPDF30_nnlo_as_0118_100"] =  0.789638
+f_ca_map[2]['mu']["NNPDF30_nnlo_as_0118_100"] =  1.171636
+f_ca_map[3]['mu']["NNPDF30_nnlo_as_0118_100"] =  1.161643
+f_ca_map[4]['mu']["NNPDF30_nnlo_as_0118_100"] =  0.959810
+f_ca_map[5]['mu']["NNPDF30_nnlo_as_0118_100"] =  0.818693
+
+# NNPDF30_nnlo_as_0118_0 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_0"] = {'bb': 1.274956, 'cc': 1.274956, 'c': 1.000000, 'l': 0.929666}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_0"] = {'bb': 1.249015, 'cc': 1.249015, 'c': 0.979653, 'l': 0.910750}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_0"] = {'bb': 1.223876, 'cc': 1.223876, 'c': 0.959936, 'l': 0.892419}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_0"] = {'bb': 1.196434, 'cc': 1.196434, 'c': 0.938412, 'l': 0.872409}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_0"] = {'bb': 1.510978, 'cc': 1.510978, 'c': 1.000000, 'l': 0.883273}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_0"] = {'bb': 1.455819, 'cc': 1.455819, 'c': 0.963495, 'l': 0.851029}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_0"] = {'bb': 1.406303, 'cc': 1.406303, 'c': 0.930724, 'l': 0.822083}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_0"] = {'bb': 1.345691, 'cc': 1.345691, 'c': 0.890609, 'l': 0.786651}
+# NNPDF30_nnlo_as_0118_1 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_1"] = {'bb': 1.329750, 'cc': 1.329750, 'c': 1.000000, 'l': 0.915633}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_1"] = {'bb': 1.297464, 'cc': 1.297464, 'c': 0.975720, 'l': 0.893401}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_1"] = {'bb': 1.266392, 'cc': 1.266392, 'c': 0.952354, 'l': 0.872006}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_1"] = {'bb': 1.232883, 'cc': 1.232883, 'c': 0.927154, 'l': 0.848932}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_1"] = {'bb': 1.501060, 'cc': 1.501060, 'c': 1.000000, 'l': 0.886593}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_1"] = {'bb': 1.446377, 'cc': 1.446377, 'c': 0.963571, 'l': 0.854295}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_1"] = {'bb': 1.398288, 'cc': 1.398288, 'c': 0.931534, 'l': 0.825891}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_1"] = {'bb': 1.339232, 'cc': 1.339232, 'c': 0.892191, 'l': 0.791011}
+# NNPDF30_nnlo_as_0118_2 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_2"] = {'bb': 1.309875, 'cc': 1.309875, 'c': 1.000000, 'l': 0.921100}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_2"] = {'bb': 1.280081, 'cc': 1.280081, 'c': 0.977254, 'l': 0.900149}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_2"] = {'bb': 1.251197, 'cc': 1.251197, 'c': 0.955203, 'l': 0.879837}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_2"] = {'bb': 1.219662, 'cc': 1.219662, 'c': 0.931128, 'l': 0.857662}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_2"] = {'bb': 1.816449, 'cc': 1.816449, 'c': 1.000000, 'l': 0.813737}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_2"] = {'bb': 1.713625, 'cc': 1.713625, 'c': 0.943393, 'l': 0.767673}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_2"] = {'bb': 1.624285, 'cc': 1.624285, 'c': 0.894209, 'l': 0.727651}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_2"] = {'bb': 1.519072, 'cc': 1.519072, 'c': 0.836287, 'l': 0.680517}
+# NNPDF30_nnlo_as_0118_3 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_3"] = {'bb': 1.312260, 'cc': 1.312260, 'c': 1.000000, 'l': 0.919865}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_3"] = {'bb': 1.282241, 'cc': 1.282241, 'c': 0.977125, 'l': 0.898822}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_3"] = {'bb': 1.252836, 'cc': 1.252836, 'c': 0.954716, 'l': 0.878210}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_3"] = {'bb': 1.220720, 'cc': 1.220720, 'c': 0.930243, 'l': 0.855697}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_3"] = {'bb': 1.490092, 'cc': 1.490092, 'c': 1.000000, 'l': 0.887785}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_3"] = {'bb': 1.437480, 'cc': 1.437480, 'c': 0.964692, 'l': 0.856439}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_3"] = {'bb': 1.390467, 'cc': 1.390467, 'c': 0.933141, 'l': 0.828429}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_3"] = {'bb': 1.332825, 'cc': 1.332825, 'c': 0.894458, 'l': 0.794087}
+# NNPDF30_nnlo_as_0118_4 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_4"] = {'bb': 1.320467, 'cc': 1.320467, 'c': 1.000000, 'l': 0.918109}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_4"] = {'bb': 1.289272, 'cc': 1.289272, 'c': 0.976376, 'l': 0.896420}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_4"] = {'bb': 1.259319, 'cc': 1.259319, 'c': 0.953692, 'l': 0.875594}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_4"] = {'bb': 1.226842, 'cc': 1.226842, 'c': 0.929097, 'l': 0.853012}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_4"] = {'bb': 1.565266, 'cc': 1.565266, 'c': 1.000000, 'l': 0.871490}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_4"] = {'bb': 1.502627, 'cc': 1.502627, 'c': 0.959982, 'l': 0.836615}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_4"] = {'bb': 1.446592, 'cc': 1.446592, 'c': 0.924183, 'l': 0.805417}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_4"] = {'bb': 1.378284, 'cc': 1.378284, 'c': 0.880543, 'l': 0.767385}
+# NNPDF30_nnlo_as_0118_5 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_5"] = {'bb': 1.268116, 'cc': 1.268116, 'c': 1.000000, 'l': 0.931403}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_5"] = {'bb': 1.242883, 'cc': 1.242883, 'c': 0.980102, 'l': 0.912870}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_5"] = {'bb': 1.218383, 'cc': 1.218383, 'c': 0.960782, 'l': 0.894875}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_5"] = {'bb': 1.191608, 'cc': 1.191608, 'c': 0.939668, 'l': 0.875209}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_5"] = {'bb': 1.526498, 'cc': 1.526498, 'c': 1.000000, 'l': 0.879971}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_5"] = {'bb': 1.469809, 'cc': 1.469809, 'c': 0.962864, 'l': 0.847292}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_5"] = {'bb': 1.419338, 'cc': 1.419338, 'c': 0.929800, 'l': 0.818197}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_5"] = {'bb': 1.357558, 'cc': 1.357558, 'c': 0.889328, 'l': 0.782583}
+# NNPDF30_nnlo_as_0118_6 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_6"] = {'bb': 1.242727, 'cc': 1.242727, 'c': 1.000000, 'l': 0.938045}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_6"] = {'bb': 1.220320, 'cc': 1.220320, 'c': 0.981969, 'l': 0.921131}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_6"] = {'bb': 1.198539, 'cc': 1.198539, 'c': 0.964443, 'l': 0.904691}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_6"] = {'bb': 1.174647, 'cc': 1.174647, 'c': 0.945217, 'l': 0.886656}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_6"] = {'bb': 1.362395, 'cc': 1.362395, 'c': 1.000000, 'l': 0.918298}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_6"] = {'bb': 1.325994, 'cc': 1.325994, 'c': 0.973281, 'l': 0.893763}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_6"] = {'bb': 1.293480, 'cc': 1.293480, 'c': 0.949416, 'l': 0.871847}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_6"] = {'bb': 1.252733, 'cc': 1.252733, 'c': 0.919507, 'l': 0.844382}
+# NNPDF30_nnlo_as_0118_7 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_7"] = {'bb': 1.289120, 'cc': 1.289120, 'c': 1.000000, 'l': 0.925738}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_7"] = {'bb': 1.261537, 'cc': 1.261537, 'c': 0.978603, 'l': 0.905931}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_7"] = {'bb': 1.234882, 'cc': 1.234882, 'c': 0.957927, 'l': 0.886790}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_7"] = {'bb': 1.205862, 'cc': 1.205862, 'c': 0.935415, 'l': 0.865950}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_7"] = {'bb': 1.512583, 'cc': 1.512583, 'c': 1.000000, 'l': 0.882802}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_7"] = {'bb': 1.457032, 'cc': 1.457032, 'c': 0.963275, 'l': 0.850381}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_7"] = {'bb': 1.407166, 'cc': 1.407166, 'c': 0.930307, 'l': 0.821277}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_7"] = {'bb': 1.346388, 'cc': 1.346388, 'c': 0.890125, 'l': 0.785805}
+# NNPDF30_nnlo_as_0118_8 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_8"] = {'bb': 1.296440, 'cc': 1.296440, 'c': 1.000000, 'l': 0.924381}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_8"] = {'bb': 1.268255, 'cc': 1.268255, 'c': 0.978260, 'l': 0.904284}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_8"] = {'bb': 1.240985, 'cc': 1.240985, 'c': 0.957225, 'l': 0.884841}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_8"] = {'bb': 1.211093, 'cc': 1.211093, 'c': 0.934168, 'l': 0.863527}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_8"] = {'bb': 1.536560, 'cc': 1.536560, 'c': 1.000000, 'l': 0.877394}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_8"] = {'bb': 1.478717, 'cc': 1.478717, 'c': 0.962355, 'l': 0.844365}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_8"] = {'bb': 1.426302, 'cc': 1.426302, 'c': 0.928244, 'l': 0.814435}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_8"] = {'bb': 1.361833, 'cc': 1.361833, 'c': 0.886287, 'l': 0.777623}
+# NNPDF30_nnlo_as_0118_9 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_9"] = {'bb': 1.233505, 'cc': 1.233505, 'c': 1.000000, 'l': 0.940279}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_9"] = {'bb': 1.212168, 'cc': 1.212168, 'c': 0.982702, 'l': 0.924014}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_9"] = {'bb': 1.191313, 'cc': 1.191313, 'c': 0.965795, 'l': 0.908116}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_9"] = {'bb': 1.168456, 'cc': 1.168456, 'c': 0.947265, 'l': 0.890692}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_9"] = {'bb': 1.595380, 'cc': 1.595380, 'c': 1.000000, 'l': 0.862978}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_9"] = {'bb': 1.529227, 'cc': 1.529227, 'c': 0.958535, 'l': 0.827195}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_9"] = {'bb': 1.468894, 'cc': 1.468894, 'c': 0.920717, 'l': 0.794559}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_9"] = {'bb': 1.396099, 'cc': 1.396099, 'c': 0.875089, 'l': 0.755183}
+# NNPDF30_nnlo_as_0118_10 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_10"] = {'bb': 1.402292, 'cc': 1.402292, 'c': 1.000000, 'l': 0.897271}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_10"] = {'bb': 1.361055, 'cc': 1.361055, 'c': 0.970593, 'l': 0.870884}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_10"] = {'bb': 1.321727, 'cc': 1.321727, 'c': 0.942548, 'l': 0.845720}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_10"] = {'bb': 1.279589, 'cc': 1.279589, 'c': 0.912498, 'l': 0.818758}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_10"] = {'bb': 1.761410, 'cc': 1.761410, 'c': 1.000000, 'l': 0.825337}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_10"] = {'bb': 1.668878, 'cc': 1.668878, 'c': 0.947467, 'l': 0.781980}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_10"] = {'bb': 1.586964, 'cc': 1.586964, 'c': 0.900962, 'l': 0.743598}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_10"] = {'bb': 1.489709, 'cc': 1.489709, 'c': 0.845748, 'l': 0.698027}
+# NNPDF30_nnlo_as_0118_11 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_11"] = {'bb': 1.252018, 'cc': 1.252018, 'c': 1.000000, 'l': 0.935646}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_11"] = {'bb': 1.228547, 'cc': 1.228547, 'c': 0.981253, 'l': 0.918106}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_11"] = {'bb': 1.205774, 'cc': 1.205774, 'c': 0.963064, 'l': 0.901087}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_11"] = {'bb': 1.180761, 'cc': 1.180761, 'c': 0.943086, 'l': 0.882395}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_11"] = {'bb': 1.485922, 'cc': 1.485922, 'c': 1.000000, 'l': 0.889374}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_11"] = {'bb': 1.434022, 'cc': 1.434022, 'c': 0.965072, 'l': 0.858311}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_11"] = {'bb': 1.387311, 'cc': 1.387311, 'c': 0.933637, 'l': 0.830353}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_11"] = {'bb': 1.330046, 'cc': 1.330046, 'c': 0.895098, 'l': 0.796077}
+# NNPDF30_nnlo_as_0118_12 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_12"] = {'bb': 1.453236, 'cc': 1.453236, 'c': 1.000000, 'l': 0.884799}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_12"] = {'bb': 1.405351, 'cc': 1.405351, 'c': 0.967050, 'l': 0.855645}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_12"] = {'bb': 1.360046, 'cc': 1.360046, 'c': 0.935875, 'l': 0.828061}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_12"] = {'bb': 1.311843, 'cc': 1.311843, 'c': 0.902705, 'l': 0.798712}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_12"] = {'bb': 1.696707, 'cc': 1.696707, 'c': 1.000000, 'l': 0.841954}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_12"] = {'bb': 1.614006, 'cc': 1.614006, 'c': 0.951258, 'l': 0.800916}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_12"] = {'bb': 1.540540, 'cc': 1.540540, 'c': 0.907959, 'l': 0.764459}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_12"] = {'bb': 1.453646, 'cc': 1.453646, 'c': 0.856746, 'l': 0.721340}
+# NNPDF30_nnlo_as_0118_13 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_13"] = {'bb': 1.275053, 'cc': 1.275053, 'c': 1.000000, 'l': 0.929445}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_13"] = {'bb': 1.249131, 'cc': 1.249131, 'c': 0.979670, 'l': 0.910549}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_13"] = {'bb': 1.224019, 'cc': 1.224019, 'c': 0.959975, 'l': 0.892244}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_13"] = {'bb': 1.196646, 'cc': 1.196646, 'c': 0.938507, 'l': 0.872291}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_13"] = {'bb': 1.478153, 'cc': 1.478153, 'c': 1.000000, 'l': 0.890986}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_13"] = {'bb': 1.427304, 'cc': 1.427304, 'c': 0.965599, 'l': 0.860335}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_13"] = {'bb': 1.381636, 'cc': 1.381636, 'c': 0.934704, 'l': 0.832808}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_13"] = {'bb': 1.325511, 'cc': 1.325511, 'c': 0.896734, 'l': 0.798978}
+# NNPDF30_nnlo_as_0118_14 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_14"] = {'bb': 1.308086, 'cc': 1.308086, 'c': 1.000000, 'l': 0.920975}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_14"] = {'bb': 1.278156, 'cc': 1.278156, 'c': 0.977119, 'l': 0.899902}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_14"] = {'bb': 1.249366, 'cc': 1.249366, 'c': 0.955110, 'l': 0.879632}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_14"] = {'bb': 1.218179, 'cc': 1.218179, 'c': 0.931268, 'l': 0.857675}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_14"] = {'bb': 1.447113, 'cc': 1.447113, 'c': 1.000000, 'l': 0.898157}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_14"] = {'bb': 1.399905, 'cc': 1.399905, 'c': 0.967378, 'l': 0.868858}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_14"] = {'bb': 1.357673, 'cc': 1.357673, 'c': 0.938194, 'l': 0.842646}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_14"] = {'bb': 1.305793, 'cc': 1.305793, 'c': 0.902343, 'l': 0.810446}
+# NNPDF30_nnlo_as_0118_15 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_15"] = {'bb': 1.275961, 'cc': 1.275961, 'c': 1.000000, 'l': 0.929589}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_15"] = {'bb': 1.249799, 'cc': 1.249799, 'c': 0.979496, 'l': 0.910529}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_15"] = {'bb': 1.224554, 'cc': 1.224554, 'c': 0.959712, 'l': 0.892138}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_15"] = {'bb': 1.197147, 'cc': 1.197147, 'c': 0.938232, 'l': 0.872170}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_15"] = {'bb': 1.471877, 'cc': 1.471877, 'c': 1.000000, 'l': 0.892985}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_15"] = {'bb': 1.421691, 'cc': 1.421691, 'c': 0.965903, 'l': 0.862537}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_15"] = {'bb': 1.376744, 'cc': 1.376744, 'c': 0.935366, 'l': 0.835268}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_15"] = {'bb': 1.321295, 'cc': 1.321295, 'c': 0.897694, 'l': 0.801627}
+# NNPDF30_nnlo_as_0118_16 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_16"] = {'bb': 1.141094, 'cc': 1.141094, 'c': 1.000000, 'l': 0.963774}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_16"] = {'bb': 1.129135, 'cc': 1.129135, 'c': 0.989520, 'l': 0.953673}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_16"] = {'bb': 1.117241, 'cc': 1.117241, 'c': 0.979096, 'l': 0.943627}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_16"] = {'bb': 1.103928, 'cc': 1.103928, 'c': 0.967429, 'l': 0.932383}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_16"] = {'bb': 1.701629, 'cc': 1.701629, 'c': 1.000000, 'l': 0.836479}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_16"] = {'bb': 1.621327, 'cc': 1.621327, 'c': 0.952809, 'l': 0.797005}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_16"] = {'bb': 1.546842, 'cc': 1.546842, 'c': 0.909036, 'l': 0.760390}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_16"] = {'bb': 1.457921, 'cc': 1.457921, 'c': 0.856780, 'l': 0.716678}
+# NNPDF30_nnlo_as_0118_17 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_17"] = {'bb': 1.318901, 'cc': 1.318901, 'c': 1.000000, 'l': 0.918688}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_17"] = {'bb': 1.287972, 'cc': 1.287972, 'c': 0.976549, 'l': 0.897144}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_17"] = {'bb': 1.258187, 'cc': 1.258187, 'c': 0.953966, 'l': 0.876398}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_17"] = {'bb': 1.225865, 'cc': 1.225865, 'c': 0.929460, 'l': 0.853884}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_17"] = {'bb': 1.465436, 'cc': 1.465436, 'c': 1.000000, 'l': 0.894709}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_17"] = {'bb': 1.416095, 'cc': 1.416095, 'c': 0.966330, 'l': 0.864584}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_17"] = {'bb': 1.371754, 'cc': 1.371754, 'c': 0.936072, 'l': 0.837512}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_17"] = {'bb': 1.317615, 'cc': 1.317615, 'c': 0.899129, 'l': 0.804458}
+# NNPDF30_nnlo_as_0118_18 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_18"] = {'bb': 1.191809, 'cc': 1.191809, 'c': 1.000000, 'l': 0.950676}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_18"] = {'bb': 1.174843, 'cc': 1.174843, 'c': 0.985764, 'l': 0.937143}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_18"] = {'bb': 1.158224, 'cc': 1.158224, 'c': 0.971820, 'l': 0.923886}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_18"] = {'bb': 1.139825, 'cc': 1.139825, 'c': 0.956382, 'l': 0.909210}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_18"] = {'bb': 1.314557, 'cc': 1.314557, 'c': 1.000000, 'l': 0.928981}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_18"] = {'bb': 1.284185, 'cc': 1.284185, 'c': 0.976895, 'l': 0.907517}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_18"] = {'bb': 1.256623, 'cc': 1.256623, 'c': 0.955929, 'l': 0.888040}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_18"] = {'bb': 1.221939, 'cc': 1.221939, 'c': 0.929545, 'l': 0.863530}
+# NNPDF30_nnlo_as_0118_19 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_19"] = {'bb': 1.287016, 'cc': 1.287016, 'c': 1.000000, 'l': 0.926675}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_19"] = {'bb': 1.259753, 'cc': 1.259753, 'c': 0.978817, 'l': 0.907045}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_19"] = {'bb': 1.233457, 'cc': 1.233457, 'c': 0.958385, 'l': 0.888112}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_19"] = {'bb': 1.204549, 'cc': 1.204549, 'c': 0.935924, 'l': 0.867297}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_19"] = {'bb': 1.545377, 'cc': 1.545377, 'c': 1.000000, 'l': 0.875437}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_19"] = {'bb': 1.485813, 'cc': 1.485813, 'c': 0.961457, 'l': 0.841695}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_19"] = {'bb': 1.432689, 'cc': 1.432689, 'c': 0.927081, 'l': 0.811601}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_19"] = {'bb': 1.366967, 'cc': 1.366967, 'c': 0.884553, 'l': 0.774370}
+# NNPDF30_nnlo_as_0118_20 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_20"] = {'bb': 1.249369, 'cc': 1.249369, 'c': 1.000000, 'l': 0.935981}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_20"] = {'bb': 1.226086, 'cc': 1.226086, 'c': 0.981364, 'l': 0.918538}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_20"] = {'bb': 1.203527, 'cc': 1.203527, 'c': 0.963308, 'l': 0.901638}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_20"] = {'bb': 1.179066, 'cc': 1.179066, 'c': 0.943730, 'l': 0.883313}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_20"] = {'bb': 1.259653, 'cc': 1.259653, 'c': 1.000000, 'l': 0.941413}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_20"] = {'bb': 1.234634, 'cc': 1.234634, 'c': 0.980138, 'l': 0.922715}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_20"] = {'bb': 1.212480, 'cc': 1.212480, 'c': 0.962551, 'l': 0.906158}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_20"] = {'bb': 1.184684, 'cc': 1.184684, 'c': 0.940485, 'l': 0.885384}
+# NNPDF30_nnlo_as_0118_21 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_21"] = {'bb': 1.354002, 'cc': 1.354002, 'c': 1.000000, 'l': 0.909467}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_21"] = {'bb': 1.319125, 'cc': 1.319125, 'c': 0.974241, 'l': 0.886040}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_21"] = {'bb': 1.285500, 'cc': 1.285500, 'c': 0.949408, 'l': 0.863455}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_21"] = {'bb': 1.248812, 'cc': 1.248812, 'c': 0.922312, 'l': 0.838812}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_21"] = {'bb': 1.528072, 'cc': 1.528072, 'c': 1.000000, 'l': 0.879443}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_21"] = {'bb': 1.470327, 'cc': 1.470327, 'c': 0.962210, 'l': 0.846209}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_21"] = {'bb': 1.418768, 'cc': 1.418768, 'c': 0.928469, 'l': 0.816536}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_21"] = {'bb': 1.355841, 'cc': 1.355841, 'c': 0.887288, 'l': 0.780319}
+# NNPDF30_nnlo_as_0118_22 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_22"] = {'bb': 1.293549, 'cc': 1.293549, 'c': 1.000000, 'l': 0.925060}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_22"] = {'bb': 1.265354, 'cc': 1.265354, 'c': 0.978204, 'l': 0.904897}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_22"] = {'bb': 1.238282, 'cc': 1.238282, 'c': 0.957275, 'l': 0.885537}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_22"] = {'bb': 1.208827, 'cc': 1.208827, 'c': 0.934504, 'l': 0.864473}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_22"] = {'bb': 1.495120, 'cc': 1.495120, 'c': 1.000000, 'l': 0.887264}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_22"] = {'bb': 1.441803, 'cc': 1.441803, 'c': 0.964339, 'l': 0.855624}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_22"] = {'bb': 1.394098, 'cc': 1.394098, 'c': 0.932432, 'l': 0.827314}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_22"] = {'bb': 1.335743, 'cc': 1.335743, 'c': 0.893402, 'l': 0.792684}
+# NNPDF30_nnlo_as_0118_23 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_23"] = {'bb': 1.306641, 'cc': 1.306641, 'c': 1.000000, 'l': 0.921427}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_23"] = {'bb': 1.276908, 'cc': 1.276908, 'c': 0.977245, 'l': 0.900460}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_23"] = {'bb': 1.248320, 'cc': 1.248320, 'c': 0.955366, 'l': 0.880300}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_23"] = {'bb': 1.217322, 'cc': 1.217322, 'c': 0.931642, 'l': 0.858441}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_23"] = {'bb': 1.559170, 'cc': 1.559170, 'c': 1.000000, 'l': 0.872681}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_23"] = {'bb': 1.496970, 'cc': 1.496970, 'c': 0.960107, 'l': 0.837868}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_23"] = {'bb': 1.441691, 'cc': 1.441691, 'c': 0.924653, 'l': 0.806927}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_23"] = {'bb': 1.374492, 'cc': 1.374492, 'c': 0.881554, 'l': 0.769315}
+# NNPDF30_nnlo_as_0118_24 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_24"] = {'bb': 1.242989, 'cc': 1.242989, 'c': 1.000000, 'l': 0.937790}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_24"] = {'bb': 1.220406, 'cc': 1.220406, 'c': 0.981832, 'l': 0.920753}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_24"] = {'bb': 1.198558, 'cc': 1.198558, 'c': 0.964255, 'l': 0.904269}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_24"] = {'bb': 1.174718, 'cc': 1.174718, 'c': 0.945075, 'l': 0.886283}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_24"] = {'bb': 1.398961, 'cc': 1.398961, 'c': 1.000000, 'l': 0.909172}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_24"] = {'bb': 1.358204, 'cc': 1.358204, 'c': 0.970866, 'l': 0.882684}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_24"] = {'bb': 1.321438, 'cc': 1.321438, 'c': 0.944585, 'l': 0.858790}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_24"] = {'bb': 1.275917, 'cc': 1.275917, 'c': 0.912046, 'l': 0.829207}
+# NNPDF30_nnlo_as_0118_25 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_25"] = {'bb': 1.319904, 'cc': 1.319904, 'c': 1.000000, 'l': 0.918077}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_25"] = {'bb': 1.288723, 'cc': 1.288723, 'c': 0.976376, 'l': 0.896388}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_25"] = {'bb': 1.258647, 'cc': 1.258647, 'c': 0.953590, 'l': 0.875468}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_25"] = {'bb': 1.226237, 'cc': 1.226237, 'c': 0.929035, 'l': 0.852925}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_25"] = {'bb': 1.583493, 'cc': 1.583493, 'c': 1.000000, 'l': 0.866683}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_25"] = {'bb': 1.517874, 'cc': 1.517874, 'c': 0.958561, 'l': 0.830768}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_25"] = {'bb': 1.459314, 'cc': 1.459314, 'c': 0.921579, 'l': 0.798716}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_25"] = {'bb': 1.388618, 'cc': 1.388618, 'c': 0.876933, 'l': 0.760023}
+# NNPDF30_nnlo_as_0118_26 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_26"] = {'bb': 1.222212, 'cc': 1.222212, 'c': 1.000000, 'l': 0.943108}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_26"] = {'bb': 1.202070, 'cc': 1.202070, 'c': 0.983520, 'l': 0.927566}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_26"] = {'bb': 1.182349, 'cc': 1.182349, 'c': 0.967384, 'l': 0.912348}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_26"] = {'bb': 1.160602, 'cc': 1.160602, 'c': 0.949592, 'l': 0.895568}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_26"] = {'bb': 1.553248, 'cc': 1.553248, 'c': 1.000000, 'l': 0.872772}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_26"] = {'bb': 1.493069, 'cc': 1.493069, 'c': 0.961256, 'l': 0.838957}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_26"] = {'bb': 1.438108, 'cc': 1.438108, 'c': 0.925871, 'l': 0.808074}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_26"] = {'bb': 1.371302, 'cc': 1.371302, 'c': 0.882861, 'l': 0.770536}
+# NNPDF30_nnlo_as_0118_27 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_27"] = {'bb': 1.275940, 'cc': 1.275940, 'c': 1.000000, 'l': 0.929213}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_27"] = {'bb': 1.249819, 'cc': 1.249819, 'c': 0.979528, 'l': 0.910190}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_27"] = {'bb': 1.224559, 'cc': 1.224559, 'c': 0.959731, 'l': 0.891795}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_27"] = {'bb': 1.196968, 'cc': 1.196968, 'c': 0.938107, 'l': 0.871701}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_27"] = {'bb': 1.540034, 'cc': 1.540034, 'c': 1.000000, 'l': 0.876411}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_27"] = {'bb': 1.480869, 'cc': 1.480869, 'c': 0.961582, 'l': 0.842740}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_27"] = {'bb': 1.427739, 'cc': 1.427739, 'c': 0.927082, 'l': 0.812505}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_27"] = {'bb': 1.363164, 'cc': 1.363164, 'c': 0.885152, 'l': 0.775757}
+# NNPDF30_nnlo_as_0118_28 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_28"] = {'bb': 1.279110, 'cc': 1.279110, 'c': 1.000000, 'l': 0.928171}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_28"] = {'bb': 1.252495, 'cc': 1.252495, 'c': 0.979193, 'l': 0.908858}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_28"] = {'bb': 1.226915, 'cc': 1.226915, 'c': 0.959195, 'l': 0.890297}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_28"] = {'bb': 1.198973, 'cc': 1.198973, 'c': 0.937350, 'l': 0.870021}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_28"] = {'bb': 1.397760, 'cc': 1.397760, 'c': 1.000000, 'l': 0.908818}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_28"] = {'bb': 1.357132, 'cc': 1.357132, 'c': 0.970933, 'l': 0.882402}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_28"] = {'bb': 1.320505, 'cc': 1.320505, 'c': 0.944729, 'l': 0.858587}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_28"] = {'bb': 1.275301, 'cc': 1.275301, 'c': 0.912389, 'l': 0.829196}
+# NNPDF30_nnlo_as_0118_29 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_29"] = {'bb': 1.199242, 'cc': 1.199242, 'c': 1.000000, 'l': 0.949094}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_29"] = {'bb': 1.181576, 'cc': 1.181576, 'c': 0.985269, 'l': 0.935113}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_29"] = {'bb': 1.164178, 'cc': 1.164178, 'c': 0.970762, 'l': 0.921345}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_29"] = {'bb': 1.144821, 'cc': 1.144821, 'c': 0.954621, 'l': 0.906025}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_29"] = {'bb': 1.552622, 'cc': 1.552622, 'c': 1.000000, 'l': 0.873233}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_29"] = {'bb': 1.492737, 'cc': 1.492737, 'c': 0.961430, 'l': 0.839552}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_29"] = {'bb': 1.438041, 'cc': 1.438041, 'c': 0.926202, 'l': 0.808790}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_29"] = {'bb': 1.371198, 'cc': 1.371198, 'c': 0.883150, 'l': 0.771195}
+# NNPDF30_nnlo_as_0118_30 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_30"] = {'bb': 1.204548, 'cc': 1.204548, 'c': 1.000000, 'l': 0.947756}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_30"] = {'bb': 1.186176, 'cc': 1.186176, 'c': 0.984748, 'l': 0.933301}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_30"] = {'bb': 1.168181, 'cc': 1.168181, 'c': 0.969808, 'l': 0.919142}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_30"] = {'bb': 1.148335, 'cc': 1.148335, 'c': 0.953333, 'l': 0.903527}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_30"] = {'bb': 1.367572, 'cc': 1.367572, 'c': 1.000000, 'l': 0.916931}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_30"] = {'bb': 1.330673, 'cc': 1.330673, 'c': 0.973019, 'l': 0.892192}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_30"] = {'bb': 1.297378, 'cc': 1.297378, 'c': 0.948673, 'l': 0.869868}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_30"] = {'bb': 1.255908, 'cc': 1.255908, 'c': 0.918349, 'l': 0.842063}
+# NNPDF30_nnlo_as_0118_31 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_31"] = {'bb': 1.286364, 'cc': 1.286364, 'c': 1.000000, 'l': 0.926925}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_31"] = {'bb': 1.258940, 'cc': 1.258940, 'c': 0.978682, 'l': 0.907165}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_31"] = {'bb': 1.232547, 'cc': 1.232547, 'c': 0.958164, 'l': 0.888146}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_31"] = {'bb': 1.204019, 'cc': 1.204019, 'c': 0.935987, 'l': 0.867590}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_31"] = {'bb': 1.460057, 'cc': 1.460057, 'c': 1.000000, 'l': 0.896173}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_31"] = {'bb': 1.411278, 'cc': 1.411278, 'c': 0.966591, 'l': 0.866233}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_31"] = {'bb': 1.367786, 'cc': 1.367786, 'c': 0.936803, 'l': 0.839538}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_31"] = {'bb': 1.314074, 'cc': 1.314074, 'c': 0.900016, 'l': 0.806570}
+# NNPDF30_nnlo_as_0118_32 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_32"] = {'bb': 1.290787, 'cc': 1.290787, 'c': 1.000000, 'l': 0.925675}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_32"] = {'bb': 1.263101, 'cc': 1.263101, 'c': 0.978551, 'l': 0.905821}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_32"] = {'bb': 1.236307, 'cc': 1.236307, 'c': 0.957793, 'l': 0.886606}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_32"] = {'bb': 1.207290, 'cc': 1.207290, 'c': 0.935313, 'l': 0.865797}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_32"] = {'bb': 1.598028, 'cc': 1.598028, 'c': 1.000000, 'l': 0.863779}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_32"] = {'bb': 1.530977, 'cc': 1.530977, 'c': 0.958041, 'l': 0.827536}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_32"] = {'bb': 1.470114, 'cc': 1.470114, 'c': 0.919955, 'l': 0.794638}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_32"] = {'bb': 1.396966, 'cc': 1.396966, 'c': 0.874181, 'l': 0.755099}
+# NNPDF30_nnlo_as_0118_33 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_33"] = {'bb': 1.272642, 'cc': 1.272642, 'c': 1.000000, 'l': 0.930903}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_33"] = {'bb': 1.246918, 'cc': 1.246918, 'c': 0.979787, 'l': 0.912087}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_33"] = {'bb': 1.222016, 'cc': 1.222016, 'c': 0.960220, 'l': 0.893872}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_33"] = {'bb': 1.194830, 'cc': 1.194830, 'c': 0.938858, 'l': 0.873986}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_33"] = {'bb': 1.425720, 'cc': 1.425720, 'c': 1.000000, 'l': 0.904287}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_33"] = {'bb': 1.381501, 'cc': 1.381501, 'c': 0.968985, 'l': 0.876240}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_33"] = {'bb': 1.341859, 'cc': 1.341859, 'c': 0.941180, 'l': 0.851096}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_33"] = {'bb': 1.291885, 'cc': 1.291885, 'c': 0.906128, 'l': 0.819399}
+# NNPDF30_nnlo_as_0118_34 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_34"] = {'bb': 1.281059, 'cc': 1.281059, 'c': 1.000000, 'l': 0.928346}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_34"] = {'bb': 1.254422, 'cc': 1.254422, 'c': 0.979207, 'l': 0.909043}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_34"] = {'bb': 1.228710, 'cc': 1.228710, 'c': 0.959136, 'l': 0.890410}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_34"] = {'bb': 1.200633, 'cc': 1.200633, 'c': 0.937219, 'l': 0.870064}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_34"] = {'bb': 1.370044, 'cc': 1.370044, 'c': 1.000000, 'l': 0.916644}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_34"] = {'bb': 1.332875, 'cc': 1.332875, 'c': 0.972870, 'l': 0.891776}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_34"] = {'bb': 1.299445, 'cc': 1.299445, 'c': 0.948470, 'l': 0.869409}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_34"] = {'bb': 1.257658, 'cc': 1.257658, 'c': 0.917969, 'l': 0.841451}
+# NNPDF30_nnlo_as_0118_35 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_35"] = {'bb': 1.281118, 'cc': 1.281118, 'c': 1.000000, 'l': 0.928125}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_35"] = {'bb': 1.254527, 'cc': 1.254527, 'c': 0.979244, 'l': 0.908861}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_35"] = {'bb': 1.228749, 'cc': 1.228749, 'c': 0.959122, 'l': 0.890185}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_35"] = {'bb': 1.200525, 'cc': 1.200525, 'c': 0.937092, 'l': 0.869738}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_35"] = {'bb': 1.633243, 'cc': 1.633243, 'c': 1.000000, 'l': 0.854230}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_35"] = {'bb': 1.561576, 'cc': 1.561576, 'c': 0.956120, 'l': 0.816747}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_35"] = {'bb': 1.495993, 'cc': 1.495993, 'c': 0.915965, 'l': 0.782445}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_35"] = {'bb': 1.418086, 'cc': 1.418086, 'c': 0.868264, 'l': 0.741698}
+# NNPDF30_nnlo_as_0118_36 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_36"] = {'bb': 1.206024, 'cc': 1.206024, 'c': 1.000000, 'l': 0.947321}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_36"] = {'bb': 1.187588, 'cc': 1.187588, 'c': 0.984713, 'l': 0.932840}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_36"] = {'bb': 1.169433, 'cc': 1.169433, 'c': 0.969660, 'l': 0.918580}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_36"] = {'bb': 1.149401, 'cc': 1.149401, 'c': 0.953049, 'l': 0.902844}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_36"] = {'bb': 1.642487, 'cc': 1.642487, 'c': 1.000000, 'l': 0.852063}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_36"] = {'bb': 1.570149, 'cc': 1.570149, 'c': 0.955959, 'l': 0.814537}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_36"] = {'bb': 1.503760, 'cc': 1.503760, 'c': 0.915539, 'l': 0.780097}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_36"] = {'bb': 1.423845, 'cc': 1.423845, 'c': 0.866884, 'l': 0.738640}
+# NNPDF30_nnlo_as_0118_37 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_37"] = {'bb': 1.361876, 'cc': 1.361876, 'c': 1.000000, 'l': 0.907995}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_37"] = {'bb': 1.325959, 'cc': 1.325959, 'c': 0.973627, 'l': 0.884049}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_37"] = {'bb': 1.291495, 'cc': 1.291495, 'c': 0.948321, 'l': 0.861071}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_37"] = {'bb': 1.254122, 'cc': 1.254122, 'c': 0.920879, 'l': 0.836153}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_37"] = {'bb': 1.775030, 'cc': 1.775030, 'c': 1.000000, 'l': 0.822050}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_37"] = {'bb': 1.681919, 'cc': 1.681919, 'c': 0.947544, 'l': 0.778929}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_37"] = {'bb': 1.597792, 'cc': 1.597792, 'c': 0.900149, 'l': 0.739968}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_37"] = {'bb': 1.498128, 'cc': 1.498128, 'c': 0.844002, 'l': 0.693812}
+# NNPDF30_nnlo_as_0118_38 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_38"] = {'bb': 1.217180, 'cc': 1.217180, 'c': 1.000000, 'l': 0.944241}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_38"] = {'bb': 1.197487, 'cc': 1.197487, 'c': 0.983821, 'l': 0.928964}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_38"] = {'bb': 1.178179, 'cc': 1.178179, 'c': 0.967958, 'l': 0.913986}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_38"] = {'bb': 1.156974, 'cc': 1.156974, 'c': 0.950536, 'l': 0.897535}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_38"] = {'bb': 1.517840, 'cc': 1.517840, 'c': 1.000000, 'l': 0.880893}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_38"] = {'bb': 1.462257, 'cc': 1.462257, 'c': 0.963380, 'l': 0.848635}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_38"] = {'bb': 1.411670, 'cc': 1.411670, 'c': 0.930051, 'l': 0.819276}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_38"] = {'bb': 1.350070, 'cc': 1.350070, 'c': 0.889468, 'l': 0.783526}
+# NNPDF30_nnlo_as_0118_39 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_39"] = {'bb': 1.310026, 'cc': 1.310026, 'c': 1.000000, 'l': 0.920540}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_39"] = {'bb': 1.280031, 'cc': 1.280031, 'c': 0.977103, 'l': 0.899462}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_39"] = {'bb': 1.251056, 'cc': 1.251056, 'c': 0.954986, 'l': 0.879102}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_39"] = {'bb': 1.219478, 'cc': 1.219478, 'c': 0.930881, 'l': 0.856913}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_39"] = {'bb': 1.572544, 'cc': 1.572544, 'c': 1.000000, 'l': 0.869135}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_39"] = {'bb': 1.508386, 'cc': 1.508386, 'c': 0.959201, 'l': 0.833675}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_39"] = {'bb': 1.451173, 'cc': 1.451173, 'c': 0.922819, 'l': 0.802054}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_39"] = {'bb': 1.381753, 'cc': 1.381753, 'c': 0.878673, 'l': 0.763686}
+# NNPDF30_nnlo_as_0118_40 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_40"] = {'bb': 1.235382, 'cc': 1.235382, 'c': 1.000000, 'l': 0.939840}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_40"] = {'bb': 1.213701, 'cc': 1.213701, 'c': 0.982450, 'l': 0.923345}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_40"] = {'bb': 1.192624, 'cc': 1.192624, 'c': 0.965389, 'l': 0.907311}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_40"] = {'bb': 1.169491, 'cc': 1.169491, 'c': 0.946664, 'l': 0.889712}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_40"] = {'bb': 1.411645, 'cc': 1.411645, 'c': 1.000000, 'l': 0.906428}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_40"] = {'bb': 1.369154, 'cc': 1.369154, 'c': 0.969900, 'l': 0.879144}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_40"] = {'bb': 1.331131, 'cc': 1.331131, 'c': 0.942964, 'l': 0.854729}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_40"] = {'bb': 1.284091, 'cc': 1.284091, 'c': 0.909642, 'l': 0.824525}
+# NNPDF30_nnlo_as_0118_41 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_41"] = {'bb': 1.235857, 'cc': 1.235857, 'c': 1.000000, 'l': 0.939591}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_41"] = {'bb': 1.214146, 'cc': 1.214146, 'c': 0.982432, 'l': 0.923085}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_41"] = {'bb': 1.193032, 'cc': 1.193032, 'c': 0.965348, 'l': 0.907033}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_41"] = {'bb': 1.169769, 'cc': 1.169769, 'c': 0.946524, 'l': 0.889346}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_41"] = {'bb': 1.466006, 'cc': 1.466006, 'c': 1.000000, 'l': 0.893519}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_41"] = {'bb': 1.416913, 'cc': 1.416913, 'c': 0.966512, 'l': 0.863597}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_41"] = {'bb': 1.372335, 'cc': 1.372335, 'c': 0.936104, 'l': 0.836427}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_41"] = {'bb': 1.317906, 'cc': 1.317906, 'c': 0.898977, 'l': 0.803253}
+# NNPDF30_nnlo_as_0118_42 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_42"] = {'bb': 1.312490, 'cc': 1.312490, 'c': 1.000000, 'l': 0.919755}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_42"] = {'bb': 1.281899, 'cc': 1.281899, 'c': 0.976692, 'l': 0.898317}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_42"] = {'bb': 1.252059, 'cc': 1.252059, 'c': 0.953957, 'l': 0.877406}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_42"] = {'bb': 1.220860, 'cc': 1.220860, 'c': 0.930186, 'l': 0.855542}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_42"] = {'bb': 1.513515, 'cc': 1.513515, 'c': 1.000000, 'l': 0.882830}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_42"] = {'bb': 1.457454, 'cc': 1.457454, 'c': 0.962960, 'l': 0.850130}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_42"] = {'bb': 1.407609, 'cc': 1.407609, 'c': 0.930027, 'l': 0.821055}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_42"] = {'bb': 1.346943, 'cc': 1.346943, 'c': 0.889944, 'l': 0.785669}
+# NNPDF30_nnlo_as_0118_43 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_43"] = {'bb': 1.230022, 'cc': 1.230022, 'c': 1.000000, 'l': 0.941387}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_43"] = {'bb': 1.209215, 'cc': 1.209215, 'c': 0.983084, 'l': 0.925463}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_43"] = {'bb': 1.188728, 'cc': 1.188728, 'c': 0.966428, 'l': 0.909783}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_43"] = {'bb': 1.166019, 'cc': 1.166019, 'c': 0.947966, 'l': 0.892403}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_43"] = {'bb': 1.680183, 'cc': 1.680183, 'c': 1.000000, 'l': 0.842667}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_43"] = {'bb': 1.602438, 'cc': 1.602438, 'c': 0.953728, 'l': 0.803676}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_43"] = {'bb': 1.531385, 'cc': 1.531385, 'c': 0.911439, 'l': 0.768040}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_43"] = {'bb': 1.445191, 'cc': 1.445191, 'c': 0.860139, 'l': 0.724811}
+# NNPDF30_nnlo_as_0118_44 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_44"] = {'bb': 1.249863, 'cc': 1.249863, 'c': 1.000000, 'l': 0.935920}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_44"] = {'bb': 1.226702, 'cc': 1.226702, 'c': 0.981470, 'l': 0.918577}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_44"] = {'bb': 1.204190, 'cc': 1.204190, 'c': 0.963458, 'l': 0.901719}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_44"] = {'bb': 1.179553, 'cc': 1.179553, 'c': 0.943746, 'l': 0.883271}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_44"] = {'bb': 1.501121, 'cc': 1.501121, 'c': 1.000000, 'l': 0.885282}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_44"] = {'bb': 1.447678, 'cc': 1.447678, 'c': 0.964398, 'l': 0.853764}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_44"] = {'bb': 1.399155, 'cc': 1.399155, 'c': 0.932074, 'l': 0.825148}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_44"] = {'bb': 1.339633, 'cc': 1.339633, 'c': 0.892422, 'l': 0.790045}
+# NNPDF30_nnlo_as_0118_45 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_45"] = {'bb': 1.241899, 'cc': 1.241899, 'c': 1.000000, 'l': 0.939036}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_45"] = {'bb': 1.219705, 'cc': 1.219705, 'c': 0.982128, 'l': 0.922254}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_45"] = {'bb': 1.197835, 'cc': 1.197835, 'c': 0.964518, 'l': 0.905717}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_45"] = {'bb': 1.173902, 'cc': 1.173902, 'c': 0.945247, 'l': 0.887621}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_45"] = {'bb': 1.654555, 'cc': 1.654555, 'c': 1.000000, 'l': 0.848800}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_45"] = {'bb': 1.580321, 'cc': 1.580321, 'c': 0.955133, 'l': 0.810717}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_45"] = {'bb': 1.512335, 'cc': 1.512335, 'c': 0.914043, 'l': 0.775840}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_45"] = {'bb': 1.430398, 'cc': 1.430398, 'c': 0.864521, 'l': 0.733806}
+# NNPDF30_nnlo_as_0118_46 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_46"] = {'bb': 1.280701, 'cc': 1.280701, 'c': 1.000000, 'l': 0.928033}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_46"] = {'bb': 1.253949, 'cc': 1.253949, 'c': 0.979112, 'l': 0.908648}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_46"] = {'bb': 1.228148, 'cc': 1.228148, 'c': 0.958966, 'l': 0.889952}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_46"] = {'bb': 1.200113, 'cc': 1.200113, 'c': 0.937076, 'l': 0.869637}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_46"] = {'bb': 1.398022, 'cc': 1.398022, 'c': 1.000000, 'l': 0.909704}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_46"] = {'bb': 1.357182, 'cc': 1.357182, 'c': 0.970787, 'l': 0.883129}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_46"] = {'bb': 1.320563, 'cc': 1.320563, 'c': 0.944594, 'l': 0.859301}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_46"] = {'bb': 1.275318, 'cc': 1.275318, 'c': 0.912231, 'l': 0.829860}
+# NNPDF30_nnlo_as_0118_47 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_47"] = {'bb': 1.285988, 'cc': 1.285988, 'c': 1.000000, 'l': 0.926102}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_47"] = {'bb': 1.258809, 'cc': 1.258809, 'c': 0.978865, 'l': 0.906529}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_47"] = {'bb': 1.232470, 'cc': 1.232470, 'c': 0.958384, 'l': 0.887561}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_47"] = {'bb': 1.203903, 'cc': 1.203903, 'c': 0.936169, 'l': 0.866989}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_47"] = {'bb': 1.481113, 'cc': 1.481113, 'c': 1.000000, 'l': 0.890093}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_47"] = {'bb': 1.429509, 'cc': 1.429509, 'c': 0.965158, 'l': 0.859081}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_47"] = {'bb': 1.383499, 'cc': 1.383499, 'c': 0.934094, 'l': 0.831430}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_47"] = {'bb': 1.327131, 'cc': 1.327131, 'c': 0.896036, 'l': 0.797555}
+# NNPDF30_nnlo_as_0118_48 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_48"] = {'bb': 1.215899, 'cc': 1.215899, 'c': 1.000000, 'l': 0.944856}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_48"] = {'bb': 1.196368, 'cc': 1.196368, 'c': 0.983938, 'l': 0.929680}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_48"] = {'bb': 1.177235, 'cc': 1.177235, 'c': 0.968202, 'l': 0.914811}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_48"] = {'bb': 1.156171, 'cc': 1.156171, 'c': 0.950878, 'l': 0.898443}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_48"] = {'bb': 1.432485, 'cc': 1.432485, 'c': 1.000000, 'l': 0.901597}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_48"] = {'bb': 1.387900, 'cc': 1.387900, 'c': 0.968876, 'l': 0.873536}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_48"] = {'bb': 1.343676, 'cc': 1.343676, 'c': 0.938004, 'l': 0.845702}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_48"] = {'bb': 1.297552, 'cc': 1.297552, 'c': 0.905805, 'l': 0.816671}
+# NNPDF30_nnlo_as_0118_49 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_49"] = {'bb': -0.049512, 'cc': -0.049512, 'c': 1.000000, 'l': 0.191312}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_49"] = {'bb': 0.061857, 'cc': 0.061857, 'c': -1.249345, 'l': -0.239014}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_49"] = {'bb': 0.106238, 'cc': 0.106238, 'c': -2.145714, 'l': -0.410500}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_49"] = {'bb': 0.057806, 'cc': 0.057806, 'c': -1.167509, 'l': -0.223358}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_49"] = {'bb': 1.414042, 'cc': 1.414042, 'c': 1.000000, 'l': 0.906668}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_49"] = {'bb': 1.371208, 'cc': 1.371208, 'c': 0.969708, 'l': 0.879204}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_49"] = {'bb': 1.333027, 'cc': 1.333027, 'c': 0.942707, 'l': 0.854722}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_49"] = {'bb': 1.285692, 'cc': 1.285692, 'c': 0.909232, 'l': 0.824372}
+# NNPDF30_nnlo_as_0118_50 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_50"] = {'bb': 1.317572, 'cc': 1.317572, 'c': 1.000000, 'l': 0.918735}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_50"] = {'bb': 1.286602, 'cc': 1.286602, 'c': 0.976495, 'l': 0.897140}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_50"] = {'bb': 1.256792, 'cc': 1.256792, 'c': 0.953870, 'l': 0.876354}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_50"] = {'bb': 1.224613, 'cc': 1.224613, 'c': 0.929447, 'l': 0.853915}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_50"] = {'bb': 1.426923, 'cc': 1.426923, 'c': 1.000000, 'l': 0.903555}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_50"] = {'bb': 1.382049, 'cc': 1.382049, 'c': 0.968552, 'l': 0.875139}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_50"] = {'bb': 1.342161, 'cc': 1.342161, 'c': 0.940598, 'l': 0.849882}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_50"] = {'bb': 1.293168, 'cc': 1.293168, 'c': 0.906263, 'l': 0.818858}
+# NNPDF30_nnlo_as_0118_51 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_51"] = {'bb': 1.204346, 'cc': 1.204346, 'c': 1.000000, 'l': 0.947750}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_51"] = {'bb': 1.185989, 'cc': 1.185989, 'c': 0.984758, 'l': 0.933304}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_51"] = {'bb': 1.168061, 'cc': 1.168061, 'c': 0.969872, 'l': 0.919196}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_51"] = {'bb': 1.148147, 'cc': 1.148147, 'c': 0.953336, 'l': 0.903525}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_51"] = {'bb': 1.314767, 'cc': 1.314767, 'c': 1.000000, 'l': 0.928798}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_51"] = {'bb': 1.284157, 'cc': 1.284157, 'c': 0.976719, 'l': 0.907174}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_51"] = {'bb': 1.256558, 'cc': 1.256558, 'c': 0.955727, 'l': 0.887677}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_51"] = {'bb': 1.221817, 'cc': 1.221817, 'c': 0.929303, 'l': 0.863135}
+# NNPDF30_nnlo_as_0118_52 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_52"] = {'bb': 1.254686, 'cc': 1.254686, 'c': 1.000000, 'l': 0.934751}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_52"] = {'bb': 1.231107, 'cc': 1.231107, 'c': 0.981207, 'l': 0.917185}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_52"] = {'bb': 1.208073, 'cc': 1.208073, 'c': 0.962848, 'l': 0.900023}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_52"] = {'bb': 1.182906, 'cc': 1.182906, 'c': 0.942790, 'l': 0.881274}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_52"] = {'bb': 1.487011, 'cc': 1.487011, 'c': 1.000000, 'l': 0.889041}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_52"] = {'bb': 1.435229, 'cc': 1.435229, 'c': 0.965177, 'l': 0.858083}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_52"] = {'bb': 1.388668, 'cc': 1.388668, 'c': 0.933865, 'l': 0.830245}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_52"] = {'bb': 1.331246, 'cc': 1.331246, 'c': 0.895250, 'l': 0.795914}
+# NNPDF30_nnlo_as_0118_53 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_53"] = {'bb': 1.167137, 'cc': 1.167137, 'c': 1.000000, 'l': 0.957283}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_53"] = {'bb': 1.152675, 'cc': 1.152675, 'c': 0.987609, 'l': 0.945421}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_53"] = {'bb': 1.138338, 'cc': 1.138338, 'c': 0.975325, 'l': 0.933662}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_53"] = {'bb': 1.122375, 'cc': 1.122375, 'c': 0.961648, 'l': 0.920569}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_53"] = {'bb': 1.608208, 'cc': 1.608208, 'c': 1.000000, 'l': 0.859664}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_53"] = {'bb': 1.540889, 'cc': 1.540889, 'c': 0.958141, 'l': 0.823679}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_53"] = {'bb': 1.479031, 'cc': 1.479031, 'c': 0.919677, 'l': 0.790613}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_53"] = {'bb': 1.404007, 'cc': 1.404007, 'c': 0.873026, 'l': 0.750509}
+# NNPDF30_nnlo_as_0118_54 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_54"] = {'bb': 1.272577, 'cc': 1.272577, 'c': 1.000000, 'l': 0.930767}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_54"] = {'bb': 1.246668, 'cc': 1.246668, 'c': 0.979641, 'l': 0.911817}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_54"] = {'bb': 1.221599, 'cc': 1.221599, 'c': 0.959941, 'l': 0.893481}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_54"] = {'bb': 1.193192, 'cc': 1.193192, 'c': 0.937619, 'l': 0.872704}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_54"] = {'bb': 1.446430, 'cc': 1.446430, 'c': 1.000000, 'l': 0.897594}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_54"] = {'bb': 1.399016, 'cc': 1.399016, 'c': 0.967220, 'l': 0.868171}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_54"] = {'bb': 1.356225, 'cc': 1.356225, 'c': 0.937636, 'l': 0.841617}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_54"] = {'bb': 1.305915, 'cc': 1.305915, 'c': 0.902854, 'l': 0.810396}
+# NNPDF30_nnlo_as_0118_55 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_55"] = {'bb': 1.288635, 'cc': 1.288635, 'c': 1.000000, 'l': 0.926135}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_55"] = {'bb': 1.261059, 'cc': 1.261059, 'c': 0.978601, 'l': 0.906316}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_55"] = {'bb': 1.234544, 'cc': 1.234544, 'c': 0.958024, 'l': 0.887260}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_55"] = {'bb': 1.205560, 'cc': 1.205560, 'c': 0.935533, 'l': 0.866429}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_55"] = {'bb': 1.482301, 'cc': 1.482301, 'c': 1.000000, 'l': 0.890248}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_55"] = {'bb': 1.430710, 'cc': 1.430710, 'c': 0.965196, 'l': 0.859263}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_55"] = {'bb': 1.384491, 'cc': 1.384491, 'c': 0.934015, 'l': 0.831505}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_55"] = {'bb': 1.327706, 'cc': 1.327706, 'c': 0.895706, 'l': 0.797400}
+# NNPDF30_nnlo_as_0118_56 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_56"] = {'bb': 1.490355, 'cc': 1.490355, 'c': 1.000000, 'l': 0.882529}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_56"] = {'bb': 1.437358, 'cc': 1.437358, 'c': 0.964440, 'l': 0.851146}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_56"] = {'bb': 1.385347, 'cc': 1.385347, 'c': 0.929542, 'l': 0.820348}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_56"] = {'bb': 1.331180, 'cc': 1.331180, 'c': 0.893197, 'l': 0.788272}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_56"] = {'bb': 1.421363, 'cc': 1.421363, 'c': 1.000000, 'l': 0.904198}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_56"] = {'bb': 1.378902, 'cc': 1.378902, 'c': 0.970127, 'l': 0.877186}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_56"] = {'bb': 1.339621, 'cc': 1.339621, 'c': 0.942491, 'l': 0.852198}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_56"] = {'bb': 1.290869, 'cc': 1.290869, 'c': 0.908191, 'l': 0.821184}
+# NNPDF30_nnlo_as_0118_57 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_57"] = {'bb': 1.279757, 'cc': 1.279757, 'c': 1.000000, 'l': 0.928273}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_57"] = {'bb': 1.253209, 'cc': 1.253209, 'c': 0.979256, 'l': 0.909017}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_57"] = {'bb': 1.227257, 'cc': 1.227257, 'c': 0.958977, 'l': 0.890193}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_57"] = {'bb': 1.199636, 'cc': 1.199636, 'c': 0.937394, 'l': 0.870158}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_57"] = {'bb': 1.606145, 'cc': 1.606145, 'c': 1.000000, 'l': 0.861181}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_57"] = {'bb': 1.537732, 'cc': 1.537732, 'c': 0.957405, 'l': 0.824499}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_57"] = {'bb': 1.476390, 'cc': 1.476390, 'c': 0.919214, 'l': 0.791609}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_57"] = {'bb': 1.402026, 'cc': 1.402026, 'c': 0.872914, 'l': 0.751737}
+# NNPDF30_nnlo_as_0118_58 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_58"] = {'bb': 1.281992, 'cc': 1.281992, 'c': 1.000000, 'l': 0.926390}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_58"] = {'bb': 1.255097, 'cc': 1.255097, 'c': 0.979021, 'l': 0.906955}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_58"] = {'bb': 1.229452, 'cc': 1.229452, 'c': 0.959017, 'l': 0.888423}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_58"] = {'bb': 1.201604, 'cc': 1.201604, 'c': 0.937294, 'l': 0.868300}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_58"] = {'bb': 1.545787, 'cc': 1.545787, 'c': 1.000000, 'l': 0.875280}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_58"] = {'bb': 1.485166, 'cc': 1.485166, 'c': 0.960783, 'l': 0.840954}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_58"] = {'bb': 1.431261, 'cc': 1.431261, 'c': 0.925911, 'l': 0.810431}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_58"] = {'bb': 1.365931, 'cc': 1.365931, 'c': 0.883648, 'l': 0.773439}
+# NNPDF30_nnlo_as_0118_59 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_59"] = {'bb': 1.218807, 'cc': 1.218807, 'c': 1.000000, 'l': 0.944135}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_59"] = {'bb': 1.198926, 'cc': 1.198926, 'c': 0.983688, 'l': 0.928734}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_59"] = {'bb': 1.179569, 'cc': 1.179569, 'c': 0.967806, 'l': 0.913740}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_59"] = {'bb': 1.158244, 'cc': 1.158244, 'c': 0.950309, 'l': 0.897220}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_59"] = {'bb': 1.411779, 'cc': 1.411779, 'c': 1.000000, 'l': 0.906390}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_59"] = {'bb': 1.369630, 'cc': 1.369630, 'c': 0.970145, 'l': 0.879330}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_59"] = {'bb': 1.331487, 'cc': 1.331487, 'c': 0.943127, 'l': 0.854841}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_59"] = {'bb': 1.284342, 'cc': 1.284342, 'c': 0.909733, 'l': 0.824573}
+# NNPDF30_nnlo_as_0118_60 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_60"] = {'bb': 1.292997, 'cc': 1.292997, 'c': 1.000000, 'l': 0.924977}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_60"] = {'bb': 1.265035, 'cc': 1.265035, 'c': 0.978374, 'l': 0.904973}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_60"] = {'bb': 1.237944, 'cc': 1.237944, 'c': 0.957422, 'l': 0.885593}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_60"] = {'bb': 1.208389, 'cc': 1.208389, 'c': 0.934564, 'l': 0.864450}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_60"] = {'bb': 1.915401, 'cc': 1.915401, 'c': 1.000000, 'l': 0.831576}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_60"] = {'bb': 1.792710, 'cc': 1.792710, 'c': 0.935945, 'l': 0.778309}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_60"] = {'bb': 1.677357, 'cc': 1.677357, 'c': 0.875721, 'l': 0.728228}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_60"] = {'bb': 1.550833, 'cc': 1.550833, 'c': 0.809665, 'l': 0.673298}
+# NNPDF30_nnlo_as_0118_61 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_61"] = {'bb': 1.321089, 'cc': 1.321089, 'c': 1.000000, 'l': 0.918105}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_61"] = {'bb': 1.290061, 'cc': 1.290061, 'c': 0.976513, 'l': 0.896542}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_61"] = {'bb': 1.260158, 'cc': 1.260158, 'c': 0.953878, 'l': 0.875760}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_61"] = {'bb': 1.227414, 'cc': 1.227414, 'c': 0.929093, 'l': 0.853005}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_61"] = {'bb': 1.699941, 'cc': 1.699941, 'c': 1.000000, 'l': 0.839166}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_61"] = {'bb': 1.618386, 'cc': 1.618386, 'c': 0.952025, 'l': 0.798907}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_61"] = {'bb': 1.544778, 'cc': 1.544778, 'c': 0.908725, 'l': 0.762571}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_61"] = {'bb': 1.456565, 'cc': 1.456565, 'c': 0.856833, 'l': 0.719025}
+# NNPDF30_nnlo_as_0118_62 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_62"] = {'bb': 1.247974, 'cc': 1.247974, 'c': 1.000000, 'l': 0.936526}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_62"] = {'bb': 1.225189, 'cc': 1.225189, 'c': 0.981742, 'l': 0.919427}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_62"] = {'bb': 1.202949, 'cc': 1.202949, 'c': 0.963921, 'l': 0.902738}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_62"] = {'bb': 1.178449, 'cc': 1.178449, 'c': 0.944290, 'l': 0.884352}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_62"] = {'bb': 1.609104, 'cc': 1.609104, 'c': 1.000000, 'l': 0.862083}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_62"] = {'bb': 1.544552, 'cc': 1.544552, 'c': 0.959883, 'l': 0.827499}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_62"] = {'bb': 1.489952, 'cc': 1.489952, 'c': 0.925951, 'l': 0.798247}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_62"] = {'bb': 1.421589, 'cc': 1.421589, 'c': 0.883466, 'l': 0.761621}
+# NNPDF30_nnlo_as_0118_63 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_63"] = {'bb': 1.309414, 'cc': 1.309414, 'c': 1.000000, 'l': 0.921447}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_63"] = {'bb': 1.279443, 'cc': 1.279443, 'c': 0.977111, 'l': 0.900357}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_63"] = {'bb': 1.250640, 'cc': 1.250640, 'c': 0.955114, 'l': 0.880087}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_63"] = {'bb': 1.219255, 'cc': 1.219255, 'c': 0.931145, 'l': 0.858001}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_63"] = {'bb': 1.375957, 'cc': 1.375957, 'c': 1.000000, 'l': 0.915560}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_63"] = {'bb': 1.337927, 'cc': 1.337927, 'c': 0.972361, 'l': 0.890255}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_63"] = {'bb': 1.303847, 'cc': 1.303847, 'c': 0.947593, 'l': 0.867579}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_63"] = {'bb': 1.261306, 'cc': 1.261306, 'c': 0.916676, 'l': 0.839272}
+# NNPDF30_nnlo_as_0118_64 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_64"] = {'bb': 1.235847, 'cc': 1.235847, 'c': 1.000000, 'l': 0.939423}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_64"] = {'bb': 1.214183, 'cc': 1.214183, 'c': 0.982470, 'l': 0.922955}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_64"] = {'bb': 1.193026, 'cc': 1.193026, 'c': 0.965350, 'l': 0.906872}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_64"] = {'bb': 1.169950, 'cc': 1.169950, 'c': 0.946679, 'l': 0.889332}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_64"] = {'bb': 1.385142, 'cc': 1.385142, 'c': 1.000000, 'l': 0.912742}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_64"] = {'bb': 1.345979, 'cc': 1.345979, 'c': 0.971726, 'l': 0.886936}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_64"] = {'bb': 1.310968, 'cc': 1.310968, 'c': 0.946450, 'l': 0.863865}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_64"] = {'bb': 1.267283, 'cc': 1.267283, 'c': 0.914912, 'l': 0.835079}
+# NNPDF30_nnlo_as_0118_65 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_65"] = {'bb': 1.261435, 'cc': 1.261435, 'c': 1.000000, 'l': 0.933300}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_65"] = {'bb': 1.237077, 'cc': 1.237077, 'c': 0.980691, 'l': 0.915278}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_65"] = {'bb': 1.213362, 'cc': 1.213362, 'c': 0.961891, 'l': 0.897732}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_65"] = {'bb': 1.187456, 'cc': 1.187456, 'c': 0.941353, 'l': 0.878565}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_65"] = {'bb': 1.483877, 'cc': 1.483877, 'c': 1.000000, 'l': 0.890244}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_65"] = {'bb': 1.431789, 'cc': 1.431789, 'c': 0.964897, 'l': 0.858994}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_65"] = {'bb': 1.386081, 'cc': 1.386081, 'c': 0.934094, 'l': 0.831572}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_65"] = {'bb': 1.328732, 'cc': 1.328732, 'c': 0.895446, 'l': 0.797166}
+# NNPDF30_nnlo_as_0118_66 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_66"] = {'bb': 1.230989, 'cc': 1.230989, 'c': 1.000000, 'l': 0.940762}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_66"] = {'bb': 1.209862, 'cc': 1.209862, 'c': 0.982837, 'l': 0.924616}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_66"] = {'bb': 1.189217, 'cc': 1.189217, 'c': 0.966066, 'l': 0.908838}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_66"] = {'bb': 1.166574, 'cc': 1.166574, 'c': 0.947671, 'l': 0.891533}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_66"] = {'bb': 1.616486, 'cc': 1.616486, 'c': 1.000000, 'l': 0.857748}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_66"] = {'bb': 1.547375, 'cc': 1.547375, 'c': 0.957247, 'l': 0.821077}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_66"] = {'bb': 1.484167, 'cc': 1.484167, 'c': 0.918144, 'l': 0.787537}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_66"] = {'bb': 1.408335, 'cc': 1.408335, 'c': 0.871233, 'l': 0.747298}
+# NNPDF30_nnlo_as_0118_67 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_67"] = {'bb': 1.354530, 'cc': 1.354530, 'c': 1.000000, 'l': 0.909596}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_67"] = {'bb': 1.319455, 'cc': 1.319455, 'c': 0.974105, 'l': 0.886042}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_67"] = {'bb': 1.285579, 'cc': 1.285579, 'c': 0.949096, 'l': 0.863294}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_67"] = {'bb': 1.248679, 'cc': 1.248679, 'c': 0.921854, 'l': 0.838515}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_67"] = {'bb': 1.513106, 'cc': 1.513106, 'c': 1.000000, 'l': 0.883570}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_67"] = {'bb': 1.456690, 'cc': 1.456690, 'c': 0.962715, 'l': 0.850626}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_67"] = {'bb': 1.406985, 'cc': 1.406985, 'c': 0.929865, 'l': 0.821601}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_67"] = {'bb': 1.347727, 'cc': 1.347727, 'c': 0.890702, 'l': 0.786998}
+# NNPDF30_nnlo_as_0118_68 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_68"] = {'bb': 1.364845, 'cc': 1.364845, 'c': 1.000000, 'l': 0.907043}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_68"] = {'bb': 1.328290, 'cc': 1.328290, 'c': 0.973217, 'l': 0.882749}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_68"] = {'bb': 1.293282, 'cc': 1.293282, 'c': 0.947566, 'l': 0.859483}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_68"] = {'bb': 1.255684, 'cc': 1.255684, 'c': 0.920019, 'l': 0.834497}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_68"] = {'bb': 1.566722, 'cc': 1.566722, 'c': 1.000000, 'l': 0.871173}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_68"] = {'bb': 1.503211, 'cc': 1.503211, 'c': 0.959463, 'l': 0.835858}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_68"] = {'bb': 1.446909, 'cc': 1.446909, 'c': 0.923527, 'l': 0.804551}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_68"] = {'bb': 1.378604, 'cc': 1.378604, 'c': 0.879929, 'l': 0.766570}
+# NNPDF30_nnlo_as_0118_69 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_69"] = {'bb': 1.191990, 'cc': 1.191990, 'c': 1.000000, 'l': 0.950797}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_69"] = {'bb': 1.174960, 'cc': 1.174960, 'c': 0.985713, 'l': 0.937213}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_69"] = {'bb': 1.158254, 'cc': 1.158254, 'c': 0.971698, 'l': 0.923888}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_69"] = {'bb': 1.139739, 'cc': 1.139739, 'c': 0.956165, 'l': 0.909119}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_69"] = {'bb': 1.478812, 'cc': 1.478812, 'c': 1.000000, 'l': 0.890158}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_69"] = {'bb': 1.428627, 'cc': 1.428627, 'c': 0.966064, 'l': 0.859949}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_69"] = {'bb': 1.382779, 'cc': 1.382779, 'c': 0.935061, 'l': 0.832351}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_69"] = {'bb': 1.326410, 'cc': 1.326410, 'c': 0.896943, 'l': 0.798421}
+# NNPDF30_nnlo_as_0118_70 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_70"] = {'bb': 1.203539, 'cc': 1.203539, 'c': 1.000000, 'l': 0.947753}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_70"] = {'bb': 1.185279, 'cc': 1.185279, 'c': 0.984828, 'l': 0.933374}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_70"] = {'bb': 1.167397, 'cc': 1.167397, 'c': 0.969971, 'l': 0.919293}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_70"] = {'bb': 1.147662, 'cc': 1.147662, 'c': 0.953573, 'l': 0.903752}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_70"] = {'bb': 1.473092, 'cc': 1.473092, 'c': 1.000000, 'l': 0.891386}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_70"] = {'bb': 1.423236, 'cc': 1.423236, 'c': 0.966155, 'l': 0.861217}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_70"] = {'bb': 1.377924, 'cc': 1.377924, 'c': 0.935396, 'l': 0.833799}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_70"] = {'bb': 1.322439, 'cc': 1.322439, 'c': 0.897730, 'l': 0.800224}
+# NNPDF30_nnlo_as_0118_71 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_71"] = {'bb': 1.268934, 'cc': 1.268934, 'c': 1.000000, 'l': 0.931551}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_71"] = {'bb': 1.243839, 'cc': 1.243839, 'c': 0.980223, 'l': 0.913128}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_71"] = {'bb': 1.219453, 'cc': 1.219453, 'c': 0.961006, 'l': 0.895225}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_71"] = {'bb': 1.192479, 'cc': 1.192479, 'c': 0.939749, 'l': 0.875423}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_71"] = {'bb': 1.509748, 'cc': 1.509748, 'c': 1.000000, 'l': 0.884226}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_71"] = {'bb': 1.455058, 'cc': 1.455058, 'c': 0.963776, 'l': 0.852196}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_71"] = {'bb': 1.405835, 'cc': 1.405835, 'c': 0.931172, 'l': 0.823366}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_71"] = {'bb': 1.345196, 'cc': 1.345196, 'c': 0.891008, 'l': 0.787852}
+# NNPDF30_nnlo_as_0118_72 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_72"] = {'bb': 1.233490, 'cc': 1.233490, 'c': 1.000000, 'l': 0.940318}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_72"] = {'bb': 1.211968, 'cc': 1.211968, 'c': 0.982552, 'l': 0.923911}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_72"] = {'bb': 1.190989, 'cc': 1.190989, 'c': 0.965544, 'l': 0.907919}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_72"] = {'bb': 1.168189, 'cc': 1.168189, 'c': 0.947060, 'l': 0.890538}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_72"] = {'bb': 1.347364, 'cc': 1.347364, 'c': 1.000000, 'l': 0.921789}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_72"] = {'bb': 1.312474, 'cc': 1.312474, 'c': 0.974105, 'l': 0.897920}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_72"] = {'bb': 1.281425, 'cc': 1.281425, 'c': 0.951060, 'l': 0.876677}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_72"] = {'bb': 1.242624, 'cc': 1.242624, 'c': 0.922263, 'l': 0.850132}
+# NNPDF30_nnlo_as_0118_73 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_73"] = {'bb': 1.281359, 'cc': 1.281359, 'c': 1.000000, 'l': 0.928211}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_73"] = {'bb': 1.254835, 'cc': 1.254835, 'c': 0.979300, 'l': 0.908997}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_73"] = {'bb': 1.229034, 'cc': 1.229034, 'c': 0.959165, 'l': 0.890308}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_73"] = {'bb': 1.200703, 'cc': 1.200703, 'c': 0.937055, 'l': 0.869785}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_73"] = {'bb': 1.563437, 'cc': 1.563437, 'c': 1.000000, 'l': 0.871058}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_73"] = {'bb': 1.500660, 'cc': 1.500660, 'c': 0.959847, 'l': 0.836082}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_73"] = {'bb': 1.445261, 'cc': 1.445261, 'c': 0.924413, 'l': 0.805217}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_73"] = {'bb': 1.376902, 'cc': 1.376902, 'c': 0.880689, 'l': 0.767131}
+# NNPDF30_nnlo_as_0118_74 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_74"] = {'bb': 1.285616, 'cc': 1.285616, 'c': 1.000000, 'l': 0.926394}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_74"] = {'bb': 1.258409, 'cc': 1.258409, 'c': 0.978838, 'l': 0.906790}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_74"] = {'bb': 1.232257, 'cc': 1.232257, 'c': 0.958496, 'l': 0.887945}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_74"] = {'bb': 1.203611, 'cc': 1.203611, 'c': 0.936213, 'l': 0.867303}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_74"] = {'bb': 1.563285, 'cc': 1.563285, 'c': 1.000000, 'l': 0.871135}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_74"] = {'bb': 1.500902, 'cc': 1.500902, 'c': 0.960095, 'l': 0.836372}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_74"] = {'bb': 1.444788, 'cc': 1.444788, 'c': 0.924200, 'l': 0.805103}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_74"] = {'bb': 1.376764, 'cc': 1.376764, 'c': 0.880687, 'l': 0.767197}
+# NNPDF30_nnlo_as_0118_75 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_75"] = {'bb': 1.367464, 'cc': 1.367464, 'c': 1.000000, 'l': 0.906238}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_75"] = {'bb': 1.330690, 'cc': 1.330690, 'c': 0.973108, 'l': 0.881867}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_75"] = {'bb': 1.295435, 'cc': 1.295435, 'c': 0.947327, 'l': 0.858503}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_75"] = {'bb': 1.257073, 'cc': 1.257073, 'c': 0.919273, 'l': 0.833080}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_75"] = {'bb': 1.622311, 'cc': 1.622311, 'c': 1.000000, 'l': 0.858130}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_75"] = {'bb': 1.551254, 'cc': 1.551254, 'c': 0.956200, 'l': 0.820544}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_75"] = {'bb': 1.488215, 'cc': 1.488215, 'c': 0.917343, 'l': 0.787199}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_75"] = {'bb': 1.411565, 'cc': 1.411565, 'c': 0.870095, 'l': 0.746655}
+# NNPDF30_nnlo_as_0118_76 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_76"] = {'bb': 1.265577, 'cc': 1.265577, 'c': 1.000000, 'l': 0.931880}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_76"] = {'bb': 1.240644, 'cc': 1.240644, 'c': 0.980299, 'l': 0.913521}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_76"] = {'bb': 1.216479, 'cc': 1.216479, 'c': 0.961205, 'l': 0.895727}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_76"] = {'bb': 1.190234, 'cc': 1.190234, 'c': 0.940467, 'l': 0.876402}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_76"] = {'bb': 1.578220, 'cc': 1.578220, 'c': 1.000000, 'l': 0.867684}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_76"] = {'bb': 1.513731, 'cc': 1.513731, 'c': 0.959138, 'l': 0.832228}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_76"] = {'bb': 1.455822, 'cc': 1.455822, 'c': 0.922445, 'l': 0.800391}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_76"] = {'bb': 1.385606, 'cc': 1.385606, 'c': 0.877955, 'l': 0.761787}
+# NNPDF30_nnlo_as_0118_77 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_77"] = {'bb': 1.319031, 'cc': 1.319031, 'c': 1.000000, 'l': 0.918128}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_77"] = {'bb': 1.288100, 'cc': 1.288100, 'c': 0.976550, 'l': 0.896598}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_77"] = {'bb': 1.258428, 'cc': 1.258428, 'c': 0.954055, 'l': 0.875945}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_77"] = {'bb': 1.225964, 'cc': 1.225964, 'c': 0.929443, 'l': 0.853347}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_77"] = {'bb': 1.608137, 'cc': 1.608137, 'c': 1.000000, 'l': 0.860318}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_77"] = {'bb': 1.539332, 'cc': 1.539332, 'c': 0.957214, 'l': 0.823509}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_77"] = {'bb': 1.477813, 'cc': 1.477813, 'c': 0.918959, 'l': 0.790597}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_77"] = {'bb': 1.403680, 'cc': 1.403680, 'c': 0.872861, 'l': 0.750938}
+# NNPDF30_nnlo_as_0118_78 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_78"] = {'bb': 1.280041, 'cc': 1.280041, 'c': 1.000000, 'l': 0.927997}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_78"] = {'bb': 1.253395, 'cc': 1.253395, 'c': 0.979184, 'l': 0.908679}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_78"] = {'bb': 1.227670, 'cc': 1.227670, 'c': 0.959086, 'l': 0.890029}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_78"] = {'bb': 1.199570, 'cc': 1.199570, 'c': 0.937134, 'l': 0.869657}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_78"] = {'bb': 1.436726, 'cc': 1.436726, 'c': 1.000000, 'l': 0.900562}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_78"] = {'bb': 1.390950, 'cc': 1.390950, 'c': 0.968139, 'l': 0.871869}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_78"] = {'bb': 1.349964, 'cc': 1.349964, 'c': 0.939611, 'l': 0.846178}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_78"] = {'bb': 1.300256, 'cc': 1.300256, 'c': 0.905014, 'l': 0.815021}
+# NNPDF30_nnlo_as_0118_79 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_79"] = {'bb': 1.246742, 'cc': 1.246742, 'c': 1.000000, 'l': 0.936851}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_79"] = {'bb': 1.223788, 'cc': 1.223788, 'c': 0.981588, 'l': 0.919602}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_79"] = {'bb': 1.201574, 'cc': 1.201574, 'c': 0.963771, 'l': 0.902910}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_79"] = {'bb': 1.177218, 'cc': 1.177218, 'c': 0.944235, 'l': 0.884607}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_79"] = {'bb': 1.411169, 'cc': 1.411169, 'c': 1.000000, 'l': 0.906847}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_79"] = {'bb': 1.368693, 'cc': 1.368693, 'c': 0.969900, 'l': 0.879551}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_79"] = {'bb': 1.330745, 'cc': 1.330745, 'c': 0.943009, 'l': 0.855164}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_79"] = {'bb': 1.283642, 'cc': 1.283642, 'c': 0.909630, 'l': 0.824895}
+# NNPDF30_nnlo_as_0118_80 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_80"] = {'bb': 1.286516, 'cc': 1.286516, 'c': 1.000000, 'l': 0.926683}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_80"] = {'bb': 1.259289, 'cc': 1.259289, 'c': 0.978836, 'l': 0.907071}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_80"] = {'bb': 1.232864, 'cc': 1.232864, 'c': 0.958297, 'l': 0.888038}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_80"] = {'bb': 1.204008, 'cc': 1.204008, 'c': 0.935867, 'l': 0.867253}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_80"] = {'bb': 1.600997, 'cc': 1.600997, 'c': 1.000000, 'l': 0.861100}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_80"] = {'bb': 1.533467, 'cc': 1.533467, 'c': 0.957820, 'l': 0.824779}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_80"] = {'bb': 1.472869, 'cc': 1.472869, 'c': 0.919970, 'l': 0.792186}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_80"] = {'bb': 1.399235, 'cc': 1.399235, 'c': 0.873977, 'l': 0.752582}
+# NNPDF30_nnlo_as_0118_81 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_81"] = {'bb': 1.371729, 'cc': 1.371729, 'c': 1.000000, 'l': 0.904844}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_81"] = {'bb': 1.334143, 'cc': 1.334143, 'c': 0.972600, 'l': 0.880051}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_81"] = {'bb': 1.298297, 'cc': 1.298297, 'c': 0.946468, 'l': 0.856405}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_81"] = {'bb': 1.259795, 'cc': 1.259795, 'c': 0.918399, 'l': 0.831008}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_81"] = {'bb': 1.637001, 'cc': 1.637001, 'c': 1.000000, 'l': 0.854202}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_81"] = {'bb': 1.562981, 'cc': 1.562981, 'c': 0.954783, 'l': 0.815577}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_81"] = {'bb': 1.497651, 'cc': 1.497651, 'c': 0.914875, 'l': 0.781488}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_81"] = {'bb': 1.419524, 'cc': 1.419524, 'c': 0.867149, 'l': 0.740720}
+# NNPDF30_nnlo_as_0118_82 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_82"] = {'bb': 1.294252, 'cc': 1.294252, 'c': 1.000000, 'l': 0.924489}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_82"] = {'bb': 1.265923, 'cc': 1.265923, 'c': 0.978111, 'l': 0.904253}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_82"] = {'bb': 1.238741, 'cc': 1.238741, 'c': 0.957109, 'l': 0.884838}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_82"] = {'bb': 1.209113, 'cc': 1.209113, 'c': 0.934217, 'l': 0.863674}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_82"] = {'bb': 1.501967, 'cc': 1.501967, 'c': 1.000000, 'l': 0.885331}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_82"] = {'bb': 1.447870, 'cc': 1.447870, 'c': 0.963982, 'l': 0.853443}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_82"] = {'bb': 1.399156, 'cc': 1.399156, 'c': 0.931549, 'l': 0.824729}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_82"] = {'bb': 1.339746, 'cc': 1.339746, 'c': 0.891994, 'l': 0.789710}
+# NNPDF30_nnlo_as_0118_83 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_83"] = {'bb': 1.255819, 'cc': 1.255819, 'c': 1.000000, 'l': 0.934544}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_83"] = {'bb': 1.232016, 'cc': 1.232016, 'c': 0.981045, 'l': 0.916830}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_83"] = {'bb': 1.208891, 'cc': 1.208891, 'c': 0.962631, 'l': 0.899621}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_83"] = {'bb': 1.183503, 'cc': 1.183503, 'c': 0.942415, 'l': 0.880728}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_83"] = {'bb': 2.271286, 'cc': 2.271286, 'c': 1.000000, 'l': 0.726936}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_83"] = {'bb': 2.040844, 'cc': 2.040844, 'c': 0.898541, 'l': 0.653182}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_83"] = {'bb': 1.864412, 'cc': 1.864412, 'c': 0.820862, 'l': 0.596714}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_83"] = {'bb': 1.675221, 'cc': 1.675221, 'c': 0.737565, 'l': 0.536162}
+# NNPDF30_nnlo_as_0118_84 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_84"] = {'bb': 1.298874, 'cc': 1.298874, 'c': 1.000000, 'l': 0.923572}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_84"] = {'bb': 1.270056, 'cc': 1.270056, 'c': 0.977813, 'l': 0.903081}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_84"] = {'bb': 1.242274, 'cc': 1.242274, 'c': 0.956424, 'l': 0.883326}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_84"] = {'bb': 1.212250, 'cc': 1.212250, 'c': 0.933308, 'l': 0.861977}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_84"] = {'bb': 1.390479, 'cc': 1.390479, 'c': 1.000000, 'l': 0.911914}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_84"] = {'bb': 1.350343, 'cc': 1.350343, 'c': 0.971135, 'l': 0.885591}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_84"] = {'bb': 1.314608, 'cc': 1.314608, 'c': 0.945435, 'l': 0.862156}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_84"] = {'bb': 1.270385, 'cc': 1.270385, 'c': 0.913631, 'l': 0.833153}
+# NNPDF30_nnlo_as_0118_85 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_85"] = {'bb': 1.311296, 'cc': 1.311296, 'c': 1.000000, 'l': 0.920521}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_85"] = {'bb': 1.281239, 'cc': 1.281239, 'c': 0.977078, 'l': 0.899421}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_85"] = {'bb': 1.252185, 'cc': 1.252185, 'c': 0.954921, 'l': 0.879025}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_85"] = {'bb': 1.220500, 'cc': 1.220500, 'c': 0.930758, 'l': 0.856783}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_85"] = {'bb': 1.688262, 'cc': 1.688262, 'c': 1.000000, 'l': 0.841813}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_85"] = {'bb': 1.607983, 'cc': 1.607983, 'c': 0.952449, 'l': 0.801784}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_85"] = {'bb': 1.535788, 'cc': 1.535788, 'c': 0.909686, 'l': 0.765785}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_85"] = {'bb': 1.449412, 'cc': 1.449412, 'c': 0.858523, 'l': 0.722716}
+# NNPDF30_nnlo_as_0118_86 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_86"] = {'bb': 1.232203, 'cc': 1.232203, 'c': 1.000000, 'l': 0.940365}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_86"] = {'bb': 1.211060, 'cc': 1.211060, 'c': 0.982842, 'l': 0.924230}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_86"] = {'bb': 1.190431, 'cc': 1.190431, 'c': 0.966100, 'l': 0.908486}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_86"] = {'bb': 1.167593, 'cc': 1.167593, 'c': 0.947566, 'l': 0.891057}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_86"] = {'bb': 1.511427, 'cc': 1.511427, 'c': 1.000000, 'l': 0.882996}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_86"] = {'bb': 1.456193, 'cc': 1.456193, 'c': 0.963456, 'l': 0.850727}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_86"] = {'bb': 1.406516, 'cc': 1.406516, 'c': 0.930588, 'l': 0.821705}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_86"] = {'bb': 1.345554, 'cc': 1.345554, 'c': 0.890254, 'l': 0.786091}
+# NNPDF30_nnlo_as_0118_87 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_87"] = {'bb': 1.195520, 'cc': 1.195520, 'c': 1.000000, 'l': 0.949931}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_87"] = {'bb': 1.178005, 'cc': 1.178005, 'c': 0.985349, 'l': 0.936013}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_87"] = {'bb': 1.160924, 'cc': 1.160924, 'c': 0.971062, 'l': 0.922442}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_87"] = {'bb': 1.142023, 'cc': 1.142023, 'c': 0.955252, 'l': 0.907423}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_87"] = {'bb': 1.333129, 'cc': 1.333129, 'c': 1.000000, 'l': 0.924445}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_87"] = {'bb': 1.300424, 'cc': 1.300424, 'c': 0.975468, 'l': 0.901766}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_87"] = {'bb': 1.270818, 'cc': 1.270818, 'c': 0.953260, 'l': 0.881236}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_87"] = {'bb': 1.233760, 'cc': 1.233760, 'c': 0.925462, 'l': 0.855538}
+# NNPDF30_nnlo_as_0118_88 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_88"] = {'bb': 1.195930, 'cc': 1.195930, 'c': 1.000000, 'l': 0.949836}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_88"] = {'bb': 1.178431, 'cc': 1.178431, 'c': 0.985368, 'l': 0.935938}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_88"] = {'bb': 1.161308, 'cc': 1.161308, 'c': 0.971050, 'l': 0.922338}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_88"] = {'bb': 1.142869, 'cc': 1.142869, 'c': 0.955631, 'l': 0.907693}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_88"] = {'bb': 1.346627, 'cc': 1.346627, 'c': 1.000000, 'l': 0.921300}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_88"] = {'bb': 1.312431, 'cc': 1.312431, 'c': 0.974606, 'l': 0.897904}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_88"] = {'bb': 1.281292, 'cc': 1.281292, 'c': 0.951483, 'l': 0.876601}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_88"] = {'bb': 1.242492, 'cc': 1.242492, 'c': 0.922669, 'l': 0.850056}
+# NNPDF30_nnlo_as_0118_89 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_89"] = {'bb': 1.296448, 'cc': 1.296448, 'c': 1.000000, 'l': 0.924096}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_89"] = {'bb': 1.268223, 'cc': 1.268223, 'c': 0.978229, 'l': 0.903977}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_89"] = {'bb': 1.240873, 'cc': 1.240873, 'c': 0.957133, 'l': 0.884483}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_89"] = {'bb': 1.210866, 'cc': 1.210866, 'c': 0.933988, 'l': 0.863094}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_89"] = {'bb': 1.672756, 'cc': 1.672756, 'c': 1.000000, 'l': 0.845180}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_89"] = {'bb': 1.594932, 'cc': 1.594932, 'c': 0.953476, 'l': 0.805858}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_89"] = {'bb': 1.524880, 'cc': 1.524880, 'c': 0.911597, 'l': 0.770463}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_89"] = {'bb': 1.440857, 'cc': 1.440857, 'c': 0.861367, 'l': 0.728010}
+# NNPDF30_nnlo_as_0118_90 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.084839, 'cc': 1.084839, 'c': 1.000000, 'l': 0.978275}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.077958, 'cc': 1.077958, 'c': 0.993657, 'l': 0.972070}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.071062, 'cc': 1.071062, 'c': 0.987301, 'l': 0.965852}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.063344, 'cc': 1.063344, 'c': 0.980186, 'l': 0.958892}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.598670, 'cc': 1.598670, 'c': 1.000000, 'l': 0.860369}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.533620, 'cc': 1.533620, 'c': 0.959310, 'l': 0.825361}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.472570, 'cc': 1.472570, 'c': 0.921122, 'l': 0.792505}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.398750, 'cc': 1.398750, 'c': 0.874946, 'l': 0.752777}
+# NNPDF30_nnlo_as_0118_91 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.315329, 'cc': 1.315329, 'c': 1.000000, 'l': 0.919315}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.284770, 'cc': 1.284770, 'c': 0.976767, 'l': 0.897957}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.255307, 'cc': 1.255307, 'c': 0.954368, 'l': 0.877365}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.223262, 'cc': 1.223262, 'c': 0.930005, 'l': 0.854967}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.452196, 'cc': 1.452196, 'c': 1.000000, 'l': 0.897448}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.404568, 'cc': 1.404568, 'c': 0.967202, 'l': 0.868014}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.361914, 'cc': 1.361914, 'c': 0.937831, 'l': 0.841655}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.309357, 'cc': 1.309357, 'c': 0.901639, 'l': 0.809174}
+# NNPDF30_nnlo_as_0118_92 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.261131, 'cc': 1.261131, 'c': 1.000000, 'l': 0.933076}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.236682, 'cc': 1.236682, 'c': 0.980614, 'l': 0.914987}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.213005, 'cc': 1.213005, 'c': 0.961839, 'l': 0.897469}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.187103, 'cc': 1.187103, 'c': 0.941300, 'l': 0.878305}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.482389, 'cc': 1.482389, 'c': 1.000000, 'l': 0.889822}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.431088, 'cc': 1.431088, 'c': 0.965393, 'l': 0.859028}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.384833, 'cc': 1.384833, 'c': 0.934190, 'l': 0.831263}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.328113, 'cc': 1.328113, 'c': 0.895927, 'l': 0.797216}
+# NNPDF30_nnlo_as_0118_93 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.270979, 'cc': 1.270979, 'c': 1.000000, 'l': 0.930847}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.245547, 'cc': 1.245547, 'c': 0.979990, 'l': 0.912221}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.220849, 'cc': 1.220849, 'c': 0.960558, 'l': 0.894133}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.193811, 'cc': 1.193811, 'c': 0.939284, 'l': 0.874330}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.555984, 'cc': 1.555984, 'c': 1.000000, 'l': 0.873021}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.494942, 'cc': 1.494942, 'c': 0.960770, 'l': 0.838772}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.439881, 'cc': 1.439881, 'c': 0.925383, 'l': 0.807879}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.372802, 'cc': 1.372802, 'c': 0.882273, 'l': 0.770243}
+# NNPDF30_nnlo_as_0118_94 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.296219, 'cc': 1.296219, 'c': 1.000000, 'l': 0.924323}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.267682, 'cc': 1.267682, 'c': 0.977985, 'l': 0.903974}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.240326, 'cc': 1.240326, 'c': 0.956880, 'l': 0.884467}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.210484, 'cc': 1.210484, 'c': 0.933857, 'l': 0.863186}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.282950, 'cc': 1.282950, 'c': 1.000000, 'l': 0.936567}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.255662, 'cc': 1.255662, 'c': 0.978730, 'l': 0.916646}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.231395, 'cc': 1.231395, 'c': 0.959815, 'l': 0.898931}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.200794, 'cc': 1.200794, 'c': 0.935963, 'l': 0.876592}
+# NNPDF30_nnlo_as_0118_95 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.177414, 'cc': 1.177414, 'c': 1.000000, 'l': 0.955054}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.162628, 'cc': 1.162628, 'c': 0.987442, 'l': 0.943061}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.148608, 'cc': 1.148608, 'c': 0.975535, 'l': 0.931689}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.132613, 'cc': 1.132613, 'c': 0.961949, 'l': 0.918714}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.439301, 'cc': 1.439301, 'c': 1.000000, 'l': 0.900521}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.393742, 'cc': 1.393742, 'c': 0.968346, 'l': 0.872016}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.352770, 'cc': 1.352770, 'c': 0.939880, 'l': 0.846381}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.301676, 'cc': 1.301676, 'c': 0.904380, 'l': 0.814414}
+# NNPDF30_nnlo_as_0118_96 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.269745, 'cc': 1.269745, 'c': 1.000000, 'l': 0.930843}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.244358, 'cc': 1.244358, 'c': 0.980006, 'l': 0.912233}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.219734, 'cc': 1.219734, 'c': 0.960614, 'l': 0.894181}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.192801, 'cc': 1.192801, 'c': 0.939402, 'l': 0.874436}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.512547, 'cc': 1.512547, 'c': 1.000000, 'l': 0.884516}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.456943, 'cc': 1.456943, 'c': 0.963238, 'l': 0.851999}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.407024, 'cc': 1.407024, 'c': 0.930234, 'l': 0.822807}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.345996, 'cc': 1.345996, 'c': 0.889886, 'l': 0.787118}
+# NNPDF30_nnlo_as_0118_97 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.328251, 'cc': 1.328251, 'c': 1.000000, 'l': 0.916106}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.296217, 'cc': 1.296217, 'c': 0.975883, 'l': 0.894012}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.265318, 'cc': 1.265318, 'c': 0.952620, 'l': 0.872701}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.231953, 'cc': 1.231953, 'c': 0.927500, 'l': 0.849689}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.407743, 'cc': 1.407743, 'c': 1.000000, 'l': 0.908043}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.365486, 'cc': 1.365486, 'c': 0.969983, 'l': 0.880786}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.328378, 'cc': 1.328378, 'c': 0.943623, 'l': 0.856850}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.282050, 'cc': 1.282050, 'c': 0.910713, 'l': 0.826967}
+# NNPDF30_nnlo_as_0118_98 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.257444, 'cc': 1.257444, 'c': 1.000000, 'l': 0.933949}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.233193, 'cc': 1.233193, 'c': 0.980714, 'l': 0.915937}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.210093, 'cc': 1.210093, 'c': 0.962344, 'l': 0.898780}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.184680, 'cc': 1.184680, 'c': 0.942133, 'l': 0.879904}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.423144, 'cc': 1.423144, 'c': 1.000000, 'l': 0.903744}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.379264, 'cc': 1.379264, 'c': 0.969167, 'l': 0.875879}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.339923, 'cc': 1.339923, 'c': 0.941523, 'l': 0.850896}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.291261, 'cc': 1.291261, 'c': 0.907330, 'l': 0.819994}
+# NNPDF30_nnlo_as_0118_99 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.343292, 'cc': 1.343292, 'c': 1.000000, 'l': 0.912074}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.309333, 'cc': 1.309333, 'c': 0.974719, 'l': 0.889016}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.276705, 'cc': 1.276705, 'c': 0.950430, 'l': 0.866862}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.241444, 'cc': 1.241444, 'c': 0.924180, 'l': 0.842920}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.739160, 'cc': 1.739160, 'c': 1.000000, 'l': 0.829178}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.650902, 'cc': 1.650902, 'c': 0.949253, 'l': 0.787100}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.571449, 'cc': 1.571449, 'c': 0.903568, 'l': 0.749219}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.477635, 'cc': 1.477635, 'c': 0.849626, 'l': 0.704491}
+# NNPDF30_nnlo_as_0118_90 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.084839, 'cc': 1.084839, 'c': 1.000000, 'l': 0.978275}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.077958, 'cc': 1.077958, 'c': 0.993657, 'l': 0.972070}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.071062, 'cc': 1.071062, 'c': 0.987301, 'l': 0.965852}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.063344, 'cc': 1.063344, 'c': 0.980186, 'l': 0.958892}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.598670, 'cc': 1.598670, 'c': 1.000000, 'l': 0.860369}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.533620, 'cc': 1.533620, 'c': 0.959310, 'l': 0.825361}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.472570, 'cc': 1.472570, 'c': 0.921122, 'l': 0.792505}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 1.398750, 'cc': 1.398750, 'c': 0.874946, 'l': 0.752777}
+# NNPDF30_nnlo_as_0118_91 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.315329, 'cc': 1.315329, 'c': 1.000000, 'l': 0.919315}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.284770, 'cc': 1.284770, 'c': 0.976767, 'l': 0.897957}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.255307, 'cc': 1.255307, 'c': 0.954368, 'l': 0.877365}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.223262, 'cc': 1.223262, 'c': 0.930005, 'l': 0.854967}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.452196, 'cc': 1.452196, 'c': 1.000000, 'l': 0.897448}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.404568, 'cc': 1.404568, 'c': 0.967202, 'l': 0.868014}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.361914, 'cc': 1.361914, 'c': 0.937831, 'l': 0.841655}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 1.309357, 'cc': 1.309357, 'c': 0.901639, 'l': 0.809174}
+# NNPDF30_nnlo_as_0118_92 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.261131, 'cc': 1.261131, 'c': 1.000000, 'l': 0.933076}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.236682, 'cc': 1.236682, 'c': 0.980614, 'l': 0.914987}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.213005, 'cc': 1.213005, 'c': 0.961839, 'l': 0.897469}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.187103, 'cc': 1.187103, 'c': 0.941300, 'l': 0.878305}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.482389, 'cc': 1.482389, 'c': 1.000000, 'l': 0.889822}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.431088, 'cc': 1.431088, 'c': 0.965393, 'l': 0.859028}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.384833, 'cc': 1.384833, 'c': 0.934190, 'l': 0.831263}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 1.328113, 'cc': 1.328113, 'c': 0.895927, 'l': 0.797216}
+# NNPDF30_nnlo_as_0118_93 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.270979, 'cc': 1.270979, 'c': 1.000000, 'l': 0.930847}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.245547, 'cc': 1.245547, 'c': 0.979990, 'l': 0.912221}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.220849, 'cc': 1.220849, 'c': 0.960558, 'l': 0.894133}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.193811, 'cc': 1.193811, 'c': 0.939284, 'l': 0.874330}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.555984, 'cc': 1.555984, 'c': 1.000000, 'l': 0.873021}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.494942, 'cc': 1.494942, 'c': 0.960770, 'l': 0.838772}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.439881, 'cc': 1.439881, 'c': 0.925383, 'l': 0.807879}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 1.372802, 'cc': 1.372802, 'c': 0.882273, 'l': 0.770243}
+# NNPDF30_nnlo_as_0118_94 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.296219, 'cc': 1.296219, 'c': 1.000000, 'l': 0.924323}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.267682, 'cc': 1.267682, 'c': 0.977985, 'l': 0.903974}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.240326, 'cc': 1.240326, 'c': 0.956880, 'l': 0.884467}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.210484, 'cc': 1.210484, 'c': 0.933857, 'l': 0.863186}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.282950, 'cc': 1.282950, 'c': 1.000000, 'l': 0.936567}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.255662, 'cc': 1.255662, 'c': 0.978730, 'l': 0.916646}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.231395, 'cc': 1.231395, 'c': 0.959815, 'l': 0.898931}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 1.200794, 'cc': 1.200794, 'c': 0.935963, 'l': 0.876592}
+# NNPDF30_nnlo_as_0118_95 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.177414, 'cc': 1.177414, 'c': 1.000000, 'l': 0.955054}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.162628, 'cc': 1.162628, 'c': 0.987442, 'l': 0.943061}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.148608, 'cc': 1.148608, 'c': 0.975535, 'l': 0.931689}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.132613, 'cc': 1.132613, 'c': 0.961949, 'l': 0.918714}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.439301, 'cc': 1.439301, 'c': 1.000000, 'l': 0.900521}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.393742, 'cc': 1.393742, 'c': 0.968346, 'l': 0.872016}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.352770, 'cc': 1.352770, 'c': 0.939880, 'l': 0.846381}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 1.301676, 'cc': 1.301676, 'c': 0.904380, 'l': 0.814414}
+# NNPDF30_nnlo_as_0118_96 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.269745, 'cc': 1.269745, 'c': 1.000000, 'l': 0.930843}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.244358, 'cc': 1.244358, 'c': 0.980006, 'l': 0.912233}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.219734, 'cc': 1.219734, 'c': 0.960614, 'l': 0.894181}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.192801, 'cc': 1.192801, 'c': 0.939402, 'l': 0.874436}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.512547, 'cc': 1.512547, 'c': 1.000000, 'l': 0.884516}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.456943, 'cc': 1.456943, 'c': 0.963238, 'l': 0.851999}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.407024, 'cc': 1.407024, 'c': 0.930234, 'l': 0.822807}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 1.345996, 'cc': 1.345996, 'c': 0.889886, 'l': 0.787118}
+# NNPDF30_nnlo_as_0118_97 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.328251, 'cc': 1.328251, 'c': 1.000000, 'l': 0.916106}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.296217, 'cc': 1.296217, 'c': 0.975883, 'l': 0.894012}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.265318, 'cc': 1.265318, 'c': 0.952620, 'l': 0.872701}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.231953, 'cc': 1.231953, 'c': 0.927500, 'l': 0.849689}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.407743, 'cc': 1.407743, 'c': 1.000000, 'l': 0.908043}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.365486, 'cc': 1.365486, 'c': 0.969983, 'l': 0.880786}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.328378, 'cc': 1.328378, 'c': 0.943623, 'l': 0.856850}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 1.282050, 'cc': 1.282050, 'c': 0.910713, 'l': 0.826967}
+# NNPDF30_nnlo_as_0118_98 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.257444, 'cc': 1.257444, 'c': 1.000000, 'l': 0.933949}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.233193, 'cc': 1.233193, 'c': 0.980714, 'l': 0.915937}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.210093, 'cc': 1.210093, 'c': 0.962344, 'l': 0.898780}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.184680, 'cc': 1.184680, 'c': 0.942133, 'l': 0.879904}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.423144, 'cc': 1.423144, 'c': 1.000000, 'l': 0.903744}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.379264, 'cc': 1.379264, 'c': 0.969167, 'l': 0.875879}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.339923, 'cc': 1.339923, 'c': 0.941523, 'l': 0.850896}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 1.291261, 'cc': 1.291261, 'c': 0.907330, 'l': 0.819994}
+# NNPDF30_nnlo_as_0118_99 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.343292, 'cc': 1.343292, 'c': 1.000000, 'l': 0.912074}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.309333, 'cc': 1.309333, 'c': 0.974719, 'l': 0.889016}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.276705, 'cc': 1.276705, 'c': 0.950430, 'l': 0.866862}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.241444, 'cc': 1.241444, 'c': 0.924180, 'l': 0.842920}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.739160, 'cc': 1.739160, 'c': 1.000000, 'l': 0.829178}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.650902, 'cc': 1.650902, 'c': 0.949253, 'l': 0.787100}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.571449, 'cc': 1.571449, 'c': 0.903568, 'l': 0.749219}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 1.477635, 'cc': 1.477635, 'c': 0.849626, 'l': 0.704491}
+# NNPDF30_nnlo_as_0118_100 
+flav_map[2]['el']["NNPDF30_nnlo_as_0118_100"] = {'bb': 1.259771, 'cc': 1.259771, 'c': 1.000000, 'l': 0.933458}
+flav_map[3]['el']["NNPDF30_nnlo_as_0118_100"] = {'bb': 1.235580, 'cc': 1.235580, 'c': 0.980797, 'l': 0.915532}
+flav_map[4]['el']["NNPDF30_nnlo_as_0118_100"] = {'bb': 1.212035, 'cc': 1.212035, 'c': 0.962107, 'l': 0.898087}
+flav_map[5]['el']["NNPDF30_nnlo_as_0118_100"] = {'bb': 1.186185, 'cc': 1.186185, 'c': 0.941587, 'l': 0.878932}
+flav_map[2]['mu']["NNPDF30_nnlo_as_0118_100"] = {'bb': 1.450148, 'cc': 1.450148, 'c': 1.000000, 'l': 0.897763}
+flav_map[3]['mu']["NNPDF30_nnlo_as_0118_100"] = {'bb': 1.401093, 'cc': 1.401093, 'c': 0.966173, 'l': 0.867394}
+flav_map[4]['mu']["NNPDF30_nnlo_as_0118_100"] = {'bb': 1.360758, 'cc': 1.360758, 'c': 0.938358, 'l': 0.842424}
+flav_map[5]['mu']["NNPDF30_nnlo_as_0118_100"] = {'bb': 1.308319, 'cc': 1.308319, 'c': 0.902197, 'l': 0.809960}
+
+# NNPDF30_nnlo_as_0118_0 
+frac[2]['el']["NNPDF30_nnlo_as_0118_0"] = {'bb': 0.095377,'cc': 0.065570,'c': 0.209864,'l': 0.629188}
+frac[3]['el']["NNPDF30_nnlo_as_0118_0"] = {'bb': 0.118554,'cc': 0.100588,'c': 0.219467,'l': 0.561391}
+frac[4]['el']["NNPDF30_nnlo_as_0118_0"] = {'bb': 0.141275,'cc': 0.139443,'c': 0.215282,'l': 0.504001}
+frac[5]['el']["NNPDF30_nnlo_as_0118_0"] = {'bb': 0.149522,'cc': 0.152731,'c': 0.209920,'l': 0.487827}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_0"] = {'bb': 0.083917,'cc': 0.063837,'c': 0.205450,'l': 0.646796}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_0"] = {'bb': 0.107540,'cc': 0.098647,'c': 0.215807,'l': 0.578006}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_0"] = {'bb': 0.130997,'cc': 0.135025,'c': 0.207117,'l': 0.526861}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_0"] = {'bb': 0.141046,'cc': 0.148520,'c': 0.202400,'l': 0.508034}
+# NNPDF30_nnlo_as_0118_1 
+frac[2]['el']["NNPDF30_nnlo_as_0118_1"] = {'bb': 0.095406,'cc': 0.065637,'c': 0.209519,'l': 0.629438}
+frac[3]['el']["NNPDF30_nnlo_as_0118_1"] = {'bb': 0.118532,'cc': 0.100572,'c': 0.219479,'l': 0.561417}
+frac[4]['el']["NNPDF30_nnlo_as_0118_1"] = {'bb': 0.141322,'cc': 0.139378,'c': 0.215186,'l': 0.504114}
+frac[5]['el']["NNPDF30_nnlo_as_0118_1"] = {'bb': 0.149538,'cc': 0.152594,'c': 0.209972,'l': 0.487896}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_1"] = {'bb': 0.083617,'cc': 0.063411,'c': 0.203362,'l': 0.649610}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_1"] = {'bb': 0.107791,'cc': 0.098561,'c': 0.215303,'l': 0.578345}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_1"] = {'bb': 0.131001,'cc': 0.134952,'c': 0.207094,'l': 0.526952}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_1"] = {'bb': 0.140987,'cc': 0.148475,'c': 0.202477,'l': 0.508061}
+# NNPDF30_nnlo_as_0118_2 
+frac[2]['el']["NNPDF30_nnlo_as_0118_2"] = {'bb': 0.095148,'cc': 0.064945,'c': 0.211146,'l': 0.628761}
+frac[3]['el']["NNPDF30_nnlo_as_0118_2"] = {'bb': 0.118399,'cc': 0.099745,'c': 0.220101,'l': 0.561755}
+frac[4]['el']["NNPDF30_nnlo_as_0118_2"] = {'bb': 0.141313,'cc': 0.138523,'c': 0.215521,'l': 0.504643}
+frac[5]['el']["NNPDF30_nnlo_as_0118_2"] = {'bb': 0.149645,'cc': 0.151892,'c': 0.209786,'l': 0.488677}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_2"] = {'bb': 0.084218,'cc': 0.063078,'c': 0.207057,'l': 0.645646}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_2"] = {'bb': 0.107789,'cc': 0.097704,'c': 0.215912,'l': 0.578595}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_2"] = {'bb': 0.131210,'cc': 0.134052,'c': 0.207171,'l': 0.527566}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_2"] = {'bb': 0.141208,'cc': 0.147623,'c': 0.202452,'l': 0.508717}
+# NNPDF30_nnlo_as_0118_3 
+frac[2]['el']["NNPDF30_nnlo_as_0118_3"] = {'bb': 0.095366,'cc': 0.066030,'c': 0.209692,'l': 0.628912}
+frac[3]['el']["NNPDF30_nnlo_as_0118_3"] = {'bb': 0.117870,'cc': 0.101269,'c': 0.219094,'l': 0.561767}
+frac[4]['el']["NNPDF30_nnlo_as_0118_3"] = {'bb': 0.141066,'cc': 0.140218,'c': 0.214543,'l': 0.504174}
+frac[5]['el']["NNPDF30_nnlo_as_0118_3"] = {'bb': 0.149537,'cc': 0.153662,'c': 0.208699,'l': 0.488102}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_3"] = {'bb': 0.083996,'cc': 0.064148,'c': 0.204842,'l': 0.647013}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_3"] = {'bb': 0.107550,'cc': 0.099400,'c': 0.215370,'l': 0.577680}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_3"] = {'bb': 0.131046,'cc': 0.135736,'c': 0.206554,'l': 0.526663}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_3"] = {'bb': 0.141028,'cc': 0.149274,'c': 0.201768,'l': 0.507930}
+# NNPDF30_nnlo_as_0118_4 
+frac[2]['el']["NNPDF30_nnlo_as_0118_4"] = {'bb': 0.095781,'cc': 0.064926,'c': 0.210384,'l': 0.628909}
+frac[3]['el']["NNPDF30_nnlo_as_0118_4"] = {'bb': 0.119335,'cc': 0.099517,'c': 0.220168,'l': 0.560980}
+frac[4]['el']["NNPDF30_nnlo_as_0118_4"] = {'bb': 0.142174,'cc': 0.137990,'c': 0.216396,'l': 0.503440}
+frac[5]['el']["NNPDF30_nnlo_as_0118_4"] = {'bb': 0.150377,'cc': 0.151231,'c': 0.211351,'l': 0.487041}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_4"] = {'bb': 0.083958,'cc': 0.063111,'c': 0.206028,'l': 0.646903}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_4"] = {'bb': 0.107604,'cc': 0.097601,'c': 0.216552,'l': 0.578242}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_4"] = {'bb': 0.131092,'cc': 0.133778,'c': 0.208437,'l': 0.526693}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_4"] = {'bb': 0.141149,'cc': 0.147294,'c': 0.203880,'l': 0.507677}
+# NNPDF30_nnlo_as_0118_5 
+frac[2]['el']["NNPDF30_nnlo_as_0118_5"] = {'bb': 0.095324,'cc': 0.065869,'c': 0.208780,'l': 0.630027}
+frac[3]['el']["NNPDF30_nnlo_as_0118_5"] = {'bb': 0.118439,'cc': 0.101120,'c': 0.218243,'l': 0.562198}
+frac[4]['el']["NNPDF30_nnlo_as_0118_5"] = {'bb': 0.141126,'cc': 0.140194,'c': 0.214182,'l': 0.504498}
+frac[5]['el']["NNPDF30_nnlo_as_0118_5"] = {'bb': 0.149476,'cc': 0.153508,'c': 0.208642,'l': 0.488375}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_5"] = {'bb': 0.083766,'cc': 0.064012,'c': 0.204001,'l': 0.648220}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_5"] = {'bb': 0.106282,'cc': 0.099196,'c': 0.214534,'l': 0.579988}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_5"] = {'bb': 0.127768,'cc': 0.136286,'c': 0.206705,'l': 0.529241}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_5"] = {'bb': 0.137100,'cc': 0.150011,'c': 0.202207,'l': 0.510682}
+# NNPDF30_nnlo_as_0118_6 
+frac[2]['el']["NNPDF30_nnlo_as_0118_6"] = {'bb': 0.095360,'cc': 0.065165,'c': 0.210572,'l': 0.628903}
+frac[3]['el']["NNPDF30_nnlo_as_0118_6"] = {'bb': 0.118637,'cc': 0.100200,'c': 0.220173,'l': 0.560990}
+frac[4]['el']["NNPDF30_nnlo_as_0118_6"] = {'bb': 0.141379,'cc': 0.139103,'c': 0.215730,'l': 0.503788}
+frac[5]['el']["NNPDF30_nnlo_as_0118_6"] = {'bb': 0.149653,'cc': 0.152407,'c': 0.210073,'l': 0.487867}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_6"] = {'bb': 0.083529,'cc': 0.062851,'c': 0.204336,'l': 0.649284}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_6"] = {'bb': 0.107871,'cc': 0.098166,'c': 0.216072,'l': 0.577891}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_6"] = {'bb': 0.131136,'cc': 0.134645,'c': 0.207442,'l': 0.526777}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_6"] = {'bb': 0.141127,'cc': 0.148199,'c': 0.202693,'l': 0.507982}
+# NNPDF30_nnlo_as_0118_7 
+frac[2]['el']["NNPDF30_nnlo_as_0118_7"] = {'bb': 0.095469,'cc': 0.065962,'c': 0.210077,'l': 0.628492}
+frac[3]['el']["NNPDF30_nnlo_as_0118_7"] = {'bb': 0.118502,'cc': 0.101150,'c': 0.219614,'l': 0.560734}
+frac[4]['el']["NNPDF30_nnlo_as_0118_7"] = {'bb': 0.141103,'cc': 0.140175,'c': 0.215072,'l': 0.503650}
+frac[5]['el']["NNPDF30_nnlo_as_0118_7"] = {'bb': 0.149433,'cc': 0.153466,'c': 0.209437,'l': 0.487664}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_7"] = {'bb': 0.084007,'cc': 0.063973,'c': 0.204803,'l': 0.647216}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_7"] = {'bb': 0.107590,'cc': 0.098953,'c': 0.215422,'l': 0.578035}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_7"] = {'bb': 0.130990,'cc': 0.135574,'c': 0.206785,'l': 0.526650}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_7"] = {'bb': 0.141017,'cc': 0.149131,'c': 0.202005,'l': 0.507848}
+# NNPDF30_nnlo_as_0118_8 
+frac[2]['el']["NNPDF30_nnlo_as_0118_8"] = {'bb': 0.095539,'cc': 0.064643,'c': 0.211884,'l': 0.627935}
+frac[3]['el']["NNPDF30_nnlo_as_0118_8"] = {'bb': 0.118785,'cc': 0.099377,'c': 0.220492,'l': 0.561345}
+frac[4]['el']["NNPDF30_nnlo_as_0118_8"] = {'bb': 0.141582,'cc': 0.137913,'c': 0.215775,'l': 0.504730}
+frac[5]['el']["NNPDF30_nnlo_as_0118_8"] = {'bb': 0.149848,'cc': 0.151218,'c': 0.210493,'l': 0.488440}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_8"] = {'bb': 0.084360,'cc': 0.063016,'c': 0.207666,'l': 0.644958}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_8"] = {'bb': 0.107876,'cc': 0.097241,'c': 0.216277,'l': 0.578606}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_8"] = {'bb': 0.131304,'cc': 0.133411,'c': 0.207316,'l': 0.527969}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_8"] = {'bb': 0.141363,'cc': 0.146966,'c': 0.202655,'l': 0.509016}
+# NNPDF30_nnlo_as_0118_9 
+frac[2]['el']["NNPDF30_nnlo_as_0118_9"] = {'bb': 0.095538,'cc': 0.065530,'c': 0.209170,'l': 0.629762}
+frac[3]['el']["NNPDF30_nnlo_as_0118_9"] = {'bb': 0.118686,'cc': 0.100400,'c': 0.219046,'l': 0.561868}
+frac[4]['el']["NNPDF30_nnlo_as_0118_9"] = {'bb': 0.141468,'cc': 0.139095,'c': 0.215495,'l': 0.503941}
+frac[5]['el']["NNPDF30_nnlo_as_0118_9"] = {'bb': 0.149698,'cc': 0.152315,'c': 0.210880,'l': 0.487106}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_9"] = {'bb': 0.084682,'cc': 0.063987,'c': 0.205339,'l': 0.645992}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_9"] = {'bb': 0.107741,'cc': 0.098200,'c': 0.214926,'l': 0.579133}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_9"] = {'bb': 0.131172,'cc': 0.134711,'c': 0.207255,'l': 0.526862}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_9"] = {'bb': 0.141244,'cc': 0.148264,'c': 0.202810,'l': 0.507682}
+# NNPDF30_nnlo_as_0118_10 
+frac[2]['el']["NNPDF30_nnlo_as_0118_10"] = {'bb': 0.095411,'cc': 0.065242,'c': 0.210225,'l': 0.629122}
+frac[3]['el']["NNPDF30_nnlo_as_0118_10"] = {'bb': 0.118640,'cc': 0.100075,'c': 0.219719,'l': 0.561565}
+frac[4]['el']["NNPDF30_nnlo_as_0118_10"] = {'bb': 0.141474,'cc': 0.138791,'c': 0.215559,'l': 0.504177}
+frac[5]['el']["NNPDF30_nnlo_as_0118_10"] = {'bb': 0.149721,'cc': 0.152057,'c': 0.210546,'l': 0.487677}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_10"] = {'bb': 0.084567,'cc': 0.063565,'c': 0.206114,'l': 0.645754}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_10"] = {'bb': 0.107773,'cc': 0.097887,'c': 0.215245,'l': 0.579095}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_10"] = {'bb': 0.131172,'cc': 0.134214,'c': 0.207066,'l': 0.527548}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_10"] = {'bb': 0.141226,'cc': 0.147796,'c': 0.202482,'l': 0.508496}
+# NNPDF30_nnlo_as_0118_11 
+frac[2]['el']["NNPDF30_nnlo_as_0118_11"] = {'bb': 0.095320,'cc': 0.065588,'c': 0.208956,'l': 0.630136}
+frac[3]['el']["NNPDF30_nnlo_as_0118_11"] = {'bb': 0.118547,'cc': 0.100746,'c': 0.218804,'l': 0.561903}
+frac[4]['el']["NNPDF30_nnlo_as_0118_11"] = {'bb': 0.141245,'cc': 0.139722,'c': 0.214692,'l': 0.504341}
+frac[5]['el']["NNPDF30_nnlo_as_0118_11"] = {'bb': 0.149567,'cc': 0.153028,'c': 0.209260,'l': 0.488146}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_11"] = {'bb': 0.083984,'cc': 0.063626,'c': 0.204017,'l': 0.648374}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_11"] = {'bb': 0.107617,'cc': 0.098678,'c': 0.214712,'l': 0.578993}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_11"] = {'bb': 0.131047,'cc': 0.135237,'c': 0.206598,'l': 0.527118}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_11"] = {'bb': 0.141049,'cc': 0.148799,'c': 0.202002,'l': 0.508150}
+# NNPDF30_nnlo_as_0118_12 
+frac[2]['el']["NNPDF30_nnlo_as_0118_12"] = {'bb': 0.095289,'cc': 0.064849,'c': 0.209829,'l': 0.630033}
+frac[3]['el']["NNPDF30_nnlo_as_0118_12"] = {'bb': 0.118429,'cc': 0.099540,'c': 0.220249,'l': 0.561783}
+frac[4]['el']["NNPDF30_nnlo_as_0118_12"] = {'bb': 0.141206,'cc': 0.138082,'c': 0.216693,'l': 0.504020}
+frac[5]['el']["NNPDF30_nnlo_as_0118_12"] = {'bb': 0.149426,'cc': 0.151246,'c': 0.212170,'l': 0.487158}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_12"] = {'bb': 0.084192,'cc': 0.062890,'c': 0.204545,'l': 0.648372}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_12"] = {'bb': 0.107819,'cc': 0.097196,'c': 0.215431,'l': 0.579554}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_12"] = {'bb': 0.131520,'cc': 0.133505,'c': 0.208084,'l': 0.526891}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_12"] = {'bb': 0.141531,'cc': 0.146969,'c': 0.203690,'l': 0.507810}
+# NNPDF30_nnlo_as_0118_13 
+frac[2]['el']["NNPDF30_nnlo_as_0118_13"] = {'bb': 0.095430,'cc': 0.065566,'c': 0.211370,'l': 0.627634}
+frac[3]['el']["NNPDF30_nnlo_as_0118_13"] = {'bb': 0.118557,'cc': 0.100631,'c': 0.220447,'l': 0.560365}
+frac[4]['el']["NNPDF30_nnlo_as_0118_13"] = {'bb': 0.141241,'cc': 0.139510,'c': 0.215706,'l': 0.503543}
+frac[5]['el']["NNPDF30_nnlo_as_0118_13"] = {'bb': 0.149463,'cc': 0.152757,'c': 0.210503,'l': 0.487277}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_13"] = {'bb': 0.083912,'cc': 0.063584,'c': 0.205560,'l': 0.646943}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_13"] = {'bb': 0.107656,'cc': 0.098526,'c': 0.216275,'l': 0.577543}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_13"] = {'bb': 0.131054,'cc': 0.135093,'c': 0.207301,'l': 0.526552}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_13"] = {'bb': 0.141090,'cc': 0.148654,'c': 0.202429,'l': 0.507827}
+# NNPDF30_nnlo_as_0118_14 
+frac[2]['el']["NNPDF30_nnlo_as_0118_14"] = {'bb': 0.095153,'cc': 0.066671,'c': 0.207290,'l': 0.630886}
+frac[3]['el']["NNPDF30_nnlo_as_0118_14"] = {'bb': 0.118286,'cc': 0.102004,'c': 0.217210,'l': 0.562500}
+frac[4]['el']["NNPDF30_nnlo_as_0118_14"] = {'bb': 0.140953,'cc': 0.141099,'c': 0.213090,'l': 0.504857}
+frac[5]['el']["NNPDF30_nnlo_as_0118_14"] = {'bb': 0.149243,'cc': 0.154353,'c': 0.207874,'l': 0.488529}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_14"] = {'bb': 0.083469,'cc': 0.064636,'c': 0.201681,'l': 0.650214}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_14"] = {'bb': 0.107251,'cc': 0.100110,'c': 0.213398,'l': 0.579241}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_14"] = {'bb': 0.130651,'cc': 0.136783,'c': 0.205324,'l': 0.527242}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_14"] = {'bb': 0.140667,'cc': 0.150310,'c': 0.200733,'l': 0.508289}
+# NNPDF30_nnlo_as_0118_15 
+frac[2]['el']["NNPDF30_nnlo_as_0118_15"] = {'bb': 0.095291,'cc': 0.065310,'c': 0.209958,'l': 0.629441}
+frac[3]['el']["NNPDF30_nnlo_as_0118_15"] = {'bb': 0.118602,'cc': 0.100442,'c': 0.219753,'l': 0.561203}
+frac[4]['el']["NNPDF30_nnlo_as_0118_15"] = {'bb': 0.141310,'cc': 0.139338,'c': 0.215622,'l': 0.503731}
+frac[5]['el']["NNPDF30_nnlo_as_0118_15"] = {'bb': 0.149467,'cc': 0.152580,'c': 0.210660,'l': 0.487293}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_15"] = {'bb': 0.083864,'cc': 0.063207,'c': 0.204421,'l': 0.648507}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_15"] = {'bb': 0.107694,'cc': 0.098285,'c': 0.215628,'l': 0.578393}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_15"] = {'bb': 0.131020,'cc': 0.134901,'c': 0.207212,'l': 0.526866}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_15"] = {'bb': 0.141084,'cc': 0.148474,'c': 0.202557,'l': 0.507885}
+# NNPDF30_nnlo_as_0118_16 
+frac[2]['el']["NNPDF30_nnlo_as_0118_16"] = {'bb': 0.095674,'cc': 0.065604,'c': 0.210579,'l': 0.628144}
+frac[3]['el']["NNPDF30_nnlo_as_0118_16"] = {'bb': 0.118868,'cc': 0.100291,'c': 0.219627,'l': 0.561214}
+frac[4]['el']["NNPDF30_nnlo_as_0118_16"] = {'bb': 0.141686,'cc': 0.138919,'c': 0.215846,'l': 0.503549}
+frac[5]['el']["NNPDF30_nnlo_as_0118_16"] = {'bb': 0.150023,'cc': 0.152265,'c': 0.210590,'l': 0.487122}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_16"] = {'bb': 0.085240,'cc': 0.064393,'c': 0.208327,'l': 0.642040}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_16"] = {'bb': 0.107571,'cc': 0.097964,'c': 0.215451,'l': 0.579014}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_16"] = {'bb': 0.131226,'cc': 0.134248,'c': 0.207385,'l': 0.527141}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_16"] = {'bb': 0.141354,'cc': 0.147849,'c': 0.202792,'l': 0.508005}
+# NNPDF30_nnlo_as_0118_17 
+frac[2]['el']["NNPDF30_nnlo_as_0118_17"] = {'bb': 0.095208,'cc': 0.065556,'c': 0.208733,'l': 0.630503}
+frac[3]['el']["NNPDF30_nnlo_as_0118_17"] = {'bb': 0.118300,'cc': 0.100454,'c': 0.218634,'l': 0.562612}
+frac[4]['el']["NNPDF30_nnlo_as_0118_17"] = {'bb': 0.140953,'cc': 0.139174,'c': 0.214686,'l': 0.505187}
+frac[5]['el']["NNPDF30_nnlo_as_0118_17"] = {'bb': 0.149149,'cc': 0.152401,'c': 0.209792,'l': 0.488658}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_17"] = {'bb': 0.083496,'cc': 0.063524,'c': 0.203087,'l': 0.649893}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_17"] = {'bb': 0.107242,'cc': 0.098637,'c': 0.214961,'l': 0.579160}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_17"] = {'bb': 0.130579,'cc': 0.135423,'c': 0.206764,'l': 0.527234}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_17"] = {'bb': 0.140602,'cc': 0.148841,'c': 0.202268,'l': 0.508289}
+# NNPDF30_nnlo_as_0118_18 
+frac[2]['el']["NNPDF30_nnlo_as_0118_18"] = {'bb': 0.095199,'cc': 0.065889,'c': 0.212482,'l': 0.626431}
+frac[3]['el']["NNPDF30_nnlo_as_0118_18"] = {'bb': 0.118395,'cc': 0.100753,'c': 0.221422,'l': 0.559431}
+frac[4]['el']["NNPDF30_nnlo_as_0118_18"] = {'bb': 0.141183,'cc': 0.139395,'c': 0.216213,'l': 0.503209}
+frac[5]['el']["NNPDF30_nnlo_as_0118_18"] = {'bb': 0.149462,'cc': 0.152600,'c': 0.210580,'l': 0.487358}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_18"] = {'bb': 0.083442,'cc': 0.063104,'c': 0.204372,'l': 0.649081}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_18"] = {'bb': 0.107532,'cc': 0.098198,'c': 0.216080,'l': 0.578191}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_18"] = {'bb': 0.130990,'cc': 0.134596,'c': 0.207243,'l': 0.527172}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_18"] = {'bb': 0.140974,'cc': 0.148121,'c': 0.202463,'l': 0.508442}
+# NNPDF30_nnlo_as_0118_19 
+frac[2]['el']["NNPDF30_nnlo_as_0118_19"] = {'bb': 0.095340,'cc': 0.065568,'c': 0.209252,'l': 0.629841}
+frac[3]['el']["NNPDF30_nnlo_as_0118_19"] = {'bb': 0.118560,'cc': 0.100388,'c': 0.219168,'l': 0.561883}
+frac[4]['el']["NNPDF30_nnlo_as_0118_19"] = {'bb': 0.141172,'cc': 0.138960,'c': 0.215532,'l': 0.504336}
+frac[5]['el']["NNPDF30_nnlo_as_0118_19"] = {'bb': 0.149527,'cc': 0.152220,'c': 0.210271,'l': 0.487982}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_19"] = {'bb': 0.084147,'cc': 0.063704,'c': 0.204804,'l': 0.647345}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_19"] = {'bb': 0.107460,'cc': 0.098311,'c': 0.215130,'l': 0.579099}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_19"] = {'bb': 0.130752,'cc': 0.134137,'c': 0.206783,'l': 0.528328}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_19"] = {'bb': 0.140838,'cc': 0.147618,'c': 0.202303,'l': 0.509241}
+# NNPDF30_nnlo_as_0118_20 
+frac[2]['el']["NNPDF30_nnlo_as_0118_20"] = {'bb': 0.095423,'cc': 0.065936,'c': 0.210109,'l': 0.628531}
+frac[3]['el']["NNPDF30_nnlo_as_0118_20"] = {'bb': 0.118741,'cc': 0.101212,'c': 0.219903,'l': 0.560144}
+frac[4]['el']["NNPDF30_nnlo_as_0118_20"] = {'bb': 0.141459,'cc': 0.140462,'c': 0.214912,'l': 0.503167}
+frac[5]['el']["NNPDF30_nnlo_as_0118_20"] = {'bb': 0.149718,'cc': 0.153696,'c': 0.209039,'l': 0.487548}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_20"] = {'bb': 0.083660,'cc': 0.063104,'c': 0.202790,'l': 0.650447}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_20"] = {'bb': 0.109214,'cc': 0.098964,'c': 0.215083,'l': 0.576740}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_20"] = {'bb': 0.132880,'cc': 0.135565,'c': 0.205902,'l': 0.525653}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_20"] = {'bb': 0.142708,'cc': 0.149135,'c': 0.200983,'l': 0.507174}
+# NNPDF30_nnlo_as_0118_21 
+frac[2]['el']["NNPDF30_nnlo_as_0118_21"] = {'bb': 0.094818,'cc': 0.066044,'c': 0.210138,'l': 0.629000}
+frac[3]['el']["NNPDF30_nnlo_as_0118_21"] = {'bb': 0.117229,'cc': 0.101166,'c': 0.219683,'l': 0.561922}
+frac[4]['el']["NNPDF30_nnlo_as_0118_21"] = {'bb': 0.139655,'cc': 0.140055,'c': 0.215171,'l': 0.505119}
+frac[5]['el']["NNPDF30_nnlo_as_0118_21"] = {'bb': 0.148101,'cc': 0.153333,'c': 0.209561,'l': 0.489004}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_21"] = {'bb': 0.083833,'cc': 0.063995,'c': 0.204645,'l': 0.647527}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_21"] = {'bb': 0.107471,'cc': 0.098943,'c': 0.215203,'l': 0.578382}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_21"] = {'bb': 0.130913,'cc': 0.135338,'c': 0.206542,'l': 0.527207}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_21"] = {'bb': 0.140923,'cc': 0.148874,'c': 0.201845,'l': 0.508358}
+# NNPDF30_nnlo_as_0118_22 
+frac[2]['el']["NNPDF30_nnlo_as_0118_22"] = {'bb': 0.094989,'cc': 0.065518,'c': 0.210762,'l': 0.628732}
+frac[3]['el']["NNPDF30_nnlo_as_0118_22"] = {'bb': 0.118414,'cc': 0.100647,'c': 0.220184,'l': 0.560755}
+frac[4]['el']["NNPDF30_nnlo_as_0118_22"] = {'bb': 0.141214,'cc': 0.139508,'c': 0.215226,'l': 0.504052}
+frac[5]['el']["NNPDF30_nnlo_as_0118_22"] = {'bb': 0.149464,'cc': 0.152772,'c': 0.209885,'l': 0.487878}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_22"] = {'bb': 0.083954,'cc': 0.063482,'c': 0.205041,'l': 0.647523}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_22"] = {'bb': 0.107745,'cc': 0.098518,'c': 0.215876,'l': 0.577861}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_22"] = {'bb': 0.131093,'cc': 0.135158,'c': 0.207188,'l': 0.526561}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_22"] = {'bb': 0.141096,'cc': 0.148717,'c': 0.202373,'l': 0.507814}
+# NNPDF30_nnlo_as_0118_23 
+frac[2]['el']["NNPDF30_nnlo_as_0118_23"] = {'bb': 0.095628,'cc': 0.065073,'c': 0.212143,'l': 0.627156}
+frac[3]['el']["NNPDF30_nnlo_as_0118_23"] = {'bb': 0.119028,'cc': 0.100336,'c': 0.220890,'l': 0.559747}
+frac[4]['el']["NNPDF30_nnlo_as_0118_23"] = {'bb': 0.141753,'cc': 0.139506,'c': 0.215689,'l': 0.503052}
+frac[5]['el']["NNPDF30_nnlo_as_0118_23"] = {'bb': 0.150029,'cc': 0.152898,'c': 0.209799,'l': 0.487274}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_23"] = {'bb': 0.084214,'cc': 0.063014,'c': 0.206163,'l': 0.646609}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_23"] = {'bb': 0.108049,'cc': 0.097919,'c': 0.215791,'l': 0.578241}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_23"] = {'bb': 0.131319,'cc': 0.134522,'c': 0.206635,'l': 0.527523}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_23"] = {'bb': 0.141213,'cc': 0.148179,'c': 0.201818,'l': 0.508790}
+# NNPDF30_nnlo_as_0118_24 
+frac[2]['el']["NNPDF30_nnlo_as_0118_24"] = {'bb': 0.095270,'cc': 0.065915,'c': 0.209231,'l': 0.629584}
+frac[3]['el']["NNPDF30_nnlo_as_0118_24"] = {'bb': 0.118632,'cc': 0.101150,'c': 0.219197,'l': 0.561021}
+frac[4]['el']["NNPDF30_nnlo_as_0118_24"] = {'bb': 0.141341,'cc': 0.140161,'c': 0.214855,'l': 0.503643}
+frac[5]['el']["NNPDF30_nnlo_as_0118_24"] = {'bb': 0.149569,'cc': 0.153391,'c': 0.209630,'l': 0.487411}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_24"] = {'bb': 0.083681,'cc': 0.063933,'c': 0.203994,'l': 0.648392}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_24"] = {'bb': 0.107518,'cc': 0.099231,'c': 0.215493,'l': 0.577758}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_24"] = {'bb': 0.130933,'cc': 0.135886,'c': 0.207084,'l': 0.526097}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_24"] = {'bb': 0.140939,'cc': 0.149431,'c': 0.202307,'l': 0.507323}
+# NNPDF30_nnlo_as_0118_25 
+frac[2]['el']["NNPDF30_nnlo_as_0118_25"] = {'bb': 0.095345,'cc': 0.065727,'c': 0.209956,'l': 0.628972}
+frac[3]['el']["NNPDF30_nnlo_as_0118_25"] = {'bb': 0.118489,'cc': 0.100778,'c': 0.219852,'l': 0.560881}
+frac[4]['el']["NNPDF30_nnlo_as_0118_25"] = {'bb': 0.141303,'cc': 0.139696,'c': 0.215800,'l': 0.503200}
+frac[5]['el']["NNPDF30_nnlo_as_0118_25"] = {'bb': 0.149553,'cc': 0.152962,'c': 0.210305,'l': 0.487180}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_25"] = {'bb': 0.084078,'cc': 0.063819,'c': 0.204798,'l': 0.647305}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_25"] = {'bb': 0.107521,'cc': 0.098657,'c': 0.215708,'l': 0.578114}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_25"] = {'bb': 0.130936,'cc': 0.135185,'c': 0.207425,'l': 0.526454}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_25"] = {'bb': 0.140942,'cc': 0.148715,'c': 0.202685,'l': 0.507658}
+# NNPDF30_nnlo_as_0118_26 
+frac[2]['el']["NNPDF30_nnlo_as_0118_26"] = {'bb': 0.095490,'cc': 0.065776,'c': 0.208857,'l': 0.629878}
+frac[3]['el']["NNPDF30_nnlo_as_0118_26"] = {'bb': 0.118627,'cc': 0.100718,'c': 0.218448,'l': 0.562206}
+frac[4]['el']["NNPDF30_nnlo_as_0118_26"] = {'bb': 0.141405,'cc': 0.139536,'c': 0.214361,'l': 0.504698}
+frac[5]['el']["NNPDF30_nnlo_as_0118_26"] = {'bb': 0.149717,'cc': 0.152808,'c': 0.209110,'l': 0.488365}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_26"] = {'bb': 0.084461,'cc': 0.064177,'c': 0.205009,'l': 0.646353}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_26"] = {'bb': 0.107530,'cc': 0.098598,'c': 0.214328,'l': 0.579544}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_26"] = {'bb': 0.131044,'cc': 0.135032,'c': 0.206191,'l': 0.527733}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_26"] = {'bb': 0.141084,'cc': 0.148567,'c': 0.201690,'l': 0.508659}
+# NNPDF30_nnlo_as_0118_27 
+frac[2]['el']["NNPDF30_nnlo_as_0118_27"] = {'bb': 0.095284,'cc': 0.065890,'c': 0.210540,'l': 0.628287}
+frac[3]['el']["NNPDF30_nnlo_as_0118_27"] = {'bb': 0.118457,'cc': 0.101083,'c': 0.219902,'l': 0.560557}
+frac[4]['el']["NNPDF30_nnlo_as_0118_27"] = {'bb': 0.141126,'cc': 0.140110,'c': 0.215200,'l': 0.503564}
+frac[5]['el']["NNPDF30_nnlo_as_0118_27"] = {'bb': 0.149433,'cc': 0.153424,'c': 0.209500,'l': 0.487643}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_27"] = {'bb': 0.084073,'cc': 0.063971,'c': 0.205059,'l': 0.646896}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_27"] = {'bb': 0.107508,'cc': 0.098830,'c': 0.215324,'l': 0.578338}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_27"] = {'bb': 0.130825,'cc': 0.135453,'c': 0.206602,'l': 0.527120}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_27"] = {'bb': 0.140806,'cc': 0.148974,'c': 0.202016,'l': 0.508203}
+# NNPDF30_nnlo_as_0118_28 
+frac[2]['el']["NNPDF30_nnlo_as_0118_28"] = {'bb': 0.095241,'cc': 0.066641,'c': 0.209087,'l': 0.629031}
+frac[3]['el']["NNPDF30_nnlo_as_0118_28"] = {'bb': 0.118303,'cc': 0.102100,'c': 0.218998,'l': 0.560599}
+frac[4]['el']["NNPDF30_nnlo_as_0118_28"] = {'bb': 0.140869,'cc': 0.141125,'c': 0.214504,'l': 0.503502}
+frac[5]['el']["NNPDF30_nnlo_as_0118_28"] = {'bb': 0.149239,'cc': 0.154382,'c': 0.208763,'l': 0.487617}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_28"] = {'bb': 0.083452,'cc': 0.064912,'c': 0.204423,'l': 0.647213}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_28"] = {'bb': 0.107158,'cc': 0.100292,'c': 0.215917,'l': 0.576634}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_28"] = {'bb': 0.130635,'cc': 0.136910,'c': 0.206972,'l': 0.525483}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_28"] = {'bb': 0.140633,'cc': 0.150383,'c': 0.202044,'l': 0.506940}
+# NNPDF30_nnlo_as_0118_29 
+frac[2]['el']["NNPDF30_nnlo_as_0118_29"] = {'bb': 0.095625,'cc': 0.064949,'c': 0.210946,'l': 0.628480}
+frac[3]['el']["NNPDF30_nnlo_as_0118_29"] = {'bb': 0.118759,'cc': 0.099822,'c': 0.219609,'l': 0.561811}
+frac[4]['el']["NNPDF30_nnlo_as_0118_29"] = {'bb': 0.141550,'cc': 0.138642,'c': 0.214814,'l': 0.504994}
+frac[5]['el']["NNPDF30_nnlo_as_0118_29"] = {'bb': 0.149875,'cc': 0.152065,'c': 0.209183,'l': 0.488876}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_29"] = {'bb': 0.084702,'cc': 0.063344,'c': 0.206572,'l': 0.645382}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_29"] = {'bb': 0.107909,'cc': 0.097625,'c': 0.214932,'l': 0.579533}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_29"] = {'bb': 0.131256,'cc': 0.134117,'c': 0.206319,'l': 0.528309}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_29"] = {'bb': 0.141306,'cc': 0.147749,'c': 0.201682,'l': 0.509263}
+# NNPDF30_nnlo_as_0118_30 
+frac[2]['el']["NNPDF30_nnlo_as_0118_30"] = {'bb': 0.095240,'cc': 0.065495,'c': 0.209943,'l': 0.629321}
+frac[3]['el']["NNPDF30_nnlo_as_0118_30"] = {'bb': 0.118408,'cc': 0.100723,'c': 0.219371,'l': 0.561497}
+frac[4]['el']["NNPDF30_nnlo_as_0118_30"] = {'bb': 0.141142,'cc': 0.139826,'c': 0.214858,'l': 0.504174}
+frac[5]['el']["NNPDF30_nnlo_as_0118_30"] = {'bb': 0.149478,'cc': 0.153084,'c': 0.209632,'l': 0.487806}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_30"] = {'bb': 0.083346,'cc': 0.063350,'c': 0.204189,'l': 0.649116}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_30"] = {'bb': 0.107461,'cc': 0.098708,'c': 0.215363,'l': 0.578468}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_30"] = {'bb': 0.130786,'cc': 0.135514,'c': 0.206670,'l': 0.527031}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_30"] = {'bb': 0.140821,'cc': 0.149072,'c': 0.201901,'l': 0.508206}
+# NNPDF30_nnlo_as_0118_31 
+frac[2]['el']["NNPDF30_nnlo_as_0118_31"] = {'bb': 0.095226,'cc': 0.065165,'c': 0.211067,'l': 0.628541}
+frac[3]['el']["NNPDF30_nnlo_as_0118_31"] = {'bb': 0.118655,'cc': 0.100319,'c': 0.221007,'l': 0.560019}
+frac[4]['el']["NNPDF30_nnlo_as_0118_31"] = {'bb': 0.141456,'cc': 0.139207,'c': 0.216994,'l': 0.502344}
+frac[5]['el']["NNPDF30_nnlo_as_0118_31"] = {'bb': 0.149660,'cc': 0.152414,'c': 0.211766,'l': 0.486159}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_31"] = {'bb': 0.083609,'cc': 0.062794,'c': 0.204884,'l': 0.648713}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_31"] = {'bb': 0.107615,'cc': 0.097949,'c': 0.216485,'l': 0.577952}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_31"] = {'bb': 0.130816,'cc': 0.134560,'c': 0.208478,'l': 0.526147}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_31"] = {'bb': 0.140835,'cc': 0.148144,'c': 0.203712,'l': 0.507309}
+# NNPDF30_nnlo_as_0118_32 
+frac[2]['el']["NNPDF30_nnlo_as_0118_32"] = {'bb': 0.095313,'cc': 0.065573,'c': 0.209667,'l': 0.629447}
+frac[3]['el']["NNPDF30_nnlo_as_0118_32"] = {'bb': 0.118528,'cc': 0.100477,'c': 0.219065,'l': 0.561929}
+frac[4]['el']["NNPDF30_nnlo_as_0118_32"] = {'bb': 0.141365,'cc': 0.139162,'c': 0.214832,'l': 0.504640}
+frac[5]['el']["NNPDF30_nnlo_as_0118_32"] = {'bb': 0.149620,'cc': 0.152358,'c': 0.209353,'l': 0.488669}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_32"] = {'bb': 0.083891,'cc': 0.063661,'c': 0.204676,'l': 0.647772}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_32"] = {'bb': 0.107198,'cc': 0.098181,'c': 0.214490,'l': 0.580131}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_32"] = {'bb': 0.130875,'cc': 0.134798,'c': 0.206723,'l': 0.527603}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_32"] = {'bb': 0.140941,'cc': 0.148363,'c': 0.202099,'l': 0.508597}
+# NNPDF30_nnlo_as_0118_33 
+frac[2]['el']["NNPDF30_nnlo_as_0118_33"] = {'bb': 0.094937,'cc': 0.064940,'c': 0.209274,'l': 0.630849}
+frac[3]['el']["NNPDF30_nnlo_as_0118_33"] = {'bb': 0.118471,'cc': 0.099763,'c': 0.219228,'l': 0.562539}
+frac[4]['el']["NNPDF30_nnlo_as_0118_33"] = {'bb': 0.141313,'cc': 0.138485,'c': 0.215738,'l': 0.504463}
+frac[5]['el']["NNPDF30_nnlo_as_0118_33"] = {'bb': 0.149513,'cc': 0.151792,'c': 0.210938,'l': 0.487757}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_33"] = {'bb': 0.083243,'cc': 0.062900,'c': 0.203832,'l': 0.650025}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_33"] = {'bb': 0.107507,'cc': 0.097877,'c': 0.215507,'l': 0.579108}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_33"] = {'bb': 0.130989,'cc': 0.134280,'c': 0.207801,'l': 0.526929}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_33"] = {'bb': 0.141323,'cc': 0.148129,'c': 0.201910,'l': 0.508639}
+# NNPDF30_nnlo_as_0118_34 
+frac[2]['el']["NNPDF30_nnlo_as_0118_34"] = {'bb': 0.095406,'cc': 0.065128,'c': 0.209783,'l': 0.629683}
+frac[3]['el']["NNPDF30_nnlo_as_0118_34"] = {'bb': 0.118730,'cc': 0.099949,'c': 0.219911,'l': 0.561409}
+frac[4]['el']["NNPDF30_nnlo_as_0118_34"] = {'bb': 0.141446,'cc': 0.138558,'c': 0.216296,'l': 0.503701}
+frac[5]['el']["NNPDF30_nnlo_as_0118_34"] = {'bb': 0.149677,'cc': 0.151760,'c': 0.211501,'l': 0.487061}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_34"] = {'bb': 0.083366,'cc': 0.062906,'c': 0.204383,'l': 0.649345}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_34"] = {'bb': 0.107613,'cc': 0.097965,'c': 0.216342,'l': 0.578080}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_34"] = {'bb': 0.131101,'cc': 0.134278,'c': 0.208303,'l': 0.526319}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_34"] = {'bb': 0.141149,'cc': 0.147789,'c': 0.203709,'l': 0.507354}
+# NNPDF30_nnlo_as_0118_35 
+frac[2]['el']["NNPDF30_nnlo_as_0118_35"] = {'bb': 0.095439,'cc': 0.065561,'c': 0.209295,'l': 0.629705}
+frac[3]['el']["NNPDF30_nnlo_as_0118_35"] = {'bb': 0.118623,'cc': 0.100387,'c': 0.219295,'l': 0.561695}
+frac[4]['el']["NNPDF30_nnlo_as_0118_35"] = {'bb': 0.141322,'cc': 0.139051,'c': 0.216009,'l': 0.503618}
+frac[5]['el']["NNPDF30_nnlo_as_0118_35"] = {'bb': 0.149642,'cc': 0.152307,'c': 0.210969,'l': 0.487082}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_35"] = {'bb': 0.084509,'cc': 0.064025,'c': 0.206211,'l': 0.645254}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_35"] = {'bb': 0.107426,'cc': 0.098280,'c': 0.215516,'l': 0.578778}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_35"] = {'bb': 0.131126,'cc': 0.134836,'c': 0.208050,'l': 0.525988}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_35"] = {'bb': 0.141157,'cc': 0.148337,'c': 0.203461,'l': 0.507045}
+# NNPDF30_nnlo_as_0118_36 
+frac[2]['el']["NNPDF30_nnlo_as_0118_36"] = {'bb': 0.095542,'cc': 0.065374,'c': 0.209752,'l': 0.629332}
+frac[3]['el']["NNPDF30_nnlo_as_0118_36"] = {'bb': 0.118724,'cc': 0.100247,'c': 0.219330,'l': 0.561699}
+frac[4]['el']["NNPDF30_nnlo_as_0118_36"] = {'bb': 0.141524,'cc': 0.139127,'c': 0.215696,'l': 0.503652}
+frac[5]['el']["NNPDF30_nnlo_as_0118_36"] = {'bb': 0.149812,'cc': 0.152481,'c': 0.210255,'l': 0.487452}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_36"] = {'bb': 0.084951,'cc': 0.063708,'c': 0.205715,'l': 0.645626}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_36"] = {'bb': 0.107878,'cc': 0.097499,'c': 0.214093,'l': 0.580530}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_36"] = {'bb': 0.131427,'cc': 0.133864,'c': 0.206150,'l': 0.528559}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_36"] = {'bb': 0.141467,'cc': 0.147457,'c': 0.201745,'l': 0.509332}
+# NNPDF30_nnlo_as_0118_37 
+frac[2]['el']["NNPDF30_nnlo_as_0118_37"] = {'bb': 0.095707,'cc': 0.064154,'c': 0.211370,'l': 0.628769}
+frac[3]['el']["NNPDF30_nnlo_as_0118_37"] = {'bb': 0.119023,'cc': 0.098490,'c': 0.221368,'l': 0.561119}
+frac[4]['el']["NNPDF30_nnlo_as_0118_37"] = {'bb': 0.141830,'cc': 0.136706,'c': 0.218230,'l': 0.503233}
+frac[5]['el']["NNPDF30_nnlo_as_0118_37"] = {'bb': 0.150067,'cc': 0.149898,'c': 0.213731,'l': 0.486304}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_37"] = {'bb': 0.085122,'cc': 0.062759,'c': 0.208045,'l': 0.644073}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_37"] = {'bb': 0.108083,'cc': 0.096201,'c': 0.217088,'l': 0.578628}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_37"] = {'bb': 0.131641,'cc': 0.132331,'c': 0.209703,'l': 0.526325}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_37"] = {'bb': 0.141741,'cc': 0.145866,'c': 0.205320,'l': 0.507074}
+# NNPDF30_nnlo_as_0118_38 
+frac[2]['el']["NNPDF30_nnlo_as_0118_38"] = {'bb': 0.095310,'cc': 0.066307,'c': 0.208880,'l': 0.629503}
+frac[3]['el']["NNPDF30_nnlo_as_0118_38"] = {'bb': 0.118409,'cc': 0.101482,'c': 0.218574,'l': 0.561535}
+frac[4]['el']["NNPDF30_nnlo_as_0118_38"] = {'bb': 0.141130,'cc': 0.140605,'c': 0.214591,'l': 0.503675}
+frac[5]['el']["NNPDF30_nnlo_as_0118_38"] = {'bb': 0.149490,'cc': 0.153900,'c': 0.209122,'l': 0.487488}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_38"] = {'bb': 0.084178,'cc': 0.064575,'c': 0.204514,'l': 0.646732}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_38"] = {'bb': 0.107295,'cc': 0.099274,'c': 0.214477,'l': 0.578955}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_38"] = {'bb': 0.130706,'cc': 0.135823,'c': 0.206129,'l': 0.527342}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_38"] = {'bb': 0.140732,'cc': 0.149362,'c': 0.201401,'l': 0.508506}
+# NNPDF30_nnlo_as_0118_39 
+frac[2]['el']["NNPDF30_nnlo_as_0118_39"] = {'bb': 0.095453,'cc': 0.065739,'c': 0.209895,'l': 0.628913}
+frac[3]['el']["NNPDF30_nnlo_as_0118_39"] = {'bb': 0.118595,'cc': 0.100834,'c': 0.219340,'l': 0.561230}
+frac[4]['el']["NNPDF30_nnlo_as_0118_39"] = {'bb': 0.141300,'cc': 0.139841,'c': 0.215148,'l': 0.503710}
+frac[5]['el']["NNPDF30_nnlo_as_0118_39"] = {'bb': 0.149683,'cc': 0.153221,'c': 0.209410,'l': 0.487686}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_39"] = {'bb': 0.084003,'cc': 0.063877,'c': 0.205134,'l': 0.646986}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_39"] = {'bb': 0.107727,'cc': 0.098734,'c': 0.215279,'l': 0.578259}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_39"] = {'bb': 0.131213,'cc': 0.135243,'c': 0.206878,'l': 0.526666}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_39"] = {'bb': 0.141278,'cc': 0.148851,'c': 0.202156,'l': 0.507715}
+# NNPDF30_nnlo_as_0118_40 
+frac[2]['el']["NNPDF30_nnlo_as_0118_40"] = {'bb': 0.095203,'cc': 0.065783,'c': 0.209137,'l': 0.629876}
+frac[3]['el']["NNPDF30_nnlo_as_0118_40"] = {'bb': 0.118502,'cc': 0.100943,'c': 0.218892,'l': 0.561662}
+frac[4]['el']["NNPDF30_nnlo_as_0118_40"] = {'bb': 0.141308,'cc': 0.139925,'c': 0.214356,'l': 0.504411}
+frac[5]['el']["NNPDF30_nnlo_as_0118_40"] = {'bb': 0.149601,'cc': 0.153252,'c': 0.208512,'l': 0.488635}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_40"] = {'bb': 0.083580,'cc': 0.063848,'c': 0.204004,'l': 0.648568}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_40"] = {'bb': 0.107312,'cc': 0.099353,'c': 0.215835,'l': 0.577501}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_40"] = {'bb': 0.130501,'cc': 0.136024,'c': 0.207378,'l': 0.526096}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_40"] = {'bb': 0.140438,'cc': 0.149533,'c': 0.202526,'l': 0.507503}
+# NNPDF30_nnlo_as_0118_41 
+frac[2]['el']["NNPDF30_nnlo_as_0118_41"] = {'bb': 0.095293,'cc': 0.066062,'c': 0.208659,'l': 0.629987}
+frac[3]['el']["NNPDF30_nnlo_as_0118_41"] = {'bb': 0.118439,'cc': 0.101218,'c': 0.218735,'l': 0.561608}
+frac[4]['el']["NNPDF30_nnlo_as_0118_41"] = {'bb': 0.141084,'cc': 0.140186,'c': 0.214767,'l': 0.503963}
+frac[5]['el']["NNPDF30_nnlo_as_0118_41"] = {'bb': 0.149451,'cc': 0.153495,'c': 0.209315,'l': 0.487738}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_41"] = {'bb': 0.083985,'cc': 0.064127,'c': 0.203690,'l': 0.648198}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_41"] = {'bb': 0.107449,'cc': 0.099145,'c': 0.214660,'l': 0.578746}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_41"] = {'bb': 0.130972,'cc': 0.135812,'c': 0.206684,'l': 0.526532}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_41"] = {'bb': 0.140986,'cc': 0.149333,'c': 0.202073,'l': 0.507608}
+# NNPDF30_nnlo_as_0118_42 
+frac[2]['el']["NNPDF30_nnlo_as_0118_42"] = {'bb': 0.095586,'cc': 0.065981,'c': 0.209265,'l': 0.629169}
+frac[3]['el']["NNPDF30_nnlo_as_0118_42"] = {'bb': 0.118991,'cc': 0.101302,'c': 0.219238,'l': 0.560469}
+frac[4]['el']["NNPDF30_nnlo_as_0118_42"] = {'bb': 0.142152,'cc': 0.140936,'c': 0.215988,'l': 0.500924}
+frac[5]['el']["NNPDF30_nnlo_as_0118_42"] = {'bb': 0.150397,'cc': 0.154148,'c': 0.210074,'l': 0.485381}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_42"] = {'bb': 0.083808,'cc': 0.064007,'c': 0.204365,'l': 0.647820}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_42"] = {'bb': 0.107611,'cc': 0.099177,'c': 0.215216,'l': 0.577996}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_42"] = {'bb': 0.130949,'cc': 0.135717,'c': 0.206759,'l': 0.526575}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_42"] = {'bb': 0.140937,'cc': 0.149221,'c': 0.202000,'l': 0.507842}
+# NNPDF30_nnlo_as_0118_43 
+frac[2]['el']["NNPDF30_nnlo_as_0118_43"] = {'bb': 0.095567,'cc': 0.064985,'c': 0.209371,'l': 0.630076}
+frac[3]['el']["NNPDF30_nnlo_as_0118_43"] = {'bb': 0.118899,'cc': 0.099460,'c': 0.218281,'l': 0.563361}
+frac[4]['el']["NNPDF30_nnlo_as_0118_43"] = {'bb': 0.141838,'cc': 0.138039,'c': 0.214434,'l': 0.505688}
+frac[5]['el']["NNPDF30_nnlo_as_0118_43"] = {'bb': 0.150173,'cc': 0.151412,'c': 0.209240,'l': 0.489175}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_43"] = {'bb': 0.084824,'cc': 0.063971,'c': 0.207927,'l': 0.643277}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_43"] = {'bb': 0.107626,'cc': 0.097747,'c': 0.215121,'l': 0.579505}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_43"] = {'bb': 0.131156,'cc': 0.133846,'c': 0.206924,'l': 0.528075}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_43"] = {'bb': 0.141199,'cc': 0.147620,'c': 0.202414,'l': 0.508767}
+# NNPDF30_nnlo_as_0118_44 
+frac[2]['el']["NNPDF30_nnlo_as_0118_44"] = {'bb': 0.095346,'cc': 0.066097,'c': 0.209057,'l': 0.629500}
+frac[3]['el']["NNPDF30_nnlo_as_0118_44"] = {'bb': 0.118497,'cc': 0.101146,'c': 0.218556,'l': 0.561801}
+frac[4]['el']["NNPDF30_nnlo_as_0118_44"] = {'bb': 0.141170,'cc': 0.139959,'c': 0.214570,'l': 0.504301}
+frac[5]['el']["NNPDF30_nnlo_as_0118_44"] = {'bb': 0.149453,'cc': 0.153182,'c': 0.209344,'l': 0.488021}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_44"] = {'bb': 0.084006,'cc': 0.064216,'c': 0.204305,'l': 0.647474}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_44"] = {'bb': 0.107437,'cc': 0.098796,'c': 0.214682,'l': 0.579085}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_44"] = {'bb': 0.130797,'cc': 0.135398,'c': 0.206254,'l': 0.527551}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_44"] = {'bb': 0.140869,'cc': 0.148943,'c': 0.201634,'l': 0.508553}
+# NNPDF30_nnlo_as_0118_45 
+frac[2]['el']["NNPDF30_nnlo_as_0118_45"] = {'bb': 0.094612,'cc': 0.064914,'c': 0.207497,'l': 0.632977}
+frac[3]['el']["NNPDF30_nnlo_as_0118_45"] = {'bb': 0.117918,'cc': 0.099607,'c': 0.217845,'l': 0.564630}
+frac[4]['el']["NNPDF30_nnlo_as_0118_45"] = {'bb': 0.141082,'cc': 0.138384,'c': 0.215063,'l': 0.505471}
+frac[5]['el']["NNPDF30_nnlo_as_0118_45"] = {'bb': 0.149387,'cc': 0.151624,'c': 0.210536,'l': 0.488453}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_45"] = {'bb': 0.084807,'cc': 0.064098,'c': 0.206472,'l': 0.644623}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_45"] = {'bb': 0.107564,'cc': 0.098015,'c': 0.215132,'l': 0.579289}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_45"] = {'bb': 0.131094,'cc': 0.134327,'c': 0.207506,'l': 0.527073}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_45"] = {'bb': 0.141169,'cc': 0.147959,'c': 0.203017,'l': 0.507855}
+# NNPDF30_nnlo_as_0118_46 
+frac[2]['el']["NNPDF30_nnlo_as_0118_46"] = {'bb': 0.095085,'cc': 0.066295,'c': 0.209172,'l': 0.629449}
+frac[3]['el']["NNPDF30_nnlo_as_0118_46"] = {'bb': 0.118194,'cc': 0.101678,'c': 0.218982,'l': 0.561146}
+frac[4]['el']["NNPDF30_nnlo_as_0118_46"] = {'bb': 0.140872,'cc': 0.140725,'c': 0.214642,'l': 0.503761}
+frac[5]['el']["NNPDF30_nnlo_as_0118_46"] = {'bb': 0.149187,'cc': 0.153963,'c': 0.209164,'l': 0.487687}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_46"] = {'bb': 0.083573,'cc': 0.063871,'c': 0.202624,'l': 0.649931}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_46"] = {'bb': 0.107570,'cc': 0.099325,'c': 0.214371,'l': 0.578733}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_46"] = {'bb': 0.130933,'cc': 0.136022,'c': 0.205913,'l': 0.527132}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_46"] = {'bb': 0.140913,'cc': 0.149549,'c': 0.201252,'l': 0.508286}
+# NNPDF30_nnlo_as_0118_47 
+frac[2]['el']["NNPDF30_nnlo_as_0118_47"] = {'bb': 0.095805,'cc': 0.066226,'c': 0.210896,'l': 0.627073}
+frac[3]['el']["NNPDF30_nnlo_as_0118_47"] = {'bb': 0.118811,'cc': 0.101388,'c': 0.219797,'l': 0.560005}
+frac[4]['el']["NNPDF30_nnlo_as_0118_47"] = {'bb': 0.141428,'cc': 0.140441,'c': 0.214904,'l': 0.503228}
+frac[5]['el']["NNPDF30_nnlo_as_0118_47"] = {'bb': 0.149637,'cc': 0.153697,'c': 0.209404,'l': 0.487262}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_47"] = {'bb': 0.084224,'cc': 0.063785,'c': 0.204087,'l': 0.647904}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_47"] = {'bb': 0.107996,'cc': 0.099035,'c': 0.215158,'l': 0.577811}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_47"] = {'bb': 0.131164,'cc': 0.135791,'c': 0.206422,'l': 0.526623}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_47"] = {'bb': 0.141113,'cc': 0.149351,'c': 0.201564,'l': 0.507971}
+# NNPDF30_nnlo_as_0118_48 
+frac[2]['el']["NNPDF30_nnlo_as_0118_48"] = {'bb': 0.095213,'cc': 0.065713,'c': 0.209024,'l': 0.630051}
+frac[3]['el']["NNPDF30_nnlo_as_0118_48"] = {'bb': 0.118413,'cc': 0.100870,'c': 0.218218,'l': 0.562499}
+frac[4]['el']["NNPDF30_nnlo_as_0118_48"] = {'bb': 0.141143,'cc': 0.139945,'c': 0.213987,'l': 0.504925}
+frac[5]['el']["NNPDF30_nnlo_as_0118_48"] = {'bb': 0.149453,'cc': 0.153277,'c': 0.208512,'l': 0.488759}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_48"] = {'bb': 0.083810,'cc': 0.063743,'c': 0.203945,'l': 0.648502}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_48"] = {'bb': 0.107401,'cc': 0.098767,'c': 0.214165,'l': 0.579667}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_48"] = {'bb': 0.133227,'cc': 0.137837,'c': 0.209261,'l': 0.519675}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_48"] = {'bb': 0.142619,'cc': 0.150808,'c': 0.203407,'l': 0.503166}
+# NNPDF30_nnlo_as_0118_49 
+frac[2]['el']["NNPDF30_nnlo_as_0118_49"] = {'bb': -1.559287,'cc': 0.182561,'c': 0.590017,'l': 1.786709}
+frac[3]['el']["NNPDF30_nnlo_as_0118_49"] = {'bb': 2.810581,'cc': -0.204193,'c': -0.450176,'l': -1.156212}
+frac[4]['el']["NNPDF30_nnlo_as_0118_49"] = {'bb': 2.027711,'cc': -0.165945,'c': -0.258443,'l': -0.603323}
+frac[5]['el']["NNPDF30_nnlo_as_0118_49"] = {'bb': 2.208094,'cc': -0.215938,'c': -0.298532,'l': -0.693624}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_49"] = {'bb': 0.083566,'cc': 0.062813,'c': 0.204251,'l': 0.649371}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_49"] = {'bb': 0.107626,'cc': 0.098009,'c': 0.216820,'l': 0.577546}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_49"] = {'bb': 0.131033,'cc': 0.134393,'c': 0.208255,'l': 0.526319}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_49"] = {'bb': 0.141028,'cc': 0.147957,'c': 0.203434,'l': 0.507581}
+# NNPDF30_nnlo_as_0118_50 
+frac[2]['el']["NNPDF30_nnlo_as_0118_50"] = {'bb': 0.095296,'cc': 0.066017,'c': 0.208305,'l': 0.630382}
+frac[3]['el']["NNPDF30_nnlo_as_0118_50"] = {'bb': 0.118294,'cc': 0.101437,'c': 0.217793,'l': 0.562476}
+frac[4]['el']["NNPDF30_nnlo_as_0118_50"] = {'bb': 0.140891,'cc': 0.140642,'c': 0.213382,'l': 0.505086}
+frac[5]['el']["NNPDF30_nnlo_as_0118_50"] = {'bb': 0.149114,'cc': 0.153969,'c': 0.207895,'l': 0.489023}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_50"] = {'bb': 0.083429,'cc': 0.063718,'c': 0.201497,'l': 0.651356}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_50"] = {'bb': 0.107544,'cc': 0.099406,'c': 0.213629,'l': 0.579421}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_50"] = {'bb': 0.130871,'cc': 0.136274,'c': 0.205124,'l': 0.527731}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_50"] = {'bb': 0.140836,'cc': 0.149820,'c': 0.200514,'l': 0.508830}
+# NNPDF30_nnlo_as_0118_51 
+frac[2]['el']["NNPDF30_nnlo_as_0118_51"] = {'bb': 0.095254,'cc': 0.065474,'c': 0.210674,'l': 0.628598}
+frac[3]['el']["NNPDF30_nnlo_as_0118_51"] = {'bb': 0.118428,'cc': 0.100717,'c': 0.220032,'l': 0.560824}
+frac[4]['el']["NNPDF30_nnlo_as_0118_51"] = {'bb': 0.141093,'cc': 0.139771,'c': 0.215220,'l': 0.503916}
+frac[5]['el']["NNPDF30_nnlo_as_0118_51"] = {'bb': 0.149513,'cc': 0.153162,'c': 0.208900,'l': 0.488425}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_51"] = {'bb': 0.083499,'cc': 0.063252,'c': 0.204500,'l': 0.648749}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_51"] = {'bb': 0.107629,'cc': 0.098744,'c': 0.216072,'l': 0.577555}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_51"] = {'bb': 0.130978,'cc': 0.135310,'c': 0.207122,'l': 0.526590}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_51"] = {'bb': 0.140952,'cc': 0.148880,'c': 0.202182,'l': 0.507986}
+# NNPDF30_nnlo_as_0118_52 
+frac[2]['el']["NNPDF30_nnlo_as_0118_52"] = {'bb': 0.095472,'cc': 0.065327,'c': 0.211553,'l': 0.627648}
+frac[3]['el']["NNPDF30_nnlo_as_0118_52"] = {'bb': 0.118680,'cc': 0.100263,'c': 0.219988,'l': 0.561069}
+frac[4]['el']["NNPDF30_nnlo_as_0118_52"] = {'bb': 0.141474,'cc': 0.139200,'c': 0.215121,'l': 0.504205}
+frac[5]['el']["NNPDF30_nnlo_as_0118_52"] = {'bb': 0.149763,'cc': 0.152530,'c': 0.209147,'l': 0.488561}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_52"] = {'bb': 0.083942,'cc': 0.063349,'c': 0.206232,'l': 0.646477}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_52"] = {'bb': 0.107712,'cc': 0.098140,'c': 0.215799,'l': 0.578350}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_52"] = {'bb': 0.131114,'cc': 0.134551,'c': 0.206536,'l': 0.527798}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_52"] = {'bb': 0.141138,'cc': 0.148126,'c': 0.201726,'l': 0.509009}
+# NNPDF30_nnlo_as_0118_53 
+frac[2]['el']["NNPDF30_nnlo_as_0118_53"] = {'bb': 0.095485,'cc': 0.065338,'c': 0.209920,'l': 0.629258}
+frac[3]['el']["NNPDF30_nnlo_as_0118_53"] = {'bb': 0.118706,'cc': 0.099998,'c': 0.219294,'l': 0.562002}
+frac[4]['el']["NNPDF30_nnlo_as_0118_53"] = {'bb': 0.141625,'cc': 0.138641,'c': 0.215397,'l': 0.504337}
+frac[5]['el']["NNPDF30_nnlo_as_0118_53"] = {'bb': 0.149887,'cc': 0.151921,'c': 0.210575,'l': 0.487618}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_53"] = {'bb': 0.084822,'cc': 0.063924,'c': 0.206599,'l': 0.644655}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_53"] = {'bb': 0.107630,'cc': 0.097908,'c': 0.214980,'l': 0.579482}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_53"] = {'bb': 0.131152,'cc': 0.134172,'c': 0.207129,'l': 0.527546}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_53"] = {'bb': 0.141222,'cc': 0.147745,'c': 0.202691,'l': 0.508342}
+# NNPDF30_nnlo_as_0118_54 
+frac[2]['el']["NNPDF30_nnlo_as_0118_54"] = {'bb': 0.095809,'cc': 0.064792,'c': 0.207094,'l': 0.632306}
+frac[3]['el']["NNPDF30_nnlo_as_0118_54"] = {'bb': 0.118615,'cc': 0.100435,'c': 0.218708,'l': 0.562241}
+frac[4]['el']["NNPDF30_nnlo_as_0118_54"] = {'bb': 0.141082,'cc': 0.140117,'c': 0.214453,'l': 0.504349}
+frac[5]['el']["NNPDF30_nnlo_as_0118_54"] = {'bb': 0.149977,'cc': 0.154631,'c': 0.208092,'l': 0.487300}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_54"] = {'bb': 0.083124,'cc': 0.064699,'c': 0.207755,'l': 0.644422}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_54"] = {'bb': 0.105541,'cc': 0.101412,'c': 0.221799,'l': 0.571248}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_54"] = {'bb': 0.128622,'cc': 0.139043,'c': 0.214969,'l': 0.517367}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_54"] = {'bb': 0.138437,'cc': 0.151992,'c': 0.209773,'l': 0.499798}
+# NNPDF30_nnlo_as_0118_55 
+frac[2]['el']["NNPDF30_nnlo_as_0118_55"] = {'bb': 0.095336,'cc': 0.065604,'c': 0.210175,'l': 0.628885}
+frac[3]['el']["NNPDF30_nnlo_as_0118_55"] = {'bb': 0.118554,'cc': 0.100716,'c': 0.219960,'l': 0.560771}
+frac[4]['el']["NNPDF30_nnlo_as_0118_55"] = {'bb': 0.141099,'cc': 0.139551,'c': 0.215856,'l': 0.503494}
+frac[5]['el']["NNPDF30_nnlo_as_0118_55"] = {'bb': 0.149357,'cc': 0.152811,'c': 0.210788,'l': 0.487044}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_55"] = {'bb': 0.083881,'cc': 0.063551,'c': 0.204688,'l': 0.647880}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_55"] = {'bb': 0.107652,'cc': 0.098580,'c': 0.216041,'l': 0.577727}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_55"] = {'bb': 0.131022,'cc': 0.135189,'c': 0.207633,'l': 0.526156}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_55"] = {'bb': 0.141074,'cc': 0.148755,'c': 0.202902,'l': 0.507270}
+# NNPDF30_nnlo_as_0118_56 
+frac[2]['el']["NNPDF30_nnlo_as_0118_56"] = {'bb': 0.091344,'cc': 0.063277,'c': 0.199953,'l': 0.645426}
+frac[3]['el']["NNPDF30_nnlo_as_0118_56"] = {'bb': 0.114795,'cc': 0.098054,'c': 0.212539,'l': 0.574612}
+frac[4]['el']["NNPDF30_nnlo_as_0118_56"] = {'bb': 0.138981,'cc': 0.137950,'c': 0.212344,'l': 0.510725}
+frac[5]['el']["NNPDF30_nnlo_as_0118_56"] = {'bb': 0.147597,'cc': 0.151473,'c': 0.207189,'l': 0.493740}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_56"] = {'bb': 0.083403,'cc': 0.064133,'c': 0.203563,'l': 0.648901}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_56"] = {'bb': 0.106377,'cc': 0.098733,'c': 0.214195,'l': 0.580696}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_56"] = {'bb': 0.129979,'cc': 0.134989,'c': 0.206558,'l': 0.528474}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_56"] = {'bb': 0.140038,'cc': 0.148548,'c': 0.201966,'l': 0.509449}
+# NNPDF30_nnlo_as_0118_57 
+frac[2]['el']["NNPDF30_nnlo_as_0118_57"] = {'bb': 0.095543,'cc': 0.065537,'c': 0.210661,'l': 0.628259}
+frac[3]['el']["NNPDF30_nnlo_as_0118_57"] = {'bb': 0.118914,'cc': 0.100519,'c': 0.220048,'l': 0.560520}
+frac[4]['el']["NNPDF30_nnlo_as_0118_57"] = {'bb': 0.142009,'cc': 0.139652,'c': 0.216172,'l': 0.502167}
+frac[5]['el']["NNPDF30_nnlo_as_0118_57"] = {'bb': 0.150101,'cc': 0.152838,'c': 0.210620,'l': 0.486441}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_57"] = {'bb': 0.084319,'cc': 0.063625,'c': 0.206064,'l': 0.645991}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_57"] = {'bb': 0.107760,'cc': 0.098182,'c': 0.215313,'l': 0.578746}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_57"] = {'bb': 0.131137,'cc': 0.134661,'c': 0.206709,'l': 0.527492}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_57"] = {'bb': 0.141205,'cc': 0.148270,'c': 0.201986,'l': 0.508540}
+# NNPDF30_nnlo_as_0118_58 
+frac[2]['el']["NNPDF30_nnlo_as_0118_58"] = {'bb': 0.096486,'cc': 0.066405,'c': 0.213090,'l': 0.624019}
+frac[3]['el']["NNPDF30_nnlo_as_0118_58"] = {'bb': 0.119586,'cc': 0.101647,'c': 0.222352,'l': 0.556415}
+frac[4]['el']["NNPDF30_nnlo_as_0118_58"] = {'bb': 0.141968,'cc': 0.140308,'c': 0.216917,'l': 0.500807}
+frac[5]['el']["NNPDF30_nnlo_as_0118_58"] = {'bb': 0.150194,'cc': 0.153351,'c': 0.211540,'l': 0.484915}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_58"] = {'bb': 0.084119,'cc': 0.063739,'c': 0.205100,'l': 0.647042}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_58"] = {'bb': 0.107739,'cc': 0.098924,'c': 0.216240,'l': 0.577098}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_58"] = {'bb': 0.130971,'cc': 0.135700,'c': 0.207933,'l': 0.525396}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_58"] = {'bb': 0.141001,'cc': 0.149278,'c': 0.203079,'l': 0.506642}
+# NNPDF30_nnlo_as_0118_59 
+frac[2]['el']["NNPDF30_nnlo_as_0118_59"] = {'bb': 0.095215,'cc': 0.065645,'c': 0.209103,'l': 0.630038}
+frac[3]['el']["NNPDF30_nnlo_as_0118_59"] = {'bb': 0.118416,'cc': 0.100714,'c': 0.219437,'l': 0.561433}
+frac[4]['el']["NNPDF30_nnlo_as_0118_59"] = {'bb': 0.141037,'cc': 0.139577,'c': 0.215747,'l': 0.503639}
+frac[5]['el']["NNPDF30_nnlo_as_0118_59"] = {'bb': 0.149339,'cc': 0.152818,'c': 0.210559,'l': 0.487285}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_59"] = {'bb': 0.083736,'cc': 0.063647,'c': 0.204297,'l': 0.648320}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_59"] = {'bb': 0.107487,'cc': 0.098686,'c': 0.215643,'l': 0.578184}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_59"] = {'bb': 0.130919,'cc': 0.135166,'c': 0.207627,'l': 0.526288}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_59"] = {'bb': 0.140968,'cc': 0.148604,'c': 0.203028,'l': 0.507400}
+# NNPDF30_nnlo_as_0118_60 
+frac[2]['el']["NNPDF30_nnlo_as_0118_60"] = {'bb': 0.095436,'cc': 0.065684,'c': 0.209640,'l': 0.629240}
+frac[3]['el']["NNPDF30_nnlo_as_0118_60"] = {'bb': 0.118604,'cc': 0.100718,'c': 0.218761,'l': 0.561917}
+frac[4]['el']["NNPDF30_nnlo_as_0118_60"] = {'bb': 0.141297,'cc': 0.139676,'c': 0.214480,'l': 0.504547}
+frac[5]['el']["NNPDF30_nnlo_as_0118_60"] = {'bb': 0.149672,'cc': 0.152955,'c': 0.209222,'l': 0.488151}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_60"] = {'bb': 0.057475,'cc': 0.065353,'c': 0.209591,'l': 0.667580}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_60"] = {'bb': 0.082765,'cc': 0.101491,'c': 0.220645,'l': 0.595099}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_60"] = {'bb': 0.115762,'cc': 0.138031,'c': 0.209431,'l': 0.536776}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_60"] = {'bb': 0.128692,'cc': 0.151767,'c': 0.203879,'l': 0.515662}
+# NNPDF30_nnlo_as_0118_61 
+frac[2]['el']["NNPDF30_nnlo_as_0118_61"] = {'bb': 0.095647,'cc': 0.064999,'c': 0.209506,'l': 0.629848}
+frac[3]['el']["NNPDF30_nnlo_as_0118_61"] = {'bb': 0.118854,'cc': 0.099486,'c': 0.219297,'l': 0.562364}
+frac[4]['el']["NNPDF30_nnlo_as_0118_61"] = {'bb': 0.141606,'cc': 0.137759,'c': 0.215729,'l': 0.504905}
+frac[5]['el']["NNPDF30_nnlo_as_0118_61"] = {'bb': 0.149887,'cc': 0.150972,'c': 0.211082,'l': 0.488060}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_61"] = {'bb': 0.084622,'cc': 0.063623,'c': 0.206602,'l': 0.645153}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_61"] = {'bb': 0.107735,'cc': 0.097405,'c': 0.215421,'l': 0.579439}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_61"] = {'bb': 0.131278,'cc': 0.133478,'c': 0.207555,'l': 0.527689}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_61"] = {'bb': 0.141360,'cc': 0.146988,'c': 0.203227,'l': 0.508425}
+# NNPDF30_nnlo_as_0118_62 
+frac[2]['el']["NNPDF30_nnlo_as_0118_62"] = {'bb': 0.096390,'cc': 0.064545,'c': 0.210333,'l': 0.628732}
+frac[3]['el']["NNPDF30_nnlo_as_0118_62"] = {'bb': 0.119625,'cc': 0.099169,'c': 0.219430,'l': 0.561776}
+frac[4]['el']["NNPDF30_nnlo_as_0118_62"] = {'bb': 0.142282,'cc': 0.137742,'c': 0.215678,'l': 0.504299}
+frac[5]['el']["NNPDF30_nnlo_as_0118_62"] = {'bb': 0.150516,'cc': 0.151129,'c': 0.210479,'l': 0.487876}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_62"] = {'bb': 0.084478,'cc': 0.062365,'c': 0.204636,'l': 0.648521}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_62"] = {'bb': 0.106401,'cc': 0.095168,'c': 0.211241,'l': 0.587189}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_62"] = {'bb': 0.126598,'cc': 0.128264,'c': 0.199394,'l': 0.545743}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_62"] = {'bb': 0.135656,'cc': 0.140781,'c': 0.194400,'l': 0.529164}
+# NNPDF30_nnlo_as_0118_63 
+frac[2]['el']["NNPDF30_nnlo_as_0118_63"] = {'bb': 0.095250,'cc': 0.065055,'c': 0.208268,'l': 0.631427}
+frac[3]['el']["NNPDF30_nnlo_as_0118_63"] = {'bb': 0.118559,'cc': 0.099982,'c': 0.218843,'l': 0.562616}
+frac[4]['el']["NNPDF30_nnlo_as_0118_63"] = {'bb': 0.141304,'cc': 0.138666,'c': 0.215508,'l': 0.504522}
+frac[5]['el']["NNPDF30_nnlo_as_0118_63"] = {'bb': 0.149609,'cc': 0.151929,'c': 0.210390,'l': 0.488071}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_63"] = {'bb': 0.083362,'cc': 0.062819,'c': 0.202966,'l': 0.650853}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_63"] = {'bb': 0.107615,'cc': 0.098047,'c': 0.215280,'l': 0.579058}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_63"] = {'bb': 0.131096,'cc': 0.134363,'c': 0.207582,'l': 0.526958}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_63"] = {'bb': 0.141114,'cc': 0.147882,'c': 0.203179,'l': 0.507825}
+# NNPDF30_nnlo_as_0118_64 
+frac[2]['el']["NNPDF30_nnlo_as_0118_64"] = {'bb': 0.095422,'cc': 0.065817,'c': 0.210993,'l': 0.627768}
+frac[3]['el']["NNPDF30_nnlo_as_0118_64"] = {'bb': 0.118622,'cc': 0.100975,'c': 0.219989,'l': 0.560415}
+frac[4]['el']["NNPDF30_nnlo_as_0118_64"] = {'bb': 0.141355,'cc': 0.140062,'c': 0.215454,'l': 0.503129}
+frac[5]['el']["NNPDF30_nnlo_as_0118_64"] = {'bb': 0.149629,'cc': 0.153384,'c': 0.209472,'l': 0.487516}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_64"] = {'bb': 0.083535,'cc': 0.063424,'c': 0.204383,'l': 0.648658}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_64"] = {'bb': 0.107790,'cc': 0.098684,'c': 0.215636,'l': 0.577890}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_64"] = {'bb': 0.131207,'cc': 0.135124,'c': 0.206550,'l': 0.527119}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_64"] = {'bb': 0.141234,'cc': 0.148660,'c': 0.201675,'l': 0.508431}
+# NNPDF30_nnlo_as_0118_65 
+frac[2]['el']["NNPDF30_nnlo_as_0118_65"] = {'bb': 0.095391,'cc': 0.064843,'c': 0.211729,'l': 0.628037}
+frac[3]['el']["NNPDF30_nnlo_as_0118_65"] = {'bb': 0.118636,'cc': 0.099746,'c': 0.220851,'l': 0.560767}
+frac[4]['el']["NNPDF30_nnlo_as_0118_65"] = {'bb': 0.141402,'cc': 0.138697,'c': 0.216033,'l': 0.503868}
+frac[5]['el']["NNPDF30_nnlo_as_0118_65"] = {'bb': 0.149654,'cc': 0.152000,'c': 0.210536,'l': 0.487810}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_65"] = {'bb': 0.084096,'cc': 0.062773,'c': 0.205631,'l': 0.647499}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_65"] = {'bb': 0.108273,'cc': 0.097807,'c': 0.216843,'l': 0.577077}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_65"] = {'bb': 0.131401,'cc': 0.134024,'c': 0.207244,'l': 0.527331}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_65"] = {'bb': 0.141416,'cc': 0.147814,'c': 0.202422,'l': 0.508349}
+# NNPDF30_nnlo_as_0118_66 
+frac[2]['el']["NNPDF30_nnlo_as_0118_66"] = {'bb': 0.095510,'cc': 0.065809,'c': 0.209639,'l': 0.629042}
+frac[3]['el']["NNPDF30_nnlo_as_0118_66"] = {'bb': 0.118638,'cc': 0.100818,'c': 0.219587,'l': 0.560956}
+frac[4]['el']["NNPDF30_nnlo_as_0118_66"] = {'bb': 0.141319,'cc': 0.139773,'c': 0.215796,'l': 0.503112}
+frac[5]['el']["NNPDF30_nnlo_as_0118_66"] = {'bb': 0.149664,'cc': 0.152973,'c': 0.210556,'l': 0.486806}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_66"] = {'bb': 0.084646,'cc': 0.064236,'c': 0.205902,'l': 0.645216}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_66"] = {'bb': 0.107503,'cc': 0.098491,'c': 0.215252,'l': 0.578755}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_66"] = {'bb': 0.131037,'cc': 0.135052,'c': 0.207473,'l': 0.526438}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_66"] = {'bb': 0.141090,'cc': 0.148582,'c': 0.202858,'l': 0.507470}
+# NNPDF30_nnlo_as_0118_67 
+frac[2]['el']["NNPDF30_nnlo_as_0118_67"] = {'bb': 0.095540,'cc': 0.065312,'c': 0.208340,'l': 0.630807}
+frac[3]['el']["NNPDF30_nnlo_as_0118_67"] = {'bb': 0.119162,'cc': 0.099856,'c': 0.216123,'l': 0.564859}
+frac[4]['el']["NNPDF30_nnlo_as_0118_67"] = {'bb': 0.142023,'cc': 0.138689,'c': 0.211715,'l': 0.507573}
+frac[5]['el']["NNPDF30_nnlo_as_0118_67"] = {'bb': 0.150321,'cc': 0.152235,'c': 0.205934,'l': 0.491509}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_67"] = {'bb': 0.083563,'cc': 0.063690,'c': 0.203806,'l': 0.648941}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_67"] = {'bb': 0.107585,'cc': 0.099172,'c': 0.214703,'l': 0.578540}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_67"] = {'bb': 0.130783,'cc': 0.135900,'c': 0.205857,'l': 0.527460}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_67"] = {'bb': 0.140870,'cc': 0.148707,'c': 0.201235,'l': 0.509189}
+# NNPDF30_nnlo_as_0118_68 
+frac[2]['el']["NNPDF30_nnlo_as_0118_68"] = {'bb': 0.095118,'cc': 0.065352,'c': 0.209705,'l': 0.629824}
+frac[3]['el']["NNPDF30_nnlo_as_0118_68"] = {'bb': 0.118356,'cc': 0.100277,'c': 0.219317,'l': 0.562050}
+frac[4]['el']["NNPDF30_nnlo_as_0118_68"] = {'bb': 0.141186,'cc': 0.139062,'c': 0.215089,'l': 0.504663}
+frac[5]['el']["NNPDF30_nnlo_as_0118_68"] = {'bb': 0.149366,'cc': 0.152331,'c': 0.210142,'l': 0.488162}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_68"] = {'bb': 0.083884,'cc': 0.063464,'c': 0.204453,'l': 0.648199}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_68"] = {'bb': 0.107617,'cc': 0.098407,'c': 0.215616,'l': 0.578360}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_68"] = {'bb': 0.130996,'cc': 0.134911,'c': 0.207112,'l': 0.526981}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_68"] = {'bb': 0.141016,'cc': 0.148466,'c': 0.202400,'l': 0.508117}
+# NNPDF30_nnlo_as_0118_69 
+frac[2]['el']["NNPDF30_nnlo_as_0118_69"] = {'bb': 0.095401,'cc': 0.065572,'c': 0.210912,'l': 0.628115}
+frac[3]['el']["NNPDF30_nnlo_as_0118_69"] = {'bb': 0.118547,'cc': 0.100568,'c': 0.220469,'l': 0.560416}
+frac[4]['el']["NNPDF30_nnlo_as_0118_69"] = {'bb': 0.141213,'cc': 0.139440,'c': 0.216200,'l': 0.503147}
+frac[5]['el']["NNPDF30_nnlo_as_0118_69"] = {'bb': 0.149574,'cc': 0.152709,'c': 0.210775,'l': 0.486941}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_69"] = {'bb': 0.084342,'cc': 0.063777,'c': 0.206219,'l': 0.645663}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_69"] = {'bb': 0.107744,'cc': 0.098210,'c': 0.216081,'l': 0.577965}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_69"] = {'bb': 0.131247,'cc': 0.134621,'c': 0.207456,'l': 0.526676}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_69"] = {'bb': 0.141333,'cc': 0.148152,'c': 0.202642,'l': 0.507872}
+# NNPDF30_nnlo_as_0118_70 
+frac[2]['el']["NNPDF30_nnlo_as_0118_70"] = {'bb': 0.095366,'cc': 0.066130,'c': 0.209364,'l': 0.629140}
+frac[3]['el']["NNPDF30_nnlo_as_0118_70"] = {'bb': 0.118449,'cc': 0.101369,'c': 0.218692,'l': 0.561490}
+frac[4]['el']["NNPDF30_nnlo_as_0118_70"] = {'bb': 0.141112,'cc': 0.140424,'c': 0.214233,'l': 0.504231}
+frac[5]['el']["NNPDF30_nnlo_as_0118_70"] = {'bb': 0.149441,'cc': 0.153723,'c': 0.208682,'l': 0.488154}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_70"] = {'bb': 0.084148,'cc': 0.064334,'c': 0.204772,'l': 0.646745}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_70"] = {'bb': 0.107593,'cc': 0.099274,'c': 0.214599,'l': 0.578534}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_70"] = {'bb': 0.130967,'cc': 0.135996,'c': 0.206112,'l': 0.526926}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_70"] = {'bb': 0.140981,'cc': 0.149554,'c': 0.201379,'l': 0.508086}
+# NNPDF30_nnlo_as_0118_71 
+frac[2]['el']["NNPDF30_nnlo_as_0118_71"] = {'bb': 0.095309,'cc': 0.065109,'c': 0.209302,'l': 0.630279}
+frac[3]['el']["NNPDF30_nnlo_as_0118_71"] = {'bb': 0.118642,'cc': 0.099699,'c': 0.218564,'l': 0.563095}
+frac[4]['el']["NNPDF30_nnlo_as_0118_71"] = {'bb': 0.141448,'cc': 0.138128,'c': 0.214781,'l': 0.505643}
+frac[5]['el']["NNPDF30_nnlo_as_0118_71"] = {'bb': 0.149811,'cc': 0.151444,'c': 0.209384,'l': 0.489361}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_71"] = {'bb': 0.083913,'cc': 0.063254,'c': 0.204867,'l': 0.647966}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_71"] = {'bb': 0.107585,'cc': 0.097813,'c': 0.214891,'l': 0.579711}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_71"] = {'bb': 0.131138,'cc': 0.133864,'c': 0.206649,'l': 0.528349}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_71"] = {'bb': 0.141213,'cc': 0.147350,'c': 0.202173,'l': 0.509264}
+# NNPDF30_nnlo_as_0118_72 
+frac[2]['el']["NNPDF30_nnlo_as_0118_72"] = {'bb': 0.095101,'cc': 0.065873,'c': 0.209244,'l': 0.629781}
+frac[3]['el']["NNPDF30_nnlo_as_0118_72"] = {'bb': 0.118312,'cc': 0.101244,'c': 0.219030,'l': 0.561414}
+frac[4]['el']["NNPDF30_nnlo_as_0118_72"] = {'bb': 0.141052,'cc': 0.140518,'c': 0.214789,'l': 0.503641}
+frac[5]['el']["NNPDF30_nnlo_as_0118_72"] = {'bb': 0.149297,'cc': 0.153777,'c': 0.209244,'l': 0.487682}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_72"] = {'bb': 0.083326,'cc': 0.063278,'c': 0.202270,'l': 0.651126}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_72"] = {'bb': 0.107653,'cc': 0.099084,'c': 0.214959,'l': 0.578304}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_72"] = {'bb': 0.130864,'cc': 0.135876,'c': 0.206499,'l': 0.526761}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_72"] = {'bb': 0.140833,'cc': 0.149463,'c': 0.201668,'l': 0.508036}
+# NNPDF30_nnlo_as_0118_73 
+frac[2]['el']["NNPDF30_nnlo_as_0118_73"] = {'bb': 0.095107,'cc': 0.065563,'c': 0.209628,'l': 0.629702}
+frac[3]['el']["NNPDF30_nnlo_as_0118_73"] = {'bb': 0.118251,'cc': 0.100482,'c': 0.218435,'l': 0.562832}
+frac[4]['el']["NNPDF30_nnlo_as_0118_73"] = {'bb': 0.140990,'cc': 0.139326,'c': 0.214091,'l': 0.505593}
+frac[5]['el']["NNPDF30_nnlo_as_0118_73"] = {'bb': 0.149315,'cc': 0.152670,'c': 0.208798,'l': 0.489216}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_73"] = {'bb': 0.084131,'cc': 0.063863,'c': 0.205317,'l': 0.646688}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_73"] = {'bb': 0.107802,'cc': 0.098772,'c': 0.215191,'l': 0.578235}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_73"] = {'bb': 0.130827,'cc': 0.135108,'c': 0.206158,'l': 0.527907}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_73"] = {'bb': 0.140892,'cc': 0.148698,'c': 0.201553,'l': 0.508857}
+# NNPDF30_nnlo_as_0118_74 
+frac[2]['el']["NNPDF30_nnlo_as_0118_74"] = {'bb': 0.095127,'cc': 0.066265,'c': 0.212348,'l': 0.626260}
+frac[3]['el']["NNPDF30_nnlo_as_0118_74"] = {'bb': 0.118256,'cc': 0.101527,'c': 0.221104,'l': 0.559113}
+frac[4]['el']["NNPDF30_nnlo_as_0118_74"] = {'bb': 0.141081,'cc': 0.140085,'c': 0.216103,'l': 0.502731}
+frac[5]['el']["NNPDF30_nnlo_as_0118_74"] = {'bb': 0.149429,'cc': 0.153343,'c': 0.210462,'l': 0.486765}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_74"] = {'bb': 0.084178,'cc': 0.063782,'c': 0.205293,'l': 0.646747}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_74"] = {'bb': 0.107632,'cc': 0.098508,'c': 0.215338,'l': 0.578522}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_74"] = {'bb': 0.131081,'cc': 0.135087,'c': 0.206834,'l': 0.526998}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_74"] = {'bb': 0.141127,'cc': 0.148653,'c': 0.202126,'l': 0.508094}
+# NNPDF30_nnlo_as_0118_75 
+frac[2]['el']["NNPDF30_nnlo_as_0118_75"] = {'bb': 0.095414,'cc': 0.065257,'c': 0.209640,'l': 0.629689}
+frac[3]['el']["NNPDF30_nnlo_as_0118_75"] = {'bb': 0.118610,'cc': 0.099929,'c': 0.219724,'l': 0.561737}
+frac[4]['el']["NNPDF30_nnlo_as_0118_75"] = {'bb': 0.141403,'cc': 0.138475,'c': 0.216262,'l': 0.503860}
+frac[5]['el']["NNPDF30_nnlo_as_0118_75"] = {'bb': 0.149716,'cc': 0.151871,'c': 0.211132,'l': 0.487281}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_75"] = {'bb': 0.084169,'cc': 0.063377,'c': 0.205244,'l': 0.647209}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_75"] = {'bb': 0.107519,'cc': 0.098057,'c': 0.215541,'l': 0.578883}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_75"] = {'bb': 0.131153,'cc': 0.133821,'c': 0.207846,'l': 0.527180}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_75"] = {'bb': 0.141262,'cc': 0.147320,'c': 0.203350,'l': 0.508068}
+# NNPDF30_nnlo_as_0118_76 
+frac[2]['el']["NNPDF30_nnlo_as_0118_76"] = {'bb': 0.095756,'cc': 0.065480,'c': 0.210155,'l': 0.628608}
+frac[3]['el']["NNPDF30_nnlo_as_0118_76"] = {'bb': 0.119227,'cc': 0.100368,'c': 0.219300,'l': 0.561105}
+frac[4]['el']["NNPDF30_nnlo_as_0118_76"] = {'bb': 0.142083,'cc': 0.139133,'c': 0.214912,'l': 0.503871}
+frac[5]['el']["NNPDF30_nnlo_as_0118_76"] = {'bb': 0.150259,'cc': 0.152378,'c': 0.209734,'l': 0.487628}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_76"] = {'bb': 0.084295,'cc': 0.063647,'c': 0.205548,'l': 0.646510}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_76"] = {'bb': 0.107774,'cc': 0.098309,'c': 0.215316,'l': 0.578601}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_76"] = {'bb': 0.131121,'cc': 0.134884,'c': 0.206966,'l': 0.527029}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_76"] = {'bb': 0.141160,'cc': 0.148470,'c': 0.202315,'l': 0.508054}
+# NNPDF30_nnlo_as_0118_77 
+frac[2]['el']["NNPDF30_nnlo_as_0118_77"] = {'bb': 0.095551,'cc': 0.065755,'c': 0.210132,'l': 0.628561}
+frac[3]['el']["NNPDF30_nnlo_as_0118_77"] = {'bb': 0.118595,'cc': 0.100658,'c': 0.219676,'l': 0.561071}
+frac[4]['el']["NNPDF30_nnlo_as_0118_77"] = {'bb': 0.141273,'cc': 0.139059,'c': 0.215498,'l': 0.504170}
+frac[5]['el']["NNPDF30_nnlo_as_0118_77"] = {'bb': 0.149567,'cc': 0.152308,'c': 0.210251,'l': 0.487874}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_77"] = {'bb': 0.083994,'cc': 0.064336,'c': 0.205879,'l': 0.645791}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_77"] = {'bb': 0.107026,'cc': 0.099043,'c': 0.216762,'l': 0.577169}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_77"] = {'bb': 0.130396,'cc': 0.135347,'c': 0.208627,'l': 0.525629}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_77"] = {'bb': 0.140434,'cc': 0.148779,'c': 0.203907,'l': 0.506880}
+# NNPDF30_nnlo_as_0118_78 
+frac[2]['el']["NNPDF30_nnlo_as_0118_78"] = {'bb': 0.095230,'cc': 0.066449,'c': 0.209506,'l': 0.628816}
+frac[3]['el']["NNPDF30_nnlo_as_0118_78"] = {'bb': 0.118474,'cc': 0.101761,'c': 0.218460,'l': 0.561305}
+frac[4]['el']["NNPDF30_nnlo_as_0118_78"] = {'bb': 0.141084,'cc': 0.140884,'c': 0.213837,'l': 0.504195}
+frac[5]['el']["NNPDF30_nnlo_as_0118_78"] = {'bb': 0.149426,'cc': 0.154246,'c': 0.207989,'l': 0.488338}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_78"] = {'bb': 0.083445,'cc': 0.064298,'c': 0.203379,'l': 0.648878}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_78"] = {'bb': 0.107122,'cc': 0.099888,'c': 0.214770,'l': 0.578220}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_78"] = {'bb': 0.130516,'cc': 0.136612,'c': 0.205994,'l': 0.526878}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_78"] = {'bb': 0.140627,'cc': 0.149667,'c': 0.201292,'l': 0.508415}
+# NNPDF30_nnlo_as_0118_79 
+frac[2]['el']["NNPDF30_nnlo_as_0118_79"] = {'bb': 0.095468,'cc': 0.065554,'c': 0.209821,'l': 0.629156}
+frac[3]['el']["NNPDF30_nnlo_as_0118_79"] = {'bb': 0.118903,'cc': 0.100832,'c': 0.218725,'l': 0.561540}
+frac[4]['el']["NNPDF30_nnlo_as_0118_79"] = {'bb': 0.141409,'cc': 0.140029,'c': 0.214169,'l': 0.504392}
+frac[5]['el']["NNPDF30_nnlo_as_0118_79"] = {'bb': 0.149709,'cc': 0.153422,'c': 0.208267,'l': 0.488602}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_79"] = {'bb': 0.083762,'cc': 0.063334,'c': 0.203640,'l': 0.649264}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_79"] = {'bb': 0.107926,'cc': 0.098702,'c': 0.214482,'l': 0.578889}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_79"] = {'bb': 0.131171,'cc': 0.135392,'c': 0.205628,'l': 0.527809}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_79"] = {'bb': 0.141149,'cc': 0.148997,'c': 0.200960,'l': 0.508895}
+# NNPDF30_nnlo_as_0118_80 
+frac[2]['el']["NNPDF30_nnlo_as_0118_80"] = {'bb': 0.095458,'cc': 0.065466,'c': 0.210191,'l': 0.628886}
+frac[3]['el']["NNPDF30_nnlo_as_0118_80"] = {'bb': 0.118604,'cc': 0.100590,'c': 0.219115,'l': 0.561691}
+frac[4]['el']["NNPDF30_nnlo_as_0118_80"] = {'bb': 0.141361,'cc': 0.139571,'c': 0.214766,'l': 0.504301}
+frac[5]['el']["NNPDF30_nnlo_as_0118_80"] = {'bb': 0.149666,'cc': 0.152931,'c': 0.209522,'l': 0.487882}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_80"] = {'bb': 0.085748,'cc': 0.063524,'c': 0.204856,'l': 0.645872}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_80"] = {'bb': 0.108625,'cc': 0.098333,'c': 0.214612,'l': 0.578430}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_80"] = {'bb': 0.131561,'cc': 0.135000,'c': 0.206371,'l': 0.527068}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_80"] = {'bb': 0.141552,'cc': 0.148638,'c': 0.201775,'l': 0.508035}
+# NNPDF30_nnlo_as_0118_81 
+frac[2]['el']["NNPDF30_nnlo_as_0118_81"] = {'bb': 0.095350,'cc': 0.065613,'c': 0.210238,'l': 0.628799}
+frac[3]['el']["NNPDF30_nnlo_as_0118_81"] = {'bb': 0.118581,'cc': 0.100716,'c': 0.220081,'l': 0.560622}
+frac[4]['el']["NNPDF30_nnlo_as_0118_81"] = {'bb': 0.141273,'cc': 0.139698,'c': 0.215808,'l': 0.503222}
+frac[5]['el']["NNPDF30_nnlo_as_0118_81"] = {'bb': 0.149572,'cc': 0.152988,'c': 0.210037,'l': 0.487403}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_81"] = {'bb': 0.083979,'cc': 0.063917,'c': 0.205939,'l': 0.646165}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_81"] = {'bb': 0.107346,'cc': 0.099023,'c': 0.216814,'l': 0.576817}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_81"] = {'bb': 0.130619,'cc': 0.135673,'c': 0.208442,'l': 0.525265}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_81"] = {'bb': 0.140618,'cc': 0.149148,'c': 0.203527,'l': 0.506707}
+# NNPDF30_nnlo_as_0118_82 
+frac[2]['el']["NNPDF30_nnlo_as_0118_82"] = {'bb': 0.095366,'cc': 0.066047,'c': 0.209585,'l': 0.629003}
+frac[3]['el']["NNPDF30_nnlo_as_0118_82"] = {'bb': 0.118463,'cc': 0.101333,'c': 0.220059,'l': 0.560145}
+frac[4]['el']["NNPDF30_nnlo_as_0118_82"] = {'bb': 0.141051,'cc': 0.140205,'c': 0.216196,'l': 0.502548}
+frac[5]['el']["NNPDF30_nnlo_as_0118_82"] = {'bb': 0.149398,'cc': 0.153458,'c': 0.210695,'l': 0.486449}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_82"] = {'bb': 0.083967,'cc': 0.064008,'c': 0.204264,'l': 0.647762}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_82"] = {'bb': 0.107483,'cc': 0.098958,'c': 0.215700,'l': 0.577860}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_82"] = {'bb': 0.131033,'cc': 0.135479,'c': 0.207633,'l': 0.525854}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_82"] = {'bb': 0.141074,'cc': 0.149025,'c': 0.202894,'l': 0.507007}
+# NNPDF30_nnlo_as_0118_83 
+frac[2]['el']["NNPDF30_nnlo_as_0118_83"] = {'bb': 0.095473,'cc': 0.065549,'c': 0.209658,'l': 0.629320}
+frac[3]['el']["NNPDF30_nnlo_as_0118_83"] = {'bb': 0.118675,'cc': 0.100410,'c': 0.219848,'l': 0.561067}
+frac[4]['el']["NNPDF30_nnlo_as_0118_83"] = {'bb': 0.141414,'cc': 0.139072,'c': 0.216361,'l': 0.503153}
+frac[5]['el']["NNPDF30_nnlo_as_0118_83"] = {'bb': 0.149735,'cc': 0.152314,'c': 0.211257,'l': 0.486694}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_83"] = {'bb': 0.080776,'cc': 0.061199,'c': 0.197044,'l': 0.660981}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_83"] = {'bb': 0.110169,'cc': 0.100658,'c': 0.221150,'l': 0.568023}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_83"] = {'bb': 0.137876,'cc': 0.141553,'c': 0.218845,'l': 0.501725}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_83"] = {'bb': 0.149285,'cc': 0.156631,'c': 0.215215,'l': 0.478869}
+# NNPDF30_nnlo_as_0118_84 
+frac[2]['el']["NNPDF30_nnlo_as_0118_84"] = {'bb': 0.095294,'cc': 0.065787,'c': 0.209009,'l': 0.629910}
+frac[3]['el']["NNPDF30_nnlo_as_0118_84"] = {'bb': 0.118468,'cc': 0.100999,'c': 0.219190,'l': 0.561344}
+frac[4]['el']["NNPDF30_nnlo_as_0118_84"] = {'bb': 0.141239,'cc': 0.139999,'c': 0.215111,'l': 0.503650}
+frac[5]['el']["NNPDF30_nnlo_as_0118_84"] = {'bb': 0.149476,'cc': 0.153259,'c': 0.209623,'l': 0.487642}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_84"] = {'bb': 0.083366,'cc': 0.063451,'c': 0.202352,'l': 0.650831}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_84"] = {'bb': 0.107607,'cc': 0.098939,'c': 0.215283,'l': 0.578171}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_84"] = {'bb': 0.130970,'cc': 0.135590,'c': 0.206998,'l': 0.526442}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_84"] = {'bb': 0.140935,'cc': 0.149117,'c': 0.202268,'l': 0.507680}
+# NNPDF30_nnlo_as_0118_85 
+frac[2]['el']["NNPDF30_nnlo_as_0118_85"] = {'bb': 0.095384,'cc': 0.065459,'c': 0.209182,'l': 0.629975}
+frac[3]['el']["NNPDF30_nnlo_as_0118_85"] = {'bb': 0.118603,'cc': 0.100281,'c': 0.218981,'l': 0.562136}
+frac[4]['el']["NNPDF30_nnlo_as_0118_85"] = {'bb': 0.141401,'cc': 0.138991,'c': 0.215347,'l': 0.504261}
+frac[5]['el']["NNPDF30_nnlo_as_0118_85"] = {'bb': 0.149756,'cc': 0.152288,'c': 0.209907,'l': 0.488049}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_85"] = {'bb': 0.084552,'cc': 0.063902,'c': 0.205629,'l': 0.645917}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_85"] = {'bb': 0.107563,'cc': 0.098141,'c': 0.214898,'l': 0.579398}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_85"] = {'bb': 0.131080,'cc': 0.134424,'c': 0.206918,'l': 0.527578}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_85"] = {'bb': 0.141132,'cc': 0.147949,'c': 0.202440,'l': 0.508479}
+# NNPDF30_nnlo_as_0118_86 
+frac[2]['el']["NNPDF30_nnlo_as_0118_86"] = {'bb': 0.095541,'cc': 0.065625,'c': 0.211309,'l': 0.627525}
+frac[3]['el']["NNPDF30_nnlo_as_0118_86"] = {'bb': 0.118702,'cc': 0.100542,'c': 0.219829,'l': 0.560927}
+frac[4]['el']["NNPDF30_nnlo_as_0118_86"] = {'bb': 0.141514,'cc': 0.139201,'c': 0.214668,'l': 0.504617}
+frac[5]['el']["NNPDF30_nnlo_as_0118_86"] = {'bb': 0.149894,'cc': 0.152535,'c': 0.208926,'l': 0.488644}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_86"] = {'bb': 0.084136,'cc': 0.063706,'c': 0.205940,'l': 0.646218}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_86"] = {'bb': 0.107861,'cc': 0.098545,'c': 0.215573,'l': 0.578021}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_86"] = {'bb': 0.131242,'cc': 0.135099,'c': 0.206974,'l': 0.526686}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_86"] = {'bb': 0.141317,'cc': 0.148754,'c': 0.202135,'l': 0.507794}
+# NNPDF30_nnlo_as_0118_87 
+frac[2]['el']["NNPDF30_nnlo_as_0118_87"] = {'bb': 0.095300,'cc': 0.065849,'c': 0.209555,'l': 0.629296}
+frac[3]['el']["NNPDF30_nnlo_as_0118_87"] = {'bb': 0.118526,'cc': 0.101191,'c': 0.219255,'l': 0.561028}
+frac[4]['el']["NNPDF30_nnlo_as_0118_87"] = {'bb': 0.141144,'cc': 0.140314,'c': 0.214633,'l': 0.503909}
+frac[5]['el']["NNPDF30_nnlo_as_0118_87"] = {'bb': 0.149483,'cc': 0.153685,'c': 0.208640,'l': 0.488192}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_87"] = {'bb': 0.083600,'cc': 0.063627,'c': 0.203638,'l': 0.649135}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_87"] = {'bb': 0.107610,'cc': 0.099054,'c': 0.214999,'l': 0.578337}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_87"] = {'bb': 0.130973,'cc': 0.135731,'c': 0.206330,'l': 0.526966}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_87"] = {'bb': 0.140959,'cc': 0.149305,'c': 0.201568,'l': 0.508169}
+# NNPDF30_nnlo_as_0118_88 
+frac[2]['el']["NNPDF30_nnlo_as_0118_88"] = {'bb': 0.095326,'cc': 0.066000,'c': 0.208558,'l': 0.630116}
+frac[3]['el']["NNPDF30_nnlo_as_0118_88"] = {'bb': 0.118530,'cc': 0.101136,'c': 0.218375,'l': 0.561959}
+frac[4]['el']["NNPDF30_nnlo_as_0118_88"] = {'bb': 0.141180,'cc': 0.140071,'c': 0.214550,'l': 0.504198}
+frac[5]['el']["NNPDF30_nnlo_as_0118_88"] = {'bb': 0.148788,'cc': 0.153432,'c': 0.209715,'l': 0.488065}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_88"] = {'bb': 0.083612,'cc': 0.063873,'c': 0.202929,'l': 0.649585}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_88"] = {'bb': 0.107453,'cc': 0.099112,'c': 0.214718,'l': 0.578717}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_88"] = {'bb': 0.130973,'cc': 0.135720,'c': 0.206604,'l': 0.526703}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_88"] = {'bb': 0.141021,'cc': 0.149255,'c': 0.201989,'l': 0.507735}
+# NNPDF30_nnlo_as_0118_89 
+frac[2]['el']["NNPDF30_nnlo_as_0118_89"] = {'bb': 0.095682,'cc': 0.065281,'c': 0.210396,'l': 0.628641}
+frac[3]['el']["NNPDF30_nnlo_as_0118_89"] = {'bb': 0.118817,'cc': 0.099987,'c': 0.219850,'l': 0.561346}
+frac[4]['el']["NNPDF30_nnlo_as_0118_89"] = {'bb': 0.141578,'cc': 0.138551,'c': 0.215853,'l': 0.504018}
+frac[5]['el']["NNPDF30_nnlo_as_0118_89"] = {'bb': 0.149911,'cc': 0.151883,'c': 0.210445,'l': 0.487761}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_89"] = {'bb': 0.084666,'cc': 0.063800,'c': 0.206391,'l': 0.645143}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_89"] = {'bb': 0.107811,'cc': 0.097892,'c': 0.215606,'l': 0.578691}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_89"] = {'bb': 0.131308,'cc': 0.134098,'c': 0.207675,'l': 0.526920}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_89"] = {'bb': 0.141369,'cc': 0.147641,'c': 0.203079,'l': 0.507911}
+# NNPDF30_nnlo_as_0118_90 
+frac[2]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.095534,'cc': 0.065632,'c': 0.209458,'l': 0.629377}
+frac[3]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.118638,'cc': 0.100452,'c': 0.219178,'l': 0.561732}
+frac[4]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.141436,'cc': 0.139177,'c': 0.215622,'l': 0.503765}
+frac[5]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.149601,'cc': 0.152367,'c': 0.211240,'l': 0.486792}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.085222,'cc': 0.064679,'c': 0.207393,'l': 0.642706}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.107651,'cc': 0.098268,'c': 0.214974,'l': 0.579107}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.131049,'cc': 0.134843,'c': 0.207364,'l': 0.526743}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.141129,'cc': 0.148437,'c': 0.202912,'l': 0.507523}
+# NNPDF30_nnlo_as_0118_91 
+frac[2]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.095457,'cc': 0.065391,'c': 0.210532,'l': 0.628620}
+frac[3]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.118576,'cc': 0.100375,'c': 0.220149,'l': 0.560901}
+frac[4]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.141302,'cc': 0.139205,'c': 0.215836,'l': 0.503658}
+frac[5]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.149642,'cc': 0.152515,'c': 0.210407,'l': 0.487435}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.083804,'cc': 0.063222,'c': 0.204668,'l': 0.648306}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.107750,'cc': 0.098304,'c': 0.216018,'l': 0.577927}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.131253,'cc': 0.134743,'c': 0.207520,'l': 0.526484}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.141283,'cc': 0.148335,'c': 0.202801,'l': 0.507581}
+# NNPDF30_nnlo_as_0118_92 
+frac[2]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.095294,'cc': 0.065997,'c': 0.209364,'l': 0.629345}
+frac[3]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.118500,'cc': 0.101033,'c': 0.219270,'l': 0.561197}
+frac[4]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.141240,'cc': 0.139808,'c': 0.215160,'l': 0.503792}
+frac[5]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.149520,'cc': 0.153045,'c': 0.210021,'l': 0.487413}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.083883,'cc': 0.064064,'c': 0.204298,'l': 0.647755}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.107399,'cc': 0.098993,'c': 0.215325,'l': 0.578283}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.130914,'cc': 0.135399,'c': 0.207077,'l': 0.526609}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.140954,'cc': 0.148932,'c': 0.202385,'l': 0.507728}
+# NNPDF30_nnlo_as_0118_93 
+frac[2]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.095449,'cc': 0.065215,'c': 0.209767,'l': 0.629569}
+frac[3]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.118695,'cc': 0.099966,'c': 0.219768,'l': 0.561572}
+frac[4]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.141527,'cc': 0.138559,'c': 0.216158,'l': 0.503756}
+frac[5]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.149802,'cc': 0.151793,'c': 0.211185,'l': 0.487219}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.084198,'cc': 0.063482,'c': 0.205695,'l': 0.646625}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.107666,'cc': 0.097917,'c': 0.215824,'l': 0.578592}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.131196,'cc': 0.134134,'c': 0.207925,'l': 0.526745}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.141246,'cc': 0.147643,'c': 0.203429,'l': 0.507683}
+# NNPDF30_nnlo_as_0118_94 
+frac[2]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.095238,'cc': 0.065882,'c': 0.208223,'l': 0.630657}
+frac[3]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.118390,'cc': 0.101291,'c': 0.217894,'l': 0.562426}
+frac[4]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.140971,'cc': 0.140285,'c': 0.213297,'l': 0.505446}
+frac[5]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.149252,'cc': 0.153580,'c': 0.207938,'l': 0.489230}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.083068,'cc': 0.063323,'c': 0.200618,'l': 0.652990}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.107602,'cc': 0.099157,'c': 0.213568,'l': 0.579673}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.130776,'cc': 0.135692,'c': 0.204944,'l': 0.528588}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.140685,'cc': 0.149202,'c': 0.200313,'l': 0.509800}
+# NNPDF30_nnlo_as_0118_95 
+frac[2]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.094870,'cc': 0.064872,'c': 0.209703,'l': 0.630555}
+frac[3]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.117223,'cc': 0.098642,'c': 0.215004,'l': 0.569131}
+frac[4]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.138053,'cc': 0.134857,'c': 0.207814,'l': 0.519276}
+frac[5]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.146006,'cc': 0.147428,'c': 0.202006,'l': 0.504560}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.083789,'cc': 0.063198,'c': 0.203914,'l': 0.649099}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.107654,'cc': 0.098135,'c': 0.214044,'l': 0.580167}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.131000,'cc': 0.134384,'c': 0.205681,'l': 0.528934}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.141043,'cc': 0.147969,'c': 0.201212,'l': 0.509775}
+# NNPDF30_nnlo_as_0118_96 
+frac[2]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.095415,'cc': 0.065606,'c': 0.210924,'l': 0.628055}
+frac[3]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.118672,'cc': 0.100742,'c': 0.219769,'l': 0.560818}
+frac[4]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.141521,'cc': 0.139724,'c': 0.214636,'l': 0.504119}
+frac[5]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.149872,'cc': 0.153070,'c': 0.208683,'l': 0.488376}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.084539,'cc': 0.062286,'c': 0.201530,'l': 0.651645}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.108389,'cc': 0.097285,'c': 0.211974,'l': 0.582351}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.131563,'cc': 0.134164,'c': 0.204334,'l': 0.529939}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.141521,'cc': 0.147901,'c': 0.199747,'l': 0.510831}
+# NNPDF30_nnlo_as_0118_97 
+frac[2]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.095184,'cc': 0.065359,'c': 0.211302,'l': 0.628155}
+frac[3]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.118337,'cc': 0.100268,'c': 0.220637,'l': 0.560758}
+frac[4]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.141001,'cc': 0.139322,'c': 0.215716,'l': 0.503961}
+frac[5]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.149244,'cc': 0.152588,'c': 0.209983,'l': 0.488185}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.083459,'cc': 0.062934,'c': 0.204496,'l': 0.649112}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.107748,'cc': 0.098359,'c': 0.216536,'l': 0.577358}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.130430,'cc': 0.134971,'c': 0.207505,'l': 0.527094}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.140271,'cc': 0.148545,'c': 0.202573,'l': 0.508611}
+# NNPDF30_nnlo_as_0118_98 
+frac[2]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.095403,'cc': 0.065887,'c': 0.210066,'l': 0.628645}
+frac[3]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.118489,'cc': 0.101697,'c': 0.219335,'l': 0.560479}
+frac[4]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.141188,'cc': 0.140100,'c': 0.214766,'l': 0.503946}
+frac[5]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.149401,'cc': 0.153354,'c': 0.209378,'l': 0.487867}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.083690,'cc': 0.063767,'c': 0.204311,'l': 0.648232}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.107630,'cc': 0.099043,'c': 0.215302,'l': 0.578026}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.130937,'cc': 0.135688,'c': 0.206530,'l': 0.526845}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.140924,'cc': 0.149254,'c': 0.201699,'l': 0.508123}
+# NNPDF30_nnlo_as_0118_99 
+frac[2]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.095400,'cc': 0.065937,'c': 0.208751,'l': 0.629912}
+frac[3]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.118485,'cc': 0.100965,'c': 0.218724,'l': 0.561827}
+frac[4]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.141191,'cc': 0.139869,'c': 0.214764,'l': 0.504176}
+frac[5]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.149513,'cc': 0.153123,'c': 0.209237,'l': 0.488127}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.084629,'cc': 0.064507,'c': 0.205546,'l': 0.645319}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.107358,'cc': 0.098816,'c': 0.214651,'l': 0.579174}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.130908,'cc': 0.135315,'c': 0.206574,'l': 0.527203}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.140931,'cc': 0.148857,'c': 0.201944,'l': 0.508268}
+# NNPDF30_nnlo_as_0118_90 
+frac[2]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.095534,'cc': 0.065632,'c': 0.209458,'l': 0.629377}
+frac[3]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.118638,'cc': 0.100452,'c': 0.219178,'l': 0.561732}
+frac[4]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.141436,'cc': 0.139177,'c': 0.215622,'l': 0.503765}
+frac[5]['el']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.149601,'cc': 0.152367,'c': 0.211240,'l': 0.486792}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.085222,'cc': 0.064679,'c': 0.207393,'l': 0.642706}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.107651,'cc': 0.098268,'c': 0.214974,'l': 0.579107}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.131049,'cc': 0.134843,'c': 0.207364,'l': 0.526743}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_90"] = {'bb': 0.141129,'cc': 0.148437,'c': 0.202912,'l': 0.507523}
+# NNPDF30_nnlo_as_0118_91 
+frac[2]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.095457,'cc': 0.065391,'c': 0.210532,'l': 0.628620}
+frac[3]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.118576,'cc': 0.100375,'c': 0.220149,'l': 0.560901}
+frac[4]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.141302,'cc': 0.139205,'c': 0.215836,'l': 0.503658}
+frac[5]['el']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.149642,'cc': 0.152515,'c': 0.210407,'l': 0.487435}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.083804,'cc': 0.063222,'c': 0.204668,'l': 0.648306}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.107750,'cc': 0.098304,'c': 0.216018,'l': 0.577927}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.131253,'cc': 0.134743,'c': 0.207520,'l': 0.526484}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_91"] = {'bb': 0.141283,'cc': 0.148335,'c': 0.202801,'l': 0.507581}
+# NNPDF30_nnlo_as_0118_92 
+frac[2]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.095294,'cc': 0.065997,'c': 0.209364,'l': 0.629345}
+frac[3]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.118500,'cc': 0.101033,'c': 0.219270,'l': 0.561197}
+frac[4]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.141240,'cc': 0.139808,'c': 0.215160,'l': 0.503792}
+frac[5]['el']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.149520,'cc': 0.153045,'c': 0.210021,'l': 0.487413}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.083883,'cc': 0.064064,'c': 0.204298,'l': 0.647755}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.107399,'cc': 0.098993,'c': 0.215325,'l': 0.578283}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.130914,'cc': 0.135399,'c': 0.207077,'l': 0.526609}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_92"] = {'bb': 0.140954,'cc': 0.148932,'c': 0.202385,'l': 0.507728}
+# NNPDF30_nnlo_as_0118_93 
+frac[2]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.095449,'cc': 0.065215,'c': 0.209767,'l': 0.629569}
+frac[3]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.118695,'cc': 0.099966,'c': 0.219768,'l': 0.561572}
+frac[4]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.141527,'cc': 0.138559,'c': 0.216158,'l': 0.503756}
+frac[5]['el']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.149802,'cc': 0.151793,'c': 0.211185,'l': 0.487219}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.084198,'cc': 0.063482,'c': 0.205695,'l': 0.646625}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.107666,'cc': 0.097917,'c': 0.215824,'l': 0.578592}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.131196,'cc': 0.134134,'c': 0.207925,'l': 0.526745}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_93"] = {'bb': 0.141246,'cc': 0.147643,'c': 0.203429,'l': 0.507683}
+# NNPDF30_nnlo_as_0118_94 
+frac[2]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.095238,'cc': 0.065882,'c': 0.208223,'l': 0.630657}
+frac[3]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.118390,'cc': 0.101291,'c': 0.217894,'l': 0.562426}
+frac[4]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.140971,'cc': 0.140285,'c': 0.213297,'l': 0.505446}
+frac[5]['el']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.149252,'cc': 0.153580,'c': 0.207938,'l': 0.489230}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.083068,'cc': 0.063323,'c': 0.200618,'l': 0.652990}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.107602,'cc': 0.099157,'c': 0.213568,'l': 0.579673}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.130776,'cc': 0.135692,'c': 0.204944,'l': 0.528588}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_94"] = {'bb': 0.140685,'cc': 0.149202,'c': 0.200313,'l': 0.509800}
+# NNPDF30_nnlo_as_0118_95 
+frac[2]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.094870,'cc': 0.064872,'c': 0.209703,'l': 0.630555}
+frac[3]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.117223,'cc': 0.098642,'c': 0.215004,'l': 0.569131}
+frac[4]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.138053,'cc': 0.134857,'c': 0.207814,'l': 0.519276}
+frac[5]['el']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.146006,'cc': 0.147428,'c': 0.202006,'l': 0.504560}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.083789,'cc': 0.063198,'c': 0.203914,'l': 0.649099}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.107654,'cc': 0.098135,'c': 0.214044,'l': 0.580167}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.131000,'cc': 0.134384,'c': 0.205681,'l': 0.528934}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_95"] = {'bb': 0.141043,'cc': 0.147969,'c': 0.201212,'l': 0.509775}
+# NNPDF30_nnlo_as_0118_96 
+frac[2]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.095415,'cc': 0.065606,'c': 0.210924,'l': 0.628055}
+frac[3]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.118672,'cc': 0.100742,'c': 0.219769,'l': 0.560818}
+frac[4]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.141521,'cc': 0.139724,'c': 0.214636,'l': 0.504119}
+frac[5]['el']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.149872,'cc': 0.153070,'c': 0.208683,'l': 0.488376}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.084539,'cc': 0.062286,'c': 0.201530,'l': 0.651645}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.108389,'cc': 0.097285,'c': 0.211974,'l': 0.582351}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.131563,'cc': 0.134164,'c': 0.204334,'l': 0.529939}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_96"] = {'bb': 0.141521,'cc': 0.147901,'c': 0.199747,'l': 0.510831}
+# NNPDF30_nnlo_as_0118_97 
+frac[2]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.095184,'cc': 0.065359,'c': 0.211302,'l': 0.628155}
+frac[3]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.118337,'cc': 0.100268,'c': 0.220637,'l': 0.560758}
+frac[4]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.141001,'cc': 0.139322,'c': 0.215716,'l': 0.503961}
+frac[5]['el']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.149244,'cc': 0.152588,'c': 0.209983,'l': 0.488185}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.083459,'cc': 0.062934,'c': 0.204496,'l': 0.649112}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.107748,'cc': 0.098359,'c': 0.216536,'l': 0.577358}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.130430,'cc': 0.134971,'c': 0.207505,'l': 0.527094}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_97"] = {'bb': 0.140271,'cc': 0.148545,'c': 0.202573,'l': 0.508611}
+# NNPDF30_nnlo_as_0118_98 
+frac[2]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.095403,'cc': 0.065887,'c': 0.210066,'l': 0.628645}
+frac[3]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.118489,'cc': 0.101697,'c': 0.219335,'l': 0.560479}
+frac[4]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.141188,'cc': 0.140100,'c': 0.214766,'l': 0.503946}
+frac[5]['el']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.149401,'cc': 0.153354,'c': 0.209378,'l': 0.487867}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.083690,'cc': 0.063767,'c': 0.204311,'l': 0.648232}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.107630,'cc': 0.099043,'c': 0.215302,'l': 0.578026}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.130937,'cc': 0.135688,'c': 0.206530,'l': 0.526845}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_98"] = {'bb': 0.140924,'cc': 0.149254,'c': 0.201699,'l': 0.508123}
+# NNPDF30_nnlo_as_0118_99 
+frac[2]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.095400,'cc': 0.065937,'c': 0.208751,'l': 0.629912}
+frac[3]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.118485,'cc': 0.100965,'c': 0.218724,'l': 0.561827}
+frac[4]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.141191,'cc': 0.139869,'c': 0.214764,'l': 0.504176}
+frac[5]['el']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.149513,'cc': 0.153123,'c': 0.209237,'l': 0.488127}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.084629,'cc': 0.064507,'c': 0.205546,'l': 0.645319}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.107358,'cc': 0.098816,'c': 0.214651,'l': 0.579174}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.130908,'cc': 0.135315,'c': 0.206574,'l': 0.527203}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_99"] = {'bb': 0.140931,'cc': 0.148857,'c': 0.201944,'l': 0.508268}
+# NNPDF30_nnlo_as_0118_100 
+frac[2]['el']["NNPDF30_nnlo_as_0118_100"] = {'bb': 0.095510,'cc': 0.065613,'c': 0.209885,'l': 0.628993}
+frac[3]['el']["NNPDF30_nnlo_as_0118_100"] = {'bb': 0.118549,'cc': 0.100716,'c': 0.218995,'l': 0.561740}
+frac[4]['el']["NNPDF30_nnlo_as_0118_100"] = {'bb': 0.141213,'cc': 0.139673,'c': 0.214452,'l': 0.504661}
+frac[5]['el']["NNPDF30_nnlo_as_0118_100"] = {'bb': 0.149533,'cc': 0.153039,'c': 0.208728,'l': 0.488700}
+frac[2]['mu']["NNPDF30_nnlo_as_0118_100"] = {'bb': 0.083810,'cc': 0.063515,'c': 0.204005,'l': 0.648670}
+frac[3]['mu']["NNPDF30_nnlo_as_0118_100"] = {'bb': 0.108784,'cc': 0.099546,'c': 0.216853,'l': 0.574818}
+frac[4]['mu']["NNPDF30_nnlo_as_0118_100"] = {'bb': 0.130922,'cc': 0.134980,'c': 0.205870,'l': 0.528228}
+frac[5]['mu']["NNPDF30_nnlo_as_0118_100"] = {'bb': 0.140946,'cc': 0.148566,'c': 0.201234,'l': 0.509253}
+

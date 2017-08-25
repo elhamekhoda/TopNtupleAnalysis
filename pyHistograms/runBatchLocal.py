@@ -21,9 +21,22 @@ def main():
 	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljets'
 	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljets'
 
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_extra'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_extra'
+
+	#outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjetspdf'
+	#outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjetspdf'
+	#outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjetspdf'
+	#outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjetspdf'
+	#outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljetspdf'
+	#outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljetspdf'
+
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_signal'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_signal'
+
 	# number of files per job
-	#nFilesPerJob = 40
-	nFilesPerJob = 8
+	#nFilesPerJob = 1000
+	nFilesPerJob = 20
 
 	# use it to setup AnalysisTop
 	# change this for the place where you setup RootCore
@@ -45,7 +58,9 @@ def main():
 	
 	# leave it for nominal to run only the nominal
 	#systematics = 'nominal'
+	#systematics = 'nominal,2to3ex,ttEWK__1up,ttEWK__1down'
 	systematics = 'all,'
+	#systematics = 'pdf'
 	#systematics = 'all1'
 	#systematics = 'all2'
 	#systematics = 'all3'
@@ -114,9 +129,10 @@ def main():
 
 	#names  += ['wbbjets']
 	#names  += ['wccjets']
+
 	#names  += ['wbbccjets']
 	#names  += ['wcjets']
-	names  += ['wljets']
+	#names  += ['wljets']
 
 	#names  += ['wbbjetspdf']
 	#names  += ['wccjetspdf']
@@ -134,10 +150,17 @@ def main():
 	#names  += ['eftl100c10']
 	
 	#for k in ["10", "15", "20", "25", "30", "35", "40"]:
-	#	names  += ['kkg1000w%s'%k]
-	#	names  += ['kkg2000w%s'%k]
-	#	names  += ['kkg3000w%s'%k]
-	#	names  += ['kkg4000w%s'%k]
+	for k in ["25", "35", "40"]:
+		names  += ['kkg500w%s'%k]
+		names  += ['kkg1000w%s'%k]
+		names  += ['kkg1500w%s'%k]
+		names  += ['kkg2000w%s'%k]
+		names  += ['kkg2500w%s'%k]
+		names  += ['kkg3000w%s'%k]
+		names  += ['kkg3500w%s'%k]
+		names  += ['kkg4000w%s'%k]
+		names  += ['kkg4500w%s'%k]
+		names  += ['kkg5000w%s'%k]
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
@@ -369,7 +392,7 @@ def main():
 			ds = glob.glob(ntuplesDir+'/*SystNewv3*')
 		elif sn == 'data':
 			ds = glob.glob(ntuplesDir+'/user.dferreir.00*15032017v*')
-		elif sn in ['wbbjetspdf', 'wccjetspdf', 'wcjetspdf', 'wljetspdf']:
+		elif sn in ['wbbjetspdf', 'wccjetspdf', 'wbbccjetspdf', 'wcjetspdf', 'wljetspdf']:
 			ds = glob.glob(ntuplesDir+'/*PDFv*')
 
 		for d in ds:
@@ -533,6 +556,7 @@ def main():
 			os.system('chmod a+x '+runfile)
 			#subcmd = 'bsub <'+runfile + "|tee "+logfile
 			subcmd = 'qsub '+runfile + "|tee "+logfile
+			#subcmd = runfile
 			fcmd.write(subcmd+"\n")
 			os.system(subcmd)
 			#sys.exit(0)
