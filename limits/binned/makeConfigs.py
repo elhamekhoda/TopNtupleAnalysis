@@ -112,38 +112,73 @@ suf = ""
 import sys
 if len(sys.argv) > 1:
   suf = sys.argv[1]
+
+# nominal
 fixFile('ttres.config', 'ttres_bkg%s.config' % suf, "bkg%s" %suf, "bkg%s" %suf, True)
 system('cp -f hist_zprime1000.root hist_bkg%s.root' %suf) ## use a dummy signal for the background only fit
 jobSubmit('bkg%s' %suf)
 
-#fixFile('ttres_cat3.config', 'ttres_bkg_cat3%s.config' % suf, "bkg_cat3%s" %suf, "bkg_cat3%s" %suf, True)
-#system('cp -f hist_zprime1000.root hist_bkg_cat3%s.root' %suf) ## use a dummy signal for the background only fit
-#jobSubmit('bkg_cat3%s' %suf)
-#
-#fixFile('ttres_cat2.config', 'ttres_bkg_cat2%s.config' % suf, "bkg_cat2%s" %suf, "bkg_cat2%s" %suf, True)
-#system('cp -f hist_zprime1000.root hist_bkg_cat2%s.root' %suf) ## use a dummy signal for the background only fit
-#jobSubmit('bkg_cat2%s' %suf)
-#
-#fixFile('ttres_cat1.config', 'ttres_bkg_cat1%s.config' % suf, "bkg_cat1%s" %suf, "bkg_cat1%s" %suf, True)
-#system('cp -f hist_zprime1000.root hist_bkg_cat1%s.root' %suf) ## use a dummy signal for the background only fit
-#jobSubmit('bkg_cat1%s' %suf)
+# mtt slope
+fixFile('ttres_slope.config', 'ttres_bkg_slope%s.config' % suf, "bkg_slope%s" %suf, "bkg_slope%s" %suf, True)
+system('cp -f hist_zprime1000.root hist_bkg_slope%s.root' %suf) ## use a dummy signal for the background only fit
+jobSubmit('bkg_slope%s' %suf)
+
+# fine binning
+fixFile('ttres_binning.config', 'ttres_bkg_binning%s.config' % suf, "bkg_binning%s" %suf, "bkg_binning%s" %suf, True)
+system('cp -f hist_zprime1000.root hist_bkg_binning%s.root' %suf) ## use a dummy signal for the background only fit
+jobSubmit('bkg_binning%s' %suf)
+
+# fit tt norm in boosted
+fixFile('ttres_boottnorm.config', 'ttres_bkg_boottnorm%s.config' % suf, "bkg_boottnorm%s" %suf, "bkg_boottnorm%s" %suf, True)
+system('cp -f hist_zprime1000.root hist_bkg_boottnorm%s.root' %suf) ## use a dummy signal for the background only fit
+jobSubmit('bkg_boottnorm%s' %suf)
+
+# nnlo rew.
+fixFile('ttres_nnlo.config', 'ttres_bkg_nnlo%s.config' % suf, "bkg_nnlo%s" %suf, "bkg_nnlo%s" %suf, True)
+system('cp -f hist_zprime1000.root hist_bkg_nnlo%s.root' %suf) ## use a dummy signal for the background only fit
+jobSubmit('bkg_nnlo%s' %suf)
+
+# category only
+fixFile('ttres_cat3.config', 'ttres_bkg_cat3%s.config' % suf, "bkg_cat3%s" %suf, "bkg_cat3%s" %suf, True)
+system('cp -f hist_zprime1000.root hist_bkg_cat3%s.root' %suf) ## use a dummy signal for the background only fit
+jobSubmit('bkg_cat3%s' %suf)
+
+fixFile('ttres_cat2.config', 'ttres_bkg_cat2%s.config' % suf, "bkg_cat2%s" %suf, "bkg_cat2%s" %suf, True)
+system('cp -f hist_zprime1000.root hist_bkg_cat2%s.root' %suf) ## use a dummy signal for the background only fit
+jobSubmit('bkg_cat2%s' %suf)
+
+fixFile('ttres_cat1.config', 'ttres_bkg_cat1%s.config' % suf, "bkg_cat1%s" %suf, "bkg_cat1%s" %suf, True)
+system('cp -f hist_zprime1000.root hist_bkg_cat1%s.root' %suf) ## use a dummy signal for the background only fit
+jobSubmit('bkg_cat1%s' %suf)
 
 # now go over to signal
 for t in signalList:
   if "eft" in t:
     continue
+  # veto reweighted KKG for now
+  if "kkg" in t and "w" in t:
+    continue
   for i in signalList[t]:
-    #fixFile('ttres_fittt_uncorr.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
-    #jobSubmit("%s%s" % (i, suf))
-    #fixFile('ttres_nocat.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
-    #jobSubmit("%s%s" % (i, suf))
-    #fixFile('ttres_fittt.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
-    #jobSubmit("%s%s" % (i, suf))
+    # nominal
     fixFile('ttres.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
     jobSubmit("%s%s" % (i, suf))
+    # stat only
     fixFile('ttres.config', 'ttres_%s%s_stat.config' %(i, suf), i, "%s%s_stat" % (i, suf), False)
     jobSubmit("%s%s_stat" % (i, suf))
+    # ranking nominal
     if 'zprime2000' in i or 'zprime3000' in i:
       fixFile('ttres.config', 'ttres_%s%s_inj.config' %(i, suf), i, "%s%s_inj" % (i, suf), False)
       jobSubmit("%s%s_inj" % (i, suf))
+
+    # fine binning
+    fixFile('ttres_binning.config', 'ttres_%s%s_binning.config' % (i, suf), i, "%s%s_binning" % (i, suf), False)
+    jobSubmit('%s%s_binning' % (i, suf))
+
+    # boosted tt norm
+    fixFile('ttres_boottnorm.config', 'ttres_%s%s_boottnorm.config' % (i, suf), i, "%s%s_boottnorm" % (i, suf), False)
+    jobSubmit('%s%s_boottnorm' % (i, suf))
+
+    # NNLO rew.
+    fixFile('ttres_nnlo.config', 'ttres_%s%s_nnlo.config' % (i, suf), i, "%s%s_nnlo" % (i, suf), False)
+    jobSubmit('%s%s_nnlo' % (i, suf))
 
