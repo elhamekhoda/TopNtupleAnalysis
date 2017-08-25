@@ -24,7 +24,7 @@ syst      muisolstat "muon isolation (stat)"          muIsolStatSF__1up         
 syst      muisolsyst "muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down                                  N  qcd
 syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      N  qcd
 syst      jvt        "JVT"                            jvtSF__1up                                 jvtSF__1down                                         N  qcd
-syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,wbbjets,wccjets,wcjets,wljets,wbbccjets,kkg
+syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      wc         "W+c SF"                         wc__1up                                    wc__1down                                            N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      wbb        "W+bb stat."                     wbb__1up                                   wbb__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
@@ -119,6 +119,10 @@ syst      ttgen     "ttbar generator"                ttgenup                ttge
 syst      ttps      "ttbar p shower"                 ttpsup                 ttpsdw                                          N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      ttisrfsr  "ttbar ISR/FSR"                  ttisrfsrup             ttisrfsrdw                                      N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      emisid    "Electron mid id"                elMisIDpos_up          elMisIDpos_down                                 N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+
+syst_pdf   wjpdf      "W+jets PDF"                   "wbbccjets"            wbbccjetspdf                                 pdf_NNPDF30_nnlo_as_0118           100
+syst_pdf   wjpdf      "W+jets PDF"                   "wcjets"               wcjetspdf                                    pdf_NNPDF30_nnlo_as_0118           100
+syst_pdf   wjpdf      "W+jets PDF"                   "wljets"               wljetspdf                                    pdf_NNPDF30_nnlo_as_0118           100
 
 #syst      makt10kbaseline "anti-$k_t$ R=1.0 kin. baseline"  LARGERJET_Medium_JET_Comb_Baseline_Kin__1up   LARGERJET_Medium_JET_Comb_Baseline_Kin__1down   N  qcd
 #syst      makt10kmodel    "anti-$k_t$ R=1.0 kin. model"     LARGERJET_Medium_JET_Comb_Modelling_Kin__1up  LARGERJET_Medium_JET_Comb_Modelling_Kin__1down  N  qcd
