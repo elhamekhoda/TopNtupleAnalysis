@@ -59,13 +59,20 @@ def main():
 	parser.add_option("-w", "--noPRW",
 							 action='store_true', dest="noPRW", default=False,
 							 help="Don't do pile up reweighting.", metavar="BOOL")
+
+	parser.add_option("-u", "--accept_prob",
+							 dest="accept_prob", default=1,
+							 help="Probability of accepting an event. Factor to use when dropping events in data to reduce luminosity available.", metavar="FLOAT")
 	 
 	(options, args) = parser.parse_args()
 	helpers.doPRW = not options.noPRW
 
+	accept_prob = float(options.accept_prob)
+	randGen = ROOT.TRandom3(4357)
+
     	print "-> Initialising wrapper"
     	ROOT.initWrapper(options.data)
-	 
+
 	pdfList = options.pdf.split(',')
 	Xsec = {}
 	 
@@ -369,6 +376,10 @@ def main():
 
 		ent = mt.GetEntries()
 		for k in range(0, ent):
+			if options.data and accept_prob > 0:
+				randomNumber = randGen.Uniform(0, 1)
+				if randomNumber > accept_prob:
+					continue
 			mt.GetEntry(k)
 			if k % 10000 == 0:
 				print "(tree = ",treeName,", syst = ",suffix,") Entry ", k, "/", mt.GetEntries()

@@ -36,6 +36,8 @@ using namespace std;
 int main(int argc, char **argv) {
   signal(SIGSEGV, handler);
 
+  TH1::AddDirectory(false);
+
   try {
 
     int help = 0;
