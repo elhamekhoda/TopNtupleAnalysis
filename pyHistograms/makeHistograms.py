@@ -384,7 +384,7 @@ def main():
 			# common part of the weight
 			weight = 1
 			if not options.data:
-				if not (isWjets and options.systs == 'pdf'): # use internal weights in this case
+				if not (isWjets and options.systs == 'pdf' and 'pdf_' in suffix): # use internal weights in this case
 					weight *= sel.weight_mc
 				channel = sel.mcChannelNumber
 				weight *= Xsec[channel]
