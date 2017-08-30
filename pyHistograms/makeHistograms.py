@@ -141,7 +141,7 @@ def main():
 
 	print "Loading first event"
 	mt_load = TChain("nominal")
-	addFilesInChain(mt_load, options.files, 20)
+	addFilesInChain(mt_load, options.files)
 	ent = mt_load.GetEntries()
 	for k in range(0, ent):
 		mt_load.GetEntry(k)
