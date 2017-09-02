@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from os import path
 from inputs import *
+import math
 
 from ROOT import *
 
@@ -23,6 +24,125 @@ def stampLumiText(lumi, x, y, text, size):
   t.SetTextColor(1)
   t.SetTextSize(size)
   t.DrawLatex(x,y, text+", "+str(lumi)+" fb^{-1}")
+
+def plotRatio(t, inputSufixNum = "_stat", inputSufixDen = ""):
+  gStyle.SetOptStat(0)
+  gStyle.SetPadTickX(1)
+  gStyle.SetPadTickY(1)
+
+  clim = TCanvas("clim", "", 800, 600);
+  l = TLegend(0.5,0.6,0.87,0.89)
+  l.SetBorderSize(0)
+
+  maxm = mass[t][-1]
+  minm = mass[t][0]
+  if minm == maxm:
+    maxm += 0.5 
+    minm -= 0.5 
+  h = TH1F("h", "", 50, minm, maxm);
+  miny = 0
+  maxy = 3.5
+  h.GetYaxis().SetRangeUser(miny, maxy);
+  h.GetYaxis().SetTitle("Cross section limit ratio");
+  name = ''
+  width = ''
+  if 'zprime' in t:
+    h.GetXaxis().SetTitle("m_{Z'} [TeV]");
+  elif 'kkG' in t:
+    h.GetXaxis().SetTitle("m_{G_{KK}} [TeV]");
+  elif 'kkgluon' in t:
+    h.GetXaxis().SetTitle("m_{g_{KK}} [TeV]");
+    width = '30'
+  h.GetXaxis().SetTitleOffset(0.9);
+  h.GetXaxis().SetLabelSize(0.05);
+  h.GetXaxis().SetTitleSize(0.05);
+  h.Draw("hist");
+
+  length = len(xs[t])
+  nom = TGraph(length);
+  obs = TGraph(length);
+  sigma1 = TGraphAsymmErrors(length);
+  sigma2 = TGraphAsymmErrors(length);
+  i=0
+  for I in range(0,length):
+    if path.exists("Ttres_"+signalList[t][I]+inputSufixNum+"/Limits/Ttres_"+signalList[t][I]+inputSufixNum+".root")==0:
+    	print "missing Ttres_"+signalList[t][I]+inputSufixNum+"/Limits/Ttres_"+signalList[t][I]+inputSufixNum+".root"
+    	continue
+    if path.exists("Ttres_"+signalList[t][I]+inputSufixDen+"/Limits/Ttres_"+signalList[t][I]+inputSufixDen+".root")==0:
+    	print "missing Ttres_"+signalList[t][I]+inputSufixDen+"/Limits/Ttres_"+signalList[t][I]+inputSufixDen+".root"
+    	continue
+    fnum = TFile("Ttres_"+signalList[t][I]+inputSufixNum+"/Limits/Ttres_"+signalList[t][I]+inputSufixNum+".root")
+    fden = TFile("Ttres_"+signalList[t][I]+inputSufixDen+"/Limits/Ttres_"+signalList[t][I]+inputSufixDen+".root")
+    hnum = fnum.Get("limit")
+    hden = fden.Get("limit")
+    muobs = [hnum.GetBinContent(1), hden.GetBinContent(1), 0]
+    muexp = [hnum.GetBinContent(2), hden.GetBinContent(2), 0]
+    muexp_p2 = [math.fabs(-muexp[0] + hnum.GetBinContent(3)), math.fabs(-muexp[1] + hden.GetBinContent(3)), 0]
+    muexp_p1 = [math.fabs(-muexp[0] + hnum.GetBinContent(4)), math.fabs(-muexp[1] + hden.GetBinContent(4)), 0]
+    muexp_m1 = [math.fabs(-muexp[0] + hnum.GetBinContent(5)), math.fabs(-muexp[1] + hden.GetBinContent(5)), 0]
+    muexp_m2 = [math.fabs(-muexp[0] + hnum.GetBinContent(6)), math.fabs(-muexp[1] + hden.GetBinContent(6)), 0]
+    print t,'\t',mass[t][I],"TeV\texp: ", muexp, "\tobs:",muobs,"pb"
+    x = mass[t][I]
+    muobs[2] = muobs[0]/muobs[1]
+    muexp[2] = muexp[0]/muexp[1]
+    for item in [muexp_p2, muexp_p1, muexp_m1, muexp_m2]:
+      error = item
+      item[2] = muexp[2]*math.sqrt( (error[1])**2/(muexp[1])**2 + (error[0])**2/(muexp[0])**2 )
+    sigma1.SetPoint(i, x, muexp[2])
+    sigma1.SetPointError(i, 0, 0, muexp_m1[2], muexp_p1[2])
+    sigma2.SetPoint(i, x, muexp[2])
+    sigma2.SetPointError(i, 0, 0, muexp_m2[2], muexp_p2[2])
+    nom.SetPoint(i, x, muexp[2])
+    obs.SetPoint(i, x, muobs[2])
+    i+=1
+  
+  nom.SetLineWidth(2);
+  nom.SetLineStyle(kDashed);
+  obs.SetLineWidth(2);
+  nom.SetMarkerStyle(20);
+  obs.SetMarkerStyle(20);
+  nom.SetMarkerSize(1.0);
+  obs.SetMarkerSize(1.0);
+  obs.SetMarkerColor(kRed);
+  sigma2.SetFillStyle(1001);
+  sigma2.SetFillColor(5);
+  sigma2.SetLineColor(5);
+  sigma2.SetMarkerColor(5);
+  sigma1.SetFillStyle(1001);
+  sigma1.SetFillColor(3);
+  sigma1.SetMarkerColor(3);
+  sigma1.SetLineColor(3);
+
+  labelNum = "nominal"
+  labelDen = "nominal"
+  if inputSufixNum != "":
+    if inputSufixNum == "_stat": labelNum = "stat. only"
+    elif inputSufixNum == "_nnlo": labelNum = "NNLO weights"
+    elif inputSufixNum == "_binning": labelNum = "finer binning"
+    elif inputSufixNum == "_boottnorm": labelNum = "boosted t#bar{t} norm. free"
+    else: inputSufixNum = inputSufixNum
+  if inputSufixDen != "":
+    if inputSufixDen == "_stat": labelDen = "stat. only"
+    elif inputSufixDen == "_nnlo": labelDen = "NNLO weights"
+    elif inputSufixDen == "_binning": labelDen = "finer binning"
+    elif inputSufixDen == "_boottnorm": labelDen = "boosted t#bar{t} norm. free"
+    else: inputSufixDen = inputSufixDen
+  l.AddEntry(nom, "Upper limit ratio (%s/%s)" % (labelNum, labelDen), "L")
+  l.AddEntry(sigma1, "#pm 1 #sigma", "F")
+  l.AddEntry(sigma2, "#pm 2 #sigma", "F")
+
+  sigma2.Draw("3");
+  sigma1.Draw("3");
+  nom.Draw("L")
+  #obs.Draw("LP")
+  l.Draw()
+
+  gPad.RedrawAxis()
+
+  stampATLAS("Internal", 0.15, 0.83)
+  stampLumiText(36.1, 0.15, 0.75, "#sqrt{s} = 13 TeV", 0.04)
+  clim.SaveAs("limit_ratio_%s_%s%s.pdf" % (t, inputSufixNum, inputSufixDen))
+  clim.SaveAs("limit_ratio_%s_%s%s.C" % (t, inputSufixNum, inputSufixDen))
 
 def plot(t, inputSufix = "", mu = False):
   gStyle.SetOptStat(0)
@@ -90,10 +210,10 @@ def plot(t, inputSufix = "", mu = False):
     hi = f.Get("limit")
     muobs = hi.GetBinContent(1)
     muexp = hi.GetBinContent(2)
-    muexp_p2 = abs(-muexp + hi.GetBinContent(3))
-    muexp_p1 = abs(-muexp + hi.GetBinContent(4))
-    muexp_m1 = abs(-muexp + hi.GetBinContent(5))
-    muexp_m2 = abs(-muexp + hi.GetBinContent(6))
+    muexp_p2 = math.fabs(-muexp + hi.GetBinContent(3))
+    muexp_p1 = math.fabs(-muexp + hi.GetBinContent(4))
+    muexp_m1 = math.fabs(-muexp + hi.GetBinContent(5))
+    muexp_m2 = math.fabs(-muexp + hi.GetBinContent(6))
     #if ('eft' in t and not mu) or True:
     #  muexp = muexp*xs[t][I]
     #  muobs = muobs*xs[t][I]
@@ -198,25 +318,9 @@ def plot(t, inputSufix = "", mu = False):
   clim.SaveAs("mass_limit_%s%s%s.pdf" % (t, suf, inputSufix))
   clim.SaveAs("mass_limit_%s%s%s.C" % (t, suf, inputSufix))
 
-
-plot('zprime', '_stat')
-plot('kkG', '_stat')
-plot('kkgluon', '_stat')
-
-plot('zprime')
-plot('kkG')
-plot('kkgluon')
-
+#### OLD ####
 #plot('eft10', mu=True)
 #plot('eft10', mu=False)
-
-#plot('zprime', '_binning')
-#plot('kkG', '_binning')
-#plot('kkgluon', '_binning')
-
-#plot('zprime', '_binning_stat')
-#plot('kkG', '_binning_stat')
-#plot('kkgluon', '_binning_stat')
 
 #plot('zprime', '_ttbarNorm')
 #plot('kkG', '_ttbarNorm')
@@ -229,4 +333,39 @@ plot('kkgluon')
 #plot('zprime', 'nocat')
 #plot('kkG', 'nocat')
 #plot('kkgluon', 'nocat')
+
+### END OLD ####
+
+
+plot('zprime', '_binning')
+plot('kkG', '_binning')
+plot('kkgluon', '_binning')
+
+plot('zprime', '_boottnorm')
+plot('kkG', '_boottnorm')
+plot('kkgluon', '_boottnorm')
+
+plot('zprime', '_nnlo')
+plot('kkG', '_nnlo')
+plot('kkgluon', '_nnlo')
+
+plot('zprime', '_stat')
+plot('kkG', '_stat')
+plot('kkgluon', '_stat')
+
+plot('zprime')
+plot('kkG')
+plot('kkgluon')
+
+plotRatio('zprime', "_binning", "")
+plotRatio('kkG', "_binning", "")
+plotRatio('kkgluon', "_binning", "")
+
+plotRatio('zprime', "_boottnorm", "")
+plotRatio('kkG', "_boottnorm", "")
+plotRatio('kkgluon', "_boottnorm", "")
+
+plotRatio('zprime', "_nnlo", "")
+plotRatio('kkG', "_nnlo", "")
+plotRatio('kkgluon', "_nnlo", "")
 
