@@ -41,7 +41,7 @@ def plotRatio(t, inputSufixNum = "_stat", inputSufixDen = ""):
     minm -= 0.5 
   h = TH1F("h", "", 50, minm, maxm);
   miny = 0
-  maxy = 3.5
+  maxy = 1.5
   h.GetYaxis().SetRangeUser(miny, maxy);
   h.GetYaxis().SetTitle("Cross section limit ratio");
   name = ''
@@ -128,11 +128,11 @@ def plotRatio(t, inputSufixNum = "_stat", inputSufixDen = ""):
     elif inputSufixDen == "_boottnorm": labelDen = "boosted t#bar{t} norm. free"
     else: inputSufixDen = inputSufixDen
   l.AddEntry(nom, "Upper limit ratio (%s/%s)" % (labelNum, labelDen), "L")
-  l.AddEntry(sigma1, "#pm 1 #sigma", "F")
-  l.AddEntry(sigma2, "#pm 2 #sigma", "F")
+  #l.AddEntry(sigma1, "#pm 1 #sigma", "F")
+  #l.AddEntry(sigma2, "#pm 2 #sigma", "F")
 
-  sigma2.Draw("3");
-  sigma1.Draw("3");
+  #sigma2.Draw("3");
+  #sigma1.Draw("3");
   nom.Draw("L")
   #obs.Draw("LP")
   l.Draw()
@@ -356,6 +356,10 @@ plot('kkgluon', '_stat')
 plot('zprime')
 plot('kkG')
 plot('kkgluon')
+
+for k in [10, 15, 20, 25, 35, 40]:
+  plot('kkgluonw%d' % k)
+  plot('kkgluonw%d' % k, '_stat')
 
 plotRatio('zprime', "_binning", "")
 plotRatio('kkG', "_binning", "")

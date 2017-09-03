@@ -182,3 +182,18 @@ for t in signalList:
     fixFile('ttres_nnlo.config', 'ttres_%s%s_nnlo.config' % (i, suf), i, "%s%s_nnlo" % (i, suf), False)
     jobSubmit('%s%s_nnlo' % (i, suf))
 
+# now KK gluon reweighted
+for t in signalList:
+  if "eft" in t:
+    continue
+  # veto reweighted KKG for now
+  if not ("kkg" in t and "w" in t):
+    continue
+  for i in signalList[t]:
+    # nominal
+    fixFile('ttres.config', 'ttres_%s%s.config' %(i, suf), i, "%s%s" % (i, suf), False)
+    jobSubmit("%s%s" % (i, suf))
+    # stat only
+    fixFile('ttres.config', 'ttres_%s%s_stat.config' %(i, suf), i, "%s%s_stat" % (i, suf), False)
+    jobSubmit("%s%s_stat" % (i, suf))
+
