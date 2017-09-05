@@ -4,9 +4,11 @@ rm limit_pack.tar.gz
 
 cp mass_limit_zprime.* tmp
 cp mass_limit_kkgluon.* tmp
+cp mass_limit_kkgluonw15.* tmp
 cp mass_limit_kkG.* tmp
 cp mass_limit_zprime_stat.* tmp
 cp mass_limit_kkgluon_stat.* tmp
+cp mass_limit_kkgluonw15_stat.* tmp
 cp mass_limit_kkG_stat.* tmp
 
 mkdir tmp/Ttres_bkg
