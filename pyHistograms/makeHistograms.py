@@ -168,12 +168,13 @@ def main():
 
 
 	# systematics list
-	if 'all' in options.systs:
+	if options.systs[0:3] == 'all':
 		systList = []
 		systList.append('nominal')
 		systList.append('ttNNLO_seq__1up')
 		systList.append('ttNNLO_topPt__1up')
 		if isWjets:
+			systList.append('CAallMCAsym')
 			systList.append('wnorm__1up')
 			systList.append('wnorm__1down')
 			systList.append('wc__1up')

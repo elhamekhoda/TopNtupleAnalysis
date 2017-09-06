@@ -28,6 +28,7 @@ syst      ttewk      "tt electroweak corr."           ttEWK__1up                
 syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      wc         "W+c SF"                         wc__1up                                    wc__1down                                            N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      wbb        "W+bb stat."                     wbb__1up                                   wbb__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+syst      wasym      "W+jets asym. bkg."              CAallMCAsym                                -                                                    N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      wl         "W+l stat."                      wl__1up                                    wl__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
 syst      eres       "electron res."                  EG_RESOLUTION_ALL__1up                     EG_RESOLUTION_ALL__1down                             N  qcd
 syst      escale     "electron scale"                 EG_SCALE_ALL__1up                          EG_SCALE_ALL__1down                                  N  qcd
