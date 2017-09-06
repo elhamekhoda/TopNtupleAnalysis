@@ -1939,6 +1939,10 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
     int pdfmax = atoi(it->second[4].c_str());
     vector<string> patterns;
     for (int i = 0; i <= pdfmax; ++i) {
+      //if (pdfpre.find("NNPDF") != std::string::npos && (i == 60 || i == 49)) { // hack for W+jets
+      //  std::cout << "Hacking this for W+jets, skipping syst. 60 and 49" << std::endl;
+      //  continue;
+      //}
       patterns.push_back(pdfpre+std::string("_")+std::to_string(i));
     }
     patterns.push_back(""); // add difference between the nominal and zero-th PDF EV
