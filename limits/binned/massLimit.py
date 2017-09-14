@@ -31,7 +31,7 @@ def plotRatio(t, inputSufixNum = "_stat", inputSufixDen = ""):
   gStyle.SetPadTickY(1)
 
   clim = TCanvas("clim", "", 800, 600);
-  l = TLegend(0.5,0.6,0.87,0.89)
+  l = TLegend(0.5,0.75,0.87,0.89)
   l.SetBorderSize(0)
 
   maxm = mass[t][-1]
@@ -197,6 +197,7 @@ def plot(t, inputSufix = "", mu = False):
   length = len(xs[t])
   xsec12 = TGraph(length);
   xsec3 = TGraph(length);
+  xsec1 = TGraph(length-1);
   nom = TGraph(length);
   obs = TGraph(length);
   sigma1 = TGraphAsymmErrors(length);
@@ -226,7 +227,8 @@ def plot(t, inputSufix = "", mu = False):
     if 'kkg' in signalList[t][i] and 'w' in signalList[t][i]:
       name = signalList[t][i].split('w')[0]
       width = signalList[t][i].split('w')[1]
-      extra_factor = xs['kkgluon']/xs['kkgluonw'+width]
+      print xs['kkgluon'], xs['kkgluonw'+width]
+      extra_factor = xs['kkgluon'][I]/xs['kkgluonw'+width][I]
       muobs *= extra_factor
       muexp *= extra_factor
       muexp_p2 *= extra_factor
@@ -253,6 +255,9 @@ def plot(t, inputSufix = "", mu = False):
     xsec12.SetPoint(i, x, xs[t][I])
     if 'zprime' in t:
       xsec3.SetPoint(i, x, xs3[t][I])
+    if 'zprime' in t:
+      if i != 0: # skip 400 GeV
+        xsec1.SetPoint(i-1, x, xs1[t][I])
     nom.SetPoint(i, x, muexp)
     obs.SetPoint(i, x, muobs)
     i+=1
@@ -270,6 +275,9 @@ def plot(t, inputSufix = "", mu = False):
   xsec3.SetLineWidth(3);
   xsec3.SetLineColor(kRed);
   xsec3.SetLineStyle(2);
+  xsec1.SetLineWidth(3);
+  xsec1.SetLineColor(kBlue);
+  xsec1.SetLineStyle(3);
   sigma2.SetFillStyle(1001);
   sigma2.SetFillColor(5);
   sigma2.SetLineColor(5);
@@ -291,6 +299,8 @@ def plot(t, inputSufix = "", mu = False):
     l.AddEntry(xsec12, "LO KK gluon #Gamma="+width+"% cross section", "L")
   if 'zprime' in t:
     l.AddEntry(xsec3, "LO Z'_{#it{TC2}} #Gamma=3% cross section #times 1.3", "L")
+  if 'zprime' in t:
+    l.AddEntry(xsec1, "NLO Z'_{#it{TC2}} #Gamma=1% cross section", "L")
 
   sigma2.Draw("3");
   sigma1.Draw("3");
@@ -300,6 +310,7 @@ def plot(t, inputSufix = "", mu = False):
     xsec12.Draw("L")
   if 'zprime' in t:
     xsec3.Draw("L")
+    xsec1.Draw("L")
   l.Draw()
   if not 'eft' in t:
     clim.SetLogy(1)
@@ -357,7 +368,8 @@ plot('zprime')
 plot('kkG')
 plot('kkgluon')
 
-for k in [10, 15, 20, 25, 35, 40]:
+#for k in [10, 15, 20, 25, 35, 40]:
+for k in [15]:
   plot('kkgluonw%d' % k)
   plot('kkgluonw%d' % k, '_stat')
 
