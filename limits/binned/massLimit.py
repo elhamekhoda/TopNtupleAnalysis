@@ -197,7 +197,7 @@ def plot(t, inputSufix = "", mu = False):
   length = len(xs[t])
   xsec12 = TGraph(length);
   xsec3 = TGraph(length);
-  xsec1 = TGraph(length-1);
+  xsec1 = TGraph(length);
   nom = TGraph(length);
   obs = TGraph(length);
   sigma1 = TGraphAsymmErrors(length);
@@ -256,8 +256,7 @@ def plot(t, inputSufix = "", mu = False):
     if 'zprime' in t:
       xsec3.SetPoint(i, x, xs3[t][I])
     if 'zprime' in t:
-      if i != 0: # skip 400 GeV
-        xsec1.SetPoint(i-1, x, xs1[t][I])
+      xsec1.SetPoint(i, x, xs1[t][I])
     nom.SetPoint(i, x, muexp)
     obs.SetPoint(i, x, muobs)
     i+=1
@@ -298,7 +297,7 @@ def plot(t, inputSufix = "", mu = False):
   elif 'kkgluon' in t:
     l.AddEntry(xsec12, "LO KK gluon #Gamma="+width+"% cross section", "L")
   if 'zprime' in t:
-    l.AddEntry(xsec3, "LO Z'_{#it{TC2}} #Gamma=3% cross section #times 1.3", "L")
+    l.AddEntry(xsec3, "NLO Z'_{#it{TC2}} #Gamma=3% cross section", "L")
   if 'zprime' in t:
     l.AddEntry(xsec1, "NLO Z'_{#it{TC2}} #Gamma=1% cross section", "L")
 
