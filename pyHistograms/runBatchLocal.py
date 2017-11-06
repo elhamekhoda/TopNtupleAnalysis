@@ -12,31 +12,32 @@ def main():
 
 	# output directory
 	# change this for your output directory
-	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_other'
-	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_other'
-	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjets'
-	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjets'
-	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjets'
-	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjets'
-	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljets'
-	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljets'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjetspdf'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjetspdf'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjetspdf'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjetspdf'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljetspdf'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljetspdf'
 
-	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_extra'
-	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_extra'
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjttpsold'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjttpsold'
 
-	#outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjetspdf'
-	#outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjetspdf'
-	#outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjetspdf'
-	#outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wcjetspdf'
-	#outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljetspdf'
-	#outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wljetspdf'
+	#outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjcfix'
+	#outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjcfix'
 
-	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_signal'
-	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_signal'
+	#outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjlfix'
+	#outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjlfix'
+
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_ttpp8'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_ttpp8'
+
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjpp8'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjpp8'
 
 	# number of files per job
 	#nFilesPerJob = 1000
-	nFilesPerJob = 20
+	nFilesPerJob = 200
+	#nFilesPerJob = 300
 
 	# use it to setup AnalysisTop
 	# change this for the place where you setup RootCore
@@ -59,8 +60,13 @@ def main():
 	# leave it for nominal to run only the nominal
 	#systematics = 'nominal'
 	#systematics = 'nominal,2to3ex,ttEWK__1up,ttEWK__1down'
-	systematics = 'all,'
-	#systematics = 'pdf'
+	#systematics = 'nominal,wnorm__1up,wnorm__1down,wbb__1up,wbb__1down,wl__1up,wl__1down'
+	#systematics = 'nominal,ttpsoldup,ttpsolddw'
+	systematics = 'nominal,ttpspp8up,ttpspp8dw'
+	#systematics = 'nominal,ttpsup,ttpsdw'
+	#systematics = 'wjpdf'
+	#systematics = 'nominal,ttNNLO_seq__1up,ttNNLO_topPt__1up'
+	#systematics = 'nominal,CAallMCAsym,wbb__1up,wbb__1down,wl__1up,wl__1down'
 	#systematics = 'all1'
 	#systematics = 'all2'
 	#systematics = 'all3'
@@ -70,6 +76,7 @@ def main():
 	names   = []
 
 	#names  += ["data"]
+	#names  += ["data_15ifb"]
 	#names  += ['qcde', 'qcdmu']
 	#names  += ['qcde']
 
@@ -83,6 +90,7 @@ def main():
 	#names  += ['zjets']
 
 	#names  += ['vv']
+	#names += ['ttpowhegpythia8af2']
 
 	#names  += ['zprime400']
 	#names  += ['zprime500']
@@ -130,12 +138,13 @@ def main():
 	#names  += ['wbbjets']
 	#names  += ['wccjets']
 
-	#names  += ['wbbccjets']
-	#names  += ['wcjets']
-	#names  += ['wljets']
+	names  += ['wbbccjets']
+	names  += ['wcjets']
+	names  += ['wljets']
 
 	#names  += ['wbbjetspdf']
 	#names  += ['wccjetspdf']
+
 	#names  += ['wbbccjetspdf']
 	#names  += ['wcjetspdf']
 	#names  += ['wljetspdf']
@@ -150,17 +159,17 @@ def main():
 	#names  += ['eftl100c10']
 	
 	#for k in ["10", "15", "20", "25", "30", "35", "40"]:
-	for k in ["25", "35", "40"]:
-		names  += ['kkg500w%s'%k]
-		names  += ['kkg1000w%s'%k]
-		names  += ['kkg1500w%s'%k]
-		names  += ['kkg2000w%s'%k]
-		names  += ['kkg2500w%s'%k]
-		names  += ['kkg3000w%s'%k]
-		names  += ['kkg3500w%s'%k]
-		names  += ['kkg4000w%s'%k]
-		names  += ['kkg4500w%s'%k]
-		names  += ['kkg5000w%s'%k]
+	#for k in ["25", "35", "40"]:
+	#	names  += ['kkg500w%s'%k]
+	#	names  += ['kkg1000w%s'%k]
+	#	names  += ['kkg1500w%s'%k]
+	#	names  += ['kkg2000w%s'%k]
+	#	names  += ['kkg2500w%s'%k]
+	#	names  += ['kkg3000w%s'%k]
+	#	names  += ['kkg3500w%s'%k]
+	#	names  += ['kkg4000w%s'%k]
+	#	names  += ['kkg4500w%s'%k]
+	#	names  += ['kkg5000w%s'%k]
 
 	mapToSamples = {
 					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
@@ -175,6 +184,7 @@ def main():
 					'wcjetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 					'wljetspdf': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets221',
 
+					'data_15ifb': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
 					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
@@ -187,6 +197,7 @@ def main():
 					'ttmcatnloherwig':'MC15c_13TeV_25ns_FS_EXOT4_ttbarMCAtNLOHerwig',
                                         'ttpowhegherwig7af2':'MC15c_13TeV_25ns_AF2_EXOT4_ttbarPowhegHerwig7',
 					'ttpowhegherwigaf2':'MC15c_13TeV_25ns_AF2_EXOT4_ttbarPowhegHerwig',
+                                        'ttpowhegpythia8af2':'MC15c_13TeV_25ns_AF2_EXOT4_ttbarPowhegPythia8',
 					'ttsystaf2':'MC15c_13TeV_25ns_AF2_EXOT4_ttbarPowhegPythia',
 					'ttradhi':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadHi',
 					'ttradlo':'MC15c_13TeV_25ns_FS_EXOT4_ttbarRadLo',
@@ -352,6 +363,8 @@ def main():
 
 		if 'af2' in sn:
 			nFilesPerJobEffective = 8
+		elif 'ttpdf' in sn:
+			nFilesPerJobEffective = 20
 		elif 'tthm' in sn:
 			nFilesPerJobEffective = 1
 		elif 'tt' in sn:
@@ -366,6 +379,8 @@ def main():
 			nFilesPerJobEffective = 1
 		elif 'kkg' in sn:
 			nFilesPerJobEffective = 1
+		elif 'data_15ifb' in sn:
+			nFilesPerJobEffective = 100000
 		elif 'data' in sn or 'qcd' in sn:
 			nFilesPerJobEffective = 400
 
@@ -388,6 +403,8 @@ def main():
 			ds = glob.glob(ntuplesDir+'/*SystNewv3*')
 		elif sn in ['ttpowhegherwig7af2']:
 			ds = glob.glob(ntuplesDir+'/*SystNewv1*')
+		elif sn in ['ttpowhegpythia8af2']:
+			ds = glob.glob(ntuplesDir+'/*Systv5*')
 		elif sn in ['ttpowhegherwigaf2']:
 			ds = glob.glob(ntuplesDir+'/*SystNewv3*')
 		elif sn == 'data':
@@ -431,6 +448,8 @@ def main():
 		if "data" in sn:
 			theSysts = "nominal"
 			isData = ' -d '
+			if '_15ifb' in sn:
+				isData = ' -d --accept_prob 0.415627 '
 		elif "qcde" in sn:
 			theSysts = "qcd"
 			isData = ' -d -Q e '
@@ -443,7 +462,7 @@ def main():
 		elif "jetspdf" in sn:
 			isData = ' --pdf NNPDF30_nnlo_as_0118 --noMttSlices '
 			theSysts = "pdf"
-                elif "ttsystaf2" in sn or "ttpowhegherwig7af2" in sn:
+                elif "ttsystaf2" in sn or "ttpowhegherwig7af2" in sn or 'ttpowhegpythia8af2' in sn:
 			isData = ' --noMttSlices --af2 '
 			theSysts = "nominal"
 		elif sn in ['ttpowhegherwig', 'ttmcatnloherwig', 'ttradhi', 'ttradlo']:

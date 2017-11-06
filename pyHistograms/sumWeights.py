@@ -93,7 +93,11 @@ def main():
 				for l in range(0, len(wjpdfList)):
 					if l not in wjpdfSumOfWeights[t_wjpdfSumWeights.dsid]:
 						wjpdfSumOfWeights[t_wjpdfSumWeights.dsid][l] = 0
-					wjpdfSumOfWeights[t_wjpdfSumWeights.dsid][l] += pdfAttr[wjpdfList[l]]
+					value = float(pdfAttr[wjpdfList[l]])
+					#if value < -200000: print "Read ", value, " in item ", wjpdfList[l], " in file ", t_wjpdfSumWeights.GetCurrentFile().GetName()
+					#if value > 200000: print "Read ", value, " in item ", wjpdfList[l], " in file ", t_wjpdfSumWeights.GetCurrentFile().GetName()
+					if (value > 60000 or value < -60000) and l in [42]: print "Read ", value, " in item ", wjpdfList[l], " in file ", t_wjpdfSumWeights.GetCurrentFile().GetName()
+					wjpdfSumOfWeights[t_wjpdfSumWeights.dsid][l] += value
 
 			pfs = open("sumOfWeights%s%s.txt" % (t, suf), "w")
 			for channel in sorted(wjpdfSumOfWeights.keys()):

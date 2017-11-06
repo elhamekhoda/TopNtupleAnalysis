@@ -126,7 +126,7 @@ def main():
 				sumOfWeightsAF2[int(line_spl[0])] = float(line_spl[1])
 			fs.close()
 
-	#print sumOfWeights
+	#print pdfSumOfWeights
 	 
 	print "Loading xsec."
 	loadXsec(Xsec, "../scripts/XSection-MC15-13TeV-ttres.data")
@@ -188,6 +188,10 @@ def main():
 			systList.append('ttgendw')
 			systList.append('ttpsup')
 			systList.append('ttpsdw')
+			systList.append('ttpspp8up')
+			systList.append('ttpspp8dw')
+			systList.append('ttpsoldup')
+			systList.append('ttpsolddw')
 			systList.append('ttisrfsrup')
 			systList.append('ttisrfsrdw')
 			systList.append('2to3ex')
@@ -276,9 +280,19 @@ def main():
 		systList = []
 		systList.append('nominal')
 		for m in pdfList:
-			nvar = len(pdfSumOfWeights[pdfSumOfWeights.keys()[0]][m])
+			dsidWithThisPdf = -1
+			for k in pdfSumOfWeights.keys():
+				if m in pdfSumOfWeights[k]:
+					dsidWithThisPdf = k
+					break
+			nvar = len(pdfSumOfWeights[dsidWithThisPdf][m])
 			for k in range(0, nvar):
 				systList.append('pdf_%s_%d' % (m, k))
+	elif options.systs == 'wjttpdf':
+		systList = []
+		systList.append('nominal')
+		for k in range(0, 30+1):
+			systList.append('pdf_PDF4LHC15_nlo_30_%d' % (k))
 	elif options.systs == 'qcd':
 		systList = []
 		systList.append('nominal')
@@ -362,7 +376,7 @@ def main():
 		treeName = s # systematic name is the same as the TTree name
 		if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'wc__' in treeName or 'wl__' in treeName or 'wbb__' in treeName or 'CAallMCAsym' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName or 'ttNNLO_' in treeName:
 			treeName = 'nominal'
-		if isWjets and (('ttgen' in treeName) or ('ttps' in treeName) or ('ttisrfsr' in treeName) or ('pdf_PDF4LHC15_nlo_30' in treeName) or ('ttxsec' in treeName) or ('singletop' in treeName) or ('elMisIDpos' in treeName) or ('2to3ex' in treeName)): # DANGER remember to change when doing W+jets PDF variation
+		if isWjets and (('ttgen' in treeName) or ('ttpsold' in treeName) or ('ttpspp7' in treeName) or ('ttps' in treeName) or ('ttisrfsr' in treeName) or ('pdf_PDF4LHC15_nlo_30' in treeName) or ('ttxsec' in treeName) or ('singletop' in treeName) or ('elMisIDpos' in treeName) or ('2to3ex' in treeName)): # DANGER remember to change when doing W+jets PDF variation
 			treeName = 'nominal'
 		if 'ttxsec' in treeName and isTtbar:
 			treeName = 'nominal'
