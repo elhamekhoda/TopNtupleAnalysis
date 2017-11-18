@@ -264,7 +264,6 @@ class AnaTtresSL(Analysis):
 			weight *= helpers.getKKgluonWidthWeight(self.KKgluonWidth, sel, s)
 		# for DM reweighting
 		if self.DMMass:
-			print "Adding DM weight ",helpers.getDMWeight(sel)
 			weight *= helpers.getDMWeight(sel)
 
                 # for 2HDM
