@@ -9,6 +9,7 @@ def main():
 	# for standard data and MC
 	#ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_2429'
 	ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_corr_2429'
+	ntuplesDir = '/nfs/dust/atlas/user/danilo/ntuple_corr_ZprimeWithTruth_2429'
 
 	# output directory
 	# change this for your output directory
@@ -501,7 +502,7 @@ def main():
 		elif "ttsyst" in sn:
 			isData = ' --noMttSlices '
 			theSysts = "nominal"
-		elif sn[:1] == "dm":
+		elif sn[:2] == "dm":
 			isData = ' --DM '
 		
 		if "wbbjets" in sn:

@@ -49,7 +49,7 @@ def main():
 							 dest="KKgluon", default="",
 				  help="Parameters to use when reweighting KK gluon samples. The parameter should be the destination width as an integer, which is a percentage of the mass.", metavar="WIDTH")
 	parser.add_option("-D", "--DM",
-							 dest="DM", default="False",
+							 action='store_true', dest="DM", default=False,
 				  help="Do Zprime to DM reweighting?", metavar="BOOL")
 	parser.add_option("-p", "--pdfForWeight",
 							 dest="pdfForWeight", default="NNPDF30_nlo_as_0118", # this is the PDF used for LO, so it should be used for the alphaS
@@ -169,7 +169,7 @@ def main():
 		doRew = True
 	if options.KKgluon != '':
 		doKKgluonRew = True
-	if options.DM != 'False':
+	if options.DM:
 		doDMRew = True
 
 
@@ -364,7 +364,7 @@ def main():
 			analysisCode[k].applyMET = float(options.applyMET)
 		if options.KKgluon != "":
 			analysisCode[k].KKgluonWidth = KKgluonWidth
-		if options.DM != "False":
+		if options.DM:
 			analysisCode[k].DMMass = True
 		else:
 			analysisCode[k].DMMass = False
