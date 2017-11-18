@@ -183,6 +183,7 @@ class AnaTtresSL(Analysis):
 		self.eftLambda = -1
 		self.eftCvv = 0
 		self.KKgluonWidth = -1
+		self.DMMass = False
 		self.w2HDM = 1
 		self.me2SM = -1
 		self.me2XX = -1
@@ -261,6 +262,9 @@ class AnaTtresSL(Analysis):
 		# for KK gluon width reweighting
 		if self.KKgluonWidth > 0:
 			weight *= helpers.getKKgluonWidthWeight(self.KKgluonWidth, sel, s)
+		# for DM reweighting
+		if self.DMMass:
+			weight *= helpers.getDMWeight(sel)
 
                 # for 2HDM
                 self.w2HDM = 1

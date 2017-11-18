@@ -48,6 +48,9 @@ def main():
 	parser.add_option("-K", "--KKgluon",
 							 dest="KKgluon", default="",
 				  help="Parameters to use when reweighting KK gluon samples. The parameter should be the destination width as an integer, which is a percentage of the mass.", metavar="WIDTH")
+	parser.add_option("-D", "--DM",
+							 dest="DM", default="False",
+				  help="Do Zprime to DM reweighting?", metavar="BOOL")
 	parser.add_option("-p", "--pdfForWeight",
 							 dest="pdfForWeight", default="NNPDF30_nlo_as_0118", # this is the PDF used for LO, so it should be used for the alphaS
 				  help="PDF to use to get alpha_S when doing either the EFT or the scalar model reweighting.", metavar="PDF")
@@ -159,12 +162,15 @@ def main():
 	doQCD = False
 	doRew = False
 	doKKgluonRew = False
+	doDMRew = False
 	if options.qcd != "False":
 		doQCD = True
 	if options.EFT != '':
 		doRew = True
 	if options.KKgluon != '':
 		doKKgluonRew = True
+	if options.DM != 'False':
+		doDMRew = True
 
 
 	# systematics list
@@ -172,7 +178,9 @@ def main():
 		systList = []
 		systList.append('nominal')
 		systList.append('ttNNLO_seq__1up')
+		systList.append('ttNNLO_seqExtended__1up')
 		systList.append('ttNNLO_topPt__1up')
+		systList.append('ttNNLO_topPtDiff__1up')
 		systList.append('mttSlope')
 		if isWjets:
 			systList.append('CAallMCAsym')
@@ -356,6 +364,10 @@ def main():
 			analysisCode[k].applyMET = float(options.applyMET)
 		if options.KKgluon != "":
 			analysisCode[k].KKgluonWidth = KKgluonWidth
+		if options.DM != "False":
+			analysisCode[k].DMMass = True
+		else:
+			analysisCode[k].DMMass = False
 		if options.EFT != "":
 			eftStr = options.EFT.split(",")
 			analysisCode[k].eftLambda = eftLambda
@@ -455,9 +467,13 @@ def main():
 					weight_reco *= sel.mc_generator_weights[wjpdfList[pdfNumber]]
 				if not options.data and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532, 410009, 410120, 410121, 407009, 407010, 407011, 407012, 410004, 410003, 410002, 410001, 410500, 410159, 410501, 410502, 410503, 410504, 410505, 410506, 410509, 410511, 410512, 10225, 410250, 410251, 410252]: #410525]:
 					if 'ttNNLO_seq_' in suffix:
-						weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, True)
+						weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 1)
 					if 'ttNNLO_topPt_' in suffix:
-						weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, False)
+						weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 0)
+					if 'ttNNLO_topPtDiff_' in suffix:
+						weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 2)
+					if 'ttNNLO_seqExtended_' in suffix:
+						weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 2)*ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 1)
 				analysisCode[ana].run(sel, suffix, weight*weight_reco, weight)
 	 
 	for k in analysisCode:

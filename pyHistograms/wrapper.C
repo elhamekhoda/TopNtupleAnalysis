@@ -25,6 +25,7 @@
 
 #include "TopNtupleAnalysis/EFTLib.h"
 
+#include "DMweight.C"
 
 #include "TLorentzVector.h"
 #include <vector>
@@ -116,11 +117,15 @@ void InitNNLO(int mcChannelNumber) {
   m_NNLO->Init();
 }
 
-double getNNLOWeight(double ttbarPt, double topPt, bool sequential) {
-  if (sequential) {
+double getNNLOWeight(double ttbarPt, double topPt, int mode) {
+  if (mode == 1) { // sequential
     return m_NNLO->GetTtbarAndTopPtWeight(ttbarPt, topPt);
+  } else if (mode == 0) { // top pt extended
+    return m_NNLO->GetExtendedTopPtWeight(topPt);
+  } else if (mode == 2) { // ratio of extended and non-extended top pT
+    return m_NNLO->GetExtendedTopPtWeight(topPt)/m_NNLO->GetTopPtWeight(topPt);
   }
-  return m_NNLO->GetExtendedTopPtWeight(topPt);
+  return 1;
 }
 
 
