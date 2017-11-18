@@ -34,9 +34,15 @@ def main():
 	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjpp8'
 	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_wjpp8'
 
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_ttnnlopt'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_ttnnlopt'
+
+	outputDir = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_dm'
+	outputDir2 = '/nfs/dust/atlas/user/danilo/hists2429_corr_local_dm'
+
 	# number of files per job
 	#nFilesPerJob = 1000
-	nFilesPerJob = 200
+	nFilesPerJob = 20
 	#nFilesPerJob = 300
 
 	# use it to setup AnalysisTop
@@ -58,11 +64,12 @@ def main():
 	analysisType='AnaTtresSL'
 	
 	# leave it for nominal to run only the nominal
+	systematics = 'all,'
 	#systematics = 'nominal'
 	#systematics = 'nominal,2to3ex,ttEWK__1up,ttEWK__1down'
 	#systematics = 'nominal,wnorm__1up,wnorm__1down,wbb__1up,wbb__1down,wl__1up,wl__1down'
 	#systematics = 'nominal,ttpsoldup,ttpsolddw'
-	systematics = 'nominal,ttpspp8up,ttpspp8dw'
+	#systematics = 'nominal,ttNNLO_seqExtended__1up,ttNNLO_topPtDiff__1up'
 	#systematics = 'nominal,ttpsup,ttpsdw'
 	#systematics = 'wjpdf'
 	#systematics = 'nominal,ttNNLO_seq__1up,ttNNLO_topPt__1up'
@@ -74,6 +81,13 @@ def main():
 	
 	# 25 ns datasets
 	names   = []
+
+	names  += ['dm500']
+	names  += ['dm1000']
+	names  += ['dm2000']
+	names  += ['dm3000']
+	names  += ['dm4000']
+	names  += ['dm5000']
 
 	#names  += ["data"]
 	#names  += ["data_15ifb"]
@@ -138,9 +152,9 @@ def main():
 	#names  += ['wbbjets']
 	#names  += ['wccjets']
 
-	names  += ['wbbccjets']
-	names  += ['wcjets']
-	names  += ['wljets']
+	#names  += ['wbbccjets']
+	#names  += ['wcjets']
+	#names  += ['wljets']
 
 	#names  += ['wbbjetspdf']
 	#names  += ['wccjetspdf']
@@ -205,6 +219,20 @@ def main():
 					'singletopDS':'MC15c_13TeV_25ns_FS_EXOT4_singletop_DSall',
 					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets221',
 					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
+					'dm400': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime400',
+					'dm500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime500',
+					'dm750': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime750',
+					'dm1000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1000',
+					'dm1250': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1250',
+					'dm1500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1500',
+					'dm1750': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1750',
+					'dm2000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2000',
+					'dm2250': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2250',
+					'dm2500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2500',
+					'dm2750': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2750',
+					'dm3000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime3000',
+					'dm4000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime4000',
+					'dm5000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime5000',
 					'zprime400': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime400',
 					'zprime500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime500',
 					'zprime750': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime750',
@@ -365,10 +393,10 @@ def main():
 			nFilesPerJobEffective = 8
 		elif 'ttpdf' in sn:
 			nFilesPerJobEffective = 20
-		elif 'tthm' in sn:
-			nFilesPerJobEffective = 1
-		elif 'tt' in sn:
-			nFilesPerJobEffective = 1
+		#elif 'tthm' in sn:
+		#	nFilesPerJobEffective = 1
+		#elif 'tt' in sn:
+		#	nFilesPerJobEffective = 1
 		elif 'eft' in sn:
 			nFilesPerJobEffective = 1
 		elif 'singletop' in sn:
@@ -376,6 +404,8 @@ def main():
 		elif 'kkgrav' in sn:
 			nFilesPerJobEffective = 1
 		elif 'zprime' in sn:
+			nFilesPerJobEffective = 1
+		elif sn[:2] == 'dm':
 			nFilesPerJobEffective = 1
 		elif 'kkg' in sn:
 			nFilesPerJobEffective = 1
@@ -471,6 +501,8 @@ def main():
 		elif "ttsyst" in sn:
 			isData = ' --noMttSlices '
 			theSysts = "nominal"
+		elif sn[:1] == "dm":
+			isData = ' --DM '
 		
 		if "wbbjets" in sn:
 			extra = ' --WjetsHF bb '
