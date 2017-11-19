@@ -206,7 +206,7 @@ for t in signalList:
   if "kkg" in t and "w" in t:
     continue
   for i in signalList[t]: #[]: #['zprime400', 'zprime1000']: #signalList[t]:
-    if i[:1] != 'dm': continue
+    if i[:2] != 'dm': continue
 
     fixFile('ttres_boottnorm_smooth2nnlottpspp8mbinsqcdfixzero2_dectau32_topptnnlo_asimov.config', 'ttres_%s%s_boottnorm_smooth2nnlottpspp8mbinsqcdfixzero2_dectau32_topptnnlo_asimov_stat.config' % (i, suf), i, "%s%s_boottnorm_smooth2nnlottpspp8mbinsqcdfixzero2_dectau32_topptnnlo_asimov_stat" % (i, suf), False)
     jobSubmit('%s%s_boottnorm_smooth2nnlottpspp8mbinsqcdfixzero2_dectau32_topptnnlo_asimov_stat' % (i, suf))

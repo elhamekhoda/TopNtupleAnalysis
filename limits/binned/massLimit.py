@@ -462,8 +462,8 @@ def plot(t, inputSufix = "", mu = False):
 
     extra_factor = 1 # ratio of cross sections in case of kkgluon width reweighting
 
-    if t in normDiff: # in case of reweighting for DM, renormalise it to get it relative to 1 pb
-      extra_factor *= normDiff[t][I]
+    if t in normFix: # in case of reweighting for DM, renormalise it to get it relative to 1 pb
+      extra_factor *= normFix[t][I]
 
     if 'kkg' in signalList[t][i] and 'w' in signalList[t][i]:
       name = signalList[t][i].split('w')[0]
