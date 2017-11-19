@@ -115,7 +115,7 @@ sample    qcde         qcde                                 "QCD (e)"           
 sample    qcdmu        qcdmu                                "QCD (#mu)"           "QCD ($\mu$)"        902
 sample    vv           vv                                   "diboson"             "diboson"            5
 sample    ttv          ttv                                  "ttV"                 "$t\bar{t}V$"        7
-syst_flat lumi          "luminosity"                         "ttall,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg"                 0.021                     -0.021
+syst_flat lumi          "luminosity"                         "ttall,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm"                 0.021                     -0.021
 syst      etrig      "electron trigger"               eTrigSF__1up                               eTrigSF__1down                                       N  qcd
 syst      erec       "electron reconstruction"        eRecoSF__1up                               eRecoSF__1down                                       N  qcd
 syst      eid        "electron ID"                    eIDSF__1up                                 eIDSF__1down                                         N  qcd
@@ -128,12 +128,12 @@ syst      muisolstat "muon isolation (stat)"          muIsolStatSF__1up         
 syst      muisolsyst "muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down                                  N  qcd
 syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      N  qcd
 syst      jvt        "JVT"                            jvtSF__1up                                 jvtSF__1down                                         N  qcd
-syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      wc         "W+c SF"                         wc__1up                                    wc__1down                                            N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      wbb        "W+bb stat."                     wbb__1up                                   wbb__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      wasym      "W+jets asym. bkg."              CAallMCAsym                                -                                                    N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      wl         "W+l stat."                      wl__1up                                    wl__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+syst      ttewk      "tt electroweak corr."           ttEWK__1up                                 ttEWK__1down                                         N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      wmodel     "W C/A SF"                       wnorm__1up                                 wnorm__1down                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      wc         "W+c SF"                         wc__1up                                    wc__1down                                            N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      wbb        "W+bb stat."                     wbb__1up                                   wbb__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      wasym      "W+jets asym. bkg."              CAallMCAsym                                -                                                    N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      wl         "W+l stat."                      wl__1up                                    wl__1down                                           N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
 syst      eres       "electron res."                  EG_RESOLUTION_ALL__1up                     EG_RESOLUTION_ALL__1down                             N  qcd
 syst      escale     "electron scale"                 EG_SCALE_ALL__1up                          EG_SCALE_ALL__1down                                  N  qcd
 syst      akt4jer    "anti-$k_t$ R=0.4 JER"           JET_JER_SINGLE_NP__1up                     -                                                    N  qcd
@@ -195,13 +195,13 @@ syst      btagl9     "b-tagging l mistag (E9)"        btaglSF_9__1up            
 syst      btagl10    "b-tagging l mistag (E10)"       btaglSF_10__1up                            btaglSF_10__1down                                    N  qcd
 syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     N  qcd
 syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     N  qcd
-syst      qcdcene    "QCD unc. cen. (e)"              qcdcenup                                   qcdcendw                                             N     ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcdmu,kkg
-syst      qcdfwde    "QCD unc. fwd. (e)"              qcdfwdup                                   qcdfwddw                                             N     ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcdmu,kkg
-#syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg
-syst      singletop   "single top cross sec."          singletopup                               singletopdw                                          N     ttall,zjets,vv,ttv,zprime,kkgrav,qcd,kkg
+syst      qcdcene    "QCD unc. cen. (e)"              qcdcenup                                   qcdcendw                                             N     ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcdmu,kkg,dm
+syst      qcdfwde    "QCD unc. fwd. (e)"              qcdfwdup                                   qcdfwddw                                             N     ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcdmu,kkg,dm
+#syst      eftScale   "EFT scale"                      eftScale__1up                              eftScale__1down                                      N    ttall,wbbjets,wccjets,wbbccjets,wcjets,wljets,singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg,dm
+syst      singletop   "single top cross sec."          singletopup                               singletopdw                                          N     ttall,zjets,vv,ttv,zprime,kkgrav,qcd,kkg,dm
 #syst_flat singletop  "single top cross sec."          "singletop"            0.053                                      -0.053
 syst_flat qcdmu      "QCD unc. (mu)"                  "qcdmu"                0.50                                       -0.50
-syst      ttxsec     "ttbar cross section"            ttxsecup                                   ttxsecdw                                              N     singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg
+syst      ttxsec     "ttbar cross section"            ttxsecup                                   ttxsecdw                                              N     singletop,zjets,vv,ttv,zprime,kkgrav,qcd,kkg,dm
 #syst_flat ttxsec     "ttbar cross section"            "ttall"                0.056                                      -0.061
 syst_model WtDRDS    "single top DR vs. DS"           "singletop"           singletop                                    singletopDS                   N
 #syst_model ttgen     "ttbar gen."                     "ttall"                 ttpowhegherwig                            ttmcatnloherwig               N
@@ -404,13 +404,13 @@ syst_pdf_simple   ttpdf28   "PDF28"                  "wljets"               wlje
 syst_pdf_simple   ttpdf29   "PDF29"                  "wljets"               wljets                                      pdf_PDF4LHC15_nlo_30           29
 syst_pdf_simple   ttpdf30   "PDF30"                  "wljets"               wljets                                      pdf_PDF4LHC15_nlo_30           30
 
-syst      ttgen     "ttbar generator"                ttgenup                ttgendw                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      ttps      "ttbar p shower"                 ttpsup                 ttpsdw                                          N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      ttpspp8   "ttbar p shower"                 ttpspp8up              ttpspp8dw                                       N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      ttpsold   "ttbar p shower"                 ttpsoldup              ttpsolddw                                       N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      ttisrfsr  "ttbar ISR/FSR"                  ttisrfsrup             ttisrfsrdw                                      N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      emisid    "Electron mid id"                elMisIDpos_up          elMisIDpos_down                                 N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      wExtrap   "W+jets extrap."                 2to3ex                 -                                               N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
+syst      ttgen     "ttbar generator"                ttgenup                ttgendw                                         N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      ttps      "ttbar p shower"                 ttpsup                 ttpsdw                                          N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      ttpspp8   "ttbar p shower"                 ttpspp8up              ttpspp8dw                                       N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      ttpsold   "ttbar p shower"                 ttpsoldup              ttpsolddw                                       N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      ttisrfsr  "ttbar ISR/FSR"                  ttisrfsrup             ttisrfsrdw                                      N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      emisid    "Electron mid id"                elMisIDpos_up          elMisIDpos_down                                 N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      wExtrap   "W+jets extrap."                 2to3ex                 -                                               N  ttall,qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
 
 #syst_pdf_simple   wjpdf0      "PDF"                   "wbbccjets"            wbbccjetspdf                                pdf_NNPDF30_nnlo_as_0118           0  
 syst_pdf_simple   wjpdf1      "PDF"                   "wbbccjets"            wbbccjetspdf                                pdf_NNPDF30_nnlo_as_0118           1  
@@ -735,7 +735,7 @@ syst      akt10jermass    "anti-$k_t$ R=1.0 mass res."      LARGERJET_JER_LARGER
 #syst      akt10corrB      "anti-$k_t$ R=1.0 corr. B"        CORR_LargeRSmallR_B__1up                      CORR_LargeRSmallR_B__1down                      N  qcd
 #syst      akt10corrC      "anti-$k_t$ R=1.0 corr. C"        CORR_LargeRSmallR_C__1up                      CORR_LargeRSmallR_C__1down                      N  qcd
 
-syst      ttnnloseq       "ttbar NNLO seq."                 ttNNLO_seq__1up                               -                                               N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      ttnnlopt        "ttbar NNLO p_T"                  ttNNLO_topPt__1up                             -                                               N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      ttnnloptdiff    "ttbar NNLO p_T diff."            ttNNLO_topPtDiff__1up                         -                                               N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg
-syst      mttSlope        "ttbar mtt slope"                 highMtt                                       lowMtt                                          N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,wbbccjets,wcjets,wljets,wbbjets,wccjets
+syst      ttnnloseq       "ttbar NNLO seq."                 ttNNLO_seq__1up                               -                                               N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      ttnnlopt        "ttbar NNLO p_T"                  ttNNLO_topPt__1up                             -                                               N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      ttnnloptdiff    "ttbar NNLO p_T diff."            ttNNLO_topPtDiff__1up                         -                                               N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,dm
+syst      mttSlope        "ttbar mtt slope"                 highMtt                                       lowMtt                                          N  qcd,singletop,zjets,vv,ttv,zprime,kkgrav,eft,kkg,wbbccjets,wcjets,wljets,wbbjets,wccjets,dm
