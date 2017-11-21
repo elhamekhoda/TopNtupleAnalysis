@@ -41,6 +41,7 @@ class Hist {
      * values from a TH1 in a file.
      */
     Hist(const string &name, const string &syst, const string &file);
+    Hist(TH1 &h);
     /*
      * Copy constructor.
      */
@@ -75,6 +76,9 @@ class Hist {
     Hist &operator *=(Hist a);
     Hist &operator /=(Hist a);
 
+    // assuming correlated histograms
+    Hist minusCorr(Hist a) const;
+
 
     /* 
      * Smoothen it.
@@ -83,6 +87,7 @@ class Hist {
     Hist smoothStatOnly(Hist &nom, double target = 0.001);
     Hist smooth(int smoothLevel = 1);
     Hist smoothRun1(Hist &nominal, int smoothLevel = 1);
+    Hist smoothROOT(int smoothLevel = 1);
 
     static int GetMaxStatErrBin(Hist &h0, Hist &h1,  double thr, bool skipZero = true);
 

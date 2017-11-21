@@ -17,6 +17,19 @@ Hist::Hist(int nbins, double value) {
   xTitle = "x";
 }
 
+Hist::Hist(TH1 &h) {
+  _size = 0;
+  for (int i = 0; i <= h.GetNbinsX()+1; ++i) {
+    _size++;
+    _x.push_back(h.GetXaxis()->GetBinLowEdge(i));
+    _y.push_back(h.GetBinContent(i));
+    _ye.push_back(h.GetBinError(i));
+  }
+  h.IntegralAndError(0,h.GetNbinsX()+1, _e);
+  xTitle = h.GetXaxis()->GetTitle();
+  yTitle = h.GetYaxis()->GetTitle();
+}
+
 Hist::Hist(const string &name, const string &syst, const string &file) {
   TFile *f = new TFile(file.c_str());
   if (!f || !f->IsOpen()) {
@@ -67,6 +80,20 @@ Hist &Hist::operator =(const Hist &other) {
   return *this;
 }
 
+Hist Hist::minusCorr(Hist a) const {
+  if (_size == 0) return a;
+  if (a._size == 0) return *this;
+  if (a._size != _size) throw string("Trying to subtract histograms with different sizes.");
+  Hist me(*this);
+  for (int i = 0; i < _size; ++i) {
+    me[i] -= a[i];
+    // this is only used for errors of syst. variations
+    // in this case we add and subtract correlated histograms repeatedly: let's not over-propagate uncertainties
+    //me.e(i) = me.e(i) + a.e(i);
+  }
+  return me;
+}
+
 Hist Hist::operator +(Hist a) const {
   if (_size == 0) return a;
   if (a._size == 0) return *this;
@@ -88,6 +115,12 @@ Hist Hist::operator -(Hist a) const {
     me.e(i) = sqrt(me.e(i)*me.e(i) + a.e(i)*a.e(i));
   }
   return me;
+}
+
+Hist Hist::smoothROOT(int level) {
+  std::shared_ptr<TH1D> toRoot = makeTH1("tmp");
+  toRoot->Smooth(level);
+  return Hist(*toRoot.get());
 }
 
 Hist Hist::smoothStatOnly(Hist &nom, double target) {
@@ -496,21 +529,26 @@ Hist Hist::operator *(double a) const {
   Hist me(*this);
   for (int i = 0; i < _size; ++i) {
     me[i] *= a;
-    me.e(i) *= a;
+    me.e(i) *= std::fabs(a);
   }
   return me;
 }
 Hist &Hist::operator *=(double f) {
   for (int i = 0; i < _size; ++i) (*this)[i] *= f;
-  for (int i = 0; i < _size; ++i) (*this).e(i) *= f;
+  for (int i = 0; i < _size; ++i) (*this).e(i) *= std::fabs(f);
 }
 
 
 void Hist::max(Hist a, Hist b) {
   *this = a;
   for (int i = 0; i < _size; ++i) {
-    if (std::fabs(b[i]) > std::fabs(a[i])) (*this)[i] = std::fabs(b[i]);
-    else (*this)[i] = std::fabs(a[i]);
+    if (std::fabs(b[i]) > std::fabs(a[i])) {
+      (*this)[i] = std::fabs(b[i]);
+      (*this).e(i) = b.e(i);
+    } else {
+      (*this)[i] = std::fabs(a[i]);
+      (*this).e(i) = a.e(i);
+    }
   }
 }
 

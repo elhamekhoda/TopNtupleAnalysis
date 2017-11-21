@@ -40,6 +40,21 @@ class HistDiff : public Syst{
  * The constructor receives the N histograms suffixes to be concatenated to histogram name
  * when trying to find the syst. variations in the file. The first histogram is the reference.
  */
+class HistDiffPdf : public Syst{
+  public:
+  vector<string> _file;
+  vector<string> _list;
+  vector<string> _sample;
+  int _smoothLevel;
+  HistDiffPdf(vector<string> &_file, vector<string> &list, vector<std::string> &sample, int smoothLevel = 0);
+  Hist get(const string &name, const string &fname);
+};
+
+/*
+ * Calculates the syst. var. caused by taking the difference between N-1 histograms and a reference histogram.
+ * The constructor receives the N histograms suffixes to be concatenated to histogram name
+ * when trying to find the syst. variations in the file. The first histogram is the reference.
+ */
 class HistDiffMany : public Syst{
   public:
   vector<string> _file;

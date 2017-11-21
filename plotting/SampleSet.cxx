@@ -145,7 +145,9 @@ shared_ptr<TH1D> SampleSet::makeTH1(const string &name, const string &systName) 
   shared_ptr<TH1D> mySum(_item[0].makeTH1(name, systName));
   for (int j = 1; j < _item.size(); ++j) {
     shared_ptr<TH1D> t(_item[j].makeTH1(Form("%s_%d", name.c_str(), j), systName));
-    mySum->Add(t.get());
+    // do not propagate uncertainties, as it will be subtracted again in TRExFitter
+    for (int i = 0; i < mySum->GetNbinsX()+1; ++i)
+      mySum->SetBinContent(i, mySum->GetBinContent(i)+t.get()->GetBinContent(i));
   }
   return shared_ptr<TH1D>(mySum);
 }

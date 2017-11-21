@@ -1973,14 +1973,14 @@ void addAllSystematics(SystematicCalculator &systCalc, const std::string &pref, 
       patterns.push_back(pdfpre+std::string("_")+std::to_string(pdfmax));
       int this_smooth = smooth;
 
-      systCalc.add(name.c_str(), new HistDiffMany(filenam, patterns, sample, this_smooth), it->second[0]);
+      systCalc.add(name.c_str(), new HistDiffPdf(filenam, patterns, sample, this_smooth), it->second[0]);
 	} else { // difference of 0 and 0 is nothing, so use it to flag that we want the difference between 0 and the nominal
       vector<string> patterns;
       patterns.push_back("");
       patterns.push_back(pdfpre+std::string("_")+std::to_string(0));
       int this_smooth = smooth;
 
-      systCalc.add(name.c_str(), new HistDiffMany(filenam, patterns, sample, this_smooth), it->second[0]);
+      systCalc.add(name.c_str(), new HistDiffPdf(filenam, patterns, sample, this_smooth), it->second[0]);
 	}
   }
 

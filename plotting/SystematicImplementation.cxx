@@ -30,10 +30,41 @@ Hist HistDiff::get(const string &name, const string &fname) {
   Hist ha(name, _a, fname);
   Hist hb(name, _b, fname);
   if (_smoothLevel <= 0)
-    return (ha - hb);
+    return ha.minusCorr(hb);
   //Hist ha_smooth = ha.smoothRun1(hb, _smoothLevel);
   Hist hsmooth = (ha - hb).smoothStatOnly(hb);
   return hsmooth;
+}
+
+HistDiffPdf::HistDiffPdf(std::vector<std::string> &file, std::vector<string> &list, std::vector<std::string> &sample, int smoothLevel) {
+  _file = file;
+  _list = list;
+  _sample = sample;
+  _smoothLevel = smoothLevel;
+}
+
+Hist HistDiffPdf::get(const string &name, const string &fname) {
+  int idx = -1;
+  for (int i = 0; i < _sample.size(); ++i) {
+    if (fname.find(_sample[i]) != std::string::npos) {
+      idx = i;
+      break;
+    }
+  }
+  if (idx < 0)
+    return Hist();
+
+  Hist hb(name, _list[0], _file[idx]);
+  Hist ret = hb;
+  for (size_t i = 0; i < ret._size; ++i) ret[i] = 0;
+  for (size_t i = 0; i < ret._size; ++i) ret.e(i) = 0;
+  for (size_t z = 1; z < _list.size(); ++z) {
+    Hist ha(name, _list[z], _file[idx]);
+    if (_smoothLevel <= 0) {
+      ret += ha.minusCorr(hb);
+    }
+  }
+  return ret;
 }
 
 HistDiffMany::HistDiffMany(std::vector<std::string> &file, std::vector<string> &list, std::vector<std::string> &sample, int smoothLevel) {
@@ -174,7 +205,7 @@ Hist RelativeISRFSR::get(const string &name, const string &fname) {
   Hist hb(name, "", _b);
   Hist hnom(name, "", fname);
   //Hist hc = ha + hb;
-  Hist hd = ha - hb;
+  Hist hd = ha.minusCorr(hb);
   //hc *= 0.5;
   if (_smoothLevel <= 0)
     return (hd*_factor); // == (hnom*hd/hc + hnom) - hnom, where the first term can be seen as the variation histogram
@@ -200,7 +231,7 @@ Hist RelativeNominal::get(const string &name, const string &fname) {
 
   Hist ha(name, "", _a);
   Hist hnom(name, "", fname);
-  Hist hd = ha - hnom;
+  Hist hd = ha.minusCorr(hnom);
   //hc *= 0.5;
   if (_smoothLevel <= 0)
     return (hd*_factor); // == (hnom*hd/hc + hnom) - hnom, where the first term can be seen as the variation histogram
