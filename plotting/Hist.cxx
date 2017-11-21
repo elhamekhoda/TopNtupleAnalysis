@@ -94,6 +94,32 @@ Hist Hist::minusCorr(Hist a) const {
   return me;
 }
 
+Hist Hist::plusCorr(Hist a) const {
+  if (_size == 0) return a;
+  if (a._size == 0) return *this;
+  if (a._size != _size) throw string("Trying to add histograms with different sizes.");
+  Hist me(*this);
+  for (int i = 0; i < _size; ++i) {
+    me[i] += a[i];
+    // this is only used for errors of syst. variations
+    // in this case we add and subtract correlated histograms repeatedly: let's not over-propagate uncertainties
+    //me.e(i) = me.e(i) + a.e(i);
+  }
+  return me;
+}
+
+void Hist::plusEqualsCorr(Hist a) {
+  if (_size == 0) return;
+  if (a._size == 0) return;
+  if (a._size != _size) throw string("Trying to add histograms with different sizes.");
+  for (int i = 0; i < _size; ++i) {
+    (*this)[i] += a[i];
+    // this is only used for errors of syst. variations
+    // in this case we add and subtract correlated histograms repeatedly: let's not over-propagate uncertainties
+    //(*this).e(i) = (*this).e(i) + a.e(i);
+  }
+}
+
 Hist Hist::operator +(Hist a) const {
   if (_size == 0) return a;
   if (a._size == 0) return *this;

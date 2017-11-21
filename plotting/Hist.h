@@ -78,6 +78,8 @@ class Hist {
 
     // assuming correlated histograms
     Hist minusCorr(Hist a) const;
+    Hist plusCorr(Hist a) const;
+    void plusEqualsCorr(Hist a);
 
 
     /* 

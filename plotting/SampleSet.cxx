@@ -19,8 +19,8 @@ shared_ptr<TH1D> Sample::makeTH1(const string &name, const string &systName) {
   if (systName == "")
     me = nominal.makeTH1(name);
   else if (syst.find(systName) != syst.end()) {
-    Hist thisVar = nominal;
-    thisVar += syst[systName];
+    Hist thisVar = syst[systName];
+    thisVar.plusEqualsCorr(nominal);
     me = thisVar.makeTH1(name);
   } else {
     for (map<string, Hist>::const_iterator i = syst.begin(); i != syst.end(); ++i) {
