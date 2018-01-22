@@ -4,7 +4,7 @@ README
 This is a framework for reading flat ntuples generated from AnalysisTop,
 running an analysis over them and producing final plots.
 
->
+
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<BEGIN OF DEPRECATED PART>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 The framework works by reading the flat ntuples using the class MiniTree, as called
 from read.cxx and then running an analysis class (that derives of Analysis) on each event and
@@ -62,7 +62,7 @@ You can also write a sumOfWeights.txt file containing, in each line the dataset 
 
 This will speed it up.
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<END OF DEPRECATED PART>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
->
+
 
 It is recommended to use the Python code in pyHistograms, which will also link to the C++ code, but it should be easier to adapt to your needs.
 To do that, please compile the code using RootCore, so that it can link against the library created by RootCore.
