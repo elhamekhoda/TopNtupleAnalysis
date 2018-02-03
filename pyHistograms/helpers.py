@@ -645,7 +645,7 @@ weightSF = {'' : ['pileup', 'leptonSF', 'jvt'], #, 'indiv_SF_EL_ChargeID', 'indi
 
 weightChangeSystematics = weightSF.keys()
 
-def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i'):
+def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel'):
     """Intuitive Python ast-style expression parser
 
     Used for hadronic-top tagging flag specification
@@ -666,9 +666,8 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i'):
     """
     class RewriteName(ast.NodeTransformer):
         def visit_Name(self, node):
-            node = ast.copy_location(ast.Subscript(value=ast.Name(id=name_fmt.format(node.id), ctx=ast.Load()),
-                                                   slice=ast.Index(value=ast.Name(id=index_id, ctx=ast.Load())),
-                                                   ctx=node.ctx), node)
+            attr = ast.Attribute(value=ast.Name(id=tree_name, ctx=ast.Load()), attr=name_fmt.format(node.id), ctx=ast.Load())
+            node = ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id=index_id, ctx=ast.Load())), ctx=node.ctx)
             ast.fix_missing_locations(node)
             return node
     return compile(RewriteName().visit(ast.parse(expr, mode = 'eval')), '<top-tagger>', 'eval')
