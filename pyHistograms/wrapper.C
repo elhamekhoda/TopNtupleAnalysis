@@ -1,10 +1,11 @@
+#include <cstdlib>
+#include <sstream>
+#include <vector>
+
+#include "TLorentzVector.h"
 
 #include "TopNtupleAnalysis/TtresChi2.h"
-#include "TLorentzVector.h"
-#include <vector>
 #include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
-#include "TLorentzVector.h"
-
 #include "TopNtupleAnalysis/MMUtils.h"
 #include "TopNtupleAnalysis/Event.h"
 #include "TopNtupleAnalysis/Electron.h"
@@ -12,29 +13,12 @@
 #include "TopNtupleAnalysis/Jet.h"
 #include "TopNtupleAnalysis/LargeJet.h"
 #include "TopNtupleAnalysis/MObject.h"
-
-#include "TLorentzVector.h"
-#include <vector>
-
 #include "TopNtupleAnalysis/TtresNeutrinoBuilder.h"
-
-#include "TLorentzVector.h"
-#include <vector>
-#include <cstdlib>
-#include <sstream>
-
 #include "TopNtupleAnalysis/EFTLib.h"
+
+// #include "NNLOReweighter/NNLOReweighter.h"
 
 #include "DMweight.C"
-
-#include "TLorentzVector.h"
-#include <vector>
-#include <cstdlib>
-#include <sstream>
-
-#include "TopNtupleAnalysis/EFTLib.h"
-
-#include "NNLOReweighter/NNLOReweighter.h"
 
 TtresChi2 m_chi2("MeV");
 bool m_status;
@@ -45,7 +29,7 @@ std::vector<MMUtils *> mm_mu(20);
 std::vector<MMUtils *> mm_e(20);
 
 
-NNLOReweighter *m_NNLO = 0;
+// NNLOReweighter *m_NNLO = 0;
 
 void initWrapper(bool dt = true) {
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
@@ -109,24 +93,24 @@ void initWrapper(bool dt = true) {
              "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
              "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag1_fake.root"); // fake2015+2016
   }
-  m_NNLO = new NNLOReweighter();
+  // m_NNLO = new NNLOReweighter();
 }
 
-void InitNNLO(int mcChannelNumber) {
-  m_NNLO->SetSampleID(mcChannelNumber);
-  m_NNLO->Init();
-}
+// void InitNNLO(int mcChannelNumber) {
+//   m_NNLO->SetSampleID(mcChannelNumber);
+//   m_NNLO->Init();
+// }
 
-double getNNLOWeight(double ttbarPt, double topPt, int mode) {
-  if (mode == 1) { // sequential
-    return m_NNLO->GetTtbarAndTopPtWeight(ttbarPt, topPt);
-  } else if (mode == 0) { // top pt extended
-    return m_NNLO->GetExtendedTopPtWeight(topPt);
-  } else if (mode == 2) { // ratio of extended and non-extended top pT
-    return m_NNLO->GetExtendedTopPtWeight(topPt)/m_NNLO->GetTopPtWeight(topPt);
-  }
-  return 1;
-}
+// double getNNLOWeight(double ttbarPt, double topPt, int mode) {
+//   if (mode == 1) { // sequential
+//     return m_NNLO->GetTtbarAndTopPtWeight(ttbarPt, topPt);
+//   } else if (mode == 0) { // top pt extended
+//     return m_NNLO->GetExtendedTopPtWeight(topPt);
+//   } else if (mode == 2) { // ratio of extended and non-extended top pT
+//     return m_NNLO->GetExtendedTopPtWeight(topPt)/m_NNLO->GetTopPtWeight(topPt);
+//   }
+//   return 1;
+// }
 
 
 void getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
@@ -223,4 +207,3 @@ double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVe
   double smw  = getSMWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
   return eftw/smw - 1.0;
 }
-

@@ -85,4 +85,5 @@ readTuDo: $(OBJS_READTUDO)
 clean:
 	rm -rf *.o read readTuDo Root/*.o util/*.o
 
-
+libTopNtupleAnalysis.so:  $(OBJS_READ)
+	g++ -shared -o$@ $(CXXFLAGS) $(OBJS_READ) $(LDFLAGS)
