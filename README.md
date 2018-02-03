@@ -1,71 +1,61 @@
 This is a framework for reading flat ntuples generated from AnalysisTop, running an analysis over them and producing final plots.
 
 <details>
-<summary>__DEPRECATED PART__</summary>
+<summary><h3>DEPRECATED PART</h3></summary>
 The framework works by reading the flat ntuples using the class MiniTree, as called
-from `read.cxx` and then running an analysis class (that derives of Analysis) on each event and
+from <code>read.cxx</code> and then running an analysis class (that derives of Analysis) on each event and
 producing histograms to be saved in the output(s).
 
 To compile the code, do in this directory (only ROOT must be setup):
-```bash
-make
-```
+<pre><code class=bash>make</code></pre>
+You can also compile the code using RootCore, by setting up RootCore (<code>setupATLAS</code> and then <code>rcSetup Top,2.4.29</code>) and doing:
+<pre><code class=bash>rc find_packages
+rc compile</code></pre>
 
-You can also compile the code using RootCore, by setting up RootCore (`setupATLAS` and then `rcSetup Top,2.4.29`) and doing:
-```bash
-rc find_packages
-rc compile
-```
+To check your options on how to run it: <code>./read --help</code>
 
-To check your options on how to run it: `./read --help`
-
-If you used RootCore, you must run it with: `$ROOTCOREBIN/bin/x86_64-slc6-gcc49-opt/read --help`
+If you used RootCore, you must run it with: <code>$ROOTCOREBIN/bin/x86_64-slc6-gcc49-opt/read --help</code>
 
 (this will be implied in what follows)
 
 
 For example:
-`./read --files input1.root,input2.root --analysis AnaTtresSL --output`resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0
-
+<pre><code class=bash>./read --files input1.root,input2.root --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0</pre></code>
 The --analysis flag indicate which class that derives of analysis should be called. It is created in read.cxx.
-To create your own Analysis class, just change read.cxx to check the value of --analysis and create an instance of your analysis class
+To create your own Analysis class, just change <code>read.cxx</code> to check the value of <code>--analysis</code> and create an instance of your analysis class
 in analogy with:
-```cpp
-  std::vector<Analysis *> vec_analysis; 
+<pre><code class=cpp>  std::vector<Analysis *> vec_analysis; 
   if (analysis == "AnaTtresSL") {
     vec_analysis.push_back(new AnaTtresSL(outList[0], true,  false )); // resolved electron
     vec_analysis.push_back(new AnaTtresSL(outList[1], false, false )); // resolved muon
     vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true  )); // boosted  electron
     vec_analysis.push_back(new AnaTtresSL(outList[3], false, true  )); // boosted  muon
-  } 
-```
+  } </code></pre>
 
 The list of output files is given as 4 files, since in this analysis 4 channels are expected. If your analysis only outputs one file, only the
 first should be considered.
 
 The list of inout files can be given as a comma-separated list, or it can be given as a newline-separated text file that ends in .txt and starts
 with input, for example:
-```bash
-./read --files input.txt --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0
+<pre><code class=bash>./read --files input.txt --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0</pre></code>
 
 where input.txt has:
-input1.root
-input2.root
-```
+<pre><code>input1.root
+input2.root</pre></code>
 
-Take a look at the `Root/AnaTtresSL.cxx` and `TopNtupleAnalysis/AnaTtresSL.h `files for an analysis example.
+Take a look at the <code>Root/AnaTtresSL.cxx</code> and <code>TopNtupleAnalysis/AnaTtresSL.h</code> files for an analysis example.
 
 If, however, the mini flat ntuple files contain a histogram with the sum of weights (which is the correct
 way of doing this), one can just read the information from there.
 
-You can also write a `sumOfWeights.txt` file containing, in each line the dataset ID and the sum of weights and use:
-```bash
-./read --files input.txt --analysis AnaTtresSL --output re.root,rmu.root,be.root,bmu.root --data 0 --sumWeights sumOfWeights.txt
-```
+You can also write a <code>sumOfWeights.txt</code> file containing, in each line the dataset ID and the sum of weights and use:
+<pre><code class=bash>./read --files input.txt --analysis AnaTtresSL --output re.root,rmu.root,be.root,bmu.root --data 0 --sumWeights sumOfWeights.txt</pre></code>
 
 This will speed it up.
 </details>
 
+Quick Start
+-----------
 It is recommended to use the Python code in `pyHistograms`, which will also link to the C++ code, but it should be easier to adapt to your needs.
 To do that, please compile the code using RootCore, so that it can link against the library created by RootCore.
 To run this code, one must also checkout the following packages and recompile the RootCore setup:
