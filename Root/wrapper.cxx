@@ -18,7 +18,9 @@
 
 // #include "NNLOReweighter/NNLOReweighter.h"
 
-#include "DMweight.C"
+// #include "DMweight.C"
+
+#include "TopNtupleAnalysis/wrapper.h"
 
 TtresChi2 m_chi2("MeV");
 bool m_status;
@@ -28,10 +30,9 @@ TtresNeutrinoBuilder m_neutrinoBuilder("MeV");
 std::vector<MMUtils *> mm_mu(20);
 std::vector<MMUtils *> mm_e(20);
 
+// // NNLOReweighter *m_NNLO = 0;
 
-// NNLOReweighter *m_NNLO = 0;
-
-void initWrapper(bool dt = true) {
+void initWrapper(bool dt) {
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
   m_status = false;
   if (dt) {
@@ -96,21 +97,21 @@ void initWrapper(bool dt = true) {
   // m_NNLO = new NNLOReweighter();
 }
 
-// void InitNNLO(int mcChannelNumber) {
-//   m_NNLO->SetSampleID(mcChannelNumber);
-//   m_NNLO->Init();
-// }
+// // void InitNNLO(int mcChannelNumber) {
+// //   m_NNLO->SetSampleID(mcChannelNumber);
+// //   m_NNLO->Init();
+// // }
 
-// double getNNLOWeight(double ttbarPt, double topPt, int mode) {
-//   if (mode == 1) { // sequential
-//     return m_NNLO->GetTtbarAndTopPtWeight(ttbarPt, topPt);
-//   } else if (mode == 0) { // top pt extended
-//     return m_NNLO->GetExtendedTopPtWeight(topPt);
-//   } else if (mode == 2) { // ratio of extended and non-extended top pT
-//     return m_NNLO->GetExtendedTopPtWeight(topPt)/m_NNLO->GetTopPtWeight(topPt);
-//   }
-//   return 1;
-// }
+// // double getNNLOWeight(double ttbarPt, double topPt, int mode) {
+// //   if (mode == 1) { // sequential
+// //     return m_NNLO->GetTtbarAndTopPtWeight(ttbarPt, topPt);
+// //   } else if (mode == 0) { // top pt extended
+// //     return m_NNLO->GetExtendedTopPtWeight(topPt);
+// //   } else if (mode == 2) { // ratio of extended and non-extended top pT
+// //     return m_NNLO->GetExtendedTopPtWeight(topPt)/m_NNLO->GetTopPtWeight(topPt);
+// //   }
+// //   return 1;
+// // }
 
 
 void getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
@@ -137,7 +138,7 @@ double res_chi2() {
   if (!m_status) return -1;
   return m_chi2.getResult_Chi2All();
 }
-double getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var = 0) {
+double getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var) {
   float sf; 
   float t_pt = top.Perp();
   float t_eta = top.Eta();
@@ -193,7 +194,8 @@ double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector l
   return w;
 }
 
-void initPDF(const std::string &s = "NNPDF21_lo_as_0130_100") {
+#ifndef EFTLIB_H
+void initPDF(const std::string &s) {
   initPDFForReweighting(s.c_str(), 0);
 }
 double alphaS(double Q2) {
@@ -207,3 +209,4 @@ double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVe
   double smw  = getSMWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
   return eftw/smw - 1.0;
 }
+#endif

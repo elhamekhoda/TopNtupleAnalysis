@@ -3,6 +3,11 @@
 import math
 from ROOT import *
 from optparse import OptionParser
+import os
+
+run_path = os.path.dirname(__file__)
+root_path = os.path.join(run_path, os.pardir)
+data_path = os.path.join(root, "share")
 
 def addFilesInChain(c, txtFileOption):
     for f in txtFileOption.split(','):
@@ -62,7 +67,7 @@ def main():
 					for m in range(0, len(pdfAttr)):
 						pdfSumOfWeights[t_pdfSumWeights.dsid][l][m] += pdfAttr[m]
 
-			pfs = open("sumOfWeights%s%s.txt" % (t, suf), "w")
+			pfs = open(os.path.join(data_path, "sumOfWeights%s%s.txt") % (t, suf), "w")
 			for channel in sorted(pdfSumOfWeights.keys()):
 				for pdfName in sorted(pdfSumOfWeights[channel].keys()):
 					for pdfNumber in range(0, len(pdfSumOfWeights[channel][pdfName])):
@@ -99,7 +104,7 @@ def main():
 					if (value > 60000 or value < -60000) and l in [42]: print "Read ", value, " in item ", wjpdfList[l], " in file ", t_wjpdfSumWeights.GetCurrentFile().GetName()
 					wjpdfSumOfWeights[t_wjpdfSumWeights.dsid][l] += value
 
-			pfs = open("sumOfWeights%s%s.txt" % (t, suf), "w")
+			pfs = open(os.path.join(data_path, "sumOfWeights%s%s.txt") % (t, suf), "w")
 			for channel in sorted(wjpdfSumOfWeights.keys()):
 				for pdfNumber in range(0, len(wjpdfSumOfWeights[channel])):
 					pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", pdfName, "", pdfNumber, "", wjpdfSumOfWeights[channel][pdfNumber]))
@@ -127,7 +132,7 @@ def main():
 					sumOfWeights[t_sumWeights.dsid] = 0
 				sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
 
-			fs = open("sumOfWeights%s%s.txt" % (t, suf), "w")
+			fs = open(os.path.join(data_path, "sumOfWeights%s%s.txt") % (t, suf), "w")
 			for channel in sorted(sumOfWeights.keys()):
 				fs.write("%20d%20s%20f\n" % (channel, "", sumOfWeights[channel]))
 			fs.close()
