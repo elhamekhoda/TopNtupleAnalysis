@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 import os
+import helpers
 from helpers import *
 # from ROOT import *
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 import analysis
 
+run_path = os.path.join(os.path.dirname(__file__))
+root_path = os.path.join(run_path, os.pardir)
+data_path = os.path.join(root_path, 'share')
 def main():
     helpers.doPRW = not options.noPRW
     accept_prob = float(options.accept_prob)
@@ -25,7 +29,7 @@ def main():
 
     if not options.data:
         if options.pdf != "":
-            pfs = open("sumOfWeightspdf_new.txt")
+            pfs = open(os.path.join(data_path, "sumOfWeightspdf_new.txt"))
             for line in pfs.readlines():
                 line_spl = line.split()
                 if not int(line_spl[0]) in pdfSumOfWeights:
@@ -37,7 +41,7 @@ def main():
                 else:
                     pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
             pfs.close()
-            pfs = open("sumOfWeightswjpdf_new.txt")
+            pfs = open(os.path.join(data_path, "sumOfWeightswjpdf_new.txt"))
             for line in pfs.readlines():
                 line_spl = line.split()
                 if not int(line_spl[0]) in pdfSumOfWeights:
@@ -50,18 +54,18 @@ def main():
                     pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
             pfs.close()
         else:
-            fs = open("sumOfWeights_new.txt")
+            fs = open(os.path.join(data_path, "sumOfWeights_new.txt"))
             for line in fs.readlines():
                 line_spl = line.split()
                 sumOfWeights[int(line_spl[0])] = float(line_spl[1])
             fs.close()
-            fs = open("sumOfWeightssyst_new.txt")
+            fs = open(os.path.join(data_path, "sumOfWeightssyst_new.txt"))
             for line in fs.readlines():
                 line_spl = line.split()
                 sumOfWeights[int(line_spl[0])] = float(line_spl[1])
             fs.close()
 
-            fs = open("sumOfWeightssystaf2_new.txt")
+            fs = open(os.path.join(data_path, "sumOfWeightssystaf2_new.txt"))
             for line in fs.readlines():
                 line_spl = line.split()
                 sumOfWeightsAF2[int(line_spl[0])] = float(line_spl[1])
@@ -70,8 +74,8 @@ def main():
     #print pdfSumOfWeights
 
     print "Loading xsec."
-    loadXsec(Xsec, "../scripts/XSection-MC15-13TeV-ttres.data")
-    loadXsec(Xsec, "../../TopDataPreparation/data/XSection-MC15-13TeV.data")
+    loadXsec(Xsec, os.path.join(root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
+    loadXsec(Xsec, os.path.join(root_path, "../TopDataPreparation/data/XSection-MC15-13TeV.data"))
     #loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
 
     # check if there is any W+jets sample there
@@ -505,11 +509,9 @@ if __name__ == "__main__":
                         help='Boosted top tagger which will applied to the large-R jet for the hadronic-top reconstruction in the boost selection. Simple logical operation are supported.')
     options = parser.parse_args()
 
-
     print "-> Initialising binds now."
-    ROOT.gROOT.LoadMacro(os.path.join(os.path.dirname(__file__), "../libTopNtupleAnalysis.so"))
-    ROOT.gROOT.LoadMacro(os.path.join(os.path.dirname(__file__), "wrapper.C+"))
-    ROOT.gSystem.Load("wrapper_C.so")
+    ROOT.gSystem.Load(os.path.join(root_path, "libTopNtupleAnalysis.so"))
+    ROOT.gSystem.Load(os.path.join(root_path, "G__TopNtupleAnalysis.cxx"))
     print "-> Calling main"
     main()
     print "The end."
