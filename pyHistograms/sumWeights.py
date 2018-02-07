@@ -5,7 +5,7 @@ from ROOT import *
 from optparse import OptionParser
 import os
 
-run_path = os.path.dirname(__file__)
+run_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.join(run_path, os.pardir)
 data_path = os.path.join(root, "share")
 

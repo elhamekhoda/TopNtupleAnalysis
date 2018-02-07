@@ -18,5 +18,5 @@
 #pragma link C++ function alphaS;
 #pragma link C++ function setEFT;
 #pragma link C++ function getEFTSMWeight;
-
+#pragma link C++ function wfunction;
 #endif

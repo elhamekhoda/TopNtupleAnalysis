@@ -1,4 +1,5 @@
 #include <TMath.h>
+#include "TopNtupleAnalysis/wrapper.h"
 Double_t wfunction(Int_t E, Double_t x) {
   Double_t parfit[6]={0,1,0,0,0,0};
   Double_t invw=1.,w=-1.;

@@ -7,7 +7,7 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 import analysis
 
-run_path = os.path.join(os.path.dirname(__file__))
+run_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 root_path = os.path.join(run_path, os.pardir)
 data_path = os.path.join(root_path, 'share')
 def main():
@@ -511,7 +511,7 @@ if __name__ == "__main__":
 
     print "-> Initialising binds now."
     ROOT.gSystem.Load(os.path.join(root_path, "libTopNtupleAnalysis.so"))
-    ROOT.gSystem.Load(os.path.join(root_path, "G__TopNtupleAnalysis.cxx"))
+    ROOT.gSystem.Load(os.path.join(root_path, "TopNtupleAnalysisCintDict.cxx"))
     print "-> Calling main"
     main()
     print "The end."

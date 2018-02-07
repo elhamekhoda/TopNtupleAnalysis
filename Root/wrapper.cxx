@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <vector>
-
+#include <string>
 #include "TLorentzVector.h"
 
 #include "TopNtupleAnalysis/TtresChi2.h"
@@ -18,20 +18,20 @@
 
 // #include "NNLOReweighter/NNLOReweighter.h"
 
-// #include "DMweight.C"
-
 #include "TopNtupleAnalysis/wrapper.h"
 
+
+std::string root_dir = (std::string) ROOT_DIR;
 TtresChi2 m_chi2("MeV");
 bool m_status;
-WeakCorrScaleFactorParam m_ewkTool("../share/EWcorr_param.root");
+
+WeakCorrScaleFactorParam m_ewkTool(root_dir+"share/EWcorr_param.root");
 TtresNeutrinoBuilder m_neutrinoBuilder("MeV");
 
 std::vector<MMUtils *> mm_mu(20);
 std::vector<MMUtils *> mm_e(20);
 
 // // NNLOReweighter *m_NNLO = 0;
-
 void initWrapper(bool dt) {
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
   m_status = false;
@@ -40,59 +40,60 @@ void initWrapper(bool dt) {
     int runMM_DRCorr_e = 0;
     int runMM_etaCorr_mu = 0;
     int runMM_DRCorr_mu = 1;
+    
     // 2jets
     mm_e[0*10+2] = new MMUtils(0, runMM_etaCorr_e, runMM_DRCorr_e, 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_2jets_btag0_fake.root");  // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_2jets_btag0_fake.root");  // fake2015+2016
         
     mm_e[1*10+2]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e, 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_2jets_btag1_fake.root");   // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_2jets_btag1_fake.root");   // fake2015+2016
 
 
     mm_mu[0*10+2] = new MMUtils(0, runMM_etaCorr_mu, runMM_DRCorr_mu,
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_2jets_btag0_fake.root"); // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_2jets_btag0_fake.root"); // fake2015+2016
         
     mm_mu[1*10+2] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu, 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_2jets_btag1_fake.root"); // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_2jets_btag1_fake.root"); // fake2015+2016
     
     // 3jets
     mm_e[0*10+3] = new MMUtils(0, runMM_etaCorr_e, runMM_DRCorr_e,
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_3jets_btag0_fake.root");  // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_3jets_btag0_fake.root");  // fake2015+2016
         
     mm_e[1*10+3]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e, 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_3jets_btag1_fake.root");   // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_3jets_btag1_fake.root");   // fake2015+2016
 
 
     mm_mu[0*10+3] = new MMUtils(0, runMM_etaCorr_mu, runMM_DRCorr_mu,
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_3jets_btag0_fake.root"); // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_3jets_btag0_fake.root"); // fake2015+2016
         
     mm_mu[1*10+3] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu, 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_3jets_btag1_fake.root"); // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_3jets_btag1_fake.root"); // fake2015+2016
     
     // 4jets    
     mm_e[0*10+4] = new MMUtils(0, runMM_etaCorr_e, runMM_DRCorr_e, 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_4jets_btag0_fake.root");  // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_4jets_btag0_fake.root");  // fake2015+2016
         
     mm_e[1*10+4]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e, 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_e_4jets_btag1_fake.root");   // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_4jets_btag1_fake.root");   // fake2015+2016
 
 
     mm_mu[0*10+4] = new MMUtils(0, runMM_etaCorr_mu, runMM_DRCorr_mu,
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag0_fake.root"); // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag0_fake.root"); // fake2015+2016
         
     mm_mu[1*10+4] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu, 
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
-             "../scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag1_fake.root"); // fake2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
+             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag1_fake.root"); // fake2015+2016
   }
   // m_NNLO = new NNLOReweighter();
 }
@@ -164,7 +165,7 @@ TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
   return nu;
 }
 
-
+#ifndef NOEFT
 double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger, float topoetcone20, int runNumber) {
   Event e;
   e.met(met.Px(), met.Py());
@@ -208,3 +209,4 @@ double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVe
   double smw  = getSMWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
   return eftw/smw - 1.0;
 }
+#endif
