@@ -31,6 +31,7 @@ TtresNeutrinoBuilder m_neutrinoBuilder("MeV");
 std::vector<MMUtils *> mm_mu(20);
 std::vector<MMUtils *> mm_e(20);
 
+namespace TopNtupleAnalysis{
 // // NNLOReweighter *m_NNLO = 0;
 void initWrapper(bool dt) {
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
@@ -209,4 +210,5 @@ double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVe
   double smw  = getSMWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
   return eftw/smw - 1.0;
 }
-#endif
+#endif 
+}

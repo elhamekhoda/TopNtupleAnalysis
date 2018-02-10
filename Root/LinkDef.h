@@ -4,6 +4,9 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
+#pragma link C++ namespace TopNtupleAnalysis;
+#pragma link C++ nestedclass;
+#pragma link C++ nestedtypedef;
 #pragma link C++ function initWrapper;
 #pragma link C++ function getMtt;
 #pragma link C++ function res_mtt;

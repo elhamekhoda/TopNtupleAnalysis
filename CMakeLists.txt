@@ -90,7 +90,7 @@ else()
 
     #---Create a shared library with geneated dictionary
     add_library(TopNtupleAnalysis SHARED ${SOURCES} TopNtupleAnalysisCintDict)
-    set_target_properties(TopNtupleAnalysis PROPERTIES SUFFIX ".so")
+    # set_target_properties(TopNtupleAnalysis PROPERTIES SUFFIX ".so")
     target_link_libraries(TopNtupleAnalysis ${ROOT_LIBRARIES})
 
     #---Create a main program using the library

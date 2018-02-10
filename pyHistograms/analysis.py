@@ -385,7 +385,7 @@ class AnaTtresSL(Analysis):
             j = ROOT.TLorentzVector()
             j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k])
             jets.push_back(j)
-        w = ROOT.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger, topoetcone20, runNumber)
+        w = ROOT.TopNtupleAnalysis.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger, topoetcone20, runNumber)
         if   math.fabs(l.Eta()) <= 1.5 and 'qcdcenup' in syst: w *= 1.5
         elif math.fabs(l.Eta()) <= 1.5 and 'qcdcendw' in syst: w *= 0.5
         elif math.fabs(l.Eta()) > 1.5 and 'qcdfwdup' in syst: w *= 2.0
@@ -610,7 +610,7 @@ class AnaTtresSL(Analysis):
         self.h["vtxz"][syst].Fill(sel.vtxz, w)
         ##TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
         ##double getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
-        nu = ROOT.getNu(l, sel.met_met, sel.met_phi)
+        nu = ROOT.TopNtupleAnalysis.getNu(l, sel.met_met, sel.met_phi)
         if 'be' in self.ch or 'bmu' in self.ch:
             goodJetIdx = -1
             closeJetIdx = -1
@@ -684,12 +684,12 @@ class AnaTtresSL(Analysis):
             mth = -1
             mwh = -1
             chi2 = 100000
-            ROOT.getMtt(l, jets, btag, met)
-            mtt = ROOT.res_mtt()
-            mtl = ROOT.res_mtl()
-            mth = ROOT.res_mth()
-            mwh = ROOT.res_mwh()
-            chi2 = ROOT.res_chi2()
+            ROOT.TopNtupleAnalysis.getMtt(l, jets, btag, met)
+            mtt = ROOT.TopNtupleAnalysis.res_mtt()
+            mtl = ROOT.TopNtupleAnalysis.res_mtl()
+            mth = ROOT.TopNtupleAnalysis.res_mth()
+            mwh = ROOT.TopNtupleAnalysis.res_mwh()
+            chi2 = ROOT.TopNtupleAnalysis.res_chi2()
             w0 = w/self.w2HDM
             self.h["mtt"][syst].Fill(mtt*1e-3, w)
             self.h["mttr"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))

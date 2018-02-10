@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import os
 import helpers
-from helpers import *
-# from ROOT import *
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 import analysis
@@ -11,12 +9,13 @@ run_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 root_path = os.path.join(run_path, os.pardir)
 data_path = os.path.join(root_path, 'share')
 def main():
+    ROOT.PyConfig.IgnoreCommandLineOptions = False
     helpers.doPRW = not options.noPRW
     accept_prob = float(options.accept_prob)
     randGen = ROOT.TRandom3(4357)
 
     print "-> Initialising wrapper"
-    ROOT.initWrapper(options.data)
+    ROOT.TopNtupleAnalysis.initWrapper(options.data)
 
     pdfList = options.pdf.split(',')
     Xsec = {}
@@ -74,8 +73,8 @@ def main():
     #print pdfSumOfWeights
 
     print "Loading xsec."
-    loadXsec(Xsec, os.path.join(root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
-    loadXsec(Xsec, os.path.join(root_path, "../TopDataPreparation/data/XSection-MC15-13TeV.data"))
+    helpers.loadXsec(Xsec, os.path.join(root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
+    helpers.loadXsec(Xsec, os.path.join(root_path, "../TopDataPreparation/data/XSection-MC15-13TeV.data"))
     #loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
 
     # check if there is any W+jets sample there
@@ -87,7 +86,7 @@ def main():
     print "Loading first event"
     mt_load = ROOT.TChain("nominal")
     sel = mt_load
-    addFilesInChain(mt_load, options.files)
+    helpers.addFilesInChain(mt_load, options.files)
 
     mt_load.GetEntry(0)
     if sel.mcChannelNumber in helpers.listWjets22:
@@ -181,7 +180,7 @@ def main():
         if isWjets or isSingleTop:
             systList.append('singletopup')
             systList.append('singletopdw')
-        systList.extend(weightChangeSystematics)
+        systList.extend(helpers.weightChangeSystematics)
         systList.remove('')
         if doEWK:
             systList.append('ttEWK__1up')
@@ -280,8 +279,8 @@ def main():
         eftStr = options.EFT.split(",")
         eftLambda = float(eftStr[0])
         eftCvv = float(eftStr[1])
-        helpers.ROOT.initPDF(options.pdfForWeight)
-        helpers.ROOT.setEFT(eftLambda, eftCvv)
+        ROOT.TopNtupleAnalysis.initPDF(options.pdfForWeight)
+        ROOT.TopNtupleAnalysis.setEFT(eftLambda, eftCvv)
     if options.SCALAR != "":
         scalarStr  = options.SCALAR.split(",")
         scalarMH   = float(scalarStr[0])
@@ -289,7 +288,7 @@ def main():
         scalarSBA  = float(scalarStr[2])
         scalarTANB = float(scalarStr[3])
         scalarTYPE = int(scalarStr[4])
-        helpers.ROOT.initPDF(options.pdfForWeight)
+        ROOT.TopNtupleAnalysis.initPDF(options.pdfForWeight)
         helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
         print "2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE)
     for k in channels:
@@ -327,7 +326,7 @@ def main():
     for s in systList:
         # s is nominal, or the name of systematic
         treeName = s # systematic name is the same as the TTree name
-        if treeName in weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'wc__' in treeName or 'wl__' in treeName or 'wbb__' in treeName or 'CAallMCAsym' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName or 'ttNNLO_' in treeName:
+        if treeName in helpers.weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'wc__' in treeName or 'wl__' in treeName or 'wbb__' in treeName or 'CAallMCAsym' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName or 'ttNNLO_' in treeName:
             treeName = 'nominal'
         if isWjets and (('ttgen' in treeName) or ('ttpsold' in treeName) or ('ttpspp7' in treeName) or ('ttps' in treeName) or ('ttisrfsr' in treeName) or ('pdf_PDF4LHC15_nlo_30' in treeName) or ('ttxsec' in treeName) or ('singletop' in treeName) or ('elMisIDpos' in treeName) or ('2to3ex' in treeName)): # DANGER remember to change when doing W+jets PDF variation
             treeName = 'nominal'
@@ -341,7 +340,7 @@ def main():
         suffix = s
         if suffix == 'nominal':
             suffix = ''
-        addFilesInChain(mt, options.files)
+        helpers.addFilesInChain(mt, options.files)
         sel = mt
         ent = mt.GetEntries()
         for k in range(0, ent):
@@ -357,7 +356,7 @@ def main():
                     m = sel.mcChannelNumber
                     if sel.mcChannelNumber in [301528, 301529, 301530, 301531, 301532]:
                         m = 410000
-                    ROOT.InitNNLO(m)
+                    ROOT.TopNtupleAnalysis.InitNNLO(m)
                 isFirstEvent = False
 
             # common part of the weight
@@ -407,13 +406,13 @@ def main():
                     weight_reco *= sel.mc_generator_weights[wjpdfList[pdfNumber]]
                 if not options.data and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532, 410009, 410120, 410121, 407009, 407010, 407011, 407012, 410004, 410003, 410002, 410001, 410500, 410159, 410501, 410502, 410503, 410504, 410505, 410506, 410509, 410511, 410512, 10225, 410250, 410251, 410252]: #410525]:
                     if 'ttNNLO_seq_' in suffix:
-                        weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 1)
+                        weight_reco *= ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 1)
                     if 'ttNNLO_topPt_' in suffix:
-                        weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 0)
+                        weight_reco *= ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 0)
                     if 'ttNNLO_topPtDiff_' in suffix:
-                        weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 2)
+                        weight_reco *= ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 2)
                     if 'ttNNLO_seqExtended_' in suffix:
-                        weight_reco *= ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 2)*ROOT.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 1)
+                        weight_reco *= ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 2)*ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 1)
                 analysisCode[ana].run(sel, suffix, weight*weight_reco, weight)
 
     for k in analysisCode:
@@ -510,8 +509,14 @@ if __name__ == "__main__":
     options = parser.parse_args()
 
     print "-> Initialising binds now."
-    ROOT.gSystem.Load(os.path.join(root_path, "libTopNtupleAnalysis.so"))
-    ROOT.gSystem.Load(os.path.join(root_path, "TopNtupleAnalysisCintDict.cxx"))
+    lib_dir = os.path.join(os.getenv("WorkDir_DIR"), "lib") if "WorkDir_DIR" in os.environ else root_dir
+    cintdict_dir = os.path.join(os.getenv("TestArea"), "TopNtupleAnalysis", 'CMakeFiles') if "TestArea" in os.environ else root_dir
+    shared_lib = os.path.join(lib_dir, "libTopNtupleAnalysis.so")
+    if os.path.exists(shared_lib):
+        ROOT.gSystem.Load(shared_lib)
+    else:
+        ROOT.gSystem.Load(shared_lib.rsplit(".so", 1)[0] + ".dylib")
+    ROOT.gSystem.Load(os.path.join(cintdict_dir, "TopNtupleAnalysisCintDict.cxx"))
     print "-> Calling main"
     main()
     print "The end."

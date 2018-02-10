@@ -129,7 +129,7 @@ def applyBtagSF(sel, s):
         syst = "FT_EFF_Eigen_extrapolation__1%s" % (direction)
     elif 'btageSF_1' in s:
         syst = "FT_EFF_Eigen_extrapolation from charm__1%s" % (direction)
-    return getBtaggingSF(jetList, jetFlavour, jetWeight, vetoSyst, syst)
+    return ROOT.getBtaggingSF(jetList, jetFlavour, jetWeight, vetoSyst, syst)
 
 # same as above, but it reads the SFs from the file
 def applyBtagSFFromFile(sel, s):
@@ -220,11 +220,11 @@ def applyEWK(sel, s):
     topbar = ROOT.TLorentzVector()
     topbar.SetPtEtaPhiM(sel.MC_tbar_pt, sel.MC_tbar_eta, sel.MC_tbar_phi, sel.MC_tbar_m)
     if s == 'ttEWK__1up':
-        w = ROOT.getEWK(top, topbar, sel.initial_type, 1)
+        w = ROOT.TopNtupleAnalysis.getEWK(top, topbar, sel.initial_type, 1)
     elif s == 'ttEWK__1down':
-        w = ROOT.getEWK(top, topbar, sel.initial_type, 2)
+        w = ROOT.TopNtupleAnalysis.getEWK(top, topbar, sel.initial_type, 2)
     else:
-        w = ROOT.getEWK(top, topbar, sel.initial_type, 0)
+        w = ROOT.TopNtupleAnalysis.getEWK(top, topbar, sel.initial_type, 0)
     return w
 
 
@@ -424,7 +424,7 @@ def getDMWeight(sel):
         mass = massMap[sel.mcChannelNumber]
     except: # no mc id in this map, do not reweight
         return 1.0
-    return ROOT.wfunction(mass, sel.MC_ttbar_beforeFSR_m*1e-3)
+    return ROOT.TopNtupleAnalysis.wfunction(mass, sel.MC_ttbar_beforeFSR_m*1e-3)
 
 def getKKgluonWidthWeight(width, sel, s = ""):
     if sel.MC_ttbar_beforeFSR_m < 0:
@@ -581,7 +581,7 @@ def get2HDMWeight(sel):
     pCpp = getMomenta(sel,topologySM_name)
     pPython = T2HDM.invert_momenta(pCpp)
     Q2 = sel.MC_Q_me*sel.MC_Q_me
-    alphaS = ROOT.alphaS(Q2)
+    alphaS = ROOT.TopNtupleAnalysis.alphaS(Q2)
     nhel = 0 # sum over all helicities
     me2SM = T2HDM.model.modules[topologySM_lib].get_me(pPython,alphaS,nhel) ### calculate the SM ME^2
     me2XX = T2HDM.model.modules[topologyXX_lib].get_me(pPython,alphaS,nhel) ### calculate the X ME^2
@@ -605,7 +605,7 @@ listWjets22.extend(range(364156, 364197+1))
 #    for i in range(0, len(sel.akt4truthjet_pt)):
 #        if sel.akt4truthjet_pt[i] > 20e3 and fabs(sel.akt4truthjet_eta[i]) < 4.5:
 #           njet += 1
-#    return ROOT.wrapperC.getWjets22Weight(njet)
+#    return ROOT.TopNtupleAnalysis.getWjets22Weight(njet)
 
 doPRW = True
 

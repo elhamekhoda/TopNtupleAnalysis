@@ -7,6 +7,7 @@
 #include "TLorentzVector.h"
 #include "TMath.h"
 
+namespace TopNtupleAnalysis{
 void initWrapper(bool dt = true);
 void getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met);
 double res_mtt();
@@ -25,3 +26,4 @@ void setEFT(float eftLambda, float eftCvv);
 double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2);
 #endif
 #endif
+}
