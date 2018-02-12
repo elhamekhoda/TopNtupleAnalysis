@@ -6,23 +6,26 @@ Prerequisites
 -------------
 #### Neccessary
 * Core function: TopDataPreparation
-```bash
-acm sparse_clone_project $CERN_USER/athena
-acm add_pkg athena/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation
-acm exclude_pkg TopDataPreparation
-```
 
+    ```bash
+    acm sparse_clone_project $CERN_USER/athena
+    acm add_pkg athena/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation
+    acm exclude_pkg TopDataPreparation
+    ```
+  
 #### Optional
 * NNLO Reweighting: NNLOReweighter (Only works with __Altas CMake__)
-  ```bash
-   acm clone_project MultiBJets/NNLOReweighter
-  ```
+
+    ```bash
+    acm clone_project MultiBJets/NNLOReweighter
+    ```
 * Grid Access: HQTTtResonancesTools
-  ```bash
-  acm clone_project elham/BoostedJetTaggers
-  acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/TtResonancesTools
-  acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/HQTTtResonancesTools
-  ```
+
+    ```bash
+    acm clone_project elham/BoostedJetTaggers
+    acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/TtResonancesTools
+    acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/HQTTtResonancesTools
+    ```
 * EFTLib: LHAPDF
 
 General Instruction
@@ -110,12 +113,13 @@ Create your own scripts based on this! Some very nice examples can be found in `
 #### Quick Start
 1. Please first follow the instruction [__HERE__](https://gitlab.cern.ch/atlas-phys/exot/hqt/R21-ttbar-1lep/TtResDocumentation/wikis/Software#instruction) of HQTTtResonancesTools and generate a TopNtuple `run/output.root`.
 2. `cd $TestArea/../run/` and run TopNtupleAnalysis
-   ```bash
-   echo "$TestArea/../run/output.root" > tna-input.txt
-   $SourceArea/TopNtupleAnalysis/pyHistograms/makeHistograms.py \
-   -f tna-input.txt
-   ```
-   Change the flags according to [Usage] to adapt to your needs.
+
+     ```bash
+     echo "$TestArea/../run/output.root" > tna-input.txt
+     $SourceArea/TopNtupleAnalysis/pyHistograms/makeHistograms.py \
+     -f tna-input.txt
+     ```
+   Change the flags according to [Usage](#usage) to adapt to your needs.
    
 <details>
 <summary><h3>AnalysisTop Rel.20.7</h3></summary>
