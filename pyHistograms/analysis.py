@@ -625,7 +625,7 @@ class AnaTtresSL(Analysis):
                 #               closeJetIdx = i
                 #               pt = cj.Perp()
             for i in range(len(sel.ljet_pt)):
-                if sel.ljet_good[i] and ord(eval(self.is_top_tagged)):
+                if sel.ljet_good[i] and eval(self.is_top_tagged):
                     goodJetIdx = i
                     break
             if goodJetIdx == -1:

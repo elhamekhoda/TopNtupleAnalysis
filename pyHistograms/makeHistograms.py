@@ -2,12 +2,11 @@
 import os
 import helpers
 import ROOT
-import warnings
 ROOT.PyConfig.IgnoreCommandLineOptions = True
+import warnings
 import analysis
 
 def main():
-    ROOT.PyConfig.IgnoreCommandLineOptions = False
     helpers.doPRW = not options.noPRW
     accept_prob = float(options.accept_prob)
     randGen = ROOT.TRandom3(4357)
@@ -438,7 +437,7 @@ if __name__ == "__main__":
                         metavar="ANALYSIS")
     parser.add_argument("-o", "--output",
                         dest="output",
-                        default="(re,isTopTagged_80):hist_re.root,(rmu,isTopTagged_80):hist_rmu.root,(be,isTopTagged_80):hist_be.root,(bmu,isTopTagged_80):hist_bmu.root",
+                        default="(re,good_smooth_ts80):hist_re.root,(rmu,good_smooth_ts80):hist_rmu.root,(be,good_smooth_ts80):hist_be.root,(bmu,good_smooth_ts80):hist_bmu.root",
                         help='Comma-separated list of "(<topo><lep>[<b-cat>],[<top-tagger>]):<output_fname>". See Also: `--top-tagger`',
                         metavar="FILES")
     parser.add_argument("-s", "--systs",
@@ -506,7 +505,7 @@ if __name__ == "__main__":
                         help="Probability of accepting an event. Factor to use when dropping events in data to reduce luminosity available.",
                         metavar="FLOAT")
     parser.add_argument('-t', '--top-tagger',
-                        default='isTopTagged_80',
+                        default='good_smooth_ts80',
                         help='"GLOBAL" Boosted top tagger which will applied to the large-R jet for the hadronic-top reconstruction in the boost selection. Simple logical operation are supported. ONLY WORK IF YOU DON\'T USE ANY TOP-TAGGER IN THE _OUTPUT_ SELECTIONS.')
     options = parser.parse_args()
 
