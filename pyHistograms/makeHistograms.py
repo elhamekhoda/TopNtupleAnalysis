@@ -2,12 +2,10 @@
 import os
 import helpers
 import ROOT
+import warnings
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 import analysis
 
-run_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-root_path = os.path.join(run_path, os.pardir)
-data_path = os.path.join(root_path, 'share')
 def main():
     ROOT.PyConfig.IgnoreCommandLineOptions = False
     helpers.doPRW = not options.noPRW
@@ -28,7 +26,7 @@ def main():
 
     if not options.data:
         if options.pdf != "":
-            pfs = open(os.path.join(data_path, "sumOfWeightspdf_new.txt"))
+            pfs = open(os.path.join(helpers.data_path, "sumOfWeightspdf_new.txt"))
             for line in pfs.readlines():
                 line_spl = line.split()
                 if not int(line_spl[0]) in pdfSumOfWeights:
@@ -40,7 +38,7 @@ def main():
                 else:
                     pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
             pfs.close()
-            pfs = open(os.path.join(data_path, "sumOfWeightswjpdf_new.txt"))
+            pfs = open(os.path.join(helpers.data_path, "sumOfWeightswjpdf_new.txt"))
             for line in pfs.readlines():
                 line_spl = line.split()
                 if not int(line_spl[0]) in pdfSumOfWeights:
@@ -53,18 +51,18 @@ def main():
                     pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
             pfs.close()
         else:
-            fs = open(os.path.join(data_path, "sumOfWeights_new.txt"))
+            fs = open(os.path.join(helpers.data_path, "sumOfWeights_new.txt"))
             for line in fs.readlines():
                 line_spl = line.split()
                 sumOfWeights[int(line_spl[0])] = float(line_spl[1])
             fs.close()
-            fs = open(os.path.join(data_path, "sumOfWeightssyst_new.txt"))
+            fs = open(os.path.join(helpers.data_path, "sumOfWeightssyst_new.txt"))
             for line in fs.readlines():
                 line_spl = line.split()
                 sumOfWeights[int(line_spl[0])] = float(line_spl[1])
             fs.close()
 
-            fs = open(os.path.join(data_path, "sumOfWeightssystaf2_new.txt"))
+            fs = open(os.path.join(helpers.data_path, "sumOfWeightssystaf2_new.txt"))
             for line in fs.readlines():
                 line_spl = line.split()
                 sumOfWeightsAF2[int(line_spl[0])] = float(line_spl[1])
@@ -73,8 +71,8 @@ def main():
     #print pdfSumOfWeights
 
     print "Loading xsec."
-    helpers.loadXsec(Xsec, os.path.join(root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
-    helpers.loadXsec(Xsec, os.path.join(root_path, "../TopDataPreparation/data/XSection-MC15-13TeV.data"))
+    helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
+    helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "../TopDataPreparation/data/XSection-MC15-13TeV.data"))
     #loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
 
     # check if there is any W+jets sample there
@@ -258,9 +256,13 @@ def main():
             histSuffixes.append('')
         else:
             histSuffixes.append(item)
-    channels = {}
-    for k in options.output.split('\;'):
-        channels.__setitem__(*k.split(',', 1))
+    if '\;' in options.output:
+        warnings.warn('The "<channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "<channel1>:<ouput_fname1>,<channel2>:<ouput_fname2>..." syntax.', DeprecationWarning)
+    channels = eval(helpers.output_expr_reader(options.output))
+    # Use default top-tagger if top-tagger is not set for this channel
+    for ch, output_fname in channels.iteritems():
+        if len(ch) == 1:
+            ch += options.top_tagger
     analysisCode = {}
     #print "Systematics: ", histSuffixes
     #print "To loop over: ", systList
@@ -291,8 +293,8 @@ def main():
         ROOT.TopNtupleAnalysis.initPDF(options.pdfForWeight)
         helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
         print "2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE)
-    for k in channels:
-        analysisCode[k] = anaClass(k, histSuffixes, channels[k])
+    for k, top_tagger in channels:
+        analysisCode[k] = anaClass(k, histSuffixes, channels[(k, top_tagger)])
         analysisCode[k].keep = options.WjetsHF
         analysisCode[k].applyQCD = False
         if options.qcd != "False":
@@ -318,8 +320,8 @@ def main():
             analysisCode[k].scalarSBA  = scalarSBA
             analysisCode[k].scalarTANB = scalarTANB
             analysisCode[k].scalarTYPE = scalarTYPE
-        print k, analysisCode[k], channels[k]
-        analysisCode[k].set_top_tagger(options.top_tagger)
+        analysisCode[k].set_top_tagger(top_tagger)
+        print k, analysisCode[k], channels[(k, top_tagger)], top_tagger
 
     isFirstEvent = True
 
@@ -436,8 +438,8 @@ if __name__ == "__main__":
                         metavar="ANALYSIS")
     parser.add_argument("-o", "--output",
                         dest="output",
-                        default="re:hist_re.root,rmu:hist_rmu.root,be:hist_be.root,bmu:hist_bmu.root",
-                        help="Comma-separated list of output ROOT files.",
+                        default="(re,isTopTagged_80):hist_re.root,(rmu,isTopTagged_80):hist_rmu.root,(be,isTopTagged_80):hist_be.root,(bmu,isTopTagged_80):hist_bmu.root",
+                        help='Comma-separated list of "(<topo><lep>[<b-cat>],[<top-tagger>]):<output_fname>". See Also: `--top-tagger`',
                         metavar="FILES")
     parser.add_argument("-s", "--systs",
                         dest="systs",
@@ -505,18 +507,10 @@ if __name__ == "__main__":
                         metavar="FLOAT")
     parser.add_argument('-t', '--top-tagger',
                         default='isTopTagged_80',
-                        help='Boosted top tagger which will applied to the large-R jet for the hadronic-top reconstruction in the boost selection. Simple logical operation are supported.')
+                        help='"GLOBAL" Boosted top tagger which will applied to the large-R jet for the hadronic-top reconstruction in the boost selection. Simple logical operation are supported. ONLY WORK IF YOU DON\'T USE ANY TOP-TAGGER IN THE _OUTPUT_ SELECTIONS.')
     options = parser.parse_args()
 
-    print "-> Initialising binds now."
-    lib_dir = os.path.join(os.getenv("WorkDir_DIR"), "lib") if "WorkDir_DIR" in os.environ else root_dir
-    cintdict_dir = os.path.join(os.getenv("TestArea"), "TopNtupleAnalysis", 'CMakeFiles') if "TestArea" in os.environ else root_dir
-    shared_lib = os.path.join(lib_dir, "libTopNtupleAnalysis.so")
-    if os.path.exists(shared_lib):
-        ROOT.gSystem.Load(shared_lib)
-    else:
-        ROOT.gSystem.Load(shared_lib.rsplit(".so", 1)[0] + ".dylib")
-    ROOT.gSystem.Load(os.path.join(cintdict_dir, "TopNtupleAnalysisCintDict.cxx"))
     print "-> Calling main"
+    helpers.initialise_binds()
     main()
     print "The end."

@@ -1,7 +1,162 @@
 This is a framework for reading flat ntuples generated from AnalysisTop, running an analysis over them and producing final plots.
 
+It is recommended to use the Python code in `pyHistograms`, which will also link to the C++ code, but it should be easier to adapt to your needs. To do so, you can compile the code using either __Athena__ or simply __CMake__.
+
+Prerequisites
+-------------
+#### Neccessary
+* Core function: TopDataPreparation
+```bash
+acm sparse_clone_project $CERN_USER/athena
+acm add_pkg athena/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation
+acm exclude_pkg TopDataPreparation
+```
+
+#### Optional
+* NNLO Reweighting: NNLOReweighter (Only works with __Altas CMake__)
+  ```bash
+   acm clone_project MultiBJets/NNLOReweighter
+  ```
+* Grid Access: HQTTtResonancesTools
+  ```bash
+  acm clone_project elham/BoostedJetTaggers
+  acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/TtResonancesTools
+  acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/HQTTtResonancesTools
+  ```
+* EFTLib: LHAPDF
+
+General Instruction
+-------------------
+#### Installation
+```bash
+# Current Rel.21 TopNtupleAnalysis is not fully tested yet and exists only in develop branch
+acm clone_project TopNtupleAnalysis atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis develop
+acm find_packages
+acm compile
+```
+
+#### Usage
+The main UI is `pyHistograms/makeHistograms.py`.
+```
+usage: makeHistograms.py [-h] [-d] [-f FILE] [-A ANALYSIS] [-o FILES]
+                         [-s SYSTEMATICS] [-W FLAVOURS] [-P PDFS] [-Q CHANNEL]
+                         [-N] [-M CUT] [-S MH,MA,SBA,TANB,TYPE]
+                         [-E LAMBDA,CVV] [-K WIDTH] [-D] [-p PDF] [-F] [-w]
+                         [-u FLOAT] [-t TOP_TAGGER]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --data            Is this data? (default: False)
+  -f FILE, --files FILE
+                        Text file with list of input files. (default:
+                        input.txt)
+  -A ANALYSIS, --analysis ANALYSIS
+                        Analysis code to run. (default: AnaTtresSL)
+  -o FILES, --output FILES
+                        Comma-separated list of "(<topo><lep>[<b-cat>],[<top-
+                        tagger>]):<output_fname>". See Also: `--top-tagger`
+                        (default: (re,isTopTagged_80):hist_re.root,(rmu,isTopT
+                        agged_80):hist_rmu.root,(be,isTopTagged_80):hist_be.ro
+                        ot,(bmu,isTopTagged_80):hist_bmu.root)
+  -s SYSTEMATICS, --systs SYSTEMATICS
+                        Comma-separated list of systematic uncertainties in
+                        TTrees in the input file. Use 'all' to run over all
+                        the default ones. (default: nominal)
+  -W FLAVOURS, --WjetsHF FLAVOURS
+                        Which W+jets HF to keep. Can be all, bb, cc, bbcc, c
+                        or l. (default: all)
+  -P PDFS, --pdf PDFS   Which PDFs to reweight to. (default: )
+  -Q CHANNEL, --qcd CHANNEL
+                        Apply QCD weights? (default: False)
+  -N, --noMttSlices     If set, stop vetoing high mtt events in 410000 sample.
+                        (default: False)
+  -M CUT, --applyMET CUT
+                        Extra MET cut to be applied. (default: 0)
+  -S MH,MA,SBA,TANB,TYPE, --SCALAR MH,MA,SBA,TANB,TYPE
+                        Parameters to use when reweighting LO ttbar+jets to a
+                        scalar 2HDM setup with a configuration of
+                        {mH,mA,sin(b-a), tan(b) and the model type}. (default:
+                        )
+  -E LAMBDA,CVV, --EFT LAMBDA,CVV
+                        Parameters to use when reweighting LO ttbar to an EFT
+                        setup with a lambda and cvv configuration. Set lambda
+                        to a negative value to disable this. (default: )
+  -K WIDTH, --KKgluon WIDTH
+                        Parameters to use when reweighting KK gluon samples.
+                        The parameter should be the destination width as an
+                        integer, which is a percentage of the mass. (default:
+                        )
+  -D, --DM              Do Zprime to DM reweighting? (default: False)
+  -p PDF, --pdfForWeight PDF
+                        PDF to use to get alpha_S when doing either the EFT or
+                        the scalar model reweighting. (default:
+                        NNPDF30_nlo_as_0118)
+  -F, --af2             Is this AF2? (default: False)
+  -w, --noPRW           Don't do pile up reweighting. (default: False)
+  -u FLOAT, --accept_prob FLOAT
+                        Probability of accepting an event. Factor to use when
+                        dropping events in data to reduce luminosity
+                        available. (default: 1)
+  -t TOP_TAGGER, --top-tagger TOP_TAGGER
+                        "GLOBAL" Boosted top tagger which will applied to the
+                        large-R jet for the hadronic-top reconstruction in the
+                        boost selection. Simple logical operation are
+                        supported. ONLY WORK IF YOU DON'T USE ANY TOP-TAGGER
+                        IN THE _OUTPUT_ SELECTIONS. (default: isTopTagged_80)
+```
+
+Create your own scripts based on this! Some very nice examples can be found in `pyHistograms/`.
+
+#### Quick Start
+1. Please first follow the instruction [__HERE__](https://gitlab.cern.ch/atlas-phys/exot/hqt/R21-ttbar-1lep/TtResDocumentation/wikis/Software#instruction) of HQTTtResonancesTools and generate a TopNtuple `run/output.root`.
+2. `cd $TestArea/../run/` and run TopNtupleAnalysis
+   ```bash
+   echo "$TestArea/../run/output.root" > tna-input.txt
+   $SourceArea/TopNtupleAnalysis/pyHistograms/makeHistograms.py \
+   -f tna-input.txt
+   ```
+   Change the flags according to [Usage] to adapt to your needs.
+   
 <details>
-<summary><h3>DEPRECATED PART</h3></summary>
+<summary><h3>AnalysisTop Rel.20.7</h3></summary>
+It is recommended to use the Python code in `pyHistograms`, which will also link to the C++ code, but it should be easier to adapt to your needs.
+To do that, please compile the code using RootCore, so that it can link against the library created by RootCore.
+To run this code, one must also checkout the following packages and recompile the RootCore setup:
+```bash
+svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk TopDataPreparation
+svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasphys-hsg8/Physics/Higgs/HSG8/AnalysisCode/NNLOReweighter/tags/NNLOReweighter-00-00-03 NNLOReweighter
+```
+
+In that Python code, you can run it with: `cd pyHistograms`
+
+* __the following make a list of all input MC files (adapt it to point to the input files list)__
+    ```bash
+    python makeInputsListLocal.py
+    ```
+
+* __this generates the text files with the sum of weights using the input files above__
+    ```bash
+    python sumWeights.py
+    ```
+
+* __this generates the histograms itself:__
+    ```bash
+    ./makeHistograms.py - --files input.txt --output be,be.root\;bmu,bmu.root\;re,re.root\;rmu,rmu.root --analysis AnaTtresSL --systs nominal
+    ```
+
+You can set `--systs` to all to run over all systematics (takes much longer), or give it a comma-separated list of systematics.
+You can use the option -d to indicate you want to run over data.
+The syntax of the --output flag is to provide a semi-colon-separated list of "XXX,YYY", where XXX indicates the channel to run (it will be read by the analysis in analysis.py,
+specified in the `--analysis` flag) and YYY indicates the output ROOT file for that channel.
+AnaTtresSL in analysis.py is set up to have the be, bmu, re, rmu channels as well as be2015, bmu2015, re2015, rmu2016, be2016, bmu2016, re2016, rmu2016,
+be3,bmu3,be2,bmu2,be1,bmu1,be0,bmu0,re3,rmu3,re2,rmu2,re1,rmu1,re0,rmu0. But you can create
+a new class in analysis.py of your choice and define different channels.
+
+Check `runBatchLocal.py` to check how to submit it on a local cluster.
+</details>
+
+<details>
+<summary><h3>Pre AnalysisTop Rel.20.7</h3></summary>
 The framework works by reading the flat ntuples using the class MiniTree, as called
 from <code>read.cxx</code> and then running an analysis class (that derives of Analysis) on each event and
 producing histograms to be saved in the output(s).
@@ -53,43 +208,6 @@ You can also write a <code>sumOfWeights.txt</code> file containing, in each line
 
 This will speed it up.
 </details>
-
-Quick Start
------------
-It is recommended to use the Python code in `pyHistograms`, which will also link to the C++ code, but it should be easier to adapt to your needs.
-To do that, please compile the code using RootCore, so that it can link against the library created by RootCore.
-To run this code, one must also checkout the following packages and recompile the RootCore setup:
-```bash
-svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk TopDataPreparation
-svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasphys-hsg8/Physics/Higgs/HSG8/AnalysisCode/NNLOReweighter/tags/NNLOReweighter-00-00-03 NNLOReweighter
-```
-
-In that Python code, you can run it with: `cd pyHistograms`
-
-* __the following make a list of all input MC files (adapt it to point to the input files list)__
-    ```bash
-    python makeInputsListLocal.py
-    ```
-
-* __this generates the text files with the sum of weights using the input files above__
-    ```bash
-    python sumWeights.py
-    ```
-
-* __this generates the histograms itself:__
-    ```bash
-    ./makeHistograms.py - --files input.txt --output be,be.root\;bmu,bmu.root\;re,re.root\;rmu,rmu.root --analysis AnaTtresSL --systs nominal
-    ```
-
-You can set `--systs` to all to run over all systematics (takes much longer), or give it a comma-separated list of systematics.
-You can use the option -d to indicate you want to run over data.
-The syntax of the --output flag is to provide a semi-colon-separated list of "XXX,YYY", where XXX indicates the channel to run (it will be read by the analysis in analysis.py,
-specified in the `--analysis` flag) and YYY indicates the output ROOT file for that channel.
-AnaTtresSL in analysis.py is set up to have the be, bmu, re, rmu channels as well as be2015, bmu2015, re2015, rmu2016, be2016, bmu2016, re2016, rmu2016,
-be3,bmu3,be2,bmu2,be1,bmu1,be0,bmu0,re3,rmu3,re2,rmu2,re1,rmu1,re0,rmu0. But you can create
-a new class in analysis.py of your choice and define different channels.
-
-Check `runBatchLocal.py` to check how to submit it on a local cluster.
 
 Auxiliary scripts
 -----------------

@@ -2,7 +2,14 @@ import ROOT
 import math
 import sys
 import ast
+import os
 sys.path.append('2HDM')
+
+run_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+root_path = os.path.join(run_path, os.pardir)
+data_path = os.path.join(root_path, 'share')
+
+BINDS_INITIASIZED = False
 
 ## Initialise the T2HDM class and load the precompiled modules
 nameX = ""
@@ -670,4 +677,56 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel')
             node = ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id=index_id, ctx=ast.Load())), ctx=node.ctx)
             ast.fix_missing_locations(node)
             return node
-    return compile(RewriteName().visit(ast.parse(expr, mode = 'eval')), '<top-tagger>', 'eval')
+        def visit_Str(self, node):
+            node = ast.Name(id=node.s, ctx=node.ctx)
+            return self.visit_Name(node)
+    node_renamer = RewriteName()
+    if isinstance(expr, str):
+        expr = ast.parse(expr, mode = 'eval')
+    else:
+        expr = ast.Expression(body=expr)
+    node_renamer.visit(expr)
+    return compile(expr, '<top-tagger>', 'eval')
+
+def output_expr_reader(expr):
+    if not expr.startswith('{'):
+        expr = '{' + expr
+    if not expr.endswith('}'):
+        expr += '}'
+    class RewriteAsStr(ast.NodeTransformer):
+        def visit_Name(self, node):
+            node = ast.Str(node.id, ctx=node.ctx)
+            ast.fix_missing_locations(node)
+            return node
+    d = ast.parse(expr, mode = 'eval')
+    values = []
+    for v in d.body.values:
+        if isinstance(v, ast.Attribute):
+            v = ast.Str("{0.value.id}.{0.attr}".format(v))
+        elif isinstance(v, ast.Num):
+            v = ast.Str("{.n}".format(v))
+        values.append(v)
+    d.body.values = values
+    RewriteAsStr().visit(d)
+    d.body.keys = [k if isinstance(k, ast.Tuple) else ast.Tuple(elts=[k]) for k in d.body.keys]
+    ast.fix_missing_locations(d)
+    return compile(d, '<output-expr-reader>', 'eval')
+
+
+def initialise_binds():
+    global BINDS_INITIASIZED
+    if BINDS_INITIASIZED:
+        return
+    print "-> Initialising binds now."
+    lib_dir = os.path.join(os.getenv("WorkDir_DIR"), "lib") if "WorkDir_DIR" in os.environ else root_path
+    cintdict_dir = os.path.join(os.getenv("TestArea"), "TopNtupleAnalysis", 'CMakeFiles') if "TestArea" in os.environ else root_path
+    shared_lib = os.path.join(lib_dir, "libTopNtupleAnalysis.so")
+    if os.path.exists(shared_lib):
+        ROOT.gSystem.Load(shared_lib)
+    else:
+        ROOT.gSystem.Load(shared_lib.rsplit(".so", 1)[0] + ".dylib")
+    ROOT.gROOT.LoadMacro(os.path.join(cintdict_dir, "TopNtupleAnalysisCintDict.cxx"))
+    BINDS_INITIASIZED = True
+
+# if not BINDS_INITIASIZED:
+#     initialise_binds()

@@ -53,6 +53,7 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
     
     # Declare the package's dependencies:
     atlas_depends_on_subdirs(PUBLIC  TopDataPreparation
+    	                             NNLOReweighter
     	                     PRIVATE Tools/PathResolver)
 
     # Generate a CINT dictionary source file:

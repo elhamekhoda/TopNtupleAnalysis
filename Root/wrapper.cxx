@@ -32,7 +32,9 @@ std::vector<MMUtils *> mm_mu(20);
 std::vector<MMUtils *> mm_e(20);
 
 namespace TopNtupleAnalysis{
-// // NNLOReweighter *m_NNLO = 0;
+#ifdef NNLOReweighter_NNLOReweighter_h
+NNLOReweighter *m_NNLO = 0;
+#endif
 void initWrapper(bool dt) {
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
   m_status = false;
@@ -96,25 +98,27 @@ void initWrapper(bool dt) {
              root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
              root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag1_fake.root"); // fake2015+2016
   }
-  // m_NNLO = new NNLOReweighter();
+  #ifdef NNLOReweighter_NNLOReweighter_h
+  m_NNLO = new NNLOReweighter();
+  #endif
+}
+#ifdef NNLOReweighter_NNLOReweighter_h
+void InitNNLO(int mcChannelNumber) {
+  m_NNLO->SetSampleID(mcChannelNumber);
+  m_NNLO->Init();
 }
 
-// // void InitNNLO(int mcChannelNumber) {
-// //   m_NNLO->SetSampleID(mcChannelNumber);
-// //   m_NNLO->Init();
-// // }
-
-// // double getNNLOWeight(double ttbarPt, double topPt, int mode) {
-// //   if (mode == 1) { // sequential
-// //     return m_NNLO->GetTtbarAndTopPtWeight(ttbarPt, topPt);
-// //   } else if (mode == 0) { // top pt extended
-// //     return m_NNLO->GetExtendedTopPtWeight(topPt);
-// //   } else if (mode == 2) { // ratio of extended and non-extended top pT
-// //     return m_NNLO->GetExtendedTopPtWeight(topPt)/m_NNLO->GetTopPtWeight(topPt);
-// //   }
-// //   return 1;
-// // }
-
+double getNNLOWeight(double ttbarPt, double topPt, int mode) {
+  if (mode == 1) { // sequential
+    return m_NNLO->GetTtbarAndTopPtWeight(ttbarPt, topPt);
+  } else if (mode == 0) { // top pt extended
+    return m_NNLO->GetExtendedTopPtWeight(topPt);
+  } else if (mode == 2) { // ratio of extended and non-extended top pT
+    return m_NNLO->GetExtendedTopPtWeight(topPt)/m_NNLO->GetTopPtWeight(topPt);
+  }
+  return 1;
+}
+#endif
 
 void getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
   m_status = m_chi2.findMinChiSquareSimple(lep, jets, btag, met);
