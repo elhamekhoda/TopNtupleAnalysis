@@ -1,6 +1,5 @@
-This is a framework for reading flat ntuples generated from AnalysisTop, running an analysis over them and producing final plots.
+This is a framework for reading flat ntuples generated from AnalysisTop, running an analysis over them and producing final plots. It is recommended to use the Python code in `pyHistograms`, which will also link to the C++ code, but it should be easier to adapt to your needs. To do so, you can compile the code using either __Atlas CMake__ or simply __CMake__.
 
-It is recommended to use the Python code in `pyHistograms`, which will also link to the C++ code, but it should be easier to adapt to your needs. To do so, you can compile the code using either __Athena__ or simply __CMake__.
 
 Prerequisites
 -------------
@@ -31,13 +30,32 @@ Prerequisites
 General Instruction
 -------------------
 #### Installation
-```bash
-# Current Rel.21 TopNtupleAnalysis is not fully tested yet and exists only in develop branch
-acm clone_project TopNtupleAnalysis atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis develop
-acm find_packages
-acm compile
-```
+1. Use __Atlas CMake__ (Recommended)
 
+    ```bash
+    # Current Rel.21 TopNtupleAnalysis is not fully tested yet and exists only in develop branch
+    acm clone_project TopNtupleAnalysis atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis develop
+    acm find_packages
+    acm compile
+    ```
+2. Stand-alone version (Optional)  
+   You can run TopNtupleAnalysis without git-atlas or athena environment, but you will still need TopDataPreparation. Fast (but quite tedious) way to do so is:
+   ```bash
+   # Sparse checkout TopDataPreparation from athena
+   git init athena
+   git -C athena config core.sparseCheckout true
+   git -C athena remote add upstream https://:@gitlab.cern.ch:8443/atlas/athena.git
+   echo PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation >> athena/.git/info/sparse-checkout
+   git -C athena fetch --depth 1 upstream 21.2
+   git -C athena checkout 21.2
+   # Symbolic link TopDataPreparation side by side with TopNtupleAnalysis
+   ln -s athena/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation
+   # Checkout TopNtupleAnalysis. Current Rel.21 TopNtupleAnalysis is not fully tested yet and exists only in develop branch
+   git clone https://:@gitlab.cern.ch:8443/atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis.git -b develop
+   cd TopNtupleAnalysis && cmake . && cmake --build . -- -j 4
+   ```
+   Note that there are some restrictions for this stand-alone version without __Atlas CMake__.
+   
 #### Usage
 The main UI is `pyHistograms/makeHistograms.py`.
 ```
