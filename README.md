@@ -129,7 +129,7 @@ optional arguments:
 Create your own scripts based on this! Some very nice examples can be found in `pyHistograms/`.
 
 #### Quick Start
-1. Please first follow the instruction [__HERE__](https://gitlab.cern.ch/atlas-phys/exot/hqt/R21-ttbar-1lep/TtResDocumentation/wikis/Software#instruction) of HQTTtResonancesTools and generate a TopNtuple `run/output.root`.
+1. Please first follow the instruction [__HERE__](https://gitlab.cern.ch/atlas-phys/exot/hqt/R21-ttbar-1lep/HQTTtResonancesTools/wikis/home) of HQTTtResonancesTools and generate a TopNtuple `run/output.root`.
 2. `cd $TestArea/../run/` and run TopNtupleAnalysis
 
      ```bash
