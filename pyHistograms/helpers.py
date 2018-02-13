@@ -675,6 +675,7 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel')
         def visit_Name(self, node):
             attr = ast.Attribute(value=ast.Name(id=tree_name, ctx=ast.Load()), attr=name_fmt.format(node.id), ctx=ast.Load())
             node = ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id=index_id, ctx=ast.Load())), ctx=node.ctx)
+            node = ast.Call(func=ast.Name(id='char2int',ctx=ast.Load()), args = [node], keywords=[], ctx=ast.Load())
             ast.fix_missing_locations(node)
             return node
         def visit_Str(self, node):
@@ -730,3 +731,8 @@ def initialise_binds():
 
 # if not BINDS_INITIASIZED:
 #     initialise_binds()
+
+def char2int(char):
+    if type(char) is not str:
+        return char
+    return ord(char)

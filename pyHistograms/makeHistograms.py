@@ -70,8 +70,12 @@ def main():
     #print pdfSumOfWeights
 
     print "Loading xsec."
-    helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
-    helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "../TopDataPreparation/data/XSection-MC15-13TeV.data"))
+    xsec_mc15_13tev_ttres = "/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV-ttres.data"
+    if os.path.exists(xsec_mc15_13tev_ttres):
+        helpers.loadXsec(Xsec, xsec_mc15_13tev_ttres)
+    else:
+        helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
+    #helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "../TopDataPreparation/data/XSection-MC15-13TeV.data"))
     #loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
 
     # check if there is any W+jets sample there
@@ -458,7 +462,7 @@ if __name__ == "__main__":
     parser.add_argument("-Q", "--qcd",
                         dest="qcd",
                         default="False",
-                        help="Apply QCD weights?",
+                        help="Apply Q8CD weights?",
                         metavar="CHANNEL")
     parser.add_argument("-N", "--noMttSlices",
                         action='store_true',

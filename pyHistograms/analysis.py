@@ -3,7 +3,7 @@ import ROOT
 import math
 from array import array
 from ROOT import std
-from wjets import *
+import wjets
 
 class Analysis:
     ch = ''
@@ -181,10 +181,9 @@ class Analysis:
         ----------
         expr : {str}
                 Input expression. e.g., (isTopTagged_50|isTopTagged_80)&isWTagged_80
-    ljet_prefix : {str}, optional
-    index_id : {str}, optional
-        which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"),
-        where 'i' is the id of the item.
+        ljet_prefix : {str}, optional
+        index_id : {str}, optional
+                which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"), where 'i' is the id of the item.
         """
         self.is_top_tagged = helpers.branch_parser(expr, name_fmt = ljet_prefix, index_id = index_id)
 
@@ -312,14 +311,13 @@ class AnaTtresSL(Analysis):
             chan = 'el'
         elif len(sel.mu_pt) == 1:
             chan = 'mu'
-
         syst = ""
-        if s in flav_map[nj][chan]:
+        if s in wjets.flav_map[nj][chan]:
             syst = s
         import copy
-        frac2[nj][chan][syst] = copy.deepcopy(frac[nj][chan][syst])
+        frac2[nj][chan][syst] = copy.deepcopy(wjets.frac[nj][chan][syst])
         for f in frac2[nj][chan][syst]:
-            frac2[nj][chan][syst][f] *= flav_map[nj][chan][syst][f]
+            frac2[nj][chan][syst][f] *= wjets.flav_map[nj][chan][syst][f]
 
         flav = ''
         if sel.mcChannelNumber in helpers.listWjets22:
@@ -332,9 +330,9 @@ class AnaTtresSL(Analysis):
                 flav = 'c'
             elif flag == 5:
                 flav = 'l'
-            f_ca = f_ca_map[nj][chan][syst]
+            f_ca = wjets.f_ca_map[nj][chan][syst]
             norm = 1.0
-            hfweight = flav_map[nj][chan][syst][flav]
+            hfweight = wjets.flav_map[nj][chan][syst][flav]
             norm = 0
             for f in ['bb', 'cc', 'c', 'l']:
                 norm += frac2[nj][chan][syst][f]
@@ -625,7 +623,7 @@ class AnaTtresSL(Analysis):
                 #               closeJetIdx = i
                 #               pt = cj.Perp()
             for i in range(len(sel.ljet_pt)):
-                if sel.ljet_good[i] and eval(self.is_top_tagged):
+                if sel.ljet_good[i] and eval(self.is_top_tagged, {'char2int': helpers.char2int, 'sel': sel, 'i': i}):
                     goodJetIdx = i
                     break
             if goodJetIdx == -1:

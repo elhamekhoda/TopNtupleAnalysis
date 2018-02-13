@@ -33,8 +33,7 @@ General Instruction
 1. Use __Atlas CMake__ (Recommended)
 
     ```bash
-    # Current Rel.21 TopNtupleAnalysis is not fully tested yet and exists only in develop branch
-    acm clone_project TopNtupleAnalysis atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis develop
+    acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis
     acm find_packages
     acm compile
     ```
@@ -50,8 +49,8 @@ General Instruction
    git -C athena checkout 21.2
    # Symbolic link TopDataPreparation side by side with TopNtupleAnalysis
    ln -s athena/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation
-   # Checkout TopNtupleAnalysis. Current Rel.21 TopNtupleAnalysis is not fully tested yet and exists only in develop branch
-   git clone https://:@gitlab.cern.ch:8443/atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis.git -b develop
+   # Checkout TopNtupleAnalysis
+   git clone https://:@gitlab.cern.ch:8443/atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis.git
    cd TopNtupleAnalysis && cmake . && cmake --build . -- -j 4
    ```
    Note that there are some restrictions for this stand-alone version without __Atlas CMake__.
