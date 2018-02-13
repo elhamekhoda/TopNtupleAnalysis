@@ -1,71 +1,146 @@
-This is a framework for reading flat ntuples generated from AnalysisTop, running an analysis over them and producing final plots.
+This is a framework for reading flat ntuples generated from AnalysisTop, running an analysis over them and producing final plots. It is recommended to use the Python code in `pyHistograms`, which will also link to the C++ code, but it should be easier to adapt to your needs. To do so, you can compile the code using either __Atlas CMake__ or simply __CMake__.
 
+
+Prerequisites
+-------------
+#### Neccessary
+* Core function: TopDataPreparation
+
+    ```bash
+    acm sparse_clone_project $CERN_USER/athena
+    acm add_pkg athena/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation
+    acm exclude_pkg TopDataPreparation
+    ```
+  
+#### Optional
+* NNLO Reweighting: NNLOReweighter (Only works with __Altas CMake__)
+
+    ```bash
+    acm clone_project MultiBJets/NNLOReweighter
+    ```
+* Grid Access: HQTTtResonancesTools (Only works with __Altas CMake__)
+
+    ```bash
+    acm clone_project elham/BoostedJetTaggers
+    acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/TtResonancesTools
+    acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/HQTTtResonancesTools
+    ```
+* EFTLib: LHAPDF
+
+General Instruction
+-------------------
+#### Installation
+1. Use __Atlas CMake__ (Recommended)
+
+    ```bash
+    # Current Rel.21 TopNtupleAnalysis is not fully tested yet and exists only in develop branch
+    acm clone_project TopNtupleAnalysis atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis develop
+    acm find_packages
+    acm compile
+    ```
+2. Stand-alone version (Optional)  
+   You can run TopNtupleAnalysis without git-atlas or athena environment, but you will still need TopDataPreparation. Fast (but quite tedious) way to do so is:
+   ```bash
+   # Sparse checkout TopDataPreparation from athena
+   git init athena
+   git -C athena config core.sparseCheckout true
+   git -C athena remote add upstream https://:@gitlab.cern.ch:8443/atlas/athena.git
+   echo PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation >> athena/.git/info/sparse-checkout
+   git -C athena fetch --depth 1 upstream 21.2
+   git -C athena checkout 21.2
+   # Symbolic link TopDataPreparation side by side with TopNtupleAnalysis
+   ln -s athena/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation
+   # Checkout TopNtupleAnalysis. Current Rel.21 TopNtupleAnalysis is not fully tested yet and exists only in develop branch
+   git clone https://:@gitlab.cern.ch:8443/atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis.git -b develop
+   cd TopNtupleAnalysis && cmake . && cmake --build . -- -j 4
+   ```
+   Note that there are some restrictions for this stand-alone version without __Atlas CMake__.
+   
+#### Usage
+The main UI is `pyHistograms/makeHistograms.py`.
+```
+usage: makeHistograms.py [-h] [-d] [-f FILE] [-A ANALYSIS] [-o FILES]
+                         [-s SYSTEMATICS] [-W FLAVOURS] [-P PDFS] [-Q CHANNEL]
+                         [-N] [-M CUT] [-S MH,MA,SBA,TANB,TYPE]
+                         [-E LAMBDA,CVV] [-K WIDTH] [-D] [-p PDF] [-F] [-w]
+                         [-u FLOAT] [-t TOP_TAGGER]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --data            Is this data? (default: False)
+  -f FILE, --files FILE
+                        Text file with list of input files. (default:
+                        input.txt)
+  -A ANALYSIS, --analysis ANALYSIS
+                        Analysis code to run. (default: AnaTtresSL)
+  -o FILES, --output FILES
+                        Comma-separated list of "(<topo><lep>[<b-cat>],[<top-
+                        tagger>]):<output_fname>". See Also: `--top-tagger`
+                        (default: (re,good_smooth_ts80):hist_re.root,(rmu,isTopT
+                        agged_80):hist_rmu.root,(be,good_smooth_ts80):hist_be.ro
+                        ot,(bmu,good_smooth_ts80):hist_bmu.root)
+  -s SYSTEMATICS, --systs SYSTEMATICS
+                        Comma-separated list of systematic uncertainties in
+                        TTrees in the input file. Use 'all' to run over all
+                        the default ones. (default: nominal)
+  -W FLAVOURS, --WjetsHF FLAVOURS
+                        Which W+jets HF to keep. Can be all, bb, cc, bbcc, c
+                        or l. (default: all)
+  -P PDFS, --pdf PDFS   Which PDFs to reweight to. (default: )
+  -Q CHANNEL, --qcd CHANNEL
+                        Apply QCD weights? (default: False)
+  -N, --noMttSlices     If set, stop vetoing high mtt events in 410000 sample.
+                        (default: False)
+  -M CUT, --applyMET CUT
+                        Extra MET cut to be applied. (default: 0)
+  -S MH,MA,SBA,TANB,TYPE, --SCALAR MH,MA,SBA,TANB,TYPE
+                        Parameters to use when reweighting LO ttbar+jets to a
+                        scalar 2HDM setup with a configuration of
+                        {mH,mA,sin(b-a), tan(b) and the model type}. (default:
+                        )
+  -E LAMBDA,CVV, --EFT LAMBDA,CVV
+                        Parameters to use when reweighting LO ttbar to an EFT
+                        setup with a lambda and cvv configuration. Set lambda
+                        to a negative value to disable this. (default: )
+  -K WIDTH, --KKgluon WIDTH
+                        Parameters to use when reweighting KK gluon samples.
+                        The parameter should be the destination width as an
+                        integer, which is a percentage of the mass. (default:
+                        )
+  -D, --DM              Do Zprime to DM reweighting? (default: False)
+  -p PDF, --pdfForWeight PDF
+                        PDF to use to get alpha_S when doing either the EFT or
+                        the scalar model reweighting. (default:
+                        NNPDF30_nlo_as_0118)
+  -F, --af2             Is this AF2? (default: False)
+  -w, --noPRW           Don't do pile up reweighting. (default: False)
+  -u FLOAT, --accept_prob FLOAT
+                        Probability of accepting an event. Factor to use when
+                        dropping events in data to reduce luminosity
+                        available. (default: 1)
+  -t TOP_TAGGER, --top-tagger TOP_TAGGER
+                        "GLOBAL" Boosted top tagger which will applied to the
+                        large-R jet for the hadronic-top reconstruction in the
+                        boost selection. Simple logical operation are
+                        supported. ONLY WORK IF YOU DON'T USE ANY TOP-TAGGER
+                        IN THE _OUTPUT_ SELECTIONS. (default: good_smooth_ts80)
+```
+
+Create your own scripts based on this! Some very nice examples can be found in `pyHistograms/`.
+
+#### Quick Start
+1. Please first follow the instruction [__HERE__](https://gitlab.cern.ch/atlas-phys/exot/hqt/R21-ttbar-1lep/TtResDocumentation/wikis/Software#instruction) of HQTTtResonancesTools and generate a TopNtuple `run/output.root`.
+2. `cd $TestArea/../run/` and run TopNtupleAnalysis
+
+     ```bash
+     echo "$TestArea/../run/output.root" > tna-input.txt
+     $SourceArea/TopNtupleAnalysis/pyHistograms/makeHistograms.py \
+     -f tna-input.txt
+     ```
+   Change the flags according to [Usage](#usage) to adapt to your needs.
+   
 <details>
-<summary>__DEPRECATED PART__</summary>
-The framework works by reading the flat ntuples using the class MiniTree, as called
-from `read.cxx` and then running an analysis class (that derives of Analysis) on each event and
-producing histograms to be saved in the output(s).
-
-To compile the code, do in this directory (only ROOT must be setup):
-```bash
-make
-```
-
-You can also compile the code using RootCore, by setting up RootCore (`setupATLAS` and then `rcSetup Top,2.4.29`) and doing:
-```bash
-rc find_packages
-rc compile
-```
-
-To check your options on how to run it: `./read --help`
-
-If you used RootCore, you must run it with: `$ROOTCOREBIN/bin/x86_64-slc6-gcc49-opt/read --help`
-
-(this will be implied in what follows)
-
-
-For example:
-`./read --files input1.root,input2.root --analysis AnaTtresSL --output`resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0
-
-The --analysis flag indicate which class that derives of analysis should be called. It is created in read.cxx.
-To create your own Analysis class, just change read.cxx to check the value of --analysis and create an instance of your analysis class
-in analogy with:
-```cpp
-  std::vector<Analysis *> vec_analysis; 
-  if (analysis == "AnaTtresSL") {
-    vec_analysis.push_back(new AnaTtresSL(outList[0], true,  false )); // resolved electron
-    vec_analysis.push_back(new AnaTtresSL(outList[1], false, false )); // resolved muon
-    vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true  )); // boosted  electron
-    vec_analysis.push_back(new AnaTtresSL(outList[3], false, true  )); // boosted  muon
-  } 
-```
-
-The list of output files is given as 4 files, since in this analysis 4 channels are expected. If your analysis only outputs one file, only the
-first should be considered.
-
-The list of inout files can be given as a comma-separated list, or it can be given as a newline-separated text file that ends in .txt and starts
-with input, for example:
-```bash
-./read --files input.txt --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0
-
-where input.txt has:
-input1.root
-input2.root
-```
-
-Take a look at the `Root/AnaTtresSL.cxx` and `TopNtupleAnalysis/AnaTtresSL.h `files for an analysis example.
-
-If, however, the mini flat ntuple files contain a histogram with the sum of weights (which is the correct
-way of doing this), one can just read the information from there.
-
-You can also write a `sumOfWeights.txt` file containing, in each line the dataset ID and the sum of weights and use:
-```bash
-./read --files input.txt --analysis AnaTtresSL --output re.root,rmu.root,be.root,bmu.root --data 0 --sumWeights sumOfWeights.txt
-```
-
-This will speed it up.
-</details>
-
+<summary><h3>AnalysisTop Rel.20.7</h3></summary>
 It is recommended to use the Python code in `pyHistograms`, which will also link to the C++ code, but it should be easier to adapt to your needs.
 To do that, please compile the code using RootCore, so that it can link against the library created by RootCore.
 To run this code, one must also checkout the following packages and recompile the RootCore setup:
@@ -100,6 +175,61 @@ be3,bmu3,be2,bmu2,be1,bmu1,be0,bmu0,re3,rmu3,re2,rmu2,re1,rmu1,re0,rmu0. But you
 a new class in analysis.py of your choice and define different channels.
 
 Check `runBatchLocal.py` to check how to submit it on a local cluster.
+</details>
+
+<details>
+<summary><h3>Pre AnalysisTop Rel.20.7</h3></summary>
+The framework works by reading the flat ntuples using the class MiniTree, as called
+from <code>read.cxx</code> and then running an analysis class (that derives of Analysis) on each event and
+producing histograms to be saved in the output(s).
+
+To compile the code, do in this directory (only ROOT must be setup):
+<pre><code class=bash>make</code></pre>
+You can also compile the code using RootCore, by setting up RootCore (<code>setupATLAS</code> and then <code>rcSetup Top,2.4.29</code>) and doing:
+<pre><code class=bash>rc find_packages
+rc compile</code></pre>
+
+To check your options on how to run it: <code>./read --help</code>
+
+If you used RootCore, you must run it with: <code>$ROOTCOREBIN/bin/x86_64-slc6-gcc49-opt/read --help</code>
+
+(this will be implied in what follows)
+
+
+For example:
+<pre><code class=bash>./read --files input1.root,input2.root --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0</pre></code>
+The --analysis flag indicate which class that derives of analysis should be called. It is created in read.cxx.
+To create your own Analysis class, just change <code>read.cxx</code> to check the value of <code>--analysis</code> and create an instance of your analysis class
+in analogy with:
+<pre><code class=cpp>  std::vector<Analysis *> vec_analysis; 
+  if (analysis == "AnaTtresSL") {
+    vec_analysis.push_back(new AnaTtresSL(outList[0], true,  false )); // resolved electron
+    vec_analysis.push_back(new AnaTtresSL(outList[1], false, false )); // resolved muon
+    vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true  )); // boosted  electron
+    vec_analysis.push_back(new AnaTtresSL(outList[3], false, true  )); // boosted  muon
+  } </code></pre>
+
+The list of output files is given as 4 files, since in this analysis 4 channels are expected. If your analysis only outputs one file, only the
+first should be considered.
+
+The list of inout files can be given as a comma-separated list, or it can be given as a newline-separated text file that ends in .txt and starts
+with input, for example:
+<pre><code class=bash>./read --files input.txt --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0</pre></code>
+
+where input.txt has:
+<pre><code>input1.root
+input2.root</pre></code>
+
+Take a look at the <code>Root/AnaTtresSL.cxx</code> and <code>TopNtupleAnalysis/AnaTtresSL.h</code> files for an analysis example.
+
+If, however, the mini flat ntuple files contain a histogram with the sum of weights (which is the correct
+way of doing this), one can just read the information from there.
+
+You can also write a <code>sumOfWeights.txt</code> file containing, in each line the dataset ID and the sum of weights and use:
+<pre><code class=bash>./read --files input.txt --analysis AnaTtresSL --output re.root,rmu.root,be.root,bmu.root --data 0 --sumWeights sumOfWeights.txt</pre></code>
+
+This will speed it up.
+</details>
 
 Auxiliary scripts
 -----------------

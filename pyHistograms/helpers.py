@@ -1,10 +1,15 @@
-
 import ROOT
-from array import array
 import math
 import sys
+import ast
+import os
 sys.path.append('2HDM')
 
+run_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+root_path = os.path.join(run_path, os.pardir)
+data_path = os.path.join(root_path, 'share')
+
+BINDS_INITIASIZED = False
 
 ## Initialise the T2HDM class and load the precompiled modules
 nameX = ""
@@ -15,52 +20,52 @@ typeX = -1
 sba   = -999
 cutsX = ""
 def init2HDM(MH,MA,SBA,TANB,TYPE):
-  import T2HDM
-  ### Needed to modify global copies of these vars:
-  global T2HDM
-  global nameX
-  global noX
-  global mX
-  global tanb
-  global typeX
-  global sba
-  global cutsX
-  ### No need for global declaration to read value of these vars
-  ############
-  nameX = "H" if(MH>0) else "A"
-  noX   = "h" if(nameX=="A") else "h1"
-  mX    = MH if(MH>0) else MA
-  tanb  = TANB
-  typeX = TYPE
-  sba   = SBA
-  #############################################
-  T2HDM.reset(nameX,mX,typeX,sba,tanb,True) ###
-  #############################################
-  print "cuts:",T2HDM.model.cuts
-  print "parameters:",T2HDM.model.parameters
-  print T2HDM.model.modules
+    import T2HDM
+    ### Needed to modify global copies of these vars:
+    global T2HDM
+    global nameX
+    global noX
+    global mX
+    global tanb
+    global typeX
+    global sba
+    global cutsX
+    ### No need for global declaration to read value of these vars
+    ############
+    nameX = "H" if(MH>0) else "A"
+    noX   = "h" if(nameX=="A") else "h1"
+    mX    = MH if(MH>0) else MA
+    tanb  = TANB
+    typeX = TYPE
+    sba   = SBA
+    #############################################
+    T2HDM.reset(nameX,mX,typeX,sba,tanb,True) ###
+    #############################################
+    print "cuts:",T2HDM.model.cuts
+    print "parameters:",T2HDM.model.parameters
+    print T2HDM.model.modules
 
 
 def loadXsec(m, fName):
     f = open(fName)
     for l in f.readlines():
         if l[0] == '#':
-	    continue
+            continue
         lsplit = l.split()
-	if len(lsplit) == 0:
-	    continue
-	if len(lsplit) < 3:
-	    print "I cannot understand this line:", lsplit
-	    continue
-	m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2])
+        if len(lsplit) == 0:
+            continue
+        if len(lsplit) < 3:
+            print "I cannot understand this line:", lsplit
+            continue
+        m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2])
 
 def addFilesInChain(c, txtFileOption, n = -1):
     counter = 0
     for f in txtFileOption.split(','):
         txtf = open(f)
         for l in txtf.readlines():
-	    if l[-1] == '\n':
-	        l = l[0:-1]
+            if l[-1] == '\n':
+                l = l[0:-1]
             if counter > n and n > 0:
                 break
             c.Add(l)
@@ -85,7 +90,7 @@ def applyBtagSF(sel, s):
         return 1
     ptbinInS = -1
     if 'btag' in s and 'pt' in s:
-       ptbinInS = int(s.split('pt')[1][0])
+        ptbinInS = int(s.split('pt')[1][0])
 
     jetList = ROOT.vector('TLorentzVector')()
     jetFlavour = ROOT.vector('int')()
@@ -114,9 +119,9 @@ def applyBtagSF(sel, s):
             vetoSyst.push_back(True)
     syst = ""
     if 'down' in s:
-       direction = 'down'
+        direction = 'down'
     else:
-       direction = 'up'
+        direction = 'up'
     eig = -1
     if 'btagbSF_' in s:
         eig = int(s.split('_')[1])
@@ -131,7 +136,7 @@ def applyBtagSF(sel, s):
         syst = "FT_EFF_Eigen_extrapolation__1%s" % (direction)
     elif 'btageSF_1' in s:
         syst = "FT_EFF_Eigen_extrapolation from charm__1%s" % (direction)
-    return getBtaggingSF(jetList, jetFlavour, jetWeight, vetoSyst, syst)
+    return ROOT.getBtaggingSF(jetList, jetFlavour, jetWeight, vetoSyst, syst)
 
 # same as above, but it reads the SFs from the file
 def applyBtagSFFromFile(sel, s):
@@ -222,11 +227,11 @@ def applyEWK(sel, s):
     topbar = ROOT.TLorentzVector()
     topbar.SetPtEtaPhiM(sel.MC_tbar_pt, sel.MC_tbar_eta, sel.MC_tbar_phi, sel.MC_tbar_m)
     if s == 'ttEWK__1up':
-        w = ROOT.getEWK(top, topbar, sel.initial_type, 1)
+        w = ROOT.TopNtupleAnalysis.getEWK(top, topbar, sel.initial_type, 1)
     elif s == 'ttEWK__1down':
-        w = ROOT.getEWK(top, topbar, sel.initial_type, 2)
+        w = ROOT.TopNtupleAnalysis.getEWK(top, topbar, sel.initial_type, 2)
     else:
-        w = ROOT.getEWK(top, topbar, sel.initial_type, 0)
+        w = ROOT.TopNtupleAnalysis.getEWK(top, topbar, sel.initial_type, 0)
     return w
 
 
@@ -420,13 +425,13 @@ def getMomenta(sel,topology):
     return p
 
 def getDMWeight(sel):
-  # mass in GeV
-  massMap = {301322: 500, 301323: 500, 305786: 600, 301324: 750, 305787: 800, 301325: 1000, 301326: 1250, 301327: 1500, 301328: 1750, 301329: 2000, 301330: 2250, 301331: 2500,301332: 2750, 301333: 3000, 301334: 4000, 301335: 5000}
-  try:
-      mass = massMap[sel.mcChannelNumber]
-  except: # no mc id in this map, do not reweight
-      return 1.0
-  return ROOT.wfunction(mass, sel.MC_ttbar_beforeFSR_m*1e-3)
+    # mass in GeV
+    massMap = {301322: 500, 301323: 500, 305786: 600, 301324: 750, 305787: 800, 301325: 1000, 301326: 1250, 301327: 1500, 301328: 1750, 301329: 2000, 301330: 2250, 301331: 2500,301332: 2750, 301333: 3000, 301334: 4000, 301335: 5000}
+    try:
+        mass = massMap[sel.mcChannelNumber]
+    except: # no mc id in this map, do not reweight
+        return 1.0
+    return ROOT.TopNtupleAnalysis.wfunction(mass, sel.MC_ttbar_beforeFSR_m*1e-3)
 
 def getKKgluonWidthWeight(width, sel, s = ""):
     if sel.MC_ttbar_beforeFSR_m < 0:
@@ -445,13 +450,13 @@ def getKKgluonWidthWeight(width, sel, s = ""):
     # define constants here
     gL = 1.0  # Left handed coupling
     #c = 0.897597901026  # this is 12 pi / (2*21) (6 flavour) sqrt(shat)
-    c = 1.7951958020 #     this is 12*pi/21 (6 flavour) 
-    #c = 1.6390918193 #   this is 12*pi/23 (5 flavour) 
+    c = 1.7951958020 #     this is 12*pi/21 (6 flavour)
+    #c = 1.6390918193 #   this is 12*pi/23 (5 flavour)
     lambd = 0.020736 # LambdaQCD^2 (lambda =0.114 GeV)
     mtop = 172.5 # value used in Pythia GeV
     widthgenerated = 30 # generation with 30% width
-    widthdict = {10:0, 15:1, 20:2, 25:3, 30:4, 35:5, 40:6} #width in % of the mass corresponding to the elements of the coupling tuples, in order. 
-    couplings = { 500: (3.35864, 4.36281, 5.18957, 5.90898, 6.55443, 7.1449,  7.69242), 
+    widthdict = {10:0, 15:1, 20:2, 25:3, 30:4, 35:5, 40:6} #width in % of the mass corresponding to the elements of the coupling tuples, in order.
+    couplings = { 500: (3.35864, 4.36281, 5.18957, 5.90898, 6.55443, 7.1449,  7.69242),
                  1000: (3.15336, 4.03605, 4.76074, 5.39045, 5.95493, 6.47103, 6.94941),
                  1500: (3.19865, 4.07595, 4.79675, 5.42331, 5.98509, 6.49881, 6.97502),
                  2000: (3.24571, 4.12691, 4.85131, 5.48118, 6.04603, 6.56261, 7.04151),
@@ -490,7 +495,7 @@ def getKKgluonWidthWeight(width, sel, s = ""):
     gagen = (gL - gR30)/2.
     gvrw  = (gL + gRW)/ 2.
     garw  = (gL - gRW)/ 2.
-    
+
     # comment these two lines to run with fixed width
     gammag = 12.5*math.sqrt(shatt)/1120. + 1./6.* alphastrong * math.sqrt(shatt * ( 1 - 4.* x )) * ( gvgen * gvgen * (1.+2.* x) + gagen * gagen * (1. - 4.*x))
     gamma  = 12.5*math.sqrt(shatt)/1120. + 1./6.* alphastrong * math.sqrt(shatt * ( 1 - 4.* x )) * ( gvrw  * gvrw  * (1.+2.* x) + garw  * garw  * (1. - 4.*x))
@@ -500,12 +505,12 @@ def getKKgluonWidthWeight(width, sel, s = ""):
     bwgen =   (shatt-m2)*(shatt-m2) + (shatt*gammag/float(mass))*(shatt*gammag/float(mass))
     bwrw =    (shatt-m2)*(shatt-m2) + (shatt*gamma/float(mass))*(shatt*gamma/float(mass))
 
-    # now calculating the numerator 
-    weinumgen =  (gL *gL + gR30 * gR30 ) - x * ( gL*gL + gR30*gR30 - 6*gR30*gL) 
+    # now calculating the numerator
+    weinumgen =  (gL *gL + gR30 * gR30 ) - x * ( gL*gL + gR30*gR30 - 6*gR30*gL)
     weinumrw  =  (gL *gL + gRW  * gRW  ) - x * ( gL*gL + gRW *gRW  - 6*gRW *gL)
 
     wr = (bwgen/bwrw) * (weinumrw / weinumgen)
-    return wr 
+    return wr
 
 
 def getEFTSMWeight(sel, s = ""):
@@ -535,9 +540,9 @@ def getEFTSMWeight(sel, s = ""):
         f.push_back(ROOT.TLorentzVector(sel.MC_px_me[idx], sel.MC_py_me[idx], sel.MC_pz_me[idx], sel.MC_e_me[idx]))
     Q2 = (1e-3*sel.MC_Q_me)**2
     if 'eftScale' in s and 'up' in s:
-    	Q2 *= 4
+        Q2 *= 4
     elif 'eftScale' in s and 'down' in s:
-    	Q2 *= 0.25
+        Q2 *= 0.25
     w = getEFTSMWeight(i1_pid, i2_pid, f_pid, i1, i2, top, topbar, f, Q2)
     return w
 
@@ -545,24 +550,24 @@ def getEFTSMWeight(sel, s = ""):
 def getTruth4momenta(sel):
     p = []
     for i in xrange(len(sel.MC_px_me)):
-       p.append(ROOT.TLorentzVector())
-       p[i].SetPxPyPzE(sel.MC_px_me[i],sel.MC_py_me[i],sel.MC_pz_me[i],sel.MC_e_me[i])
+        p.append(ROOT.TLorentzVector())
+        p[i].SetPxPyPzE(sel.MC_px_me[i],sel.MC_py_me[i],sel.MC_pz_me[i],sel.MC_e_me[i])
     return p
 
 def print2HDM(sel,topology,alphaS,ids,pCpp,me2XX,me2SM):
     pME = getTruth4momenta(sel)
     truPttbar = (pME[2]+pME[3]).M()
     if(abs(truPttbar.M()-mX)<100):
-       weightX = me2XX/me2SM
-       print "# 2HDM setup: mX=%g, sba=%g, tanb=%g, type=%g --> topo=%s, mtt=%g, me2XX/me2SM=%g/%g=%g" % (mX,sba,tanb,typeX,topology,(pt1+pt2).M(),me2XX,me2SM,weightX)
-       print "# ME ids are: ",ids
-       print "# Q =",sel.MC_Q_me/1000.
-       print "alphaS =",alphaS
-       print "p=["
-       for x in xrange(len(ids)):
-          print "  [%g,%g,%g,%g]," % (sel.MC_e_me[x],sel.MC_px_me[x],sel.MC_py_me[x],sel.MC_pz_me[x])
-       print "]"
-       print "used p =", pCpp
+        weightX = me2XX/me2SM
+        print "# 2HDM setup: mX=%g, sba=%g, tanb=%g, type=%g --> topo=%s, mtt=%g, me2XX/me2SM=%g/%g=%g" % (mX,sba,tanb,typeX,topology,(pt1+pt2).M(),me2XX,me2SM,weightX)
+        print "# ME ids are: ",ids
+        print "# Q =",sel.MC_Q_me/1000.
+        print "alphaS =",alphaS
+        print "p=["
+        for x in xrange(len(ids)):
+            print "  [%g,%g,%g,%g]," % (sel.MC_e_me[x],sel.MC_px_me[x],sel.MC_py_me[x],sel.MC_pz_me[x])
+        print "]"
+        print "used p =", pCpp
 
 def get2HDMWeight(sel):
     if sel.mcChannelNumber == 0:
@@ -583,7 +588,7 @@ def get2HDMWeight(sel):
     pCpp = getMomenta(sel,topologySM_name)
     pPython = T2HDM.invert_momenta(pCpp)
     Q2 = sel.MC_Q_me*sel.MC_Q_me
-    alphaS = ROOT.alphaS(Q2)
+    alphaS = ROOT.TopNtupleAnalysis.alphaS(Q2)
     nhel = 0 # sum over all helicities
     me2SM = T2HDM.model.modules[topologySM_lib].get_me(pPython,alphaS,nhel) ### calculate the SM ME^2
     me2XX = T2HDM.model.modules[topologyXX_lib].get_me(pPython,alphaS,nhel) ### calculate the X ME^2
@@ -606,8 +611,8 @@ listWjets22.extend(range(364156, 364197+1))
 #    njet = 0
 #    for i in range(0, len(sel.akt4truthjet_pt)):
 #        if sel.akt4truthjet_pt[i] > 20e3 and fabs(sel.akt4truthjet_eta[i]) < 4.5:
-#	    njet += 1
-#    return ROOT.wrapperC.getWjets22Weight(njet)
+#           njet += 1
+#    return ROOT.TopNtupleAnalysis.getWjets22Weight(njet)
 
 doPRW = True
 
@@ -643,7 +648,85 @@ weightSF = {'' : ['pileup', 'leptonSF', 'jvt'], #, 'indiv_SF_EL_ChargeID', 'indi
             'pileupSF__1down': ['pileup_DOWN', 'leptonSF', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
             'jvtSF__1up': ['pileup', 'leptonSF', 'jvt_UP'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
             'jvtSF__1down': ['pileup', 'leptonSF', 'jvt_DOWN'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-	   }
+           }
 
 weightChangeSystematics = weightSF.keys()
 
+def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel'):
+    """Intuitive Python ast-style expression parser
+
+    Used for hadronic-top tagging flag specification
+
+    Parameters
+    ----------
+    expr : {str}
+        Input expression. e.g., (isTopTagged_50|isTopTagged_80)&isWTagged_80
+    name_fmt : {str}, optional
+    index_id : {str}, optional
+        which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"),
+        where 'i' is the id of the item.
+
+    Returns
+    -------
+    program
+        A program can evaluate the input expression. eval(program) := (ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]
+    """
+    class RewriteName(ast.NodeTransformer):
+        def visit_Name(self, node):
+            attr = ast.Attribute(value=ast.Name(id=tree_name, ctx=ast.Load()), attr=name_fmt.format(node.id), ctx=ast.Load())
+            node = ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id=index_id, ctx=ast.Load())), ctx=node.ctx)
+            ast.fix_missing_locations(node)
+            return node
+        def visit_Str(self, node):
+            node = ast.Name(id=node.s, ctx=node.ctx)
+            return self.visit_Name(node)
+    node_renamer = RewriteName()
+    if isinstance(expr, str):
+        expr = ast.parse(expr, mode = 'eval')
+    else:
+        expr = ast.Expression(body=expr)
+    node_renamer.visit(expr)
+    return compile(expr, '<top-tagger>', 'eval')
+
+def output_expr_reader(expr):
+    if not expr.startswith('{'):
+        expr = '{' + expr
+    if not expr.endswith('}'):
+        expr += '}'
+    class RewriteAsStr(ast.NodeTransformer):
+        def visit_Name(self, node):
+            node = ast.Str(node.id, ctx=node.ctx)
+            ast.fix_missing_locations(node)
+            return node
+    d = ast.parse(expr, mode = 'eval')
+    values = []
+    for v in d.body.values:
+        if isinstance(v, ast.Attribute):
+            v = ast.Str("{0.value.id}.{0.attr}".format(v))
+        elif isinstance(v, ast.Num):
+            v = ast.Str("{.n}".format(v))
+        values.append(v)
+    d.body.values = values
+    RewriteAsStr().visit(d)
+    d.body.keys = [k if isinstance(k, ast.Tuple) else ast.Tuple(elts=[k]) for k in d.body.keys]
+    ast.fix_missing_locations(d)
+    return compile(d, '<output-expr-reader>', 'eval')
+
+
+def initialise_binds():
+    global BINDS_INITIASIZED
+    if BINDS_INITIASIZED:
+        return
+    print "-> Initialising binds now."
+    lib_dir = os.path.join(os.getenv("WorkDir_DIR"), "lib") if "WorkDir_DIR" in os.environ else root_path
+    cintdict_dir = os.path.join(os.getenv("TestArea"), "TopNtupleAnalysis", 'CMakeFiles') if "TestArea" in os.environ else root_path
+    shared_lib = os.path.join(lib_dir, "libTopNtupleAnalysis.so")
+    if os.path.exists(shared_lib):
+        ROOT.gSystem.Load(shared_lib)
+    else:
+        ROOT.gSystem.Load(shared_lib.rsplit(".so", 1)[0] + ".dylib")
+    ROOT.gROOT.LoadMacro(os.path.join(cintdict_dir, "TopNtupleAnalysisCintDict.cxx"))
+    BINDS_INITIASIZED = True
+
+# if not BINDS_INITIASIZED:
+#     initialise_binds()

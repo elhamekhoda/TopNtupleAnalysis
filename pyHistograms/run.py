@@ -1,252 +1,200 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
+import os
+import sys
+import glob
+import re
+import tempfile
+import subprocess
+try:
+    import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
+    import HQTTtResonancesTools.MC16a_EXOT4
+except ImportError:
+    raise ImportError("HQTTtResonancesTools is not installed or dataset does not exist.")
+import rucio.client
+import TopExamples.grid
 
-import HQTTtResonancesTools.DC15MC13TeV_25ns_mc15c_EXOT4
-import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
+DS_PATTERN = '{s.ds_scope}.{s.DSID}.*{suffix}'
+DS_SCOPE = 'user.yuchen'
 
-def main():
-	# input directory
-	#ntuplesDir = '/nfs/dust/atlas/user/danilo/20062016v1'
-	# for standard data and MC
-	pattern = 'user.dferreir.*24062016v1_output.root'
-	# for QCD e
-	pattern_qcde = 'user.dferreir.*24062016QCDev1_output.root'
-	pattern_qcdmu = 'user.dferreir.*24062016QCDmuv1_output.root'
-	theScope = 'user.dferreir'
-	
-	# output directory
-	#outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
-	outputDir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr'
-	outputDir = '/nfs/dust/atlas/user/danilo/hists_sr'
 
-	rundir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/'
+MAP_TO_SAMPLES = {# <sample>: <physics_short>
+                'wbbjets': 'MC16_13TeV_25ns_FS_EXOT4_Wjets22',
+                'wccjets': 'MC16_13TeV_25ns_FS_EXOT4_Wjets22',
+                'wcjets': 'MC16_13TeV_25ns_FS_EXOT4_Wjets22',
+                'wljets': 'MC16_13TeV_25ns_FS_EXOT4_Wjets22',
+                'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
+                'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
+                'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
+                'tt':'MC16_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia,MC16_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+                'singletop':'MC16_13TeV_25ns_FS_EXOT4_singletop',
+                'zjets':'MC16_13TeV_25ns_FS_EXOT4_Zjets22',
+                'vv': 'MC16_13TeV_25ns_FS_EXOT4_VV',
+                'zprime400': 'MC16_13TeV_25ns_FS_EXOT4_Zprime400',
+                'zprime500': 'MC16_13TeV_25ns_FS_EXOT4_Zprime500',
+                'zprime750': 'MC16_13TeV_25ns_FS_EXOT4_Zprime750',
+                'zprime1000': 'MC16_13TeV_25ns_FS_EXOT4_Zprime1000',
+                'zprime1250': 'MC16_13TeV_25ns_FS_EXOT4_Zprime1250',
+                'zprime1500': 'MC16_13TeV_25ns_FS_EXOT4_Zprime1500',
+                'zprime1750': 'MC16_13TeV_25ns_FS_EXOT4_Zprime1750',
+                'zprime2000': 'MC16_13TeV_25ns_FS_EXOT4_Zprime2000',
+                'zprime2250': 'MC16_13TeV_25ns_FS_EXOT4_Zprime2250',
+                'zprime2500': 'MC16_13TeV_25ns_FS_EXOT4_Zprime2500',
+                'zprime2750': 'MC16_13TeV_25ns_FS_EXOT4_Zprime2750',
+                'zprime3000': 'MC16_13TeV_25ns_FS_EXOT4_Zprime3000',
+                'zprime4000': 'MC16_13TeV_25ns_FS_EXOT4_Zprime4000',
+                'zprime5000': 'MC16_13TeV_25ns_FS_EXOT4_Zprime5000',
+                'kkgrav400': 'MC16_13TeV_25ns_FS_EXOT4_Gtt400',
+                'kkgrav500': 'MC16_13TeV_25ns_FS_EXOT4_Gtt500',
+                'kkgrav750': 'MC16_13TeV_25ns_FS_EXOT4_Gtt750',
+                'kkgrav1000': 'MC16_13TeV_25ns_FS_EXOT4_Gtt1000',
+                'kkgrav2000': 'MC16_13TeV_25ns_FS_EXOT4_Gtt2000',
+                'kkgrav3000': 'MC16_13TeV_25ns_FS_EXOT4_Gtt3000'
+                }
 
-	# the default is AnaTtresSL, which produces many control pltos for tt res.
-	# The Mtt version produces a TTree to do the limit setting
-	# the QCD version aims at plots for QCD studies using the matrix method
-	# look into read.cxx to see what is available
-	# create yours, if you wish
-	#analysisType='AnaWjetsCR'
-	analysisType='AnaTtresSL'
-	
-	# leave it for nominal to run only the nominal
-	#systematics = 'nominal'
-	systematics = 'all'
-	
-	# 25 ns datasets
-	names   = []
+class Sample(object):
+    _client = rucio.client.Client()
+    @staticmethod
+    def parse_dataset(obj):
+        sample = TopExamples.grid.Sample("")
+        if isinstance(obj, TopExamples.grid.Sample):
+            for dataset_name, physics_short in MAP_TO_SAMPLES.iteritems():
+                if set(physics_short.split(',')).issubset(obj.datasets):
+                    sample.name = dataset_name
+                    sample.datasets.extend(obj.datasets)
+                    return sample
+        else:
+            for dataset_name, physics_short in MAP_TO_SAMPLES.iteritems():
+                if obj == dataset_name:
+                    sample.name = dataset_name
+                    sample.datasets.extend(TopExamples.grid.Samples(physics_short.split(','))[0].datasets)
+                    return sample
+        raise KeyError()
 
-	#names  += ['tt']
-	#names  += ['wbbjets']
-	#names  += ['wccjets']
-	#names  += ['wcjets']
-	#names  += ['wljets']
-	#names  += ['zjets']
-	#names  += ["data"]
-	names  += ['qcdmu', 'qcde']
-	#names  += ['singletop']
-	#names  += ['vv']
-	#names  += ['zprime400']
-	#names  += ['zprime500']
-	#names  += ['zprime750']
-	#names  += ['zprime1000']
-	#names  += ['zprime1250']
-	#names  += ['zprime1500']
-	#names  += ['zprime1750']
-	#names  += ['zprime2000']
-	#names  += ['zprime2250']
-	#names  += ['zprime2500']
-	#names  += ['zprime2750']
-	#names  += ['zprime3000']
-	#names  += ['zprime4000']
-	#names  += ['zprime5000']
-	#names  += ['kkgrav400']
-	#names  += ['kkgrav500']
-	#names  += ['kkgrav750']
-	#names  += ['kkgrav1000']
-	#names  += ['kkgrav2000']
-	#names  += ['kkgrav3000']
+    def __init__(self, sample_name = 'zprime1000', input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13112016v2_output.root'}):
+        self.ds_scope = ds_scope.format(**ds_fmt_options)
+        self.sample_name = sample_name
+        self.sample = self.parse_dataset(sample_name)
+        self.ds_pattern = ds_pattern.format(s = self, **ds_fmt_options)
+        self.set_input_files(input_files)
+    def _list_dids(self, scope = None, filters = {}):
+        scope = scope or self.ds_scope
+        filters = dict({'name': self.ds_pattern}, **filters)
+        return list(self._client.list_dids(scope = scope, filters = filters))
+    @property
+    def physics_short(self):
+        return self.sample.name
+    @property
+    def shortNameDatasets(self):
+        return self.sample.shortNameDatasets()[0]
+    @property
+    def ami_tag(self):
+        return self.shortNameDatasets.split('.')[1]
+    @property
+    def DSID(self):
+        return self.shortNameDatasets.split('.')[0]
+    @property
+    def datasets(self):
+        return self.sample.datasets
+    @property
+    def systematics(self):
+        for name in ["data", "qcde", "qcdmu"]:
+            if name in self.sample_name:
+                return "nominal"
+        return "all"
+    @property
+    def is_data(self):
+        if "data" in self.sample_name:
+            return " -d "
+        if "qcde" in self.sample_name:
+            return " -d -Q e "
+        if "qcdmu" in self.sample_name:
+            return " -d -Q mu "
+        return ""
+    @property
+    def extra(self):
+        if "wbbjets" in self.sample_name:
+            return ' --WjetsHF bb '
+        elif 'wccjets' in self.sample_name:
+            return ' --WjetsHF cc'
+        elif 'wcjets' in self.sample_name:
+            return ' --WjetsHF c'
+        elif 'wljets' in self.sample_name:
+            return ' --WjetsHF l'
+        return ''
+    def get_input_files(self):
+        return self._input_files
+    def set_input_files(self, alist = None):
+        if alist == None and not self._input_files:
+            self._input_files = [replica['pfns'].keys() for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root'])]
+        else:
+            self._input_files = alist
+    input_files = property(get_input_files, set_input_files)
 
-	mapToSamples = {
-					'wbbjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'wccjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'wcjets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'wljets': 'MC15c_13TeV_25ns_FS_EXOT4_Wjets22',
-					'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
-					'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
-					'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
-					'tt':'MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia,MC15c_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
-					'singletop':'MC15c_13TeV_25ns_FS_EXOT4_singletop',
-					'zjets':'MC15c_13TeV_25ns_FS_EXOT4_Zjets22',
-					'vv': 'MC15c_13TeV_25ns_FS_EXOT4_VV',
-					'zprime400': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime400',
-					'zprime500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime500',
-					'zprime750': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime750',
-					'zprime1000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1000',
-					'zprime1250': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1250',
-					'zprime1500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1500',
-					'zprime1750': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime1750',
-					'zprime2000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2000',
-					'zprime2250': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2250',
-					'zprime2500': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2500',
-					'zprime2750': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime2750',
-					'zprime3000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime3000',
-					'zprime4000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime4000',
-					'zprime5000': 'MC15c_13TeV_25ns_FS_EXOT4_Zprime5000',
-					'kkgrav400': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt400',
-					'kkgrav500': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt500',
-					'kkgrav750': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt750',
-					'kkgrav1000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt1000',
-					'kkgrav2000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt2000',
-					'kkgrav3000': 'MC15c_13TeV_25ns_FS_EXOT4_Gtt3000',
-		   }
-	
-	import TopExamples.grid
-	
-	
-	import glob
-	import os
-	import sys
-	# get list of processed datasets
-	#dirs = glob.glob(ntuplesDir+'/*')
 
-	import rucio.client
-	rucio = rucio.client.Client()
-	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern})
-	datasets = []
-	for l in response:
-		datasets.append(l)
-	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_qcde})
-	datasets_qcde = []
-	for l in response:
-		datasets_qcde.append(l)
-	response = rucio.list_dids(scope = theScope, filters = {'name' : pattern_qcdmu})
-	datasets_qcdmu = []
-	for l in response:
-		datasets_qcdmu.append(l)
-	
-	# each "sample" below means an item in the list names above
-	# there may contain multiple datasets
-	# for each sample we want to read
-	for sn in names:
-		sname = mapToSamples[sn]
-		sample = None
-		for it in sname.split(','):
-			samples = TopExamples.grid.Samples([it])
-			if sample == None:
-				sample = samples[0]
-			else:
-				sample.datasets.extend(samples[0].datasets)
+class Run(object):
+    def __init__(self, samples = ['zprime1000'], output_dir = None, analysis_type = 'AnaTtresSL'):
+        self.samples = [Sample(s) if isinstance(s, str) else s for s in samples]
+        self.run_dir = os.path.abspath(os.path.dirname(__file__))
+        self.output_dir = os.path.abspath(output_dir or os.path.join(self.run_dir, os.path.pardir, 'data', 'output'))
+        if not os.path.exists(self.output_dir):
+            os.makedirs(self.output_dir)
+        self.selections = ['be', 'bmu', 're', 'rmu', 'be2015', 'bmu2015', 're2015', 'rmu2015', 'be2016', 'bmu2016', 're2016', 'rmu2016']
+        self.analysis_type = analysis_type
+    def write_runfile(self, sample, runfile = "/dev/stdout", selections = None):
+        selections = selections or self.selections
+        job_name = sample.sample_name
+        with open(os.path.join(self.output_dir, "input_"+sample.sample_name+'.txt'), 'w') as infile:
+            infile.writelines((f + '\n' for f in sample.input_files))
+        with open(runfile, 'w') as fr:
+            fr.write('#!/bin/sh\n')
+            fr.write('#cd ' + self.run_dir + '\n')
+            fr.write('#export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase\n')
+            fr.write('#export DQ2_LOCAL_SITE_ID=DESY-HH_SCRATCHDISK \n')
+            fr.write('#source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
+            fr.write('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
+            fr.write('#lsetup rcsetup\n')
+            fr.write('#cd TopNtupleAnalysis/pyHistograms\n')
+            output_files = ','.join(['{selection}:file://{output_file}'.format(selection = selection,
+                                                               output_file = os.path.join(self.output_dir, '{}_{}.root'.format(selection, job_name)))
+                            for selection in selections])
+            fr.write(os.path.join(self.run_dir,'makeHistograms.py')
+                     + sample.is_data
+                     + sample.extra
+                     + '  --files '    + infile.name
+                     + ' --analysis '  + self.analysis_type
+                     + ' --output '    + output_files
+                     + '   --systs '   + sample.systematics)
+    def execute(self, runfile_dir = os.path.join(tempfile.gettempdir())):
+        for sample in self.samples:
+            # logfile = os.path.join(self.output_dir, "stdout_"+sample.sample_name+'.txt')
+            runfile = os.path.join(runfile_dir, sample.sample_name+'.sh')
+            self.write_runfile(sample = sample, runfile = runfile)
+            subprocess.call(['chmod', 'a+x', runfile])
+            subprocess.call([runfile])
 
-		# write list of files to be read when processing this sample
-		f = open(outputDir+"/input_"+sn+'.txt', 'w')
-		# output file after running read
-		outfile = sn
-		
-		# go over all directories in the ntuplesDir
-		ds = datasets
-		if sn == 'qcde':
-			ds = datasets_qcde
-		elif sn == 'qcdmu':
-			ds = datasets_qcdmu
-		for d in ds:
-			# remove path and get only dir name in justfile
-			#justfile = d.split('/')[-1]
-			dsid_dir = d.split('.')[2] # get the DSID of the directory
-			# this will include all directories, so check if this director is in the sample
-	
-			# now go over the list of datasets in sample
-			# and check if this DSID is there
-			for s in sample.datasets:
-				if len(s.split(':')) > 1:
-					s = s.split(':')[1] # skip mc15_13TeV
-				dsid_sample = s.split('.')[1] # get DSID
-				if dsid_dir == dsid_sample: # this dataset belongs in the sample in the big for loop
-					# get all files in the directory
-					#files = glob.glob(d+'/*.root*')
+def main(samples = ['zprime1000'], output_dir = None, analysis_type = 'AnaTtresSL'):
+    # for QCD e
+    # pattern_qcde = 'user.dferreir.*24062016QCDev1_output.root'
+    # pattern_qcdmu = 'user.dferreir.*24062016QCDmuv1_output.root'
+    # output directory
+    #output_dir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
 
-					from subprocess import Popen, PIPE
-					process = Popen(["rucio", "list-file-replicas", "--protocols", "root", d], stdout=PIPE)
-					(output, err) = process.communicate()
-					#exit_code = process.wait()
-					pfns = {}
-					for line in output.split('\n'):
-						outline = line.split()
-						if not 'root://' in line:
-							continue
-						fname = outline[3]
-						site = outline[10][0:-1]
-						pfno = outline[11]
-						idx = pfno.find('/', len("root://")+2)
-						pfn = pfno[:idx] + "/" + pfno[idx:]
-						if not fname in pfns:
-							pfns[fname] = {}
-						pfns[fname][site] = pfn
-					files = []
-					for fname in pfns:
-						if 'DESY-HH_LOCALGROUPDISK' in pfns[fname]:
-							files.append(pfns[fname]['DESY-HH_LOCALGROUPDISK'])
-						else:
-							#print "File %s is not available in DESY! It is available on " % fname, pfns[fname]
-							k = pfns[fname].keys()[0]
-							files.append(pfns[fname][k])
-					# and write it in ht elist of input files to process
-					for item in files:
-						if not '.part' in item:
-							f.write(item+'\n')
-					# go to the next directory in the same sample
-					break
-		f.close()
-		theSysts = systematics
-		isData = ''
-		extra = ''
-		if "data" in sn:
-			theSysts = "nominal"
-			isData = ' -d '
-		elif "qcde" in sn:
-			theSysts = "nominal"
-			isData = ' -d -Q e '
-		elif "qcdmu" in sn:
-			theSysts = "nominal"
-			isData = ' -d -Q mu '
-		if "wbbjets" in sn:
-			extra = ' --WjetsHF bb '
-		elif 'wccjets' in sn:
-			extra = ' --WjetsHF cc'
-		elif 'wcjets' in sn:
-			extra = ' --WjetsHF c'
-		elif 'wljets' in sn:
-			extra = ' --WjetsHF l'
-	
-		jobName = sn
-		infile = outputDir+"/input_"+sn+'.txt'
-		infullfile = outputDir+"/input_"+sn+'.txt'
-		logfile = outputDir+"/stdout_"+sn+'.txt'
-		runfile = outputDir+"/run_"+sn+'.sh'
-		fr = open(runfile, 'w')
-		fr.write('#!/bin/sh\n')
-		fr.write('#cd '+rundir+'\n')
-		fr.write('#export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase\n')
-		fr.write('#export DQ2_LOCAL_SITE_ID=DESY-HH_SCRATCHDISK \n')
-		fr.write('#source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
-		fr.write('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
-		fr.write('#lsetup rcsetup\n')
-		fr.write('#cd TopNtupleAnalysis/pyHistograms\n')
-		out = 'be:'+outputDir+'/be_'+jobName+'.root,bmu:'+outputDir+'/bmu_'+jobName+'.root,re:'+outputDir+'/re_'+jobName+'.root,rmu:'+outputDir+'/rmu_'+jobName+'.root,be2015:'+outputDir+'/be2015_'+jobName+'.root,bmu2015:'+outputDir+'/bmu2015_'+jobName+'.root,re2015:'+outputDir+'/re2015_'+jobName+'.root,rmu2015:'+outputDir+'/rmu2015_'+jobName+'.root,be2016:'+outputDir+'/be2016_'+jobName+'.root,bmu2016:'+outputDir+'/bmu2016_'+jobName+'.root,re2016:'+outputDir+'/re2016_'+jobName+'.root,rmu2016:'+outputDir+'/rmu2016_'+jobName+'.root'
-		fr.write('./makeHistograms.py - '+isData+'   '+extra+'  --files '+infile+' --fullFiles '+infullfile+' --analysis '+analysisType+' --output '+out+'   --systs '+theSysts+' > '+logfile+'\n')
-		fr.close()
-		os.system('chmod a+x '+runfile)
-		subcmd = runfile
-		os.system(subcmd)
-		#sys.exit(0)
-	
+    # the default is AnaTtresSL, which produces many control pltos for tt res.
+    # The Mtt version produces a TTree to do the limit setting
+    # the QCD version aims at plots for QCD studies using the matrix method
+    # look into read.cxx to see what is available
+    # create yours, if you wish
+    #analysis_type='AnaWjetsCR'
+    Run(samples = samples, output_dir = output_dir, analysis_type = analysis_type).execute()
+    
 if __name__ == '__main__':
-	import os
-	fr = open("get_proxy.sh", "w")
-	fr.write("export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n")
-	fr.write("voms-proxy-init --voms atlas --vomslife 96:00 --valid 96:00\n")
-	fr.close()
-	os.system("chmod a+x get_proxy.sh")
-	os.system("./get_proxy.sh")
-	main()
+    # import os
+    # fr = open("get_proxy.sh", "w")
+    # fr.write("export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n")
+    # fr.write("voms-proxy-init --voms atlas --vomslife 96:00 --valid 96:00\n")
+    # fr.close()
+    # os.system("chmod a+x get_proxy.sh")
+    # os.system("./get_proxy.sh")
+    main()
 
 
