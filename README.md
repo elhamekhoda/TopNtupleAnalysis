@@ -3,15 +3,6 @@ This is a framework for reading flat ntuples generated from AnalysisTop, running
 
 Prerequisites
 -------------
-#### Neccessary
-* Core function: TopDataPreparation
-
-    ```bash
-    acm sparse_clone_project $CERN_USER/athena
-    acm add_pkg athena/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation
-    acm exclude_pkg TopDataPreparation
-    ```
-  
 #### Optional
 * NNLO Reweighting: NNLOReweighter (Only works with __Altas CMake__)
 
@@ -425,8 +416,8 @@ It generates the mass limit in `mass_limit.py`.
 
 
 -------------------------------
-For more information, contact:
-Danilo Enoque Ferreira de Lima
+For more information, contact:  
+Danilo Enoque Ferreira de Lima  
 dferreir@mail.cern.ch
 
 
