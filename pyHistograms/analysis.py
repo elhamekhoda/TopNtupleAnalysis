@@ -390,7 +390,7 @@ class AnaTtresSL(Analysis):
         elif math.fabs(l.Eta()) > 1.5 and 'qcdfwddw' in syst: w *= 0
         return w
 
-    def selectChannel(self, sel, syst, w):
+    def selectChannel(self, sel, syst):
         # OR all channels in the comma-separated list
         mapSel = {
                                 'be': 'bejets_2015,bejets_2016',
@@ -442,13 +442,11 @@ class AnaTtresSL(Analysis):
                 #               if sel.ljet_good[k] and sel.ljet_pt[k] > 300e3:
                 #                       hardPass = True
                 #                       break
-
                 passChannel = getattr(sel, item)
                 if passChannel and hardPass:
                     passORChannels = True
                     break
             passSel[i] = passORChannels
-
         if not passSel[self.ch]:
             return False
 
@@ -528,9 +526,6 @@ class AnaTtresSL(Analysis):
                     return
 
         w = wo
-        if not self.selectChannel(sel, syst, w):
-            return
-
 
         if self.applyQCD:
             w *= self.qcdWeight(sel, syst)

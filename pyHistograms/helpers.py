@@ -3,6 +3,7 @@ import math
 import sys
 import ast
 import os
+import re
 sys.path.append('2HDM')
 
 run_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
@@ -77,7 +78,7 @@ class Event:
     def __init__(self):
         pass
 
-MV2C10_CUT = 0.6455
+MV2C10_CUT = 0.66
 # systematic variations are specified according to this syntax:
 # btag[A]SF_[eig][_pt[X]]__1[up/down]
 # where:
@@ -683,17 +684,19 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel')
             return self.visit_Name(node)
     node_renamer = RewriteName()
     if isinstance(expr, str):
-        expr = ast.parse(expr, mode = 'eval')
+        expr = ast.parse(expr.strip(), mode = 'eval')
     else:
         expr = ast.Expression(body=expr)
     node_renamer.visit(expr)
     return compile(expr, '<top-tagger>', 'eval')
 
-def output_expr_reader(expr):
+def output_expr_reader_old(expr):
+    expr = expr.strip()
     if not expr.startswith('{'):
         expr = '{' + expr
     if not expr.endswith('}'):
         expr += '}'
+        expr = re.sub(r"(?=[^\{]*)(.+?):(.+?)(?=[,$\}])",r'\1:"\2"', expr)
     class RewriteAsStr(ast.NodeTransformer):
         def visit_Name(self, node):
             node = ast.Str(node.id, ctx=node.ctx)
@@ -708,11 +711,21 @@ def output_expr_reader(expr):
             v = ast.Str("{.n}".format(v))
         values.append(v)
     d.body.values = values
-    RewriteAsStr().visit(d)
-    d.body.keys = [k if isinstance(k, ast.Tuple) else ast.Tuple(elts=[k]) for k in d.body.keys]
+    RewriteAsStr().visit(d.body.keys)
+    d.body.keys = [k if isinstance(k, ast.Tuple) else ast.Tuple(elts=[k], ctx=k.ctx) for k in d.body.keys]
     ast.fix_missing_locations(d)
     return compile(d, '<output-expr-reader>', 'eval')
 
+def output_expr_reader_new(expr, _type = tuple):
+    if not isinstance(expr, str):
+        return map(output_expr_reader_new, expr)
+    expr = expr.strip()
+    url_pattern = '://'
+    url_like = re.match(r'(.+):([^:]+{}.+)'.format(url_pattern), expr)
+    matched = url_like if url_like else re.match(r'(.+):(.+)', expr)
+    selections, output_fname = map(str.strip, matched.groups())
+    selections = tuple(selections.strip('()').split(','))
+    return selections, output_fname
 
 def initialise_binds():
     global BINDS_INITIASIZED
