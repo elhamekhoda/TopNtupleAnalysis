@@ -1,7 +1,5 @@
 #!/usr/bin/env python2.7
 import os
-import sys
-import glob
 import re
 import tempfile
 import subprocess
@@ -178,15 +176,15 @@ class Run(object):
             fr.write('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
             fr.write('#lsetup rcsetup\n')
             fr.write('#cd TopNtupleAnalysis/pyHistograms\n')
-            output_files = ','.join(['{selection}:file://{output_file}'.format(selection = selection,
-                                                                               output_file = os.path.join(self.output_dir, '{}_{}.root'.format(re.search('\((\S+)\s*,', selection).group(1), job_name)))
+            output_files = ' '.join(['-o "{selection}:file://{output_file}"'.format(selection = selection,
+                                                                                    output_file = os.path.join(self.output_dir, '{}_{}.root'.format(re.search('\((\S+)\s*,', selection).group(1), job_name)))
                                      for selection in selections])
             fr.write(os.path.join(self.source_dir,'makeHistograms.py')
                      + sample.is_data
                      + sample.extra
                      + '  --files '    + infile.name
                      + ' --analysis '  + self.analysis_type
-                     + ' --output '    + "\"" + output_files + "\""
+                     + ' '             + output_files
                      + '   --systs '   + sample.systematics)
     def execute(self, runfile_dir = tempfile.gettempdir()):
         for sample in self.samples:
@@ -223,6 +221,4 @@ if __name__ == '__main__':
     # os.system("chmod a+x get_proxy.sh")
     # os.system("./get_proxy.sh")
     main()
-    pass
-
 
