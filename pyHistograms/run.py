@@ -70,12 +70,13 @@ class Sample(object):
                     return sample
         raise KeyError()
 
-    def __init__(self, sample_name = 'zprime1000', input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13112016v2_output.root'}):
+    def __init__(self, sample_name = 'zprime1000', input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}):
         self.ds_scope = ds_scope.format(**ds_fmt_options)
         self.sample_name = sample_name
         self.sample = self.parse_dataset(sample_name)
         self.ds_pattern = ds_pattern.format(s = self, **ds_fmt_options)
         self.set_input_files(input_files)
+        self.set_systematics()
     def _list_dids(self, scope = None, filters = {}):
         scope = scope or self.ds_scope
         filters = dict({'name': self.ds_pattern}, **filters)
@@ -95,12 +96,19 @@ class Sample(object):
     @property
     def datasets(self):
         return self.sample.datasets
-    @property
-    def systematics(self):
+
+    def get_systematics(self):
+        return self._systematics
+    def set_systematics(self, astr = None):
+        if astr != None:
+            self._systematics = astr
+            return
         for name in ["data", "qcde", "qcdmu"]:
             if name in self.sample_name:
-                return "nominal"
-        return "all"
+                self._systematics = "nominal"
+                return
+        self._systematics = "all"
+    systematics = property(get_systematics, set_systematics)
     @property
     def is_data(self):
         if "data" in self.sample_name:
@@ -124,30 +132,46 @@ class Sample(object):
     def get_input_files(self):
         return self._input_files
     def set_input_files(self, alist = None):
-        if alist == None and not self._input_files:
-            self._input_files = [replica['pfns'].keys() for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root'])]
+        input_files = []
+        if alist == None:
+            for files in (replica['pfns'].keys() for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root'])):
+                input_files.append(files[0])
+        elif type(alist) == str:
+            input_files = [alist]
         else:
-            self._input_files = alist
+            input_files = list(alist)
+        self._input_files = input_files
     input_files = property(get_input_files, set_input_files)
 
 
 class Run(object):
     def __init__(self, samples = ['zprime1000'], output_dir = None, analysis_type = 'AnaTtresSL'):
         self.samples = [Sample(s) if isinstance(s, str) else s for s in samples]
-        self.run_dir = os.path.abspath(os.path.dirname(__file__))
-        self.output_dir = os.path.abspath(output_dir or os.path.join(self.run_dir, os.path.pardir, 'data', 'output'))
+        self.source_dir = os.path.abspath(os.path.dirname(__file__))
+        self.output_dir = os.path.abspath(output_dir or os.path.join(os.curdir, 'output'))
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
-        self.selections = ['be', 'bmu', 're', 'rmu', 'be2015', 'bmu2015', 're2015', 'rmu2015', 'be2016', 'bmu2016', 're2016', 'rmu2016']
+        self.selections = ['(be,     good_smooth_ts80)',
+                           '(bmu,    good_smooth_ts80)',
+                           '(re,     good_smooth_ts80)',
+                           '(rmu,    good_smooth_ts80)', 
+                           '(be2015, good_smooth_ts80)',
+                           '(bmu2015,good_smooth_ts80)',
+                           '(re2015, good_smooth_ts80)',
+                           '(rmu2015,good_smooth_ts80)',
+                           '(be2016, good_smooth_ts80)',
+                           '(bmu2016,good_smooth_ts80)',
+                           '(re2016, good_smooth_ts80)',
+                           '(rmu2016,good_smooth_ts80)']
         self.analysis_type = analysis_type
     def write_runfile(self, sample, runfile = "/dev/stdout", selections = None):
         selections = selections or self.selections
         job_name = sample.sample_name
         with open(os.path.join(self.output_dir, "input_"+sample.sample_name+'.txt'), 'w') as infile:
-            infile.writelines((f + '\n' for f in sample.input_files))
+            infile.writelines('\n'.join(sample.input_files))
         with open(runfile, 'w') as fr:
             fr.write('#!/bin/sh\n')
-            fr.write('#cd ' + self.run_dir + '\n')
+            # fr.write('#cd ' + self.run_dir + '\n')
             fr.write('#export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase\n')
             fr.write('#export DQ2_LOCAL_SITE_ID=DESY-HH_SCRATCHDISK \n')
             fr.write('#source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
@@ -155,16 +179,16 @@ class Run(object):
             fr.write('#lsetup rcsetup\n')
             fr.write('#cd TopNtupleAnalysis/pyHistograms\n')
             output_files = ','.join(['{selection}:file://{output_file}'.format(selection = selection,
-                                                               output_file = os.path.join(self.output_dir, '{}_{}.root'.format(selection, job_name)))
-                            for selection in selections])
-            fr.write(os.path.join(self.run_dir,'makeHistograms.py')
+                                                                               output_file = os.path.join(self.output_dir, '{}_{}.root'.format(re.search('\((\S+)\s*,', selection).group(1), job_name)))
+                                     for selection in selections])
+            fr.write(os.path.join(self.source_dir,'makeHistograms.py')
                      + sample.is_data
                      + sample.extra
                      + '  --files '    + infile.name
                      + ' --analysis '  + self.analysis_type
-                     + ' --output '    + output_files
+                     + ' --output '    + "\"" + output_files + "\""
                      + '   --systs '   + sample.systematics)
-    def execute(self, runfile_dir = os.path.join(tempfile.gettempdir())):
+    def execute(self, runfile_dir = tempfile.gettempdir()):
         for sample in self.samples:
             # logfile = os.path.join(self.output_dir, "stdout_"+sample.sample_name+'.txt')
             runfile = os.path.join(runfile_dir, sample.sample_name+'.sh')
@@ -185,7 +209,10 @@ def main(samples = ['zprime1000'], output_dir = None, analysis_type = 'AnaTtresS
     # look into read.cxx to see what is available
     # create yours, if you wish
     #analysis_type='AnaWjetsCR'
-    Run(samples = samples, output_dir = output_dir, analysis_type = analysis_type).execute()
+    run = Run(samples = samples, output_dir = output_dir, analysis_type = analysis_type)
+    for sample in run.samples:
+        sample.systematics = 'nominal'
+    run.execute()
     
 if __name__ == '__main__':
     # import os
@@ -196,5 +223,6 @@ if __name__ == '__main__':
     # os.system("chmod a+x get_proxy.sh")
     # os.system("./get_proxy.sh")
     main()
+    pass
 
 

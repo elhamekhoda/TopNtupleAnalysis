@@ -58,7 +58,7 @@ General Instruction
 #### Usage
 The main UI is `pyHistograms/makeHistograms.py`.
 ```
-usage: makeHistograms.py [-h] [-d] [-f FILE] [-A ANALYSIS] [-o FILES]
+usage: makeHistograms.py [-h] [-d] [-f FILE] [-A ANALYSIS] [-o [FILES]]
                          [-s SYSTEMATICS] [-W FLAVOURS] [-P PDFS] [-Q CHANNEL]
                          [-N] [-M CUT] [-S MH,MA,SBA,TANB,TYPE]
                          [-E LAMBDA,CVV] [-K WIDTH] [-D] [-p PDF] [-F] [-w]
@@ -72,12 +72,15 @@ optional arguments:
                         input.txt)
   -A ANALYSIS, --analysis ANALYSIS
                         Analysis code to run. (default: AnaTtresSL)
-  -o FILES, --output FILES
-                        Comma-separated list of "(<topo><lep>[<b-cat>],[<top-
-                        tagger>]):<output_fname>". See Also: `--top-tagger`
-                        (default: (re,good_smooth_ts80):hist_re.root,(rmu,isTopT
-                        agged_80):hist_rmu.root,(be,good_smooth_ts80):hist_be.ro
-                        ot,(bmu,good_smooth_ts80):hist_bmu.root)
+  -o [FILES], --output [FILES]
+                        You can run more than 1 channels in the same time. The
+                        syntax is "-o (<topo><lep>[<b-cat>],[<top-
+                        tagger>]):<output_fname> [-o ... [-o ...]]". See Also:
+                        `--top-tagger` (default:
+                        ['(re,good_smooth_ts80):hist_re.root',
+                        '(rmu,good_smooth_ts80):hist_rmu.root',
+                        '(be,good_smooth_ts80):hist_be.root',
+                        '(bmu,good_smooth_ts80):hist_bmu.root'])
   -s SYSTEMATICS, --systs SYSTEMATICS
                         Comma-separated list of systematic uncertainties in
                         TTrees in the input file. Use 'all' to run over all
@@ -122,7 +125,8 @@ optional arguments:
                         large-R jet for the hadronic-top reconstruction in the
                         boost selection. Simple logical operation are
                         supported. ONLY WORK IF YOU DON'T USE ANY TOP-TAGGER
-                        IN THE _OUTPUT_ SELECTIONS. (default: good_smooth_ts80)
+                        IN THE _OUTPUT_ SELECTIONS. (default:
+                        good_smooth_ts80)
 ```
 
 Create your own scripts based on this! Some very nice examples can be found in `pyHistograms/`.
@@ -140,40 +144,37 @@ Create your own scripts based on this! Some very nice examples can be found in `
    
 <details>
 <summary><h3>AnalysisTop Rel.20.7</h3></summary>
-It is recommended to use the Python code in `pyHistograms`, which will also link to the C++ code, but it should be easier to adapt to your needs.
+It is recommended to use the Python code in <code>pyHistograms</code>, which will also link to the C++ code, but it should be easier to adapt to your needs.
 To do that, please compile the code using RootCore, so that it can link against the library created by RootCore.
 To run this code, one must also checkout the following packages and recompile the RootCore setup:
-```bash
-svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk TopDataPreparation
-svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasphys-hsg8/Physics/Higgs/HSG8/AnalysisCode/NNLOReweighter/tags/NNLOReweighter-00-00-03 NNLOReweighter
-```
+<pre><code class=bash>svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk TopDataPreparation
+svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasphys-hsg8/Physics/Higgs/HSG8/AnalysisCode/NNLOReweighter/tags/NNLOReweighter-00-00-03 NNLOReweighter</code></pre>
 
-In that Python code, you can run it with: `cd pyHistograms`
+In that Python code, you can run it with: <code>cd pyHistograms</code>
 
-* __the following make a list of all input MC files (adapt it to point to the input files list)__
-    ```bash
-    python makeInputsListLocal.py
-    ```
+<ol>
+  <li style="font-weight: bold;">
+     <p><span style="font-weight: bold;">the following make a list of all input MC files (adapt it to point to the input files list)</span></p>
+     <pre><code class=bash>python makeInputsListLocal.py</code></pre>
+  <\li>
+  <li style="font-weight: bold;">
+    <p><span style="font-weight: bold;">this generates the text files with the sum of weights using the input files above</span></p>
+    <pre><code class=bash> python sumWeights.py</code></pre>
+    <\li>
+  <li style="font-weight: bold;">
+    <p><span style="font-weight: bold;">this generates the histograms itself:</span></p>
+    <pre><code class=bash>./makeHistograms.py - --files input.txt --output be,be.root\;bmu,bmu.root\;re,re.root\;rmu,rmu.root --analysis AnaTtresSL --systs nominal</code></pre>
+</ol>
 
-* __this generates the text files with the sum of weights using the input files above__
-    ```bash
-    python sumWeights.py
-    ```
-
-* __this generates the histograms itself:__
-    ```bash
-    ./makeHistograms.py - --files input.txt --output be,be.root\;bmu,bmu.root\;re,re.root\;rmu,rmu.root --analysis AnaTtresSL --systs nominal
-    ```
-
-You can set `--systs` to all to run over all systematics (takes much longer), or give it a comma-separated list of systematics.
+You can set <code>--systs</code> to all to run over all systematics (takes much longer), or give it a comma-separated list of systematics.
 You can use the option -d to indicate you want to run over data.
 The syntax of the --output flag is to provide a semi-colon-separated list of "XXX,YYY", where XXX indicates the channel to run (it will be read by the analysis in analysis.py,
-specified in the `--analysis` flag) and YYY indicates the output ROOT file for that channel.
+specified in the <code>--analysis</code> flag) and YYY indicates the output ROOT file for that channel.
 AnaTtresSL in analysis.py is set up to have the be, bmu, re, rmu channels as well as be2015, bmu2015, re2015, rmu2016, be2016, bmu2016, re2016, rmu2016,
 be3,bmu3,be2,bmu2,be1,bmu1,be0,bmu0,re3,rmu3,re2,rmu2,re1,rmu1,re0,rmu0. But you can create
 a new class in analysis.py of your choice and define different channels.
 
-Check `runBatchLocal.py` to check how to submit it on a local cluster.
+Check <code>runBatchLocal.py</code> to check how to submit it on a local cluster.
 </details>
 
 <details>

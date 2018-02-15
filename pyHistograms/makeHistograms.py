@@ -260,12 +260,15 @@ def main():
         else:
             histSuffixes.append(item)
     if '\;' in options.output:
-        warnings.warn('The "<channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "<channel1>:<ouput_fname1>,<channel2>:<ouput_fname2>..." syntax.', DeprecationWarning)
-    channels = eval(helpers.output_expr_reader(options.output))
+        warnings.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
+        channels = helpers.output_expr_reader_old(options.output)
+    else:
+        channels = dict(helpers.output_expr_reader_new(options.output))
     # Use default top-tagger if top-tagger is not set for this channel
-    for ch, output_fname in channels.iteritems():
+    for ch in channels.keys():
         if len(ch) == 1:
-            ch += options.top_tagger
+            channels[ch + (options.top_tagger,)] = channels.pop(ch)
+
     analysisCode = {}
     #print "Systematics: ", histSuffixes
     #print "To loop over: ", systList
@@ -398,6 +401,8 @@ def main():
 
 
             for ana in analysisCode:
+                if not analysisCode[ana].selectChannel(sel, suffix):
+                    continue
                 weight_reco = analysisCode[ana].getWeight(sel, suffix)
                 if options.systs == 'pdf' and 'pdf_' in suffix and not isWjets: # for W+jets, use internal weights
                     pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
@@ -425,6 +430,16 @@ def main():
 
 if __name__ == "__main__":
     import argparse
+    class AppendActionCleanDefault(argparse._AppendAction):
+        def __init__(self, *args, **kwargs):
+            super(argparse._AppendAction, self).__init__(*args,**kwargs)
+            self.index = 0
+        def __call__(self, parser, namespace, values, option_string = None):
+            items = argparse._copy.copy(argparse._ensure_value(namespace, self.dest, [])) if self.index else []
+            if values:
+                self.index += 1
+                items.append(values)
+                setattr(namespace, self.dest, items)
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-d", "--data",
                         action="store_true",
@@ -441,8 +456,13 @@ if __name__ == "__main__":
                         metavar="ANALYSIS")
     parser.add_argument("-o", "--output",
                         dest="output",
-                        default="(re,good_smooth_ts80):hist_re.root,(rmu,good_smooth_ts80):hist_rmu.root,(be,good_smooth_ts80):hist_be.root,(bmu,good_smooth_ts80):hist_bmu.root",
-                        help='Comma-separated list of "(<topo><lep>[<b-cat>],[<top-tagger>]):<output_fname>". See Also: `--top-tagger`',
+                        default = ["(re,good_smooth_ts80):hist_re.root",
+                                   "(rmu,good_smooth_ts80):hist_rmu.root",
+                                   "(be,good_smooth_ts80):hist_be.root",
+                                   "(bmu,good_smooth_ts80):hist_bmu.root"],
+                        action = AppendActionCleanDefault,
+                        nargs = '?',
+                        help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>],[<top-tagger>]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
                         metavar="FILES")
     parser.add_argument("-s", "--systs",
                         dest="systs",
@@ -462,7 +482,7 @@ if __name__ == "__main__":
     parser.add_argument("-Q", "--qcd",
                         dest="qcd",
                         default="False",
-                        help="Apply Q8CD weights?",
+                        help="Apply QCD weights?",
                         metavar="CHANNEL")
     parser.add_argument("-N", "--noMttSlices",
                         action='store_true',
