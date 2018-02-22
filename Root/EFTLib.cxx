@@ -325,7 +325,7 @@ double getWeight(C &process, int i1pid, int i2pid, TLorentzVector i1o, TLorentzV
     delete [] p[k];
   p.clear();
   return weight;
-};
+}
 
 double getEFTWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2, double cvv) {
   Parameters_TopEffTh::getInstance()->mdl_C81qq = cvv;

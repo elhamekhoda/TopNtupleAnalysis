@@ -1,6 +1,5 @@
-#include <TMath.h>
-#include "TopNtupleAnalysis/wrapper.h"
-namespace TopNtupleAnalysis{
+#include "TMath.h"
+
 Double_t wfunction(Int_t E, Double_t x) {
   Double_t parfit[6]={0,1,0,0,0,0};
   Double_t invw=1.,w=-1.;
@@ -64,6 +63,4 @@ Double_t wfunction(Int_t E, Double_t x) {
  
   invw = ( 2 * parfit[2] / (TMath::Pi() * parfit[1]) )  /  TMath::Max(1.e-10, (1 + (x-parfit[0])*(x-parfit[0])/(parfit[1]*parfit[1]) ) ) + parfit[4]*exp(parfit[3]*x)+parfit[5]  ; // Lorentz par2 = hauteur par1 = largeur, par0 = position pic + pol1
   w = 1.0/invw;
-  return w;
-}
-}
+  return w;}

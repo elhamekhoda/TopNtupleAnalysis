@@ -141,7 +141,7 @@ void MiniTree::read(int event, Event &e) {
   if (f("MA_bl_pt") > 0)	e.MA_bl().SetPtEtaPhiM(f("MA_bl_pt"), f("MA_bl_eta"), f("MA_bl_phi"), f("MA_bl_m"));  
   else   		e.MA_bl().SetPtEtaPhiM(2000, -9., 0., 0.);
 
-  for (int k = 0; k < vf("el_pt")->size(); ++k) {
+  for (unsigned int k = 0; k < vf("el_pt")->size(); ++k) {
     e.electron().push_back(Electron());
     e.electron()[k].mom().SetPtEtaPhiE(vf("el_pt")->at(k), vf("el_eta")->at(k), vf("el_phi")->at(k), vf("el_e")->at(k));
     //e.electron()[k].setMI(vf("el_miniiso")->at(k));
@@ -175,7 +175,7 @@ void MiniTree::read(int event, Event &e) {
 
     e.electron()[k].author() = 1;
   }
-  for (int k = 0; k < vf("mu_pt")->size(); ++k) {
+  for (unsigned int k = 0; k < vf("mu_pt")->size(); ++k) {
     e.muon().push_back(Muon());
     e.muon()[k].mom().SetPtEtaPhiE(vf("mu_pt")->at(k), vf("mu_eta")->at(k), vf("mu_phi")->at(k), vf("mu_e")->at(k));
     e.muon()[k].setMI(0);
@@ -195,7 +195,7 @@ void MiniTree::read(int event, Event &e) {
     e.muon()[k].passTrkCuts() = true;
   }
 
-  for (int k = 0; k < vf("jet_pt")->size(); ++k) {
+  for (unsigned int k = 0; k < vf("jet_pt")->size(); ++k) {
     e.jet().push_back(Jet());
     e.jet()[k].mom().SetPtEtaPhiE(vf("jet_pt")->at(k), vf("jet_eta")->at(k), vf("jet_phi")->at(k), vf("jet_e")->at(k));
     e.jet()[k].trueFlavour() = vi("jet_trueflav")->at(k); // TODO jet_trueflav==0?-99:jet_trueflav->at(k);
@@ -206,7 +206,7 @@ void MiniTree::read(int event, Event &e) {
     e.jet()[k].closeToLepton() = vi("jet_closeToLepton")==0?-99:vi("jet_closeToLepton")->at(k);
   }
 
-  for (int k = 0; k < vf("tjet_pt")->size(); ++k) {
+  for (unsigned int k = 0; k < vf("tjet_pt")->size(); ++k) {
     e.tjet().push_back(Jet());
     e.tjet()[k].mom().SetPtEtaPhiE(vf("tjet_pt")->at(k), vf("tjet_eta")->at(k), vf("tjet_phi")->at(k), vf("tjet_e")->at(k));
     e.tjet()[k].trueFlavour() = vi("tjet_label")->at(k);
@@ -218,7 +218,7 @@ void MiniTree::read(int event, Event &e) {
     e.tjet()[k].numConstituents() = vi("tjet_numConstituents")->at(k);
   }
    
-  for (int k = 0; k < vf("ljet_pt")->size(); ++k) {
+  for (unsigned int k = 0; k < vf("ljet_pt")->size(); ++k) {
     e.largeJet().push_back(LargeJet());
     e.largeJet()[k].mom().SetPtEtaPhiE(vf("ljet_pt")->at(k), vf("ljet_eta")->at(k), vf("ljet_phi")->at(k), vf("ljet_e")->at(k));
     e.largeJet()[k].split12() = vf("ljet_sd12")->at(k);
@@ -360,7 +360,7 @@ int MiniTree::GetEntries() {
 
 void MiniTree::prepareBranches() {
   TObjArray *l = m_chain->GetListOfBranches();
-  for (size_t z = 0; z < l->GetEntries(); ++z) {
+  for (size_t z = 0; z < (size_t)l->GetEntries(); ++z) {
     std::string name = l->At(z)->GetName();
     std::string type = ((TBranch *) l->At(z))->GetLeaf(name.c_str())->GetTypeName();
     //std::cout<< name << "\t" << type << std::endl;

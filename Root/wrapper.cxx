@@ -15,11 +15,10 @@
 #include "TopNtupleAnalysis/MObject.h"
 #include "TopNtupleAnalysis/TtresNeutrinoBuilder.h"
 #include "TopNtupleAnalysis/EFTLib.h"
-
-// #include "NNLOReweighter/NNLOReweighter.h"
-
 #include "TopNtupleAnalysis/wrapper.h"
-
+#ifdef NNLOReweighter_NNLOReweighter_h
+#include "NNLOReweighter/NNLOReweighterTool.h"
+#endif
 
 std::string root_dir = (std::string) ROOT_DIR;
 TtresChi2 m_chi2("MeV");
@@ -31,10 +30,13 @@ TtresNeutrinoBuilder m_neutrinoBuilder("MeV");
 std::vector<MMUtils *> mm_mu(20);
 std::vector<MMUtils *> mm_e(20);
 
-namespace TopNtupleAnalysis{
 #ifdef NNLOReweighter_NNLOReweighter_h
-NNLOReweighter *m_NNLO = 0;
+NNLOReweighterTool *m_NNLO = 0;
 #endif
+
+namespace TopNtupleAnalysis{
+#include "DMweight.cxx"
+
 void initWrapper(bool dt) {
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
   m_status = false;
@@ -99,7 +101,7 @@ void initWrapper(bool dt) {
              root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag1_fake.root"); // fake2015+2016
   }
   #ifdef NNLOReweighter_NNLOReweighter_h
-  m_NNLO = new NNLOReweighter();
+  m_NNLO = new NNLOReweighterTool();
   #endif
 }
 #ifdef NNLOReweighter_NNLOReweighter_h
@@ -110,11 +112,11 @@ void InitNNLO(int mcChannelNumber) {
 
 double getNNLOWeight(double ttbarPt, double topPt, int mode) {
   if (mode == 1) { // sequential
-    return m_NNLO->GetTtbarAndTopPtWeight(ttbarPt, topPt);
+    return m_NNLO->get_ttbar_pt_weight(ttbarPt, topPt);
   } else if (mode == 0) { // top pt extended
-    return m_NNLO->GetExtendedTopPtWeight(topPt);
+    return m_NNLO->get_top_pt_weight(topPt, true);
   } else if (mode == 2) { // ratio of extended and non-extended top pT
-    return m_NNLO->GetExtendedTopPtWeight(topPt)/m_NNLO->GetTopPtWeight(topPt);
+    return m_NNLO->get_top_pt_weight(topPt, true)/m_NNLO->get_top_pt_weight(topPt);
   }
   return 1;
 }
@@ -187,7 +189,7 @@ double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector l
 	e.muon()[0].HLT_mu50() = muonTrigger;
 	e.muon()[0].topoetcone20() = topoetcone20;
   }
-  for (int k = 0; k < jet.size(); ++k) {
+  for (unsigned int k = 0; k < jet.size(); ++k) {
     e.jet().push_back(Jet(jet[k]));
   }
   double w = 0;

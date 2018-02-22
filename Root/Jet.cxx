@@ -49,9 +49,8 @@ const int Jet::numConstituents() const {
 bool Jet::pass() const {
   if (std::fabs(mom().Eta()) > 2.5) return false;
   if (mom().Perp() < 25e3) return false;
-  if ( (mom().Perp() <= 50e3) && (std::fabs(mom().Eta()) < 2.4) )//&& \
-       (std::fabs(jvt()) <= 0.5) )
-    return false;
+  if ( (mom().Perp() <= 50e3) && (std::fabs(mom().Eta()) < 2.4) ) {//&& (std::fabs(jvt()) <= 0.5) )
+    return false;}
   return true;
 }
 

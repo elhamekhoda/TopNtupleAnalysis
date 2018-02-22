@@ -29,10 +29,9 @@ class MiniTree {
     void read(int event, Event &e);
 
     double &sumWeights();
+    TFile  *m_file;
     TTree *m_chain;
     double m_sumWeights;
-
-    TFile  *m_file;
     TTree *m_num;
     std::string m_name;
 

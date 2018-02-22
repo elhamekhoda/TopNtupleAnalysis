@@ -77,7 +77,7 @@ void SLHAReader::read_slha_file(string file_name)
 	while (line[0] == ' ')
 	  line = line.substr(1);
 	// Now find end of block name
-	int space_pos = line.find(' ');
+	unsigned int space_pos = line.find(' ');
 	if(space_pos != line.npos)
 	  line = line.substr(0, space_pos);
 	block = line;

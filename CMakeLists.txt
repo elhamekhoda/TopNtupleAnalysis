@@ -31,8 +31,8 @@ file(GLOB SOURCES        ### Core ###
                          Root/WeakCorrScaleFactorParam.cxx
                          ### pyHistogram Only ###
                          ## Wrapper ##
+                         Root/DMWeight.cxx
                          Root/wrapper.cxx
-                         Root/DMWeight.C
                          )
 
 file(GLOB EFTLIB_SOURCES Root/EFTLib.cxx
@@ -45,8 +45,12 @@ file(GLOB EFTLIB_SOURCES Root/EFTLib.cxx
 list(APPEND SOURCES ${EFTLIB_SOURCES})
 
 add_definitions(-D ROOT_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/\\"")
-#---Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)
 
+add_definitions(-Wno-ignored-qualifiers)
+add_definitions(-Wno-unused-parameter)
+add_definitions(-Wno-unused-variable)
+add_definitions(-Wno-unused-but-set-variable)
+#---Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)
 if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
     atlas_subdir( TopNtupleAnalysis )
     find_package(ROOT REQUIRED Minuit TreePlayer Physics Matrix LHAPDF)
@@ -55,7 +59,7 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
     atlas_depends_on_subdirs(PUBLIC  TopDataPreparation
     	                             NNLOReweighter
     	                     PRIVATE Tools/PathResolver)
-
+    # add_definitions(-D NNLOReweighter_NNLOReweighter_h)
     # Generate a CINT dictionary source file:
     atlas_add_root_dictionary( TopNtupleAnalysis _cintDictSource
                                ROOT_HEADERS TopNtupleAnalysis/wrapper.h Root/LinkDef.h
@@ -64,9 +68,9 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
     # Build a library that other components can link against:
     atlas_add_library( TopNtupleAnalysis ${SOURCES} ${_cintDictSource} 
                        PUBLIC_HEADERS TopNtupleAnalysis
-                       LINK_LIBRARIES ${ROOT_LIBRARIES}
+                       LINK_LIBRARIES NNLOReweighter ${ROOT_LIBRARIES}
                        PRIVATE_LINK_LIBRARIES PathResolver
-                       INCLUDE_DIRS ${ROOT_INCLUDE_DIRS} )
+                       INCLUDE_DIRS ${ROOT_INCLUDE_DIRS})
 
 else()
     project(TopNtupleAnalysis)

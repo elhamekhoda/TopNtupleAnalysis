@@ -336,11 +336,11 @@ bool TtresChi2::findMinChiSquareSimple(TLorentzVector lep, const std::vector<TLo
   double chi2ming1, chi2ming1H, chi2ming1L;
 
   std::vector<TLorentzVector *> j;
-  for (int k = 0; k < jet.size(); ++k) {
+  for (unsigned int k = 0; k < jet.size(); ++k) {
     j.push_back(new TLorentzVector(jet[k]));
   }
   bool status = findMinChiSquare(&lep, &j, &btag, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
-  for (int k = 0; k < j.size(); ++k) delete j[k];
+  for (unsigned int k = 0; k < j.size(); ++k) delete j[k];
   return status;
 }
 
@@ -531,7 +531,9 @@ bool TtresChi2::findMinChiSquare(TLorentzVector* L, const std::vector<TLorentzVe
   res_chi2TopH = chi2ming1H;
   res_chi2TopL = chi2ming1L;
 
-  for (unsigned int i =0; i< neutrinoVector.size(); i++)delete neutrinoVector[i]; neutrinoVector.clear();
+  for (unsigned int i =0; i< neutrinoVector.size(); i++){
+  	delete neutrinoVector[i];}
+  neutrinoVector.clear();
   return status;
 }
 
@@ -719,7 +721,9 @@ chi2ming1H, double& chi2ming1L){
   res_chi2TopL = chi2ming1L;
 
 
-  for (unsigned int i =0; i< neutrinoVector.size(); i++)delete neutrinoVector[i]; neutrinoVector.clear();
+  for (unsigned int i =0; i< neutrinoVector.size(); i++){
+  	delete neutrinoVector[i];}
+  	neutrinoVector.clear();
   return status;
 }
 
@@ -818,7 +822,9 @@ bool TtresChi2::findMinChiSquare_VeryHighMass(TLorentzVector* L, const std::vect
   res_chi2TopH = chi2ming1H;
   res_chi2TopL = chi2ming1L;
 
-  for (unsigned int i =0; i< neutrinoVector.size(); i++)delete neutrinoVector[i]; neutrinoVector.clear();
+  for (unsigned int i =0; i< neutrinoVector.size(); i++){
+  	delete neutrinoVector[i];}
+  	neutrinoVector.clear();
   return status;
 }
 
