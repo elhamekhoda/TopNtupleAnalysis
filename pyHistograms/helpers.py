@@ -12,6 +12,24 @@ data_path = os.path.join(root_path, 'share')
 
 BINDS_INITIASIZED = False
 
+import logging
+
+msgfmt = '%(asctime)s %(levelname)-7s %(name)-20s %(message)s'
+datefmt = '%H:%M:%S'
+
+
+def getLogger(name = None, level = logging.DEBUG):
+    logger = logging.getLogger(name)
+    try:
+        import coloredlogs
+        coloredlogs.install(logger = logger, level = level, fmt = msgfmt, datefmt = datefmt)
+    except ImportError:
+        logging.basicConfig(format = msgfmt, datefmt = datefmt)
+        logger.setLevel(level)
+    return logger
+logger = getLogger('TopNtupleAnalysis')
+
+
 ## Initialise the T2HDM class and load the precompiled modules
 nameX = ""
 noX   = ""
@@ -287,7 +305,7 @@ def getTopology(prod,id1,id2=999):
         if(id1*id2<0       and absidsub>0):      topology = "ucx"
         if(id1<0 and id2<0 and absidsub>0):      topology = "uxcx"
     else:
-        print "Cannot understand the topology - quitting"
+        logger.critical("Cannot understand the topology - quitting")
         quit()
     return topology
 
@@ -317,8 +335,8 @@ def correct2HDMTopology(sel,topology):
     n = len(sel.MC_id_me)
     topoparts = topology.split("_")
     if(len(topoparts)<3):
-        print "Error: topoparts=",topoparts
-        print "Too few topo parts - quitting"
+        logger.error("Error: topoparts=%s",topoparts)
+        logger.error("Too few topo parts - quitting")
         quit()
     BOT=5
     if(n==4 and abs(sel.MC_id_me[0])!=BOT and abs(sel.MC_id_me[1])!=BOT): return topology
@@ -331,8 +349,8 @@ def correct2HDMTopology(sel,topology):
         elif(prod=="gu" or prod=="gux" or prod=="uu" or prod=="uxux"): prod = prod.replace("u","b")
         elif(prod=="uc" or prod=="ucx" or prod=="uxcx"):               prod = prod.replace("c","b")
         else:
-            print "Cannot understand the production with b's - quitting:",prod
-            print "Topology is:",topology
+            logger.error("Cannot understand the production with b's - quitting:%s",prod)
+            logger.error("Topology is:%s",topology)
             quit()
     if(n==5 and abs(sel.MC_id_me[4])==BOT):
         if(decay=="u" or decay=="ux"): decay = decay.replace("u","b")
@@ -731,7 +749,7 @@ def initialise_binds():
     global BINDS_INITIASIZED
     if BINDS_INITIASIZED:
         return
-    print "-> Initialising binds now."
+    logger.info("-> Initialising binds now.")
     lib_dir = os.path.join(os.getenv("WorkDir_DIR"), "lib") if "WorkDir_DIR" in os.environ else root_path
     cintdict_dir = os.path.join(os.getenv("TestArea"), "TopNtupleAnalysis", 'CMakeFiles') if "TestArea" in os.environ else root_path
     shared_lib = os.path.join(lib_dir, "libTopNtupleAnalysis.so")

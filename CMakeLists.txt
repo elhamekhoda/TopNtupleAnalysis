@@ -54,24 +54,25 @@ add_definitions(-Wno-unused-but-set-variable)
 if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
     atlas_subdir( TopNtupleAnalysis )
     find_package(ROOT REQUIRED Minuit TreePlayer Physics Matrix LHAPDF)
-    
     # Declare the package's dependencies:
     atlas_depends_on_subdirs(PUBLIC  TopDataPreparation
-    	                             NNLOReweighter
-    	                     PRIVATE Tools/PathResolver)
-    # add_definitions(-D NNLOReweighter_NNLOReweighter_h)
+                                     NNLOReweighter
+                             PRIVATE Tools/PathResolver)
+    if(TARGET NNLOReweighterPkg)
+        add_definitions(-D NNLOReweighter_NNLOReweighter)
+    else()
+    	message( WARNING "NNLOReweighter is not valid.")
+    endif()
     # Generate a CINT dictionary source file:
     atlas_add_root_dictionary( TopNtupleAnalysis _cintDictSource
                                ROOT_HEADERS TopNtupleAnalysis/wrapper.h Root/LinkDef.h
-                               EXTERNAL_PACKAGES ROOT )
-
+                               EXTERNAL_PACKAGES ROOT)
     # Build a library that other components can link against:
-    atlas_add_library( TopNtupleAnalysis ${SOURCES} ${_cintDictSource} 
+    atlas_add_library( TopNtupleAnalysis ${SOURCES} ${_cintDictSource} TopNtupleAnalysis/wrapper.h
                        PUBLIC_HEADERS TopNtupleAnalysis
-                       LINK_LIBRARIES NNLOReweighter ${ROOT_LIBRARIES}
+                       LINK_LIBRARIES ${ROOT_LIBRARIES} NNLOReweighterLib
                        PRIVATE_LINK_LIBRARIES PathResolver
                        INCLUDE_DIRS ${ROOT_INCLUDE_DIRS})
-
 else()
     project(TopNtupleAnalysis)
     # You need to tell CMake where to find the ROOT installation. This can be done in a number of ways:
@@ -84,7 +85,7 @@ else()
                       OPTIONAL_COMPONENTS LHAPDF)
     if(NOT ROOT_LHAPDF_FOUND)
         add_definitions(-D NOEFT)
-        message(AUTHOR_WARNING "LHAPDF is not found. EFTLib is not going to be built.")
+        message(WARNING "LHAPDF is not found. EFTLib is not going to be built.")
     endif()
     #---Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)
     include(${ROOT_USE_FILE})

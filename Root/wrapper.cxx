@@ -16,7 +16,7 @@
 #include "TopNtupleAnalysis/TtresNeutrinoBuilder.h"
 #include "TopNtupleAnalysis/EFTLib.h"
 #include "TopNtupleAnalysis/wrapper.h"
-#ifdef NNLOReweighter_NNLOReweighter_h
+#ifdef NNLOReweighter_NNLOReweighter
 #include "NNLOReweighter/NNLOReweighterTool.h"
 #endif
 
@@ -30,7 +30,7 @@ TtresNeutrinoBuilder m_neutrinoBuilder("MeV");
 std::vector<MMUtils *> mm_mu(20);
 std::vector<MMUtils *> mm_e(20);
 
-#ifdef NNLOReweighter_NNLOReweighter_h
+#ifdef NNLOReweighter_NNLOReweighter
 NNLOReweighterTool *m_NNLO = 0;
 #endif
 
@@ -100,19 +100,19 @@ void initWrapper(bool dt) {
              root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
              root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag1_fake.root"); // fake2015+2016
   }
-  #ifdef NNLOReweighter_NNLOReweighter_h
-  m_NNLO = new NNLOReweighterTool();
+  #ifdef NNLOReweighter_NNLOReweighter
+  m_NNLO = new NNLOReweighterTool("NNLO");
   #endif
 }
-#ifdef NNLOReweighter_NNLOReweighter_h
+#ifdef NNLOReweighter_NNLOReweighter
 void InitNNLO(int mcChannelNumber) {
-  m_NNLO->SetSampleID(mcChannelNumber);
-  m_NNLO->Init();
+  m_NNLO->setProperty("ChannelNumber", mcChannelNumber).isSuccess();
+  m_NNLO->initialize().isSuccess();
 }
 
 double getNNLOWeight(double ttbarPt, double topPt, int mode) {
   if (mode == 1) { // sequential
-    return m_NNLO->get_ttbar_pt_weight(ttbarPt, topPt);
+    return m_NNLO->get_ttbar_and_top_pt_weight(ttbarPt, topPt);
   } else if (mode == 0) { // top pt extended
     return m_NNLO->get_top_pt_weight(topPt, true);
   } else if (mode == 2) { // ratio of extended and non-extended top pT
