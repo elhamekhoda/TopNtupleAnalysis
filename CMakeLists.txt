@@ -60,8 +60,10 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
                              PRIVATE Tools/PathResolver)
     if(TARGET NNLOReweighterPkg)
         add_definitions(-D NNLOReweighter_NNLOReweighter)
+        list(APPEND LINK_LIBRARIES ${ROOT_LIBRARIES} NNLOReweighterLib)
     else()
-    	message( WARNING "NNLOReweighter is not valid.")
+        message( WARNING "NNLOReweighter is not valid.")
+        list(APPEND LINK_LIBRARIES ${ROOT_LIBRARIES})
     endif()
     # Generate a CINT dictionary source file:
     atlas_add_root_dictionary( TopNtupleAnalysis _cintDictSource
@@ -70,7 +72,7 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
     # Build a library that other components can link against:
     atlas_add_library( TopNtupleAnalysis ${SOURCES} ${_cintDictSource} TopNtupleAnalysis/wrapper.h
                        PUBLIC_HEADERS TopNtupleAnalysis
-                       LINK_LIBRARIES ${ROOT_LIBRARIES} NNLOReweighterLib
+                       LINK_LIBRARIES ${LINK_LIBRARIES}
                        PRIVATE_LINK_LIBRARIES PathResolver
                        INCLUDE_DIRS ${ROOT_INCLUDE_DIRS})
 else()
