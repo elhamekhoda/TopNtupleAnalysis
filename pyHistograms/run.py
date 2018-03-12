@@ -11,8 +11,8 @@ except ImportError:
 import rucio.client
 import TopExamples.grid
 
-DS_PATTERN = '{s.ds_scope}.{s.DSID}.*{suffix}'
-DS_SCOPE = 'user.yuchen'
+DS_PATTERN = '{s.ds_scope}.{s.DSID}*{suffix}'
+DS_SCOPE = 'user.' + os.environ.get('CERN_USER', os.environ.get('USER'))
 
 
 MAP_TO_SAMPLES = {# <sample>: <physics_short>
@@ -68,7 +68,7 @@ class Sample(object):
                     return sample
         raise KeyError()
 
-    def __init__(self, sample_name = 'zprime1000', input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}):
+    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}):
         self.ds_scope = ds_scope.format(**ds_fmt_options)
         self.sample_name = sample_name
         self.sample = self.parse_dataset(sample_name)
@@ -143,7 +143,7 @@ class Sample(object):
 
 
 class Run(object):
-    def __init__(self, samples = ['zprime1000'], output_dir = None, analysis_type = 'AnaTtresSL'):
+    def __init__(self, samples = [], output_dir = None, analysis_type = 'AnaTtresSL'):
         self.samples = [Sample(s) if isinstance(s, str) else s for s in samples]
         self.source_dir = os.path.abspath(os.path.dirname(__file__))
         self.output_dir = os.path.abspath(output_dir or os.path.join(os.curdir, 'output'))
@@ -194,7 +194,7 @@ class Run(object):
             subprocess.call(['chmod', 'a+x', runfile])
             subprocess.call([runfile])
 
-def main(samples = ['zprime1000'], output_dir = None, analysis_type = 'AnaTtresSL'):
+def main(samples, systematics, output_dir = None, analysis_type = 'AnaTtresSL'):
     # for QCD e
     # pattern_qcde = 'user.dferreir.*24062016QCDev1_output.root'
     # pattern_qcdmu = 'user.dferreir.*24062016QCDmuv1_output.root'
@@ -209,7 +209,7 @@ def main(samples = ['zprime1000'], output_dir = None, analysis_type = 'AnaTtresS
     #analysis_type='AnaWjetsCR'
     run = Run(samples = samples, output_dir = output_dir, analysis_type = analysis_type)
     for sample in run.samples:
-        sample.systematics = 'nominal'
+        sample.systematics = systematics
     run.execute()
     
 if __name__ == '__main__':
@@ -220,5 +220,5 @@ if __name__ == '__main__':
     # fr.close()
     # os.system("chmod a+x get_proxy.sh")
     # os.system("./get_proxy.sh")
-    main()
+    main(samples = ['zprime1000'], systematics = 'nominal', output_dir = None, analysis_type = 'AnaTtresSL') # An example of histogramming signal sample w/ M(Z')=1000GeV in l+jets analysis
 
