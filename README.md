@@ -28,8 +28,8 @@ General Instruction
     acm find_packages
     acm compile
     ```
-2. Stand-alone version (Optional)  
-   You can run TopNtupleAnalysis without git-atlas or athena environment, but you will still need TopDataPreparation. Fast (but quite tedious) way to do so is:
+2. Use __vanilla CMake__ (Optional)  
+   A portable version that can be installed in your laptop without git-atlas or athena environment. You only need __TopDataPreparation__. Fast (but quite tedious) way to do so is:
    ```bash
    # Sparse checkout TopDataPreparation from athena
    git init athena
