@@ -21,14 +21,14 @@ Prerequisites
 General Instruction
 -------------------
 #### Installation
-1. Use __Atlas CMake__ (Recommended)
+1. Use __Atlas CMake__ ({+ Recommended +})
 
     ```bash
     acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/TopNtupleAnalysis
     acm find_packages
     acm compile
     ```
-2. Use __vanilla CMake__ (Optional)  
+2. Use __vanilla CMake__ ({- Alternative -})  
    A portable version that can be installed in your laptop without git-atlas or athena environment. You only need __TopDataPreparation__. Fast (but quite tedious) way to do so is:
    ```bash
    # Sparse checkout TopDataPreparation from athena
