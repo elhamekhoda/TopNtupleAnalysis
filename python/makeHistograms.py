@@ -5,13 +5,13 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 import warnings
 import analysis
+logger = helpers.getLogger('TopNtupleAnalysis.makeHistograms')
 
 def main():
     helpers.doPRW = not options.noPRW
     accept_prob = float(options.accept_prob)
     randGen = ROOT.TRandom3(4357)
-
-    print "-> Initialising wrapper"
+    do_tree = options.do_tree
     ROOT.TopNtupleAnalysis.initWrapper(options.data)
 
     pdfList = options.pdf.split(',')
@@ -69,7 +69,7 @@ def main():
 
     #print pdfSumOfWeights
 
-    print "Loading xsec."
+    logger.info("Loading xsec.")
     xsec_mc15_13tev_ttres = "/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV-ttres.data"
     if os.path.exists(xsec_mc15_13tev_ttres):
         helpers.loadXsec(Xsec, xsec_mc15_13tev_ttres)
@@ -84,7 +84,7 @@ def main():
     isTtbar = False
     isSingleTop = False
 
-    print "Loading first event"
+    logger.info("Loading first event")
     mt_load = ROOT.TChain("nominal")
     sel = mt_load
     helpers.addFilesInChain(mt_load, options.files)
@@ -224,7 +224,7 @@ def main():
         if 'all' in options.systs:
             systListTmp = systList
         systList = systListTmp
-        print "--> Setup to run over following systs.", systList
+        logger.info("--> Setup to run over following systs. {}".format(systList))
     elif options.systs == 'pdf':
         systList = []
         systList.append('nominal')
@@ -298,9 +298,10 @@ def main():
         scalarTYPE = int(scalarStr[4])
         ROOT.TopNtupleAnalysis.initPDF(options.pdfForWeight)
         helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
-        print "2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE)
+        logger.info("2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE))
     for k, top_tagger in channels:
         analysisCode[k] = anaClass(k, histSuffixes, channels[(k, top_tagger)])
+        analysisCode[k].doTree = do_tree
         analysisCode[k].keep = options.WjetsHF
         analysisCode[k].applyQCD = False
         if options.qcd != "False":
@@ -327,7 +328,7 @@ def main():
             analysisCode[k].scalarTANB = scalarTANB
             analysisCode[k].scalarTYPE = scalarTYPE
         analysisCode[k].set_top_tagger(top_tagger)
-        print k, analysisCode[k], channels[(k, top_tagger)], top_tagger
+        logger.info('({},{}): {}'.format(k.strip(), top_tagger, channels[(k, top_tagger)]))
 
     isFirstEvent = True
 
@@ -351,6 +352,7 @@ def main():
         helpers.addFilesInChain(mt, options.files)
         sel = mt
         ent = mt.GetEntries()
+        ent_length = len(str(ent))
         for k in range(0, ent):
             if options.data and accept_prob > 0:
                 randomNumber = randGen.Uniform(0, 1)
@@ -358,7 +360,7 @@ def main():
                     continue
             mt.GetEntry(k)
             if k % 10000 == 0:
-                print "(tree = ",treeName,", syst = ",suffix,") Entry ", k, "/", ent
+                logger.info("(tree = {:^10}, syst = {:^5}) Entry: {{:>{}}} / {}".format('<'+treeName+'>', '<'+suffix+'>', ent_length, ent).format(k))
             if isFirstEvent:
                 if not options.data and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532, 410009, 410120, 410121, 407009, 407010, 407011, 407012, 410004, 410003, 410002, 410001, 410500, 410159, 410501, 410502, 410503, 410504, 410505, 410506, 410509, 410511, 410512, 410225, 410250, 410251, 410252]: #410525]:
                     m = sel.mcChannelNumber
@@ -531,6 +533,9 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--top-tagger',
                         default='good_smooth_ts80',
                         help='"GLOBAL" Boosted top tagger which will applied to the large-R jet for the hadronic-top reconstruction in the boost selection. Simple logical operation are supported. ONLY WORK IF YOU DON\'T USE ANY TOP-TAGGER IN THE _OUTPUT_ SELECTIONS.')
+    parser.add_argument('--do-tree',
+                        action='store_true',
+                        help='Make a mini-tree.')
     options = parser.parse_args()
 
     print "-> Calling main"

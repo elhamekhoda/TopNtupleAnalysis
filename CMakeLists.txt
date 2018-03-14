@@ -75,6 +75,9 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
                        LINK_LIBRARIES ${LINK_LIBRARIES}
                        PRIVATE_LINK_LIBRARIES PathResolver
                        INCLUDE_DIRS ${ROOT_INCLUDE_DIRS})
+    atlas_install_python_modules( python/__init__.py python/run.py python/clusters.py python/samples.py python/helpers.py python/makeHistograms.py python/analysis.py )
+    atlas_install_scripts( scripts/tna-run )
+
 else()
     project(TopNtupleAnalysis)
     # You need to tell CMake where to find the ROOT installation. This can be done in a number of ways:
@@ -102,11 +105,11 @@ else()
     target_link_libraries(TopNtupleAnalysis ${ROOT_LIBRARIES})
 
     #---Create a main program using the library
-    add_executable(read util/read.cxx)
-    target_link_libraries(read TopNtupleAnalysis)
-    add_executable(readTuDo util/readTuDo.cxx)
-    target_link_libraries(readTuDo TopNtupleAnalysis)
-    file(INSTALL pyHistograms DESTINATION . PATTERN '*')
+    # add_executable(read util/read.cxx)
+    # target_link_libraries(read TopNtupleAnalysis)
+    # add_executable(readTuDo util/readTuDo.cxx)
+    # target_link_libraries(readTuDo TopNtupleAnalysis)
+    file(INSTALL python DESTINATION . PATTERN '*')
     file(INSTALL share DESTINATION . PATTERN '*')
     file(INSTALL scripts DESTINATION . PATTERN '*.data')
 endif()

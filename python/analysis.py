@@ -4,8 +4,8 @@ import math
 from array import array
 from ROOT import std
 import wjets
-
-class Analysis:
+logger = helpers.getLogger('TopNtupleAnalysis.analysis')
+class Analysis(object):
     ch = ''
     fi = None
     histSuffixes = [] # systematic copies of histograms
@@ -21,10 +21,8 @@ class Analysis:
     me2SM = -1
     me2XX = -1
     alphaS = -1
-    doTree = False
     tName  = "debug"
-    def __init__(self, channel, suf, outputFile):
-        print "Analysis initialisation for channel %s for output file %s" % (channel, outputFile)
+    def __init__(self, channel, suf, outputFile, do_tree = False):
         self.fi = ROOT.TFile.Open(outputFile, "recreate")
         self.ch = channel
         self.histSuffixes = suf
@@ -37,12 +35,24 @@ class Analysis:
         self.me2SM = -1
         self.me2XX = -1
         self.alphaS = -1
-        self.doTree = False
+        self._doTree = do_tree
         self.tName  = "debug"
         self.h = {}
         self.trees = {}
         self.branches = {}
         self.keep = '' # can be 'bb', 'cc', 'bbcc', 'c' or 'l' and only applies to W+jets
+
+    @property
+    def doTree(self):
+        return self._doTree
+    @doTree.setter
+    def doTree(self, boolean):
+        self._doTree = boolean
+        if boolean:
+            self.addTree()
+        else:
+            self.trees = {}
+            self.branches = {}
 
     def add(self, hName, nBins, xLow, xHigh):
         self.h[hName] = {}
@@ -54,20 +64,21 @@ class Analysis:
             self.h[hName][s].SetDirectory(0)
 
     def clearBranches(self):
-        if(not self.doTree or helpers.nameX==""): return
+        if not self._doTree: return
         tname = self.tName+self.ch
         for s in self.histSuffixes:
             for bname in self.branches[tname][s]:
                 self.branches[tname][s][bname].clear()
 
     def addTree(self):
-        if(not self.doTree or helpers.nameX==""): return
+        if not self._doTree:
+            return
         tname = self.tName+self.ch
         self.trees[tname] = {}
         self.branches[tname] = {}
         #self.fi.cd()
         for s in self.histSuffixes:
-            print "adding ttree with name ", tname+s
+            logger.info("Adding <Tree(\"{}\")>".format(tname+s))
             self.trees[tname][s] = ROOT.TTree(tname+s,tname+s)
             self.trees[tname][s].SetDirectory(0)
             self.branches[tname][s] = {}
@@ -103,7 +114,6 @@ class Analysis:
             self.trees[tname][s].Branch("mttReco",self.branches[tname][s]["mttReco"])
             self.branches[tname][s]["mttTrue"] = std.vector(float)()
             self.trees[tname][s].Branch("mttTrue",self.branches[tname][s]["mttTrue"])
-
     def addVar(self, hName, nBinsList):
         ar = array("d", nBinsList)
         #self.fi.cd()
@@ -128,7 +138,7 @@ class Analysis:
             for s in self.histSuffixes:
                 #print "writing histogram with name ", hName+s, " in file ",self.fi.GetName()
                 self.h[hName][s].Write(hName+s)
-        if(self.doTree and helpers.nameX!=""):
+        if self._doTree:
             tname = self.tName+self.ch
             for tname in self.trees:
                 for s in self.histSuffixes:
@@ -188,8 +198,8 @@ class Analysis:
         self.is_top_tagged = helpers.branch_parser(expr, name_fmt = ljet_prefix, index_id = index_id)
 
 class AnaTtresSL(Analysis):
-    def __init__(self, channel, suf, outputFile):
-        Analysis.__init__(self, channel, suf, outputFile)
+    def __init__(self, channel, suf, outputFile, do_tree = False):
+        Analysis.__init__(self, channel, suf, outputFile, do_tree)
         self.applyQCD = False
         self.noMttSlices = False
         self.applyMET = 0
@@ -646,6 +656,33 @@ class AnaTtresSL(Analysis):
                 self.h["mttNeg"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
             self.h["largeJetPtMtt"][syst].Fill(lj.Perp()/(closeJet+nu+l+lj).M(), w)
             mtt = (closeJet+nu+l+lj).M()*1e-3
+            ################################
+            ### fill the tree ##############
+            tname = self.tName+self.ch
+            if self._doTree:
+                self.branches[tname][syst]["eventNumber"].push_back(sel.eventNumber)
+                self.branches[tname][syst]["runNumber"].push_back(sel.runNumber)
+                self.branches[tname][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
+                self.branches[tname][syst]["aS"].push_back(self.alphaS)
+                self.branches[tname][syst]["w"].push_back(w)
+                self.branches[tname][syst]["w0"].push_back(w0)
+                self.branches[tname][syst]["w2HDM"].push_back(self.w2HDM)
+                self.branches[tname][syst]["me2SM"].push_back(self.me2SM)
+                self.branches[tname][syst]["me2XX"].push_back(self.me2XX)
+                self.branches[tname][syst]["mttReco"].push_back(mtt)
+                # pME = helpers.getTruth4momenta(sel)
+                # truPttbar = pME[2]+pME[3]
+                self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                # for i in xrange(sel.MC_id_me.size()):
+                #     self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
+                #     self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
+                #     self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
+                #     self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
+                #     self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
+                ##################################
+                ### fill the tree ################
+                self.trees[tname][syst].Fill() ###
+                ##################################
         elif 're' in self.ch or 'rmu' in self.ch:
             if len(sel.ljet_pt) >= 1:
                 lj = ROOT.TLorentzVector()
@@ -699,7 +736,7 @@ class AnaTtresSL(Analysis):
             ################################
             ### fill the tree ##############
             tname = self.tName+self.ch
-            if(self.doTree and helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+            if(self._doTree and helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
                 self.branches[tname][syst]["eventNumber"].push_back(sel.eventNumber)
                 self.branches[tname][syst]["runNumber"].push_back(sel.runNumber)
                 self.branches[tname][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)

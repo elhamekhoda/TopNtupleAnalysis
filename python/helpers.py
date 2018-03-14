@@ -17,7 +17,6 @@ import logging
 msgfmt = '%(asctime)s %(levelname)-7s %(name)-20s %(message)s'
 datefmt = '%H:%M:%S'
 
-
 def getLogger(name = None, level = logging.DEBUG):
     logger = logging.getLogger(name)
     try:
@@ -28,7 +27,6 @@ def getLogger(name = None, level = logging.DEBUG):
         logger.setLevel(level)
     return logger
 logger = getLogger('TopNtupleAnalysis')
-
 
 ## Initialise the T2HDM class and load the precompiled modules
 nameX = ""
@@ -751,7 +749,7 @@ def initialise_binds():
         return
     logger.info("-> Initialising binds now.")
     lib_dir = os.path.join(os.getenv("WorkDir_DIR"), "lib") if "WorkDir_DIR" in os.environ else root_path
-    cintdict_dir = os.path.join(os.getenv("TestArea"), "TopNtupleAnalysis", 'CMakeFiles') if "TestArea" in os.environ else root_path
+    cintdict_dir = os.path.join(os.getenv("WorkDir_DIR"), '..', "TopNtupleAnalysis", 'CMakeFiles') if "WorkDir_DIR" in os.environ else root_path
     shared_lib = os.path.join(lib_dir, "libTopNtupleAnalysis.so")
     if os.path.exists(shared_lib):
         ROOT.gSystem.Load(shared_lib)

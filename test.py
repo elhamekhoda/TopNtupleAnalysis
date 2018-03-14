@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import ROOT
-import pyHistograms.helpers as helpers
+import python.helpers as helpers
 logger = helpers.getLogger("TopNtupleAnalysis.test")
 try:
     try:

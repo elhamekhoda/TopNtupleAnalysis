@@ -1,4 +1,4 @@
-This is a framework for reading flat ntuples generated from AnalysisTop, running an analysis over them and producing final plots. It is recommended to use the Python code in `pyHistograms`, which will also link to the C++ code, but it should be easier to adapt to your needs. To do so, you can compile the code using either __Atlas CMake__ or simply __CMake__.
+This is a framework for reading flat ntuples generated from AnalysisTop, running an analysis over them and producing final plots. It is recommended to use the Python code in `python`, which will also link to the C++ code, but it should be easier to adapt to your needs. To do so, you can compile the code using either __Atlas CMake__ or simply __CMake__.
 
 
 Prerequisites
@@ -47,7 +47,7 @@ General Instruction
    Note that there are some restrictions for this stand-alone version without __Atlas CMake__.
    
 #### Usage
-The main UI is `pyHistograms/makeHistograms.py`.
+The main UI is `python/makeHistograms.py`.
 ```
 usage: makeHistograms.py [-h] [-d] [-f FILE] [-A ANALYSIS] [-o [FILES]]
                          [-s SYSTEMATICS] [-W FLAVOURS] [-P PDFS] [-Q CHANNEL]
@@ -120,7 +120,7 @@ optional arguments:
                         good_smooth_ts80)
 ```
 
-Create your own scripts based on this! Some very nice examples can be found in `pyHistograms/`.
+Create your own scripts based on this! Some very nice examples can be found in `scripts/`.
 
 #### Quick Start
 1. Please first follow the instruction [__HERE__](https://gitlab.cern.ch/atlas-phys/exot/hqt/R21-ttbar-1lep/HQTTtResonancesTools/wikis/home) of HQTTtResonancesTools and generate a TopNtuple `run/output.root`.
@@ -128,14 +128,14 @@ Create your own scripts based on this! Some very nice examples can be found in `
 
      ```bash
      echo "$TestArea/../run/output.root" > tna-input.txt
-     $SourceArea/TopNtupleAnalysis/pyHistograms/makeHistograms.py \
+     $SourceArea/TopNtupleAnalysis/python/makeHistograms.py \
      -f tna-input.txt
      ```
    Change the flags according to [Usage](#usage) to adapt to your needs.
    
 <details>
 <summary><h3>AnalysisTop Rel.20.7</h3></summary>
-It is recommended to use the Python code in <code>pyHistograms</code>, which will also link to the C++ code, but it should be easier to adapt to your needs.
+It is recommended to use the Python code in <code>python</code>, which will also link to the C++ code, but it should be easier to adapt to your needs.
 To do that, please compile the code using RootCore, so that it can link against the library created by RootCore.
 To run this code, one must also checkout the following packages and recompile the RootCore setup:
 <pre><code class=bash>svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk TopDataPreparation

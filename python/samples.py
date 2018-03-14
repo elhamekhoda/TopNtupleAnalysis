@@ -1,8 +1,7 @@
-#!/usr/bin/env python2.7
 import os
-import re
-import tempfile
 import subprocess
+import glob
+
 try:
     import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
     import HQTTtResonancesTools.MC16a_EXOT4
@@ -11,9 +10,12 @@ except ImportError:
 import rucio.client
 import TopExamples.grid
 
-DS_PATTERN = '{s.ds_scope}.{s.DSID}*{suffix}'
-DS_SCOPE = 'user.' + os.environ.get('CERN_USER', os.environ.get('USER'))
+import helpers
 
+logger = helpers.getLogger('TopNtupleAnalysis.samples')
+
+DS_PATTERN = '{s.ds_scope}.{s.DSID}.*{suffix}'
+DS_SCOPE = 'user.{s._client.account}'
 
 MAP_TO_SAMPLES = {# <sample>: <physics_short>
                 'wbbjets': 'MC16_13TeV_25ns_FS_EXOT4_Wjets22',
@@ -66,19 +68,29 @@ class Sample(object):
                     sample.name = dataset_name
                     sample.datasets.extend(TopExamples.grid.Samples(physics_short.split(','))[0].datasets)
                     return sample
-        raise KeyError()
+        assert True, "Houston we've got a problem"
 
-    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}):
-        self.ds_scope = ds_scope.format(**ds_fmt_options)
+    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}, download_to = None, commit_when_init = True):
+        self.ds_scope = ds_scope.format(s = self, **ds_fmt_options)
         self.sample_name = sample_name
         self.sample = self.parse_dataset(sample_name)
         self.ds_pattern = ds_pattern.format(s = self, **ds_fmt_options)
-        self.set_input_files(input_files)
+        self.download_to = download_to if download_to is not True else os.curdir
+        self.commited = False
         self.set_systematics()
+        if commit_when_init:
+            self.commit(input_files)
+
     def _list_dids(self, scope = None, filters = {}):
         scope = scope or self.ds_scope
         filters = dict({'name': self.ds_pattern}, **filters)
-        return list(self._client.list_dids(scope = scope, filters = filters))
+        ret = list(self._client.list_dids(scope = scope, filters = filters))
+        if not ret:
+            p = "{scope}:{pattern}".format(scope = scope, pattern = filters.get('name'))
+            if 'type' in filters:
+                p += ' [' + filters['type'] + ']'
+            logger.critical('DIDs with pattern "{}" not found. Please check if it really exists on grid.'.format(p))
+        return ret
     @property
     def physics_short(self):
         return self.sample.name
@@ -140,85 +152,37 @@ class Sample(object):
             input_files = list(alist)
         self._input_files = input_files
     input_files = property(get_input_files, set_input_files)
-
-
-class Run(object):
-    def __init__(self, samples = [], output_dir = None, analysis_type = 'AnaTtresSL'):
-        self.samples = [Sample(s) if isinstance(s, str) else s for s in samples]
-        self.source_dir = os.path.abspath(os.path.dirname(__file__))
-        self.output_dir = os.path.abspath(output_dir or os.path.join(os.curdir, 'output'))
-        if not os.path.exists(self.output_dir):
-            os.makedirs(self.output_dir)
-        self.selections = ['(be,     good_smooth_ts80)',
-                           '(bmu,    good_smooth_ts80)',
-                           '(re,     good_smooth_ts80)',
-                           '(rmu,    good_smooth_ts80)', 
-                           '(be2015, good_smooth_ts80)',
-                           '(bmu2015,good_smooth_ts80)',
-                           '(re2015, good_smooth_ts80)',
-                           '(rmu2015,good_smooth_ts80)',
-                           '(be2016, good_smooth_ts80)',
-                           '(bmu2016,good_smooth_ts80)',
-                           '(re2016, good_smooth_ts80)',
-                           '(rmu2016,good_smooth_ts80)']
-        self.analysis_type = analysis_type
-    def write_runfile(self, sample, runfile = "/dev/stdout", selections = None):
-        selections = selections or self.selections
-        job_name = sample.sample_name
-        with open(os.path.join(self.output_dir, "input_"+sample.sample_name+'.txt'), 'w') as infile:
-            infile.writelines('\n'.join(sample.input_files))
-        with open(runfile, 'w') as fr:
-            fr.write('#!/bin/sh\n')
-            # fr.write('#cd ' + self.run_dir + '\n')
-            fr.write('#export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase\n')
-            fr.write('#export DQ2_LOCAL_SITE_ID=DESY-HH_SCRATCHDISK \n')
-            fr.write('#source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
-            fr.write('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
-            fr.write('#lsetup rcsetup\n')
-            fr.write('#cd TopNtupleAnalysis/pyHistograms\n')
-            output_files = ' '.join(['-o "{selection}:file://{output_file}"'.format(selection = selection,
-                                                                                    output_file = os.path.join(self.output_dir, '{}_{}.root'.format(re.search('\((\S+)\s*,', selection).group(1), job_name)))
-                                     for selection in selections])
-            fr.write(os.path.join(self.source_dir,'makeHistograms.py')
-                     + sample.is_data
-                     + sample.extra
-                     + '  --files '    + infile.name
-                     + ' --analysis '  + self.analysis_type
-                     + ' '             + output_files
-                     + '   --systs '   + sample.systematics)
-    def execute(self, runfile_dir = tempfile.gettempdir()):
-        for sample in self.samples:
-            # logfile = os.path.join(self.output_dir, "stdout_"+sample.sample_name+'.txt')
-            runfile = os.path.join(runfile_dir, sample.sample_name+'.sh')
-            self.write_runfile(sample = sample, runfile = runfile)
-            subprocess.call(['chmod', 'a+x', runfile])
-            subprocess.call([runfile])
-
-def main(samples, systematics, output_dir = None, analysis_type = 'AnaTtresSL'):
-    # for QCD e
-    # pattern_qcde = 'user.dferreir.*24062016QCDev1_output.root'
-    # pattern_qcdmu = 'user.dferreir.*24062016QCDmuv1_output.root'
-    # output directory
-    #output_dir = '/afs/desy.de/user/d/danilo/xxl/af-atlas/Top2412/TopNtupleAnalysis/pyHistograms/hists_sr_nosyst'
-
-    # the default is AnaTtresSL, which produces many control pltos for tt res.
-    # The Mtt version produces a TTree to do the limit setting
-    # the QCD version aims at plots for QCD studies using the matrix method
-    # look into read.cxx to see what is available
-    # create yours, if you wish
-    #analysis_type='AnaWjetsCR'
-    run = Run(samples = samples, output_dir = output_dir, analysis_type = analysis_type)
-    for sample in run.samples:
-        sample.systematics = systematics
-    run.execute()
-    
-if __name__ == '__main__':
-    # import os
-    # fr = open("get_proxy.sh", "w")
-    # fr.write("export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n")
-    # fr.write("voms-proxy-init --voms atlas --vomslife 96:00 --valid 96:00\n")
-    # fr.close()
-    # os.system("chmod a+x get_proxy.sh")
-    # os.system("./get_proxy.sh")
-    main(samples = ['zprime1000'], systematics = 'nominal', output_dir = None, analysis_type = 'AnaTtresSL') # An example of histogramming signal sample w/ M(Z')=1000GeV in l+jets analysis
-
+    def download_dataset(self, ds_name = None, only_retrieve_cmd = False):
+        dirname = os.path.abspath(ds_name or self.download_to)
+        input_files = []
+        if only_retrieve_cmd:
+            cmds = []
+        for s in self._list_dids():
+            cmd = ['rucio','download', s, '--dir', dirname]
+            if only_retrieve_cmd:
+                cmds.append(' '.join(cmd)+'\n')
+                input_files.extend([os.path.join(dirname, s, d['name']) for d in self._client.list_files(scope = self.ds_scope, name = s)])
+                continue
+            subprocess.call(cmd)
+            input_files.extend(map(os.path.abspath, glob.iglob(os.path.join(dirname, s, '*.root*'))))
+        self.input_files = input_files
+        if only_retrieve_cmd:
+            return cmds
+    def remove_dataset(self, ds_name = None):
+        # dirname = ds_name or self.download_to
+        for f in self.input_files:
+            os.remove(f)
+        self.input_files = []
+    def commit(self, input_files = None, only_retrieve_cmd = False):
+        if self.commited:
+            return
+        if not self.download_to:
+            self.set_input_files(input_files)
+        else:
+            cmds = self.download_dataset(self.download_to, only_retrieve_cmd = only_retrieve_cmd)
+        self.commited = True
+        if only_retrieve_cmd:
+            assert type(cmds) == list, "Houston we've got a problem"
+            return cmds
+    def __repr__(self):
+        return '<{}.{}("{}")>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name)
