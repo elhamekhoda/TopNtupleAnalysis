@@ -7,15 +7,15 @@ import os
 
 run_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.join(run_path, os.pardir)
-data_path = os.path.join(root, "share")
+data_path = os.path.join(root_path, "share")
 
 def addFilesInChain(c, txtFileOption):
     for f in txtFileOption.split(','):
         txtf = open(f)
         for l in txtf.readlines():
-	    if l[-1] == '\n':
-	        l = l[0:-1]
-            c.Add(l)
+	    l = l.strip()
+            if not l.startswith('#'):
+                c.Add(l)
 
 pdfList = ['PDF4LHC15_nlo_30']
 wjpdfList = [7]+range(11, 110+1)

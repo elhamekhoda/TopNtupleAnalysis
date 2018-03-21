@@ -25,7 +25,7 @@ MAP_TO_SAMPLES = {# <sample>: <physics_short>
                 'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
                 'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
                 'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
-                'tt':'MC16_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia,MC16_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced',
+                'tt':'MC16_13TeV_25ns_FS_EXOT4_ttbar_nonallhad',
                 'singletop':'MC16_13TeV_25ns_FS_EXOT4_singletop',
                 'zjets':'MC16_13TeV_25ns_FS_EXOT4_Zjets22',
                 'vv': 'MC16_13TeV_25ns_FS_EXOT4_VV',

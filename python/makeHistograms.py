@@ -70,10 +70,11 @@ def main():
     #print pdfSumOfWeights
 
     logger.info("Loading xsec.")
-    xsec_mc15_13tev_ttres = "/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV-ttres.data"
+    xsec_mc15_13tev_ttres = "/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data"
     if os.path.exists(xsec_mc15_13tev_ttres):
         helpers.loadXsec(Xsec, xsec_mc15_13tev_ttres)
     else:
+        logger.critical('Can\'t access TDP in GroupData. Read cross-section from local records.')
         helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
     #helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "../TopDataPreparation/data/XSection-MC15-13TeV.data"))
     #loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
