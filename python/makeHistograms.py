@@ -402,7 +402,6 @@ def main():
                         else:
                             weight /= pdfSumOfWeights[channel][pdfName][pdfNumber]
 
-
             for ana in analysisCode:
                 if not analysisCode[ana].selectChannel(sel, suffix):
                     continue

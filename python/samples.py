@@ -186,3 +186,5 @@ class Sample(object):
             return cmds
     def __repr__(self):
         return '<{}.{}("{}")>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name)
+    def sum_of_weights(self):
+        raise NotImplementedError
