@@ -5,6 +5,41 @@ from array import array
 from ROOT import std
 import wjets
 logger = helpers.getLogger('TopNtupleAnalysis.analysis')
+
+class Selection(object):
+    def __init__(self, callable, *args, **kwds):
+        self._alg = callable(*args, **kwds)
+        raise NotImplementedError
+    def passes(self, event):
+        return self._alg(event)
+
+class BoostTopTagger(Selection):
+    """Boosted hadronic-top tagger
+
+    Used for hadronic-top tagging flag specification. 
+    Note that in the case of resolved selections, this is also used in order to __veto__ the event which has at least one boosted top.
+
+    Parameters
+    ----------
+    expr : {str}
+            Input expression. e.g., (isTopTagged_50|isTopTagged_80)&isWTagged_80
+    ljet_prefix : {str}, optional
+    index_id : {str}, optional
+            which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"), where 'i' is the id of the item.
+    """
+    def __init__(self, expr, ljet_prefix = "ljet_{}", index_id = 'i'):
+        self._alg = helpers.branch_parser(expr, name_fmt = ljet_prefix, index_id = index_id)
+        self.thad_index = -1
+        self.passed = False
+    def passes(self, ev):
+        self.thad_index = -1
+        for i in range(len(ev.ljet_pt)):
+            if ev.ljet_good[i] and eval(self._alg, {'char2int': helpers.char2int, 'sel': ev, 'i': i}):
+                self.thad_index = i
+                break
+        self.passed = not (self.thad_index == -1)
+        return self.passed
+
 class Analysis(object):
     ch = ''
     fi = None
@@ -22,6 +57,7 @@ class Analysis(object):
     me2XX = -1
     alphaS = -1
     tName  = "debug"
+
     def __init__(self, channel, suf, outputFile, do_tree = False):
         self.fi = ROOT.TFile.Open(outputFile, "recreate")
         self.ch = channel
@@ -36,7 +72,7 @@ class Analysis(object):
         self.me2XX = -1
         self.alphaS = -1
         self._doTree = do_tree
-        self.tName  = "debug"
+        self.tName  = "mini"
         self.h = {}
         self.trees = {}
         self.branches = {}
@@ -65,7 +101,7 @@ class Analysis(object):
 
     def clearBranches(self):
         if not self._doTree: return
-        tname = self.tName+self.ch
+        tname = self.tName
         for s in self.histSuffixes:
             for bname in self.branches[tname][s]:
                 self.branches[tname][s][bname].clear()
@@ -73,7 +109,7 @@ class Analysis(object):
     def addTree(self):
         if not self._doTree:
             return
-        tname = self.tName+self.ch
+        tname = self.tName
         self.trees[tname] = {}
         self.branches[tname] = {}
         #self.fi.cd()
@@ -183,21 +219,40 @@ class Analysis(object):
 
         return weight
     def set_top_tagger(self, expr, ljet_prefix = "ljet_{}", index_id = 'i'):
-        """Set boosted hadronic-top tagger
-
-        Used for hadronic-top tagging flag specification
-
-        Parameters
-        ----------
-        expr : {str}
-                Input expression. e.g., (isTopTagged_50|isTopTagged_80)&isWTagged_80
-        ljet_prefix : {str}, optional
-        index_id : {str}, optional
-                which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"), where 'i' is the id of the item.
-        """
-        self.is_top_tagged = helpers.branch_parser(expr, name_fmt = ljet_prefix, index_id = index_id)
+        self.top_tagger = BoostTopTagger(expr, ljet_prefix = ljet_prefix, index_id = index_id)
 
 class AnaTtresSL(Analysis):
+    mapSel = {  # OR all channels in the comma-separated list
+                'be': ['bejets_2015','bejets_2016'],
+                'bmu': ['bmujets_2015','bmujets_2016'],
+                're': ['rejets_2015','rejets_2016'],
+                'rmu': ['rmujets_2015','rmujets_2016'],
+                'be0': ['bejets_2015','bejets_2016'],
+                'bmu0': ['bmujets_2015','bmujets_2016'],
+                're0': ['rejets_2015','rejets_2016'],
+                'rmu0': ['rmujets_2015','rmujets_2016'],
+                'be1': ['bejets_2015','bejets_2016'],
+                'bmu1': ['bmujets_2015','bmujets_2016'],
+                're1': ['rejets_2015','rejets_2016'],
+                'rmu1': ['rmujets_2015','rmujets_2016'],
+                'be2': ['bejets_2015','bejets_2016'],
+                'bmu2': ['bmujets_2015','bmujets_2016'],
+                're2': ['rejets_2015','rejets_2016'],
+                'rmu2': ['rmujets_2015','rmujets_2016'],
+                'be3': ['bejets_2015','bejets_2016'],
+                'bmu3': ['bmujets_2015','bmujets_2016'],
+                're3': ['rejets_2015','rejets_2016'],
+                'rmu3': ['rmujets_2015','rmujets_2016'],
+                'be2015': ['bejets_2015'],
+                'bmu2015': ['bmujets_2015'],
+                're2015': ['rejets_2015'],
+                'rmu2015': ['rmujets_2015'],
+                'be2016': ['bejets_2016'],
+                'bmu2016': ['bmujets_2016'],
+                're2016': ['rejets_2016'],
+                'rmu2016': ['rmujets_2016'],
+                'ovre': ['rejets_2015','rejets_2016'],
+                'ovrmu': ['rmujets_2015','rmujets_2016']}
     def __init__(self, channel, suf, outputFile, do_tree = False):
         Analysis.__init__(self, channel, suf, outputFile, do_tree)
         self.applyQCD = False
@@ -401,44 +456,9 @@ class AnaTtresSL(Analysis):
         return w
 
     def selectChannel(self, sel, syst):
-        # OR all channels in the comma-separated list
-        mapSel = {
-                                'be': 'bejets_2015,bejets_2016',
-                                'bmu': 'bmujets_2015,bmujets_2016',
-                                're': 'rejets_2015,rejets_2016',
-                                'rmu': 'rmujets_2015,rmujets_2016',
-                                'be0': 'bejets_2015,bejets_2016',
-                                'bmu0': 'bmujets_2015,bmujets_2016',
-                                're0': 'rejets_2015,rejets_2016',
-                                'rmu0': 'rmujets_2015,rmujets_2016',
-                                'be1': 'bejets_2015,bejets_2016',
-                                'bmu1': 'bmujets_2015,bmujets_2016',
-                                're1': 'rejets_2015,rejets_2016',
-                                'rmu1': 'rmujets_2015,rmujets_2016',
-                                'be2': 'bejets_2015,bejets_2016',
-                                'bmu2': 'bmujets_2015,bmujets_2016',
-                                're2': 'rejets_2015,rejets_2016',
-                                'rmu2': 'rmujets_2015,rmujets_2016',
-                                'be3': 'bejets_2015,bejets_2016',
-                                'bmu3': 'bmujets_2015,bmujets_2016',
-                                're3': 'rejets_2015,rejets_2016',
-                                'rmu3': 'rmujets_2015,rmujets_2016',
-                                'be2015': 'bejets_2015',
-                                'bmu2015': 'bmujets_2015',
-                                're2015': 'rejets_2015',
-                                'rmu2015': 'rmujets_2015',
-                                'be2016': 'bejets_2016',
-                                'bmu2016': 'bmujets_2016',
-                                're2016': 'rejets_2016',
-                                'rmu2016': 'rmujets_2016',
-                                'ovre': 'rejets_2015,rejets_2016',
-                                'ovrmu': 'rmujets_2015,rmujets_2016',
-                 }
         passSel = {}
-        for i in mapSel:
+        for i, listSel in self.mapSel.iteritems():
             passSel[i] = True
-            listSel = mapSel[i].split(',')
-
             passORChannels = False
             for item in listSel:
                 if self.applyQCD == "e" and "mujets" in item:
@@ -471,9 +491,9 @@ class AnaTtresSL(Analysis):
         #               return False
 
         # veto resolved event if it passes the boosted channel
+        self.top_tagger.passes(sel)
         if ('re' in self.ch or 'rmu' in self.ch) and not "ov" in self.ch:
-            #if sel.bejets or sel.bmujets or sel.bmujetsmet80:
-            if passSel['be'] or passSel['bmu']:
+            if (passSel['be'] or passSel['bmu']) and self.top_tagger.passed:
                 return False
 
         # apply b-tagging cut
@@ -615,7 +635,7 @@ class AnaTtresSL(Analysis):
         ##double getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
         nu = ROOT.TopNtupleAnalysis.getNu(l, sel.met_met, sel.met_phi)
         if 'be' in self.ch or 'bmu' in self.ch:
-            goodJetIdx = -1
+            goodJetIdx = self.top_tagger.thad_index
             closeJetIdx = -1
             for i in range(0, len(sel.jet_pt)):
                 if sel.jet_closeToLepton[i]:
@@ -627,10 +647,6 @@ class AnaTtresSL(Analysis):
                 #       if cj.Perp() > pt:
                 #               closeJetIdx = i
                 #               pt = cj.Perp()
-            for i in range(len(sel.ljet_pt)):
-                if sel.ljet_good[i] and eval(self.is_top_tagged, {'char2int': helpers.char2int, 'sel': sel, 'i': i}):
-                    goodJetIdx = i
-                    break
             if goodJetIdx == -1:
                 return
             lj = ROOT.TLorentzVector()
@@ -658,7 +674,7 @@ class AnaTtresSL(Analysis):
             mtt = (closeJet+nu+l+lj).M()*1e-3
             ################################
             ### fill the tree ##############
-            tname = self.tName+self.ch
+            tname = self.tName
             if self._doTree:
                 self.branches[tname][syst]["eventNumber"].push_back(sel.eventNumber)
                 self.branches[tname][syst]["runNumber"].push_back(sel.runNumber)
