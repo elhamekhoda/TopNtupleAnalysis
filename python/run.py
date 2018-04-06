@@ -18,23 +18,23 @@ class Run(object):
             os.makedirs(self.output_dir)
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
-        self.selections = ['(be,     good_smooth_ts80)',
-                           '(bmu,    good_smooth_ts80)',
-                           '(re,     good_smooth_ts80)',
-                           '(rmu,    good_smooth_ts80)', 
-                           '(be2015, good_smooth_ts80)',
-                           '(bmu2015,good_smooth_ts80)',
-                           '(re2015, good_smooth_ts80)',
-                           '(rmu2015,good_smooth_ts80)',
-                           '(be2016, good_smooth_ts80)',
-                           '(bmu2016,good_smooth_ts80)',
-                           '(re2016, good_smooth_ts80)',
-                           '(rmu2016,good_smooth_ts80)']
+        self.selections = {'(be,     good_smooth_ts80)': '{channel}_{sample}.root',
+                           '(bmu,    good_smooth_ts80)': '{channel}_{sample}.root',
+                           '(re,     good_smooth_ts80)': '{channel}_{sample}.root',
+                           '(rmu,    good_smooth_ts80)': '{channel}_{sample}.root', 
+                           '(be2015, good_smooth_ts80)': '{channel}_{sample}.root',
+                           '(bmu2015,good_smooth_ts80)': '{channel}_{sample}.root',
+                           '(re2015, good_smooth_ts80)': '{channel}_{sample}.root',
+                           '(rmu2015,good_smooth_ts80)': '{channel}_{sample}.root',
+                           '(be2016, good_smooth_ts80)': '{channel}_{sample}.root',
+                           '(bmu2016,good_smooth_ts80)': '{channel}_{sample}.root',
+                           '(re2016, good_smooth_ts80)': '{channel}_{sample}.root',
+                           '(rmu2016,good_smooth_ts80)': '{channel}_{sample}.root'}
         self.analysis_type = analysis_type
         self.analysis_exts = []
         self.cluster = clusters.from_name.get(cluster)(cluster_type = None, cluster_status_update=(600,30)) if isinstance(cluster, str) else cluster
 
-    def write_runfile(self, sample, runfile = sys.stdout, selections = None):
+    def write_runfile(self, sample, runfile = sys.stdout, selections = None, output_fname_fmt = None):
         selections = selections or self.selections
         job_name = sample.sample_name
         download_cmd = ''.join(sample.commit(only_retrieve_cmd = bool(sample.download_to)) or [])
@@ -53,8 +53,8 @@ class Run(object):
             if download_cmd:
                 fr.write(''.join(download_cmd))
             output_files = ' '.join(['-o "{selection}:file://{output_file}"'.format(selection = selection,
-                                                                                    output_file = os.path.join(self.output_dir, '{}_{}.root'.format(re.search('\((\S+)\s*,', selection).group(1), job_name)))
-                                     for selection in selections])
+                                                                                    output_file = os.path.join(self.output_dir, output_fname.format(channel = re.search('\((\S+)\s*,', selection).group(1), sample = job_name)))
+                                     for selection, output_fname in selections.iteritems()])
             fr.write(os.path.join(self.source_dir,'makeHistograms.py')
                      + sample.is_data
                      + sample.extra
