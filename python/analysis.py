@@ -7,13 +7,13 @@ import wjets
 logger = helpers.getLogger('TopNtupleAnalysis.analysis')
 
 class Selection(object):
-    def __init__(self, callable, *args, **kwds):
-        self._alg = callable(*args, **kwds)
+    def __init__(self, _callable = None, *args, **kwds):
+        self._alg = _callable(*args, **kwds)
         raise NotImplementedError
     def passes(self, event):
         return self._alg(event)
 
-class BoostTopTagger(Selection):
+class BoostedTopTagger(Selection):
     """Boosted hadronic-top tagger
 
     Used for hadronic-top tagging flag specification. 
@@ -27,16 +27,24 @@ class BoostTopTagger(Selection):
     index_id : {str}, optional
             which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"), where 'i' is the id of the item.
     """
-    def __init__(self, expr, ljet_prefix = "ljet_{}", index_id = 'i'):
-        self._alg = helpers.branch_parser(expr, name_fmt = ljet_prefix, index_id = index_id)
+    def __init__(self, _callable = None):
+        if not callable(_callable):
+            self._expr = _callable
+            def _callable(ev):
+                _top_tagger = lambda i: eval(helpers.branch_parser(self._expr,
+                                                                   name_fmt = "ljet_{}",
+                                                                   index_id = "i"),
+                                             {'char2int': helpers.char2int, 'sel': ev, 'i': i})
+                for i in range(len(ev.ljet_pt)):
+                    if _top_tagger(i):
+                        self.thad_index = i
+                        break
+        self._alg = _callable
         self.thad_index = -1
         self.passed = False
     def passes(self, ev):
         self.thad_index = -1
-        for i in range(len(ev.ljet_pt)):
-            if ev.ljet_good[i] and eval(self._alg, {'char2int': helpers.char2int, 'sel': ev, 'i': i}):
-                self.thad_index = i
-                break
+        self._alg(ev)
         self.passed = not (self.thad_index == -1)
         return self.passed
 
@@ -59,6 +67,7 @@ class Analysis(object):
     tName  = "debug"
 
     def __init__(self, channel, suf, outputFile, do_tree = False):
+        self._outputFile = outputFile
         self.fi = ROOT.TFile.Open(outputFile, "recreate")
         self.ch = channel
         self.histSuffixes = suf
@@ -81,6 +90,7 @@ class Analysis(object):
     @property
     def doTree(self):
         return self._doTree
+
     @doTree.setter
     def doTree(self, boolean):
         self._doTree = boolean
@@ -150,6 +160,7 @@ class Analysis(object):
             self.trees[tname][s].Branch("mttReco",self.branches[tname][s]["mttReco"])
             self.branches[tname][s]["mttTrue"] = std.vector(float)()
             self.trees[tname][s].Branch("mttTrue",self.branches[tname][s]["mttTrue"])
+
     def addVar(self, hName, nBinsList):
         ar = array("d", nBinsList)
         #self.fi.cd()
@@ -172,7 +183,6 @@ class Analysis(object):
         self.fi.cd()
         for hName in self.h:
             for s in self.histSuffixes:
-                #print "writing histogram with name ", hName+s, " in file ",self.fi.GetName()
                 self.h[hName][s].Write(hName+s)
         if self._doTree:
             tname = self.tName+self.ch
@@ -192,6 +202,9 @@ class Analysis(object):
             out_tanb[0] = helpers.tanb
             out_tanb.Write("tanb")
         self.fi.Close()
+
+    def end(self):
+        self.write()
 
     def getWeight(self, sel, s):
         # this applies all the weights that come out of the box
@@ -218,8 +231,8 @@ class Analysis(object):
         #weight *= sel.weight_Sherpa22_corr
 
         return weight
-    def set_top_tagger(self, expr, ljet_prefix = "ljet_{}", index_id = 'i'):
-        self.top_tagger = BoostTopTagger(expr, ljet_prefix = ljet_prefix, index_id = index_id)
+    def set_top_tagger(self, expr):
+        self.top_tagger = BoostedTopTagger(expr)
 
 class AnaTtresSL(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
@@ -491,9 +504,9 @@ class AnaTtresSL(Analysis):
         #               return False
 
         # veto resolved event if it passes the boosted channel
-        self.top_tagger.passes(sel)
+        top_tagged = self.top_tagger.passes(sel)
         if ('re' in self.ch or 'rmu' in self.ch) and not "ov" in self.ch:
-            if (passSel['be'] or passSel['bmu']) and self.top_tagger.passed:
+            if (passSel['be'] or passSel['bmu']) and top_tagged:
                 return False
 
         # apply b-tagging cut
@@ -635,8 +648,7 @@ class AnaTtresSL(Analysis):
         ##double getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
         nu = ROOT.TopNtupleAnalysis.getNu(l, sel.met_met, sel.met_phi)
         if 'be' in self.ch or 'bmu' in self.ch:
-
-            for i in range(0, len(sel.jet_pt)):
+            for i in range(len(sel.jet_pt)):
                 if sel.jet_closeToLepton[i]:
                     closeJetIdx = i
                     break
@@ -650,6 +662,8 @@ class AnaTtresSL(Analysis):
             closeJet.SetPtEtaPhiE(sel.jet_pt[closeJetIdx], sel.jet_eta[closeJetIdx], sel.jet_phi[closeJetIdx], sel.jet_e[closeJetIdx])
 
             w0 = w/self.w2HDM
+            mtt = (closeJet+nu+l+lj).M()*1e-3 # unit is GeV
+
             self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
             self.h["largeJetM"][syst].Fill(lj.M()*1e-3, w)
             self.h["largeJetEta"][syst].Fill(lj.Eta(), w)
@@ -657,20 +671,20 @@ class AnaTtresSL(Analysis):
             self.h["largeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx], w)
             self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx], w)
             self.h["mtlep_boo"][syst].Fill((closeJet+nu+l).M()*1e-3, w)
-            self.h["mtt"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
-            self.h["mttr"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w0*(self.w2HDM-1.))
-            self.h["mtt8TeV"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
-            self.h["mtt8TeVr"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w0*(self.w2HDM-1.))
+            self.h["mtt"][syst].Fill(mtt, w)
+            self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
+            self.h["mtt8TeV"][syst].Fill(mtt, w)
+            self.h["mtt8TeVr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             if lQ > 0:
-                self.h["mttPos"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
+                self.h["mttPos"][syst].Fill(mtt, w)
             elif lQ < 0:
-                self.h["mttNeg"][syst].Fill((closeJet+nu+l+lj).M()*1e-3, w)
-            self.h["largeJetPtMtt"][syst].Fill(lj.Perp()/(closeJet+nu+l+lj).M(), w)
-            mtt = (closeJet+nu+l+lj).M()*1e-3
+                self.h["mttNeg"][syst].Fill(mtt, w)
+            self.h["largeJetPtMtt"][syst].Fill(lj.Perp()/(mtt*1e3), w)
+            
             ################################
             ### fill the tree ##############
-            tname = self.tName
             if self._doTree:
+                tname = self.tName
                 self.branches[tname][syst]["eventNumber"].push_back(sel.eventNumber)
                 self.branches[tname][syst]["runNumber"].push_back(sel.runNumber)
                 self.branches[tname][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
@@ -746,8 +760,8 @@ class AnaTtresSL(Analysis):
             self.h["chi2"][syst].Fill(chi2, w)
             ################################
             ### fill the tree ##############
-            tname = self.tName+self.ch
-            if(self._doTree and helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+            if self._doTree:
+                tname = self.tName
                 self.branches[tname][syst]["eventNumber"].push_back(sel.eventNumber)
                 self.branches[tname][syst]["runNumber"].push_back(sel.runNumber)
                 self.branches[tname][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
@@ -758,19 +772,21 @@ class AnaTtresSL(Analysis):
                 self.branches[tname][syst]["me2SM"].push_back(self.me2SM)
                 self.branches[tname][syst]["me2XX"].push_back(self.me2XX)
                 self.branches[tname][syst]["mttReco"].push_back(mtt*1e-3)
-                pME = helpers.getTruth4momenta(sel)
-                truPttbar = pME[2]+pME[3]
-                self.branches[tname][syst]["mttTrue"].push_back(truPttbar.M())
-                for i in xrange(sel.MC_id_me.size()):
-                    self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
-                    self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
-                    self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
-                    self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
-                    self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
+
+                if not (helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+                    self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                else:
+                    pME = helpers.getTruth4momenta(sel)
+                    truPttbar = pME[2]+pME[3]
+                    self.branches[tname][syst]["mttTrue"].push_back(truPttbar.M())
+                    for i in xrange(sel.MC_id_me.size()):
+                        self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
+                        self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
+                        self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
+                        self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
+                        self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
                 ##################################
                 ### fill the tree ################
                 self.trees[tname][syst].Fill() ###
                 ##################################
-    def end(self):
-        #print "Yield for channel ", self.ch, self.h["yields"][""].GetBinContent(1)
-        self.write()
+

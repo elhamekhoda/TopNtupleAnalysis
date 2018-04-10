@@ -14,7 +14,7 @@ BINDS_INITIASIZED = False
 
 import logging
 
-msgfmt = '%(asctime)s %(levelname)-7s %(name)-20s %(message)s'
+msgfmt = '%(asctime)s %(levelname)-7s %(name)-35s %(message)s'
 datefmt = '%H:%M:%S'
 
 def getLogger(name = None, level = logging.DEBUG):
@@ -66,43 +66,57 @@ def init2HDM(MH,MA,SBA,TANB,TYPE):
 def loadXsec(m, fName):
     f = open(fName)
     for l in f.readlines():
-        if l[0] == '#':
-            continue
         lsplit = l.split()
-        if len(lsplit) == 0:
+        length_lsplit = len(lsplit)
+        if l.startswith('#'):
             continue
-        if len(lsplit) < 3:
-            print "I cannot understand this line:", lsplit
+        if length_lsplit == 0:
+            continue
+        if length_lsplit < 3:
+            logger.critical("loadXsec: I cannot understand this line: %s", lsplit)
             continue
         m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2])
 
 def addFilesInChain(c, txtFileOption, n = -1):
-    counter = 0
     for f in txtFileOption.split(','):
-        txtf = open(f)
-        for l in txtf.readlines():
-            if l[-1] == '\n':
-                l = l[0:-1]
-            if counter > n and n > 0:
-                break
-            c.Add(l)
-            counter += 1
-        if counter > n:
-            break
+        with open(f) as txtf:
+            for counter, l in enumerate(l.strip() for l in txtf.readlines() if not l.startswith('#')):
+                if n == -1 or counter < n:
+                    c.Add(l.strip())
+                else:
+                    return
 
 class Event:
     def __init__(self):
         pass
 
 MV2C10_CUT = 0.66
-# systematic variations are specified according to this syntax:
-# btag[A]SF_[eig][_pt[X]]__1[up/down]
-# where:
-# [A] = b,c,l,e for b-jet, c-jet, light-jet or extrapolation variations
-# [eig] is the number of the eigen vector
-# [X] is the number of the pt bin if we want to vary only jets within a pt bin
-# if there is no 'btag' in the name of the variation, then the nominal SF is used
+
 def applyBtagSF(sel, s):
+    """
+    Retrieve the b-tagging scale factor with systematic variations specified accordingly
+
+    systematic variations are specified according to this syntax:
+    btag[A]SF_[eig][_pt[X]]__1[up/down]
+    where:
+    [A] = b,c,l,e for b-jet, c-jet, light-jet or extrapolation variations
+    [eig] is the number of the eigen vector
+    [X] is the number of the pt bin if we want to vary only jets within a pt bin
+    if there is no 'btag' in the name of the variation, then the nominal SF is used
+    
+    Parameters
+    ----------
+    sel : [TChain]
+        selected event chain
+    s : [str]
+        systematic variation flag
+    
+    Returns
+    -------
+    btagSF: [float]
+        b-tagging scale factor
+    
+    """
     if sel.mcChannelNumber == 0:
         return 1
     ptbinInS = -1
@@ -157,6 +171,30 @@ def applyBtagSF(sel, s):
 
 # same as above, but it reads the SFs from the file
 def applyBtagSFFromFile(sel, s):
+    """
+    Retrieve the b-tagging scale factor with systematic variations specified accordingly
+
+    systematic variations are specified according to this syntax:
+    btag[A]SF_[eig][_pt[X]]__1[up/down]
+    where:
+    [A] = b,c,l,e for b-jet, c-jet, light-jet or extrapolation variations
+    [eig] is the number of the eigen vector
+    [X] is the number of the pt bin if we want to vary only jets within a pt bin
+    if there is no 'btag' in the name of the variation, then the nominal SF is used
+    
+    Parameters
+    ----------
+    sel : [TChain]
+        selected event chain
+    s : [str]
+        systematic variation flag
+    
+    Returns
+    -------
+    btagSF: [float]
+        b-tagging scale factor
+    
+    """
     pref = 'tjet_bTagSF_70'
     varName = ''
     nomName = pref

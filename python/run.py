@@ -18,18 +18,18 @@ class Run(object):
             os.makedirs(self.output_dir)
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
-        self.selections = {'(be,     good_smooth_ts80)': '{channel}_{sample}.root',
-                           '(bmu,    good_smooth_ts80)': '{channel}_{sample}.root',
-                           '(re,     good_smooth_ts80)': '{channel}_{sample}.root',
-                           '(rmu,    good_smooth_ts80)': '{channel}_{sample}.root', 
-                           '(be2015, good_smooth_ts80)': '{channel}_{sample}.root',
-                           '(bmu2015,good_smooth_ts80)': '{channel}_{sample}.root',
-                           '(re2015, good_smooth_ts80)': '{channel}_{sample}.root',
-                           '(rmu2015,good_smooth_ts80)': '{channel}_{sample}.root',
-                           '(be2016, good_smooth_ts80)': '{channel}_{sample}.root',
-                           '(bmu2016,good_smooth_ts80)': '{channel}_{sample}.root',
-                           '(re2016, good_smooth_ts80)': '{channel}_{sample}.root',
-                           '(rmu2016,good_smooth_ts80)': '{channel}_{sample}.root'}
+        self.selections = [('(be,     good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(bmu,    good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(re,     good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(rmu,    good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(be2015, good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(bmu2015,good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(re2015, good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(rmu2015,good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(be2016, good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(bmu2016,good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(re2016, good_smooth_ts80)', '{channel}_{sample}.root'),
+                           ('(rmu2016,good_smooth_ts80)', '{channel}_{sample}.root')]
         self.analysis_type = analysis_type
         self.analysis_exts = []
         self.cluster = clusters.from_name.get(cluster)(cluster_type = None, cluster_status_update=(600,30)) if isinstance(cluster, str) else cluster
@@ -54,7 +54,7 @@ class Run(object):
                 fr.write(''.join(download_cmd))
             output_files = ' '.join(['-o "{selection}:file://{output_file}"'.format(selection = selection,
                                                                                     output_file = os.path.join(self.output_dir, output_fname.format(channel = re.search('\((\S+)\s*,', selection).group(1), sample = job_name)))
-                                     for selection, output_fname in selections.iteritems()])
+                                     for selection, output_fname in (selections.iteritems() if isinstance(selections, dict) else selections)])
             fr.write(os.path.join(self.source_dir,'makeHistograms.py')
                      + sample.is_data
                      + sample.extra
@@ -92,20 +92,19 @@ def get_fct(logger = None):
         def fct(idle, run, finish):
             l = "Idle: {:3},  Running: {:3},  Completed: {:3}".format(idle, run, finish)
             print l
-        return fct
     else:
         def fct(idle, run, finish):
             l = "Idle: {:3},  Running: {:3},  Completed: {:3}".format(idle, run, finish)
             logger.info(l)
-        return fct
+    return fct
 
 if __name__ == '__main__':
     """
     An example of histogramming signal sample w/ M(Z')=[400, ... , 5000]GeV in l+jets analysis using batch system `HTCondor`
     """
-    samples = [samples.Sample(sample_name = 'zprime1000',
-                              ds_fmt_options = {'suffix': '13022018v1_output.root'},
-                              download_to = None)]
+    s = [samples.Sample(sample_name = 'zprime1000',
+                        ds_fmt_options = {'suffix': '13022018v1_output.root'},
+                        download_to = None)]
 
     def main(samples, systematics, **run_kwds):
         run = Run(samples = samples, **run_kwds)
@@ -115,7 +114,7 @@ if __name__ == '__main__':
         run.analysis_exts = ['--do-tree'] # comment it out if you don't want a mini-tree output
         run.run(use_cluster = True, monitor = True)
 
-    main(samples = samples,
+    main(samples = s,
          systematics = 'nominal',
          output_dir = None,
          analysis_type = 'AnaTtresSL',

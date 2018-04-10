@@ -300,8 +300,9 @@ def main():
         ROOT.TopNtupleAnalysis.initPDF(options.pdfForWeight)
         helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
         logger.info("2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE))
-    for k, top_tagger in channels:
-        analysisCode[k] = anaClass(k, histSuffixes, channels[(k, top_tagger)])
+    for k in channels:
+        ch, top_tagger = k
+        analysisCode[k] = anaClass(ch, histSuffixes, channels[k])
         analysisCode[k].doTree = do_tree
         analysisCode[k].keep = options.WjetsHF
         analysisCode[k].applyQCD = False
@@ -329,7 +330,7 @@ def main():
             analysisCode[k].scalarTANB = scalarTANB
             analysisCode[k].scalarTYPE = scalarTYPE
         analysisCode[k].set_top_tagger(top_tagger)
-        logger.info('({},{}): {}'.format(k.strip(), top_tagger, channels[(k, top_tagger)]))
+        logger.info('({},{}): {}'.format(ch.strip(), top_tagger, channels[k]))
 
     isFirstEvent = True
 

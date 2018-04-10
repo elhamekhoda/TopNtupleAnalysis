@@ -5,12 +5,11 @@ from TopNtupleAnalysis import samples, run, clusters
 """
 An example of histogramming signal sample w/ M(Z')=[400, ... , 5000]GeV in l+jets analysis using batch system `HTCondor`
 """
-samples = [samples.Sample(sample_name = s,
-                          # ds_fmt_options = {'suffix': '13022018v1_output.root'},
-                          ds_fmt_options = {'suffix': 'EXOT8_27022018v1_output.root'},
-                          download_to = os.path.join(os.curdir, 'data'),
-                          commit_when_init = False) for s in samples.MAP_TO_SAMPLES if 'zprime' in s]
-samples = samples[:2]
+s = [samples.Sample(sample_name = s,
+                    ds_fmt_options = {'suffix': '13022018v1_output.root'},
+                    download_to = os.path.join(os.curdir, 'data'),
+                    commit_when_init = False) for s in samples.MAP_TO_SAMPLES if 'zprime' in s]
+
 def main(samples, systematics, **run_kwds):
     r = run.Run(samples = samples, **run_kwds)
     for sample in r.samples:
@@ -19,7 +18,7 @@ def main(samples, systematics, **run_kwds):
     r.analysis_exts = ['--do-tree'] # comment it out if you don't want a mini-tree output
     r.run(use_cluster = True, monitor = True)
 
-main(samples = samples,
+main(samples = s,
      systematics = 'nominal',
      output_dir = None,
      analysis_type = 'AnaTtresSL',

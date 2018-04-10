@@ -119,7 +119,7 @@ class Cluster(object):
             self.temp_dir = opts['cluster_temp_path']
         else:
             self.temp_dir = None
-        self.options = {'cluster_status_update': (600, 30)}
+        self.options = {'cluster_status_update': (120, 30)}
         for key,value in opts.items():
             self.options[key] = value
         self.nb_retry = opts['cluster_nb_retry'] if 'cluster_nb_retry' in opts else 0
