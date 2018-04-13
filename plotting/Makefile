@@ -29,5 +29,5 @@ compare: $(DEPS) compare.o
 	g++ -o $@ $(DEPS) compare.o $(LDFLAGS)
 
 clean:
-	rm -f *.o plot compare plotCompareNominal
+	rm -f *.o plot compare plotCompareNominal plotChannelRatio
 

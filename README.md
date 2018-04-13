@@ -68,10 +68,10 @@ optional arguments:
                         syntax is "-o (<topo><lep>[<b-cat>],[<top-
                         tagger>]):<output_fname> [-o ... [-o ...]]". See Also:
                         `--top-tagger` (default:
-                        ['(re,good_smooth_ts80):hist_re.root',
-                        '(rmu,good_smooth_ts80):hist_rmu.root',
-                        '(be,good_smooth_ts80):hist_be.root',
-                        '(bmu,good_smooth_ts80):hist_bmu.root'])
+                        ['(re,good):hist_re.root',
+                        '(rmu,good):hist_rmu.root',
+                        '(be,good):hist_be.root',
+                        '(bmu,good):hist_bmu.root'])
   -s SYSTEMATICS, --systs SYSTEMATICS
                         Comma-separated list of systematic uncertainties in
                         TTrees in the input file. Use 'all' to run over all
@@ -117,7 +117,7 @@ optional arguments:
                         boost selection. Simple logical operation are
                         supported. ONLY WORK IF YOU DON'T USE ANY TOP-TAGGER
                         IN THE _OUTPUT_ SELECTIONS. (default:
-                        good_smooth_ts80)
+                        good)
 ```
 
 Create your own scripts based on this! Some very nice examples can be found in `scripts/`.

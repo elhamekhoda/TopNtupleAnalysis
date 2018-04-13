@@ -459,10 +459,10 @@ if __name__ == "__main__":
                         metavar="ANALYSIS")
     parser.add_argument("-o", "--output",
                         dest="output",
-                        default = ["(re,good_smooth_ts80):hist_re.root",
-                                   "(rmu,good_smooth_ts80):hist_rmu.root",
-                                   "(be,good_smooth_ts80):hist_be.root",
-                                   "(bmu,good_smooth_ts80):hist_bmu.root"],
+                        default = ["(re,good):hist_re.root",
+                                   "(rmu,good):hist_rmu.root",
+                                   "(be,good):hist_be.root",
+                                   "(bmu,good):hist_bmu.root"],
                         action = AppendActionCleanDefault,
                         nargs = '?',
                         help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>],[<top-tagger>]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
@@ -532,7 +532,7 @@ if __name__ == "__main__":
                         help="Probability of accepting an event. Factor to use when dropping events in data to reduce luminosity available.",
                         metavar="FLOAT")
     parser.add_argument('-t', '--top-tagger',
-                        default='good_smooth_ts80',
+                        default='good',
                         help='"GLOBAL" Boosted top tagger which will applied to the large-R jet for the hadronic-top reconstruction in the boost selection. Simple logical operation are supported. ONLY WORK IF YOU DON\'T USE ANY TOP-TAGGER IN THE _OUTPUT_ SELECTIONS.')
     parser.add_argument('--do-tree',
                         action='store_true',
