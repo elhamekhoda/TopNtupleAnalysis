@@ -64,7 +64,7 @@ class Sample(object):
                     return sample
         else:
             for dataset_name, physics_short in MAP_TO_SAMPLES.iteritems():
-                if obj == dataset_name:
+                if obj.split('._')[0] == dataset_name:
                     sample.name = dataset_name
                     sample.datasets.extend(TopExamples.grid.Samples(physics_short.split(','))[0].datasets)
                     return sample
@@ -78,7 +78,7 @@ class Sample(object):
         self.download_to = download_to if download_to is not True else os.curdir
         self.commited = False
         self.set_systematics()
-        if commit_when_init:
+        if commit_when_init or input_files:
             self.commit(input_files)
 
     def _list_dids(self, scope = None, filters = {}):
@@ -89,8 +89,9 @@ class Sample(object):
             p = "{scope}:{pattern}".format(scope = scope, pattern = filters.get('name'))
             if 'type' in filters:
                 p += ' [' + filters['type'] + ']'
-            logger.critical('DIDs with pattern "{}" not found. Please check if it really exists on grid.'.format(p))
+            logger.critical('{}: DIDs with pattern "{}" not found. Please check if it really exists on grid.'.format(self, p))
         return ret
+
     @property
     def physics_short(self):
         return self.sample.name
@@ -140,10 +141,14 @@ class Sample(object):
             return ' --WjetsHF l'
         return ''
     def get_input_files(self):
+        if not self._input_files:
+            logger.critical('{!r}: inputs list is empty!'.format(self))
         return self._input_files
-    def set_input_files(self, alist = None):
+    def set_input_files(self, alist = None, force = True):
         input_files = []
         if alist == None:
+            if not force and self._input_files:
+                return
             for files in (replica['pfns'].keys() for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root'])):
                 input_files.append(files[0])
         elif type(alist) == str:
@@ -174,10 +179,12 @@ class Sample(object):
             os.remove(f)
         self.input_files = []
     def commit(self, input_files = None, only_retrieve_cmd = False):
-        if self.commited:
+        if self.commited and not only_retrieve_cmd:
             return
-        if not self.download_to:
-            self.set_input_files(input_files)
+        elif not self.download_to:
+            self.set_input_files(input_files, force = False)
+            self.commited = True
+            return
         else:
             cmds = self.download_dataset(self.download_to, only_retrieve_cmd = only_retrieve_cmd)
         self.commited = True
@@ -188,3 +195,36 @@ class Sample(object):
         return '<{}.{}("{}")>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name)
     def sum_of_weights(self):
         raise NotImplementedError
+
+class SubSample(Sample):
+    def __init__(self, parent, input_files, suffix):
+        self.parent = parent
+        self.sample_name = self.parent.sample_name + '._{}'.format(suffix)
+        self.input_files = input_files
+        self.commited = False
+    def __getattr__(self, attr):
+        try:
+            return self.__getattribute__(attr)
+        except AttributeError:
+            return self.parent.__getattribute__(attr)
+    def download_dataset(self, ds_name = None, only_retrieve_cmd = False):
+        if only_retrieve_cmd:
+            cmds = []
+        for s in self._list_dids():
+            dirname = os.path.join(os.path.abspath(ds_name or self.parent.download_to), s)
+            cmd = ['rucio','download'] + map(os.path.basename, self.input_files) + ['--dir', dirname, '--no-subdir']
+            if only_retrieve_cmd:
+                cmds.append(' '.join(cmd)+'\n')
+                continue
+            subprocess.call(cmd)
+        if only_retrieve_cmd:
+            return cmds
+
+def part_sample(sample, max_input_files = 5):
+    if not sample.commited:
+        sample.commit(only_retrieve_cmd = True)
+    l = len(sample.input_files)
+    if l <= max_input_files or max_input_files == None:
+        return [sample]
+    return [SubSample(sample, sample.input_files[i:min(i+max_input_files, l)], suffix = '{:06d}'.format(suffix)) for suffix, i in enumerate(range(0, l, max_input_files), 1)]
+

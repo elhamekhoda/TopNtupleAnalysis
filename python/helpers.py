@@ -4,6 +4,7 @@ import sys
 import ast
 import os
 import re
+import subprocess
 sys.path.append('2HDM')
 
 run_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
@@ -803,3 +804,20 @@ def char2int(char):
     if type(char) is not str:
         return char
     return ord(char)
+
+def hadd(a_dict, delete_sources = False, force_recreate = True):
+    for k, v in a_dict.iteritems():
+        subprocess.check_call(['hadd'] + (['-f'] if force_recreate else []) + [k] + list(v))
+        if delete_sources:
+            for f in v:
+                os.remove(f)
+
+def merge_files(filelist, pattern=r'(?P<base>.*)(?P<idx>\._\d+)(?P<ext>\.root.*)', delete_sources = False):
+    merge_dict = {}
+    prog = re.compile(pattern)
+    for f in filelist:
+        matched = prog.match(f)
+        if matched:
+            out = matched.expand(r'\g<base>\g<ext>')
+            merge_dict.setdefault(out, []).append(matched.group(0))
+    hadd(merge_dict, delete_sources)

@@ -37,8 +37,8 @@ def main():
 							 dest="types", default="",
 				  help="Categories they should be added in.", metavar="LIST")
 	parser.add_option("-s", "--suffix",
-							 #dest="suffix", default="_new",
-							 dest="suffix", default="_test",
+							 dest="suffix", default="_new",
+							 # dest="suffix", default="_test",
 				  help="Suffix to be added in the output file.", metavar="SUFFIX")
 
 	(options, args) = parser.parse_args()
