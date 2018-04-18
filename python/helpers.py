@@ -4,6 +4,7 @@ import sys
 import ast
 import os
 import re
+import subprocess
 sys.path.append('2HDM')
 
 run_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
@@ -58,9 +59,9 @@ def init2HDM(MH,MA,SBA,TANB,TYPE):
     #############################################
     T2HDM.reset(nameX,mX,typeX,sba,tanb,True) ###
     #############################################
-    print "cuts:",T2HDM.model.cuts
-    print "parameters:",T2HDM.model.parameters
-    print T2HDM.model.modules
+    logger.info("init2HDM: cuts: %s",T2HDM.model.cuts)
+    logger.info("init2HDM: parameters: %s",T2HDM.model.parameters)
+    logger.info(T2HDM.model.modules)
 
 
 def loadXsec(m, fName):
@@ -385,20 +386,20 @@ def correct2HDMTopology(sel,topology):
         elif(prod=="gu" or prod=="gux" or prod=="uu" or prod=="uxux"): prod = prod.replace("u","b")
         elif(prod=="uc" or prod=="ucx" or prod=="uxcx"):               prod = prod.replace("c","b")
         else:
-            logger.error("Cannot understand the production with b's - quitting:%s",prod)
-            logger.error("Topology is:%s",topology)
+            logger.critical("correct2HDMTopology: Cannot understand the production with b's - quitting:%s",prod)
+            logger.critical("correct2HDMTopology: Topology is:%s",topology)
             quit()
     if(n==5 and abs(sel.MC_id_me[4])==BOT):
         if(decay=="u" or decay=="ux"): decay = decay.replace("u","b")
         else:
-            print "Cannot understand the decay with b's (n=5)- quitting:",decay
+            logger.critical("correct2HDMTopology: Cannot understand the decay with b's (n=5)- quitting: %s",decay)
             quit()
     if(n==6 and (abs(sel.MC_id_me[4])==BOT or abs(sel.MC_id_me[5])==BOT)):
         if(decay=="uux"):                                                    decay = "bbx"
         elif(decay=="gu" or decay=="gux" or decay=="uu"   or decay=="uxux"): decay = decay.replace("u","b")
         elif(decay=="uc" or decay=="ucx" or decay=="uxcx" or decay=="ccx"):  decay = decay.replace("c","b")
         else:
-            print "Cannot understand the decay with b's (n=6) - quitting:",decay
+            logger.critical("correct2HDMTopology: Cannot understand the decay with b's (n=6) - quitting: %s",decay)
             quit()
     topology = topoparts[0]+"_"+prod+"_ttx"+decay
     for i in xrange(3,len(topoparts)): topology += "_"+topoparts[i]
@@ -408,8 +409,8 @@ def getMomenta(sel,topology):
     n = len(sel.MC_id_me)
     topoparts = topology.split("_")
     if(len(topoparts)<3):
-        print "Error: topoparts=",topoparts
-        print "Too few topo parts - quitting"
+        logger.error("topoparts=%s",topoparts)
+        logger.error("Too few topo parts - quitting")
         quit()
     prod  = topoparts[1]
     decay = topoparts[2].replace("ttx","")
@@ -437,7 +438,7 @@ def getMomenta(sel,topology):
         me.update({"p1":{"id":sel.MC_id_me[qLight],"idx":qLight}})
         me.update({"p2":{"id":sel.MC_id_me[qHeavy],"idx":qHeavy}})
     else:
-        print "Cannot understand the production - quitting"
+        logger.critical("getMomenta: Cannot understand the production - quitting")
         quit()
     ### Fill top quarks' momenta ###
     t  = 2 if(sel.MC_id_me[2]>0) else 3
@@ -468,7 +469,7 @@ def getMomenta(sel,topology):
             me.update({"j1":{"id":sel.MC_id_me[qLight],"idx":qLight}})
             me.update({"j2":{"id":sel.MC_id_me[qHeavy],"idx":qHeavy}})
         else:
-            print "Cannot understand the decay - quitting"
+            logger.critical("getMomenta: Cannot understand the decay - quitting")
             quit()
     ### Fill the momenta array
     p = [[ sel.MC_e_me[me["p1"]["idx"]], sel.MC_px_me[me["p1"]["idx"]], sel.MC_py_me[me["p1"]["idx"]], sel.MC_pz_me[me["p1"]["idx"]] ],
@@ -614,15 +615,15 @@ def print2HDM(sel,topology,alphaS,ids,pCpp,me2XX,me2SM):
     truPttbar = (pME[2]+pME[3]).M()
     if(abs(truPttbar.M()-mX)<100):
         weightX = me2XX/me2SM
-        print "# 2HDM setup: mX=%g, sba=%g, tanb=%g, type=%g --> topo=%s, mtt=%g, me2XX/me2SM=%g/%g=%g" % (mX,sba,tanb,typeX,topology,(pt1+pt2).M(),me2XX,me2SM,weightX)
-        print "# ME ids are: ",ids
-        print "# Q =",sel.MC_Q_me/1000.
-        print "alphaS =",alphaS
-        print "p=["
+        logger.info("# 2HDM setup: mX=%g, sba=%g, tanb=%g, type=%g --> topo=%s, mtt=%g, me2XX/me2SM=%g/%g=%g", mX,sba,tanb,typeX,topology,(pt1+pt2).M(),me2XX,me2SM,weightX)
+        logger.info("# ME ids are: %s",ids)
+        logger.info("# Q = %s",sel.MC_Q_me/1000.)
+        logger.info("alphaS = %s",alphaS)
+        logger.info("p=[")
         for x in xrange(len(ids)):
-            print "  [%g,%g,%g,%g]," % (sel.MC_e_me[x],sel.MC_px_me[x],sel.MC_py_me[x],sel.MC_pz_me[x])
-        print "]"
-        print "used p =", pCpp
+            logger.info("  [%g,%g,%g,%g],", sel.MC_e_me[x],sel.MC_px_me[x],sel.MC_py_me[x],sel.MC_pz_me[x])
+        logger.info("]")
+        logger.info("used p = %s", pCpp)
 
 def get2HDMWeight(sel):
     if sel.mcChannelNumber == 0:
@@ -637,8 +638,8 @@ def get2HDMWeight(sel):
     ids = []
     for i in xrange(sel.MC_id_me.size()): ids.append(sel.MC_id_me[i])
     if(topologySM_lib not in T2HDM.model.modules or topologyXX_lib not in T2HDM.model.modules):
-        print "topology %s or %s (or both) is not in T2HDM.model.modules" % (topologySM_lib,topologyXX_lib)
-        print "ME id's are: ",ids
+        logger.warn("topology %s or %s (or both) is not in T2HDM.model.modules",topologySM_lib,topologyXX_lib)
+        logger.warn("ME id's are: %s",ids)
         return 1
     pCpp = getMomenta(sel,topologySM_name)
     pPython = T2HDM.invert_momenta(pCpp)
@@ -786,6 +787,8 @@ def initialise_binds():
     if BINDS_INITIASIZED:
         return
     logger.info("-> Initialising binds now.")
+    logger.debug('$PWD: %s', os.environ['PWD'])
+    logger.debug('$LD_LIBRARY_PATH: %s', os.environ['LD_LIBRARY_PATH'])
     lib_dir = os.path.join(os.getenv("WorkDir_DIR"), "lib") if "WorkDir_DIR" in os.environ else root_path
     cintdict_dir = os.path.join(os.getenv("WorkDir_DIR"), '..', "TopNtupleAnalysis", 'CMakeFiles') if "WorkDir_DIR" in os.environ else root_path
     shared_lib = os.path.join(lib_dir, "libTopNtupleAnalysis.so")
@@ -803,3 +806,20 @@ def char2int(char):
     if type(char) is not str:
         return char
     return ord(char)
+
+def hadd(a_dict, delete_sources = False, force_recreate = True):
+    for k, v in a_dict.iteritems():
+        subprocess.check_call(['hadd'] + (['-f'] if force_recreate else []) + [k] + list(v))
+        if delete_sources:
+            for f in v:
+                os.remove(f)
+
+def merge_files(filelist, pattern=r'(?P<base>.*)(?P<idx>\._\d+)(?P<ext>\.root.*)', delete_sources = False):
+    merge_dict = {}
+    prog = re.compile(pattern)
+    for f in filelist:
+        matched = prog.match(f)
+        if matched:
+            out = matched.expand(r'\g<base>\g<ext>')
+            merge_dict.setdefault(out, []).append(matched.group(0))
+    hadd(merge_dict, delete_sources)

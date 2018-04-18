@@ -381,13 +381,13 @@ def main():
                 if options.systs != 'pdf': #'pdf_' in suffix:
                     if not options.af2:
                         if not channel in sumOfWeights:
-                            print "Could not find DSID ",channel, " in sum of weights."
+                            logger.error('Could not find <DSID: %s> in "sumOfWeights".',channel)
                             weight = 0
                         else:
                             weight /= sumOfWeights[channel]
                     else:
                         if not channel in sumOfWeightsAF2:
-                            print "Could not find DSID ",channel, " in sum of weights."
+                            logger.error('Could not find <DSID: %s> in "sunOfWeightsAF2"',channel)
                             weight = 0
                         else:
                             weight /= sumOfWeightsAF2[channel]
@@ -398,7 +398,7 @@ def main():
                         pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
                         pdfNumber = int(suffix.rsplit('_', 1)[1])
                         if not channel in pdfSumOfWeights:
-                            print "Could not find DSID ",channel, " in sum of weights."
+                            logger.error('Could not find <DSID: %s> in "pdfSumOfWeights".',channel)
                             weight = 0
                         else:
                             weight /= pdfSumOfWeights[channel][pdfName][pdfNumber]
@@ -539,7 +539,7 @@ if __name__ == "__main__":
                         help='Make a mini-tree.')
     options = parser.parse_args()
 
-    print "-> Calling main"
+    logger.info("-> Calling main")
     helpers.initialise_binds()
     main()
-    print "The end."
+    logger.info("The end.")
