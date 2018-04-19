@@ -697,7 +697,8 @@ class AnaTtresSL(Analysis):
                 self.branches[tname][syst]["mttReco"].push_back(mtt)
                 # pME = helpers.getTruth4momenta(sel)
                 # truPttbar = pME[2]+pME[3]
-                self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                if sel.sel.mcChannelNumber != 0:
+                    self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
                 # for i in xrange(sel.MC_id_me.size()):
                 #     self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
                 #     self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
@@ -772,19 +773,19 @@ class AnaTtresSL(Analysis):
                 self.branches[tname][syst]["me2SM"].push_back(self.me2SM)
                 self.branches[tname][syst]["me2XX"].push_back(self.me2XX)
                 self.branches[tname][syst]["mttReco"].push_back(mtt*1e-3)
-
-                if not (helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
-                    self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
-                else:
-                    pME = helpers.getTruth4momenta(sel)
-                    truPttbar = pME[2]+pME[3]
-                    self.branches[tname][syst]["mttTrue"].push_back(truPttbar.M())
-                    for i in xrange(sel.MC_id_me.size()):
-                        self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
-                        self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
-                        self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
-                        self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
-                        self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
+                if sel.mcChannelNumber != 0:
+                    if not (helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+                        self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                    else:
+                        pME = helpers.getTruth4momenta(sel)
+                        truPttbar = pME[2]+pME[3]
+                        self.branches[tname][syst]["mttTrue"].push_back(truPttbar.M())
+                        for i in xrange(sel.MC_id_me.size()):
+                            self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
+                            self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
+                            self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
+                            self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
+                            self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
                 ##################################
                 ### fill the tree ################
                 self.trees[tname][syst].Fill() ###
