@@ -9,6 +9,8 @@ import helpers
 import clusters
 import samples
 
+logger = helpers.getLogger('TopNtupleAnalysis.run')
+
 class Run(object):
     def __init__(self, samples = [], output_dir = None, log_dir = None, analysis_type = 'AnaTtresSL', cluster = None, max_inputs_per_job = 5, environment = 'asetup'):
         self.samples = [samples.Sample(s) if isinstance(s, str) else s for s in samples]
@@ -37,54 +39,63 @@ class Run(object):
         self.cluster = clusters.from_name.get(cluster)(cluster_type = None, cluster_status_update=(600,30)) if isinstance(cluster, str) else cluster
         self.environment = environment
 
+
     def write_inputsfile(self, sample):
         with open(os.path.join(self.output_dir, "input_"+sample.sample_name+'.txt'), 'w') as infile:
             infile.writelines('\n'.join(sample.input_files))
         return infile.name
-
-    def write_runfile(self, sample, runfile = sys.stdout, selections = None, output_fname_fmt = None):
+    
+    def command_lines(self, sample, selections = None, output_fname_fmt = None):
+        cmds = {'shebang': [], 'build': [], 'download': [], 'pre-exec': [], 'exec': [], 'post-exec': []}
         selections = selections or self.selections
         job_name = sample.sample_name
         download_cmd = ''.join(sample.commit(only_retrieve_cmd = bool(sample.download_to)) or [])
         infile = self.write_inputsfile(sample)
-        with open(runfile, 'w') as fr:
-            fr.write('#!{}\n'.format(os.environ['SHELL']))
-            if self.cluster != None:
-                fr.write('pwd="$PWD"\n')
-                fr.write('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
-                fr.write('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
-                fr.write('cd {}\n'.format(os.path.join(os.getenv("WorkDir_DIR"), '..')))
-                if self.environment == 'acmSetup':
-                    fr.write('acmSetup\n')
-                elif self.environment == 'asetup':
-                    fr.write('asetup --restore && . */setup.sh && . */env_setup.sh\n')
-                fr.write('export LD_LIBRARY_PATH=$WorkDir_DIR/lib:$LD_LIBRARY_PATH\n')
-                # fr.write('LD_LIBRARY_PATH=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/emi/3.17.1-1.el6umd4v5/lib64:/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/emi/3.17.1-1.el6umd4v5/lib:/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/emi/3.17.1-1.el6umd4v5/alrbUsr/lib64:/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/emi/3.17.1-1.el6umd4v5/alrbUsr/lib:/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/emi/3.17.1-1.el6umd4v5/alrbUsr/lib64/dcap:/nfs/dust/atlas/user/chenyh/AnalysisTop_21.2.25/build/x86_64-slc6-gcc62-opt/lib:/cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisBaseExternals/21.2.24/InstallArea/x86_64-slc6-gcc62-opt/lib:/cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisTop/21.2.24/InstallArea/x86_64-slc6-gcc62-opt/lib:/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/git/2.11.1-x86_64-slc6/lib64:/cvmfs/atlas.cern.ch/repo/sw/software/21.2/AnalysisBaseExternals/21.2.24/InstallArea/x86_64-slc6-gcc62-opt/lib64:/cvmfs/atlas.cern.ch/repo/sw/software/21.2/sw/lcg/releases/gcc/6.2.0binutils/x86_64-slc6-gcc62-opt/lib64:/cvmfs/grid.cern.ch/emi-ui-3.17.1-1.el6umd4v5/lib64:/cvmfs/grid.cern.ch/emi-ui-3.17.1-1.el6umd4v5/lib:/cvmfs/grid.cern.ch/emi-ui-3.17.1-1.el6umd4v5/usr/lib64:/cvmfs/grid.cern.ch/emi-ui-3.17.1-1.el6umd4v5/usr/lib:/cvmfs/grid.cern.ch/emi-ui-3.17.1-1.el6umd4v5/usr/lib64/dcap\n')
-                fr.write('cd {}\n'.format("$pwd"))
-            if download_cmd:
-                fr.write('lsetup -f pyami rucio\n')
-                fr.write(''.join(download_cmd))
-            output_files = ' '.join(['-o "{selection}:file://{output_file}"'.format(selection = selection,
+        cmds['shebang'].append('#!{}\n'.format(os.environ['SHELL']))
+        if self.cluster != None:
+            cmds['build'].append('pwd="$PWD"\n')
+            cmds['build'].append('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
+            cmds['build'].append('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
+            cmds['build'].append('cd {}\n'.format(os.path.join(os.getenv("WorkDir_DIR"), '..')))
+            if self.environment == 'acmSetup':
+                cmds['build'].append('acmSetup\n')
+            elif self.environment == 'asetup':
+                cmds['build'].append('asetup --restore && . */setup.sh && . */env_setup.sh\n')
+            cmds['build'].append('export LD_LIBRARY_PATH=$WorkDir_DIR/lib:$LD_LIBRARY_PATH\n')
+            cmds['build'].append('cd {}\n'.format("$pwd"))
+        if download_cmd:
+            cmds['download'].append('lsetup -f pyami rucio\n')
+            cmds['download'].append(''.join(download_cmd))
+        output_files = ' \\\n'.join(['-o "{selection}:file://{output_file}"'.format(selection = selection,
                                                                                     output_file = os.path.join(self.output_dir, output_fname.format(channel = re.search('\((\S+)\s*,', selection).group(1), sample = job_name)))
                                      for selection, output_fname in (selections.iteritems() if isinstance(selections, dict) else selections)])
-            fr.write(os.path.join(self.source_dir,'makeHistograms.py')
-                     + sample.is_data
-                     + sample.extra
-                     + '  --files '    + infile
-                     + ' --analysis '  + self.analysis_type
-                     + ' '             + output_files
-                     + '   --systs '   + sample.systematics
-                     + ' ' + ' '.join(self.analysis_exts))
+        cmds['exec'].append(os.path.join(self.source_dir,'makeHistograms.py') + ' \\\n'
+                            + '--analysis ' + self.analysis_type  + sample.is_data + sample.extra + '--systs '  + sample.systematics + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
+                            + '--files '    + infile + ' \\\n'
+                            + output_files)
+        return cmds
 
-    def execute(self, runfile_dir = os.curdir, use_cluster = True):
+    def write_runfile(self, sample, runfile = sys.stdout, selections = None, output_fname_fmt = None, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec')):
+        command_lines = self.command_lines(sample, selections = selections, output_fname_fmt = output_fname_fmt)
+        lines = []
+        for stage in stages:
+            lines.extend(command_lines[stage])
+            if stage in ('exec',):
+                logger.debug('Executing:\n%s', ''.join(command_lines[stage]))
+        with open(runfile, 'w') as fr:
+            fr.writelines(lines)
+
+    def execute(self, runfile_dir = os.curdir, use_cluster = True, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec')):
+        if self.cluster == None:
+            use_cluster = False
         runfile_dir = os.path.abspath(runfile_dir)
         for sample in self.samples:
             subsamples = samples.part_sample(sample, max_input_files = self.max_inputs_per_job)
             for s in subsamples:
                 runfile = os.path.join(runfile_dir, s.sample_name+'.submit')
-                self.write_runfile(sample = s, runfile = runfile)
+                self.write_runfile(sample = s, runfile = runfile, stages = stages)
                 subprocess.call(['chmod', 'u+x', runfile])
-                if not use_cluster or self.cluster == None:
+                if not use_cluster:
                     subprocess.call([runfile])
                 else:
                     self.cluster.submit2(runfile,

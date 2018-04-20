@@ -791,9 +791,9 @@ def initialise_binds():
     logger.debug('Environment: %s', environment + (', ' + version) if version else '')
     # This is for checking if the version is up-to-date.
     try:
-        (head, sep, tail) = os.readlink(__file__).rpartition('.')
-        if tail == '.pyc': tail = '.py'
-        source_dir = os.path.dirname(os.path.join(run_path, ''.join((head, sep, tail))))
+        (head, sep, tail) = __file__.rpartition('.')
+        if tail == 'pyc': tail = 'py'
+        source_dir = os.path.dirname(os.path.realpath(''.join((head, sep, tail))))
         logger.debug('Package Version: %s', subprocess.check_output(['git', '-C', source_dir, 'log', '-1', '--pretty=commit %H [%cd]']).strip())
     except Exception as e:
         logger.warn('%s: %s', e.__class__.__name__, e)
