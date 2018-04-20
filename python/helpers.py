@@ -787,10 +787,25 @@ def initialise_binds():
     if BINDS_INITIASIZED:
         return
     logger.info("-> Initialising binds now.")
+    environment, version, WorkDir_DIR = os.getenv('AtlasProject', 'StandAlone'), os.getenv('AtlasVersion'), os.getenv('WorkDir_DIR')
+    logger.debug('Environment: %s', environment + (', ' + version) if version else '')
+    # This is for checking if the version is up-to-date.
+    try:
+        (head, sep, tail) = os.readlink(__file__).rpartition('.')
+        if tail == '.pyc': tail = '.py'
+        source_dir = os.path.dirname(os.path.join(run_path, ''.join((head, sep, tail))))
+        logger.debug('Package Version: %s', subprocess.check_output(['git', '-C', source_dir, 'log', '-1', '--pretty=commit %H [%cd]']).strip())
+    except Exception as e:
+        logger.warn('%s: %s', e.__class__.__name__, e)
+        logger.warn('Not able to check package version with Git!')
+
+    if WorkDir_DIR:
+        logger.debug('$WorkDir_DIR: %s', WorkDir_DIR)
     logger.debug('$PWD: %s', os.environ['PWD'])
     logger.debug('$LD_LIBRARY_PATH: %s', os.environ['LD_LIBRARY_PATH'])
-    lib_dir = os.path.join(os.getenv("WorkDir_DIR"), "lib") if "WorkDir_DIR" in os.environ else root_path
-    cintdict_dir = os.path.join(os.getenv("WorkDir_DIR"), '..', "TopNtupleAnalysis", 'CMakeFiles') if "WorkDir_DIR" in os.environ else root_path
+        
+    lib_dir = os.path.join(WorkDir_DIR, "lib") if WorkDir_DIR else root_path
+    cintdict_dir = os.path.join(WorkDir_DIR, '..', "TopNtupleAnalysis", 'CMakeFiles') if WorkDir_DIR else root_path
     shared_lib = os.path.join(lib_dir, "libTopNtupleAnalysis.so")
     if os.path.exists(shared_lib):
         ROOT.gSystem.Load(shared_lib)

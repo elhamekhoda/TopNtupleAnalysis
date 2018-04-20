@@ -697,7 +697,7 @@ class AnaTtresSL(Analysis):
                 self.branches[tname][syst]["mttReco"].push_back(mtt)
                 # pME = helpers.getTruth4momenta(sel)
                 # truPttbar = pME[2]+pME[3]
-                if sel.sel.mcChannelNumber != 0:
+                if sel.mcChannelNumber != 0:
                     self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
                 # for i in xrange(sel.MC_id_me.size()):
                 #     self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
