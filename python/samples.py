@@ -1,7 +1,6 @@
 import os
 import subprocess
 import glob
-
 try:
     import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
     import HQTTtResonancesTools.MC16a_EXOT4
@@ -14,7 +13,7 @@ import helpers
 
 logger = helpers.getLogger('TopNtupleAnalysis.samples')
 
-DS_PATTERN = '{s.ds_scope}.{s.DSID}.*{suffix}'
+DS_PATTERN = '{s.ds_scope}.{{{{s.DSID[{{i}}]}}}}.*{suffix}'
 DS_SCOPE = 'user.{s._client.account}'
 
 MAP_TO_SAMPLES = {# <sample>: <physics_short>
@@ -74,7 +73,7 @@ class Sample(object):
         self.ds_scope = ds_scope.format(s = self, **ds_fmt_options)
         self.sample_name = sample_name
         self.sample = self.parse_dataset(sample_name)
-        self.ds_pattern = ds_pattern.format(s = self, **ds_fmt_options)
+        self._ds_pattern_fmt = ds_pattern.format(s = self, **ds_fmt_options)
         self.download_to = download_to if download_to is not True else os.curdir
         self.commited = False
         self.set_systematics()
@@ -82,28 +81,34 @@ class Sample(object):
             self.commit(input_files)
 
     def _list_dids(self, scope = None, filters = {}):
+        ret = []
         scope = scope or self.ds_scope
-        filters = dict({'name': self.ds_pattern}, **filters)
-        ret = list(self._client.list_dids(scope = scope, filters = filters))
-        if not ret:
-            p = "{scope}:{pattern}".format(scope = scope, pattern = filters.get('name'))
-            if 'type' in filters:
-                p += ' [' + filters['type'] + ']'
-            logger.critical('{}: DIDs with pattern "{}" not found. Please check if it really exists on grid.'.format(self, p))
+        for ds_pattern in self.ds_pattern:
+            _filters = dict({'name': ds_pattern}, **filters)
+            _ret = list(self._client.list_dids(scope = scope, filters = _filters))
+            if not _ret:
+                p = "{scope}:{pattern}".format(scope = scope, pattern = _filters.get('name'))
+                if 'type' in _filters:
+                    p += ' [' + _filters['type'] + ']'
+                logger.critical('{}: DIDs with pattern "{}" not found. Please check if it really exists on grid.'.format(self, p))
+            ret.extend(_ret)
         return ret
 
+    @property
+    def ds_pattern(self):
+        return [self._ds_pattern_fmt.format(i=i).format(s=self) for i in range(len(self.shortNameDatasets))]
     @property
     def physics_short(self):
         return self.sample.name
     @property
     def shortNameDatasets(self):
-        return self.sample.shortNameDatasets()[0]
+        return self.sample.shortNameDatasets()
     @property
     def ami_tag(self):
-        return self.shortNameDatasets.split('.')[1]
+        return [shortNameDataset.split('.')[1] for shortNameDataset in self.shortNameDatasets]
     @property
     def DSID(self):
-        return self.shortNameDatasets.split('.')[0]
+        return [shortNameDataset.split('.')[0] for shortNameDataset in self.shortNameDatasets]
     @property
     def datasets(self):
         return self.sample.datasets
@@ -210,13 +215,17 @@ class SubSample(Sample):
     def download_dataset(self, ds_name = None, only_retrieve_cmd = False):
         if only_retrieve_cmd:
             cmds = []
-        for s in self._list_dids():
-            dirname = os.path.join(os.path.abspath(ds_name or self.parent.download_to), s)
-            cmd = ['rucio','download'] + map(os.path.basename, self.input_files) + ['--dir', dirname, '--no-subdir']
+        cluster = {}
+        for dataset, file in map(os.path.split, self.input_files):
+            dataset = dataset.rstrip('/').rpartition('/')[-1]
+            dirname = os.path.join(os.path.abspath(ds_name or self.parent.download_to), dataset)
+            cluster.setdefault(dirname, []).append(file)
+        for dirname, files in cluster.iteritems():
+            cmd = ['rucio','download'] + files + ['--dir', dirname, '--no-subdir']
             if only_retrieve_cmd:
                 cmds.append(' '.join(cmd)+'\n')
-                continue
-            subprocess.call(cmd)
+            else:
+                subprocess.call(cmd)
         if only_retrieve_cmd:
             return cmds
 
