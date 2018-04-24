@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Up!fss!jt!ivnbo!.!boe!up!cmbnf!ju!po!b!dpnqvufs!jt!fwfo!npsf!tp/"""
 import sys
 import ROOT
 import python.helpers as helpers
@@ -21,6 +22,12 @@ logger.info("{:<30} [{}]".format('Check "EFTLib"', "3/4"))
 ROOT.TopNtupleAnalysis.initPDF("CT10")
 logger.debug(u"α(Mz)={:.4g}".format(ROOT.TopNtupleAnalysis.alphaS(91.19**2)))
 logger.info("{:<30} [{}]".format('Check "NNLOReweighter"', "4/4"))
+try:
+    ROOT.NNLOReweighterTool("TEST")
+except Exception as e:
+    logger.critical('Unable to import "NNLOReweighterTool". Are you sure that it is installed?')
+    raise e
+
 ROOT.TopNtupleAnalysis.InitNNLO(410501) 
-logger.debug(u"NNLOWeight(ttbar pT=1000GeV, t pT=1000GeV)={:.4g}".format(ROOT.TopNtupleAnalysis.getNNLOWeight(1000, 1000, 1)))
+logger.debug(u"NNLOWeight(pT(ttbar)=1000GeV, pT(t)=1000GeV)={:.4g}".format(ROOT.TopNtupleAnalysis.getNNLOWeight(1000, 1000, 1)))
 logger.info("All Tests Passed!")

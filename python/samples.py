@@ -92,11 +92,12 @@ class Sample(object):
                     p += ' [' + _filters['type'] + ']'
                 logger.critical('{}: DIDs with pattern "{}" not found. Please check if it really exists on grid.'.format(self, p))
             ret.extend(_ret)
+        ret.sort()
         return ret
 
     @property
     def ds_pattern(self):
-        return [self._ds_pattern_fmt.format(i=i).format(s=self) for i in range(len(self.shortNameDatasets))]
+        return sorted(set(self._ds_pattern_fmt.format(i=i).format(s=self) for i in range(len(self.shortNameDatasets))))
     @property
     def physics_short(self):
         return self.sample.name
