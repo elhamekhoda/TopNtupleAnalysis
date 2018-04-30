@@ -36,7 +36,7 @@ class Run(object):
         self.analysis_type = analysis_type
         self.analysis_exts = []
         self.max_inputs_per_job = max_inputs_per_job
-        self.cluster = clusters.from_name.get(cluster)(cluster_type = None, cluster_status_update=(600,30)) if isinstance(cluster, str) else cluster
+        self.cluster = clusters.from_name.get(cluster)(cluster_type = None, cluster_status_update=(600,30), cluster_queue='None') if isinstance(cluster, str) else cluster
         self.environment = environment
 
 
@@ -57,10 +57,15 @@ class Run(object):
             cmds['build'].append('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
             cmds['build'].append('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
             cmds['build'].append('cd {}\n'.format(os.path.join(os.getenv("WorkDir_DIR"), '..')))
+            if self.cluster.name == 'lsf': 
+                # this is needed because the default python version for LSF in lxplus is way too old.
+                #This leads to problems building athena
+                cmds['build'].append('lsetup python\n')
             if self.environment == 'acmSetup':
                 cmds['build'].append('acmSetup\n')
             elif self.environment == 'asetup':
                 cmds['build'].append('asetup --restore && . */setup.sh && . */env_setup.sh\n')
+                cmds['build'].append('lsetup git\n')
             cmds['build'].append('export LD_LIBRARY_PATH=$WorkDir_DIR/lib:$LD_LIBRARY_PATH\n')
             cmds['build'].append('cd {}\n'.format("$pwd"))
         if download_cmd:
@@ -98,10 +103,11 @@ class Run(object):
                 if not use_cluster:
                     subprocess.call([runfile])
                 else:
+                    job_id = self.cluster.get_identifier()
                     self.cluster.submit2(runfile,
-                                         stdout = os.path.join(self.log_dir, 'out.$(Cluster).$(Process)'),
-                                         stderr = os.path.join(self.log_dir, 'out.$(Cluster).$(Process)'),
-                                         log    = os.path.join(self.log_dir, 'log.$(Cluster).$(Process)'))
+                                         stdout = os.path.join(self.log_dir, 'out.%s' % job_id),
+                                         stderr = os.path.join(self.log_dir, 'out.%s' % job_id),
+                                         log    = os.path.join(self.log_dir, 'log.%s' % job_id))
 
     def finalize(self):
         helpers.merge_files(glob.iglob(os.path.join(self.output_dir, '*.root*')), delete_sources = True)
