@@ -64,13 +64,13 @@ class Run(object):
             cmds['build'].append('export LD_LIBRARY_PATH=$WorkDir_DIR/lib:$LD_LIBRARY_PATH\n')
             cmds['build'].append('cd {}\n'.format("$pwd"))
         if download_cmd:
-            cmds['download'].append('lsetup -f pyami rucio\n')
+            cmds['download'].append('lsetup pyami rucio\n')
             cmds['download'].append(''.join(download_cmd))
         output_files = ' \\\n'.join(['-o "{selection}:file://{output_file}"'.format(selection = selection,
                                                                                     output_file = os.path.join(self.output_dir, output_fname.format(channel = re.search('\((\S+)\s*,', selection).group(1), sample = job_name)))
                                      for selection, output_fname in (selections.iteritems() if isinstance(selections, dict) else selections)])
         cmds['exec'].append(os.path.join(self.source_dir,'makeHistograms.py') + ' \\\n'
-                            + '--analysis ' + self.analysis_type  + sample.is_data + sample.extra + '--systs '  + sample.systematics + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
+                            + '--analysis ' + self.analysis_type  + sample.is_data + sample.extra + ' --systs '  + sample.systematics + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
                             + '--files '    + infile + ' \\\n'
                             + output_files)
         return cmds

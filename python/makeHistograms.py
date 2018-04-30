@@ -353,7 +353,7 @@ def main():
             suffix = ''
         helpers.addFilesInChain(mt, options.files)
         sel = mt
-        ent = mt.GetEntries()
+        ent = options.nevents or mt.GetEntries()
         ent_length = len(str(ent))
         for k in range(0, ent):
             if options.data and accept_prob > 0:
@@ -534,6 +534,10 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--top-tagger',
                         default='good',
                         help='"GLOBAL" Boosted top tagger which will applied to the large-R jet for the hadronic-top reconstruction in the boost selection. Simple logical operation are supported. ONLY WORK IF YOU DON\'T USE ANY TOP-TAGGER IN THE _OUTPUT_ SELECTIONS.')
+    parser.add_argument('--nevents',
+                        default = None,
+                        type = int,
+                        help='Number of events are going to be processed for test-only purpose.')
     parser.add_argument('--do-tree',
                         action='store_true',
                         help='Make a mini-tree.')

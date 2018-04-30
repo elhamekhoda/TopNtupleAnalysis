@@ -14,7 +14,7 @@ data_path = os.path.join(root_path, 'share')
 BINDS_INITIASIZED = False
 
 import logging
-
+# logging.captureWarnings(True)
 msgfmt = '%(asctime)s %(levelname)-7s %(name)-35s %(message)s'
 datefmt = '%H:%M:%S'
 

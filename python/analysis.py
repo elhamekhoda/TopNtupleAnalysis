@@ -1,6 +1,8 @@
 import helpers
 import ROOT
 import math
+import copy
+import warnings
 from array import array
 from ROOT import std
 import wjets
@@ -384,15 +386,15 @@ class AnaTtresSL(Analysis):
         frac2[4] = {'el': {}, 'mu': {}}
         frac2[5] = {'el': {}, 'mu': {}}
 
-        chan = ''
+        chan = 'not-exactly-one-charged-lepton'
         if len(sel.el_pt) == 1:
             chan = 'el'
         elif len(sel.mu_pt) == 1:
             chan = 'mu'
         syst = ""
-        if s in wjets.flav_map[nj][chan]:
+        if s in wjets.flav_map[nj][chan]: # You should always have exactly one electron or muon in a good event. It usually means the event selections are problematic (i.e. not exactly one electron or muon) if you get an error from here.
             syst = s
-        import copy
+
         frac2[nj][chan][syst] = copy.deepcopy(wjets.frac[nj][chan][syst])
         for f in frac2[nj][chan][syst]:
             frac2[nj][chan][syst][f] *= wjets.flav_map[nj][chan][syst][f]
@@ -469,6 +471,9 @@ class AnaTtresSL(Analysis):
         return w
 
     def selectChannel(self, sel, syst):
+        if self.ch not in self.mapSel:
+            logger.warn('The selected channel "{}" is not registered. The events will be processed anyway without any further constraint.'.format(self.ch))
+            self.mapSel[self.ch] = [self.ch]
         passSel = {}
         for i, listSel in self.mapSel.iteritems():
             passSel[i] = True
@@ -485,11 +490,12 @@ class AnaTtresSL(Analysis):
                 #               if sel.ljet_good[k] and sel.ljet_pt[k] > 300e3:
                 #                       hardPass = True
                 #                       break
-                passChannel = getattr(sel, item)
+                passChannel = getattr(sel, item, False)
                 if passChannel and hardPass:
                     passORChannels = True
                     break
             passSel[i] = passORChannels
+
         if not passSel[self.ch]:
             return False
 
@@ -656,6 +662,7 @@ class AnaTtresSL(Analysis):
             goodJetIdx = self.top_tagger.thad_index
             if goodJetIdx == -1:
                 return
+
             lj = ROOT.TLorentzVector()
             lj.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx], sel.ljet_eta[goodJetIdx], sel.ljet_phi[goodJetIdx], sel.ljet_m[goodJetIdx])
             closeJet = ROOT.TLorentzVector()
@@ -663,14 +670,13 @@ class AnaTtresSL(Analysis):
 
             w0 = w/self.w2HDM
             mtt = (closeJet+nu+l+lj).M()*1e-3 # unit is GeV
-
             self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
             self.h["largeJetM"][syst].Fill(lj.M()*1e-3, w)
             self.h["largeJetEta"][syst].Fill(lj.Eta(), w)
             self.h["largeJetPhi"][syst].Fill(lj.Phi(), w)
             self.h["largeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx], w)
             self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx], w)
-            self.h["mtlep_boo"][syst].Fill((closeJet+nu+l).M()*1e-3, w)
+            self.h["mtlep_boo"][syst].Fill(mtt, w)
             self.h["mtt"][syst].Fill(mtt, w)
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             self.h["mtt8TeV"][syst].Fill(mtt, w)
