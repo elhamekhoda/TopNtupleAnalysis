@@ -449,7 +449,9 @@ if __name__ == "__main__":
                         dest="data",
                         help="Is this data?")
     parser.add_argument("-f", "--files",
-                        dest="files", default="input.txt",
+                        dest="files", default=["input.txt"],
+                        action = AppendActionCleanDefault,
+                        nargs = '?',
                         help="Text file with list of input files.",
                         metavar="FILE")
     parser.add_argument("-A", "--analysis",

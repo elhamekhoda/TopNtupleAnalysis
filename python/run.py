@@ -38,6 +38,7 @@ class Run(object):
         self.max_inputs_per_job = max_inputs_per_job
         self.cluster = clusters.from_name.get(cluster)(cluster_type = None, cluster_status_update=(600,30), cluster_queue='None') if isinstance(cluster, str) else cluster
         self.environment = environment
+        self.system = 'lxplus'
 
 
     def write_inputsfile(self, sample):
@@ -45,10 +46,8 @@ class Run(object):
             infile.writelines('\n'.join(sample.input_files))
         return infile.name
     
-    def command_lines(self, sample, selections = None, output_fname_fmt = None):
+    def command_lines(self, sample, output_files):
         cmds = {'shebang': [], 'build': [], 'download': [], 'pre-exec': [], 'exec': [], 'post-exec': []}
-        selections = selections or self.selections
-        job_name = sample.sample_name
         download_cmd = ''.join(sample.commit(only_retrieve_cmd = bool(sample.download_to)) or [])
         infile = self.write_inputsfile(sample)
         cmds['shebang'].append('#!{}\n'.format(os.environ['SHELL']))
@@ -58,8 +57,8 @@ class Run(object):
             cmds['build'].append('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
             cmds['build'].append('cd {}\n'.format(os.path.join(os.getenv("WorkDir_DIR"), '..')))
             if self.cluster.name == 'lsf': 
-                # this is needed because the default python version for LSF in lxplus is way too old.
-                #This leads to problems building athena
+                # This is needed because the default python version for LSF in lxplus is way too old.
+                # , which leads to problems building athena
                 cmds['build'].append('lsetup python\n')
             if self.environment == 'acmSetup':
                 cmds['build'].append('acmSetup\n')
@@ -68,59 +67,81 @@ class Run(object):
                 cmds['build'].append('lsetup git\n')
             cmds['build'].append('export LD_LIBRARY_PATH=$WorkDir_DIR/lib:$LD_LIBRARY_PATH\n')
             cmds['build'].append('cd {}\n'.format("$pwd"))
+            if download_cmd:
+                cmds['build'].append('lsetup pyami rucio{}\n'.format(' -f' if self.system == 'naf' else ''))
         if download_cmd:
-            cmds['download'].append('lsetup pyami rucio\n')
             cmds['download'].append(''.join(download_cmd))
-        output_files = ' \\\n'.join(['-o "{selection}:file://{output_file}"'.format(selection = selection,
-                                                                                    output_file = os.path.join(self.output_dir, output_fname.format(channel = re.search('\((\S+)\s*,', selection).group(1), sample = job_name)))
-                                     for selection, output_fname in (selections.iteritems() if isinstance(selections, dict) else selections)])
         cmds['exec'].append(os.path.join(self.source_dir,'makeHistograms.py') + ' \\\n'
                             + '--analysis ' + self.analysis_type  + sample.is_data + sample.extra + ' --systs '  + sample.systematics + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
                             + '--files '    + infile + ' \\\n'
-                            + output_files)
+                            + ' \\\n'.join(['-o "{selection}:file://{output_file}"'.format(selection = selection, output_file = output_file) for selection, output_file in output_files]) + '\n')
         return cmds
 
-    def write_runfile(self, sample, runfile = sys.stdout, selections = None, output_fname_fmt = None, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec')):
-        command_lines = self.command_lines(sample, selections = selections, output_fname_fmt = output_fname_fmt)
-        lines = []
+    def write_runfile(self, sample , output_files, runfile = sys.stdout, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'), check_exitcode = True):
+        command_lines = self.command_lines(sample, output_files = output_files)
+        _lines = []
         for stage in stages:
-            lines.extend(command_lines[stage])
+            _lines.extend(command_lines[stage])
             if stage in ('exec',):
-                logger.debug('Executing:\n%s', ''.join(command_lines[stage]))
+                logger.debug('Executing:\n%s', ''.join(command_lines[stage]).strip())
+        if check_exitcode:
+            lines = []
+            checker = ['if [ $? -ne 0 ]; then\n', 'exit $?\n', 'fi\n']
+            for l in _lines:
+                lines.append(l)
+                lines.extend(checker)
+        else:
+            lines = _lines
         with open(runfile, 'w') as fr:
             fr.writelines(lines)
 
-    def execute(self, runfile_dir = os.curdir, use_cluster = True, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec')):
+    def execute(self, runfile_dir = os.curdir, use_cluster = True, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'), force_rerun = False):
         if self.cluster == None:
             use_cluster = False
         runfile_dir = os.path.abspath(runfile_dir)
+        selections = self.selections.iteritems() if isinstance(self.selections, dict) else self.selections
+        self.outstreams = {}
         for sample in self.samples:
             subsamples = samples.part_sample(sample, max_input_files = self.max_inputs_per_job)
-            for s in subsamples:
-                runfile = os.path.join(runfile_dir, s.sample_name+'.submit')
-                self.write_runfile(sample = s, runfile = runfile, stages = stages)
-                subprocess.call(['chmod', 'u+x', runfile])
-                if not use_cluster:
-                    subprocess.call([runfile])
-                else:
-                    job_id = self.cluster.get_identifier()
-                    self.cluster.submit2(runfile,
-                                         stdout = os.path.join(self.log_dir, 'out.%s' % job_id),
-                                         stderr = os.path.join(self.log_dir, 'out.%s' % job_id),
-                                         log    = os.path.join(self.log_dir, 'log.%s' % job_id))
+            outstream = self.outstreams[sample.sample_name] = {}
+            for selection, output_fname in selections:
+                outstream[selection] = {}
+                channel = re.search('\((\S+)\s*,', selection).group(1)
+                outstream[selection]['output'] = os.path.join(self.output_dir, output_fname.format(channel = channel, sample = sample.sample_name))
+                outstream[selection]['sub_outputs'] = [os.path.join(self.output_dir, output_fname.format(channel = channel, sample = s.sample_name)) for s in subsamples]
+            for i, s in enumerate(subsamples):
+                jobs = [(selection, outstream[selection]['sub_outputs'][i]) for selection in outstream if (not os.path.exists(outstream[selection]['sub_outputs'][i])) or force_rerun]
+                if jobs:
+                    runfile = os.path.join(runfile_dir, s.sample_name+'.submit')
+                    self.write_runfile(sample = s, output_files = jobs, runfile = runfile, stages = stages)
+                    subprocess.call(['chmod', 'u+x', runfile])
+                    if not use_cluster:
+                        subprocess.call([runfile])
+                    else:
+                        job_id = self.cluster.get_identifier()
+                        self.cluster.submit2(runfile,
+                                             stdout = os.path.join(self.log_dir, 'out.%s' % job_id),
+                                             stderr = os.path.join(self.log_dir, 'out.%s' % job_id),
+                                             log    = os.path.join(self.log_dir, 'log.%s' % job_id))
 
-    def finalize(self):
-        helpers.merge_files(glob.iglob(os.path.join(self.output_dir, '*.root*')), delete_sources = True)
+    def finalize(self, delete_sources_after_merged = False):
+        for outstream in self.outstreams.viewvalues():
+            for selection in outstream:
+                output = outstream[selection]['output']
+                sub_outputs = outstream[selection]['sub_outputs']
+                if len(sub_outputs) == 1 and output == sub_outputs[0]:
+                    continue
+                helpers.hadd({output: sub_outputs}, delete_sources = delete_sources_after_merged)
 
     def wait(self):
         if self.cluster != None:
             self.cluster.wait(None, fct = get_fct(logger = helpers.getLogger('TopNtupleAnalysis.cluster')))
 
-    def run(self, runfile_dir = os.curdir, use_cluster = True, monitor = True):
-        self.execute(runfile_dir = runfile_dir, use_cluster = use_cluster)
+    def run(self, runfile_dir = os.curdir, use_cluster = True, monitor = True, force_rerun = False, delete_sources_after_merged = False):
+        self.execute(runfile_dir = runfile_dir, use_cluster = use_cluster, force_rerun = force_rerun)
         if use_cluster and monitor:
             self.wait()
-        self.finalize()
+        self.finalize(delete_sources_after_merged = delete_sources_after_merged)
 
 def get_fct(logger = None):
     if logger == None:

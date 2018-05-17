@@ -1,4 +1,5 @@
 import os
+import sys
 import subprocess
 import glob
 try:
@@ -70,6 +71,7 @@ class Sample(object):
         assert True, "Houston we've got a problem"
 
     def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}, download_to = None, commit_when_init = True):
+        self.parent = self
         self.ds_scope = ds_scope.format(s = self, **ds_fmt_options)
         self.sample_name = sample_name
         self.sample = self.parse_dataset(sample_name)
@@ -150,10 +152,10 @@ class Sample(object):
         if not self._input_files:
             logger.critical('{!r}: inputs list is empty!'.format(self))
         return self._input_files
-    def set_input_files(self, alist = None, force = True):
+    def set_input_files(self, alist = None, force = True, sort = True):
         input_files = []
         if alist == None:
-            if not force and self._input_files:
+            if not force and getattr(self, '_input_files', None):
                 return
             for files in (replica['pfns'].keys() for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root'])):
                 input_files.append(files[0])
@@ -161,6 +163,7 @@ class Sample(object):
             input_files = [alist]
         else:
             input_files = list(alist)
+        input_files.sort()
         self._input_files = input_files
     input_files = property(get_input_files, set_input_files)
     def download_dataset(self, ds_name = None, only_retrieve_cmd = False):
@@ -201,6 +204,9 @@ class Sample(object):
         return '<{}.{}("{}")>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name)
     def sum_of_weights(self):
         raise NotImplementedError
+    def write_inputsfile(self, fname):
+        with open(fname, 'w') as infile:
+            infile.writelines('\n'.join(self.input_files))
 
 class SubSample(Sample):
     def __init__(self, parent, input_files, suffix):
@@ -230,11 +236,12 @@ class SubSample(Sample):
         if only_retrieve_cmd:
             return cmds
 
-def part_sample(sample, max_input_files = 5):
+def part_sample(sample, max_input_files = 5, sort = True):
     if not sample.commited:
         sample.commit(only_retrieve_cmd = True)
     l = len(sample.input_files)
     if l <= max_input_files or max_input_files == None:
         return [sample]
-    return [SubSample(sample, sample.input_files[i:min(i+max_input_files, l)], suffix = '{:06d}'.format(suffix)) for suffix, i in enumerate(range(0, l, max_input_files), 1)]
+    ret = [SubSample(sample, sample.input_files[i:min(i+max_input_files, l)], suffix = '{:06d}'.format(suffix)) for suffix, i in enumerate(range(0, l, max_input_files), 1)]
+    return ret
 

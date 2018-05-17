@@ -2,7 +2,7 @@ import helpers
 import ROOT
 import math
 import copy
-import warnings
+import os
 from array import array
 from ROOT import std
 import wjets
@@ -70,7 +70,7 @@ class Analysis(object):
 
     def __init__(self, channel, suf, outputFile, do_tree = False):
         self._outputFile = outputFile
-        self.fi = ROOT.TFile.Open(outputFile, "recreate")
+        self.fi = ROOT.TFile.Open(outputFile + '.part', "recreate")
         self.ch = channel
         self.histSuffixes = suf
         self.noMttSlices = False
@@ -207,6 +207,9 @@ class Analysis(object):
 
     def end(self):
         self.write()
+        head, sep, tail = self._outputFile.partition('file://')
+        f = tail if head == '' else self._outputFile
+        os.rename(f + '.part', f)
 
     def getWeight(self, sel, s):
         # this applies all the weights that come out of the box

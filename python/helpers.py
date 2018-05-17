@@ -5,6 +5,7 @@ import ast
 import os
 import re
 import subprocess
+
 sys.path.append('2HDM')
 
 run_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
@@ -76,14 +77,16 @@ def loadXsec(m, fName):
         if length_lsplit < 3:
             logger.critical("loadXsec: I cannot understand this line: %s", lsplit)
             continue
-        m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2])
+        m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2]) # crossSection * k-factor. Note that in TopDataPreparation crossSection is the crossSection after filter efficiency applied.
 
 def addFilesInChain(c, txtFileOption, n = -1):
-    for f in txtFileOption.split(','):
+    for f in txtFileOption:
         with open(f) as txtf:
             for counter, l in enumerate(l.strip() for l in txtf.readlines() if not l.startswith('#')):
                 if n == -1 or counter < n:
-                    c.Add(l.strip())
+                    l = l.strip()
+                    c.Add(l)
+                    logger.info('addFilesInChain: {}'.format(l))
                 else:
                     return
 
@@ -824,6 +827,14 @@ def char2int(char):
 
 def hadd(a_dict, delete_sources = False, force_recreate = True):
     for k, v in a_dict.iteritems():
+        offensive = False
+        for source in v:
+            if not os.path.exists(source):
+                offensive = True
+                logger.error('hadd: source file "{}" does not exists.'.format(source))
+        if offensive:
+            logger.error('hadd: fail to merge. Maybe rerun this job and try to merge again.')
+            continue
         subprocess.check_call(['hadd'] + (['-f'] if force_recreate else []) + [k] + list(v))
         if delete_sources:
             for f in v:
