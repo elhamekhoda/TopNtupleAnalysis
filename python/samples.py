@@ -3,7 +3,7 @@ import sys
 import subprocess
 import glob
 try:
-    import HQTTtResonancesTools.DC15Data13TeV_25ns_207_EXOT4
+    import HQTTtResonancesTools.Data15_EXOT4_rel21
     import HQTTtResonancesTools.MC16a_EXOT4
 except ImportError:
     raise ImportError("HQTTtResonancesTools is not installed or dataset does not exist.")
@@ -18,37 +18,37 @@ DS_PATTERN = '{s.ds_scope}.{{{{s.DSID[{{i}}]}}}}.*{suffix}'
 DS_SCOPE = 'user.{s._client.account}'
 
 MAP_TO_SAMPLES = {# <sample>: <physics_short>
-                'wbbjets': 'MC16_13TeV_25ns_FS_EXOT4_Wjets22',
-                'wccjets': 'MC16_13TeV_25ns_FS_EXOT4_Wjets22',
-                'wcjets': 'MC16_13TeV_25ns_FS_EXOT4_Wjets22',
-                'wljets': 'MC16_13TeV_25ns_FS_EXOT4_Wjets22',
-                'data': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
-                'qcde': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
-                'qcdmu': 'Data15_13TeV_25ns_207_EXOT4,Data16_13TeV_25ns_207_EXOT4',
-                'tt':'MC16_13TeV_25ns_FS_EXOT4_ttbar_nonallhad',
-                'singletop':'MC16_13TeV_25ns_FS_EXOT4_singletop',
-                'zjets':'MC16_13TeV_25ns_FS_EXOT4_Zjets22',
-                'vv': 'MC16_13TeV_25ns_FS_EXOT4_VV',
-                'zprime400': 'MC16_13TeV_25ns_FS_EXOT4_Zprime400',
-                'zprime500': 'MC16_13TeV_25ns_FS_EXOT4_Zprime500',
-                'zprime750': 'MC16_13TeV_25ns_FS_EXOT4_Zprime750',
-                'zprime1000': 'MC16_13TeV_25ns_FS_EXOT4_Zprime1000',
-                'zprime1250': 'MC16_13TeV_25ns_FS_EXOT4_Zprime1250',
-                'zprime1500': 'MC16_13TeV_25ns_FS_EXOT4_Zprime1500',
-                'zprime1750': 'MC16_13TeV_25ns_FS_EXOT4_Zprime1750',
-                'zprime2000': 'MC16_13TeV_25ns_FS_EXOT4_Zprime2000',
-                'zprime2250': 'MC16_13TeV_25ns_FS_EXOT4_Zprime2250',
-                'zprime2500': 'MC16_13TeV_25ns_FS_EXOT4_Zprime2500',
-                'zprime2750': 'MC16_13TeV_25ns_FS_EXOT4_Zprime2750',
-                'zprime3000': 'MC16_13TeV_25ns_FS_EXOT4_Zprime3000',
-                'zprime4000': 'MC16_13TeV_25ns_FS_EXOT4_Zprime4000',
-                'zprime5000': 'MC16_13TeV_25ns_FS_EXOT4_Zprime5000',
-                'kkgrav400': 'MC16_13TeV_25ns_FS_EXOT4_Gtt400',
-                'kkgrav500': 'MC16_13TeV_25ns_FS_EXOT4_Gtt500',
-                'kkgrav750': 'MC16_13TeV_25ns_FS_EXOT4_Gtt750',
-                'kkgrav1000': 'MC16_13TeV_25ns_FS_EXOT4_Gtt1000',
-                'kkgrav2000': 'MC16_13TeV_25ns_FS_EXOT4_Gtt2000',
-                'kkgrav3000': 'MC16_13TeV_25ns_FS_EXOT4_Gtt3000'
+                'wbbjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets22'],
+                'wccjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets22'],
+                'wcjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets22'],
+                'wljets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets22'],
+                'data': ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
+                'qcde': ['Data15_13TeV_25ns_EXOT4', 'Data16_13TeV_25ns_EXOT4'],
+                'qcdmu': ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
+                'tt':['MC16_13TeV_25ns_FS_EXOT4_ttbar_nonallhad'],
+                'singletop':['MC16_13TeV_25ns_FS_EXOT4_singletop'],
+                'zjets': ['MC16_13TeV_25ns_FS_EXOT4_Zjets22'],
+                'vv': ['MC16_13TeV_25ns_FS_EXOT4_VV'],
+                'zprime400': ['MC16_13TeV_25ns_FS_EXOT4_Zprime400'],
+                'zprime500': ['MC16_13TeV_25ns_FS_EXOT4_Zprime500'],
+                'zprime750': ['MC16_13TeV_25ns_FS_EXOT4_Zprime750'],
+                'zprime1000': ['MC16_13TeV_25ns_FS_EXOT4_Zprime1000'],
+                'zprime1250': ['MC16_13TeV_25ns_FS_EXOT4_Zprime1250'],
+                'zprime1500': ['MC16_13TeV_25ns_FS_EXOT4_Zprime1500'],
+                'zprime1750': ['MC16_13TeV_25ns_FS_EXOT4_Zprime1750'],
+                'zprime2000': ['MC16_13TeV_25ns_FS_EXOT4_Zprime2000'],
+                'zprime2250': ['MC16_13TeV_25ns_FS_EXOT4_Zprime2250'],
+                'zprime2500': ['MC16_13TeV_25ns_FS_EXOT4_Zprime2500'],
+                'zprime2750': ['MC16_13TeV_25ns_FS_EXOT4_Zprime2750'],
+                'zprime3000': ['MC16_13TeV_25ns_FS_EXOT4_Zprime3000'],
+                'zprime4000': ['MC16_13TeV_25ns_FS_EXOT4_Zprime4000'],
+                'zprime5000': ['MC16_13TeV_25ns_FS_EXOT4_Zprime5000'],
+                'kkgrav400': ['MC16_13TeV_25ns_FS_EXOT4_Gtt400'],
+                'kkgrav500': ['MC16_13TeV_25ns_FS_EXOT4_Gtt500'],
+                'kkgrav750': ['MC16_13TeV_25ns_FS_EXOT4_Gtt750'],
+                'kkgrav1000': ['MC16_13TeV_25ns_FS_EXOT4_Gtt1000'],
+                'kkgrav2000': ['MC16_13TeV_25ns_FS_EXOT4_Gtt2000'],
+                'kkgrav3000': ['MC16_13TeV_25ns_FS_EXOT4_Gtt3000']
                 }
 
 class Sample(object):
@@ -66,7 +66,8 @@ class Sample(object):
             for dataset_name, physics_short in MAP_TO_SAMPLES.iteritems():
                 if obj.split('._')[0] == dataset_name:
                     sample.name = dataset_name
-                    sample.datasets.extend(TopExamples.grid.Samples(physics_short.split(','))[0].datasets)
+                    for s in TopExamples.grid.Samples(physics_short):
+                        sample.datasets.extend(s.datasets)
                     return sample
         assert True, "Houston we've got a problem"
 
@@ -220,19 +221,26 @@ class SubSample(Sample):
         except AttributeError:
             return self.parent.__getattribute__(attr)
     def download_dataset(self, ds_name = None, only_retrieve_cmd = False):
-        if only_retrieve_cmd:
-            cmds = []
+        cmds = []
         cluster = {}
         for dataset, file in map(os.path.split, self.input_files):
             dataset = dataset.rstrip('/').rpartition('/')[-1]
             dirname = os.path.join(os.path.abspath(ds_name or self.parent.download_to), dataset)
             cluster.setdefault(dirname, []).append(file)
-        for dirname, files in cluster.iteritems():
-            cmd = ['rucio','download'] + files + ['--dir', dirname, '--no-subdir']
+        for dirname, _files in cluster.iteritems():
+            files = []
+            for f in _files:
+                if os.path.exists(os.path.join(dirname, f)):
+                    cmds.append(['echo', '"{}: file already found locally. Won\'t be downloaded"'.format(f)])
+                else:
+                    files.append(f)
+            if files:
+                cmds.append(['rucio','download'] + files + ['--dir', dirname, '--no-subdir'])
             if only_retrieve_cmd:
-                cmds.append(' '.join(cmd)+'\n')
+                cmds = [' '.join(cmd)+'\n' for cmd in cmds]
             else:
-                subprocess.call(cmd)
+                for cmd in cmds:
+                    subprocess.call(cmd)
         if only_retrieve_cmd:
             return cmds
 

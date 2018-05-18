@@ -18,7 +18,7 @@ def main(files, types, suffix):
         if t == "pdf":
             pdfSumOfWeights = {} # map of DSID to map of PDF variation names to sum of weights
             t_pdfSumWeights = ROOT.TChain("PDFsumWeights")
-            helpers.addFilesInChain(t_pdfSumWeights, f)
+            helpers.addFilesInChain(t_pdfSumWeights, [f])
             for k in range(0, t_pdfSumWeights.GetEntries()):
                 t_pdfSumWeights.GetEntry(k)
                 if not t_pdfSumWeights.dsid in pdfSumOfWeights:
@@ -41,7 +41,7 @@ def main(files, types, suffix):
 
             sumOfWeights = {} # map of DSID to sum of weights
             t_sumWeights =  ROOT.TChain("sumWeights")
-            helpers.addFilesInChain(t_sumWeights, f)
+            helpers.addFilesInChain(t_sumWeights, [f])
             for k in range(0, t_sumWeights.GetEntries()):
                 t_sumWeights.GetEntry(k)
                 if not t_sumWeights.dsid in sumOfWeights:
@@ -56,7 +56,7 @@ def main(files, types, suffix):
             pdfName = "NNPDF30_nnlo_as_0118"
             wjpdfSumOfWeights = {} # map of DSID to map of PDF variation names to sum of weights
             t_wjpdfSumWeights = ROOT.TChain("sumWeights")
-            helpers.addFilesInChain(t_wjpdfSumWeights, f)
+            helpers.addFilesInChain(t_wjpdfSumWeights, [f])
             for k in range(0, t_wjpdfSumWeights.GetEntries()):
                 t_wjpdfSumWeights.GetEntry(k)
                 if not t_wjpdfSumWeights.dsid in wjpdfSumOfWeights:
@@ -80,7 +80,7 @@ def main(files, types, suffix):
 
             sumOfWeights = {} # map of DSID to sum of weights
             t_sumWeights = ROOT.TChain("sumWeights")
-            helpers.addFilesInChain(t_sumWeights, f)
+            helpers.addFilesInChain(t_sumWeights, [f])
             for k in range(0, t_sumWeights.GetEntries()):
                 t_sumWeights.GetEntry(k)
                 if not t_sumWeights.dsid in sumOfWeights:
@@ -94,7 +94,7 @@ def main(files, types, suffix):
         else:
             sumOfWeights = {} # map of DSID to sum of weights
             t_sumWeights = ROOT.TChain("sumWeights")
-            helpers.addFilesInChain(t_sumWeights, f)
+            helpers.addFilesInChain(t_sumWeights, [f])
 
             for k in range(0, t_sumWeights.GetEntries()):
                 t_sumWeights.GetEntry(k)

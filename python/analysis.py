@@ -656,15 +656,13 @@ class AnaTtresSL(Analysis):
         ##TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
         ##double getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
         nu = ROOT.TopNtupleAnalysis.getNu(l, sel.met_met, sel.met_phi)
-        if 'be' in self.ch or 'bmu' in self.ch:
+        if ('be' in self.ch or 'bmu' in self.ch) and self.top_tagger.passed:
             for i in range(len(sel.jet_pt)):
                 if sel.jet_closeToLepton[i]:
                     closeJetIdx = i
                     break
             
             goodJetIdx = self.top_tagger.thad_index
-            if goodJetIdx == -1:
-                return
 
             lj = ROOT.TLorentzVector()
             lj.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx], sel.ljet_eta[goodJetIdx], sel.ljet_phi[goodJetIdx], sel.ljet_m[goodJetIdx])

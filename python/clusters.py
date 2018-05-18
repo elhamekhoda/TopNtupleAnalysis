@@ -870,7 +870,7 @@ class CondorCluster(Cluster):
     
     name = 'condor'
     job_id = 'CONDOR_ID'
-
+    max_runtime = 7200
 
 
     @multiple_try()
@@ -883,7 +883,7 @@ class CondorCluster(Cluster):
                   error = %(stderr)s
                   log = %(log)s
                   %(argument)s
-                  +MaxRuntime = 7200
+                  +MaxRuntime = %(max_runtime)s
                   environment = CONDOR_ID=$(Cluster).$(Process)
                   Universe = vanilla
                   notification = Error
@@ -917,6 +917,7 @@ class CondorCluster(Cluster):
         dico = {'prog': prog, 'cwd': cwd, 'stdout': stdout, 
                 'stderr': stderr,'log': log,'argument': argument,
                 'requirement': requirement}
+        dico['max_runtime'] = getattr(self,'max_runtime',3600)
 
         #open('submit_condor','w').write(text % dico)
         a = subprocess.Popen(['condor_submit'], stdout=subprocess.PIPE,
@@ -960,6 +961,7 @@ class CondorCluster(Cluster):
                   should_transfer_files = YES
                   when_to_transfer_output = ON_EXIT
                   transfer_input_files = %(input_files)s
+                  +MaxRuntime = %(max_runtime)s
                   %(output_files)s
                   Universe = vanilla
                   notification = Error
@@ -1004,7 +1006,7 @@ class CondorCluster(Cluster):
                 'stderr': stderr,'log': log,'argument': argument,
                 'requirement': requirement, 'input_files':input_files, 
                 'output_files':output_files}
-
+        dico['max_runtime'] = getattr(self,'max_runtime',3600)
         #open('submit_condor','w').write(text % dico)
         a = subprocess.Popen(['condor_submit'], stdout=subprocess.PIPE,
                              stdin=subprocess.PIPE)

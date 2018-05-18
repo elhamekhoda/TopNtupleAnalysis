@@ -77,25 +77,21 @@ class Run(object):
                             + ' \\\n'.join(['-o "{selection}:file://{output_file}"'.format(selection = selection, output_file = output_file) for selection, output_file in output_files]) + '\n')
         return cmds
 
-    def write_runfile(self, sample , output_files, runfile = sys.stdout, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'), check_exitcode = True):
+    def write_runfile(self, sample , output_files, runfile = sys.stdout, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'), check_exitcode = ('build', 'download', 'pre-exec', 'exec', 'post-exec')):
         command_lines = self.command_lines(sample, output_files = output_files)
-        _lines = []
+        checker = ['if [ $? -ne 0 ]; then\n', 'exit $?\n', 'fi\n']
+        lines = []
         for stage in stages:
-            _lines.extend(command_lines[stage])
+            for l in command_lines[stage]:
+                lines.append(l)
+                if check_exitcode == True or stage in check_exitcode:
+                    lines.extend(checker)
             if stage in ('exec',):
                 logger.debug('Executing:\n%s', ''.join(command_lines[stage]).strip())
-        if check_exitcode:
-            lines = []
-            checker = ['if [ $? -ne 0 ]; then\n', 'exit $?\n', 'fi\n']
-            for l in _lines:
-                lines.append(l)
-                lines.extend(checker)
-        else:
-            lines = _lines
         with open(runfile, 'w') as fr:
             fr.writelines(lines)
 
-    def execute(self, runfile_dir = os.curdir, use_cluster = True, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'), force_rerun = False):
+    def execute(self, runfile_dir = os.curdir, use_cluster = True, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'), force_rerun = False, **write_kwds):
         if self.cluster == None:
             use_cluster = False
         runfile_dir = os.path.abspath(runfile_dir)
@@ -113,7 +109,7 @@ class Run(object):
                 jobs = [(selection, outstream[selection]['sub_outputs'][i]) for selection in outstream if (not os.path.exists(outstream[selection]['sub_outputs'][i])) or force_rerun]
                 if jobs:
                     runfile = os.path.join(runfile_dir, s.sample_name+'.submit')
-                    self.write_runfile(sample = s, output_files = jobs, runfile = runfile, stages = stages)
+                    self.write_runfile(sample = s, output_files = jobs, runfile = runfile, stages = stages, **write_kwds)
                     subprocess.call(['chmod', 'u+x', runfile])
                     if not use_cluster:
                         subprocess.call([runfile])
@@ -137,11 +133,11 @@ class Run(object):
         if self.cluster != None:
             self.cluster.wait(None, fct = get_fct(logger = helpers.getLogger('TopNtupleAnalysis.cluster')))
 
-    def run(self, runfile_dir = os.curdir, use_cluster = True, monitor = True, force_rerun = False, delete_sources_after_merged = False):
-        self.execute(runfile_dir = runfile_dir, use_cluster = use_cluster, force_rerun = force_rerun)
+    def run(self, runfile_dir = os.curdir, use_cluster = True, monitor = True, force_rerun = False, delete_sources_after_merged = False, execute_kwds = {}, finalize_kwds = {}):
+        self.execute(runfile_dir = runfile_dir, use_cluster = use_cluster, force_rerun = force_rerun, **execute_kwds)
         if use_cluster and monitor:
             self.wait()
-        self.finalize(delete_sources_after_merged = delete_sources_after_merged)
+        self.finalize(delete_sources_after_merged = delete_sources_after_merged, **finalize_kwds)
 
 def get_fct(logger = None):
     if logger == None:
