@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include "TLorentzVector.h"
-
 #include "TopNtupleAnalysis/TtresChi2.h"
 #include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
 #include "TopNtupleAnalysis/MMUtils.h"
@@ -16,15 +15,20 @@
 #include "TopNtupleAnalysis/TtresNeutrinoBuilder.h"
 #include "TopNtupleAnalysis/EFTLib.h"
 #include "TopNtupleAnalysis/wrapper.h"
+#ifndef DATA_DIR
+#include <PathResolver/PathResolver.h>
+std::string data_dir = (std::string) PathResolverFindCalibDirectory("TopNtupleAnalysis/");
+#else
+std::string data_dir = (std::string) DATA_DIR;
+#endif 
 #ifdef NNLOReweighter_NNLOReweighter
 #include "NNLOReweighter/NNLOReweighterTool.h"
 #endif
 
-std::string root_dir = (std::string) ROOT_DIR;
 TtresChi2 m_chi2("MeV");
 bool m_status;
 
-WeakCorrScaleFactorParam m_ewkTool(root_dir+"share/EWcorr_param.root");
+WeakCorrScaleFactorParam m_ewkTool(data_dir+"EWcorr_param.root");
 TtresNeutrinoBuilder m_neutrinoBuilder("MeV");
 
 std::vector<MMUtils *> mm_mu(20);
@@ -45,60 +49,60 @@ void initWrapper(bool dt) {
     int runMM_DRCorr_e = 0;
     int runMM_etaCorr_mu = 0;
     int runMM_DRCorr_mu = 1;
-    
+    std::cout << data_dir;
     // 2jets
     mm_e[0*10+2] = new MMUtils(0, runMM_etaCorr_e, runMM_DRCorr_e, 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_2jets_btag0_fake.root");  // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_2jets_btag0_fake.root");  // fake2015+2016
         
     mm_e[1*10+2]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e, 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_2jets_btag1_fake.root");   // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_2jets_btag1_fake.root");   // fake2015+2016
 
 
     mm_mu[0*10+2] = new MMUtils(0, runMM_etaCorr_mu, runMM_DRCorr_mu,
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_2jets_btag0_fake.root"); // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_2jets_btag0_fake.root"); // fake2015+2016
         
     mm_mu[1*10+2] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu, 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_2jets_btag1_fake.root"); // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_2jets_btag1_fake.root"); // fake2015+2016
     
     // 3jets
     mm_e[0*10+3] = new MMUtils(0, runMM_etaCorr_e, runMM_DRCorr_e,
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_3jets_btag0_fake.root");  // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_3jets_btag0_fake.root");  // fake2015+2016
         
     mm_e[1*10+3]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e, 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_3jets_btag1_fake.root");   // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_3jets_btag1_fake.root");   // fake2015+2016
 
 
     mm_mu[0*10+3] = new MMUtils(0, runMM_etaCorr_mu, runMM_DRCorr_mu,
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_3jets_btag0_fake.root"); // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_3jets_btag0_fake.root"); // fake2015+2016
         
     mm_mu[1*10+3] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu, 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_3jets_btag1_fake.root"); // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_3jets_btag1_fake.root"); // fake2015+2016
     
     // 4jets    
     mm_e[0*10+4] = new MMUtils(0, runMM_etaCorr_e, runMM_DRCorr_e, 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_4jets_btag0_fake.root");  // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",  // real2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_4jets_btag0_fake.root");  // fake2015+2016
         
     mm_e[1*10+4]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e, 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_e_4jets_btag1_fake.root");   // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_eff_ttbar.root",     // real2015+2016 
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_e_4jets_btag1_fake.root");   // fake2015+2016
 
 
     mm_mu[0*10+4] = new MMUtils(0, runMM_etaCorr_mu, runMM_DRCorr_mu,
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag0_fake.root"); // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016  
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag0_fake.root"); // fake2015+2016
         
     mm_mu[1*10+4] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu, 
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
-             root_dir+"scripts/QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag1_fake.root"); // fake2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_eff_ttbar.root",   // real2015+2016
+             data_dir+"QCDestimation/RATES_2015_2016/resolved_mu_4jets_btag1_fake.root"); // fake2015+2016
   }
   #ifdef NNLOReweighter_NNLOReweighter
   m_NNLO = new NNLOReweighterTool("NNLO");

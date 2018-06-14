@@ -10,7 +10,11 @@ sys.path.append('2HDM')
 
 run_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 root_path = os.path.join(run_path, os.pardir)
-data_path = os.path.join(root_path, 'share')
+try:
+    import PathResolver.PathResolver
+    data_path = PathResolver.PathResolver.FindCalibDirectory('TopNtupleAnalysis')
+except ImportError:
+    data_path = os.path.join(root_path, 'share')
 
 BINDS_INITIASIZED = False
 
@@ -79,14 +83,40 @@ def loadXsec(m, fName):
             continue
         m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2]) # crossSection * k-factor. Note that in TopDataPreparation crossSection is the crossSection after filter efficiency applied.
 
-def addFilesInChain(c, txtFileOption, n = -1):
+def addFilesInChain(c, txtFileOption, n = -1, sep = ','):
+    '''Add files listed in a text file to the chain.
+    
+    Parameters
+    ----------
+    c : {ROOT.TChain}
+        The chain you want add files to
+    txtFileOption : {iterable}
+        List of paths of the input file list
+    n : {number}, optional
+        The addition stops when number of files from each input file list exceed this number. (the default is -1, which means not constrained)
+    sep : {str}, optional
+        Delimiter to use. For grid submission, it is neccessery to be ",".
+        However, it can cause problem if you have "," in the file path (the default is ',')
+        Note that in any case, "\n" will be considered as a delimiter.
+    '''
+    chain_name = c.GetName()
     for f in txtFileOption:
+        i = 0
         with open(f) as txtf:
-            for counter, l in enumerate(l.strip() for l in txtf.readlines() if not l.startswith('#')):
-                if n == -1 or counter < n:
-                    l = l.strip()
-                    c.Add(l)
-                    logger.info('addFilesInChain: {}'.format(l))
+            for l in (l.strip() for l in txtf.readlines() if not l.startswith('#')):
+                if n == -1 or i < n:
+                    if sep == '\n':
+                        c.Add(l)
+                        logger.info('addFilesInChain to <Chain("{}")>: {}'.format(chain_name ,l))
+                        i += 1
+                    else:
+                        for f in l.split(sep):
+                            if n == -1 or i < n:
+                                c.Add(f.strip())
+                                logger.info('addFilesInChain to <Chain("{}")>: {}'.format(chain_name, f))
+                                i += 1
+                            else:
+                                return
                 else:
                     return
 

@@ -3,9 +3,6 @@ import ROOT
 import os
 import helpers
 logger = helpers.getLogger('TopNtupleAnalysis.sumWeights')
-run_path = os.path.abspath(os.path.dirname(__file__))
-root_path = os.path.join(run_path, os.pardir)
-data_path = os.path.join(root_path, "share")
 
 pdfList = ['PDF4LHC15_nlo_30']
 wjpdfList = [7]+range(11, 110+1)
@@ -32,7 +29,7 @@ def main(files, types, suffix):
                     for m in range(0, len(pdfAttr)):
                         pdfSumOfWeights[t_pdfSumWeights.dsid][l][m] += pdfAttr[m]
 
-            pfs = open(os.path.join(data_path, "sumOfWeights%s%s.txt") % (t, suffix), "w")
+            pfs = open(os.path.join(helpers.data_path, "sumOfWeights%s%s.txt") % (t, suffix), "w")
             for channel in sorted(pdfSumOfWeights.keys()):
                 for pdfName in sorted(pdfSumOfWeights[channel].keys()):
                     for pdfNumber in range(0, len(pdfSumOfWeights[channel][pdfName])):
@@ -72,7 +69,7 @@ def main(files, types, suffix):
                         logger.info(" ".join("Read ", value, " in item ", wjpdfList[l], " in file ", t_wjpdfSumWeights.GetCurrentFile().GetName()))
                     wjpdfSumOfWeights[t_wjpdfSumWeights.dsid][l] += value
 
-            pfs = open(os.path.join(data_path, "sumOfWeights%s%s.txt") % (t, suffix), "w")
+            pfs = open(os.path.join(helpers.data_path, "sumOfWeights%s%s.txt") % (t, suffix), "w")
             for channel in sorted(wjpdfSumOfWeights.keys()):
                 for pdfNumber in range(0, len(wjpdfSumOfWeights[channel])):
                     pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", pdfName, "", pdfNumber, "", wjpdfSumOfWeights[channel][pdfNumber]))
@@ -102,7 +99,7 @@ def main(files, types, suffix):
                     sumOfWeights[t_sumWeights.dsid] = 0
                 sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
 
-            fs = open(os.path.join(data_path, "sumOfWeights%s%s.txt") % (t, suffix), "w")
+            fs = open(os.path.join(helpers.data_path, "sumOfWeights%s%s.txt") % (t, suffix), "w")
             for channel in sorted(sumOfWeights.keys()):
                 fs.write("%20d%20s%20f\n" % (channel, "", sumOfWeights[channel]))
                 logger.debug("{:d}:{:>40.2f}".format(channel, sumOfWeights[channel]))
@@ -113,23 +110,22 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-f", "--files",
-                             #dest="files", default="/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_all.txt,/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_syst.txt,/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_pdf.txt",
-                             #dest="files", default="inputSW_all.txt,inputSW_syst.txt,inputSW_pdf.txt,inputSW_systaf2.txt",
-                             #dest="files", default="inputSW_pdf.txt",
-                             #dest="files", default="inputSW_systaf2.txt",
-                             dest="files", default = '',
-                  help="Text file with list of input files.", metavar="FILELIST")
+                        #dest="files", default="/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_all.txt,/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_syst.txt,/nfs/dust/atlas/user/danilo/hists_sr2416/inputSW_pdf.txt",
+                        #dest="files", default="inputSW_all.txt,inputSW_syst.txt,inputSW_pdf.txt,inputSW_systaf2.txt",
+                        #dest="files", default="inputSW_pdf.txt",
+                        #dest="files", default="inputSW_systaf2.txt",
+                        dest="files", default = '',
+                        help="Text file with list of input files.", metavar="FILELIST")
     parser.add_argument("-t", "--types",
-                    
-                             #dest="types", default=",syst,pdf,systaf2",
-                             #dest="types", default="pdf",
-                             #dest="types", default="systaf2",
-                             dest="types", default = '',
-                  help="Categories they should be added in.", metavar="LIST")
+                        #dest="types", default=",syst,pdf,systaf2",
+                        #dest="types", default="pdf",
+                        #dest="types", default="systaf2",
+                        dest="types", default = '',
+                        help="Categories they should be added in.", metavar="LIST")
     parser.add_argument("-s", "--suffix",
-                             dest="suffix", default="_new",
-                             # dest="suffix", default="_test",
-                  help="Suffix to be added in the output file.", metavar="SUFFIX")
+                        dest="suffix", default="_new",
+                        #dest="suffix", default="_test",
+                        help="Suffix to be added in the output file.", metavar="SUFFIX")
 
     options = parser.parse_args()
     main(options.files, options.types, options.suffix)
