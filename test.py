@@ -2,7 +2,10 @@
 """Up!fss!jt!ivnbo!.!boe!up!cmbnf!ju!po!b!dpnqvufs!jt!fwfo!npsf!tp/"""
 import sys
 import ROOT
-import python.helpers as helpers
+try:
+    import TopNtupleAnalysis.helpers as helpers
+except:
+    import python.helpers as helpers
 logger = helpers.getLogger("TopNtupleAnalysis.test")
 try:
     try:

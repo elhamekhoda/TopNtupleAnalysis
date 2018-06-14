@@ -5,6 +5,8 @@ from TopNtupleAnalysis import samples, run, clusters
 """
 An example of histogramming signal sample w/ M(Z')=[400, ... , 5000]GeV in l+jets analysis using batch system `HTCondor`
 """
+
+# samples going to be processed.
 s = [samples.Sample(sample_name = s,
                     ds_fmt_options = {'suffix': '13022018v1_output.root'},
                     download_to = os.path.join(os.curdir, 'data'),
@@ -14,12 +16,22 @@ def main(samples, systematics, **run_kwds):
     r = run.Run(samples = samples, **run_kwds)
     for sample in r.samples:
         sample.systematics = systematics
-    r.selections = r.selections[:4] # only channels be, bmu, re, rmu 2015+2016
-    r.analysis_exts = ['--do-tree'] # comment it out if you don't want a mini-tree output
-    r.run(use_cluster = True, monitor = True)
+    # only channels be, bmu, re, rmu 2015+2016
+    r.selections = r.selections[:4] 
+    # comment it out if you don't want a mini-tree output
+    r.analysis_exts = ['--do-tree'] 
+    # outDS suffix. Only matters if you use 'grid' as cluster
+    # if you don't change it, by default the format in 'histTNA_%DD%MM%YYYYv0'
+    r.tag = 'histTNA_{date}v0' 
+    r.run(use_cluster = True,
+          monitor = True,
+          # This is to control `Run.execute` and can be also used to control batch submission,
+          # like site name where jobs are sent in grid for example. Comment it out to use it.
+          # execute_kwds = dict(submit_kwds = {'argument': ['--site', 'DESY-HH,AUTO']})                                                                       
+          )
 
 main(samples = s,
      systematics = 'nominal',
      output_dir = None,
      analysis_type = 'AnaTtresSL',
-     cluster = 'condor') 
+     cluster = 'condor') # known to work: 'condor', 'lsf' and 'grid'

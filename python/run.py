@@ -3,6 +3,8 @@ import os
 import sys
 import re
 import glob
+import copy
+import datetime
 import subprocess
 
 import helpers
@@ -10,6 +12,8 @@ import clusters
 import samples
 
 logger = helpers.getLogger('TopNtupleAnalysis.run')
+
+__grid__ = False
 
 class Run(object):
     def __init__(self, samples = [], output_dir = None, log_dir = None, analysis_type = 'AnaTtresSL', cluster = None, max_inputs_per_job = 5, environment = 'asetup'):
@@ -39,17 +43,26 @@ class Run(object):
         self.cluster = clusters.from_name.get(cluster)(cluster_type = None, cluster_status_update=(600,30), cluster_queue='None') if isinstance(cluster, str) else cluster
         self.environment = environment
         self.system = 'lxplus'
+        self.do_merge = True
+        self._tag_fmt = 'histTNA_{date}{series}'
 
-
+    @property
+    def tag(self):
+        return self._tag_fmt.format(date = format(datetime.date.today(), '%Y%m%d'), series = 'v0')
+    @tag.setter
+    def tag(self, value):
+        self._tag_fmt = value
     def write_inputsfile(self, sample):
-        with open(os.path.join(self.output_dir, "input_"+sample.sample_name+'.txt'), 'w') as infile:
-            infile.writelines('\n'.join(sample.input_files))
-        return infile.name
+        infile_fname = "input_"+sample.sample_name+'.txt'
+        if not __grid__:
+            with open(os.path.join(self.output_dir, infile_fname), 'w') as infile:
+                infile.writelines('\n'.join(sample.input_files))
+        return infile_fname
     
-    def command_lines(self, sample, output_files):
+    def command_lines(self, sample, output_files, infile = None):
         cmds = {'shebang': [], 'build': [], 'download': [], 'pre-exec': [], 'exec': [], 'post-exec': []}
         download_cmd = ''.join(sample.commit(only_retrieve_cmd = bool(sample.download_to)) or [])
-        infile = self.write_inputsfile(sample)
+        infile = infile or self.write_inputsfile(sample)
         cmds['shebang'].append('#!{}\n'.format(os.environ['SHELL']))
         if self.cluster != None:
             cmds['build'].append('pwd="$PWD"\n')
@@ -71,14 +84,19 @@ class Run(object):
                 cmds['build'].append('lsetup pyami rucio{}\n'.format(' -f' if self.system == 'naf' else ''))
         if download_cmd:
             cmds['download'].append(''.join(download_cmd))
-        cmds['exec'].append(os.path.join(self.source_dir,'makeHistograms.py') + ' \\\n'
+        cmds['exec'].append(('python $WorkDir_DIR/python/TopNtupleAnalysis/makeHistograms.py' if os.getenv('AtlasProject') and self.cluster != None else os.path.join(self.source_dir,'makeHistograms.py'))  + ' \\\n'
                             + '--analysis ' + self.analysis_type  + sample.is_data + sample.extra + ' --systs '  + sample.systematics + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
                             + '--files '    + infile + ' \\\n'
-                            + ' \\\n'.join(['-o "{selection}:file://{output_file}"'.format(selection = selection, output_file = output_file) for selection, output_file in output_files]) + '\n')
+                            + ' \\\n'.join(['-o "{selection}:{output_file}"'.format(selection = selection, output_file = output_file) for selection, output_file in output_files]) + '\n')
         return cmds
 
-    def write_runfile(self, sample , output_files, runfile = sys.stdout, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'), check_exitcode = ('build', 'download', 'pre-exec', 'exec', 'post-exec')):
-        command_lines = self.command_lines(sample, output_files = output_files)
+    def write_runfile(self, sample , output_files,
+                      infile = None,
+                      runfile = sys.stdout,
+                      stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'),
+                      check_exitcode = ('build', 'download', 'pre-exec', 'exec', 'post-exec')):
+        infile = infile or self.write_inputsfile(sample)
+        command_lines = self.command_lines(sample, output_files = output_files, infile = infile)
         checker = ['if [ $? -ne 0 ]; then\n', 'exit $?\n', 'fi\n']
         lines = []
         for stage in stages:
@@ -91,14 +109,21 @@ class Run(object):
         with open(runfile, 'w') as fr:
             fr.writelines(lines)
 
-    def execute(self, runfile_dir = os.curdir, use_cluster = True, stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'), force_rerun = False, **write_kwds):
+    def execute(self, runfile_dir = os.curdir,
+                use_cluster = True,
+                stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'),
+                force_rerun = False,
+                submit_kwds = {},
+                max_inputs_per_job = None,
+                **write_kwds):
+        max_inputs_per_job = max_inputs_per_job if max_inputs_per_job != None else self.max_inputs_per_job
         if self.cluster == None:
             use_cluster = False
         runfile_dir = os.path.abspath(runfile_dir)
         selections = self.selections.iteritems() if isinstance(self.selections, dict) else self.selections
         self.outstreams = {}
         for sample in self.samples:
-            subsamples = samples.part_sample(sample, max_input_files = self.max_inputs_per_job)
+            subsamples = samples.part_sample(sample, max_input_files = max_inputs_per_job)
             outstream = self.outstreams[sample.sample_name] = {}
             for selection, output_fname in selections:
                 outstream[selection] = {}
@@ -109,31 +134,58 @@ class Run(object):
                 jobs = [(selection, outstream[selection]['sub_outputs'][i]) for selection in outstream if (not os.path.exists(outstream[selection]['sub_outputs'][i])) or force_rerun]
                 if jobs:
                     runfile = os.path.join(runfile_dir, s.sample_name+'.submit')
-                    self.write_runfile(sample = s, output_files = jobs, runfile = runfile, stages = stages, **write_kwds)
+                    infile = self.write_inputsfile(s)
+                    self.write_runfile(sample = s, output_files = jobs, runfile = runfile, stages = stages, infile = infile, **write_kwds)
                     subprocess.call(['chmod', 'u+x', runfile])
                     if not use_cluster:
                         subprocess.call([runfile])
                     else:
                         job_id = self.cluster.get_identifier()
+                        submit_kwds = copy.deepcopy(submit_kwds)
+                        if isinstance(self.cluster, clusters.CERNGrid):
+                            submit_kwds['argument'].extend(['--inDS', ','.join(s._list_dids())])
+                            submit_kwds['argument'].extend(['--outDS',  'user.{CERN_USER}.{s.DSID[0]}.{s.physics_short}.{s.ami_tag[0]}.{r.tag}'.format(CERN_USER = os.getenv('CERN_USER'), s = s, r = self)])
+                            submit_kwds['argument'].extend(['--writeInputToTxt=IN:' + infile])
+                            submit_kwds['argument'].extend(['--outputs', ','.join([os.path.join(self.output_dir, job[1]) for job in jobs] + [infile])])
                         self.cluster.submit2(runfile,
                                              stdout = os.path.join(self.log_dir, 'out.%s' % job_id),
                                              stderr = os.path.join(self.log_dir, 'out.%s' % job_id),
-                                             log    = os.path.join(self.log_dir, 'log.%s' % job_id))
+                                             log    = os.path.join(self.log_dir, 'log.%s' % job_id),
+                                             **submit_kwds)
 
-    def finalize(self, delete_sources_after_merged = False):
-        for outstream in self.outstreams.viewvalues():
-            for selection in outstream:
-                output = outstream[selection]['output']
-                sub_outputs = outstream[selection]['sub_outputs']
-                if len(sub_outputs) == 1 and output == sub_outputs[0]:
-                    continue
-                helpers.hadd({output: sub_outputs}, delete_sources = delete_sources_after_merged)
+    def finalize(self, do_merge = None, delete_sources_after_merged = False):
+        do_merge = do_merge or self.do_merge
+        if do_merge == True:
+            for outstream in self.outstreams.viewvalues():
+                for selection in outstream:
+                    output = outstream[selection]['output']
+                    sub_outputs = outstream[selection]['sub_outputs']
+                    if len(sub_outputs) == 1 and output == sub_outputs[0]:
+                        continue
+                    helpers.hadd({output: sub_outputs}, delete_sources = delete_sources_after_merged)
 
     def wait(self):
         if self.cluster != None:
             self.cluster.wait(None, fct = get_fct(logger = helpers.getLogger('TopNtupleAnalysis.cluster')))
 
     def run(self, runfile_dir = os.curdir, use_cluster = True, monitor = True, force_rerun = False, delete_sources_after_merged = False, execute_kwds = {}, finalize_kwds = {}):
+        global __grid__
+        execute_kwds = copy.deepcopy(execute_kwds)
+        finalize_kwds = copy.deepcopy(finalize_kwds)
+        cluster_arguments = execute_kwds.setdefault('submit_kwds', {}).setdefault('argument', [])
+
+        __grid__ = isinstance(self.cluster, clusters.CERNGrid)
+        if __grid__:
+            self.output_dir = ''#os.path.split(self.output_dir.rstrip('/'))[-1]
+            cluster_arguments.extend(["--maxNFilesPerJob=" + str(self.max_inputs_per_job)])
+            cluster_arguments.extend(['--useAthenaPackages'])
+            cluster_arguments.extend(['--excludeFile=./'])
+            if self.do_merge:
+                cluster_arguments.extend(['--mergeOutput'])
+                finalize_kwds['do_merge'] = False # this is going to pass to Run.finalize so that it won't merge twice
+            execute_kwds.setdefault('stages', ('exec',))
+            execute_kwds.setdefault('max_inputs_per_job', False)
+            execute_kwds.setdefault('check_exitcode', tuple())
         self.execute(runfile_dir = runfile_dir, use_cluster = use_cluster, force_rerun = force_rerun, **execute_kwds)
         if use_cluster and monitor:
             self.wait()

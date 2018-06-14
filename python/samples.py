@@ -18,16 +18,16 @@ DS_PATTERN = '{s.ds_scope}.{{{{s.DSID[{{i}}]}}}}.*{suffix}'
 DS_SCOPE = 'user.{s._client.account}'
 
 MAP_TO_SAMPLES = {# <sample>: <physics_short>
-                'wbbjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets22'],
-                'wccjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets22'],
-                'wcjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets22'],
-                'wljets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets22'],
+                'wbbjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
+                'wccjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
+                'wcjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
+                'wljets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
                 'data': ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
                 'qcde': ['Data15_13TeV_25ns_EXOT4', 'Data16_13TeV_25ns_EXOT4'],
                 'qcdmu': ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
                 'tt':['MC16_13TeV_25ns_FS_EXOT4_ttbar_nonallhad'],
                 'singletop':['MC16_13TeV_25ns_FS_EXOT4_singletop'],
-                'zjets': ['MC16_13TeV_25ns_FS_EXOT4_Zjets22'],
+                'zjets': ['MC16_13TeV_25ns_FS_EXOT4_Zjets221'],
                 'vv': ['MC16_13TeV_25ns_FS_EXOT4_VV'],
                 'zprime400': ['MC16_13TeV_25ns_FS_EXOT4_Zprime400'],
                 'zprime500': ['MC16_13TeV_25ns_FS_EXOT4_Zprime500'],
@@ -77,6 +77,9 @@ class Sample(object):
         self.sample_name = sample_name
         self.sample = self.parse_dataset(sample_name)
         self._ds_pattern_fmt = ds_pattern.format(s = self, **ds_fmt_options)
+        if self._ds_pattern_fmt.startswith('user.'):
+            head, _, tail = self._ds_pattern_fmt.partition(':')
+            self.ds_scope = head if tail else '.'.join(head.split('.')[:2])
         self.download_to = download_to if download_to is not True else os.curdir
         self.commited = False
         self.set_systematics()
@@ -248,7 +251,7 @@ def part_sample(sample, max_input_files = 5, sort = True):
     if not sample.commited:
         sample.commit(only_retrieve_cmd = True)
     l = len(sample.input_files)
-    if l <= max_input_files or max_input_files == None:
+    if l <= max_input_files or max_input_files in (None, 0, 'none', False):
         return [sample]
     ret = [SubSample(sample, sample.input_files[i:min(i+max_input_files, l)], suffix = '{:06d}'.format(suffix)) for suffix, i in enumerate(range(0, l, max_input_files), 1)]
     return ret

@@ -2166,9 +2166,50 @@ class HTCaaS2Cluster(Cluster):
             cmd = "htcaas-job-cancel -m %s" % str(id)
             status = subprocess.Popen([cmd], shell=True, stdout=open(os.devnull,'w'))
 
+class CERNGrid(Cluster):
+    isFirst = True
+    @store_input()
+    def submit2(self, prog, argument=[], cwd=None, stdout=None, stderr=None, 
+                log=None, input_files=[], output_files=[], required_output=[],
+                nb_submit=0):
+        argument = argument[:]
+        if self.isFirst:
+            argument.append('--outTarBall=tna-run.tar.gz')
+        else:
+            argument.append('--inTarBall=tna-run.tar.gz')
+            self.isFirst = False
+        with open(prog) as prog:
+            cmds = ['prun'] + ['--exec', ''.join(l.replace('\\\n', ' ') for l in prog.readlines(True))] + argument
+        print cmds
+
+        prog = subprocess.Popen(cmds, stdout = subprocess.PIPE, stderr=subprocess.STDOUT)
+        output = ''
+        while True:
+            line = prog.stdout.readline()
+            output += line
+            print '>> {}'.format(line),
+            if line == '' and prog.poll() != None:
+                break
+
+        pat = re.compile("INFO : succeeded. new jediTaskID=(\d+)",re.MULTILINE)
+        try:
+            id = pat.search(output).groups()[0]
+        except:
+            raise ClusterManagmentError, 'fail to submit to the cluster: \n%s' \
+                                                                        % output 
+        self.submitted += 1
+        self.submitted_ids.append(id)
+        return id
+        
+
+    @check_interupt()
+    def wait(self, me_dir, fct, minimal_job=0, update_first=None):
+        return
+
 from_name = {'condor':CondorCluster, 'pbs': PBSCluster, 'sge': SGECluster, 
              'lsf': LSFCluster, 'ge':GECluster, 'slurm': SLURMCluster, 
-             'htcaas':HTCaaSCluster, 'htcaas2':HTCaaS2Cluster}
+             'htcaas':HTCaaSCluster, 'htcaas2':HTCaaS2Cluster,
+             'grid': CERNGrid}
 
 onecore=MultiCore(1) # create a thread to run simple bash job without having to
                      #fork the main process

@@ -44,8 +44,6 @@ file(GLOB EFTLIB_SOURCES Root/EFTLib.cxx
                          Root/HelAmps_sm.cxx)
 list(APPEND SOURCES ${EFTLIB_SOURCES})
 
-add_definitions(-D ROOT_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/\\"")
-
 add_definitions(-Wno-ignored-qualifiers)
 add_definitions(-Wno-unused-parameter)
 add_definitions(-Wno-unused-variable)
@@ -75,7 +73,15 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
                        LINK_LIBRARIES ${LINK_LIBRARIES}
                        PRIVATE_LINK_LIBRARIES PathResolver
                        INCLUDE_DIRS ${ROOT_INCLUDE_DIRS})
-    atlas_install_python_modules( python/__init__.py python/run.py python/clusters.py python/samples.py python/helpers.py python/makeHistograms.py python/analysis.py )
+    atlas_install_data( share/* )
+    atlas_install_python_modules( python/__init__.py
+                                  python/run.py
+                                  python/clusters.py
+                                  python/samples.py
+                                  python/helpers.py
+                                  python/makeHistograms.py
+                                  python/analysis.py
+                                  python/wjets.py)
     atlas_install_scripts( scripts/tna-run )
 
 else()
@@ -94,7 +100,7 @@ else()
     endif()
     #---Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)
     include(${ROOT_USE_FILE})
-
+    add_definitions(-D DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/share/\\"") # This should point to the share directory
     include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${ROOT_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/../TopDataPreparation)
     add_definitions(${ROOT_CXX_FLAGS})
     ROOT_GENERATE_DICTIONARY(TopNtupleAnalysisCintDict TopNtupleAnalysis/wrapper.h LINKDEF Root/LinkDef.h MODULE TopNtupleAnalysis)
