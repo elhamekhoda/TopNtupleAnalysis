@@ -47,7 +47,7 @@ General Instruction
    Note that there are some restrictions for this stand-alone version without __Atlas CMake__.
    
 #### Usage
-The main UI is `python/makeHistograms.py`.
+The core program is `python/makeHistograms.py`.
 ```
 usage: makeHistograms.py [-h] [-d] [-f FILE] [-A ANALYSIS] [-o [FILES]]
                          [-s SYSTEMATICS] [-W FLAVOURS] [-P PDFS] [-Q CHANNEL]
@@ -224,36 +224,51 @@ This will speed it up.
 
 Auxiliary scripts
 -----------------
-The input files for read.cxx can be produced by running top-xaod from the TopAnalysis package with the OutputMinixAOD flag set to False
-in the configuration file.
-The output is then downloaded with dq2-get and the script in `scripts/addFiles.py` can be used to add all output ROOT file in a single file per
-sample type.
-However, for large files, it is recommended to use `scripts/run.py` directly, so that the original files are read and processed
-with no intermediate step.
+Three python modules are developed:
 
-To use `scripts/run.py`, edit the following lines so that ntuplesDir points to the directory where you downloaded the Grid
-datasets, outputDir points to the directory where to save the output of TopNtupleAnalysis and names contains a list of
-datasets defined according to the imports from `HQTTtResonancesTools/python`.
+1. [samples](python/samples.py): Sample handling. You can either download datasets to local disk or access them remotely via `root://` protocol. Back-ended by `Rucio`.
+2. [clusters](python/clusters.py): Batch submission and monitoring (__LSF__, __Condor__ and __CERNGrid__ are known to work. Others are not tested yet.)
+3. [run](python/run.py): API to communicate between [samples](python/samples.py), [clusters](python/clusters.py) and [makeHistograms.py](python/makeHistograms.py)
+
+It is highly recommended to copy [scripts/run-tna](scripts/run-tna) to a working directory, select the sample and cluster based on your need, and execute it directly. It is designed as the main user interface, so users should be in principle able to control the jobs using this without modifying source codes for _everything not changing the physics_.
+
+An example of how to use [scripts/run-tna](scripts/run-tna):
 
 ```python
-import HQTTtResonancesTools.DC15MC13TeV_25ns_EXOT4_p2375
-import HQTTtResonancesTools.DC15MC13TeV_EXOT4_p2352
+import os
+from TopNtupleAnalysis import samples, run, clusters
+"""
+An example of histogramming signal sample w/ M(Z')=[400, ... , 5000]GeV in l+jets analysis using batch system `HTCondor`
+"""
+# samples going to be processed.
+s = [samples.Sample(sample_name = s,
+                    ds_fmt_options = {'suffix': '13022018v1_output.root'},
+                    download_to = os.path.join(os.curdir, 'data'),
+                    commit_when_init = False) for s in samples.MAP_TO_SAMPLES if 'zprime' in s]
 
-ntuplesDir = '/afs/cern.ch/user/d/dferreir/work/eos/atlas/user/d/dferreir/topana/09092015'
-outputDir = 'test25ns'
-analysisType='AnaTtresSL'
+def main(samples, systematics, **run_kwds):
+    r = run.Run(samples = samples, **run_kwds)
+    for sample in r.samples:
+        sample.systematics = systematics
+    # only channels be, bmu, re, rmu 2015+2016
+    r.selections = r.selections[:4] 
+    # comment it out if you don't want a mini-tree output
+    r.analysis_exts = ['--do-tree'] 
+    # outDS suffix. Only matters if you use 'grid' as cluster
+    # if you don't change it, by default the format in 'histTNA_%DD%MM%YYYYv0'
+    r.tag = 'histTNA_{date}v0' 
+    r.run(use_cluster = True, monitor = True)
 
-#### each string defines a set of datasets in the Grid, which are written in the Python files above
-names  = ['MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia', 'MC15_13TeV_25ns_FS_EXOT4_ttbarPowhegPythia_mttsliced']
+main(samples = s,
+     systematics = 'nominal',
+     output_dir = None,
+     analysis_type = 'AnaTtresSL',
+     cluster = 'condor') # known to work: 'condor', 'lsf' and 'grid'
 ```
 
-Run it with: `python scripts/run.py`
+Run it with: `./tna-run`
 
-(in the future an official 13 TeV configuration file might be helpful)
-
-`svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk TopDataPreparation`
-There is no need to compile it, since the current Makefile includes it directly only for the C++ file needed.
-
+More details can be found in the slides: https://indico.cern.ch/event/719036/contributions/2955787/
 
 Plotting and limit setting preparation code
 -------------------------------------------
