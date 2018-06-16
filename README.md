@@ -266,7 +266,7 @@ main(samples = s,
      cluster = 'condor') # known to work: 'condor', 'lsf' and 'grid'
 ```
 
-Run it with: `./tna-run`
+Run it with: `./tna-run`. Don't forget to `lsetup panda` first if you are using `CERNGrid`.
 
 More details can be found in the slides: https://indico.cern.ch/event/719036/contributions/2955787/
 
