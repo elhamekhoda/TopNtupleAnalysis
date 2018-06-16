@@ -2175,9 +2175,9 @@ class CERNGrid(Cluster):
         argument = argument[:]
         if self.isFirst:
             argument.append('--outTarBall=tna-run.tar.gz')
+            self.isFirst = False
         else:
             argument.append('--inTarBall=tna-run.tar.gz')
-            self.isFirst = False
         with open(prog) as prog:
             cmds = ['prun'] + ['--exec', ''.join(l.replace('\\\n', ' ') for l in prog.readlines(True))] + argument
         print cmds

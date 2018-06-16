@@ -141,17 +141,17 @@ class Run(object):
                         subprocess.call([runfile])
                     else:
                         job_id = self.cluster.get_identifier()
-                        submit_kwds = copy.deepcopy(submit_kwds)
+                        _submit_kwds = copy.deepcopy(submit_kwds)
                         if isinstance(self.cluster, clusters.CERNGrid):
-                            submit_kwds['argument'].extend(['--inDS', ','.join(s._list_dids())])
-                            submit_kwds['argument'].extend(['--outDS',  'user.{CERN_USER}.{s.DSID[0]}.{s.physics_short}.{s.ami_tag[0]}.{r.tag}'.format(CERN_USER = os.getenv('CERN_USER'), s = s, r = self)])
-                            submit_kwds['argument'].extend(['--writeInputToTxt=IN:' + infile])
-                            submit_kwds['argument'].extend(['--outputs', ','.join([os.path.join(self.output_dir, job[1]) for job in jobs] + [infile])])
+                            _submit_kwds['argument'].extend(['--inDS', ','.join(s._list_dids())])
+                            _submit_kwds['argument'].extend(['--outDS',  'user.{CERN_USER}.{s.DSID[0]}.{s.physics_short}.{s.ami_tag[0]}.{r.tag}'.format(CERN_USER = os.getenv('CERN_USER'), s = s, r = self)])
+                            _submit_kwds['argument'].extend(['--writeInputToTxt=IN:' + infile])
+                            _submit_kwds['argument'].extend(['--outputs', ','.join([os.path.join(self.output_dir, job[1]) for job in jobs] + [infile])])
                         self.cluster.submit2(runfile,
                                              stdout = os.path.join(self.log_dir, 'out.%s' % job_id),
                                              stderr = os.path.join(self.log_dir, 'out.%s' % job_id),
                                              log    = os.path.join(self.log_dir, 'log.%s' % job_id),
-                                             **submit_kwds)
+                                             **_submit_kwds)
 
     def finalize(self, do_merge = None, delete_sources_after_merged = False):
         do_merge = do_merge or self.do_merge
