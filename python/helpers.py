@@ -879,3 +879,11 @@ def merge_files(filelist, pattern=r'(?P<base>.*)(?P<idx>\._\d+)(?P<ext>\.root.*)
             out = matched.expand(r'\g<base>\g<ext>')
             merge_dict.setdefault(out, []).append(matched.group(0))
     hadd(merge_dict, delete_sources)
+
+def check_for_panda():
+    import distutils.spawn
+    if distutils.spawn.find_executable('prun') == None:
+        print '\033[91m' + 'DANGER DANGER DANGER' + '\033[m'
+        print 'Could not find `prun`. If you use `setupATLAS` (you should) then'
+        print '">> lsetup pandas" and run this again'
+        sys.exit()

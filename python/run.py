@@ -55,7 +55,8 @@ class Run(object):
     def write_inputsfile(self, sample):
         infile_fname = "input_"+sample.sample_name+'.txt'
         if not __grid__:
-            with open(os.path.join(self.output_dir, infile_fname), 'w') as infile:
+            infile_fname = os.path.join(self.output_dir, infile_fname)
+            with open(infile_fname, 'w') as infile:
                 infile.writelines('\n'.join(sample.input_files))
         return infile_fname
     
@@ -144,7 +145,7 @@ class Run(object):
                         _submit_kwds = copy.deepcopy(submit_kwds)
                         if isinstance(self.cluster, clusters.CERNGrid):
                             _submit_kwds['argument'].extend(['--inDS', ','.join(s._list_dids())])
-                            _submit_kwds['argument'].extend(['--outDS',  'user.{CERN_USER}.{s.DSID[0]}.{s.physics_short}.{s.ami_tag[0]}.{r.tag}'.format(CERN_USER = os.getenv('CERN_USER'), s = s, r = self)])
+                            _submit_kwds['argument'].extend(['--outDS',  'user.{CERN_USER}.{s.DSID[0]}.{s.physics_short}.{s.ami_tag[0]}.{r.tag}'.format(CERN_USER = samples.Sample._client.account, s = s, r = self)])
                             _submit_kwds['argument'].extend(['--writeInputToTxt=IN:' + infile])
                             _submit_kwds['argument'].extend(['--outputs', ','.join([os.path.join(self.output_dir, job[1]) for job in jobs] + [infile])])
                         self.cluster.submit2(runfile,

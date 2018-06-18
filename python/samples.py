@@ -51,10 +51,16 @@ MAP_TO_SAMPLES = {# <sample>: <physics_short>
                 'kkgrav3000': ['MC16_13TeV_25ns_FS_EXOT4_Gtt3000']
                 }
 
+def register_samples(mapping):
+    MAP_TO_SAMPLES.update(mapping)
+
 class Sample(object):
     _client = rucio.client.Client()
     @staticmethod
     def parse_dataset(obj):
+        if obj not in MAP_TO_SAMPLES:
+            raise NameError('"{}"" not found in the current smaple list.\nNote that a user-defined sample must be first registered to {} using {}.\nAlready Registered Samples: {}'
+                            .format(obj, '`{}`'.format(__name__ + '.MAP_TO_SAMPLES'), '`{}`'.format(__name__ + '.register_samples'), sorted(MAP_TO_SAMPLES.iterkeys())))
         sample = TopExamples.grid.Sample("")
         if isinstance(obj, TopExamples.grid.Sample):
             for dataset_name, physics_short in MAP_TO_SAMPLES.iteritems():

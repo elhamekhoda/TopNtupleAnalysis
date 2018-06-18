@@ -2168,6 +2168,9 @@ class HTCaaS2Cluster(Cluster):
 
 class CERNGrid(Cluster):
     isFirst = True
+    def __init__(self, *args, **opts):
+        Cluster.__init__(self, *args, **opts)
+        helpers.check_for_panda()
     @store_input()
     def submit2(self, prog, argument=[], cwd=None, stdout=None, stderr=None, 
                 log=None, input_files=[], output_files=[], required_output=[],
