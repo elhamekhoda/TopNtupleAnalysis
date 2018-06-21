@@ -14,6 +14,8 @@ class Selection(object):
         raise NotImplementedError
     def passes(self, event):
         return self._alg(event)
+    def scale_factor(self, event):
+        raise NotImplementedError
 
 class BoostedTopTagger(Selection):
     """Boosted hadronic-top tagger
@@ -49,6 +51,131 @@ class BoostedTopTagger(Selection):
         self._alg(ev)
         self.passed = not (self.thad_index == -1)
         return self.passed
+
+class TrackJetBotTagger(Selection):
+    def __init__(self, algorithm = 'MV2c10', WP = '70'):
+        self.algorithm = algorithm
+        self.WP = WP
+        self.max_deltaR = 0.4
+        self._branch_map = {'tjet_isbtagged': 'tjet_isbtagged_{alg}_{WP}'.format(alg = self.algorithm, WP = self.WP),
+                            'tjet_SF': 'tjet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = self.WP)}
+        self.jet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Not used in boosted channel
+        self.jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
+    def passes(self, ev, do_association = True):
+        self.tjet_isbtagged = getattr(ev, self._branch_map['tjet_isbtagged'])
+        self.tjet_p4 = ROOT.vector('TLorentzVector')()
+        for i in range(len(ev.tjet_pt)):
+            p4 = ROOT.TLorentzVector()
+            p4.SetPtEtaPhiE(ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i], ev.tjet_e[i])
+            self.tjet_p4.push_back(p4)
+        if do_association:
+            self.jet_isbtagged.clear()
+            self.jet_p4.clear()
+            for jet_i in range(len(ev.jet_pt)):
+                jet_p4 = ROOT.TLorentzVector()
+                jet_p4.SetPtEtaPhiE(ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])
+                self.jet_p4.push_back(jet_p4)
+                for tjet_i in range(len(ev.tjet_pt)):
+                    self.jet_isbtagged.push_back(self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, ev))
+
+    def associated(self, tjet_i, jet_i, ev):
+        deltaR = self.jet_p4[jet_i].DeltaR(self.tjet_p4[tjet_i])
+        return (deltaR < self.max_deltaR)
+
+    def scale_factor(self, ev, systematic_variation = ''):
+        """
+        Retrieve the b-tagging scale factor with systematic variations specified accordingly
+
+        systematic variations are specified according to this syntax:
+        btag[A]SF_[eig][_pt[X]]__1[up/down]
+        where:
+        [A] = b,c,l,e for b-jet, c-jet, light-jet or extrapolation variations
+        [eig] is the number of the eigen vector
+        [X] is the number of the pt bin if we want to vary only jets within a pt bin
+        if there is no 'btag' in the name of the variation, then the nominal SF is used
+        
+        Parameters
+        ----------
+        ev : [TChain]
+            selected event chain
+        systematic_variation : [str]
+            systematic variation flag
+        
+        Returns
+        -------
+        btagSF: [float]
+            b-tagging scale factor
+        
+        """
+        pref =  self._branch_map['tjet_SF']
+        varName = ''
+        nomName = pref
+        ptbinInS = 0
+        eig = -1
+        # if this is a b-tagging variation
+        # then check which branch to take to apply the variation
+        if 'btag' in systematic_variation:
+            # if we are also varying only jets in a specific pt bin, the pt bin is identified as "ptX", where X is an integer
+            # get "X" as an integer from the systematic name
+            if 'pt' in systematic_variation:
+                ptbinInS = int(systematic_variation.split('pt')[1][0])
+                # later, if this is != -1, we will use it to apply the variation only at the jets within this pt bin
+            # get direction
+            direction = 'up'
+            if 'down' in systematic_variation:
+                direction = 'down'
+            # check if it is a b,c,light or extrapolation variation and set name
+            if 'btagbSF_' in systematic_variation:
+                varName = pref+'_eigen_B_'+direction
+                # get eigenvector index
+                eig = int(systematic_variation.split('_')[1])
+            if 'btagcSF_' in systematic_variation:
+                varName = pref+'_eigen_C_'+direction
+                # get eigenvector index
+                eig = int(systematic_variation.split('_')[1])
+            if 'btaglSF_' in systematic_variation:
+                varName = pref+'_eigen_Light_'+direction
+                # get eigenvector index
+                eig = int(systematic_variation.split('_')[1])
+            if 'btageSF_0' in systematic_variation:
+                varName = pref+'_syst_extrapolation_'+direction
+                eig = -1
+            if 'btageSF_1' in systematic_variation:
+                varName = pref+'_syst_extrapolation_from_charm_'+direction
+                eig = -1
+        else: # not a b-tagging variation, so take the nominal
+            varName = pref
+
+        scale_factor = 1.
+        # loop over track jets
+        for i, tjet_p4 in enumerate(self.tjet_p4):
+            # if we requested to vary only jets in a specific pt bin, check if this jet is in the pt bin
+            vetoed = False
+            if ptbinInS != 0:
+                ptbin = 0
+                if tjet_p4.Perp() < 50e3:
+                    ptbin = 1
+                elif tjet_p4.Perp() < 100e3:
+                    ptbin = 2
+                else:
+                    ptbin = 3
+                if ptbinInS == ptbin:
+                    # if this jet is in the correct pt bin, apply the syst. variation
+                    tjet_SF = getattr(ev, varName)
+                else:
+                    # otherwise, take the nominal SF for this jet
+                    # even if we are supposed to vary it for any other criteria
+                    tjet_SF = getattr(ev, nomName)
+                    vetoed = True
+            else: # we have not requested the pt binned variation
+                # so we always vary all jets, regardless of the pt bin
+                # if no variation was requested, varName will be set to the nominal above
+                tjet_SF = getattr(ev, varName)
+            if eig > -1 and not vetoed: # branches in b,c,light variation have a second index related to the eigenvector number
+                scale_factor *= tjet_SF[i][eig]
+            else: # extrapolation branches or the nominal, have no second index
+                scale_factor *= tjet_SF[i]
+        return scale_factor
 
 class Analysis(object):
     ch = ''
@@ -239,6 +366,10 @@ class Analysis(object):
     def set_top_tagger(self, expr):
         self.top_tagger = BoostedTopTagger(expr)
 
+    def set_bot_tagger(self, algorithm_WP = 'MV2c10_70'):
+        algorithm, WP = algorithm_WP.split('_')
+        self.bot_tagger = TrackJetBotTagger(algorithm, WP)
+
 class AnaTtresSL(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
                 'be': ['bejets_2015','bejets_2016'],
@@ -339,7 +470,7 @@ class AnaTtresSL(Analysis):
 
         # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
         #### warning: disabled for now in mc15c
-        btagsf = helpers.applyBtagSFFromFile(sel, s)
+        btagsf = self.bot_tagger.scale_factor(sel, s)
         weight *= btagsf
 
         if s == "singletopup" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
@@ -428,7 +559,7 @@ class AnaTtresSL(Analysis):
             return 1
 
         nBtag = 0
-        for bidx in range(0, len(sel.tjet_mv2c10)):
+        for bidx in range(0, len(sel.tjet_pt)):
             pb = ROOT.TLorentzVector()
             pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
             if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
@@ -511,7 +642,7 @@ class AnaTtresSL(Analysis):
         #                       break
         #       if not passes:
         #               return False
-
+        self.bot_tagger.passes(sel, do_association = True)
         # veto resolved event if it passes the boosted channel
         top_tagged = self.top_tagger.passes(sel)
         if ('re' in self.ch or 'rmu' in self.ch) and not "ov" in self.ch:
@@ -635,20 +766,20 @@ class AnaTtresSL(Analysis):
 
         self.h["closestJetDr"][syst].Fill(closestJetDr, w)
         self.h["closestJetPt"][syst].Fill(closestJetPt*1e-3, w)
-        nBtags = 0
-        tjets = []
-        tb = []
-        for bidx in range(0, len(sel.tjet_mv2c10)):
-            pb = ROOT.TLorentzVector()
-            pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
-            if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
-                tjets.append(pb)
-                b = False
-                if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
-                    nBtags += 1
-                    b = True
-                tb.append(b)
-        self.h["nTrkBtagJets"][syst].Fill(nBtags, w)
+        # nBtags = 0
+        # tjets = []
+        # tb = []
+        # for bidx in range(0, len(sel.tjet_pt)):
+        #     pb = ROOT.TLorentzVector()
+        #     pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
+        #     if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
+        #         tjets.append(pb)
+        #         b = False
+        #         if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
+        #             nBtags += 1
+        #             b = True
+        #         tb.append(b)
+        self.h["nTrkBtagJets"][syst].Fill(sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in self.bot_tagger.tjet_isbtagged), w)
         self.h["mwt"][syst].Fill(math.sqrt(2*l.Perp()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3, w)
         self.h["mu"][syst].Fill(sel.mu, w)
         self.h["npv"][syst].Fill(sel.npv, w)
@@ -726,20 +857,19 @@ class AnaTtresSL(Analysis):
                 self.h["largeJetPhi"][syst].Fill(lj.Phi(), w)
                 self.h["largeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[0], w)
                 self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[0], w)
-            jets = ROOT.vector('TLorentzVector')()
-            #jets = []
-            btag = ROOT.vector('bool')()
-            #btag = []
-            for k in range(0, len(sel.jet_pt)):
-                j = ROOT.TLorentzVector()
-                j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k])
-                jets.push_back(j)
-                tagged = False
-                for t in range(0, len(tjets)):
-                    dr = jets[k].DeltaR(tjets[t])
-                    if dr < 0.4 and tb[t]:
-                        tagged = True
-                btag.push_back(tagged)
+            # jets = ROOT.vector('TLorentzVector')()
+            # btag = ROOT.vector('bool')()
+            # for k in range(0, len(sel.jet_pt)):
+            #     j = ROOT.TLorentzVector()
+            #     j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k])
+            #     jets.push_back(j)
+            #     tagged = False
+            #     for t in range(0, len(tjets)):
+            #         dr = jets[k].DeltaR(tjets[t])
+            #         if dr < 0.4 and tb[t]:
+            #             tagged = True
+            #     btag.push_back(tagged)
+
             met = ROOT.TLorentzVector()
             met.SetPtEtaPhiE(sel.met_met, 0, sel.met_phi, sel.met_met)
             mtt = -1
@@ -747,7 +877,7 @@ class AnaTtresSL(Analysis):
             mth = -1
             mwh = -1
             chi2 = 100000
-            ROOT.TopNtupleAnalysis.getMtt(l, jets, btag, met)
+            ROOT.TopNtupleAnalysis.getMtt(l, self.bot_tagger.jet_p4, self.bot_tagger.jet_isbtagged, met)
             mtt = ROOT.TopNtupleAnalysis.res_mtt()
             mtl = ROOT.TopNtupleAnalysis.res_mtl()
             mth = ROOT.TopNtupleAnalysis.res_mth()

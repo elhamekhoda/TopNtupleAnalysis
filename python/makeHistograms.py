@@ -268,7 +268,10 @@ def main():
     # Use default top-tagger if top-tagger is not set for this channel
     for ch in channels.keys():
         if len(ch) == 1:
-            channels[ch + (options.top_tagger,)] = channels.pop(ch)
+            channels[ch + (options.top_tagger, )] = channels.pop(ch)
+        if len(ch) == 2:
+            channels[ch + (options.bot_tagger, )] = channels.pop(ch)
+
 
     analysisCode = {}
     #print "Systematics: ", histSuffixes
@@ -301,7 +304,7 @@ def main():
         helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
         logger.info("2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE))
     for k in channels:
-        ch, top_tagger = k
+        ch, top_tagger, bot_tagger = k
         analysisCode[k] = anaClass(ch, histSuffixes, channels[k])
         analysisCode[k].doTree = do_tree
         analysisCode[k].keep = options.WjetsHF
@@ -330,7 +333,8 @@ def main():
             analysisCode[k].scalarTANB = scalarTANB
             analysisCode[k].scalarTYPE = scalarTYPE
         analysisCode[k].set_top_tagger(top_tagger)
-        logger.info('({},{}): {}'.format(ch.strip(), top_tagger, channels[k]))
+        analysisCode[k].set_bot_tagger(bot_tagger)
+        logger.info('({},{},{}): {}'.format(ch.strip(), top_tagger, bot_tagger, channels[k]))
 
     isFirstEvent = True
 
@@ -461,13 +465,13 @@ if __name__ == "__main__":
                         metavar="ANALYSIS")
     parser.add_argument("-o", "--output",
                         dest="output",
-                        default = ["(re,good):hist_re.root",
-                                   "(rmu,good):hist_rmu.root",
-                                   "(be,good):hist_be.root",
-                                   "(bmu,good):hist_bmu.root"],
+                        default = ["(re,good,MV2c10_70):hist_re.root",
+                                   "(rmu,good,MV2c10_70):hist_rmu.root",
+                                   "(be,good,MV2c10_70):hist_be.root",
+                                   "(bmu,good,MV2c10_70):hist_bmu.root"],
                         action = AppendActionCleanDefault,
                         nargs = '?',
-                        help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>],[<top-tagger>]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
+                        help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>][,[<top-tagger>], [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
                         metavar="FILES")
     parser.add_argument("-s", "--systs",
                         dest="systs",
@@ -536,6 +540,9 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--top-tagger',
                         default='good',
                         help='"GLOBAL" Boosted top tagger which will applied to the large-R jet for the hadronic-top reconstruction in the boost selection. Simple logical operation are supported. ONLY WORK IF YOU DON\'T USE ANY TOP-TAGGER IN THE _OUTPUT_ SELECTIONS.')
+    parser.add_argument('-b', '--bot-tagger',
+                        default='MV2c10_70',
+                        help='"GLOBAL" b-quark tagger. ONLY WORK IF YOU DON\'T USE ANY BOT-TAGGER IN THE _OUTPUT_ SELECTIONS.')
     parser.add_argument('--nevents',
                         default = None,
                         type = int,

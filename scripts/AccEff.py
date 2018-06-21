@@ -195,7 +195,7 @@ def doItFast(signal):
         label_signal = "Kaluza-Klein gluon #Gamma=30%"
 
     for did in did_list:
-        for d in glob.glob(os.path.join(files, "user.sbatlamo.%d.*"%did)):
+        for d in glob.glob(os.path.join(files, "user.yuchen.%d.*"%did)):
             for f in glob.glob(os.path.join(d, "*")):
                 print '>>>',  f
                 ct.Add(f)
