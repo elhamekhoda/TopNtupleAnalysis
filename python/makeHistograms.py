@@ -334,7 +334,7 @@ def main():
             analysisCode[k].scalarTYPE = scalarTYPE
         analysisCode[k].set_top_tagger(top_tagger)
         analysisCode[k].set_bot_tagger(bot_tagger)
-        logger.info('({},{},{}): {}'.format(ch.strip(), top_tagger, bot_tagger, channels[k]))
+        logger.info('({:^6},{:^6},{:^12}): {}'.format(ch.strip(), top_tagger, bot_tagger, channels[k]))
 
     isFirstEvent = True
 
@@ -471,7 +471,7 @@ if __name__ == "__main__":
                                    "(bmu,good,MV2c10_70):hist_bmu.root"],
                         action = AppendActionCleanDefault,
                         nargs = '?',
-                        help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>][,[<top-tagger>], [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
+                        help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
                         metavar="FILES")
     parser.add_argument("-s", "--systs",
                         dest="systs",

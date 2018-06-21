@@ -53,36 +53,41 @@ class BoostedTopTagger(Selection):
         return self.passed
 
 class TrackJetBotTagger(Selection):
-    def __init__(self, algorithm = 'MV2c10', WP = '70'):
+    def __init__(self, algorithm = 'MV2c10', WP = '70', systematic_variation = ''):
         self.algorithm = algorithm
         self.WP = WP
-        self.max_deltaR = 0.4
+        self.max_deltaR = 0.4 # Used for `do_association`
+        self.systematic_variation = systematic_variation
+        if self.systematic_variation != '':
+            logger.warn('Please be informed: b-tagging scale factor with systematic variations is currently not valid'
+                        +' because the eigen matrix are not stored in the ttres ntuple produced by the current-version `HQTTtResonancesTools`.'
+                        +' Please consult us and make sure you really know what you\'re doing!')
         self._branch_map = {'tjet_isbtagged': 'tjet_isbtagged_{alg}_{WP}'.format(alg = self.algorithm, WP = self.WP),
                             'tjet_SF': 'tjet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = self.WP)}
         self.jet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Not used in boosted channel
-        self.jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
+        self._jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
     def passes(self, ev, do_association = True):
         self.tjet_isbtagged = getattr(ev, self._branch_map['tjet_isbtagged'])
-        self.tjet_p4 = ROOT.vector('TLorentzVector')()
+        self._tjet_p4 = ROOT.vector('TLorentzVector')()
         for i in range(len(ev.tjet_pt)):
             p4 = ROOT.TLorentzVector()
             p4.SetPtEtaPhiE(ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i], ev.tjet_e[i])
-            self.tjet_p4.push_back(p4)
+            self._tjet_p4.push_back(p4)
         if do_association:
             self.jet_isbtagged.clear()
-            self.jet_p4.clear()
+            self._jet_p4.clear()
             for jet_i in range(len(ev.jet_pt)):
                 jet_p4 = ROOT.TLorentzVector()
                 jet_p4.SetPtEtaPhiE(ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])
-                self.jet_p4.push_back(jet_p4)
+                self._jet_p4.push_back(jet_p4)
                 for tjet_i in range(len(ev.tjet_pt)):
                     self.jet_isbtagged.push_back(self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, ev))
 
     def associated(self, tjet_i, jet_i, ev):
-        deltaR = self.jet_p4[jet_i].DeltaR(self.tjet_p4[tjet_i])
+        deltaR = self._jet_p4[jet_i].DeltaR(self._tjet_p4[tjet_i])
         return (deltaR < self.max_deltaR)
 
-    def scale_factor(self, ev, systematic_variation = ''):
+    def scale_factor(self, ev):
         """
         Retrieve the b-tagging scale factor with systematic variations specified accordingly
 
@@ -112,6 +117,7 @@ class TrackJetBotTagger(Selection):
         nomName = pref
         ptbinInS = 0
         eig = -1
+        systematic_variation = self.systematic_variation
         # if this is a b-tagging variation
         # then check which branch to take to apply the variation
         if 'btag' in systematic_variation:
@@ -148,7 +154,7 @@ class TrackJetBotTagger(Selection):
 
         scale_factor = 1.
         # loop over track jets
-        for i, tjet_p4 in enumerate(self.tjet_p4):
+        for i, tjet_p4 in enumerate(self._tjet_p4):
             # if we requested to vary only jets in a specific pt bin, check if this jet is in the pt bin
             vetoed = False
             if ptbinInS != 0:
@@ -366,9 +372,9 @@ class Analysis(object):
     def set_top_tagger(self, expr):
         self.top_tagger = BoostedTopTagger(expr)
 
-    def set_bot_tagger(self, algorithm_WP = 'MV2c10_70'):
-        algorithm, WP = algorithm_WP.split('_')
-        self.bot_tagger = TrackJetBotTagger(algorithm, WP)
+    def set_bot_tagger(self, algorithm_WP_systs = 'MV2c10_70'):
+        algorithm_WP_systs = algorithm_WP_systs.split('_', 2)
+        self.bot_tagger = TrackJetBotTagger(*algorithm_WP_systs)
 
 class AnaTtresSL(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
@@ -470,7 +476,7 @@ class AnaTtresSL(Analysis):
 
         # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
         #### warning: disabled for now in mc15c
-        btagsf = self.bot_tagger.scale_factor(sel, s)
+        btagsf = self.bot_tagger.scale_factor(sel)
         weight *= btagsf
 
         if s == "singletopup" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
@@ -558,13 +564,7 @@ class AnaTtresSL(Analysis):
         if sel.mcChannelNumber != 0:
             return 1
 
-        nBtag = 0
-        for bidx in range(0, len(sel.tjet_pt)):
-            pb = ROOT.TLorentzVector()
-            pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
-            if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
-                if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
-                    nBtag += 1
+        nBtag = sum(helpers.char2int(jet_isbtagged) for jet_isbtagged in self.bot_tagger.jet_isbtagged)
         isBoosted = 0
         #if 'be' in self.ch or 'bmu' in self.ch:
         #       isBoosted = 1
@@ -633,35 +633,12 @@ class AnaTtresSL(Analysis):
         if not passSel[self.ch]:
             return False
 
-        # bugfix for no large-R jet requirement in QCD
-        #if 'be' in self.ch or 'bmu' in self.ch:
-        #       passes = False
-        #       for i in range(0, len(sel.ljet_pt)):
-        #               if sel.ljet_good[i]:
-        #                       passes = True
-        #                       break
-        #       if not passes:
-        #               return False
         self.bot_tagger.passes(sel, do_association = True)
         # veto resolved event if it passes the boosted channel
         top_tagged = self.top_tagger.passes(sel)
         if ('re' in self.ch or 'rmu' in self.ch) and not "ov" in self.ch:
             if (passSel['be'] or passSel['bmu']) and top_tagged:
                 return False
-
-        # apply b-tagging cut
-        #nBtag = 0
-        #for bidx in range(0, len(sel.tjet_mv2c10)):
-        #       pb = ROOT.TLorentzVector()
-        #       pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
-        #       if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
-        #               if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
-        #                       nBtag += 1
-        #for bidx in range(0, len(sel.jet_mv2c10)):
-        #       if sel.jet_mv2c10[bidx] > 0.8244273:
-        #               nBtag += 1
-        #if nBtag < 1:
-        #       return False
 
         if self.ch in ['be0', 'bmu0', 're0', 'rmu0']:
             if sel.Btagcat != 0:
@@ -766,19 +743,6 @@ class AnaTtresSL(Analysis):
 
         self.h["closestJetDr"][syst].Fill(closestJetDr, w)
         self.h["closestJetPt"][syst].Fill(closestJetPt*1e-3, w)
-        # nBtags = 0
-        # tjets = []
-        # tb = []
-        # for bidx in range(0, len(sel.tjet_pt)):
-        #     pb = ROOT.TLorentzVector()
-        #     pb.SetPtEtaPhiE(sel.tjet_pt[bidx], sel.tjet_eta[bidx], sel.tjet_phi[bidx], sel.tjet_e[bidx])
-        #     if pb.Perp() > 10e3 and math.fabs(pb.Eta()) < 2.5 and sel.tjet_numConstituents[bidx] >= 2:
-        #         tjets.append(pb)
-        #         b = False
-        #         if sel.tjet_mv2c10[bidx] > helpers.MV2C10_CUT:
-        #             nBtags += 1
-        #             b = True
-        #         tb.append(b)
         self.h["nTrkBtagJets"][syst].Fill(sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in self.bot_tagger.tjet_isbtagged), w)
         self.h["mwt"][syst].Fill(math.sqrt(2*l.Perp()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3, w)
         self.h["mu"][syst].Fill(sel.mu, w)
@@ -857,18 +821,6 @@ class AnaTtresSL(Analysis):
                 self.h["largeJetPhi"][syst].Fill(lj.Phi(), w)
                 self.h["largeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[0], w)
                 self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[0], w)
-            # jets = ROOT.vector('TLorentzVector')()
-            # btag = ROOT.vector('bool')()
-            # for k in range(0, len(sel.jet_pt)):
-            #     j = ROOT.TLorentzVector()
-            #     j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k])
-            #     jets.push_back(j)
-            #     tagged = False
-            #     for t in range(0, len(tjets)):
-            #         dr = jets[k].DeltaR(tjets[t])
-            #         if dr < 0.4 and tb[t]:
-            #             tagged = True
-            #     btag.push_back(tagged)
 
             met = ROOT.TLorentzVector()
             met.SetPtEtaPhiE(sel.met_met, 0, sel.met_phi, sel.met_met)
@@ -877,7 +829,7 @@ class AnaTtresSL(Analysis):
             mth = -1
             mwh = -1
             chi2 = 100000
-            ROOT.TopNtupleAnalysis.getMtt(l, self.bot_tagger.jet_p4, self.bot_tagger.jet_isbtagged, met)
+            ROOT.TopNtupleAnalysis.getMtt(l, self.bot_tagger._jet_p4, self.bot_tagger.jet_isbtagged, met)
             mtt = ROOT.TopNtupleAnalysis.res_mtt()
             mtl = ROOT.TopNtupleAnalysis.res_mtl()
             mth = ROOT.TopNtupleAnalysis.res_mth()
