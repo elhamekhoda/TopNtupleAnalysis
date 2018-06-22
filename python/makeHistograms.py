@@ -3,7 +3,7 @@ import os
 import helpers
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
-import warnings
+import csv
 import analysis
 logger = helpers.getLogger('TopNtupleAnalysis.makeHistograms')
 
@@ -23,51 +23,27 @@ def main():
 
     sumOfWeightsAF2 = {} # map of DSID to sum of weights
 
+    fname_pat = "sumOfWeights{}_R21.txt"
     if not options.data:
-        if options.pdf != "":
-            pfs = open(os.path.join(helpers.data_path, "sumOfWeightspdf_new.txt"))
-            for line in pfs.readlines():
-                line_spl = line.split()
-                if not int(line_spl[0]) in pdfSumOfWeights:
-                    pdfSumOfWeights[int(line_spl[0])] = {}
-                if not line_spl[1] in pdfSumOfWeights[int(line_spl[0])]:
-                    pdfSumOfWeights[int(line_spl[0])][line_spl[1]] = {}
-                if line_spl[1] == "nominal": # nominal for PDF variation sample
-                    sumOfWeights[int(line_spl[0])] = float(line_spl[3])
-                else:
-                    pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
-            pfs.close()
-            pfs = open(os.path.join(helpers.data_path, "sumOfWeightswjpdf_new.txt"))
-            for line in pfs.readlines():
-                line_spl = line.split()
-                if not int(line_spl[0]) in pdfSumOfWeights:
-                    pdfSumOfWeights[int(line_spl[0])] = {}
-                if not line_spl[1] in pdfSumOfWeights[int(line_spl[0])]:
-                    pdfSumOfWeights[int(line_spl[0])][line_spl[1]] = {}
-                if line_spl[1] == "nominal": # nominal for PDF variation sample
-                    sumOfWeights[int(line_spl[0])] = float(line_spl[3])
-                else:
-                    pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
-            pfs.close()
-        else:
-            fs = open(os.path.join(helpers.data_path, "sumOfWeights_new.txt"))
-            for line in fs.readlines():
-                line_spl = line.split()
-                sumOfWeights[int(line_spl[0])] = float(line_spl[1])
-            fs.close()
-            fs = open(os.path.join(helpers.data_path, "sumOfWeightssyst_new.txt"))
-            for line in fs.readlines():
-                line_spl = line.split()
-                sumOfWeights[int(line_spl[0])] = float(line_spl[1])
-            fs.close()
-
-            fs = open(os.path.join(helpers.data_path, "sumOfWeightssystaf2_new.txt"))
-            for line in fs.readlines():
-                line_spl = line.split()
-                sumOfWeightsAF2[int(line_spl[0])] = float(line_spl[1])
-            fs.close()
-
-    #print pdfSumOfWeights
+        csv.register_dialect('sumOfWeightsDATA', delimiter = ' ', skipinitialspace = True, quoting = csv.QUOTE_NONE)
+        for t in ('', 'syst', 'systaf2', 'pdf', 'wjpdf'):
+            if options.pdf == '' and t in ('pdf', 'wjpdf'):
+                continue
+            try:
+                fname = os.path.join(helpers.data_path, fname_pat.format(t))
+                logger.info('Retrieve TOTAL MC weights from FILE("{}")'.format(fname))
+                with open(fname, 'rb') as fs:
+                    csv_reader = csv.DictReader(fs, dialect = 'sumOfWeightsDATA')
+                    for r in csv_reader:
+                        if r['pdfName'] == 'nominal': # nominal for PDF variation sample
+                            if t == 'systaf2':
+                                sumOfWeightsAF2[int(r['channel'])] = float(r['SumOfWeights'])
+                            else:
+                                sumOfWeights[int(r['channel'])] = float(r['SumOfWeights'])
+                        else:
+                            pdfSumOfWeights.setdefault(r['channel'], {}).setdefault(r['pdfName'], {})[r['pdfNumber']] = float(r['SumOfWeights'])
+            except IOError:
+                logger.warn('FILE("{}") not found.'.format(fname))
 
     logger.info("Loading xsec.")
     xsec_mc15_13tev_ttres = "/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data"
@@ -76,8 +52,6 @@ def main():
     else:
         logger.critical('Can\'t access TDP in GroupData. Read cross-section from local records.')
         helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
-    #helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "../TopDataPreparation/data/XSection-MC15-13TeV.data"))
-    #loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
 
     # check if there is any W+jets sample there
     isWjets = False
@@ -261,7 +235,7 @@ def main():
         else:
             histSuffixes.append(item)
     if '\;' in options.output:
-        warnings.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
+        logger.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
         channels = helpers.output_expr_reader_old(options.output)
     else:
         channels = dict(helpers.output_expr_reader_new(options.output))
@@ -385,13 +359,13 @@ def main():
                 if options.systs != 'pdf': #'pdf_' in suffix:
                     if not options.af2:
                         if not channel in sumOfWeights:
-                            logger.error('Could not find <DSID: %s> in "sumOfWeights".',channel)
+                            logger.error('Could not find <DSID: %s> in DICT("sumOfWeights").', channel)
                             weight = 0
                         else:
                             weight /= sumOfWeights[channel]
                     else:
                         if not channel in sumOfWeightsAF2:
-                            logger.error('Could not find <DSID: %s> in "sunOfWeightsAF2"',channel)
+                            logger.error('Could not find <DSID: %s> in DICT("sunOfWeightsAF2")', channel)
                             weight = 0
                         else:
                             weight /= sumOfWeightsAF2[channel]
@@ -402,7 +376,7 @@ def main():
                         pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
                         pdfNumber = int(suffix.rsplit('_', 1)[1])
                         if not channel in pdfSumOfWeights:
-                            logger.error('Could not find <DSID: %s> in "pdfSumOfWeights".',channel)
+                            logger.error('Could not find <DSID: %s> in DICT("pdfSumOfWeights").', channel)
                             weight = 0
                         else:
                             weight /= pdfSumOfWeights[channel][pdfName][pdfNumber]

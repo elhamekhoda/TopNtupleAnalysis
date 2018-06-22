@@ -1,5 +1,4 @@
 import os
-import sys
 import subprocess
 import glob
 try:
@@ -9,7 +8,6 @@ except ImportError:
     raise ImportError("HQTTtResonancesTools is not installed or dataset does not exist.")
 import rucio.client
 import TopExamples.grid
-
 import helpers
 
 logger = helpers.getLogger('TopNtupleAnalysis.samples')
@@ -162,11 +160,11 @@ class Sample(object):
         if not self._input_files:
             logger.critical('{!r}: inputs list is empty!'.format(self))
         return self._input_files
-    def set_input_files(self, alist = None, force = True, sort = True):
+    def set_input_files(self, alist = None, force = True, sort = True, inplace = True):
         input_files = []
         if alist == None:
-            if not force and getattr(self, '_input_files', None):
-                return
+            if not force and inplace and bool(getattr(self, '_input_files', False)):
+                return self._input_files
             for files in (replica['pfns'].keys() for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root'])):
                 input_files.append(files[0])
         elif type(alist) == str:
@@ -174,7 +172,11 @@ class Sample(object):
         else:
             input_files = list(alist)
         input_files.sort()
-        self._input_files = input_files
+        if not inplace:
+            return input_files
+        else:
+            self._input_files = input_files
+            return self._input_files
     input_files = property(get_input_files, set_input_files)
     def download_dataset(self, ds_name = None, only_retrieve_cmd = False):
         dirname = os.path.abspath(ds_name or self.download_to)
@@ -212,11 +214,21 @@ class Sample(object):
             return cmds
     def __repr__(self):
         return '<{}.{}("{}")>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name)
-    def sum_of_weights(self):
-        raise NotImplementedError
-    def write_inputsfile(self, fname):
+    def sum_of_weights(self, systs = [''], online = True):
+        if not self.commited:
+            online = True
+        logger.info('Compute TOTAL MC Weights using {} datasets'.format('online' if online else 'offline'))
+        import tempfile
+        from TopNtupleAnalysis.sumWeights import sumWeights
+        infile = tempfile.NamedTemporaryFile(delete = False)
+        infile.close()
+        self.write_inputsfile(infile.name, inplace = False if online else True)
+        total_weights = sumWeights([infile.name]*len(systs), systs, suffix = '_R21')[0]['SumOfWeights']
+        os.remove(infile.name)
+        return total_weights
+    def write_inputsfile(self, fname, **set_input_files_kwds):
         with open(fname, 'w') as infile:
-            infile.writelines('\n'.join(self.input_files))
+            infile.writelines('\n'.join(self.set_input_files(force = False, **set_input_files_kwds)))
 
 class SubSample(Sample):
     def __init__(self, parent, input_files, suffix):
@@ -252,6 +264,8 @@ class SubSample(Sample):
                     subprocess.call(cmd)
         if only_retrieve_cmd:
             return cmds
+    def sum_of_weights(self):
+        raise NotImplementedError('I don\'t think you really want to do this.')
 
 def part_sample(sample, max_input_files = 5, sort = True):
     if not sample.commited:

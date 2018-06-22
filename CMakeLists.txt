@@ -81,7 +81,9 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
                                   python/helpers.py
                                   python/makeHistograms.py
                                   python/analysis.py
-                                  python/wjets.py)
+                                  python/wjets.py
+                                  python/sumWeights.py
+                                  )
     atlas_install_scripts( scripts/tna-run )
 
 else()
