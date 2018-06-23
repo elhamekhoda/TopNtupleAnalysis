@@ -14,7 +14,7 @@ s = [samples.Sample(sample_name = s,
 
 # This is for generating SumOfWeights files
 # for si in s:
-#    si.sum_of_weights()
+#     si.sum_of_weights()
 
 def main(samples, systematics, **run_kwds):
     r = run.Run(samples = samples, **run_kwds)
