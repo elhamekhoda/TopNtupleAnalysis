@@ -185,9 +185,9 @@ class Run(object):
             cluster_arguments.extend(["--maxNFilesPerJob=" + str(self.max_inputs_per_job)])
             cluster_arguments.extend(['--useAthenaPackages'])
             cluster_arguments.extend(['--excludeFile=./'])
-            if self.do_merge:
-                cluster_arguments.extend(['--mergeOutput'])
-                finalize_kwds['do_merge'] = False # this is going to pass to Run.finalize so that it won't merge twice
+#            if self.do_merge: # TODO: seems to cause some issues. commented out until resolved
+#                cluster_arguments.extend(['--mergeOutput'])
+#                finalize_kwds['do_merge'] = False # this is going to pass to Run.finalize so that it won't merge twice
             execute_kwds.setdefault('stages', ('exec',))
             execute_kwds.setdefault('max_inputs_per_job', False)
             execute_kwds.setdefault('check_exitcode', tuple())
