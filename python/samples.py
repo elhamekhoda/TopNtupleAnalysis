@@ -52,6 +52,12 @@ MAP_TO_SAMPLES = {# <sample>: <physics_short>
 def register_samples(mapping):
     MAP_TO_SAMPLES.update(mapping)
 
+def write_totalweight_of_samples(list_of_samples, systs = [''], online = True, mode = 'auto'):
+    isFirst = True
+    for s in list_of_samples:
+        s.sum_of_weights(systs = systs, online = online, mode = mode if isFirst else 'a')
+        isFirst = False
+
 class Sample(object):
     _client = rucio.client.Client()
     @staticmethod
@@ -214,7 +220,9 @@ class Sample(object):
             return cmds
     def __repr__(self):
         return '<{}.{}("{}")>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name)
-    def sum_of_weights(self, systs = [''], online = True):
+    def sum_of_weights(self, systs = [''], online = True, mode = 'return'):
+        if self.sample_name == 'data':
+            raise TypeError('DO NOT use DATA Weights')
         if not self.commited:
             online = True
         logger.info('Compute TOTAL MC Weights using {} datasets'.format('online' if online else 'offline'))
@@ -223,7 +231,7 @@ class Sample(object):
         infile = tempfile.NamedTemporaryFile(delete = False)
         infile.close()
         self.write_inputsfile(infile.name, inplace = False if online else True)
-        total_weights = sumWeights([infile.name]*len(systs), systs, suffix = '_R21')[0]['SumOfWeights']
+        total_weights = sumWeights([infile.name]*len(systs), systs, suffix = '_R21',  mode = mode)[0]['SumOfWeights']
         os.remove(infile.name)
         return total_weights
     def write_inputsfile(self, fname, **set_input_files_kwds):
