@@ -44,6 +44,8 @@ def main():
                             pdfSumOfWeights.setdefault(r['channel'], {}).setdefault(r['pdfName'], {})[r['pdfNumber']] = float(r['SumOfWeights'])
             except IOError:
                 logger.warn('FILE("{}") not found.'.format(fname))
+        if {} == sumOfWeights == pdfSumOfWeights == sumOfWeightsAF2:
+            raise IOError('TotalMCWeights files not found. Did you create them first?\nUse samples.write_totalweight_of_samples() to create TotalMCWeights files.')
 
     logger.info("Loading xsec.")
     xsec_mc15_13tev_ttres = "/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data"

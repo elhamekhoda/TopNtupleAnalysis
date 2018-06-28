@@ -155,7 +155,7 @@ if __name__ == "__main__":
                         #dest="suffix", default="_test",
                         help="Suffix to be added in the output file.", metavar="SUFFIX")
     parser.add_argument('-m', '--mode',
-                        default = '',
+                        default = 'auto',
                         choices = ['auto', 'a', 'w'])
 
     options = parser.parse_args()

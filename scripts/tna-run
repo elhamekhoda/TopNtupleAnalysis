@@ -12,9 +12,9 @@ s = [samples.Sample(sample_name = s,
                     download_to = os.path.join(os.curdir, 'data'),
                     commit_when_init = False) for s in samples.MAP_TO_SAMPLES if 'zprime' in s]
 
-# This is for generating SumOfWeights files
-# for si in s:
-#     si.sum_of_weights()
+# This is for generating SumOfWeights files.
+# Possible systs are ['','systaf2',syst,'pdf','wjpdf']
+#samples.write_totalweight_of_samples(s, systs = ['']) # To use it, comment it out
 
 def main(samples, systematics, **run_kwds):
     r = run.Run(samples = samples, **run_kwds)
