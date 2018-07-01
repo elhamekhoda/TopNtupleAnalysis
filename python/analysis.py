@@ -53,7 +53,10 @@ class BoostedTopTagger(Selection):
         return self.passed
 
 class TrackJetBotTagger(Selection):
-    def __init__(self, algorithm = 'MV2c10', WP = '70', systematic_variation = ''):
+    WP2D = {'MV2c10':    {'60':  0.86, '70':  0.66, '77':  0.38, '85': -0.15},
+            'MV2c10mu':  {'60':  0.95, '70':  0.87, '77':  0.71, '85':  0.23},
+            'MV2c10rnn': {'60':  0.96, '70':  0.87, '77':  0.71, '85':  0.26}} # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
+    def __init__(self, algorithm = 'MV2c10', WP = '70', systematic_variation = '', strategy = 'rebel'):
         self.algorithm = algorithm
         self.WP = WP
         self.max_deltaR = 0.4 # Used for `do_association`
@@ -63,10 +66,23 @@ class TrackJetBotTagger(Selection):
                         +' because the eigen matrix are not stored in the ttres ntuple produced by the current-version `HQTTtResonancesTools`.'
                         +' Please consult us and make sure you really know what you\'re doing!')
         self._branch_map = {'tjet_isbtagged': 'tjet_isbtagged_{alg}_{WP}'.format(alg = self.algorithm, WP = self.WP),
-                            'tjet_SF': 'tjet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = self.WP)}
+                            'tjet_SF': 'tjet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = self.WP),
+                            'tjet_discriminant': 'tjet_{alg}'.format(alg = self.algorithm.lower())}
+        self.strategy = strategy
+        self.min_discriminant = self.WP2D.get(self.algorithm, {}).get(WP, -999)
+        if self.strategy == 'rebel':
+            logger.debug('The b-tagging strategy is "rebel", which means b-tagging will be re-computed internally')
+        elif self.strategy == 'obey':
+            logger.debug('The b-tagging strategy is "rebel", which means using the b-tagging is done by external program. (i.e. HQTTtResonancesTools)')
+            if self.min_discriminant == -999:
+                raise KeyError('For STRATEGY("rebel"), you always need an available "Alg./WP" stored in WP2D!')
+        self.passes = getattr(self, '_passes_{}'.format(self.strategy))
+
         self.jet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Not used in boosted channel
         self._jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
-    def passes(self, ev, do_association = True):
+
+    def _passes_obey(self, ev, do_association = True):
+        raise DeprecationWarning("This is temporarily deprecated til we fix the bug of trk b-tagging selector in HQTTtResonancesTools -- 01.07.2018")
         self.tjet_isbtagged = getattr(ev, self._branch_map['tjet_isbtagged'])
         self._tjet_p4 = ROOT.vector('TLorentzVector')()
         for i in range(len(ev.tjet_pt)):
@@ -80,8 +96,35 @@ class TrackJetBotTagger(Selection):
                 jet_p4 = ROOT.TLorentzVector()
                 jet_p4.SetPtEtaPhiE(ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])
                 self._jet_p4.push_back(jet_p4)
+                trkbjet_associated = False
                 for tjet_i in range(len(ev.tjet_pt)):
-                    self.jet_isbtagged.push_back(self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, ev))
+                    if self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, ev):
+                        trkbjet_associated = True
+                        break
+                self.jet_isbtagged.push_back(trkbjet_associated)
+
+    def _passes_rebel(self, ev, do_association = True):
+        self.tjet_isbtagged = ROOT.vector(int)()
+        self._tjet_p4 = ROOT.vector('TLorentzVector')()
+        for i, discriminant in enumerate(getattr(ev, self._branch_map['tjet_discriminant'])):
+            p4 = ROOT.TLorentzVector()
+            p4.SetPtEtaPhiE(ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i],ev.tjet_e[i])
+            if p4.Perp() > 10e3 and math.fabs(p4.Eta()) < 2.5 and ev.tjet_numConstituents[i] >= 2:
+                self._tjet_p4.push_back(p4)
+                self.tjet_isbtagged.push_back(discriminant > self.min_discriminant)
+        if do_association:
+            self.jet_isbtagged.clear()
+            self._jet_p4.clear()
+            for jet_i in range(len(ev.jet_pt)):
+                jet_p4 = ROOT.TLorentzVector()
+                jet_p4.SetPtEtaPhiE(ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])
+                self._jet_p4.push_back(jet_p4)
+                trkbjet_associated = False
+                for tjet_i in range(len(ev.tjet_pt)):
+                    if self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, ev):
+                        trkbjet_associated = True
+                        break
+                self.jet_isbtagged.push_back(trkbjet_associated)
 
     def associated(self, tjet_i, jet_i, ev):
         deltaR = self._jet_p4[jet_i].DeltaR(self._tjet_p4[tjet_i])
@@ -453,7 +496,7 @@ class AnaTtresSL(Analysis):
         self.addVar("mtlep_res", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
         self.addVar("mthad_res", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
         self.add("mwhad_res", 40, 0, 400)
-        self.add("chi2", 50, -3, 7)
+        self.add("chi2", 65, -3, 10)
         #self.addVar("mtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
         self.add("mtt", 600 , 0, 6000)
         self.add("mttr", 600, 0, 6000)
