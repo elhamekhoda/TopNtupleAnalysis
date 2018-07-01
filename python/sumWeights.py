@@ -7,11 +7,13 @@ logger = helpers.getLogger('TopNtupleAnalysis.sumWeights')
 pdfList = ['PDF4LHC15_nlo_30']
 wjpdfList = [7]+range(11, 110+1)
 
-def main(files, types, suffix):
-    files = files.split(',')
-    types = types.split(',')
+def sumWeights(files, types, suffix, mode = 'auto'):
     assert len(files) == len(types), '"types" must be of the same size of "files"'
+    ret = []
+    l_fmt = (' '*20).join(['{channel:>20}', '{pdfName:>20}', '{pdfNumber:>20}', '{SumOfWeights:>20}\n'])
+    header = l_fmt.format(**{'channel': 'channel', 'pdfName': 'pdfName', 'pdfNumber': 'pdfNumber', 'SumOfWeights': 'SumOfWeights'})
     for f, t in zip(files, types):
+        lines = []
         if t == "pdf":
             pdfSumOfWeights = {} # map of DSID to map of PDF variation names to sum of weights
             t_pdfSumWeights = ROOT.TChain("PDFsumWeights")
@@ -29,12 +31,13 @@ def main(files, types, suffix):
                     for m in range(0, len(pdfAttr)):
                         pdfSumOfWeights[t_pdfSumWeights.dsid][l][m] += pdfAttr[m]
 
-            pfs = open(os.path.join(helpers.data_path, "sumOfWeights%s%s.txt") % (t, suffix), "w")
             for channel in sorted(pdfSumOfWeights.keys()):
                 for pdfName in sorted(pdfSumOfWeights[channel].keys()):
                     for pdfNumber in range(0, len(pdfSumOfWeights[channel][pdfName])):
-                        pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", pdfName, "", pdfNumber, "", pdfSumOfWeights[channel][pdfName][pdfNumber]))
-                        logger.debug("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", pdfName, "", pdfNumber, "", pdfSumOfWeights[channel][pdfName][pdfNumber]))
+                        entry = {'channel': channel, 'pdfName': pdfName, 'pdfNumber': pdfNumber, 'SumOfWeights':pdfSumOfWeights[channel][pdfName][pdfNumber]}
+                        lines.append(l_fmt.format(**entry))
+                        logger.debug(lines[-1])
+                        ret.append(entry)
 
             sumOfWeights = {} # map of DSID to sum of weights
             t_sumWeights =  ROOT.TChain("sumWeights")
@@ -46,9 +49,11 @@ def main(files, types, suffix):
                 sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
 
             for channel in sorted(sumOfWeights.keys()):
-                pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", "nominal", "", -1, "", sumOfWeights[channel]))
-                logger.debug("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", "nominal", "", -1, "", sumOfWeights[channel]))
-            pfs.close()
+                entry = {'channel': channel, 'pdfName': 'nominal', 'pdfNumber': -1, 'SumOfWeights': sumOfWeights[channel]}
+                lines.append(l_fmt.format(**entry))
+                logger.debug(lines[-1])
+                ret.append(entry)
+
         elif t == "wjpdf":
             pdfName = "NNPDF30_nnlo_as_0118"
             wjpdfSumOfWeights = {} # map of DSID to map of PDF variation names to sum of weights
@@ -69,11 +74,12 @@ def main(files, types, suffix):
                         logger.info(" ".join("Read ", value, " in item ", wjpdfList[l], " in file ", t_wjpdfSumWeights.GetCurrentFile().GetName()))
                     wjpdfSumOfWeights[t_wjpdfSumWeights.dsid][l] += value
 
-            pfs = open(os.path.join(helpers.data_path, "sumOfWeights%s%s.txt") % (t, suffix), "w")
             for channel in sorted(wjpdfSumOfWeights.keys()):
                 for pdfNumber in range(0, len(wjpdfSumOfWeights[channel])):
-                    pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", pdfName, "", pdfNumber, "", wjpdfSumOfWeights[channel][pdfNumber]))
-                    logger.debug("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", pdfName, "", pdfNumber, "", wjpdfSumOfWeights[channel][pdfNumber]))
+                    entry = {'channel': channel, 'pdfName': pdfName, 'pdfNumber': pdfNumber, 'SumOfWeights': wjpdfSumOfWeights[channel][pdfNumber]}
+                    lines.append(l_fmt.format(**entry))
+                    logger.debug(lines[-1])
+                    ret.append(entry)
 
             sumOfWeights = {} # map of DSID to sum of weights
             t_sumWeights = ROOT.TChain("sumWeights")
@@ -85,9 +91,11 @@ def main(files, types, suffix):
                 sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
 
             for channel in sorted(sumOfWeights.keys()):
-                pfs.write("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", "nominal", "", -1, "", sumOfWeights[channel]))
-                logger.debug("%20d%20s%20s%20s%20d%20s%20f\n" % (channel, "", "nominal", "", -1, "", sumOfWeights[channel]))
-            pfs.close()
+                entry = {'channel': channel, 'pdfName': 'nominal', 'pdfNumber': -1, 'SumOfWeights': sumOfWeights[channel]}
+                lines.append(l_fmt.format(**entry))
+                logger.debug(lines[-1])
+                ret.append(entry)
+
         else:
             sumOfWeights = {} # map of DSID to sum of weights
             t_sumWeights = ROOT.TChain("sumWeights")
@@ -99,11 +107,31 @@ def main(files, types, suffix):
                     sumOfWeights[t_sumWeights.dsid] = 0
                 sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
 
-            fs = open(os.path.join(helpers.data_path, "sumOfWeights%s%s.txt") % (t, suffix), "w")
+            
             for channel in sorted(sumOfWeights.keys()):
-                fs.write("%20d%20s%20f\n" % (channel, "", sumOfWeights[channel]))
-                logger.debug("{:d}:{:>40.2f}".format(channel, sumOfWeights[channel]))
-            fs.close()
+                entry = {'channel': channel, 'pdfName': 'nominal', 'pdfNumber': -1, 'SumOfWeights': sumOfWeights[channel]}
+                lines.append(l_fmt.format(**entry))
+                logger.debug(lines[-1])
+                ret.append(entry)
+
+        if mode != 'return':
+            sumOfWeights_file = os.path.join(helpers.data_path, "sumOfWeights%s%s.txt") % (t, suffix)
+            if not os.path.exists(sumOfWeights_file):
+                logger.info('Creating new sumOfWeights file: FILE("%s")', sumOfWeights_file)
+                if mode == 'auto':
+                    mode = 'w'
+                if mode == 'a':
+                    logger.warn('Headers will not be correctly written in the append mode.')
+            else:
+                logger.info('Updating existing sumOfWeights file: FILE("%s")', sumOfWeights_file)
+                if mode == 'auto':
+                    mode = 'a'
+            if mode == 'w':
+                lines.insert(0, header)
+            assert mode in ['a', 'w']
+            with open(sumOfWeights_file, mode) as f:
+                f.writelines(lines)
+    return ret
 
 
 if __name__ == "__main__":
@@ -123,9 +151,12 @@ if __name__ == "__main__":
                         dest="types", default = '',
                         help="Categories they should be added in.", metavar="LIST")
     parser.add_argument("-s", "--suffix",
-                        dest="suffix", default="_new",
+                        dest="suffix", default="_R21",
                         #dest="suffix", default="_test",
                         help="Suffix to be added in the output file.", metavar="SUFFIX")
+    parser.add_argument('-m', '--mode',
+                        default = 'auto',
+                        choices = ['auto', 'a', 'w'])
 
     options = parser.parse_args()
-    main(options.files, options.types, options.suffix)
+    sumWeights(options.files.split(','), options.types.split(','), options.suffix, options.mode)

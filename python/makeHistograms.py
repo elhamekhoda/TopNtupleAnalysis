@@ -3,7 +3,7 @@ import os
 import helpers
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
-import warnings
+import csv
 import analysis
 logger = helpers.getLogger('TopNtupleAnalysis.makeHistograms')
 
@@ -23,51 +23,29 @@ def main():
 
     sumOfWeightsAF2 = {} # map of DSID to sum of weights
 
+    fname_pat = "sumOfWeights{}_R21.txt"
     if not options.data:
-        if options.pdf != "":
-            pfs = open(os.path.join(helpers.data_path, "sumOfWeightspdf_new.txt"))
-            for line in pfs.readlines():
-                line_spl = line.split()
-                if not int(line_spl[0]) in pdfSumOfWeights:
-                    pdfSumOfWeights[int(line_spl[0])] = {}
-                if not line_spl[1] in pdfSumOfWeights[int(line_spl[0])]:
-                    pdfSumOfWeights[int(line_spl[0])][line_spl[1]] = {}
-                if line_spl[1] == "nominal": # nominal for PDF variation sample
-                    sumOfWeights[int(line_spl[0])] = float(line_spl[3])
-                else:
-                    pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
-            pfs.close()
-            pfs = open(os.path.join(helpers.data_path, "sumOfWeightswjpdf_new.txt"))
-            for line in pfs.readlines():
-                line_spl = line.split()
-                if not int(line_spl[0]) in pdfSumOfWeights:
-                    pdfSumOfWeights[int(line_spl[0])] = {}
-                if not line_spl[1] in pdfSumOfWeights[int(line_spl[0])]:
-                    pdfSumOfWeights[int(line_spl[0])][line_spl[1]] = {}
-                if line_spl[1] == "nominal": # nominal for PDF variation sample
-                    sumOfWeights[int(line_spl[0])] = float(line_spl[3])
-                else:
-                    pdfSumOfWeights[int(line_spl[0])][line_spl[1]][int(line_spl[2])] = float(line_spl[3])
-            pfs.close()
-        else:
-            fs = open(os.path.join(helpers.data_path, "sumOfWeights_new.txt"))
-            for line in fs.readlines():
-                line_spl = line.split()
-                sumOfWeights[int(line_spl[0])] = float(line_spl[1])
-            fs.close()
-            fs = open(os.path.join(helpers.data_path, "sumOfWeightssyst_new.txt"))
-            for line in fs.readlines():
-                line_spl = line.split()
-                sumOfWeights[int(line_spl[0])] = float(line_spl[1])
-            fs.close()
-
-            fs = open(os.path.join(helpers.data_path, "sumOfWeightssystaf2_new.txt"))
-            for line in fs.readlines():
-                line_spl = line.split()
-                sumOfWeightsAF2[int(line_spl[0])] = float(line_spl[1])
-            fs.close()
-
-    #print pdfSumOfWeights
+        csv.register_dialect('sumOfWeightsDATA', delimiter = ' ', skipinitialspace = True, quoting = csv.QUOTE_NONE)
+        for t in ('', 'syst', 'systaf2', 'pdf', 'wjpdf'):
+            if options.pdf == '' and t in ('pdf', 'wjpdf'):
+                continue
+            try:
+                fname = os.path.join(helpers.data_path, fname_pat.format(t))
+                logger.info('Retrieve TOTAL MC weights from FILE("{}")'.format(fname))
+                with open(fname, 'rb') as fs:
+                    csv_reader = csv.DictReader(fs, dialect = 'sumOfWeightsDATA')
+                    for r in csv_reader:
+                        if r['pdfName'] == 'nominal': # nominal for PDF variation sample
+                            if t == 'systaf2':
+                                sumOfWeightsAF2[int(r['channel'])] = float(r['SumOfWeights'])
+                            else:
+                                sumOfWeights[int(r['channel'])] = float(r['SumOfWeights'])
+                        else:
+                            pdfSumOfWeights.setdefault(r['channel'], {}).setdefault(r['pdfName'], {})[r['pdfNumber']] = float(r['SumOfWeights'])
+            except IOError:
+                logger.warn('FILE("{}") not found.'.format(fname))
+        if {} == sumOfWeights == pdfSumOfWeights == sumOfWeightsAF2:
+            raise IOError('TotalMCWeights files not found. Did you create them first?\nUse samples.write_totalweight_of_samples() to create TotalMCWeights files.')
 
     logger.info("Loading xsec.")
     xsec_mc15_13tev_ttres = "/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data"
@@ -76,8 +54,6 @@ def main():
     else:
         logger.critical('Can\'t access TDP in GroupData. Read cross-section from local records.')
         helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
-    #helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "../TopDataPreparation/data/XSection-MC15-13TeV.data"))
-    #loadXsec(Xsec, "../share/MC15c-SherpaWZ.data")
 
     # check if there is any W+jets sample there
     isWjets = False
@@ -261,14 +237,17 @@ def main():
         else:
             histSuffixes.append(item)
     if '\;' in options.output:
-        warnings.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
+        logger.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
         channels = helpers.output_expr_reader_old(options.output)
     else:
         channels = dict(helpers.output_expr_reader_new(options.output))
     # Use default top-tagger if top-tagger is not set for this channel
     for ch in channels.keys():
         if len(ch) == 1:
-            channels[ch + (options.top_tagger,)] = channels.pop(ch)
+            channels[ch + (options.top_tagger, )] = channels.pop(ch)
+        if len(ch) == 2:
+            channels[ch + (options.bot_tagger, )] = channels.pop(ch)
+
 
     analysisCode = {}
     #print "Systematics: ", histSuffixes
@@ -301,7 +280,7 @@ def main():
         helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
         logger.info("2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE))
     for k in channels:
-        ch, top_tagger = k
+        ch, top_tagger, bot_tagger = k
         analysisCode[k] = anaClass(ch, histSuffixes, channels[k])
         analysisCode[k].doTree = do_tree
         analysisCode[k].keep = options.WjetsHF
@@ -330,7 +309,8 @@ def main():
             analysisCode[k].scalarTANB = scalarTANB
             analysisCode[k].scalarTYPE = scalarTYPE
         analysisCode[k].set_top_tagger(top_tagger)
-        logger.info('({},{}): {}'.format(ch.strip(), top_tagger, channels[k]))
+        analysisCode[k].set_bot_tagger(bot_tagger)
+        logger.info('({:^6},{:^6},{:^12}): {}'.format(ch.strip(), top_tagger, bot_tagger, channels[k]))
 
     isFirstEvent = True
 
@@ -381,13 +361,13 @@ def main():
                 if options.systs != 'pdf': #'pdf_' in suffix:
                     if not options.af2:
                         if not channel in sumOfWeights:
-                            logger.error('Could not find <DSID: %s> in "sumOfWeights".',channel)
+                            logger.error('Could not find <DSID: %s> in DICT("sumOfWeights").', channel)
                             weight = 0
                         else:
                             weight /= sumOfWeights[channel]
                     else:
                         if not channel in sumOfWeightsAF2:
-                            logger.error('Could not find <DSID: %s> in "sunOfWeightsAF2"',channel)
+                            logger.error('Could not find <DSID: %s> in DICT("sunOfWeightsAF2")', channel)
                             weight = 0
                         else:
                             weight /= sumOfWeightsAF2[channel]
@@ -398,7 +378,7 @@ def main():
                         pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
                         pdfNumber = int(suffix.rsplit('_', 1)[1])
                         if not channel in pdfSumOfWeights:
-                            logger.error('Could not find <DSID: %s> in "pdfSumOfWeights".',channel)
+                            logger.error('Could not find <DSID: %s> in DICT("pdfSumOfWeights").', channel)
                             weight = 0
                         else:
                             weight /= pdfSumOfWeights[channel][pdfName][pdfNumber]
@@ -461,13 +441,13 @@ if __name__ == "__main__":
                         metavar="ANALYSIS")
     parser.add_argument("-o", "--output",
                         dest="output",
-                        default = ["(re,good):hist_re.root",
-                                   "(rmu,good):hist_rmu.root",
-                                   "(be,good):hist_be.root",
-                                   "(bmu,good):hist_bmu.root"],
+                        default = ["(re,good,MV2c10_70):hist_re.root",
+                                   "(rmu,good,MV2c10_70):hist_rmu.root",
+                                   "(be,good,MV2c10_70):hist_be.root",
+                                   "(bmu,good,MV2c10_70):hist_bmu.root"],
                         action = AppendActionCleanDefault,
                         nargs = '?',
-                        help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>],[<top-tagger>]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
+                        help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
                         metavar="FILES")
     parser.add_argument("-s", "--systs",
                         dest="systs",
@@ -536,6 +516,9 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--top-tagger',
                         default='good',
                         help='"GLOBAL" Boosted top tagger which will applied to the large-R jet for the hadronic-top reconstruction in the boost selection. Simple logical operation are supported. ONLY WORK IF YOU DON\'T USE ANY TOP-TAGGER IN THE _OUTPUT_ SELECTIONS.')
+    parser.add_argument('-b', '--bot-tagger',
+                        default='MV2c10_70',
+                        help='"GLOBAL" b-quark tagger. ONLY WORK IF YOU DON\'T USE ANY BOT-TAGGER IN THE _OUTPUT_ SELECTIONS.')
     parser.add_argument('--nevents',
                         default = None,
                         type = int,

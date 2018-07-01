@@ -2,7 +2,6 @@
 import os
 import sys
 import re
-import glob
 import copy
 import datetime
 import subprocess
@@ -25,18 +24,18 @@ class Run(object):
             os.makedirs(self.output_dir)
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
-        self.selections = [('(be,     good)', '{channel}_{sample}.root'),
-                           ('(bmu,    good)', '{channel}_{sample}.root'),
-                           ('(re,     good)', '{channel}_{sample}.root'),
-                           ('(rmu,    good)', '{channel}_{sample}.root'),
-                           ('(be2015, good)', '{channel}_{sample}.root'),
-                           ('(bmu2015,good)', '{channel}_{sample}.root'),
-                           ('(re2015, good)', '{channel}_{sample}.root'),
-                           ('(rmu2015,good)', '{channel}_{sample}.root'),
-                           ('(be2016, good)', '{channel}_{sample}.root'),
-                           ('(bmu2016,good)', '{channel}_{sample}.root'),
-                           ('(re2016, good)', '{channel}_{sample}.root'),
-                           ('(rmu2016,good)', '{channel}_{sample}.root')]
+        self.selections = [('(be,     good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(bmu,    good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(re,     good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(rmu,    good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(be2015, good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(bmu2015,good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(re2015, good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(rmu2015,good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(be2016, good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(bmu2016,good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(re2016, good, MV2c10_70)', '{channel}_{sample}.root'),
+                           ('(rmu2016,good, MV2c10_70)', '{channel}_{sample}.root')]
         self.analysis_type = analysis_type
         self.analysis_exts = []
         self.max_inputs_per_job = max_inputs_per_job
@@ -132,7 +131,12 @@ class Run(object):
                 outstream[selection]['output'] = os.path.join(self.output_dir, output_fname.format(channel = channel, sample = sample.sample_name))
                 outstream[selection]['sub_outputs'] = [os.path.join(self.output_dir, output_fname.format(channel = channel, sample = s.sample_name)) for s in subsamples]
             for i, s in enumerate(subsamples):
-                jobs = [(selection, outstream[selection]['sub_outputs'][i]) for selection in outstream if (not os.path.exists(outstream[selection]['sub_outputs'][i])) or force_rerun]
+                jobs = []
+                for selection in outstream:
+                    if (not os.path.exists(outstream[selection]['sub_outputs'][i])) or force_rerun:
+                        jobs.append((selection, outstream[selection]['sub_outputs'][i]))
+                    else:
+                        raise OSError('OUT: "{}" already exists! Remove it and do force-run!'.format(outstream[selection]['sub_outputs'][i]))
                 if jobs:
                     runfile = os.path.join(runfile_dir, s.sample_name+'.submit')
                     infile = self.write_inputsfile(s)
@@ -181,9 +185,9 @@ class Run(object):
             cluster_arguments.extend(["--maxNFilesPerJob=" + str(self.max_inputs_per_job)])
             cluster_arguments.extend(['--useAthenaPackages'])
             cluster_arguments.extend(['--excludeFile=./'])
-            if self.do_merge:
-                cluster_arguments.extend(['--mergeOutput'])
-                finalize_kwds['do_merge'] = False # this is going to pass to Run.finalize so that it won't merge twice
+#            if self.do_merge: # TODO: seems to cause some issues. commented out until resolved
+#                cluster_arguments.extend(['--mergeOutput'])
+#                finalize_kwds['do_merge'] = False # this is going to pass to Run.finalize so that it won't merge twice
             execute_kwds.setdefault('stages', ('exec',))
             execute_kwds.setdefault('max_inputs_per_job', False)
             execute_kwds.setdefault('check_exitcode', tuple())
