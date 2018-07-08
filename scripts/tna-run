@@ -29,6 +29,7 @@ def main(samples, systematics, **run_kwds):
     r.tag = 'histTNA_{date}v0' 
     r.run(use_cluster = True,
           monitor = True,
+          rerun_strategy = 'merge', # avalible: ['merge', 'force', 'none']
           # This is to control `Run.execute` and can be also used to control batch submission,
           # like site name where jobs are sent in grid for example. Comment it out to use it.
           # execute_kwds = dict(submit_kwds = {'argument': ['--site', 'DESY-HH,AUTO']})                                                                       
@@ -38,5 +39,4 @@ main(samples = s,
      systematics = 'nominal',
      output_dir = None,
      analysis_type = 'AnaTtresSL',
-     rerun_strategy = 'merge', # avalible: ['merge', 'force', 'none']
      cluster = 'condor') # known to work: 'condor', 'lsf' and 'grid'
