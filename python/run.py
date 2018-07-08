@@ -112,7 +112,7 @@ class Run(object):
     def execute(self, runfile_dir = os.curdir,
                 use_cluster = True,
                 stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'),
-                force_rerun = False,
+                rerun_strategy = 'merge',
                 submit_kwds = {},
                 max_inputs_per_job = None,
                 **write_kwds):
@@ -133,10 +133,13 @@ class Run(object):
             for i, s in enumerate(subsamples):
                 jobs = []
                 for selection in outstream:
-                    if (not os.path.exists(outstream[selection]['sub_outputs'][i])) or force_rerun:
-                        jobs.append((selection, outstream[selection]['sub_outputs'][i]))
+                    sub_output = outstream[selection]['sub_outputs'][i]
+                    if (not os.path.exists(sub_output)) or rerun_strategy == 'force':
+                        jobs.append((selection, sub_output))
+                    elif rerun_strategy == 'merge':
+                        logger.debug('OUT("{}") already exists! `rerun_strategy` is "merge" so SKIP running this job!'.format(sub_output))
                     else:
-                        raise OSError('OUT: "{}" already exists! Remove it and do force-run!'.format(outstream[selection]['sub_outputs'][i]))
+                        raise OSError('OUT("{}") already exists! Remove it or change `rerun_strategy` to "merge" or "force according to your needs"!'.format(sub_output))
                 if jobs:
                     runfile = os.path.join(runfile_dir, s.sample_name+'.submit')
                     infile = self.write_inputsfile(s)
@@ -173,7 +176,7 @@ class Run(object):
         if self.cluster != None:
             self.cluster.wait(None, fct = get_fct(logger = helpers.getLogger('TopNtupleAnalysis.cluster')))
 
-    def run(self, runfile_dir = os.curdir, use_cluster = True, monitor = True, force_rerun = False, delete_sources_after_merged = False, execute_kwds = {}, finalize_kwds = {}):
+    def run(self, runfile_dir = os.curdir, use_cluster = True, monitor = True, rerun_strategy = 'merge', delete_sources_after_merged = False, execute_kwds = {}, finalize_kwds = {}):
         global __grid__
         execute_kwds = copy.deepcopy(execute_kwds)
         finalize_kwds = copy.deepcopy(finalize_kwds)
@@ -191,7 +194,7 @@ class Run(object):
             execute_kwds.setdefault('stages', ('exec',))
             execute_kwds.setdefault('max_inputs_per_job', False)
             execute_kwds.setdefault('check_exitcode', tuple())
-        self.execute(runfile_dir = runfile_dir, use_cluster = use_cluster, force_rerun = force_rerun, **execute_kwds)
+        self.execute(runfile_dir = runfile_dir, use_cluster = use_cluster, rerun_strategy = rerun_strategy, **execute_kwds)
         if use_cluster and monitor:
             self.wait()
         self.finalize(delete_sources_after_merged = delete_sources_after_merged, **finalize_kwds)
