@@ -26,6 +26,7 @@ MAP_TO_SAMPLES = {# <sample>: <physics_short>
                 'tt':['MC16_13TeV_25ns_FS_EXOT4_ttbar_nonallhad'],
                 'singletop':['MC16_13TeV_25ns_FS_EXOT4_singletop'],
                 'zjets': ['MC16_13TeV_25ns_FS_EXOT4_Zjets221'],
+                'dijets': ['MC16_13TeV_25ns_FS_EXOT4_dijets'],
                 'vv': ['MC16_13TeV_25ns_FS_EXOT4_VV'],
                 'zprime400': ['MC16_13TeV_25ns_FS_EXOT4_Zprime400'],
                 'zprime500': ['MC16_13TeV_25ns_FS_EXOT4_Zprime500'],
