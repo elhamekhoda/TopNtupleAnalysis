@@ -45,6 +45,9 @@ class Run(object):
         self.do_merge = True
         self._tag_fmt = 'histTNA_{date}{series}'
 
+    def add_selection(self, topo, lepton, period = '', b_category = '', top_tagger = 'good', bot_tagger = 'MV2c10_70', fname = '{channel}_{sample}.root'):
+        self.selections.append(('({}{}{}{}, {}, {})'.format(topo, lepton, period, b_category, top_tagger, bot_tagger), fname))
+
     @property
     def tag(self):
         return self._tag_fmt.format(date = format(datetime.date.today(), '%Y%m%d'), series = 'v0')

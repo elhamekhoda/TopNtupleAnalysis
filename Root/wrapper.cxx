@@ -150,6 +150,11 @@ double res_chi2() {
   if (!m_status) return -1;
   return m_chi2.getResult_Chi2All();
 }
+int res_bcat() {
+  if (!m_status) return -1;
+  return m_chi2.getCategory();
+}
+
 double getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var) {
   float sf; 
   float t_pt = top.Perp();

@@ -15,6 +15,7 @@ double res_mtl();
 double res_mth();
 double res_mwh();
 double res_chi2();
+int res_bcat();
 double getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var = 0);
 TLorentzVector getNu(TLorentzVector l, double met, double met_phi);
 double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger, float topoetcone20, int runNumber);

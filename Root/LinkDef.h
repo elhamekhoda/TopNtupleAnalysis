@@ -13,6 +13,7 @@
 #pragma link C++ function TopNtupleAnalysis::res_mth;
 #pragma link C++ function TopNtupleAnalysis::res_mwh;
 #pragma link C++ function TopNtupleAnalysis::res_chi2;
+#pragma link C++ function TopNtupleAnalysis::res_bcat;
 #pragma link C++ function TopNtupleAnalysis::getEWK;
 #pragma link C++ function TopNtupleAnalysis::getNu;
 #pragma link C++ function TopNtupleAnalysis::getQCDWeight;

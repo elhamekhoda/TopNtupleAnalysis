@@ -3,6 +3,7 @@ import ROOT
 import math
 import copy
 import os
+import ctypes
 from array import array
 from ROOT import std
 import wjets
@@ -16,6 +17,49 @@ class Selection(object):
         return self._alg(event)
     def scale_factor(self, event):
         raise NotImplementedError
+
+class TtresChi2(Selection):
+    def __init__(self, bot_tagger, max_chi2 = float('inf'), strategy = 'rebel'):
+        self.strategy = strategy
+        self.met = ROOT.TLorentzVector()
+        self.bot_tagger = bot_tagger
+        self.max_chi2 = max_chi2
+        self.bcategory = -1
+        if self.strategy == 'rebel':
+            logger.debug('The ttres-chi2 strategy is "rebel", which means ttres-chi2 will be re-computed internally')
+        elif self.strategy == 'obey':
+            logger.debug('The ttres-chi2 strategy is "obey", which means using the ttres-chi2 is done by external program. (i.e. HQTTtResonancesTools)')
+        self.bcategorize = getattr(self, '_bcategorize_{}'.format(self.strategy))
+        self._lepton = ROOT.TLorentzVector()
+    def passes(self, ev, lepton = None):
+        self.reset()
+        self.met.SetPtEtaPhiE(ev.met_met, 0, ev.met_phi, ev.met_met)
+        lepton = lepton or self._lepton
+        if len(ev.el_pt) == 1:
+            lepton.SetPtEtaPhiE(ev.el_pt[0], ev.el_eta[0], ev.el_phi[0], ev.el_e[0])
+        elif len(ev.mu_pt) == 1:
+            lepton.SetPtEtaPhiE(ev.mu_pt[0], ev.mu_eta[0], ev.mu_phi[0], ev.mu_e[0])
+        ROOT.TopNtupleAnalysis.getMtt(lepton, self.bot_tagger._jet_p4, self.bot_tagger.jet_isbtagged, self.met)
+        self.mtt = ROOT.TopNtupleAnalysis.res_mtt()*1e-3
+        self.mtl = ROOT.TopNtupleAnalysis.res_mtl()*1e-3
+        self.mth = ROOT.TopNtupleAnalysis.res_mth()*1e-3
+        self.mwh = ROOT.TopNtupleAnalysis.res_mwh()*1e-3
+        self.chi2 = ROOT.TopNtupleAnalysis.res_chi2()
+        self.bcategorize(ev)
+        return (self.chi2 < self.max_chi2)
+    def reset(self):
+        self.mtt = -1
+        self.mtl = -1
+        self.mth = -1
+        self.mwh = -1
+        self.chi2 = 100000
+        self.bcategory = -1
+    def _bcategorize_obey(self, ev):
+        raise DeprecationWarning("This is temporarily deprecated til we fix the bug of TtresChi2 btagging categorization in HQTTtResonancesTools -- 16.07.2018")
+        self.bcategory = ev.Btagcat
+    def _bcategorize_rebel(self, ev):
+        self.bcategory = ROOT.TopNtupleAnalysis.res_bcat()
+
 
 class BoostedTopTagger(Selection):
     """Boosted hadronic-top tagger
@@ -73,12 +117,13 @@ class TrackJetBotTagger(Selection):
         if self.strategy == 'rebel':
             logger.debug('The b-tagging strategy is "rebel", which means b-tagging will be re-computed internally')
         elif self.strategy == 'obey':
-            logger.debug('The b-tagging strategy is "rebel", which means using the b-tagging is done by external program. (i.e. HQTTtResonancesTools)')
+            logger.debug('The b-tagging strategy is "obey", which means using the b-tagging is done by external program. (i.e. HQTTtResonancesTools)')
             if self.min_discriminant == -999:
                 raise KeyError('For STRATEGY("rebel"), you always need an available "Alg./WP" stored in WP2D!')
         self.passes = getattr(self, '_passes_{}'.format(self.strategy))
 
         self.jet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Not used in boosted channel
+        self.jet_associated_btaggedtjet_index = ROOT.vector('int')()
         self._jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
 
     def _passes_obey(self, ev, do_association = True):
@@ -90,18 +135,8 @@ class TrackJetBotTagger(Selection):
             p4.SetPtEtaPhiE(ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i], ev.tjet_e[i])
             self._tjet_p4.push_back(p4)
         if do_association:
-            self.jet_isbtagged.clear()
-            self._jet_p4.clear()
-            for jet_i in range(len(ev.jet_pt)):
-                jet_p4 = ROOT.TLorentzVector()
-                jet_p4.SetPtEtaPhiE(ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])
-                self._jet_p4.push_back(jet_p4)
-                trkbjet_associated = False
-                for tjet_i in range(len(ev.tjet_pt)):
-                    if self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, ev):
-                        trkbjet_associated = True
-                        break
-                self.jet_isbtagged.push_back(trkbjet_associated)
+            self.association(ev)
+        return True
 
     def _passes_rebel(self, ev, do_association = True):
         self.tjet_isbtagged = ROOT.vector(int)()
@@ -113,22 +148,32 @@ class TrackJetBotTagger(Selection):
                 self._tjet_p4.push_back(p4)
                 self.tjet_isbtagged.push_back(discriminant > self.min_discriminant)
         if do_association:
-            self.jet_isbtagged.clear()
-            self._jet_p4.clear()
-            for jet_i in range(len(ev.jet_pt)):
-                jet_p4 = ROOT.TLorentzVector()
-                jet_p4.SetPtEtaPhiE(ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])
-                self._jet_p4.push_back(jet_p4)
-                trkbjet_associated = False
-                for tjet_i in range(len(ev.tjet_pt)):
-                    if self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, ev):
-                        trkbjet_associated = True
-                        break
-                self.jet_isbtagged.push_back(trkbjet_associated)
+            self.association(ev)
+        # Reject events of bcat0
+        return any(self.tjet_isbtagged)
+
 
     def associated(self, tjet_i, jet_i, ev):
         deltaR = self._jet_p4[jet_i].DeltaR(self._tjet_p4[tjet_i])
         return (deltaR < self.max_deltaR)
+
+    def association(self, ev):
+        self.jet_isbtagged.clear()
+        self._jet_p4.clear()
+        self.jet_associated_btaggedtjet_index.clear()
+        for jet_i in range(len(ev.jet_pt)):
+            jet_p4 = ROOT.TLorentzVector()
+            jet_p4.SetPtEtaPhiE(ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])
+            self._jet_p4.push_back(jet_p4)
+            trkbjet_associated = False
+            associated_btaggedtjet_index = -1
+            for tjet_i in range(len(ev.tjet_pt)):
+                if self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, ev):
+                    trkbjet_associated = True
+                    associated_btaggedtjet_index = tjet_i
+                    break
+            self.jet_isbtagged.push_back(trkbjet_associated)
+            self.jet_associated_btaggedtjet_index.push_back(associated_btaggedtjet_index)
 
     def scale_factor(self, ev):
         """
@@ -263,6 +308,7 @@ class Analysis(object):
         self.h = {}
         self.trees = {}
         self.branches = {}
+        self.branches_noclear = {}
         self.keep = '' # can be 'bb', 'cc', 'bbcc', 'c' or 'l' and only applies to W+jets
 
     @property
@@ -300,12 +346,15 @@ class Analysis(object):
         tname = self.tName
         self.trees[tname] = {}
         self.branches[tname] = {}
+        self.branches_noclear[tname] = {}
         #self.fi.cd()
         for s in self.histSuffixes:
             logger.info("Adding <Tree(\"{}\")>".format(tname+s))
             self.trees[tname][s] = ROOT.TTree(tname+s,tname+s)
             self.trees[tname][s].SetDirectory(0)
             self.branches[tname][s] = {}
+            self.branches_noclear[tname][s] = {}
+
             self.branches[tname][s]["eventNumber"] = std.vector(float)()
             self.trees[tname][s].Branch("eventNumber",self.branches[tname][s]["eventNumber"])
             self.branches[tname][s]["runNumber"] = std.vector(float)()
@@ -338,6 +387,9 @@ class Analysis(object):
             self.trees[tname][s].Branch("mttReco",self.branches[tname][s]["mttReco"])
             self.branches[tname][s]["mttTrue"] = std.vector(float)()
             self.trees[tname][s].Branch("mttTrue",self.branches[tname][s]["mttTrue"])
+
+            self.branches_noclear[tname][s]["Btagcat"] = ctypes.c_int()
+            self.trees[tname][s].Branch("Btagcat",ctypes.addressof(self.branches_noclear[tname][s]["Btagcat"]), 'Btagcat/I')
 
     def addVar(self, hName, nBinsList):
         ar = array("d", nBinsList)
@@ -418,6 +470,9 @@ class Analysis(object):
     def set_bot_tagger(self, algorithm_WP_systs = 'MV2c10_70'):
         algorithm_WP_systs = algorithm_WP_systs.split('_', 2)
         self.bot_tagger = TrackJetBotTagger(*algorithm_WP_systs)
+
+    def set_TtresChi2(self):
+        self.TtresChi2 = TtresChi2(bot_tagger = self.bot_tagger)
 
 class AnaTtresSL(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
@@ -676,24 +731,32 @@ class AnaTtresSL(Analysis):
         if not passSel[self.ch]:
             return False
 
-        self.bot_tagger.passes(sel, do_association = True)
+        if not self.bot_tagger.passes(sel, do_association = True):
+            return False
         # veto resolved event if it passes the boosted channel
         top_tagged = self.top_tagger.passes(sel)
+
+        if ('re' in self.ch or 'rmu' in self.ch):
+            self.TtresChi2.passes(sel)
+            Btagcat = self.TtresChi2.bcategory
+        else:
+            Btagcat = sel.Btagcat
+
         if ('re' in self.ch or 'rmu' in self.ch) and not "ov" in self.ch:
             if (passSel['be'] or passSel['bmu']) and top_tagged:
                 return False
 
         if self.ch in ['be0', 'bmu0', 're0', 'rmu0']:
-            if sel.Btagcat != 0:
+            if Btagcat != 0:
                 return False
         if self.ch in ['be1', 'bmu1', 're1', 'rmu1']:
-            if sel.Btagcat != 1:
+            if Btagcat != 1:
                 return False
         if self.ch in ['be2', 'bmu2', 're2', 'rmu2']:
-            if sel.Btagcat != 2:
+            if Btagcat != 2:
                 return False
         if self.ch in ['be3', 'bmu3', 're3', 'rmu3']:
-            if sel.Btagcat != 3:
+            if Btagcat != 3:
                 return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples
@@ -840,6 +903,7 @@ class AnaTtresSL(Analysis):
                 self.branches[tname][syst]["me2SM"].push_back(self.me2SM)
                 self.branches[tname][syst]["me2XX"].push_back(self.me2XX)
                 self.branches[tname][syst]["mttReco"].push_back(mtt)
+                self.branches_noclear[tname][syst]["Btagcat"].value = sel.Btagcat
                 # pME = helpers.getTruth4momenta(sel)
                 # truPttbar = pME[2]+pME[3]
                 if sel.mcChannelNumber != 0:
@@ -865,32 +929,21 @@ class AnaTtresSL(Analysis):
                 self.h["largeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[0], w)
                 self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[0], w)
 
-            met = ROOT.TLorentzVector()
-            met.SetPtEtaPhiE(sel.met_met, 0, sel.met_phi, sel.met_met)
-            mtt = -1
-            mtl = -1
-            mth = -1
-            mwh = -1
-            chi2 = 100000
-            ROOT.TopNtupleAnalysis.getMtt(l, self.bot_tagger._jet_p4, self.bot_tagger.jet_isbtagged, met)
-            mtt = ROOT.TopNtupleAnalysis.res_mtt()
-            mtl = ROOT.TopNtupleAnalysis.res_mtl()
-            mth = ROOT.TopNtupleAnalysis.res_mth()
-            mwh = ROOT.TopNtupleAnalysis.res_mwh()
-            chi2 = ROOT.TopNtupleAnalysis.res_chi2()
+
             w0 = w/self.w2HDM
-            self.h["mtt"][syst].Fill(mtt*1e-3, w)
-            self.h["mttr"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))
-            self.h["mtt8TeV"][syst].Fill(mtt*1e-3, w)
-            self.h["mtt8TeVr"][syst].Fill(mtt*1e-3, w0*(self.w2HDM-1.))
+            mtt = self.TtresChi2.mtt
+            self.h["mtt"][syst].Fill(mtt, w)
+            self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
+            self.h["mtt8TeV"][syst].Fill(mtt, w)
+            self.h["mtt8TeVr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             if lQ > 0:
-                self.h["mttPos"][syst].Fill(mtt*1e-3, w)
+                self.h["mttPos"][syst].Fill(mtt, w)
             elif lQ < 0:
-                self.h["mttNeg"][syst].Fill(mtt*1e-3, w)
-            self.h["mtlep_res"][syst].Fill(mtl*1e-3, w)
-            self.h["mthad_res"][syst].Fill(mth*1e-3, w)
-            self.h["mwhad_res"][syst].Fill(mwh*1e-3, w)
-            self.h["chi2"][syst].Fill(chi2, w)
+                self.h["mttNeg"][syst].Fill(mtt, w)
+            self.h["mtlep_res"][syst].Fill(self.TtresChi2.mtl, w)
+            self.h["mthad_res"][syst].Fill(self.TtresChi2.mth, w)
+            self.h["mwhad_res"][syst].Fill(self.TtresChi2.mwh, w)
+            self.h["chi2"][syst].Fill(self.TtresChi2.chi2, w)
             ################################
             ### fill the tree ##############
             if self._doTree:
@@ -904,7 +957,8 @@ class AnaTtresSL(Analysis):
                 self.branches[tname][syst]["w2HDM"].push_back(self.w2HDM)
                 self.branches[tname][syst]["me2SM"].push_back(self.me2SM)
                 self.branches[tname][syst]["me2XX"].push_back(self.me2XX)
-                self.branches[tname][syst]["mttReco"].push_back(mtt*1e-3)
+                self.branches[tname][syst]["mttReco"].push_back(mtt)
+                self.branches_noclear[tname][syst]["Btagcat"].value = self.TtresChi2.bcategory
                 if sel.mcChannelNumber != 0:
                     if not (helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
                         self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
