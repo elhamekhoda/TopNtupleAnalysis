@@ -562,7 +562,7 @@ weightSF = {'' : ['pileup', 'leptonSF', 'jvt'], #, 'indiv_SF_EL_ChargeID', 'indi
 
 weightChangeSystematics = weightSF.keys()
 
-def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel'):
+def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel', debug_mode = False):
     """Intuitive Python ast-style expression parser
 
     Used for hadronic-top tagging flag specification
@@ -597,6 +597,13 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel')
     else:
         expr = ast.Expression(body=expr)
     node_renamer.visit(expr)
+    if debug_mode:
+        try:
+            import astunparse
+            logger.debug(astunparse.unparse(expr))
+            logger.debug(ast.dump(expr))
+        except Exception as e:
+            logger.error(e, exc_info = True)
     return compile(expr, '<top-tagger>', 'eval')
 
 def output_expr_reader_old(expr):

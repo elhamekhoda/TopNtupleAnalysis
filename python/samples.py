@@ -82,7 +82,7 @@ class Sample(object):
                     return sample
         assert True, "Houston we've got a problem"
 
-    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}, download_to = None, commit_when_init = True):
+    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}, tag = '', download_to = None, commit_when_init = True):
         self.parent = self
         self.ds_scope = ds_scope.format(s = self, **ds_fmt_options)
         self.sample_name = sample_name
@@ -93,6 +93,9 @@ class Sample(object):
             self.ds_scope = head if tail else '.'.join(head.split('.')[:2])
         self.download_to = download_to if download_to is not True else os.curdir
         self.commited = False
+        self.tag = tag # Note this is a custom tag mainly for differentiate samples with the same type
+                       # e.g. two different zprime1000 samples with different object definitions and etc.
+                       # So, this "doesn't necessarily" mean ami-tag yet it can be
         self.set_systematics()
         if commit_when_init or input_files:
             self.commit(input_files)
@@ -220,7 +223,7 @@ class Sample(object):
             assert type(cmds) == list, "Houston we've got a problem"
             return cmds
     def __repr__(self):
-        return '<{}.{}("{}")>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name)
+        return '<{}.{}("{}"{})>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name, self.tag or '[{}]'.format(self.tag))
     def sum_of_weights(self, systs = [''], online = True, mode = 'return'):
         if self.sample_name == 'data':
             raise TypeError('DO NOT use DATA Weights')

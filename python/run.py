@@ -24,18 +24,18 @@ class Run(object):
             os.makedirs(self.output_dir)
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
-        self.selections = [('(be,     good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(bmu,    good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(re,     good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(rmu,    good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(be2015, good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(bmu2015,good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(re2015, good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(rmu2015,good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(be2016, good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(bmu2016,good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(re2016, good, MV2c10_70)', '{channel}_{sample}.root'),
-                           ('(rmu2016,good, MV2c10_70)', '{channel}_{sample}.root')]
+        self.selections = [('(be,     good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(bmu,    good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(re,     good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(rmu,    good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(be2015, good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(bmu2015,good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(re2015, good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(rmu2015,good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(be2016, good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(bmu2016,good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(re2016, good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(rmu2016,good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root')]
         self.analysis_type = analysis_type
         self.analysis_exts = []
         self.max_inputs_per_job = max_inputs_per_job
@@ -45,7 +45,7 @@ class Run(object):
         self.do_merge = True
         self._tag_fmt = 'histTNA_{date}{series}'
 
-    def add_selection(self, topo, lepton, period = '', b_category = '', top_tagger = 'good', bot_tagger = 'MV2c10_70', fname = '{channel}_{sample}.root'):
+    def add_selection(self, topo, lepton, period = '', b_category = '', top_tagger = 'good', bot_tagger = 'MV2c10_70', fname = '{channel}_{s.sample_name}{s.tag}.root'):
         self.selections.append(('({}{}{}{}, {}, {})'.format(topo, lepton, period, b_category, top_tagger, bot_tagger), fname))
 
     @property
@@ -55,7 +55,7 @@ class Run(object):
     def tag(self, value):
         self._tag_fmt = value
     def write_inputsfile(self, sample):
-        infile_fname = "input_"+sample.sample_name+'.txt'
+        infile_fname = "input_"+sample.sample_name+(sample.tag or '_'+sample.tag)+'.txt'
         if not __grid__:
             infile_fname = os.path.join(self.output_dir, infile_fname)
             with open(infile_fname, 'w') as infile:
@@ -131,8 +131,8 @@ class Run(object):
             for selection, output_fname in selections:
                 outstream[selection] = {}
                 channel = re.search('\((\S+)\s*,', selection).group(1)
-                outstream[selection]['output'] = os.path.join(self.output_dir, output_fname.format(channel = channel, sample = sample.sample_name))
-                outstream[selection]['sub_outputs'] = [os.path.join(self.output_dir, output_fname.format(channel = channel, sample = s.sample_name)) for s in subsamples]
+                outstream[selection]['output'] = os.path.join(self.output_dir, output_fname.format(channel = channel, s = sample, sample = sample.sample_name))
+                outstream[selection]['sub_outputs'] = [os.path.join(self.output_dir, output_fname.format(channel = channel, s = s, sample = s.sample_name)) for s in subsamples]
             for i, s in enumerate(subsamples):
                 jobs = []
                 for selection in outstream:

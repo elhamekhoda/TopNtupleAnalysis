@@ -6,6 +6,7 @@ import os
 import ctypes
 from array import array
 from ROOT import std
+from observables import ObservableList
 import wjets
 logger = helpers.getLogger('TopNtupleAnalysis.analysis')
 
@@ -437,7 +438,10 @@ class Analysis(object):
         self.write()
         head, sep, tail = self._outputFile.partition('file://')
         f = tail if head == '' else self._outputFile
-        os.rename(f + '.part', f)
+        try:
+            os.rename(f + '.part', f)
+        except OSError as e:
+            logger.error(e, exc_info=True)
 
     def getWeight(self, sel, s):
         # this applies all the weights that come out of the box
@@ -565,6 +569,13 @@ class AnaTtresSL(Analysis):
         self.addVar("trueMtt8TeVr", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
         self.add("largeJet_tau32_wta", 20, 0, 1)
         self.add("largeJet_tau21_wta", 20, 0, 1)
+        self.add("btagged_tjet_closest_to_ljet", 50, 0, (math.pi**2+2.5**2)**0.5)
+        self.add("btagged_tjet_closest_to_lep", 50, 0, (math.pi**2+2.5**2)**0.5)
+        for observable in ObservableList:
+            if type(observable.binning) == tuple:
+                self.add(observable.name, *observable.binning)
+            else:
+                self.addVar(observable.name, observable.binning)
 
     # only apply the reco weights
     def getWeight(self, sel, s):
@@ -847,6 +858,8 @@ class AnaTtresSL(Analysis):
                 closestJetDr = dr
                 closestJetPt = cj.Perp()
 
+        btagged_tjet_closest_to_lep = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(l))
+        self.h["btagged_tjet_closest_to_lep"][syst].Fill(btagged_tjet_closest_to_lep.DeltaR(l), w)
         self.h["closestJetDr"][syst].Fill(closestJetDr, w)
         self.h["closestJetPt"][syst].Fill(closestJetPt*1e-3, w)
         self.h["nTrkBtagJets"][syst].Fill(sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in self.bot_tagger.tjet_isbtagged), w)
@@ -869,7 +882,7 @@ class AnaTtresSL(Analysis):
             lj.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx], sel.ljet_eta[goodJetIdx], sel.ljet_phi[goodJetIdx], sel.ljet_m[goodJetIdx])
             closeJet = ROOT.TLorentzVector()
             closeJet.SetPtEtaPhiE(sel.jet_pt[closeJetIdx], sel.jet_eta[closeJetIdx], sel.jet_phi[closeJetIdx], sel.jet_e[closeJetIdx])
-
+            btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj))
             w0 = w/self.w2HDM
             mtt = (closeJet+nu+l+lj).M()*1e-3 # unit is GeV
             self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
@@ -880,6 +893,7 @@ class AnaTtresSL(Analysis):
             self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx], w)
             self.h["mtlep_boo"][syst].Fill(mtt, w)
             self.h["mtt"][syst].Fill(mtt, w)
+            self.h["btagged_tjet_closest_to_ljet"][syst].Fill(btagged_tjet_closest_to_ljet.DeltaR(lj), w)
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             self.h["mtt8TeV"][syst].Fill(mtt, w)
             self.h["mtt8TeVr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
@@ -922,14 +936,15 @@ class AnaTtresSL(Analysis):
             if len(sel.ljet_pt) >= 1:
                 lj = ROOT.TLorentzVector()
                 lj.SetPtEtaPhiM(sel.ljet_pt[0], sel.ljet_eta[0], sel.ljet_phi[0], sel.ljet_m[0])
+                btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj))
                 self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
                 self.h["largeJetM"][syst].Fill(lj.M()*1e-3, w)
                 self.h["largeJetEta"][syst].Fill(lj.Eta(), w)
                 self.h["largeJetPhi"][syst].Fill(lj.Phi(), w)
                 self.h["largeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[0], w)
                 self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[0], w)
-
-
+                self.h["btagged_tjet_closest_to_ljet"][syst].Fill(btagged_tjet_closest_to_ljet.DeltaR(lj), w)
+            self.h["btagged_tjet_closest_to_lep"][syst].Fill(btagged_tjet_closest_to_lep.DeltaR(l), w)
             w0 = w/self.w2HDM
             mtt = self.TtresChi2.mtt
             self.h["mtt"][syst].Fill(mtt, w)
@@ -976,4 +991,14 @@ class AnaTtresSL(Analysis):
                 ### fill the tree ################
                 self.trees[tname][syst].Fill() ###
                 ##################################
+        for observable in ObservableList:
+            if observable.only != None:
+                if not any (only in self.ch for only in observable.only):
+                    break
+            values = observable(self, _locals = locals())
+            if observable.style == 'foreach':
+                for v in values:
+                    self.h[observable.name][syst].Fill(v, w)
+            else:
+                self.h[observable.name][syst].Fill(values, w)
 
