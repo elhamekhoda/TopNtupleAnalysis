@@ -19,7 +19,8 @@ class Run(object):
         self.samples = [samples.Sample(s) if isinstance(s, str) else s for s in samples]
         self.source_dir = os.path.abspath(os.path.dirname(__file__))
         self.output_dir = os.path.abspath(output_dir or os.path.join(os.curdir, 'output'))
-        self.log_dir = os.path.abspath(log_dir or os.path.join(os.curdir, 'log'))
+        self.log_dir = os.path.abspath(log_dir or os.path.join(self.output_dir, 'log'))
+        self.runfile_dir = self.output_dir
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
         if not os.path.exists(self.log_dir):
@@ -55,7 +56,7 @@ class Run(object):
     def tag(self, value):
         self._tag_fmt = value
     def write_inputsfile(self, sample):
-        infile_fname = "input_"+sample.sample_name+(sample.tag or '_'+sample.tag)+'.txt'
+        infile_fname = "input_"+sample.sample_name+(sample.tag and '_'+sample.tag)+'.txt'
         if not __grid__:
             infile_fname = os.path.join(self.output_dir, infile_fname)
             with open(infile_fname, 'w') as infile:
@@ -112,7 +113,7 @@ class Run(object):
         with open(runfile, 'w') as fr:
             fr.writelines(lines)
 
-    def execute(self, runfile_dir = os.curdir,
+    def execute(self, runfile_dir = None,
                 use_cluster = True,
                 stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'),
                 rerun_strategy = 'merge',
@@ -122,7 +123,7 @@ class Run(object):
         max_inputs_per_job = max_inputs_per_job if max_inputs_per_job != None else self.max_inputs_per_job
         if self.cluster == None:
             use_cluster = False
-        runfile_dir = os.path.abspath(runfile_dir)
+        runfile_dir = os.path.abspath(runfile_dir or self.runfile_dir)
         selections = self.selections.iteritems() if isinstance(self.selections, dict) else self.selections
         self.outstreams = {}
         for sample in self.samples:
@@ -144,7 +145,7 @@ class Run(object):
                     else:
                         raise OSError('OUT("{}") already exists! Remove it or change `rerun_strategy` to "merge" or "force according to your needs"!'.format(sub_output))
                 if jobs:
-                    runfile = os.path.join(runfile_dir, s.sample_name+'.submit')
+                    runfile = os.path.join(runfile_dir, s.sample_name + (s.tag and ('_' + s.tag)) + '.submit')
                     infile = self.write_inputsfile(s)
                     self.write_runfile(sample = s, output_files = jobs, runfile = runfile, stages = stages, infile = infile, **write_kwds)
                     subprocess.call(['chmod', 'u+x', runfile])
@@ -179,7 +180,7 @@ class Run(object):
         if self.cluster != None:
             self.cluster.wait(None, fct = get_fct(logger = helpers.getLogger('TopNtupleAnalysis.cluster')))
 
-    def run(self, runfile_dir = os.curdir, use_cluster = True, monitor = True, rerun_strategy = 'merge', delete_sources_after_merged = False, execute_kwds = {}, finalize_kwds = {}):
+    def run(self, runfile_dir = None, use_cluster = True, monitor = True, rerun_strategy = 'merge', delete_sources_after_merged = False, execute_kwds = {}, finalize_kwds = {}):
         global __grid__
         execute_kwds = copy.deepcopy(execute_kwds)
         finalize_kwds = copy.deepcopy(finalize_kwds)

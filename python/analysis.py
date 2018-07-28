@@ -98,14 +98,22 @@ class BoostedTopTagger(Selection):
         return self.passed
 
 class TrackJetBotTagger(Selection):
-    WP2D = {'MV2c10':    {'60':  0.86, '70':  0.66, '77':  0.38, '85': -0.15},
-            'MV2c10mu':  {'60':  0.95, '70':  0.87, '77':  0.71, '85':  0.23},
-            'MV2c10rnn': {'60':  0.96, '70':  0.87, '77':  0.71, '85':  0.26}} # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
-    def __init__(self, algorithm = 'MV2c10', WP = '70', systematic_variation = '', strategy = 'rebel'):
+    WP2D = {'AntiKt2PV0TrackJets':
+            {'MV2c10':    {'60':  0.86, '70':  0.66, '77':  0.38, '85': -0.15, 'pt': 10e3},
+             'MV2c10mu':  {'60':  0.95, '70':  0.87, '77':  0.71, '85':  0.23, 'pt': 10e3},
+             'MV2c10rnn': {'60':  0.96, '70':  0.87, '77':  0.71, '85':  0.26, 'pt': 10e3}},
+            'AntiKtVR30Rmax4Rmin02TrackJets':
+            {'MV2c10':    {'60':  0.92, '70':  0.79, '77':  0.58, '85':  0.05, 'pt':  7e3}}
+            }
+    # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
+    def __init__(self, algorithm = 'MV2c10', WP = '70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'rebel', do_association = True, do_truth_matching = True):
         self.algorithm = algorithm
         self.WP = WP
+        self.trackjet_alg = trackjet_alg
         self.max_deltaR = 0.4 # Used for `do_association`
         self.systematic_variation = systematic_variation
+        self.do_association = do_association
+        self.do_truth_matching = do_truth_matching
         if self.systematic_variation != '':
             logger.warn('Please be informed: b-tagging scale factor with systematic variations is currently not valid'
                         +' because the eigen matrix are not stored in the ttres ntuple produced by the current-version `HQTTtResonancesTools`.'
@@ -114,7 +122,9 @@ class TrackJetBotTagger(Selection):
                             'tjet_SF': 'tjet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = self.WP),
                             'tjet_discriminant': 'tjet_{alg}'.format(alg = self.algorithm.lower())}
         self.strategy = strategy
-        self.min_discriminant = self.WP2D.get(self.algorithm, {}).get(WP, -999)
+        recomm = self.WP2D.get(self.trackjet_alg, {}).get(self.algorithm, {})
+        self.min_discriminant = recomm.get(WP, -999)
+        self.min_pt = recomm.get('pt', 10e3)
         if self.strategy == 'rebel':
             logger.debug('The b-tagging strategy is "rebel", which means b-tagging will be re-computed internally')
         elif self.strategy == 'obey':
@@ -127,7 +137,7 @@ class TrackJetBotTagger(Selection):
         self.jet_associated_btaggedtjet_index = ROOT.vector('int')()
         self._jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
 
-    def _passes_obey(self, ev, do_association = True):
+    def _passes_obey(self, ev):
         raise DeprecationWarning("This is temporarily deprecated til we fix the bug of trk b-tagging selector in HQTTtResonancesTools -- 01.07.2018")
         self.tjet_isbtagged = getattr(ev, self._branch_map['tjet_isbtagged'])
         self._tjet_p4 = ROOT.vector('TLorentzVector')()
@@ -135,22 +145,25 @@ class TrackJetBotTagger(Selection):
             p4 = ROOT.TLorentzVector()
             p4.SetPtEtaPhiE(ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i], ev.tjet_e[i])
             self._tjet_p4.push_back(p4)
-        if do_association:
+        if self.do_association:
             self.association(ev)
+        if self.do_truth_matching:
+            self.truth_matching(ev)
         return True
 
-    def _passes_rebel(self, ev, do_association = True):
+    def _passes_rebel(self, ev):
         self.tjet_isbtagged = ROOT.vector(int)()
         self._tjet_p4 = ROOT.vector('TLorentzVector')()
         for i, discriminant in enumerate(getattr(ev, self._branch_map['tjet_discriminant'])):
             p4 = ROOT.TLorentzVector()
             p4.SetPtEtaPhiE(ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i],ev.tjet_e[i])
-            if p4.Perp() > 10e3 and math.fabs(p4.Eta()) < 2.5 and ev.tjet_numConstituents[i] >= 2:
+            if p4.Perp() > self.min_pt and math.fabs(p4.Eta()) < 2.5 and ev.tjet_numConstituents[i] >= 2:
                 self._tjet_p4.push_back(p4)
                 self.tjet_isbtagged.push_back(discriminant > self.min_discriminant)
-        if do_association:
+        if self.do_association:
             self.association(ev)
-        # Reject events of bcat0
+        if self.do_truth_matching:
+            self.truth_matching(ev)
         return any(self.tjet_isbtagged)
 
 
@@ -175,6 +188,9 @@ class TrackJetBotTagger(Selection):
                     break
             self.jet_isbtagged.push_back(trkbjet_associated)
             self.jet_associated_btaggedtjet_index.push_back(associated_btaggedtjet_index)
+
+    def truth_matching(self, ev):
+        self.tjet_istrueb = [label==5 for label in ev.tjet_label]
 
     def scale_factor(self, ev):
         """
@@ -311,6 +327,7 @@ class Analysis(object):
         self.branches = {}
         self.branches_noclear = {}
         self.keep = '' # can be 'bb', 'cc', 'bbcc', 'c' or 'l' and only applies to W+jets
+        self.observables = [observable.registered(self) for observable in ObservableList]
 
     @property
     def doTree(self):
@@ -471,8 +488,11 @@ class Analysis(object):
     def set_top_tagger(self, expr):
         self.top_tagger = BoostedTopTagger(expr)
 
-    def set_bot_tagger(self, algorithm_WP_systs = 'MV2c10_70'):
-        algorithm_WP_systs = algorithm_WP_systs.split('_', 2)
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_70'):
+        attr = algorithm_WP_systs.split('.',2)
+        algorithm_WP_systs = attr[-1].split('_', 2)
+        if len(attr)==2:
+            algorithm_WP_systs.append(attr[0])
         self.bot_tagger = TrackJetBotTagger(*algorithm_WP_systs)
 
     def set_TtresChi2(self):
@@ -571,7 +591,7 @@ class AnaTtresSL(Analysis):
         self.add("largeJet_tau21_wta", 20, 0, 1)
         self.add("btagged_tjet_closest_to_ljet", 50, 0, (math.pi**2+2.5**2)**0.5)
         self.add("btagged_tjet_closest_to_lep", 50, 0, (math.pi**2+2.5**2)**0.5)
-        for observable in ObservableList:
+        for observable in self.observables:
             if type(observable.binning) == tuple:
                 self.add(observable.name, *observable.binning)
             else:
@@ -742,7 +762,7 @@ class AnaTtresSL(Analysis):
         if not passSel[self.ch]:
             return False
 
-        if not self.bot_tagger.passes(sel, do_association = True):
+        if not self.bot_tagger.passes(sel):
             return False
         # veto resolved event if it passes the boosted channel
         top_tagged = self.top_tagger.passes(sel)
@@ -827,6 +847,8 @@ class AnaTtresSL(Analysis):
         self.h["yields"][syst].Fill(1, w)
         self.h["runNumber"][syst].Fill(sel.runNumber, w)
         l = ROOT.TLorentzVector()
+        lj = ROOT.TLorentzVector()
+        tlep = ROOT.TLorentzVector()
         lQ = 0
         if len(sel.el_pt) == 1:
             l.SetPtEtaPhiE(sel.el_pt[0], sel.el_eta[0], sel.el_phi[0], sel.el_e[0])
@@ -877,21 +899,20 @@ class AnaTtresSL(Analysis):
                     break
             
             goodJetIdx = self.top_tagger.thad_index
-
-            lj = ROOT.TLorentzVector()
             lj.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx], sel.ljet_eta[goodJetIdx], sel.ljet_phi[goodJetIdx], sel.ljet_m[goodJetIdx])
             closeJet = ROOT.TLorentzVector()
             closeJet.SetPtEtaPhiE(sel.jet_pt[closeJetIdx], sel.jet_eta[closeJetIdx], sel.jet_phi[closeJetIdx], sel.jet_e[closeJetIdx])
             btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj))
             w0 = w/self.w2HDM
-            mtt = (closeJet+nu+l+lj).M()*1e-3 # unit is GeV
+            tlep = closeJet+nu+l
+            mtt = (tlep+lj).M()*1e-3 # unit is GeV
             self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
             self.h["largeJetM"][syst].Fill(lj.M()*1e-3, w)
             self.h["largeJetEta"][syst].Fill(lj.Eta(), w)
             self.h["largeJetPhi"][syst].Fill(lj.Phi(), w)
             self.h["largeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx], w)
             self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx], w)
-            self.h["mtlep_boo"][syst].Fill(mtt, w)
+            self.h["mtlep_boo"][syst].Fill(tlep.M()*1e-3, w)
             self.h["mtt"][syst].Fill(mtt, w)
             self.h["btagged_tjet_closest_to_ljet"][syst].Fill(btagged_tjet_closest_to_ljet.DeltaR(lj), w)
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
@@ -934,7 +955,6 @@ class AnaTtresSL(Analysis):
                 ##################################
         elif 're' in self.ch or 'rmu' in self.ch:
             if len(sel.ljet_pt) >= 1:
-                lj = ROOT.TLorentzVector()
                 lj.SetPtEtaPhiM(sel.ljet_pt[0], sel.ljet_eta[0], sel.ljet_phi[0], sel.ljet_m[0])
                 btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj))
                 self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
@@ -991,11 +1011,11 @@ class AnaTtresSL(Analysis):
                 ### fill the tree ################
                 self.trees[tname][syst].Fill() ###
                 ##################################
-        for observable in ObservableList:
+        for observable in self.observables:
             if observable.only != None:
                 if not any (only in self.ch for only in observable.only):
                     break
-            values = observable(self, _locals = locals())
+            values = observable( _locals = locals())
             if observable.style == 'foreach':
                 for v in values:
                     self.h[observable.name][syst].Fill(v, w)

@@ -5,9 +5,10 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 import csv
 import analysis
+ROOT.ROOT.EnableImplicitMT(8) # Not sure if it works
 logger = helpers.getLogger('TopNtupleAnalysis.makeHistograms')
 
-def main():
+def main(parallel = True):
     helpers.doPRW = not options.noPRW
     accept_prob = float(options.accept_prob)
     randGen = ROOT.TRandom3(4357)
@@ -335,6 +336,8 @@ def main():
             suffix = ''
         helpers.addFilesInChain(mt, options.files)
         sel = mt
+        if parallel:
+            sel.SetImplicitMT(True)
         ent = options.nevents or mt.GetEntries()
         ent_length = len(str(ent))
         for k in range(0, ent):
