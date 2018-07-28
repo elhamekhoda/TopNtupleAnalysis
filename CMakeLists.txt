@@ -84,6 +84,7 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
                                   python/wjets.py
                                   python/sumWeights.py
                                   python/observables.py
+                                  python/selections.py
                                   )
     atlas_install_scripts( scripts/tna-run )
 
