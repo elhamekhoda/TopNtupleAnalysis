@@ -156,7 +156,8 @@ class TrackJetBotTagger(Selection):
             self.association(ev)
         if self.do_truth_matching:
             self.truth_matching(ev)
-        return any(self.tjet_isbtagged)
+        return True
+        # return any(self.tjet_isbtagged)
 
 
     def associated(self, tjet_i, jet_i, ev):

@@ -602,9 +602,11 @@ class AnaTtresSL(Analysis):
                 closestJetIdx = i
                 closestJetDr = dr
                 closestJetPt = cj.Perp()
-
-        btagged_tjet_closest_to_lep = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(l))
-        self.h["btagged_tjet_closest_to_lep"][syst].Fill(btagged_tjet_closest_to_lep.DeltaR(l), w)
+        try:
+            btagged_tjet_closest_to_lep = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(l))
+            self.h["btagged_tjet_closest_to_lep"][syst].Fill(btagged_tjet_closest_to_lep.DeltaR(l), w)
+        except ValueError:
+            btagged_tjet_closest_to_lep = None
         self.h["closestJetDr"][syst].Fill(closestJetDr, w)
         self.h["closestJetPt"][syst].Fill(closestJetPt*1e-3, w)
         self.h["nTrkBtagJets"][syst].Fill(sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in self.bot_tagger.tjet_isbtagged), w)
@@ -625,7 +627,11 @@ class AnaTtresSL(Analysis):
             lj.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx], sel.ljet_eta[goodJetIdx], sel.ljet_phi[goodJetIdx], sel.ljet_m[goodJetIdx])
             closeJet = ROOT.TLorentzVector()
             closeJet.SetPtEtaPhiE(sel.jet_pt[closeJetIdx], sel.jet_eta[closeJetIdx], sel.jet_phi[closeJetIdx], sel.jet_e[closeJetIdx])
-            btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj))
+            try:
+                btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj))
+                self.h["btagged_tjet_closest_to_ljet"][syst].Fill(btagged_tjet_closest_to_ljet.DeltaR(lj), w)
+            except ValueError:
+                pass
             w0 = w/self.w2HDM
             tlep = closeJet+nu+l
             mtt = (tlep+lj).M()*1e-3 # unit is GeV
@@ -637,7 +643,6 @@ class AnaTtresSL(Analysis):
             self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx], w)
             self.h["mtlep_boo"][syst].Fill(tlep.M()*1e-3, w)
             self.h["mtt"][syst].Fill(mtt, w)
-            self.h["btagged_tjet_closest_to_ljet"][syst].Fill(btagged_tjet_closest_to_ljet.DeltaR(lj), w)
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             self.h["mtt8TeV"][syst].Fill(mtt, w)
             self.h["mtt8TeVr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
@@ -679,15 +684,19 @@ class AnaTtresSL(Analysis):
         elif 're' in self.ch or 'rmu' in self.ch:
             if len(sel.ljet_pt) >= 1:
                 lj.SetPtEtaPhiM(sel.ljet_pt[0], sel.ljet_eta[0], sel.ljet_phi[0], sel.ljet_m[0])
-                btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj))
+                try:
+                    btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj))
+                    self.h["btagged_tjet_closest_to_ljet"][syst].Fill(btagged_tjet_closest_to_ljet.DeltaR(lj), w)
+                except ValueError:
+                    pass
                 self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
                 self.h["largeJetM"][syst].Fill(lj.M()*1e-3, w)
                 self.h["largeJetEta"][syst].Fill(lj.Eta(), w)
                 self.h["largeJetPhi"][syst].Fill(lj.Phi(), w)
                 self.h["largeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[0], w)
                 self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[0], w)
-                self.h["btagged_tjet_closest_to_ljet"][syst].Fill(btagged_tjet_closest_to_ljet.DeltaR(lj), w)
-            self.h["btagged_tjet_closest_to_lep"][syst].Fill(btagged_tjet_closest_to_lep.DeltaR(l), w)
+            if btagged_tjet_closest_to_lep is not None:
+                self.h["btagged_tjet_closest_to_lep"][syst].Fill(btagged_tjet_closest_to_lep.DeltaR(l), w)
             w0 = w/self.w2HDM
             mtt = self.TtresChi2.mtt
             self.h["mtt"][syst].Fill(mtt, w)
