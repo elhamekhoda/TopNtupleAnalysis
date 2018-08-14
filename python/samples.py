@@ -93,7 +93,7 @@ class Sample(object):
             self.ds_scope = head if tail else '.'.join(head.split('.')[:2])
         self.download_to = download_to if download_to is not True else os.curdir
         self.commited = False
-        self.tag = tag # Note this is a custom tag mainly for differentiate samples with the same type
+        self.tag = tag if (not tag or tag.startswith('_')) else ('_'+tag) # Note this is a custom tag mainly for differentiate samples with the same type
                        # e.g. two different zprime1000 samples with different object definitions and etc.
                        # So, this "doesn't necessarily" mean ami-tag yet it can be
         self.set_systematics()

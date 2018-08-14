@@ -132,6 +132,15 @@ class Analysis(object):
             self.branches_noclear[tname][s]["Btagcat"] = ctypes.c_int()
             self.trees[tname][s].Branch("Btagcat",ctypes.addressof(self.branches_noclear[tname][s]["Btagcat"]), 'Btagcat/I')
 
+            for observable in self.observables:
+                if 'tree' in observable.do:
+                    if observable.style == 'foreach':
+                        self.branches[tname][s][observable.name] = std.vector(observable.dtype)()
+                    else:
+                        self.branches_noclear[tname][s][observable.name] = getattr(ctypes, 'c_' + str(observable.dtype.__name__))()
+                        self.trees[tname][s].Branch(observable.name, ctypes.addressof(self.branches_noclear[tname][s][observable.name]), observable.name + ('/I' if observable.dtype == int else '/F'))
+
+
     def addVar(self, hName, nBinsList):
         ar = array("d", nBinsList)
         #self.fi.cd()
@@ -315,10 +324,11 @@ class AnaTtresSL(Analysis):
         self.add("btagged_tjet_closest_to_ljet", 50, 0, (math.pi**2+2.5**2)**0.5)
         self.add("btagged_tjet_closest_to_lep", 50, 0, (math.pi**2+2.5**2)**0.5)
         for observable in self.observables:
-            if type(observable.binning) == tuple:
-                self.add(observable.name, *observable.binning)
-            else:
-                self.addVar(observable.name, observable.binning)
+            if 'hist' in observable.do:
+                if type(observable.binning) == tuple:
+                    self.add(observable.name, *observable.binning)
+                else:
+                    self.addVar(observable.name, observable.binning)
 
     # only apply the reco weights
     def getWeight(self, sel, s):
@@ -678,6 +688,17 @@ class AnaTtresSL(Analysis):
                 #     self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
                 #     self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
                 ##################################
+                for observable in self.observables:
+                    if 'tree' in observable.do:
+                        if observable.only != None:
+                            if not any (only in self.ch for only in observable.only):
+                                break
+                        values = observable(_locals = locals())
+                        if observable.style == 'foreach':
+                            for v in values:
+                                self.branches[tname][syst][observable.name].push_back(v)
+                        else:
+                            self.branches_noclear[tname][syst][observable.name].value = values
                 ### fill the tree ################
                 self.trees[tname][syst].Fill() ###
                 ##################################
@@ -739,18 +760,31 @@ class AnaTtresSL(Analysis):
                             self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
                             self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
                             self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
+
+                for observable in self.observables:
+                    if 'tree' in observable.do:
+                        if observable.only != None:
+                            if not any (only in self.ch for only in observable.only):
+                                break
+                        values = observable( _locals = locals())
+                        if observable.style == 'foreach':
+                            for v in values:
+                                self.branches[tname][syst][observable.name].push_back(v)
+                        else:
+                            self.branches_noclear[tname][syst][observable.name].value = values
                 ##################################
                 ### fill the tree ################
                 self.trees[tname][syst].Fill() ###
                 ##################################
         for observable in self.observables:
-            if observable.only != None:
-                if not any (only in self.ch for only in observable.only):
-                    break
-            values = observable( _locals = locals())
-            if observable.style == 'foreach':
-                for v in values:
-                    self.h[observable.name][syst].Fill(v, w)
-            else:
-                self.h[observable.name][syst].Fill(values, w)
+            if 'hist' in observable.do:
+                if observable.only != None:
+                    if not any (only in self.ch for only in observable.only):
+                        break
+                values = observable(_locals = locals())
+                if observable.style == 'foreach':
+                    for v in values:
+                        self.h[observable.name][syst].Fill(v, w)
+                else:
+                    self.h[observable.name][syst].Fill(values, w)
 
