@@ -33,7 +33,7 @@ build_image:
   script:
     - ignore
   variables:
-    FROM: atlas-phys/exot/hqt/r21-ttbar-1lep/hqtttresonancestools
+    FROM: gitlab-registry.cern.ch/atlas-phys/exot/hqt/r21-ttbar-1lep/hqtttresonancestools
     CONTEXT_DIR: /
     BUILD_ARG_1: CI_JOB_TOKEN=${CI_JOB_TOKEN}
   tags:
