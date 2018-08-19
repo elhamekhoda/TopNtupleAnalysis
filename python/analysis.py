@@ -11,6 +11,8 @@ import selections
 import wjets
 logger = helpers.getLogger('TopNtupleAnalysis.analysis')
 
+GeV = 1e-3
+
 class Analysis(object):
     ch = ''
     fi = None
@@ -217,15 +219,15 @@ class Analysis(object):
         #weight *= sel.weight_Sherpa22_corr
 
         return weight
-    def set_top_tagger(self, expr):
-        self.top_tagger = selections.BoostedTopTagger(expr)
+    def set_top_tagger(self, expr, num_thad = 1):
+        self.top_tagger = selections.BoostedTopTagger(expr, num_top = num_thad)
 
-    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_70'):
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_70', **kwds):
         attr = algorithm_WP_systs.split('.',2)
         algorithm_WP_systs = attr[-1].split('_', 2)
         if len(attr)==2:
             algorithm_WP_systs.append(attr[0])
-        self.bot_tagger = selections.TrackJetBotTagger(*algorithm_WP_systs)
+        self.bot_tagger = selections.TrackJetBotTagger(*algorithm_WP_systs, **kwds)
 
     def set_TtresChi2(self):
         self.TtresChi2 = selections.TtresChi2(bot_tagger = self.bot_tagger)
@@ -633,7 +635,7 @@ class AnaTtresSL(Analysis):
                     closeJetIdx = i
                     break
             
-            goodJetIdx = self.top_tagger.thad_index
+            goodJetIdx = self.top_tagger.thad_indices[0]
             lj.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx], sel.ljet_eta[goodJetIdx], sel.ljet_phi[goodJetIdx], sel.ljet_m[goodJetIdx])
             closeJet = ROOT.TLorentzVector()
             closeJet.SetPtEtaPhiE(sel.jet_pt[closeJetIdx], sel.jet_eta[closeJetIdx], sel.jet_phi[closeJetIdx], sel.jet_e[closeJetIdx])
@@ -788,3 +790,262 @@ class AnaTtresSL(Analysis):
                 else:
                     self.h[observable.name][syst].Fill(values, w)
 
+class AnaTtresFH(Analysis):
+    mapSel = {  # OR all channels in the comma-separated list
+                'boosted': ['bJJ_2015','bJJ_2016'],
+                'boosted0': ['bJJ_2015','bJJ_2016'],
+                'boosted1': ['bJJ_2015','bJJ_2016'],
+                'boosted2': ['bJJ_2015', 'bJJ_2016'],
+                'boosted3': ['bJJ_2015', 'bJJ_2016'],
+                'resolved': ['resolved_2015', 'resolved_2016'],
+                'resolved0': ['resolved_2015', 'resolved_2016'],
+                'resolved1': ['resolved_2015', 'resolved_2016'],
+                'resolved2': ['resolved_2015', 'resolved_2016'],
+                'resolved3': ['resolved_2015', 'resolved_2016'],
+                'ovresolved': ['resolved_2015', 'resolved_2016'],
+                'ovresolved': ['resolved_2015', 'resolved_2016']
+                }
+    def __init__(self, channel, suf, outputFile, do_tree = False):
+        if 'resolved' in channel:
+            raise NotImplementedError("resolved (bucket) analysis is not yet implemented!")
+        Analysis.__init__(self, channel, suf, outputFile, do_tree)
+        self.noMttSlices = False
+        self.applyMET = 0
+        self.eftLambda = -1
+        self.eftCvv = 0
+        self.KKgluonWidth = -1
+        self.DMMass = False
+        self.w2HDM = 1
+        self.me2SM = -1
+        self.me2XX = -1
+        self.alphaS = -1
+        ########################
+        ### make debug tree ####
+        self.addTree() #########
+        ########################
+        # make histograms
+        self.add("yields", 1, 0.5, 1.5)
+        self.add("runNumber", 24647, 276261.5, 300908.5)
+        self.add("nJets", 10, -0.5, 9.5)
+        self.add("nTrkBtagJets", 10, -0.5, 9.5)
+        self.addVar("MET", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
+        self.add("MET_phi", 32, -3.2, 3.2)
+        self.add("mu", 100, 0, 100)
+        self.add("vtxz", 40, -400, 400)
+        self.add("npv", 50, 0, 50)
+        ### boosted channel ###
+        self.add("nlargeJets", 10, -0.5, 9.5)
+        # Leading hadronic top candidate
+        self.addVar("leadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3])
+        self.add("leadinglargeJetM", 30, 0, 300)
+        self.add("leadinglargeJetPtMtt", 50, 0, 1)
+        self.add("leadinglargeJetEta", 20, -2., 2.)
+        self.add("leadinglargeJetPhi", 32, -3.2, 3.2)
+        self.add("leadinglargeJet_tau32_wta", 20, 0, 1)
+        self.add("leadinglargeJet_tau21_wta", 20, 0, 1)
+        self.add("btagged_tjet_closest_to_ljet1", 50, 0, (math.pi**2+2.5**2)**0.5)
+        # Sub-leading hadronic top candidate
+        self.addVar("subleadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3])
+        self.add("subleadinglargeJetM", 30, 0, 300)
+        self.add("subleadinglargeJetPtMtt", 50, 0, 1)
+        self.add("subleadinglargeJetEta", 20, -2., 2.)
+        self.add("subleadinglargeJetPhi", 32, -3.2, 3.2)
+        self.add("subleadinglargeJet_tau32_wta", 20, 0, 1)
+        self.add("subleadinglargeJet_tau21_wta", 20, 0, 1)
+        self.add("btagged_tjet_closest_to_ljet2", 50, 0, (math.pi**2+2.5**2)**0.5)
+        ### resolved channel ###
+        # Leading hadronic top candidate
+        self.addVar("mthad1_res", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
+        self.add("mwhad1_res", 40, 0, 400)
+        # Sub-leading hadronic top candidate
+        self.addVar("mthad2_res", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
+        self.add("mwhad2_res", 40, 0, 400)
+
+        #self.addVar("mtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
+        self.add("mtt", 600 , 0, 6000)
+        self.add("mttr", 600, 0, 6000)
+        self.add("trueMtt", 600, 0, 6000)
+        self.add("trueMttr", 600, 0, 6000)
+        self.addVar("mtt8TeV", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+        self.addVar("mtt8TeVr",[0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+        self.addVar("trueMtt8TeV",  [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+        self.addVar("trueMtt8TeVr", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+
+        self.add("btagCat", 5, -1.5, 3.5)
+        
+        for observable in self.observables:
+            if 'hist' in observable.do:
+                if type(observable.binning) == tuple:
+                    self.add(observable.name, *observable.binning)
+                else:
+                    self.addVar(observable.name, observable.binning)
+    def selectChannel(self, sel, syst):
+        if self.ch not in self.mapSel:
+            logger.warn('The selected channel "{}" is not registered. The events will be processed anyway without any further constraint.'.format(self.ch))
+            self.mapSel[self.ch] = [self.ch]
+        passSel = {}
+        for i, listSel in self.mapSel.iteritems():
+            passSel[i] = True
+            passORChannels = False
+            for item in listSel:
+                hardPass = True
+                passChannel = getattr(sel, item, False)
+                if passChannel and hardPass:
+                    passORChannels = True
+                    break
+            passSel[i] = passORChannels
+
+        if not passSel[self.ch]:
+            return False
+
+        if not self.bot_tagger.passes(sel):
+            return False
+        # veto resolved event if it passes the boosted channel
+        top_tagged = self.top_tagger.passes(sel)
+
+        if 'resolved' in self.ch:
+            self.TtresBucket.passes(sel)
+            Btagcat = self.TtresBucket.bcategory
+        else:
+            Btagcat = sel.Btagcat
+
+        if ('resolved' in self.ch or 'resolved' in self.ch) and not "ov" in self.ch:
+            if passSel['boosted'] and top_tagged:
+                return False
+
+        if self.ch in ['boosted0']:
+            if Btagcat != 0:
+                return False
+        if self.ch in ['boosted1']:
+            if Btagcat != 1:
+                return False
+        if self.ch in ['boosted2']:
+            if Btagcat != 2:
+                return False
+        if self.ch in ['boosted3']:
+            if Btagcat != 3:
+                return False
+
+        # veto events in nominal ttbar overlapping with the mtt sliced samples
+        # commented now as it is not available in mc15c
+        if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
+            if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+                return False
+        return True
+    def run(self, sel, syst, wo, wTruth):
+        ########################
+        self.clearBranches() ###
+        ########################
+
+        if sel.mcChannelNumber in helpers.listWjets22:
+            flag = sel.Wfilter_Sherpa_nT
+            if self.keep == 'bb':
+                if flag != 3 and flag != 4:
+                    return
+            if self.keep == 'cc':
+                if flag != 1:
+                    return
+            if self.keep == 'bbcc':
+                if flag != 3 and flag != 4 and flag != 1:
+                    return
+            if self.keep == 'c':
+                if flag != 2:
+                    return
+            if self.keep == 'l':
+                if flag != 5:
+                    return
+
+        w = wo
+
+        if self.applyMET > 0 and not ('boosted' in self.ch or 'boosted' in self.ch):
+            if sel.met_met*1e-3 < self.applyMET:
+                return
+
+        if(sel.mcChannelNumber != 0 and hasattr(sel, "MC_ttbar_beforeFSR_m") and sel.mcChannelNumber not in [407200, 407201, 407202, 407203, 407204]):
+            w0 = w/self.w2HDM
+            self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
+            self.h["trueMttr"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
+            self.h["trueMtt8TeV"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
+            self.h["trueMtt8TeVr"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
+        if(sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+            pME = helpers.getTruth4momenta(sel)
+            truPttbar = pME[2]+pME[3]
+            w0 = w/self.w2HDM
+            self.h["trueMtt"][syst].Fill(truPttbar.M(), w)
+            self.h["trueMttr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
+            self.h["trueMtt8TeV"][syst].Fill(truPttbar.M(), w)
+            self.h["trueMtt8TeVr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
+        self.h["yields"][syst].Fill(1, w)
+        self.h["runNumber"][syst].Fill(sel.runNumber, w)
+        lj1 = ROOT.TLorentzVector()
+        lj2 = ROOT.TLorentzVector()
+
+        self.h["MET_phi"][syst].Fill(sel.met_phi, w)
+        self.h["MET"][syst].Fill(sel.met_met*1e-3, w)
+        self.h["nJets"][syst].Fill(len(sel.jet_pt), w)
+
+        self.h["nTrkBtagJets"][syst].Fill(sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in self.bot_tagger.tjet_isbtagged), w)
+        self.h["mu"][syst].Fill(sel.mu, w)
+        self.h["npv"][syst].Fill(sel.npv, w)
+        self.h["vtxz"][syst].Fill(sel.vtxz, w)
+
+        if ('boosted' in self.ch) and self.top_tagger.passed:
+            goodJetIdx1 = self.top_tagger.thad_indices[0]
+            lj1.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx1]*GeV, sel.ljet_eta[goodJetIdx1], sel.ljet_phi[goodJetIdx1], sel.ljet_m[goodJetIdx1]*GeV)
+            goodJetIdx2 = self.top_tagger.thad_indices[1]
+            lj2.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx2]*GeV, sel.ljet_eta[goodJetIdx2], sel.ljet_phi[goodJetIdx2], sel.ljet_m[goodJetIdx2]*GeV)
+            w0 = w/self.w2HDM
+            mtt = (lj1+lj2).M() # unit is GeV
+            
+            self.h["mtt"][syst].Fill(mtt, w)
+            self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
+            self.h["mtt8TeV"][syst].Fill(mtt, w)
+            self.h["mtt8TeVr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
+            
+            ### boosted channel ###
+            self.h["nlargeJets"][syst].Fill(sel.ljet_pt.size(), w)
+            # Leading hadronic top candidate
+            self.h["leadinglargeJetPt"][syst].Fill(lj1.Perp(), w)
+            self.h["leadinglargeJetM"][syst].Fill(lj1.M(), w)
+            self.h["leadinglargeJetPtMtt"][syst].Fill(lj1.Perp()/mtt, w)
+            self.h["leadinglargeJetEta"][syst].Fill(lj1.Eta(), w)
+            self.h["leadinglargeJetPhi"][syst].Fill(lj1.Phi(), w)
+            self.h["leadinglargeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx1], w)
+            self.h["leadinglargeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx1], w)
+            btagged_tjet_closest_to_ljet1 = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj1))
+            self.h["btagged_tjet_closest_to_ljet1"][syst].Fill(btagged_tjet_closest_to_ljet1.DeltaR(lj1), w)
+            # Sub-leading hadronic top candidate
+            self.h["subleadinglargeJetPt"][syst].Fill(lj2.Perp(), w)
+            self.h["subleadinglargeJetM"][syst].Fill(lj2.M(), w)
+            self.h["subleadinglargeJetPtMtt"][syst].Fill(lj2.Perp()/mtt, w)
+            self.h["subleadinglargeJetEta"][syst].Fill(lj2.Eta(), w)
+            self.h["subleadinglargeJetPhi"][syst].Fill(lj2.Phi(), w)
+            self.h["subleadinglargeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx2], w)
+            self.h["subleadinglargeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx2], w)
+            btagged_tjet_closest_to_ljet2 = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj2))
+            self.h["btagged_tjet_closest_to_ljet2"][syst].Fill(btagged_tjet_closest_to_ljet1.DeltaR(lj2), w)
+
+            self.h["btagCat"][syst].Fill(self.top_tagger.bcategory, w)
+
+        for observable in self.observables:
+            if 'hist' in observable.do:
+                if observable.only != None:
+                    if not any (only in self.ch for only in observable.only):
+                        break
+                values = observable(_locals = locals())
+                if observable.style == 'foreach':
+                    for v in values:
+                        self.h[observable.name][syst].Fill(v, w)
+                else:
+                    self.h[observable.name][syst].Fill(values, w)
+
+    def set_top_tagger(self, expr, num_thad = 2):
+        super(AnaTtresFH, self).set_top_tagger(expr, num_thad = num_thad)
+        if hasattr(self, 'bot_tagger'):
+            self.top_tagger._bot_tagger = self.bot_tagger
+
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_70', **kwds):
+        kwds.setdefault('do_ljet_association', True)
+        super(AnaTtresFH, self).set_bot_tagger(algorithm_WP_systs, **kwds)
+        if hasattr(self, 'top_tagger'):
+            self.top_tagger._bot_tagger = self.bot_tagger

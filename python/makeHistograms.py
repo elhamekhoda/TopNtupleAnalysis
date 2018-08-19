@@ -311,8 +311,9 @@ def main(parallel = True):
             analysisCode[k].scalarTYPE = scalarTYPE
         analysisCode[k].set_top_tagger(top_tagger)
         analysisCode[k].set_bot_tagger(bot_tagger)
-        if ch.startswith('r'):
-            analysisCode[k].set_TtresChi2()
+        if isinstance(analysisCode[k], analysis.AnaTtresSL):
+            if ch.startswith('r'):
+                analysisCode[k].set_TtresChi2()
         logger.info('({:^6},{:^6},{:^12}): {}'.format(ch.strip(), top_tagger, bot_tagger, channels[k]))
 
     isFirstEvent = True

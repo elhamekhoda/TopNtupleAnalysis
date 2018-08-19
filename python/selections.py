@@ -68,7 +68,13 @@ class BoostedTopTagger(Selection):
     index_id : {str}, optional
             which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"), where 'i' is the id of the item.
     """
-    def __init__(self, _callable = None):
+    def __init__(self, _callable = None, num_top = 1, min_pt = 300000, strategy = 'rebel', bot_tagger = None):
+        logger.info("Select events contain at least {} hadronic-top candidate(s) with pt larger than {} MeV".format(num_top, min_pt))
+        if not callable(_callable):
+            logger.info('StrExpression: "{}"'.format(_callable))
+        self.num_top = num_top
+        self.min_pt = min_pt
+        self.bcategory = -1
         if not callable(_callable):
             self._expr = _callable
             def _callable(ev):
@@ -76,17 +82,32 @@ class BoostedTopTagger(Selection):
                                                                    name_fmt = "ljet_{}",
                                                                    index_id = "i"),
                                              {'char2int': helpers.char2int, 'sel': ev, 'i': i})
+                n = 0
                 for i in range(len(ev.ljet_pt)):
+                    if ev.ljet_pt[i] < self.min_pt:
+                        continue
                     if _top_tagger(i):
-                        self.thad_index = i
+                        self.thad_indices.append(i)
+                        n += 1
+                    if n >= self.num_top:
                         break
+
         self._alg = _callable
-        self.thad_index = -1
+        self.thad_indices = []
         self.passed = False
+        self._bot_tagger = bot_tagger
+    def bcategorize(self, ev, bot_tagger = None):
+        btagCat = 0
+        for i in self.thad_indices:
+            if self._bot_tagger.ljet_isbtagged[i]:
+                btagCat += 1
+        self.bcategory = btagCat
     def passes(self, ev):
-        self.thad_index = -1
+        self.thad_indices = []
         self._alg(ev)
-        self.passed = not (self.thad_index == -1)
+        self.passed = len(self.thad_indices) >= self.num_top
+        if self._bot_tagger != None:
+            self.bcategorize(ev)
         return self.passed
 
 class TrackJetBotTagger(Selection):
@@ -98,13 +119,15 @@ class TrackJetBotTagger(Selection):
             {'MV2c10':    {'60':  0.92, '70':  0.79, '77':  0.58, '85':  0.05, 'pt':  7e3}}
             }
     # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
-    def __init__(self, algorithm = 'MV2c10', WP = '70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'rebel', do_association = True, do_truth_matching = True):
+    def __init__(self, algorithm = 'MV2c10', WP = '70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'rebel', do_association = True, do_ljet_association = False, do_truth_matching = True):
         self.algorithm = algorithm
         self.WP = WP
         self.trackjet_alg = trackjet_alg
         self.max_deltaR = 0.4 # Used for `do_association`
+        self.max_ljet_deltaR = 1.0 # Used for `do_ljet_association`
         self.systematic_variation = systematic_variation
         self.do_association = do_association
+        self.do_ljet_association = do_ljet_association
         self.do_truth_matching = do_truth_matching
         if self.systematic_variation != '':
             logger.warn('Please be informed: b-tagging scale factor with systematic variations is currently not valid'
@@ -124,10 +147,12 @@ class TrackJetBotTagger(Selection):
             if self.min_discriminant == -999:
                 raise KeyError('For STRATEGY("rebel"), you always need an available "Alg./WP" stored in WP2D!')
         self.passes = getattr(self, '_passes_{}'.format(self.strategy))
-
+        self._jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
         self.jet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Not used in boosted channel
         self.jet_associated_btaggedtjet_index = ROOT.vector('int')()
-        self._jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
+        self._ljet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
+        self.ljet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Used in boosted full-hadronic analysis
+        self.ljet_associated_btaggedtjet_index = ROOT.vector('int')()
 
     def _passes_obey(self, ev):
         raise DeprecationWarning("This is temporarily deprecated til we fix the bug of trk b-tagging selector in HQTTtResonancesTools -- 01.07.2018")
@@ -154,14 +179,16 @@ class TrackJetBotTagger(Selection):
                 self.tjet_isbtagged.push_back(discriminant > self.min_discriminant)
         if self.do_association:
             self.association(ev)
+        if self.do_ljet_association:
+            self.ljet_association(ev)
         if self.do_truth_matching:
             self.truth_matching(ev)
         return any(self.tjet_isbtagged)
 
 
-    def associated(self, tjet_i, jet_i, ev):
+    def associated(self, tjet_i, jet_i, max_deltaR, ev):
         deltaR = self._jet_p4[jet_i].DeltaR(self._tjet_p4[tjet_i])
-        return (deltaR < self.max_deltaR)
+        return (deltaR < max_deltaR)
 
     def association(self, ev):
         self.jet_isbtagged.clear()
@@ -174,12 +201,30 @@ class TrackJetBotTagger(Selection):
             trkbjet_associated = False
             associated_btaggedtjet_index = -1
             for tjet_i in range(len(ev.tjet_pt)):
-                if self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, ev):
+                if self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, self.max_deltaR, ev):
                     trkbjet_associated = True
                     associated_btaggedtjet_index = tjet_i
                     break
             self.jet_isbtagged.push_back(trkbjet_associated)
             self.jet_associated_btaggedtjet_index.push_back(associated_btaggedtjet_index)
+
+    def ljet_association(self, ev):
+        self.ljet_isbtagged.clear()
+        self._ljet_p4.clear()
+        self.ljet_associated_btaggedtjet_index.clear()
+        for ljet_i in range(len(ev.ljet_pt)):
+            ljet_p4 = ROOT.TLorentzVector()
+            ljet_p4.SetPtEtaPhiE(ev.ljet_pt[ljet_i], ev.ljet_eta[ljet_i], ev.ljet_phi[ljet_i], ev.ljet_e[ljet_i])
+            self._ljet_p4.push_back(ljet_p4)
+            trkbjet_associated = False
+            associated_btaggedtjet_index = -1
+            for tjet_i in range(len(ev.tjet_pt)):
+                if self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, ljet_i, self.max_ljet_deltaR, ev):
+                    trkbjet_associated = True
+                    associated_btaggedtjet_index = tjet_i
+                    break
+            self.ljet_isbtagged.push_back(trkbjet_associated)
+            self.ljet_associated_btaggedtjet_index.push_back(associated_btaggedtjet_index)
 
     def truth_matching(self, ev):
         self.tjet_istrueb = [label==5 for label in ev.tjet_label]

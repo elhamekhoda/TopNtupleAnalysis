@@ -47,8 +47,11 @@ class Run(object):
         self._tag_fmt = 'histTNA_{date}{series}'
 
     def add_selection(self, topo, lepton, period = '', b_category = '', top_tagger = 'good', bot_tagger = 'MV2c10_70', fname = '{channel}_{s.sample_name}{s.tag}.root'):
-        assert lepton in ('e', 'mu')
-        assert topo in ('b', 'r')
+        assert lepton in ('e', 'mu', 'FH')
+        if lepton in ('e', 'mu'):
+            assert topo in ('b', 'r')
+        elif lepton in ('FH',):
+            assert topo in ('boosted', 'resolved')
         self.selections.append(('({}{}{}{}, {}, {})'.format(topo, lepton, period, b_category, top_tagger, bot_tagger), fname))
 
     @property

@@ -7,7 +7,11 @@ try:
 except ImportError:
     raise ImportError("HQTTtResonancesTools is not installed or dataset does not exist.")
 import rucio.client
-import TopExamples.grid
+try:
+    import TopExamples.grid
+    __TopExamples__ = True
+except:
+    __TopExamples__ = False
 import helpers
 
 logger = helpers.getLogger('TopNtupleAnalysis.samples')
