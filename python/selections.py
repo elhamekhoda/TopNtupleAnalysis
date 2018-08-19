@@ -98,9 +98,12 @@ class BoostedTopTagger(Selection):
         self._bot_tagger = bot_tagger
     def bcategorize(self, ev, bot_tagger = None):
         btagCat = 0
-        for i in self.thad_indices:
+        for nth,i in enumerate(self.thad_indices):
             if self._bot_tagger.ljet_isbtagged[i]:
-                btagCat += 1
+                if btagCat == 1:
+                    btagCat = 3
+                else:
+                    btagCat = nth
         self.bcategory = btagCat
     def passes(self, ev):
         self.thad_indices = []
