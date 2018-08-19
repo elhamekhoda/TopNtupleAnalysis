@@ -792,21 +792,21 @@ class AnaTtresSL(Analysis):
 
 class AnaTtresFH(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
-                'boosted': ['bJJ_2015','bJJ_2016'],
-                'boosted0': ['bJJ_2015','bJJ_2016'],
-                'boosted1': ['bJJ_2015','bJJ_2016'],
-                'boosted2': ['bJJ_2015', 'bJJ_2016'],
-                'boosted3': ['bJJ_2015', 'bJJ_2016'],
-                'resolved': ['resolved_2015', 'resolved_2016'],
-                'resolved0': ['resolved_2015', 'resolved_2016'],
-                'resolved1': ['resolved_2015', 'resolved_2016'],
-                'resolved2': ['resolved_2015', 'resolved_2016'],
-                'resolved3': ['resolved_2015', 'resolved_2016'],
-                'ovresolved': ['resolved_2015', 'resolved_2016'],
-                'ovresolved': ['resolved_2015', 'resolved_2016']
+                'bFH': ['bFH_2015','bFH_2016'],
+                'bFH0': ['bFH_2015','bFH_2016'],
+                'bFH1': ['bFH_2015','bFH_2016'],
+                'bFH2': ['bFH_2015', 'bFH_2016'],
+                'bFH3': ['bFH_2015', 'bFH_2016'],
+                'rFH': ['rFH_2015', 'rFH_2016'],
+                'rFH0': ['rFH_2015', 'rFH_2016'],
+                'rFH1': ['rFH_2015', 'rFH_2016'],
+                'rFH2': ['rFH_2015', 'rFH_2016'],
+                'rFH3': ['rFH_2015', 'rFH_2016'],
+                'ovrFH': ['rFH_2015', 'rFH_2016'],
+                'ovrFH': ['rFH_2015', 'rFH_2016']
                 }
     def __init__(self, channel, suf, outputFile, do_tree = False):
-        if 'resolved' in channel:
+        if 'rFH' in channel:
             raise NotImplementedError("resolved (bucket) analysis is not yet implemented!")
         Analysis.__init__(self, channel, suf, outputFile, do_tree)
         self.noMttSlices = False
@@ -903,26 +903,26 @@ class AnaTtresFH(Analysis):
         # veto resolved event if it passes the boosted channel
         top_tagged = self.top_tagger.passes(sel)
 
-        if 'resolved' in self.ch:
+        if 'rFH' in self.ch:
             self.TtresBucket.passes(sel)
             Btagcat = self.TtresBucket.bcategory
         else:
             Btagcat = sel.Btagcat
 
-        if ('resolved' in self.ch or 'resolved' in self.ch) and not "ov" in self.ch:
-            if passSel['boosted'] and top_tagged:
+        if ('rFH' in self.ch or 'rFH' in self.ch) and not "ov" in self.ch:
+            if passSel['bFH'] and top_tagged:
                 return False
 
-        if self.ch in ['boosted0']:
+        if self.ch in ['bFH0']:
             if Btagcat != 0:
                 return False
-        if self.ch in ['boosted1']:
+        if self.ch in ['bFH1']:
             if Btagcat != 1:
                 return False
-        if self.ch in ['boosted2']:
+        if self.ch in ['bFH2']:
             if Btagcat != 2:
                 return False
-        if self.ch in ['boosted3']:
+        if self.ch in ['bFH3']:
             if Btagcat != 3:
                 return False
 
@@ -957,7 +957,7 @@ class AnaTtresFH(Analysis):
 
         w = wo
 
-        if self.applyMET > 0 and not ('boosted' in self.ch or 'boosted' in self.ch):
+        if self.applyMET > 0 and not 'bFH' in self.ch:
             if sel.met_met*1e-3 < self.applyMET:
                 return
 
@@ -989,7 +989,7 @@ class AnaTtresFH(Analysis):
         self.h["npv"][syst].Fill(sel.npv, w)
         self.h["vtxz"][syst].Fill(sel.vtxz, w)
 
-        if ('boosted' in self.ch) and self.top_tagger.passed:
+        if ('bFH' in self.ch) and self.top_tagger.passed:
             goodJetIdx1 = self.top_tagger.thad_indices[0]
             lj1.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx1]*GeV, sel.ljet_eta[goodJetIdx1], sel.ljet_phi[goodJetIdx1], sel.ljet_m[goodJetIdx1]*GeV)
             goodJetIdx2 = self.top_tagger.thad_indices[1]
