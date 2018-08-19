@@ -132,95 +132,6 @@ Create your own scripts based on this! Some very nice examples can be found in `
      -f tna-input.txt
      ```
    Change the flags according to [Usage](#usage) to adapt to your needs.
-   
-<details>
-<summary><h3>AnalysisTop Rel.20.7</h3></summary>
-It is recommended to use the Python code in <code>python</code>, which will also link to the C++ code, but it should be easier to adapt to your needs.
-To do that, please compile the code using RootCore, so that it can link against the library created by RootCore.
-To run this code, one must also checkout the following packages and recompile the RootCore setup:
-<pre><code class=bash>svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasoff/PhysicsAnalysis/TopPhys/TopPhysUtils/TopDataPreparation/trunk TopDataPreparation
-svn co svn+ssh://$CERN_USER@svn.cern.ch/reps/atlasphys-hsg8/Physics/Higgs/HSG8/AnalysisCode/NNLOReweighter/tags/NNLOReweighter-00-00-03 NNLOReweighter</code></pre>
-
-In that Python code, you can run it with: <code>cd pyHistograms</code>
-
-<ol>
-  <li style="font-weight: bold;">
-     <p><span style="font-weight: bold;">the following make a list of all input MC files (adapt it to point to the input files list)</span></p>
-     <pre><code class=bash>python makeInputsListLocal.py</code></pre>
-  <\li>
-  <li style="font-weight: bold;">
-    <p><span style="font-weight: bold;">this generates the text files with the sum of weights using the input files above</span></p>
-    <pre><code class=bash> python sumWeights.py</code></pre>
-    <\li>
-  <li style="font-weight: bold;">
-    <p><span style="font-weight: bold;">this generates the histograms itself:</span></p>
-    <pre><code class=bash>./makeHistograms.py - --files input.txt --output be,be.root\;bmu,bmu.root\;re,re.root\;rmu,rmu.root --analysis AnaTtresSL --systs nominal</code></pre>
-</ol>
-
-You can set <code>--systs</code> to all to run over all systematics (takes much longer), or give it a comma-separated list of systematics.
-You can use the option -d to indicate you want to run over data.
-The syntax of the --output flag is to provide a semi-colon-separated list of "XXX,YYY", where XXX indicates the channel to run (it will be read by the analysis in analysis.py,
-specified in the <code>--analysis</code> flag) and YYY indicates the output ROOT file for that channel.
-AnaTtresSL in analysis.py is set up to have the be, bmu, re, rmu channels as well as be2015, bmu2015, re2015, rmu2016, be2016, bmu2016, re2016, rmu2016,
-be3,bmu3,be2,bmu2,be1,bmu1,be0,bmu0,re3,rmu3,re2,rmu2,re1,rmu1,re0,rmu0. But you can create
-a new class in analysis.py of your choice and define different channels.
-
-Check <code>runBatchLocal.py</code> to check how to submit it on a local cluster.
-</details>
-
-<details>
-<summary><h3>Pre AnalysisTop Rel.20.7</h3></summary>
-The framework works by reading the flat ntuples using the class MiniTree, as called
-from <code>read.cxx</code> and then running an analysis class (that derives of Analysis) on each event and
-producing histograms to be saved in the output(s).
-
-To compile the code, do in this directory (only ROOT must be setup):
-<pre><code class=bash>make</code></pre>
-You can also compile the code using RootCore, by setting up RootCore (<code>setupATLAS</code> and then <code>rcSetup Top,2.4.29</code>) and doing:
-<pre><code class=bash>rc find_packages
-rc compile</code></pre>
-
-To check your options on how to run it: <code>./read --help</code>
-
-If you used RootCore, you must run it with: <code>$ROOTCOREBIN/bin/x86_64-slc6-gcc49-opt/read --help</code>
-
-(this will be implied in what follows)
-
-
-For example:
-<pre><code class=bash>./read --files input1.root,input2.root --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0</pre></code>
-The --analysis flag indicate which class that derives of analysis should be called. It is created in read.cxx.
-To create your own Analysis class, just change <code>read.cxx</code> to check the value of <code>--analysis</code> and create an instance of your analysis class
-in analogy with:
-<pre><code class=cpp>  std::vector<Analysis *> vec_analysis; 
-  if (analysis == "AnaTtresSL") {
-    vec_analysis.push_back(new AnaTtresSL(outList[0], true,  false )); // resolved electron
-    vec_analysis.push_back(new AnaTtresSL(outList[1], false, false )); // resolved muon
-    vec_analysis.push_back(new AnaTtresSL(outList[2], true,  true  )); // boosted  electron
-    vec_analysis.push_back(new AnaTtresSL(outList[3], false, true  )); // boosted  muon
-  } </code></pre>
-
-The list of output files is given as 4 files, since in this analysis 4 channels are expected. If your analysis only outputs one file, only the
-first should be considered.
-
-The list of inout files can be given as a comma-separated list, or it can be given as a newline-separated text file that ends in .txt and starts
-with input, for example:
-<pre><code class=bash>./read --files input.txt --analysis AnaTtresSL --output resolved_e.root,resolved_mu.root,boosted_e.root,boosted_mu.root --data 0</pre></code>
-
-where input.txt has:
-<pre><code>input1.root
-input2.root</pre></code>
-
-Take a look at the <code>Root/AnaTtresSL.cxx</code> and <code>TopNtupleAnalysis/AnaTtresSL.h</code> files for an analysis example.
-
-If, however, the mini flat ntuple files contain a histogram with the sum of weights (which is the correct
-way of doing this), one can just read the information from there.
-
-You can also write a <code>sumOfWeights.txt</code> file containing, in each line the dataset ID and the sum of weights and use:
-<pre><code class=bash>./read --files input.txt --analysis AnaTtresSL --output re.root,rmu.root,be.root,bmu.root --data 0 --sumWeights sumOfWeights.txt</pre></code>
-
-This will speed it up.
-</details>
 
 Auxiliary scripts
 -----------------
@@ -230,7 +141,7 @@ Three python modules are developed:
 2. [clusters](python/clusters.py): Batch submission and monitoring (__LSF__, __Condor__ and __CERNGrid__ are known to work. Others are not tested yet.)
 3. [run](python/run.py): API to communicate between [samples](python/samples.py), [clusters](python/clusters.py) and [makeHistograms.py](python/makeHistograms.py)
 
-It is highly recommended to copy [scripts/run-tna](scripts/run-tna) to a working directory, select the sample and cluster based on your need, and execute it directly. It is designed as the main user interface, so users should be in principle able to control the jobs using this without modifying source codes for _everything not changing the physics_.
+It is highly recommended to copy [scripts/tna-run](scripts/tna-run) to a working directory, select the sample and cluster based on your need, and execute it directly. It is designed as the main user interface, so users should be in principle able to control the jobs using this without modifying source codes for _everything not changing the physics_.
 
 An example of how to use [scripts/run-tna](scripts/run-tna):
 
