@@ -2,6 +2,7 @@ import helpers
 import ROOT
 import math
 logger = helpers.getLogger('TopNtupleAnalysis.selections')
+
 class Selection(object):
     def __init__(self, _callable = None, *args, **kwds):
         self._alg = _callable(*args, **kwds)
@@ -53,7 +54,6 @@ class TtresChi2(Selection):
     def _bcategorize_rebel(self, ev):
         self.bcategory = ROOT.TopNtupleAnalysis.res_bcat()
 
-
 class BoostedTopTagger(Selection):
     """Boosted hadronic-top tagger
 
@@ -68,13 +68,17 @@ class BoostedTopTagger(Selection):
     index_id : {str}, optional
             which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"), where 'i' is the id of the item.
     """
-    def __init__(self, _callable = None, num_top = 1, min_pt = 300000, strategy = 'rebel', bot_tagger = None):
+    def __init__(self, _callable = None, num_top = 1, min_pt = 300000, strategy = 'obey', bot_tagger = None):
         logger.info("Select events contain at least {} hadronic-top candidate(s) with pt larger than {} MeV".format(num_top, min_pt))
         if not callable(_callable):
             logger.info('StrExpression: "{}"'.format(_callable))
         self.num_top = num_top
         self.min_pt = min_pt
+        self.min_dPhi = 1.6
         self.bcategory = -1
+        self.ljet_istoptagged = []
+        self.ljet_angularcuts = []
+        self.thad = []
         if not callable(_callable):
             self._expr = _callable
             def _callable(ev):
@@ -82,33 +86,60 @@ class BoostedTopTagger(Selection):
                                                                    name_fmt = "ljet_{}",
                                                                    index_id = "i"),
                                              {'char2int': helpers.char2int, 'sel': ev, 'i': i})
-                n = 0
                 for i in range(len(ev.ljet_pt)):
                     if ev.ljet_pt[i] < self.min_pt:
-                        continue
-                    if _top_tagger(i):
-                        self.thad_indices.append(i)
-                        n += 1
-                    if n >= self.num_top:
-                        break
+                        self.ljet_istoptagged.append(0)
+                    else:
+                        self.ljet_istoptagged.append(_top_tagger(i))
 
         self._alg = _callable
-        self.thad_indices = []
         self.passed = False
         self._bot_tagger = bot_tagger
+        self.strategy = strategy
+        if self.strategy == 'obey':
+            self.passes = self._passes_obey
+        elif self.strategy == 'rebel':
+            self.passes = self._passes_rebel
     def bcategorize(self, ev, bot_tagger = None):
         btagCat = 0
-        for nth,i in enumerate(self.thad_indices):
+        for i, istoptagged in enumerate(self.ljet_istoptagged):
+            if not istoptagged:
+                continue
             if self._bot_tagger.ljet_isbtagged[i]:
                 if btagCat == 1:
                     btagCat = 3
                 else:
-                    btagCat = nth
+                    btagCat = i
         self.bcategory = btagCat
-    def passes(self, ev):
-        self.thad_indices = []
+    def _passes_obey(self, ev):
+        self.ljet_istoptagged = []
         self._alg(ev)
-        self.passed = len(self.thad_indices) >= self.num_top
+        self.passed = sum(self.ljet_istoptagged) >= self.num_top
+        if self._bot_tagger != None:
+            self.bcategorize(ev)
+        return self.passed
+    def angularcuts(self, ev):
+        # This is a temporary solution. will be implemented in HQTTtresTools and be utilized directly here in the future
+        ret = []
+        for i1, phi_ljet1 in enumerate(ev.ljet_phi):
+            ret.append([])
+            for i2, phi_ljet2 in enumerate(ev.ljet_phi):
+                ret[-1].append(int((i1 > i2) * (abs(phi_ljet1 - phi_ljet2) > self.min_dPhi)))
+        self.ljet_angularcuts = ret
+        for i in range(len(self.ljet_angularcuts)):
+            for j in range(len(self.ljet_angularcuts[i])):
+                if i == j:
+                    continue
+                if self.ljet_istoptagged[i]*self.ljet_angularcuts[i][j]*self.ljet_istoptagged[j]:
+                    self.ljet_istoptagged[i+1:j] = (0,)*(j-i-1)
+                    return
+        self.ljet_istoptagged = [0]* len(self.ljet_angularcuts)
+
+    def _passes_rebel(self, ev):
+        self.ljet_istoptagged = []
+        self._alg(ev)
+        self.angularcuts(ev)
+        self.passed = sum(self.ljet_istoptagged) >= self.num_top
         if self._bot_tagger != None:
             self.bcategorize(ev)
         return self.passed
