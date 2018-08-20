@@ -93,8 +93,8 @@ class Run(object):
                 cmds['build'].append('lsetup pyami rucio{}\n'.format(' -f' if self.system == 'naf' else ''))
         if download_cmd:
             cmds['download'].append(''.join(download_cmd))
-        cmds['exec'].append(('python $WorkDir_DIR/python/TopNtupleAnalysis/makeHistograms.py' if os.getenv('AtlasProject') and self.cluster != None else os.path.join(self.source_dir,'makeHistograms.py'))  + ' \\\n'
-                            + '--analysis ' + self.analysis_type  + sample.is_data + sample.extra + ' --systs '  + sample.systematics + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
+        cmds['exec'].append(('python $WorkDir_DIR/python/TopNtupleAnalysis/makeHistograms.py ' if os.getenv('AtlasProject') and self.cluster != None else os.path.join(self.source_dir,'makeHistograms.py')) + self.analysis_type + ' \\\n'
+                            + sample.is_data + sample.extra + ' --systs '  + sample.systematics + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
                             + '--files '    + infile + ' \\\n'
                             + ' \\\n'.join(['-o "{selection}:{output_file}"'.format(selection = selection, output_file = output_file) for selection, output_file in output_files]) + '\n')
         return cmds

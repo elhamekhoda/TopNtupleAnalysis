@@ -49,29 +49,19 @@ General Instruction
 #### Usage
 The core program is `python/makeHistograms.py`.
 ```
-usage: makeHistograms.py [-h] [-d] [-f FILE] [-A ANALYSIS] [-o [FILES]]
-                         [-s SYSTEMATICS] [-W FLAVOURS] [-P PDFS] [-Q CHANNEL]
-                         [-N] [-M CUT] [-S MH,MA,SBA,TANB,TYPE]
-                         [-E LAMBDA,CVV] [-K WIDTH] [-D] [-p PDF] [-F] [-w]
-                         [-u FLOAT] [-t TOP_TAGGER]
+usage: makeHistograms.py [-h] [-d] [-f [FILE]] [-s SYSTEMATICS] [-W FLAVOURS]
+                         [-P PDFS] [-Q CHANNEL] [-N] [-M CUT]
+                         [-S MH,MA,SBA,TANB,TYPE] [-E LAMBDA,CVV] [-K WIDTH]
+                         [-D] [-p PDF] [-F] [-w] [-u FLOAT] [-t TOP_TAGGER]
+                         [-b BOT_TAGGER] [--nevents NEVENTS] [--do-tree]
+                         {AnaTtresSL,AnaTtresFH} ...
 
 optional arguments:
   -h, --help            show this help message and exit
   -d, --data            Is this data? (default: False)
-  -f FILE, --files FILE
+  -f [FILE], --files [FILE]
                         Text file with list of input files. (default:
-                        input.txt)
-  -A ANALYSIS, --analysis ANALYSIS
-                        Analysis code to run. (default: AnaTtresSL)
-  -o [FILES], --output [FILES]
-                        You can run more than 1 channels in the same time. The
-                        syntax is "-o (<topo><lep>[<b-cat>],[<top-
-                        tagger>]):<output_fname> [-o ... [-o ...]]". See Also:
-                        `--top-tagger` (default:
-                        ['(re,good):hist_re.root',
-                        '(rmu,good):hist_rmu.root',
-                        '(be,good):hist_be.root',
-                        '(bmu,good):hist_bmu.root'])
+                        ['input.txt'])
   -s SYSTEMATICS, --systs SYSTEMATICS
                         Comma-separated list of systematic uncertainties in
                         TTrees in the input file. Use 'all' to run over all
@@ -116,22 +106,68 @@ optional arguments:
                         large-R jet for the hadronic-top reconstruction in the
                         boost selection. Simple logical operation are
                         supported. ONLY WORK IF YOU DON'T USE ANY TOP-TAGGER
-                        IN THE _OUTPUT_ SELECTIONS. (default:
-                        good)
+                        IN THE _OUTPUT_ SELECTIONS. (default: good)
+  -b BOT_TAGGER, --bot-tagger BOT_TAGGER
+                        "GLOBAL" b-quark tagger. ONLY WORK IF YOU DON'T USE
+                        ANY BOT-TAGGER IN THE _OUTPUT_ SELECTIONS. (default:
+                        MV2c10_70)
+  --nevents NEVENTS     Number of events are going to be processed for test-
+                        only purpose. (default: None)
+  --do-tree             Make a mini-tree. (default: False)
+
+SL/FH ttbar resonances anaylsis:
+  {AnaTtresSL,AnaTtresFH}
+    AnaTtresSL          Semi-leptonic ttbar resonances anaylsis
+      -o [FILES], --output [FILES]
+                            You can run more than 1 channels in the same time. The
+                            syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>,
+                            [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]".
+                            See Also: `--top-tagger` (default:
+                            ['(re,good,MV2c10_70):hist_re.root',
+                            '(rmu,good,MV2c10_70):hist_rmu.root',
+                            '(be,good,MV2c10_70):hist_be.root',
+                            '(bmu,good,MV2c10_70):hist_bmu.root'])
+    AnaTtresFH          Full-Hadronic ttbar resonances anaylsis
+      -o [FILES], --output [FILES]
+                            You can run more than 1 channels in the same time. The
+                            syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>,
+                            [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]".
+                            See Also: `--top-tagger` (default:
+                            ['(bFH,good,MV2c10_70):hist_bFH.root'])
 ```
 
 Create your own scripts based on this! Some very nice examples can be found in `scripts/`.
 
 #### Quick Start
-1. Please first follow the instruction [__HERE__](https://gitlab.cern.ch/atlas-phys/exot/hqt/R21-ttbar-1lep/HQTTtResonancesTools/wikis/home) of HQTTtResonancesTools and generate a TopNtuple `run/output.root`.
-2. `cd $TestArea/../run/` and run TopNtupleAnalysis
-
-     ```bash
-     echo "$TestArea/../run/output.root" > tna-input.txt
-     $SourceArea/TopNtupleAnalysis/python/makeHistograms.py \
-     -f tna-input.txt
-     ```
-   Change the flags according to [Usage](#usage) to adapt to your needs.
+1.  Please first follow the instruction [__HERE__](https://gitlab.cern.ch/atlas-phys/exot/hqt/R21-ttbar-1lep/HQTTtResonancesTools/wikis/home) of HQTTtResonancesTools and generate a TopNtuple `run/output.root`.
+2.  `cd $TestArea/../run/` and run TopNtupleAnalysis
+    __For semi-leptonic analysis:__
+    ```bash
+    echo "$TestArea/../run/output.root" > tna-input.txt
+    $SourceArea/TopNtupleAnalysis/python/makeHistograms.py AnaTtresSL
+    -f tna-input.txt \
+    -o "(be,good,MV2c10_70):be_zprime3000.root"
+    ```
+    __For full-hadronic analysis:__
+    ```bash
+    echo "$TestArea/../run/output.root" > tna-input.txt
+    $SourceArea/TopNtupleAnalysis/python/makeHistograms.py AnaTtresFH
+    -f tna-input.txt \
+    -o "(bFH,good,MV2c10_70):be_zprime3000.root"
+    ```
+   Change the flags according to [Usage](#usage) to adapt to your needs. For example, you can change `good` to any top-tagger as you like.
+   Currently available top-taggers are listed below:
+   | Tagger      | Flag               |
+   |:-----------:|:------------------:|
+   | DNN@80      | `good_dnn80`       |
+   | BDT@80      | `good_bdt80`       |
+   | DNN Topo@80 | `good_topo80`      |
+   | MT@50       | `good_smooth_mt50` |
+   | MT@80       | `good_smooth_mt80` |
+   | TS@50       | `good_smooth_ts50` |
+   | TS@80       | `good_smooth_ts80` |
+   | QT@50       | `good_smooth_qt50` |
+   | QT@80       | `good_smooth_qt80` |
 
 Auxiliary scripts
 -----------------

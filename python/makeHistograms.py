@@ -429,7 +429,8 @@ if __name__ == "__main__":
                 self.index += 1
                 items.append(values)
                 setattr(namespace, self.dest, items)
-    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, add_help=False)
+
     parser.add_argument("-d", "--data",
                         action="store_true",
                         dest="data",
@@ -440,21 +441,6 @@ if __name__ == "__main__":
                         nargs = '?',
                         help="Text file with list of input files.",
                         metavar="FILE")
-    parser.add_argument("-A", "--analysis",
-                        dest="analysis",
-                        default="AnaTtresSL",
-                        help="Analysis code to run.",
-                        metavar="ANALYSIS")
-    parser.add_argument("-o", "--output",
-                        dest="output",
-                        default = ["(re,good,MV2c10_70):hist_re.root",
-                                   "(rmu,good,MV2c10_70):hist_rmu.root",
-                                   "(be,good,MV2c10_70):hist_be.root",
-                                   "(bmu,good,MV2c10_70):hist_bmu.root"],
-                        action = AppendActionCleanDefault,
-                        nargs = '?',
-                        help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
-                        metavar="FILES")
     parser.add_argument("-s", "--systs",
                         dest="systs",
                         default="nominal",
@@ -532,7 +518,30 @@ if __name__ == "__main__":
     parser.add_argument('--do-tree',
                         action='store_true',
                         help='Make a mini-tree.')
-    options = parser.parse_args()
+
+    parent_parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, parents = [parser]) 
+    subparsers = parent_parser.add_subparsers(title = 'SL/FH ttbar resonances anaylsis', dest = 'analysis')
+    SLttres_parser = subparsers.add_parser('AnaTtresSL', parents = [parser], formatter_class=argparse.ArgumentDefaultsHelpFormatter, help = 'Semi-leptonic ttbar resonances anaylsis')
+    SLttres_parser.add_argument("-o", "--output",
+                        dest="output",
+                        default = ["(re,good,MV2c10_70):hist_re.root",
+                                   "(rmu,good,MV2c10_70):hist_rmu.root",
+                                   "(be,good,MV2c10_70):hist_be.root",
+                                   "(bmu,good,MV2c10_70):hist_bmu.root"],
+                        action = AppendActionCleanDefault,
+                        nargs = '?',
+                        help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
+                        metavar="FILES")
+    FHttres_parser = subparsers.add_parser('AnaTtresFH', parents = [parser],formatter_class=argparse.ArgumentDefaultsHelpFormatter, help = 'Full-Hadronic ttbar resonances anaylsis')
+    FHttres_parser.add_argument("-o", "--output",
+                        dest="output",
+                        default = ["(bFH,good,MV2c10_70):hist_bFH.root"],
+                        action = AppendActionCleanDefault,
+                        nargs = '?',
+                        help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
+                        metavar="FILES")
+
+    options = parent_parser.parse_args()
 
     logger.info("-> Calling main")
     helpers.initialise_binds()
