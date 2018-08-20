@@ -146,14 +146,17 @@ Create your own scripts based on this! Some very nice examples can be found in `
      echo "$TestArea/../run/output.root" > tna-input.txt
      $SourceArea/TopNtupleAnalysis/python/makeHistograms.py AnaTtresSL \
      -f tna-input.txt
-     -o "(bFH, good, MV2c10_70): bFH_zprime3000.root"
+     -o "(be , good, MV2c10_70):  be_zprime3000.root"
+     -o "(bmu, good, MV2c10_70): bmu_zprime3000.root"
+     -o "(re , good, MV2c10_70):  re_zprime3000.root"
+     -o "(rmu, good, MV2c10_70): rmu_zprime3000.root"
      ```
     __For full-hadronic channels:__
      ```bash
      echo "$TestArea/../run/output.root" > tna-input.txt
      $SourceArea/TopNtupleAnalysis/python/makeHistograms.py AnaTtresFH \
      -f tna-input.txt
-     -o "(be, good, MV2c10_70): be_zprime3000.root"
+     -o "(bFH, good, MV2c10_70): bFH_zprime3000.root"
      ```
 
     Change the flags according to [Usage](#usage) to adapt to your needs.  
