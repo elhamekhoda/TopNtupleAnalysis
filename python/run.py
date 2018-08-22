@@ -48,10 +48,7 @@ class Run(object):
 
     def add_selection(self, topo, lepton, period = '', b_category = '', top_tagger = 'good', bot_tagger = 'MV2c10_70', fname = '{channel}_{s.sample_name}{s.tag}.root'):
         assert lepton in ('e', 'mu', 'FH')
-        if lepton in ('e', 'mu'):
-            assert topo in ('b', 'r')
-        elif lepton in ('FH',):
-            assert topo in ('boosted', 'resolved')
+        assert topo in ('b', 'r')
         self.selections.append(('({}{}{}{}, {}, {})'.format(topo, lepton, period, b_category, top_tagger, bot_tagger), fname))
 
     @property
@@ -93,7 +90,7 @@ class Run(object):
                 cmds['build'].append('lsetup pyami rucio{}\n'.format(' -f' if self.system == 'naf' else ''))
         if download_cmd:
             cmds['download'].append(''.join(download_cmd))
-        cmds['exec'].append(('python $WorkDir_DIR/python/TopNtupleAnalysis/makeHistograms.py ' if os.getenv('AtlasProject') and self.cluster != None else os.path.join(self.source_dir,'makeHistograms.py')) + self.analysis_type + ' \\\n'
+        cmds['exec'].append(('python $WorkDir_DIR/python/TopNtupleAnalysis/makeHistograms.py ' if os.getenv('AtlasProject') and self.cluster != None else os.path.join(self.source_dir,'makeHistograms.py'))   + ' '  + self.analysis_type + ' \\\n'
                             + sample.is_data + sample.extra + ' --systs '  + sample.systematics + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
                             + '--files '    + infile + ' \\\n'
                             + ' \\\n'.join(['-o "{selection}:{output_file}"'.format(selection = selection, output_file = output_file) for selection, output_file in output_files]) + '\n')
