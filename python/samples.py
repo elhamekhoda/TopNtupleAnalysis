@@ -18,43 +18,70 @@ import helpers
 
 logger = helpers.getLogger('TopNtupleAnalysis.samples')
 
-DS_PATTERN = '{s.ds_scope}.{{{{s.DSID[{{i}}]}}}}.*{suffix}'
+DS_PATTERN = '{s.ds_scope}.{{{{s.DSID[{{i}}]}}}}.*.DAOD_{s.deriv}.*{suffix}'
 DS_SCOPE = 'user.{s._client.account}'
 
-MAP_TO_SAMPLES = {# <sample>: <physics_short>
-                'wbbjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
-                'wccjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
-                'wcjets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
-                'wljets': ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
-                'data': ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
-                'qcde': ['Data15_13TeV_25ns_EXOT4', 'Data16_13TeV_25ns_EXOT4'],
-                'qcdmu': ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
-                'tt':['MC16_13TeV_25ns_FS_EXOT4_ttbar_nonallhad'],
-                'singletop':['MC16_13TeV_25ns_FS_EXOT4_singletop'],
-                'zjets': ['MC16_13TeV_25ns_FS_EXOT4_Zjets221'],
-                'dijets': ['MC16_13TeV_25ns_FS_EXOT4_dijets'],
-                'vv': ['MC16_13TeV_25ns_FS_EXOT4_VV'],
-                'zprime400': ['MC16_13TeV_25ns_FS_EXOT4_Zprime400'],
-                'zprime500': ['MC16_13TeV_25ns_FS_EXOT4_Zprime500'],
-                'zprime750': ['MC16_13TeV_25ns_FS_EXOT4_Zprime750'],
-                'zprime1000': ['MC16_13TeV_25ns_FS_EXOT4_Zprime1000'],
-                'zprime1250': ['MC16_13TeV_25ns_FS_EXOT4_Zprime1250'],
-                'zprime1500': ['MC16_13TeV_25ns_FS_EXOT4_Zprime1500'],
-                'zprime1750': ['MC16_13TeV_25ns_FS_EXOT4_Zprime1750'],
-                'zprime2000': ['MC16_13TeV_25ns_FS_EXOT4_Zprime2000'],
-                'zprime2250': ['MC16_13TeV_25ns_FS_EXOT4_Zprime2250'],
-                'zprime2500': ['MC16_13TeV_25ns_FS_EXOT4_Zprime2500'],
-                'zprime2750': ['MC16_13TeV_25ns_FS_EXOT4_Zprime2750'],
-                'zprime3000': ['MC16_13TeV_25ns_FS_EXOT4_Zprime3000'],
-                'zprime4000': ['MC16_13TeV_25ns_FS_EXOT4_Zprime4000'],
-                'zprime5000': ['MC16_13TeV_25ns_FS_EXOT4_Zprime5000'],
-                'kkgrav400': ['MC16_13TeV_25ns_FS_EXOT4_Gtt400'],
-                'kkgrav500': ['MC16_13TeV_25ns_FS_EXOT4_Gtt500'],
-                'kkgrav750': ['MC16_13TeV_25ns_FS_EXOT4_Gtt750'],
-                'kkgrav1000': ['MC16_13TeV_25ns_FS_EXOT4_Gtt1000'],
-                'kkgrav2000': ['MC16_13TeV_25ns_FS_EXOT4_Gtt2000'],
-                'kkgrav3000': ['MC16_13TeV_25ns_FS_EXOT4_Gtt3000']
-                }
+MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
+                  # EXOT4
+                  ('wbbjets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
+                  ('wccjets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
+                  ('wcjets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
+                  ('wljets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
+                  ('data', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
+                  ('qcde', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4', 'Data16_13TeV_25ns_EXOT4'],
+                  ('qcdmu', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
+                  ('tt', 'EXOT4'):['MC16_13TeV_25ns_FS_EXOT4_ttbar_nonallhad'],
+                  ('singletop', 'EXOT4'):['MC16_13TeV_25ns_FS_EXOT4_singletop'],
+                  ('zjets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zjets221'],
+                  ('dijets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_dijets'],
+                  ('vv', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_VV'],
+                  ('zprime400', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime400'],
+                  ('zprime500', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime500'],
+                  ('zprime750', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime750'],
+                  ('zprime1000', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime1000'],
+                  ('zprime1250', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime1250'],
+                  ('zprime1500', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime1500'],
+                  ('zprime1750', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime1750'],
+                  ('zprime2000', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime2000'],
+                  ('zprime2250', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime2250'],
+                  ('zprime2500', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime2500'],
+                  ('zprime2750', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime2750'],
+                  ('zprime3000', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime3000'],
+                  ('zprime4000', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime4000'],
+                  ('zprime5000', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Zprime5000'],
+                  ('kkgrav400', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Gtt400'],
+                  ('kkgrav500', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Gtt500'],
+                  ('kkgrav750', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Gtt750'],
+                  ('kkgrav1000', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Gtt1000'],
+                  ('kkgrav2000', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Gtt2000'],
+                  ('kkgrav3000', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Gtt3000'],
+                  # EXOT7
+                  ('wbbjets', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Wjets221'],
+                  ('wccjets', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Wjets221'],
+                  ('wcjets', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Wjets221'],
+                  ('wljets', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Wjets221'],
+                  ('data', 'EXOT7'): ['Data15_13TeV_25ns_EXOT7','Data16_13TeV_25ns_EXOT7'],
+                  ('tt', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_ttbar_allhad'],
+                  ('ttV', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_ttbarV'],
+                  ('singletop', 'EXOT7'):['MC16_13TeV_25ns_FS_EXOT7_singletop'],
+                  ('zjets', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zjets221'],
+                  ('dijets', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_dijets'],
+                  ('vv', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_VV'],
+                  ('zprime400', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime400'],
+                  ('zprime500', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime500'],
+                  ('zprime750', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime750'],
+                  ('zprime1000', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime1000'],
+                  ('zprime1250', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime1250'],
+                  ('zprime1500', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime1500'],
+                  ('zprime1750', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime1750'],
+                  ('zprime2000', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime2000'],
+                  ('zprime2250', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime2250'],
+                  ('zprime2500', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime2500'],
+                  ('zprime2750', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime2750'],
+                  ('zprime3000', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime3000'],
+                  ('zprime4000', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime4000'],
+                  ('zprime5000', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime5000']
+                 }
 
 def register_samples(mapping):
     MAP_TO_SAMPLES.update(mapping)
@@ -80,19 +107,27 @@ class Sample(object):
                     sample.datasets.extend(obj.datasets)
                     return sample
         else:
-            for dataset_name, physics_short in MAP_TO_SAMPLES.iteritems():
-                if obj.split('._')[0] == dataset_name:
+            for (dataset_name, dataset_deriv), physics_short in MAP_TO_SAMPLES.iteritems():
+                if not isinstance(obj, str):
+                    obj, deriv = obj
+                else:
+                    deriv = 'EXOT4'
+                if (obj.split('._')[0], deriv) == (dataset_name,  dataset_deriv):
                     sample.name = dataset_name
                     for s in TopExamples.grid.Samples(physics_short):
                         sample.datasets.extend(s.datasets)
                     return sample
         assert True, "Houston we've got a problem"
 
-    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}, tag = '', download_to = None, commit_when_init = True):
+    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}, tag = '', download_to = None, commit_when_init = True, deriv = None):
+        deriv = deriv or 'EXOT4'
         self.parent = self
         self.ds_scope = ds_scope.format(s = self, **ds_fmt_options)
+        if not isinstance(sample_name, str) and deriv == None:
+            sample_name, deriv = sample_name
         self.sample_name = sample_name
-        self.sample = self.parse_dataset(sample_name)
+        self.sample = self.parse_dataset((sample_name, deriv))
+        self.deriv = deriv
         self._ds_pattern_fmt = ds_pattern.format(s = self, **ds_fmt_options)
         if self._ds_pattern_fmt.startswith('user.'):
             head, _, tail = self._ds_pattern_fmt.partition(':')
