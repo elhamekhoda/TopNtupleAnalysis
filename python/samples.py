@@ -96,9 +96,6 @@ class Sample(object):
     _client = rucio.client.Client()
     @staticmethod
     def parse_dataset(obj):
-        if obj not in MAP_TO_SAMPLES:
-            raise NameError('"{}"" not found in the current smaple list.\nNote that a user-defined sample must be first registered to {} using {}.\nAlready Registered Samples: {}'
-                            .format(obj, '`{}`'.format(__name__ + '.MAP_TO_SAMPLES'), '`{}`'.format(__name__ + '.register_samples'), sorted(MAP_TO_SAMPLES.iterkeys())))
         sample = TopExamples.grid.Sample("")
         if isinstance(obj, TopExamples.grid.Sample):
             for dataset_name, physics_short in MAP_TO_SAMPLES.iteritems():
@@ -117,13 +114,13 @@ class Sample(object):
                     for s in TopExamples.grid.Samples(physics_short):
                         sample.datasets.extend(s.datasets)
                     return sample
-        assert True, "Houston we've got a problem"
+        raise NameError('"{}" not found in the current sample list.\nNote that a user-defined sample must be first registered to {} using {}.\nAlready Registered Samples: {}'
+                        .format(obj, '`{}`'.format(__name__ + '.MAP_TO_SAMPLES'), '`{}`'.format(__name__ + '.register_samples'), sorted(MAP_TO_SAMPLES.iterkeys())))
 
-    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}, tag = '', download_to = None, commit_when_init = True, deriv = None):
-        deriv = deriv or 'EXOT4'
+    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}, tag = '', download_to = None, commit_when_init = True, deriv = 'EXOT4'):
         self.parent = self
         self.ds_scope = ds_scope.format(s = self, **ds_fmt_options)
-        if not isinstance(sample_name, str) and deriv == None:
+        if not isinstance(sample_name, str):
             sample_name, deriv = sample_name
         self.sample_name = sample_name
         self.sample = self.parse_dataset((sample_name, deriv))
@@ -264,7 +261,7 @@ class Sample(object):
             assert type(cmds) == list, "Houston we've got a problem"
             return cmds
     def __repr__(self):
-        return '<{}.{}("{}"{})>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name, self.tag or '[{}]'.format(self.tag))
+        return '<{}.{}("{}"{})>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name, self.tag and '[{}]'.format(self.tag))
     def sum_of_weights(self, systs = [''], online = True, mode = 'return'):
         if self.sample_name == 'data':
             raise TypeError('DO NOT use DATA Weights')
