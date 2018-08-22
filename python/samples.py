@@ -2,8 +2,10 @@ import os
 import subprocess
 import glob
 try:
-    import HQTTtResonancesTools.Data15_EXOT4_rel21
+    import HQTTtResonancesTools.Data_EXOT4_rel21
+    import HQTTtResonancesTools.Data_EXOT7_rel21
     import HQTTtResonancesTools.MC16a_EXOT4
+    import HQTTtResonancesTools.MC16a_EXOT7
 except ImportError:
     raise ImportError("HQTTtResonancesTools is not installed or dataset does not exist.")
 import rucio.client
