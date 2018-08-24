@@ -104,11 +104,9 @@ class Sample(object):
                     sample.datasets.extend(obj.datasets)
                     return sample
         else:
+            if not isinstance(obj, str):
+                obj, deriv = obj
             for (dataset_name, dataset_deriv), physics_short in MAP_TO_SAMPLES.iteritems():
-                if not isinstance(obj, str):
-                    obj, deriv = obj
-                else:
-                    deriv = 'EXOT4'
                 if (obj.split('._')[0], deriv) == (dataset_name,  dataset_deriv):
                     sample.name = dataset_name
                     for s in TopExamples.grid.Samples(physics_short):

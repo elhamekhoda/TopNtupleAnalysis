@@ -989,7 +989,6 @@ class AnaTtresFH(Analysis):
         self.h["mu"][syst].Fill(sel.mu, w)
         self.h["npv"][syst].Fill(sel.npv, w)
         self.h["vtxz"][syst].Fill(sel.vtxz, w)
-
         if ('bFH' in self.ch) and self.top_tagger.passed:
             goodJetIdx1 = self.top_tagger.ljet_istoptagged.index(1)
             lj1.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx1]*GeV, sel.ljet_eta[goodJetIdx1], sel.ljet_phi[goodJetIdx1], sel.ljet_m[goodJetIdx1]*GeV)
@@ -997,7 +996,6 @@ class AnaTtresFH(Analysis):
             lj2.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx2]*GeV, sel.ljet_eta[goodJetIdx2], sel.ljet_phi[goodJetIdx2], sel.ljet_m[goodJetIdx2]*GeV)
             w0 = w/self.w2HDM
             mtt = (lj1+lj2).M() # unit is GeV
-            
             self.h["mtt"][syst].Fill(mtt, w)
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             self.h["mtt8TeV"][syst].Fill(mtt, w)

@@ -124,7 +124,7 @@ class BoostedTopTagger(Selection):
         for i1, phi_ljet1 in enumerate(ev.ljet_phi):
             ret.append([])
             for i2, phi_ljet2 in enumerate(ev.ljet_phi):
-                ret[-1].append(int((i1 > i2) * (abs(phi_ljet1 - phi_ljet2) > self.min_dPhi)))
+                ret[-1].append(int((i1 < i2) * (abs(phi_ljet1 - phi_ljet2) > self.min_dPhi)))
         self.ljet_angularcuts = ret
         for i in range(len(self.ljet_angularcuts)):
             for j in range(len(self.ljet_angularcuts[i])):

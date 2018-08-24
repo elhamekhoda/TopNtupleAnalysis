@@ -403,7 +403,7 @@ def main(parallel = True):
                     pdfNumber = int(suffix.rsplit('_', 1)[1])
                     wjpdfList = [7]+range(11, 110+1)
                     weight_reco *= sel.mc_generator_weights[wjpdfList[pdfNumber]]
-                if not options.data and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532, 410009, 410120, 410121, 407009, 407010, 407011, 407012, 410004, 410003, 410002, 410001, 410500, 410159, 410501, 410502, 410503, 410504, 410505, 410506, 410509, 410511, 410512, 10225, 410250, 410251, 410252]: #410525]:
+                if not options.data and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532, 410009, 410120, 410121, 407009, 407010, 407011, 407012, 410004, 410003, 410002, 410001, 410500, 410159, 410501, 410502, 410503, 410504, 410505, 410506, 410509, 410511, 410512, 10225, 410250, 410251, 410252] + [410470, 410471]: #410525]:
                     if 'ttNNLO_seq_' in suffix:
                         weight_reco *= ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 1)
                     if 'ttNNLO_topPt_' in suffix:
