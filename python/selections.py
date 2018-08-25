@@ -78,7 +78,7 @@ class BoostedTopTagger(Selection):
         self.bcategory = -1
         self.ljet_istoptagged = []
         self.ljet_angularcuts = []
-        self.thad = []
+        self.ljet_p4 = ROOT.vector('TLorentzVector')()
         if not callable(_callable):
             self._expr = _callable
             def _callable(ev):
@@ -100,6 +100,12 @@ class BoostedTopTagger(Selection):
             self.passes = self._passes_obey
         elif self.strategy == 'rebel':
             self.passes = self._passes_rebel
+    def retrieve_ljet_p4(self, ev):
+        self.ljet_p4.clear()
+        for i in xrange(ev.ljet_pt.size()):
+            p4 = ROOT.TLorentzVector()
+            p4.SetPtEtaPhiE(ev.ljet_pt[i], ev.ljet_eta[i], ev.ljet_phi[i],ev.ljet_e[i])
+            self.ljet_p4.push_back(p4)
     def bcategorize(self, ev, bot_tagger = None):
         btagCat = 0
         for i, istoptagged in enumerate(self.ljet_istoptagged):
@@ -113,6 +119,7 @@ class BoostedTopTagger(Selection):
         self.bcategory = btagCat
     def _passes_obey(self, ev):
         self.ljet_istoptagged = []
+        self.retrieve_ljet_p4(ev)
         self._alg(ev)
         self.passed = sum(self.ljet_istoptagged) >= self.num_top
         if self._bot_tagger != None:
@@ -121,14 +128,14 @@ class BoostedTopTagger(Selection):
     def angularcuts(self, ev):
         # This is a temporary solution. will be implemented in HQTTtresTools and be utilized directly here in the future
         ret = []
-        for i1, phi_ljet1 in enumerate(ev.ljet_phi):
+        for i1, p4_i1 in enumerate(self.ljet_p4):
             ret.append([])
-            for i2, phi_ljet2 in enumerate(ev.ljet_phi):
-                ret[-1].append(int((i1 < i2) * (abs(phi_ljet1 - phi_ljet2) > self.min_dPhi)))
+            for i2, p4_i2 in enumerate(self.ljet_p4):
+                ret[-1].append(int((i1 < i2) and (abs(p4_i1.DeltaPhi(p4_i2)) > self.min_dPhi)))
         self.ljet_angularcuts = ret
         for i in range(len(self.ljet_angularcuts)):
             for j in range(len(self.ljet_angularcuts[i])):
-                if i == j:
+                if i >= j:
                     continue
                 if self.ljet_istoptagged[i]*self.ljet_angularcuts[i][j]*self.ljet_istoptagged[j]:
                     self.ljet_istoptagged[i+1:j] = (0,)*(j-i-1)
@@ -137,6 +144,7 @@ class BoostedTopTagger(Selection):
 
     def _passes_rebel(self, ev):
         self.ljet_istoptagged = []
+        self.retrieve_ljet_p4(ev)
         self._alg(ev)
         self.angularcuts(ev)
         self.passed = sum(self.ljet_istoptagged) >= self.num_top
@@ -220,22 +228,22 @@ class TrackJetBotTagger(Selection):
         return any(self.tjet_isbtagged)
 
 
-    def associated(self, tjet_i, jet_i, max_deltaR, ev):
-        deltaR = self._jet_p4[jet_i].DeltaR(self._tjet_p4[tjet_i])
+    def associated(self, p4_1, p4_2, max_deltaR, ev):
+        deltaR = p4_1.DeltaR(p4_2)
         return (deltaR < max_deltaR)
 
     def association(self, ev):
         self.jet_isbtagged.clear()
         self._jet_p4.clear()
         self.jet_associated_btaggedtjet_index.clear()
-        for jet_i in range(len(ev.jet_pt)):
+        for jet_i in xrange(len(ev.jet_pt)):
             jet_p4 = ROOT.TLorentzVector()
             jet_p4.SetPtEtaPhiE(ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])
             self._jet_p4.push_back(jet_p4)
             trkbjet_associated = False
             associated_btaggedtjet_index = -1
-            for tjet_i in range(len(ev.tjet_pt)):
-                if self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, jet_i, self.max_deltaR, ev):
+            for tjet_i in xrange(len(ev.tjet_pt)):
+                if self.tjet_isbtagged[tjet_i] and self.associated(self._tjet_p4[tjet_i], self._jet_p4[jet_i], self.max_deltaR, ev):
                     trkbjet_associated = True
                     associated_btaggedtjet_index = tjet_i
                     break
@@ -246,14 +254,14 @@ class TrackJetBotTagger(Selection):
         self.ljet_isbtagged.clear()
         self._ljet_p4.clear()
         self.ljet_associated_btaggedtjet_index.clear()
-        for ljet_i in range(len(ev.ljet_pt)):
+        for ljet_i in xrange(len(ev.ljet_pt)):
             ljet_p4 = ROOT.TLorentzVector()
             ljet_p4.SetPtEtaPhiE(ev.ljet_pt[ljet_i], ev.ljet_eta[ljet_i], ev.ljet_phi[ljet_i], ev.ljet_e[ljet_i])
             self._ljet_p4.push_back(ljet_p4)
             trkbjet_associated = False
             associated_btaggedtjet_index = -1
             for tjet_i in range(len(ev.tjet_pt)):
-                if self.tjet_isbtagged[tjet_i] and self.associated(tjet_i, ljet_i, self.max_ljet_deltaR, ev):
+                if self.tjet_isbtagged[tjet_i] and self.associated(self._tjet_p4[tjet_i], self._ljet_p4[ljet_i], self.max_ljet_deltaR, ev):
                     trkbjet_associated = True
                     associated_btaggedtjet_index = tjet_i
                     break

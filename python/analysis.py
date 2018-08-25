@@ -853,7 +853,7 @@ class AnaTtresFH(Analysis):
         self.add("subleadinglargeJet_tau32_wta", 20, 0, 1)
         self.add("subleadinglargeJet_tau21_wta", 20, 0, 1)
         self.add("btagged_tjet_closest_to_ljet2", 50, 0, (math.pi**2+2.5**2)**0.5)
-        self.add("dPhiJJ", 50, -math.pi, math.pi)
+        self.add("dPhiJJ", 60, -math.pi*1.2, math.pi*1.2)
         ### resolved channel ###
         # Leading hadronic top candidate
         self.addVar("mthad1_res", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
@@ -978,8 +978,6 @@ class AnaTtresFH(Analysis):
             self.h["trueMtt8TeVr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
         self.h["yields"][syst].Fill(1, w)
         self.h["runNumber"][syst].Fill(sel.runNumber, w)
-        lj1 = ROOT.TLorentzVector()
-        lj2 = ROOT.TLorentzVector()
 
         self.h["MET_phi"][syst].Fill(sel.met_phi, w)
         self.h["MET"][syst].Fill(sel.met_met*1e-3, w)
@@ -991,9 +989,9 @@ class AnaTtresFH(Analysis):
         self.h["vtxz"][syst].Fill(sel.vtxz, w)
         if ('bFH' in self.ch) and self.top_tagger.passed:
             goodJetIdx1 = self.top_tagger.ljet_istoptagged.index(1)
-            lj1.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx1]*GeV, sel.ljet_eta[goodJetIdx1], sel.ljet_phi[goodJetIdx1], sel.ljet_m[goodJetIdx1]*GeV)
+            lj1 = self.top_tagger.ljet_p4[goodJetIdx1]*GeV
             goodJetIdx2 = self.top_tagger.ljet_istoptagged.index(1, goodJetIdx1+1)
-            lj2.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx2]*GeV, sel.ljet_eta[goodJetIdx2], sel.ljet_phi[goodJetIdx2], sel.ljet_m[goodJetIdx2]*GeV)
+            lj2 = self.top_tagger.ljet_p4[goodJetIdx2]*GeV
             w0 = w/self.w2HDM
             mtt = (lj1+lj2).M() # unit is GeV
             self.h["mtt"][syst].Fill(mtt, w)
@@ -1021,7 +1019,8 @@ class AnaTtresFH(Analysis):
             self.h["subleadinglargeJetPhi"][syst].Fill(lj2.Phi(), w)
             self.h["subleadinglargeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx2], w)
             self.h["subleadinglargeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx2], w)
-            self.h["dPhiJJ"][syst].Fill(lj1.Phi()-lj2.Phi(), w)
+
+            self.h["dPhiJJ"][syst].Fill(lj1.DeltaPhi(lj2), w)
             btagged_tjet_closest_to_ljet2 = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj2))
             self.h["btagged_tjet_closest_to_ljet2"][syst].Fill(btagged_tjet_closest_to_ljet1.DeltaR(lj2), w)
 
