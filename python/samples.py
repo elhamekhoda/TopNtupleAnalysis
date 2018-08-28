@@ -230,7 +230,7 @@ class Sample(object):
         if only_retrieve_cmd:
             cmds = []
         for s in self._list_dids():
-            cmd = ['rucio','download', s, '--dir', dirname]
+            cmd = ['rucio','download', s, '--dir', dirname, '--transfer-timeout', '3600']
             if only_retrieve_cmd:
                 cmds.append(' '.join(cmd)+'\n')
                 input_files.extend([os.path.join(dirname, s, d['name']) for d in self._client.list_files(scope = self.ds_scope, name = s)])
