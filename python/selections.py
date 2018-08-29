@@ -197,7 +197,6 @@ class TrackJetBotTagger(Selection):
         self.ljet_associated_btaggedtjet_index = ROOT.vector('int')()
 
     def _passes_obey(self, ev):
-        raise DeprecationWarning("This is temporarily deprecated til we fix the bug of trk b-tagging selector in HQTTtResonancesTools -- 01.07.2018")
         self.tjet_isbtagged = getattr(ev, self._branch_map['tjet_isbtagged'])
         self._tjet_p4 = ROOT.vector('TLorentzVector')()
         for i in range(len(ev.tjet_pt)):
@@ -219,6 +218,9 @@ class TrackJetBotTagger(Selection):
             if p4.Perp() > self.min_pt and math.fabs(p4.Eta()) < 2.5 and ev.tjet_numConstituents[i] >= 2:
                 self._tjet_p4.push_back(p4)
                 self.tjet_isbtagged.push_back(discriminant > self.min_discriminant)
+            else:
+                self._tjet_p4.push_back(p4)
+                self.tjet_isbtagged.push_back(False)
         if self.do_association:
             self.association(ev)
         if self.do_ljet_association:
