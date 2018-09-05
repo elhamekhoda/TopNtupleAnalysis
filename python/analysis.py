@@ -52,7 +52,39 @@ class Analysis(object):
         self.branches = {}
         self.branches_noclear = {}
         self.keep = '' # can be 'bb', 'cc', 'bbcc', 'c' or 'l' and only applies to W+jets
+        # make histograms
+        self.add('NEvents', 1, 0.5, 1.5)
+        self.add("yields", 1, 0.5, 1.5)
+        self.add('finalNEvents', 1, 0.5, 1.5)
+        self.add('finalYields', 1, 0.5, 1.5)
+        self.add("runNumber", 24647, 276261.5, 300908.5)
+        self.add("nJets", 10, -0.5, 9.5)
+        self.add("nTrkBtagJets", 10, -0.5, 9.5)
+        self.addVar("MET", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
+        self.add("MET_phi", 32, -3.2, 3.2)
+        self.add("mu", 100, 0, 100)
+        self.add("vtxz", 40, -400, 400)
+        self.add("npv", 50, 0, 50)
+        self.add("runNumber", 24647, 276261.5, 300908.5)
+        ### boosted channel ###
+        self.add("nlargeJets", 10, -0.5, 9.5)
+        ### mass spectrum ###
+        self.add("mtt", 600 , 0, 6000)
+        self.add("mttr", 600, 0, 6000)
+        self.add("trueMtt", 600, 0, 6000)
+        self.add("trueMttr", 600, 0, 6000)
+        self.addVar("mtt8TeV", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+        self.addVar("mtt8TeVr",[0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+        self.addVar("trueMtt8TeV",  [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+        self.addVar("trueMtt8TeVr", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
+
         self.observables = [observable.registered(self) for observable in observables.ObservableList]
+        for observable in self.observables:
+            if 'hist' in observable.do:
+                if type(observable.binning) == tuple:
+                    self.add(observable.name, *observable.binning)
+                else:
+                    self.addVar(observable.name, observable.binning)
 
     @property
     def doTree(self):
@@ -186,6 +218,17 @@ class Analysis(object):
         self.fi.Close()
 
     def end(self):
+        for histName in self.h:
+            for s in self.histSuffixes:
+                if self.h[histName][s].GetEntries() == 0:
+                    logger.warning('Unfilled HIST({}<{}>)!'.format(histName, s))
+
+        y_err = ROOT.Double()
+        for s in self.histSuffixes:
+            h = self.h['finalNEvents'][s]
+            logger.debug("\tFinal NEvents <{syst}>: {y}".format(syst = s, y = h.Integral()))
+            h = self.h['finalYields'][s]
+            logger.debug("\tFinal Yields <{syst}>: {y:.4g}+/-{y_err:.2g}".format(syst = s, y = h.IntegralAndError(0, h.GetNbinsX()+1, y_err), y_err = y_err))
         self.write()
         head, sep, tail = self._outputFile.partition('file://')
         f = tail if head == '' else self._outputFile
@@ -282,10 +325,9 @@ class AnaTtresSL(Analysis):
         self.addTree() #########
         ########################
         # make histograms
-        self.add("yields", 1, 0.5, 1.5)
         self.add("yieldsPos", 1, 0.5, 1.5)
         self.add("yieldsNeg", 1, 0.5, 1.5)
-        self.add("runNumber", 24647, 276261.5, 300908.5)
+
         self.add("lepPt", 100, 25, 525)
         self.add("lepEta", 20, -2.5, 2.5)
         self.add("lepPhi", 32, -3.2, 3.2)
@@ -311,26 +353,13 @@ class AnaTtresSL(Analysis):
         self.add("mwhad_res", 40, 0, 400)
         self.add("chi2", 65, -3, 10)
         #self.addVar("mtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
-        self.add("mtt", 600 , 0, 6000)
-        self.add("mttr", 600, 0, 6000)
         self.add("mttPos", 600, 0, 6000)
         self.add("mttNeg", 600, 0, 6000)
-        self.add("trueMtt", 600, 0, 6000)
-        self.add("trueMttr", 600, 0, 6000)
-        self.addVar("mtt8TeV", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
-        self.addVar("mtt8TeVr",[0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
-        self.addVar("trueMtt8TeV",  [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
-        self.addVar("trueMtt8TeVr", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
         self.add("largeJet_tau32_wta", 20, 0, 1)
         self.add("largeJet_tau21_wta", 20, 0, 1)
         self.add("btagged_tjet_closest_to_ljet", 50, 0, (math.pi**2+2.5**2)**0.5)
         self.add("btagged_tjet_closest_to_lep", 50, 0, (math.pi**2+2.5**2)**0.5)
-        for observable in self.observables:
-            if 'hist' in observable.do:
-                if type(observable.binning) == tuple:
-                    self.add(observable.name, *observable.binning)
-                else:
-                    self.addVar(observable.name, observable.binning)
+
 
     # only apply the reco weights
     def getWeight(self, sel, s):
@@ -823,18 +852,7 @@ class AnaTtresFH(Analysis):
         ### make debug tree ####
         self.addTree() #########
         ########################
-        # make histograms
-        self.add("yields", 1, 0.5, 1.5)
-        self.add("runNumber", 24647, 276261.5, 300908.5)
-        self.add("nJets", 10, -0.5, 9.5)
-        self.add("nTrkBtagJets", 10, -0.5, 9.5)
-        self.addVar("MET", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
-        self.add("MET_phi", 32, -3.2, 3.2)
-        self.add("mu", 100, 0, 100)
-        self.add("vtxz", 40, -400, 400)
-        self.add("npv", 50, 0, 50)
-        ### boosted channel ###
-        self.add("nlargeJets", 10, -0.5, 9.5)
+
         # Leading hadronic top candidate
         self.addVar("leadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3])
         self.add("leadinglargeJetM", 30, 0, 300)
@@ -865,14 +883,6 @@ class AnaTtresFH(Analysis):
         self.add("mwhad2_res", 40, 0, 400)
 
         #self.addVar("mtt", [0, 80, 160, 240, 320, 400, 480, 560,640,720,800,920,1040,1160,1280,1400,1550,1700,2000,2300,2600,2900,3200,3600,4100,4600,5100,6000])
-        self.add("mtt", 600 , 0, 6000)
-        self.add("mttr", 600, 0, 6000)
-        self.add("trueMtt", 600, 0, 6000)
-        self.add("trueMttr", 600, 0, 6000)
-        self.addVar("mtt8TeV", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
-        self.addVar("mtt8TeVr",[0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
-        self.addVar("trueMtt8TeV",  [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
-        self.addVar("trueMtt8TeVr", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
 
         self.add("btagCat", 5, -1.5, 3.5)
         
@@ -978,7 +988,6 @@ class AnaTtresFH(Analysis):
             self.h["trueMttr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
             self.h["trueMtt8TeV"][syst].Fill(truPttbar.M(), w)
             self.h["trueMtt8TeVr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
-        self.h["yields"][syst].Fill(1, w)
         self.h["runNumber"][syst].Fill(sel.runNumber, w)
 
         self.h["MET_phi"][syst].Fill(sel.met_phi, w)
@@ -989,6 +998,8 @@ class AnaTtresFH(Analysis):
         self.h["mu"][syst].Fill(sel.mu, w)
         self.h["npv"][syst].Fill(sel.npv, w)
         self.h["vtxz"][syst].Fill(sel.vtxz, w)
+        self.h['NEvents'][syst].Fill(1, 1)
+        self.h['yields'][syst].Fill(1, w)
         if ('bFH' in self.ch) and self.top_tagger.passed:
             goodJetIdx1 = self.top_tagger.ljet_istoptagged.index(1)
             lj1 = self.top_tagger.ljet_p4[goodJetIdx1]*GeV
@@ -1029,6 +1040,8 @@ class AnaTtresFH(Analysis):
             self.h["btagged_tjet_closest_to_ljet2"][syst].Fill(btagged_tjet_closest_to_ljet1.DeltaR(lj2), w)
 
             self.h["btagCat"][syst].Fill(self.top_tagger.bcategory, w)
+            self.h['finalYields'][syst].Fill(1, w)
+            self.h['finalNEvents'][syst].Fill(1)
 
         for observable in self.observables:
             if 'hist' in observable.do:

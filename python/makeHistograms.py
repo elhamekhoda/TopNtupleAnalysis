@@ -55,7 +55,7 @@ def main(parallel = True):
     else:
         logger.critical('Can\'t access TDP in GroupData. Read cross-section from local records.')
         helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
-
+    Xsec[0] = 0 # No idea why there are these events in dijets samples @yu-heng
     # check if there is any W+jets sample there
     isWjets = False
     doEWK = False
@@ -367,14 +367,12 @@ def main(parallel = True):
                 if options.systs != 'pdf': #'pdf_' in suffix:
                     if not options.af2:
                         if not channel in sumOfWeights:
-                            logger.error('Could not find <DSID: %s> in DICT("sumOfWeights").', channel)
-                            weight = 0
+                            raise NameError('Could not find <DSID: %s> in DICT("sumOfWeights").' % channel)
                         else:
                             weight /= sumOfWeights[channel]
                     else:
                         if not channel in sumOfWeightsAF2:
-                            logger.error('Could not find <DSID: %s> in DICT("sunOfWeightsAF2")', channel)
-                            weight = 0
+                            raise NameError('Could not find <DSID: %s> in DICT("sunOfWeightsAF2")' % channel)
                         else:
                             weight /= sumOfWeightsAF2[channel]
                 else:
@@ -384,8 +382,7 @@ def main(parallel = True):
                         pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
                         pdfNumber = int(suffix.rsplit('_', 1)[1])
                         if not channel in pdfSumOfWeights:
-                            logger.error('Could not find <DSID: %s> in DICT("pdfSumOfWeights").', channel)
-                            weight = 0
+                            raise NameError('Could not find <DSID: %s> in DICT("pdfSumOfWeights").' % channel)
                         else:
                             weight /= pdfSumOfWeights[channel][pdfName][pdfNumber]
 
