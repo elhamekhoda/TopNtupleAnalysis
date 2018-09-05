@@ -568,7 +568,7 @@ void drawDataMC2(SampleSetConfiguration &stackConfig, const vector<std::string> 
   c->SaveAs(outfile.c_str());
 }
 
-void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, const std::string &xTitle, const std::string &yTitle, bool mustBeBigger, int posLegend, float yMin, float yMax, int useArrow, double lumi) {
+void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, const std::string &xTitle, const std::string &yTitle, bool mustBeBigger, int posLegend, float yMin, float yMax, int useArrow, double lumi, float xLabelSize, float yLabelSize) {
   TStyle *atlasStyle = AtlasStyle();
   gROOT->SetStyle("ATLAS");
   gROOT->ForceStyle();
@@ -656,8 +656,9 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
     Data->SetMinimum(minimum);
   }
   MC->SetMinimum(minimum);
-
   MC->Draw();
+  if (xLabelSize != -1) MC->GetXaxis()->SetLabelSize(xLabelSize);
+  if (yLabelSize != -1) MC->GetYaxis()->SetLabelSize(yLabelSize);
   if (yTitle != "") MC->GetYaxis()->SetTitle(yTitle.c_str());
   if (!ratio || !Data) {
     if (xTitle == "")

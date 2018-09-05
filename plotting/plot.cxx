@@ -34,11 +34,9 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-  signal(SIGSEGV, handler);
 
   TH1::AddDirectory(false);
 
-  try {
 
     int help = 0;
     string channel = "e";
@@ -67,6 +65,8 @@ int main(int argc, char **argv) {
     float normBinWidth = 0;
     int alternateStyle = 0;
     int _logY = 0;
+    float xLabelSize = -1;
+    float yLabelSize = -1;
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -80,6 +80,8 @@ int main(int argc, char **argv) {
         {"extraText",       required_argument,     0, 'T', "Extra text to add in the plot.", &_extraText, extendedOption::eOTString},
         {"yTitle",          required_argument,     0, 'E', "Y title.", &yTitle, extendedOption::eOTString},
         {"xTitle",          required_argument,     0, 't', "X title.", &xTitle, extendedOption::eOTString},
+        {"xLabelSize",      required_argument,     0,  2, "Label size of the Y axis.", &yLabelSize, extendedOption::eOTFloat},
+        {"yLabelSize",      required_argument,     0,  3, "Label size of the X axis.", &xLabelSize, extendedOption::eOTFloat},
         {"xMax",            required_argument,     0, 'X', "Limit X maximum value.", &xMax, extendedOption::eOTFloat},
         {"xMin",            required_argument,     0, 'x', "Limit X minimum value.", &xMin, extendedOption::eOTFloat},
         {"mustBeBigger",    required_argument,     0, 'M', "Widen range of the Y axis in the ratio plots.", &mustBeBigger, extendedOption::eOTInt},
@@ -216,7 +218,7 @@ int main(int argc, char **argv) {
       if (alternateStyle) {
         drawDataMC2(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
       } else {
-        drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
+        drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi, yLabelSize, xLabelSize);
       }
 
       if (saveTH1 != "") {
@@ -356,11 +358,6 @@ int main(int argc, char **argv) {
         drawEff(&(systRatCalc->_sr["Ratio"]), extraText, outfile, yTitle, 0, false, mustBeBigger, yMax, xTitle, 0, lumi);
       }
     } // ratio?
-
-  } catch (string s) {
-    cout << "Crashed with exception: " << s << endl;
-    dumpTrace();
-  }
 
   return 0;
 }
