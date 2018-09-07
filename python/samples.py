@@ -6,7 +6,8 @@ try:
     import HQTTtResonancesTools.Data_EXOT7_rel21
     import HQTTtResonancesTools.MC16a_EXOT4
     import HQTTtResonancesTools.MC16a_EXOT7
-except ImportError:
+except ImportError as e:
+    print e.message
     raise ImportError("HQTTtResonancesTools is not installed or dataset does not exist.")
 import rucio.client
 try:
@@ -27,7 +28,7 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('wccjets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
                   ('wcjets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
                   ('wljets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
-                  ('data', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
+                  ('data', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4','Data18_13TeV_25ns_EXOT4'],
                   ('qcde', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4', 'Data16_13TeV_25ns_EXOT4'],
                   ('qcdmu', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
                   ('tt', 'EXOT4'):['MC16_13TeV_25ns_FS_EXOT4_ttbar_nonallhad'],
@@ -83,6 +84,15 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('zprime5000', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Zprime5000']
                  }
 
+MAP_TO_SAMPLES.update(
+                 {
+                 # EXOT4
+                 ('data2015', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4'],
+                 ('data2016', 'EXOT4'): ['Data16_13TeV_25ns_EXOT4'],
+                 ('data2018', 'EXOT4'): ['Data18_13TeV_25ns_EXOT4'],
+                 }
+
+  )
 def register_samples(mapping):
     MAP_TO_SAMPLES.update(mapping)
 
@@ -115,7 +125,7 @@ class Sample(object):
         raise NameError('"{}" not found in the current sample list.\nNote that a user-defined sample must be first registered to {} using {}.\nAlready Registered Samples: {}'
                         .format(obj, '`{}`'.format(__name__ + '.MAP_TO_SAMPLES'), '`{}`'.format(__name__ + '.register_samples'), sorted(MAP_TO_SAMPLES.iterkeys())))
 
-    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '13022018v1_output.root'}, tag = '', download_to = None, commit_when_init = True, deriv = 'EXOT4'):
+    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '_output.root'}, tag = '', download_to = None, commit_when_init = True, deriv = 'EXOT4', RSE_preferred = None, priority_key = None):
         self.parent = self
         self.ds_scope = ds_scope.format(s = self, **ds_fmt_options)
         if not isinstance(sample_name, str):
@@ -123,6 +133,8 @@ class Sample(object):
         self.sample_name = sample_name
         self.sample = self.parse_dataset((sample_name, deriv))
         self.deriv = deriv
+        self.RSE_preferred = RSE_preferred
+        self.priority_key = priority_key or (lambda pfns: (pfns[1]['rse']==self.RSE_preferred, pfns[1]['priority']))
         self._ds_pattern_fmt = ds_pattern.format(s = self, **ds_fmt_options)
         if self._ds_pattern_fmt.startswith('user.'):
             head, _, tail = self._ds_pattern_fmt.partition(':')
@@ -206,13 +218,14 @@ class Sample(object):
         if not self._input_files:
             logger.critical('{!r}: inputs list is empty!'.format(self))
         return self._input_files
-    def set_input_files(self, alist = None, force = True, sort = True, inplace = True):
+    def set_input_files(self, alist = None, force = True, sort = True, inplace = True, priority_key = None):
         input_files = []
         if alist == None:
             if not force and inplace and bool(getattr(self, '_input_files', False)):
                 return self._input_files
-            for files in (replica['pfns'].keys() for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root'])):
-                input_files.append(files[0])
+            priority_key = priority_key or self.priority_key
+            for file, _ in (max(replica['pfns'].iteritems(), key = priority_key) for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root'])):
+                input_files.append(file)
         elif type(alist) == str:
             input_files = [alist]
         else:

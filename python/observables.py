@@ -2,7 +2,7 @@ import math
 ObservableList = []
 
 class Observable(object):
-    def __init__(self, name, binning = (20, -1000, 1000), script = None, style = 'single', do = ['hist'], only = None, title = '{self.name}', dtype = float, default = -1):
+    def __init__(self, name, binning = (20, -1000, 1000), script = None, style = 'single', do = ['hist'], only = None, title = '{self.name}', dtype = float, default = -1, need_truth = False):
             """Observable for filling histograms or trees
             
             Parameters
@@ -32,13 +32,14 @@ class Observable(object):
             self.do = do
             self.dtype = dtype
             self.default = default
+            self.need_truth = need_truth
     def registered(self, analysis):
-        return  _Observable(self.name, analysis, binning = self.binning, script = self.script, style = self.style, only = self.only, title = self.title, do = self.do, dtype = self.dtype, default = self.default)
+        return  _Observable(self.name, analysis, binning = self.binning, script = self.script, style = self.style, only = self.only, title = self.title, do = self.do, dtype = self.dtype, default = self.default, need_truth = self.need_truth)
     def queue(self):
         ObservableList.append(self)
 
 class _Observable(object):
-    def __init__(self, name, analysis, binning = (20, -1000, 1000), script = None, style = 'single', do = ['hist'], only = None, title = '{self.name}', dtype = None, default = -1):
+    def __init__(self, name, analysis, binning = (20, -1000, 1000), script = None, style = 'single', do = ['hist'], only = None, title = '{self.name}', dtype = None, default = -1, need_truth = False):
         self.name = name
         self.binning = binning
         self.title = title.format(self = self)
@@ -49,6 +50,7 @@ class _Observable(object):
         self.do = do
         self.dtype = dtype
         self.default = default
+        self.need_truth = need_truth
         self._globals = {'analysis': self.analysis}
         self._globals.update(self.analysis.run.im_func.func_globals)
     def __call__(self, _type = None, _locals = None):
@@ -79,19 +81,28 @@ class _Observable(object):
 # Observable("dNtruedBTrackJetdPt_lepside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_istrueb) if istrueb and p4.DeltaR(tlep)<1.0)""", style = 'foreach').queue()
 # Observable("dNtruthMatchedBTrackJetdPt_hadside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, isbtagged, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_isbtagged, analysis.bot_tagger.tjet_istrueb) if (isbtagged and istrueb and p4.DeltaR(lj)<1.0))""", style = 'foreach').queue()
 # Observable("dNtruedBTrackJetdPt_hadside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_istrueb) if istrueb and p4.DeltaR(lj)<1.0)""", style = 'foreach').queue()
-Observable("NB_lepside", (4, 0, 4), """sel.NB_lepside""").queue()
-Observable("NB_hadside", (4, 0, 4), """sel.NB_hadside""").queue()
+# Observable("NB_lepside", (4, 0, 4), """sel.NB_lepside""").queue()
+# Observable("NB_hadside", (4, 0, 4), """sel.NB_hadside""").queue()
 
 ### Basic Object ###
-Observable("th_pt", do = ['tree'], only = ['b'], script = """lj.Perp()*1e-3""").queue()
-Observable("th_eta", do = ['tree'], only = ['b'], script = """lj.Eta()""").queue()
-Observable("th_phi", do = ['tree'], only = ['b'], script = """lj.Phi()""").queue()
-Observable("th_m", do = ['tree'], only = ['b'], script = """lj.M()*1e-3""").queue()
+Observable("th_pt", do = ['tree'], only = ['be', 'bmu'], script = """lj.Perp()*1e-3""").queue()
+Observable("th_eta", do = ['tree'], only = ['be', 'bmu'], script = """lj.Eta()""").queue()
+Observable("th_phi", do = ['tree'], only = ['be', 'bmu'], script = """lj.Phi()""").queue()
+Observable("th_m", do = ['tree'], only = ['be', 'bmu'], script = """lj.M()*1e-3""").queue()
 
-Observable("th_pt_MC", do = ['tree'], only = ['b'], script = """sel.MC_th_pt*1e-3""").queue()
-Observable("th_eta_MC", do = ['tree'], only = ['b'], script = """sel.MC_th_eta""").queue()
-Observable("th_phi_MC", do = ['tree'], only = ['b'], script = """sel.MC_th_phi""").queue()
-Observable("th_m_MC", do = ['tree'], only = ['b'], script = """sel.MC_th_m*1e-3""").queue()
+Observable("th_pt_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_pt*1e-3""", need_truth = True).queue()
+Observable("th_eta_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_eta""", need_truth = True).queue()
+Observable("th_phi_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_phi""", need_truth = True).queue()
+Observable("th_m_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_m*1e-3""", need_truth = True).queue()
+
+Observable("th1_pt", do = ['tree'], only = ['bFH'],  script = """lj1.Perp()""").queue()
+Observable("th1_eta", do = ['tree'], only = ['bFH'], script = """lj1.Eta()""").queue()
+Observable("th1_phi", do = ['tree'], only = ['bFH'], script = """lj1.Phi()""").queue()
+Observable("th1_m", do = ['tree'], only = ['bFH'],   script = """lj1.M()""").queue()
+Observable("th2_pt", do = ['tree'], only = ['bFH'],  script = """lj2.Perp()""").queue()
+Observable("th2_eta", do = ['tree'], only = ['bFH'], script = """lj2.Eta()""").queue()
+Observable("th2_phi", do = ['tree'], only = ['bFH'], script = """lj2.Phi()""").queue()
+Observable("th2_m", do = ['tree'], only = ['bFH'],   script = """lj2.M()""").queue()
 
 ### Jet Substructure ###
 # Observable("th_tau21_wta", do = ['tree'], only = ['b'], script = """sel.ljet_tau21_wta[analysis.top_tagger.thad_index] if analysis.top_tagger.thad_index != -1 else -999""").queue()

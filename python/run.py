@@ -159,9 +159,9 @@ class Run(object):
                     runfile = os.path.join(runfile_dir, s.sample_name + s.tag + '.submit')
                     infile = self.write_inputsfile(s)
                     self.write_runfile(sample = s, output_files = jobs, runfile = runfile, stages = stages, infile = infile, **write_kwds)
-                    subprocess.call(['chmod', 'u+x', runfile])
+                    subprocess.check_call(['chmod', 'u+x', runfile])
                     if not use_cluster:
-                        subprocess.call([runfile])
+                        subprocess.check_call([runfile])
                     else:
                         job_id = self.cluster.get_identifier()
                         _submit_kwds = copy.deepcopy(submit_kwds)

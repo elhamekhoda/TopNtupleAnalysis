@@ -168,6 +168,8 @@ class Analysis(object):
 
             for observable in self.observables:
                 if 'tree' in observable.do:
+                    if not any(only in self.ch for only in observable.only):
+                        continue
                     if observable.style == 'foreach':
                         self.branches[tname][s][observable.name] = std.vector(observable.dtype)()
                     else:
@@ -593,7 +595,7 @@ class AnaTtresSL(Analysis):
         if self.applyMET > 0 and not ('be' in self.ch or 'bmu' in self.ch):
             if sel.met_met*1e-3 < self.applyMET:
                 return
-
+        isdata = sel.mcChannelNumber == 0
         if(sel.mcChannelNumber != 0 and hasattr(sel, "MC_ttbar_beforeFSR_m") and sel.mcChannelNumber not in [407200, 407201, 407202, 407203, 407204]):
             w0 = w/self.w2HDM
             self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
@@ -720,10 +722,12 @@ class AnaTtresSL(Analysis):
                 #     self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
                 ##################################
                 for observable in self.observables:
+                    if isdata and observable.need_truth:
+                        continue
                     if 'tree' in observable.do:
                         if observable.only != None:
                             if not any (only in self.ch for only in observable.only):
-                                break
+                                continue
                         values = observable(_locals = locals())
                         if observable.style == 'foreach':
                             for v in values:
@@ -793,10 +797,12 @@ class AnaTtresSL(Analysis):
                             self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
 
                 for observable in self.observables:
+                    if isdata and observable.need_truth:
+                        continue
                     if 'tree' in observable.do:
                         if observable.only != None:
                             if not any (only in self.ch for only in observable.only):
-                                break
+                                continue
                         values = observable( _locals = locals())
                         if observable.style == 'foreach':
                             for v in values:
@@ -808,10 +814,12 @@ class AnaTtresSL(Analysis):
                 self.trees[tname][syst].Fill() ###
                 ##################################
         for observable in self.observables:
+            if isdata and observable.need_truth:
+                continue
             if 'hist' in observable.do:
                 if observable.only != None:
                     if not any (only in self.ch for only in observable.only):
-                        break
+                        continue
                 values = observable(_locals = locals())
                 if observable.style == 'foreach':
                     for v in values:
@@ -920,7 +928,7 @@ class AnaTtresFH(Analysis):
             self.TtresBucket.passes(sel)
             Btagcat = self.TtresBucket.bcategory
         else:
-            Btagcat = sel.Btagcat
+            Btagcat = self.top_tagger.bcategory
 
         if ('rFH' in self.ch or 'rFH' in self.ch) and not "ov" in self.ch:
             if passSel['bFH'] and top_tagged:
@@ -974,6 +982,7 @@ class AnaTtresFH(Analysis):
             if sel.met_met*1e-3 < self.applyMET:
                 return
 
+        isdata = sel.mcChannelNumber == 0
         if(sel.mcChannelNumber != 0 and hasattr(sel, "MC_ttbar_beforeFSR_m") and sel.mcChannelNumber not in [407200, 407201, 407202, 407203, 407204]):
             w0 = w/self.w2HDM
             self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
@@ -1007,6 +1016,7 @@ class AnaTtresFH(Analysis):
             lj2 = self.top_tagger.ljet_p4[goodJetIdx2]*GeV
             w0 = w/self.w2HDM
             mtt = (lj1+lj2).M() # unit is GeV
+            bjets = list(tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i]))
             self.h["mtt"][syst].Fill(mtt, w)
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             self.h["mtt8TeV"][syst].Fill(mtt, w)
@@ -1023,8 +1033,10 @@ class AnaTtresFH(Analysis):
             self.h["leadinglargeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx1], w)
             self.h["leadinglargeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx1], w)
             self.h["leadinglargeJetEtaPhi"][syst].Fill(lj1.Eta(), lj1.Phi(), w)
-            btagged_tjet_closest_to_ljet1 = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj1))
-            self.h["btagged_tjet_closest_to_ljet1"][syst].Fill(btagged_tjet_closest_to_ljet1.DeltaR(lj1), w)
+            deltaR_closest_btjet_to_ljet1 = 1e6
+            for bjet in bjets:
+                deltaR_closest_btjet_to_ljet1 = min(bjet.DeltaR(lj1), deltaR_closest_btjet_to_ljet1)
+            self.h["btagged_tjet_closest_to_ljet1"][syst].Fill(deltaR_closest_btjet_to_ljet1, w)
             # Sub-leading hadronic top candidate
             self.h["subleadinglargeJetPt"][syst].Fill(lj2.Perp(), w)
             self.h["subleadinglargeJetM"][syst].Fill(lj2.M(), w)
@@ -1036,18 +1048,66 @@ class AnaTtresFH(Analysis):
             self.h["subleadinglargeJetEtaPhi"][syst].Fill(lj2.Eta(), lj2.Phi(), w)
 
             self.h["dPhiJJ"][syst].Fill(lj1.DeltaPhi(lj2), w)
-            btagged_tjet_closest_to_ljet2 = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: btagged_tjet.DeltaR(lj2))
-            self.h["btagged_tjet_closest_to_ljet2"][syst].Fill(btagged_tjet_closest_to_ljet1.DeltaR(lj2), w)
+            deltaR_closest_btjet_to_ljet2 = 1e6
+            for bjet in bjets:
+                deltaR_closest_btjet_to_ljet2 = min(bjet.DeltaR(lj2), deltaR_closest_btjet_to_ljet2)
+            self.h["btagged_tjet_closest_to_ljet2"][syst].Fill(deltaR_closest_btjet_to_ljet2, w)
 
             self.h["btagCat"][syst].Fill(self.top_tagger.bcategory, w)
             self.h['finalYields'][syst].Fill(1, w)
             self.h['finalNEvents'][syst].Fill(1)
 
+            ################################
+            ### fill the tree ##############
+            if self._doTree:
+                tname = self.tName
+                self.branches[tname][syst]["eventNumber"].push_back(sel.eventNumber)
+                self.branches[tname][syst]["runNumber"].push_back(sel.runNumber)
+                self.branches[tname][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
+                self.branches[tname][syst]["aS"].push_back(self.alphaS)
+                self.branches[tname][syst]["w"].push_back(w)
+                self.branches[tname][syst]["w0"].push_back(w0)
+                self.branches[tname][syst]["w2HDM"].push_back(self.w2HDM)
+                self.branches[tname][syst]["me2SM"].push_back(self.me2SM)
+                self.branches[tname][syst]["me2XX"].push_back(self.me2XX)
+                self.branches[tname][syst]["mttReco"].push_back(mtt)
+                self.branches_noclear[tname][syst]["Btagcat"].value = self.top_tagger.bcategory
+                # pME = helpers.getTruth4momenta(sel)
+                # truPttbar = pME[2]+pME[3]
+                if sel.mcChannelNumber != 0:
+                    self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                # for i in xrange(sel.MC_id_me.size()):
+                #     self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
+                #     self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
+                #     self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
+                #     self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
+                #     self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
+                ##################################
+                for observable in self.observables:
+                    if isdata and observable.need_truth:
+                        continue
+                    if 'tree' in observable.do:
+                        if observable.only != None:
+                            if not any (only in self.ch for only in observable.only):
+                                continue
+                        values = observable( _locals = locals())
+                        if observable.style == 'foreach':
+                            for v in values:
+                                self.branches[tname][syst][observable.name].push_back(v)
+                        else:
+                            self.branches_noclear[tname][syst][observable.name].value = values
+                ##################################
+                ### fill the tree ################
+                self.trees[tname][syst].Fill() ###
+                ##################################
+
         for observable in self.observables:
+            if isdata and observable.need_truth:
+                continue
             if 'hist' in observable.do:
                 if observable.only != None:
                     if not any (only in self.ch for only in observable.only):
-                        break
+                        continue
                 values = observable(_locals = locals())
                 if observable.style == 'foreach':
                     for v in values:
@@ -1062,6 +1122,7 @@ class AnaTtresFH(Analysis):
 
     def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_70', **kwds):
         kwds.setdefault('do_ljet_association', True)
+        kwds.setdefault('min_nbjets', 0)
         super(AnaTtresFH, self).set_bot_tagger(algorithm_WP_systs, **kwds)
         if hasattr(self, 'top_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger

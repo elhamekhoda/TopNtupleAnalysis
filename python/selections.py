@@ -161,7 +161,7 @@ class TrackJetBotTagger(Selection):
             {'MV2c10':    {'60':  0.92, '70':  0.79, '77':  0.58, '85':  0.05, 'pt':  7e3}}
             }
     # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
-    def __init__(self, algorithm = 'MV2c10', WP = '70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'rebel', do_association = True, do_ljet_association = False, do_truth_matching = True):
+    def __init__(self, algorithm = 'MV2c10', WP = '70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'rebel', do_association = True, do_ljet_association = False, do_truth_matching = True, min_nbjets = 1):
         self.algorithm = algorithm
         self.WP = WP
         self.trackjet_alg = trackjet_alg
@@ -182,6 +182,7 @@ class TrackJetBotTagger(Selection):
         recomm = self.WP2D.get(self.trackjet_alg, {}).get(self.algorithm, {})
         self.min_discriminant = recomm.get(WP, -999)
         self.min_pt = recomm.get('pt', 10e3)
+        self.min_nbjets = min_nbjets
         if self.strategy == 'rebel':
             logger.debug('The b-tagging strategy is "rebel", which means b-tagging will be re-computed internally')
         elif self.strategy == 'obey':
@@ -227,7 +228,9 @@ class TrackJetBotTagger(Selection):
             self.ljet_association(ev)
         if self.do_truth_matching:
             self.truth_matching(ev)
-        return any(self.tjet_isbtagged)
+        if self.min_nbjets == 0:
+            return True
+        return (sum(self.tjet_isbtagged) >= self.min_nbjets)
 
 
     def associated(self, p4_1, p4_2, max_deltaR, ev):
