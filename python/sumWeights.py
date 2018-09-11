@@ -74,7 +74,7 @@ def sumWeights(files, types, suffix, mode = 'auto'):
                         logger.info(" ".join("Read ", value, " in item ", wjpdfList[l], " in file ", t_wjpdfSumWeights.GetCurrentFile().GetName()))
                     wjpdfSumOfWeights[t_wjpdfSumWeights.dsid][l] += value
 
-            for channel in sorted(wjpdfSumOfWeights.keys()):
+            for channel in sorted(wjpdfSumOfWeights.iterkeys()):
                 for pdfNumber in range(0, len(wjpdfSumOfWeights[channel])):
                     entry = {'channel': channel, 'pdfName': pdfName, 'pdfNumber': pdfNumber, 'SumOfWeights': wjpdfSumOfWeights[channel][pdfNumber]}
                     lines.append(l_fmt.format(**entry))
@@ -90,7 +90,7 @@ def sumWeights(files, types, suffix, mode = 'auto'):
                     sumOfWeights[t_sumWeights.dsid] = 0
                 sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
 
-            for channel in sorted(sumOfWeights.keys()):
+            for channel in sorted(sumOfWeights.iterkeys()):
                 entry = {'channel': channel, 'pdfName': 'nominal', 'pdfNumber': -1, 'SumOfWeights': sumOfWeights[channel]}
                 lines.append(l_fmt.format(**entry))
                 logger.debug(lines[-1])
@@ -105,10 +105,12 @@ def sumWeights(files, types, suffix, mode = 'auto'):
                 t_sumWeights.GetEntry(k)
                 if not t_sumWeights.dsid in sumOfWeights:
                     sumOfWeights[t_sumWeights.dsid] = 0
-                sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
-
+                if t_sumWeights.dsid in xrange(361020, 361033):
+                    sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEvents
+                else:
+                    sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
             
-            for channel in sorted(sumOfWeights.keys()):
+            for channel in sorted(sumOfWeights.iterkeys()):
                 entry = {'channel': channel, 'pdfName': 'nominal', 'pdfNumber': -1, 'SumOfWeights': sumOfWeights[channel]}
                 lines.append(l_fmt.format(**entry))
                 logger.debug(lines[-1])
