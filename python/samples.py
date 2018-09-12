@@ -1,6 +1,11 @@
 import os
-import subprocess
 import glob
+import math
+import datetime
+import subprocess
+import urlparse
+
+
 try:
     import HQTTtResonancesTools.Data_EXOT4_rel21
     import HQTTtResonancesTools.Data_EXOT7_rel21
@@ -134,7 +139,7 @@ class Sample(object):
         self.sample = self.parse_dataset((sample_name, deriv))
         self.deriv = deriv
         self.RSE_preferred = RSE_preferred
-        self.priority_key = priority_key or (lambda pfns: (pfns[1]['rse']==self.RSE_preferred, pfns[1]['priority']))
+        self.priority_key = priority_key or (lambda pfns: ((pfns[1].get('rse') or pfns[1]['rse_expression']) == self.RSE_preferred, pfns[1]['priority']))
         self._ds_pattern_fmt = ds_pattern.format(s = self, **ds_fmt_options)
         if self._ds_pattern_fmt.startswith('user.'):
             head, _, tail = self._ds_pattern_fmt.partition(':')
@@ -162,6 +167,10 @@ class Sample(object):
             ret.extend(_ret)
         ret.sort()
         return ret
+
+    @property
+    def ntuples(self):
+      return self._list_dids()
 
     @property
     def ds_pattern(self):
@@ -237,6 +246,35 @@ class Sample(object):
             self._input_files = input_files
             return self._input_files
     input_files = property(get_input_files, set_input_files)
+    def get_replication_rules(self):
+        for f in self._input_files:
+            yield tuple(self._client.list_associated_rules_for_file(self.ds_scope, os.path.basename(urlparse.urlparse(f).path)))
+    def update_replication_lieftime(self, max_extend = datetime.timedelta(days=14), only = range(1), lower_limit = datetime.timedelta(days=3)):
+        now = datetime.datetime.now()
+        for rules in self.get_replication_rules():
+            i = 0
+            if only and i not in only:
+                continue
+            for _, rule in sorted(enumerate(rules), key = self.priority_key):
+                expires_at = rule['expires_at']
+                remained = expires_at - now
+                to_extended = max_extend - remained
+                seconds = int(math.floor(to_extended.total_seconds()))
+                try:
+                    logger.info('Update replication rule:')
+                    logger.info('\tname:{}'.format(rule['name']))
+                    logger.info('\tid:{}'.format(rule['id']))
+                    logger.info('\tRSE:{}'.format(rule['rse_expression']))
+                    if remained >= lower_limit:
+                        logger.info('\tSkip! Remaining lifetime is long enough (>={} days).'.format(lower_limit.days))
+                        i += 1
+                        continue
+                    logger.info('\tfor {} days'.format(to_extended.days))
+                    self._client.update_replication_rule(rule['id'], {'lifetime': seconds})
+                    logger.info('\tSuccess!')
+                except Exception as e:
+                    logger.exception(e)
+                i += 1
     def download_dataset(self, ds_name = None, only_retrieve_cmd = False):
         dirname = os.path.abspath(ds_name or self.download_to)
         input_files = []
