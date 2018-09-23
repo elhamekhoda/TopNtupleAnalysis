@@ -65,7 +65,7 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
     endif()
     # Generate a CINT dictionary source file:
     atlas_add_root_dictionary( TopNtupleAnalysis _cintDictSource
-                               ROOT_HEADERS TopNtupleAnalysis/wrapper.h Root/LinkDef.h
+                               ROOT_HEADERS Root/LinkDef.h
                                EXTERNAL_PACKAGES ROOT)
     # Build a library that other components can link against:
     atlas_add_library( TopNtupleAnalysis ${SOURCES} ${_cintDictSource} TopNtupleAnalysis/wrapper.h
@@ -107,7 +107,7 @@ else()
     add_definitions(-D DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/share/\\"") # This should point to the share directory
     include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${ROOT_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/../TopDataPreparation)
     add_definitions(${ROOT_CXX_FLAGS})
-    ROOT_GENERATE_DICTIONARY(TopNtupleAnalysisCintDict TopNtupleAnalysis/wrapper.h LINKDEF Root/LinkDef.h MODULE TopNtupleAnalysis)
+    ROOT_GENERATE_DICTIONARY(TopNtupleAnalysisCintDict LINKDEF Root/LinkDef.h MODULE TopNtupleAnalysis)
 
     #---Create a shared library with geneated dictionary
     add_library(TopNtupleAnalysis SHARED ${SOURCES} TopNtupleAnalysisCintDict)

@@ -28,7 +28,7 @@ logger.info("{:<30} [{}]".format('Check "NNLOReweighter"', "4/4"))
 try:
     ROOT.NNLOReweighterTool("TEST")
 except Exception as e:
-    logger.critical('Unable to import "NNLOReweighterTool". Are you sure that it is installed?')
+    logger.error('Unable to import "NNLOReweighterTool". Are you sure that it is installed?')
     raise e
 
 ROOT.TopNtupleAnalysis.InitNNLO(410501) 

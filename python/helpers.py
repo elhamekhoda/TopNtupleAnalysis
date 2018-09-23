@@ -644,9 +644,6 @@ def output_expr_reader_new(expr, _type = tuple):
     return selections, output_fname
 
 def initialise_binds():
-    global BINDS_INITIASIZED
-    if BINDS_INITIASIZED:
-        return
     logger.info("-> Initialising binds now.")
     environment, version, WorkDir_DIR = os.getenv('AtlasProject', 'StandAlone'), os.getenv('AtlasVersion'), os.getenv('WorkDir_DIR')
     logger.debug('Environment: %s', environment + (', ' + version) if version else '')
@@ -664,16 +661,6 @@ def initialise_binds():
         logger.debug('$WorkDir_DIR: %s', WorkDir_DIR)
     logger.debug('$PWD: %s', os.environ['PWD'])
     logger.debug('$LD_LIBRARY_PATH: %s', os.environ['LD_LIBRARY_PATH'])
-        
-    lib_dir = os.path.join(WorkDir_DIR, "lib") if WorkDir_DIR else root_path
-    cintdict_dir = os.path.join(WorkDir_DIR, '..', "TopNtupleAnalysis", 'CMakeFiles') if WorkDir_DIR else root_path
-    shared_lib = os.path.join(lib_dir, "libTopNtupleAnalysis.so")
-    if os.path.exists(shared_lib):
-        ROOT.gSystem.Load(shared_lib)
-    else:
-        ROOT.gSystem.Load(shared_lib.rsplit(".so", 1)[0] + ".dylib")
-    ROOT.gROOT.LoadMacro(os.path.join(cintdict_dir, "TopNtupleAnalysisCintDict.cxx"))
-    BINDS_INITIASIZED = True
 
 # if not BINDS_INITIASIZED:
 #     initialise_binds()

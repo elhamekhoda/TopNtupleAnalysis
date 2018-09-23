@@ -6,6 +6,9 @@
 #pragma link C++ namespace TopNtupleAnalysis;
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
+
+#pragma extra_include "TopNtupleAnalysis/wrapper.h";
+
 #pragma link C++ function TopNtupleAnalysis::initWrapper;
 #pragma link C++ function TopNtupleAnalysis::getMtt;
 #pragma link C++ function TopNtupleAnalysis::res_mtt;
