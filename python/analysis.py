@@ -513,12 +513,6 @@ class AnaTtresSL(Analysis):
                 elif self.applyQCD == "mu" and "ejets" in item:
                     continue
                 hardPass = True
-                #if 'be' in i or 'bmu' in i:
-                #       hardPass = False
-                #       for k in range(0, len(sel.ljet_pt)):
-                #               if sel.ljet_good[k] and sel.ljet_pt[k] > 300e3:
-                #                       hardPass = True
-                #                       break
                 passChannel = getattr(sel, item, False)
                 if passChannel and hardPass:
                     passORChannels = True
@@ -532,9 +526,13 @@ class AnaTtresSL(Analysis):
             return False
         # veto resolved event if it passes the boosted channel
         top_tagged = self.top_tagger.passes(sel)
+        if ('be' in self.ch or 'bmu') in self.ch:
+            if not top_tagged:
+                return False
 
         if ('re' in self.ch or 'rmu' in self.ch):
-            self.TtresChi2.passes(sel)
+            if not self.TtresChi2.passes(sel):
+                return False
             Btagcat = self.TtresChi2.bcategory
         else:
             Btagcat = sel.Btagcat
@@ -561,6 +559,7 @@ class AnaTtresSL(Analysis):
         if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
             if sel.MC_ttbar_beforeFSR_m > 1.1e6:
                 return False
+
         return True
 
 
@@ -660,7 +659,7 @@ class AnaTtresSL(Analysis):
         ##TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
         ##double getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
         nu = ROOT.TopNtupleAnalysis.getNu(l, sel.met_met, sel.met_phi)
-        if ('be' in self.ch or 'bmu' in self.ch) and self.top_tagger.passed:
+        if ('be' in self.ch or 'bmu' in self.ch):
             for i in range(len(sel.jet_pt)):
                 if sel.jet_closeToLepton[i]:
                     closeJetIdx = i
