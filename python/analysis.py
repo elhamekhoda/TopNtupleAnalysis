@@ -609,6 +609,7 @@ class AnaTtresSL(Analysis):
             self.h["trueMttr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
             self.h["trueMtt8TeV"][syst].Fill(truPttbar.M(), w)
             self.h["trueMtt8TeVr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
+        self.h['NEvents'][syst].Fill(1, 1)
         self.h["yields"][syst].Fill(1, w)
         self.h["runNumber"][syst].Fill(sel.runNumber, w)
         l = ROOT.TLorentzVector()
@@ -693,6 +694,8 @@ class AnaTtresSL(Analysis):
             elif lQ < 0:
                 self.h["mttNeg"][syst].Fill(mtt, w)
             self.h["largeJetPtMtt"][syst].Fill(lj.Perp()/(mtt*1e3), w)
+            self.h['finalYields'][syst].Fill(1, w)
+            self.h['finalNEvents'][syst].Fill(1)
             
             ################################
             ### fill the tree ##############
@@ -766,6 +769,8 @@ class AnaTtresSL(Analysis):
             self.h["mthad_res"][syst].Fill(self.TtresChi2.mth, w)
             self.h["mwhad_res"][syst].Fill(self.TtresChi2.mwh, w)
             self.h["chi2"][syst].Fill(self.TtresChi2.chi2, w)
+            self.h['finalYields'][syst].Fill(1, w)
+            self.h['finalNEvents'][syst].Fill(1)
             ################################
             ### fill the tree ##############
             if self._doTree:
@@ -863,6 +868,7 @@ class AnaTtresFH(Analysis):
         # Leading hadronic top candidate
         self.addVar("leadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3])
         self.add("leadinglargeJetM", 30, 0, 300)
+        self.add("leadinglargeJetY", 22, -2.2, 2.2)
         self.add("leadinglargeJetPtMtt", 50, 0, 1)
         self.add("leadinglargeJetEta", 22, -2.2, 2.2)
         self.add("leadinglargeJetPhi", 32, -3.2, 3.2)
@@ -873,6 +879,7 @@ class AnaTtresFH(Analysis):
         # Sub-leading hadronic top candidate
         self.addVar("subleadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3])
         self.add("subleadinglargeJetM", 30, 0, 300)
+        self.add("subleadinglargeJetY", 22, -2.2, 2.2)
         self.add("subleadinglargeJetPtMtt", 50, 0, 1)
         self.add("subleadinglargeJetEta", 22, -2.2, 2.2)
         self.add("subleadinglargeJetPhi", 32, -3.2, 3.2)
@@ -881,6 +888,8 @@ class AnaTtresFH(Analysis):
         self.add2D("subleadinglargeJetEtaPhi", 44, -2.2, 2.2, 64, -3.2, 3.2)
         self.add("btagged_tjet_closest_to_ljet2", 50, 0, (math.pi**2+2.5**2)**0.5)
         self.add("dPhiJJ", 60, -math.pi*1.2, math.pi*1.2)
+        self.add("Ystar", 22, -2.2, 2.2)
+        self.add("Yboost", 22, -2.2, 2.2)
         ### resolved channel ###
         # Leading hadronic top candidate
         self.addVar("mthad1_res", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
@@ -1026,6 +1035,7 @@ class AnaTtresFH(Analysis):
             # Leading hadronic top candidate
             self.h["leadinglargeJetPt"][syst].Fill(lj1.Perp(), w)
             self.h["leadinglargeJetM"][syst].Fill(lj1.M(), w)
+            self.h["leadinglargeJetY"][syst].Fill(lj1.Rapidity(), w)
             self.h["leadinglargeJetPtMtt"][syst].Fill(lj1.Perp()/mtt, w)
             self.h["leadinglargeJetEta"][syst].Fill(lj1.Eta(), w)
             self.h["leadinglargeJetPhi"][syst].Fill(lj1.Phi(), w)
@@ -1039,6 +1049,7 @@ class AnaTtresFH(Analysis):
             # Sub-leading hadronic top candidate
             self.h["subleadinglargeJetPt"][syst].Fill(lj2.Perp(), w)
             self.h["subleadinglargeJetM"][syst].Fill(lj2.M(), w)
+            self.h["subleadinglargeJetY"][syst].Fill(lj2.Rapidity(), w)
             self.h["subleadinglargeJetPtMtt"][syst].Fill(lj2.Perp()/mtt, w)
             self.h["subleadinglargeJetEta"][syst].Fill(lj2.Eta(), w)
             self.h["subleadinglargeJetPhi"][syst].Fill(lj2.Phi(), w)
@@ -1047,6 +1058,8 @@ class AnaTtresFH(Analysis):
             self.h["subleadinglargeJetEtaPhi"][syst].Fill(lj2.Eta(), lj2.Phi(), w)
 
             self.h["dPhiJJ"][syst].Fill(lj1.DeltaPhi(lj2), w)
+            self.h["Ystar"][syst].Fill((lj1.Rapidity()-lj2.Rapidity())/2, w)
+            self.h["Yboost"][syst].Fill((lj1.Rapidity()+lj2.Rapidity())/2, w)
             deltaR_closest_btjet_to_ljet2 = 1e6
             for bjet in bjets:
                 deltaR_closest_btjet_to_ljet2 = min(bjet.DeltaR(lj2), deltaR_closest_btjet_to_ljet2)
