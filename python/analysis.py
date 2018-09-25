@@ -526,7 +526,7 @@ class AnaTtresSL(Analysis):
             return False
         # veto resolved event if it passes the boosted channel
         top_tagged = self.top_tagger.passes(sel)
-        if ('be' in self.ch or 'bmu') in self.ch:
+        if ('be' in self.ch or 'bmu' in self.ch):
             if not top_tagged:
                 return False
 
