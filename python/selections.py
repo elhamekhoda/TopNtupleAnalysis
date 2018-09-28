@@ -69,7 +69,7 @@ class BoostedTopTagger(Selection):
             which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"), where 'i' is the id of the item.
     """
     def __init__(self, _callable = None, num_top = 1, min_pt = 300000, strategy = 'obey', bot_tagger = None):
-        logger.info("Select events contain at least {} hadronic-top candidate(s) with pt larger than {} MeV".format(num_top, min_pt))
+        logger.info("Select events contain at least {} hadronic-top candidate(s) with pt > {} MeV".format(num_top, min_pt))
         if not callable(_callable):
             logger.info('StrExpression: "{}"'.format(_callable))
         self.num_top = num_top
@@ -107,6 +107,9 @@ class BoostedTopTagger(Selection):
             p4.SetPtEtaPhiE(ev.ljet_pt[i], ev.ljet_eta[i], ev.ljet_phi[i],ev.ljet_e[i])
             self.ljet_p4.push_back(p4)
     def bcategorize(self, ev, bot_tagger = None):
+        if not any(helpers.char2int(tagged) for tagged in self._bot_tagger.tjet_isbtagged):
+            self.bcategory = -1
+            return 
         btagCat = 0
         for i, istoptagged in enumerate(self.ljet_istoptagged):
             if not istoptagged:
@@ -183,6 +186,7 @@ class TrackJetBotTagger(Selection):
         self.min_discriminant = recomm.get(WP, -999)
         self.min_pt = recomm.get('pt', 10e3)
         self.min_nbjets = min_nbjets
+        logger.info("Select events contain at least {} b-tagged trk-jets with pt > {} MeV".format(self.min_nbjets, self.min_pt))
         if self.strategy == 'rebel':
             logger.debug('The b-tagging strategy is "rebel", which means b-tagging will be re-computed internally')
         elif self.strategy == 'obey':

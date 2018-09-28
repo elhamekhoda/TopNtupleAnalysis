@@ -168,8 +168,9 @@ class Analysis(object):
 
             for observable in self.observables:
                 if 'tree' in observable.do:
-                    if not any(only in self.ch for only in observable.only):
-                        continue
+                    if observable.only != None:
+                        if not any(only in self.ch for only in observable.only):
+                            continue
                     if observable.style == 'foreach':
                         self.branches[tname][s][observable.name] = std.vector(observable.dtype)()
                     else:
@@ -1134,7 +1135,7 @@ class AnaTtresFH(Analysis):
 
     def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_70', **kwds):
         kwds.setdefault('do_ljet_association', True)
-        kwds.setdefault('min_nbjets', 0)
+        kwds.setdefault('min_nbjets', 1)
         super(AnaTtresFH, self).set_bot_tagger(algorithm_WP_systs, **kwds)
         if hasattr(self, 'top_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger

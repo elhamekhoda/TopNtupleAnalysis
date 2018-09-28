@@ -275,6 +275,22 @@ class Sample(object):
                 except Exception as e:
                     logger.exception(e)
                 i += 1
+    def add_replication_rule(self, rse = None, only = range(1), allow_fail = True, **kwds):
+        rse = rse or self.RSE_preferred
+        try:
+            logger.info('Adding replication rule:')
+            dids = [{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()]
+            for did in dids:
+                logger.info('\tname:{}'.format(did['name']))
+                logger.info('\tRSE:{}'.format(rse))
+            self._client.add_replication_rule(dids, len(only), rse, **kwds)
+        except Exception as e:
+            logger.warning(e)
+            if not allow_fail:
+                raise
+            else:
+                logger.info('\tSKIP!')
+
     def download_dataset(self, ds_name = None, only_retrieve_cmd = False):
         dirname = os.path.abspath(ds_name or self.download_to)
         input_files = []
