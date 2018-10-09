@@ -128,7 +128,7 @@ class Event:
 def readEvent(mt):
     return mt
 
-listEWK = [410000, 301528, 301529, 301530, 301531, 301532]
+listEWK = [410471, 410470, 410000, 301528, 301529, 301530, 301531, 301532]
 def applyEWK(sel, s):
     if sel.mcChannelNumber == 0:
         return 1
