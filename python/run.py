@@ -177,7 +177,7 @@ class Run(object):
                                              **_submit_kwds)
 
     def finalize(self, do_merge = None, delete_sources_after_merged = False):
-        do_merge = do_merge or self.do_merge
+        do_merge = do_merge if do_merge != None else self.do_merge
         if do_merge == True:
             for outstream in self.outstreams.viewvalues():
                 for selection in outstream:
