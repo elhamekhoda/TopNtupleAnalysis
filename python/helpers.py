@@ -664,15 +664,7 @@ def initialise_binds():
         logger.debug('$WorkDir_DIR: %s', WorkDir_DIR)
     logger.debug('$PWD: %s', os.environ['PWD'])
     logger.debug('$LD_LIBRARY_PATH: %s', os.environ['LD_LIBRARY_PATH'])
-        
-    lib_dir = os.path.join(WorkDir_DIR, "lib") if WorkDir_DIR else root_path
-    cintdict_dir = os.path.join(WorkDir_DIR, '..', "TopNtupleAnalysis", 'CMakeFiles') if WorkDir_DIR else root_path
-    shared_lib = os.path.join(lib_dir, "libTopNtupleAnalysis.so")
-    if os.path.exists(shared_lib):
-        ROOT.gSystem.Load(shared_lib)
-    else:
-        ROOT.gSystem.Load(shared_lib.rsplit(".so", 1)[0] + ".dylib")
-    ROOT.gROOT.LoadMacro(os.path.join(cintdict_dir, "TopNtupleAnalysisCintDict.cxx"))
+    ROOT.gROOT.ProcessLine('TopNtupleAnalysis=new TopNtupleAnalysisUtils();')
     BINDS_INITIASIZED = True
 
 # if not BINDS_INITIASIZED:

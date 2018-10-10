@@ -157,14 +157,14 @@ class BoostedTopTagger(Selection):
 
 class TrackJetBotTagger(Selection):
     WP2D = {'AntiKt2PV0TrackJets':
-            {'MV2c10':    {'60':  0.86, '70':  0.66, '77':  0.38, '85': -0.15, 'pt': 10e3},
-             'MV2c10mu':  {'60':  0.95, '70':  0.87, '77':  0.71, '85':  0.23, 'pt': 10e3},
-             'MV2c10rnn': {'60':  0.96, '70':  0.87, '77':  0.71, '85':  0.26, 'pt': 10e3}},
+            {'MV2c10':    {'FixedCutBEff60':  0.86, 'FixedCutBEff70':  0.66, 'FixedCutBEff77':  0.38, 'FixedCutBEff85': -0.15, 'pt': 10e3},
+             'MV2c10mu':  {'FixedCutBEff60':  0.95, 'FixedCutBEff70':  0.87, 'FixedCutBEff77':  0.71, 'FixedCutBEff85':  0.23, 'pt': 10e3},
+             'MV2c10rnn': {'FixedCutBEff60':  0.96, 'FixedCutBEff70':  0.87, 'FixedCutBEff77':  0.71, 'FixedCutBEff85':  0.26, 'pt': 10e3}},
             'AntiKtVR30Rmax4Rmin02TrackJets':
-            {'MV2c10':    {'60':  0.92, '70':  0.79, '77':  0.58, '85':  0.05, 'pt':  7e3}}
+            {'MV2c10':    {'FixedCutBEff60':  0.92, 'FixedCutBEff70':  0.79, 'FixedCutBEff77':  0.58, 'FixedCutBEff85':  0.05, 'pt':  7e3}}
             }
     # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
-    def __init__(self, algorithm = 'MV2c10', WP = '70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'rebel', do_association = True, do_ljet_association = False, do_truth_matching = True, min_nbjets = 1):
+    def __init__(self, algorithm = 'MV2c10', WP = 'FixedCutBEff70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'rebel', do_association = True, do_ljet_association = False, do_truth_matching = True, min_nbjets = 1):
         self.algorithm = algorithm
         self.WP = WP
         self.trackjet_alg = trackjet_alg
@@ -174,14 +174,19 @@ class TrackJetBotTagger(Selection):
         self.do_association = do_association
         self.do_ljet_association = do_ljet_association
         self.do_truth_matching = do_truth_matching
+        is_HybWP = 'HybBEff' in self.WP
         if self.systematic_variation != '':
             logger.warn('Please be informed: b-tagging scale factor with systematic variations is currently not valid'
                         +' because the eigen matrix are not stored in the ttres ntuple produced by the current-version `HQTTtResonancesTools`.'
                         +' Please consult us and make sure you really know what you\'re doing!')
-        self._branch_map = {'tjet_isbtagged': 'tjet_isbtagged_{alg}_{WP}'.format(alg = self.algorithm, WP = self.WP),
-                            'tjet_SF': 'tjet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = self.WP),
+        self._branch_map = {'tjet_isbtagged': 'tjet_isbtagged_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
+                            'tjet_SF': 'tjet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
                             'tjet_discriminant': 'tjet_{alg}'.format(alg = self.algorithm.lower())}
-        self.strategy = strategy
+        if is_HybWP:
+            logger.warn('When using Hybrid WP, the b-tagging strategy should always be `obey`!')
+            self.strategy = 'obey'
+        else:
+            self.strategy = strategy 
         recomm = self.WP2D.get(self.trackjet_alg, {}).get(self.algorithm, {})
         self.min_discriminant = recomm.get(WP, -999)
         self.min_pt = recomm.get('pt', 10e3)
@@ -210,6 +215,8 @@ class TrackJetBotTagger(Selection):
             self._tjet_p4.push_back(p4)
         if self.do_association:
             self.association(ev)
+        if self.do_ljet_association:
+            self.ljet_association(ev)
         if self.do_truth_matching:
             self.truth_matching(ev)
         return True

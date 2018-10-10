@@ -65,10 +65,10 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
     endif()
     # Generate a CINT dictionary source file:
     atlas_add_root_dictionary( TopNtupleAnalysis _cintDictSource
-                               ROOT_HEADERS Root/LinkDef.h
+                               ROOT_HEADERS TopNtupleAnalysis/wrapper.h Root/LinkDef.h
                                EXTERNAL_PACKAGES ROOT)
     # Build a library that other components can link against:
-    atlas_add_library( TopNtupleAnalysis ${SOURCES} ${_cintDictSource} TopNtupleAnalysis/wrapper.h
+    atlas_add_library( TopNtupleAnalysis ${_cintDictSource} ${SOURCES} TopNtupleAnalysis/wrapper.h 
                        PUBLIC_HEADERS TopNtupleAnalysis
                        LINK_LIBRARIES ${LINK_LIBRARIES}
                        PRIVATE_LINK_LIBRARIES PathResolver

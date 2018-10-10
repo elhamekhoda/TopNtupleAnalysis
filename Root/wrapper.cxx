@@ -38,10 +38,15 @@ std::vector<MMUtils *> mm_e(20);
 NNLOReweighterTool *m_NNLO = 0;
 #endif
 
-namespace TopNtupleAnalysis{
 #include "DMweight.cxx"
 
-void initWrapper(bool dt) {
+TopNtupleAnalysisUtils::TopNtupleAnalysisUtils(){
+
+}
+
+TopNtupleAnalysisUtils::~TopNtupleAnalysisUtils(){}
+
+void TopNtupleAnalysisUtils::initWrapper(bool dt) {
   m_chi2.Init(TtresChi2::DATA2015_MC15C);
   m_status = false;
   if (dt) {
@@ -109,12 +114,12 @@ void initWrapper(bool dt) {
   #endif
 }
 #ifdef NNLOReweighter_NNLOReweighter
-void InitNNLO(int mcChannelNumber) {
+void TopNtupleAnalysisUtils::InitNNLO(int mcChannelNumber) {
   m_NNLO->setProperty("ChannelNumber", mcChannelNumber).isSuccess();
   m_NNLO->initialize().isSuccess();
 }
 
-double getNNLOWeight(double ttbarPt, double topPt, int mode) {
+double TopNtupleAnalysisUtils::getNNLOWeight(double ttbarPt, double topPt, int mode) {
   if (mode == 1) { // sequential
     return m_NNLO->get_ttbar_and_top_pt_weight(ttbarPt, topPt);
   } else if (mode == 0) { // top pt extended
@@ -126,36 +131,36 @@ double getNNLOWeight(double ttbarPt, double topPt, int mode) {
 }
 #endif
 
-void getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
+void TopNtupleAnalysisUtils::getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
   m_status = m_chi2.findMinChiSquareSimple(lep, jets, btag, met);
 }
 
-double res_mtt() {
+double TopNtupleAnalysisUtils::res_mtt() {
   if (!m_status) return -1;
   return m_chi2.getResult_Mtt();
 }
-double res_mtl() {
+double TopNtupleAnalysisUtils::res_mtl() {
   if (!m_status) return -1;
   return m_chi2.getResult_Mtl();
 }
-double res_mth() {
+double TopNtupleAnalysisUtils::res_mth() {
   if (!m_status) return -1;
   return m_chi2.getResult_Mth();
 }
-double res_mwh() {
+double TopNtupleAnalysisUtils::res_mwh() {
   if (!m_status) return -1;
   return m_chi2.getResult_Mwh();
 }
-double res_chi2() {
+double TopNtupleAnalysisUtils::res_chi2() {
   if (!m_status) return -1;
   return m_chi2.getResult_Chi2All();
 }
-int res_bcat() {
+int TopNtupleAnalysisUtils::res_bcat() {
   if (!m_status) return -1;
   return m_chi2.getCategory();
 }
 
-double getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var) {
+double TopNtupleAnalysisUtils::getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var) {
   float sf; 
   float t_pt = top.Perp();
   float t_eta = top.Eta();
@@ -170,7 +175,7 @@ double getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int v
   return sf;
 }
 
-TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
+TLorentzVector TopNtupleAnalysisUtils::getNu(TLorentzVector l, double met, double met_phi) {
   std::vector<TLorentzVector *> vec_nu = m_neutrinoBuilder.candidatesFromWMass_Rotation(&l, met, met_phi, true);
   TLorentzVector nu;
   if (vec_nu.size() > 0) {
@@ -180,9 +185,12 @@ TLorentzVector getNu(TLorentzVector l, double met, double met_phi) {
   }
   return nu;
 }
+Double_t TopNtupleAnalysisUtils::wfunction(Int_t E, Double_t x) {
+  return get_wfunction(E, x);
+}
 
 #ifndef NOEFT
-double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger, float topoetcone20, int runNumber) {
+double TopNtupleAnalysisUtils::getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger, float topoetcone20, int runNumber) {
   Event e;
   e.met(met.Px(), met.Py());
   if (isElectron) {
@@ -211,19 +219,18 @@ double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector l
   return w;
 }
 
-void initPDF(const std::string &s) {
+void TopNtupleAnalysisUtils::initPDF(const std::string &s) {
   initPDFForReweighting(s.c_str(), 0);
 }
-double alphaS(double Q2) {
+double TopNtupleAnalysisUtils::alphaS(double Q2) {
   return pdfAlphaS(Q2);
 }
-void setEFT(float eftLambda, float eftCvv) {
+void TopNtupleAnalysisUtils::setEFT(float eftLambda, float eftCvv) {
   initEFTModels(eftLambda, eftCvv);
 }
-double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
+double TopNtupleAnalysisUtils::getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVector i1, TLorentzVector i2, TLorentzVector t, TLorentzVector tbar, std::vector<TLorentzVector> f, double Q2) {
   double eftw = getEFTWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2, 1.0);
   double smw  = getSMWeight(i1_pid, i2_pid, f_pid, i1, i2, t, tbar, f, Q2);
   return eftw/smw - 1.0;
 }
 #endif 
-}

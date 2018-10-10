@@ -268,7 +268,7 @@ class Analysis(object):
     def set_top_tagger(self, expr, num_thad = 1, **kwds):
         self.top_tagger = selections.BoostedTopTagger(expr, num_top = num_thad, **kwds)
 
-    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_70', **kwds):
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70', **kwds):
         attr = algorithm_WP_systs.split('.',2)
         algorithm_WP_systs = attr[-1].split('_', 2)
         if len(attr)==2:
@@ -1133,7 +1133,7 @@ class AnaTtresFH(Analysis):
         if hasattr(self, 'bot_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger
 
-    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_70', **kwds):
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_FixedCutBEff77', **kwds):
         kwds.setdefault('do_ljet_association', True)
         kwds.setdefault('min_nbjets', 1)
         super(AnaTtresFH, self).set_bot_tagger(algorithm_WP_systs, **kwds)
