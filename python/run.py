@@ -25,18 +25,18 @@ class Run(object):
             os.makedirs(self.output_dir)
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
-        self.selections = [('(be,     good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(bmu,    good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(re,     good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(rmu,    good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(be2015, good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(bmu2015,good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(re2015, good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(rmu2015,good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(be2016, good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(bmu2016,good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(re2016, good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                           ('(rmu2016,good, MV2c10_70)', '{channel}_{s.sample_name}{s.tag}.root')]
+        self.selections = [('(be,     good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(bmu,    good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(re,     good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(rmu,    good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(be2015, good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(bmu2015,good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(re2015, good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(rmu2015,good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(be2016, good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(bmu2016,good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(re2016, good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                           ('(rmu2016,good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root')]
         self.analysis_type = analysis_type
         self.analysis_exts = []
         self.max_inputs_per_job = max_inputs_per_job
