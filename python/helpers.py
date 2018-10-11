@@ -128,22 +128,6 @@ class Event:
 def readEvent(mt):
     return mt
 
-listEWK = [410471, 410470, 410000, 301528, 301529, 301530, 301531, 301532]
-def applyEWK(sel, s):
-    if sel.mcChannelNumber == 0:
-        return 1
-    top = ROOT.TLorentzVector()
-    top.SetPtEtaPhiM(sel.MC_t_pt, sel.MC_t_eta, sel.MC_t_phi, sel.MC_t_m)
-    topbar = ROOT.TLorentzVector()
-    topbar.SetPtEtaPhiM(sel.MC_tbar_pt, sel.MC_tbar_eta, sel.MC_tbar_phi, sel.MC_tbar_m)
-    if s == 'ttEWK__1up':
-        w = ROOT.TopNtupleAnalysis.getEWK(top, topbar, sel.initial_type, 1)
-    elif s == 'ttEWK__1down':
-        w = ROOT.TopNtupleAnalysis.getEWK(top, topbar, sel.initial_type, 2)
-    else:
-        w = ROOT.TopNtupleAnalysis.getEWK(top, topbar, sel.initial_type, 0)
-    return w
-
 
 '''
 SM topo's         |  H/A matched topo's  | H/A partially matched topo's

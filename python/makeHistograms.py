@@ -5,6 +5,8 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 import csv
 import analysis
+import reweighting
+
 ROOT.ROOT.EnableImplicitMT(8) # Not sure if it works
 logger = helpers.getLogger('TopNtupleAnalysis.makeHistograms')
 
@@ -74,7 +76,7 @@ def main(parallel = True):
         isTtbar = True
     if sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
         isSingleTop = True
-    if sel.mcChannelNumber in helpers.listEWK:
+    if sel.mcChannelNumber in reweighting.EWKCorrection.RUN_NUMBERS:
         doEWK = True
 
 

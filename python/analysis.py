@@ -8,6 +8,7 @@ from array import array
 from ROOT import std
 import observables
 import selections
+import reweighting
 import wjets
 logger = helpers.getLogger('TopNtupleAnalysis.analysis')
 
@@ -256,9 +257,8 @@ class Analysis(object):
             weight *= wItem
 
         # this applies the EWK weight
-        channel = sel.mcChannelNumber
-        if channel in helpers.listEWK and not self.noMttSlices:
-            weight *= helpers.applyEWK(sel, s)
+        if not self.noMttSlices:
+            weight *= reweighting.EWKCorrection.get_weight(sel, s)
 
         # this applies the W+jets Sherpa 2.2.0 nJets reweighting correction
         # WARNING: disable this if using 2.2.1

@@ -2,32 +2,16 @@
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 # Find source files
 file(GLOB SOURCES        ### Core ###
-                         Root/AnaTtresMM.cxx
-                         Root/AnaTtresQCD.cxx
-                         Root/AnaTtresSB.cxx
-                         Root/AnaTtresSL.cxx
-                         Root/AnaTtresSLMtt.cxx
-                         Root/AnaTtresWJ.cxx
-                         Root/AnaTuDoSL.cxx
-                         Root/AnaTuDoTtresBoosted.cxx
-                         Root/AnaTuDoTtresResolved.cxx
-                         Root/Analysis.cxx
                          Root/Electron.cxx
                          Root/Event.cxx
-                         Root/EventCount.cxx
-                         Root/HistogramService.cxx
                          Root/Jet.cxx
-                         Root/KinematicUtils.cxx
                          Root/LargeJet.cxx
                          Root/MMUtils.cxx
                          Root/MObject.cxx
-                         Root/MiniTree.cxx
                          Root/Muon.cxx
                          Root/ParseUtils.cxx
                          Root/TtresChi2.cxx
                          Root/TtresNeutrinoBuilder.cxx
-                         Root/TtresdRmin.cxx
-                         Root/UserFunktions.cxx
                          Root/WeakCorrScaleFactorParam.cxx
                          ### pyHistogram Only ###
                          ## Wrapper ##
@@ -74,18 +58,7 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
                        PRIVATE_LINK_LIBRARIES PathResolver
                        INCLUDE_DIRS ${ROOT_INCLUDE_DIRS})
     atlas_install_data( share/* )
-    atlas_install_python_modules( python/__init__.py
-                                  python/run.py
-                                  python/clusters.py
-                                  python/samples.py
-                                  python/helpers.py
-                                  python/makeHistograms.py
-                                  python/analysis.py
-                                  python/wjets.py
-                                  python/sumWeights.py
-                                  python/observables.py
-                                  python/selections.py
-                                  )
+    atlas_install_python_modules( python/*.py )
     atlas_install_scripts( scripts/tna-run )
 
 else()
