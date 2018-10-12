@@ -194,10 +194,10 @@ class TrackJetBotTagger(Selection):
         logger.info("Select events contain at least {} b-tagged trk-jets with pt > {} MeV".format(self.min_nbjets, self.min_pt))
         if self.strategy == 'rebel':
             logger.debug('The b-tagging strategy is "rebel", which means b-tagging will be re-computed internally')
-        elif self.strategy == 'obey':
-            logger.debug('The b-tagging strategy is "obey", which means using the b-tagging is done by external program. (i.e. HQTTtResonancesTools)')
             if self.min_discriminant == -999:
                 raise KeyError('For STRATEGY("rebel"), you always need an available "Alg./WP" stored in WP2D!')
+        elif self.strategy == 'obey':
+            logger.debug('The b-tagging strategy is "obey", which means using the b-tagging is done by external program. (i.e. HQTTtResonancesTools)')
         self.passes = getattr(self, '_passes_{}'.format(self.strategy))
         self._jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
         self.jet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Not used in boosted channel
