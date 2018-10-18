@@ -104,7 +104,7 @@ Observable("th2_eta", do = ['tree'], only = ['bFH'], script = """lj2.Eta()""").q
 Observable("th2_phi", do = ['tree'], only = ['bFH'], script = """lj2.Phi()""").queue()
 Observable("th2_m", do = ['tree'], only = ['bFH'],   script = """lj2.M()""").queue()
 
-Observable('trkbjets_N', (4, 0, 5), do = ['hist', 'tree'], dtype = int, script = """sum(map(helpers.char2int, analysis.bot_tagger.tjet_isbtagged))""").queue()
+# Observable('trkbjets_N', (4, 0, 5), do = ['hist', 'tree'], dtype = int, script = """sum(map(helpers.char2int, analysis.bot_tagger.tjet_isbtagged))""").queue()
 
 ### Jet Substructure ###
 # Observable("th_tau21_wta", do = ['tree'], only = ['b'], script = """sel.ljet_tau21_wta[analysis.top_tagger.thad_index] if analysis.top_tagger.thad_index != -1 else -999""").queue()

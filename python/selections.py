@@ -111,15 +111,20 @@ class BoostedTopTagger(Selection):
             self.bcategory = -1
             return 
         btagCat = 0
-        for i, istoptagged in enumerate(self.ljet_istoptagged):
-            if not istoptagged:
-                continue
-            if self._bot_tagger.ljet_isbtagged[i]:
-                if btagCat == 1:
-                    btagCat = 3
-                else:
-                    btagCat = i
-        self.bcategory = btagCat
+        if self.num_top == 1:
+            raise NotImplementedError
+        else:
+            i_top = 0
+            for i, istoptagged in enumerate(self.ljet_istoptagged):
+                if not istoptagged:
+                    continue
+                i_top += 1
+                if self._bot_tagger.ljet_isbtagged[i]:
+                    if btagCat == 1:
+                        btagCat = 3
+                    else:
+                        btagCat = i_top
+            self.bcategory = btagCat
     def _passes_obey(self, ev):
         self.ljet_istoptagged = []
         self.retrieve_ljet_p4(ev)
@@ -131,8 +136,10 @@ class BoostedTopTagger(Selection):
     def angularcuts(self, ev):
         # This is a temporary solution. will be implemented in HQTTtresTools and be utilized directly here in the future
         ret = []
+        _ljet_istoptagged = []
         for i1, p4_i1 in enumerate(self.ljet_p4):
             ret.append([])
+            _ljet_istoptagged.append(0)
             for i2, p4_i2 in enumerate(self.ljet_p4):
                 ret[-1].append(int((i1 < i2) and (abs(p4_i1.DeltaPhi(p4_i2)) > self.min_dPhi)))
         self.ljet_angularcuts = ret
@@ -140,10 +147,12 @@ class BoostedTopTagger(Selection):
             for j in range(len(self.ljet_angularcuts[i])):
                 if i >= j:
                     continue
-                if self.ljet_istoptagged[i]*self.ljet_angularcuts[i][j]*self.ljet_istoptagged[j]:
-                    self.ljet_istoptagged[i+1:j] = (0,)*(j-i-1)
+                if self.ljet_istoptagged[i] * self.ljet_istoptagged[j]:
+                    if self.ljet_angularcuts[i][j]:
+                        _ljet_istoptagged[i] = _ljet_istoptagged[j] = 1
+                    self.ljet_istoptagged = _ljet_istoptagged
                     return
-        self.ljet_istoptagged = [0]* len(self.ljet_angularcuts)
+        self.ljet_istoptagged = _ljet_istoptagged
 
     def _passes_rebel(self, ev):
         self.ljet_istoptagged = []
@@ -157,11 +166,18 @@ class BoostedTopTagger(Selection):
 
 class TrackJetBotTagger(Selection):
     WP2D = {'AntiKt2PV0TrackJets':
-            {'MV2c10':    {'FixedCutBEff60':  0.86, 'FixedCutBEff70':  0.66, 'FixedCutBEff77':  0.38, 'FixedCutBEff85': -0.15, 'pt': 10e3},
+            {
+             'MV2c10':    {'FixedCutBEff60':  0.86, 'FixedCutBEff70':  0.66, 'FixedCutBEff77':  0.38, 'FixedCutBEff85': -0.15, 'pt': 10e3},
              'MV2c10mu':  {'FixedCutBEff60':  0.95, 'FixedCutBEff70':  0.87, 'FixedCutBEff77':  0.71, 'FixedCutBEff85':  0.23, 'pt': 10e3},
-             'MV2c10rnn': {'FixedCutBEff60':  0.96, 'FixedCutBEff70':  0.87, 'FixedCutBEff77':  0.71, 'FixedCutBEff85':  0.26, 'pt': 10e3}},
+             'MV2c10rnn': {'FixedCutBEff60':  0.96, 'FixedCutBEff70':  0.87, 'FixedCutBEff77':  0.71, 'FixedCutBEff85':  0.26, 'pt': 10e3},
+             'DL1':       {'FixedCutBEff60':  2.74, 'FixedCutBEff70':  2.02, 'FixedCutBEff77':  1.45, 'FixedCutBEff85':  0.46, 'pt': 10e3},
+             'DL1mu':     {'FixedCutBEff60':  2.72, 'FixedCutBEff70':  1.83, 'FixedCutBEff77':  1.10, 'FixedCutBEff85':  0.12, 'pt': 10e3},
+             'DL1rnn':    {'FixedCutBEff60':  4.31, 'FixedCutBEff70':  2.98, 'FixedCutBEff77':  2.23, 'FixedCutBEff85':  1.32, 'pt': 10e3}
+            },
+
             'AntiKtVR30Rmax4Rmin02TrackJets':
-            {'MV2c10':    {'FixedCutBEff60':  0.92, 'FixedCutBEff70':  0.79, 'FixedCutBEff77':  0.58, 'FixedCutBEff85':  0.05, 'pt':  7e3}}
+            {
+             'MV2c10':    {'FixedCutBEff60':  0.92, 'FixedCutBEff70':  0.79, 'FixedCutBEff77':  0.58, 'FixedCutBEff85':  0.05, 'pt':  7e3}}
             }
     # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
     def __init__(self, algorithm = 'MV2c10', WP = 'FixedCutBEff70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'rebel', do_association = True, do_ljet_association = False, do_truth_matching = True, min_nbjets = 1):
@@ -194,10 +210,10 @@ class TrackJetBotTagger(Selection):
         logger.info("Select events contain at least {} b-tagged trk-jets with pt > {} MeV".format(self.min_nbjets, self.min_pt))
         if self.strategy == 'rebel':
             logger.debug('The b-tagging strategy is "rebel", which means b-tagging will be re-computed internally')
-        elif self.strategy == 'obey':
-            logger.debug('The b-tagging strategy is "obey", which means using the b-tagging is done by external program. (i.e. HQTTtResonancesTools)')
             if self.min_discriminant == -999:
                 raise KeyError('For STRATEGY("rebel"), you always need an available "Alg./WP" stored in WP2D!')
+        elif self.strategy == 'obey':
+            logger.debug('The b-tagging strategy is "obey", which means using the b-tagging is done by external program. (i.e. HQTTtResonancesTools)')
         self.passes = getattr(self, '_passes_{}'.format(self.strategy))
         self._jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
         self.jet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Not used in boosted channel
@@ -207,7 +223,9 @@ class TrackJetBotTagger(Selection):
         self.ljet_associated_btaggedtjet_index = ROOT.vector('int')()
 
     def _passes_obey(self, ev):
-        self.tjet_isbtagged = getattr(ev, self._branch_map['tjet_isbtagged'])
+        self.tjet_isbtagged = ROOT.vector(int)()
+        for tagged in getattr(ev, self._branch_map['tjet_isbtagged']):
+            self.tjet_isbtagged.push_back(helpers.char2int(tagged))
         self._tjet_p4 = ROOT.vector('TLorentzVector')()
         for i in range(len(ev.tjet_pt)):
             p4 = ROOT.TLorentzVector()
@@ -219,7 +237,9 @@ class TrackJetBotTagger(Selection):
             self.ljet_association(ev)
         if self.do_truth_matching:
             self.truth_matching(ev)
-        return True
+        if self.min_nbjets == 0:
+            return True
+        return (sum(self.tjet_isbtagged) >= self.min_nbjets)
 
     def _passes_rebel(self, ev):
         self.tjet_isbtagged = ROOT.vector(int)()
