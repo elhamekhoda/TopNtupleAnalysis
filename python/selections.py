@@ -180,7 +180,7 @@ class TrackJetBotTagger(Selection):
              'MV2c10':    {'FixedCutBEff60':  0.92, 'FixedCutBEff70':  0.79, 'FixedCutBEff77':  0.58, 'FixedCutBEff85':  0.05, 'pt':  7e3}}
             }
     # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
-    def __init__(self, algorithm = 'MV2c10', WP = 'FixedCutBEff70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'rebel', do_association = True, do_ljet_association = False, do_truth_matching = True, min_nbjets = 1):
+    def __init__(self, algorithm = 'MV2c10', WP = 'FixedCutBEff70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'obey', do_association = True, do_ljet_association = False, do_truth_matching = True, min_nbjets = 1):
         self.algorithm = algorithm
         self.WP = WP
         self.trackjet_alg = trackjet_alg
@@ -198,7 +198,7 @@ class TrackJetBotTagger(Selection):
         self._branch_map = {'tjet_isbtagged': 'tjet_isbtagged_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
                             'tjet_SF': 'tjet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
                             'tjet_discriminant': 'tjet_{alg}'.format(alg = self.algorithm.lower())}
-        if is_HybWP:
+        if is_HybWP and self.strategy == 'rebel':
             logger.warn('When using Hybrid WP, the b-tagging strategy should always be `obey`!')
             self.strategy = 'obey'
         else:

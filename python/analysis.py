@@ -46,7 +46,7 @@ class Analysis(object):
                 self.period = int(channel_match['bcat_or_period'])
                 self.bcategory = None
             else:
-                self.bcategory = int(channel_match['bcat_or_period'])
+                self.bcategory = int(channel_match['bcat_or_period']) if channel_match['bcat_or_period'] else None
                 self.period = None
         self.histSuffixes = suf
         self.noMttSlices = False
