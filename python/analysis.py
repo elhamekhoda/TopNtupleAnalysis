@@ -143,9 +143,9 @@ class Analysis(object):
             self.branches[tname][s] = {}
             self.branches_noclear[tname][s] = {}
 
-            self.branches[tname][s]["eventNumber"] = std.vector(float)()
+            self.branches[tname][s]["eventNumber"] = std.vector(long)()
             self.trees[tname][s].Branch("eventNumber",self.branches[tname][s]["eventNumber"])
-            self.branches[tname][s]["runNumber"] = std.vector(float)()
+            self.branches[tname][s]["runNumber"] = std.vector(long)()
             self.trees[tname][s].Branch("runNumber",self.branches[tname][s]["runNumber"])
             self.branches[tname][s]["mcChannelNumber"] = std.vector(float)()
             self.trees[tname][s].Branch("mcChannelNumber",self.branches[tname][s]["mcChannelNumber"])
