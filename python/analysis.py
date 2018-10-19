@@ -301,26 +301,26 @@ class Analysis(object):
 
 class AnaTtresSL(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
-                'be': ['bejets_2015','bejets_2016'],
-                'bmu': ['bmujets_2015','bmujets_2016'],
-                're': ['rejets_2015','rejets_2016'],
-                'rmu': ['rmujets_2015','rmujets_2016'],
-                'be0': ['bejets_2015','bejets_2016'],
-                'bmu0': ['bmujets_2015','bmujets_2016'],
-                're0': ['rejets_2015','rejets_2016'],
-                'rmu0': ['rmujets_2015','rmujets_2016'],
-                'be1': ['bejets_2015','bejets_2016'],
-                'bmu1': ['bmujets_2015','bmujets_2016'],
-                're1': ['rejets_2015','rejets_2016'],
-                'rmu1': ['rmujets_2015','rmujets_2016'],
-                'be2': ['bejets_2015','bejets_2016'],
-                'bmu2': ['bmujets_2015','bmujets_2016'],
-                're2': ['rejets_2015','rejets_2016'],
-                'rmu2': ['rmujets_2015','rmujets_2016'],
-                'be3': ['bejets_2015','bejets_2016'],
-                'bmu3': ['bmujets_2015','bmujets_2016'],
-                're3': ['rejets_2015','rejets_2016'],
-                'rmu3': ['rmujets_2015','rmujets_2016'],
+                'be': ['bejets_2015','bejets_2016','bejets_2017'],
+                'bmu': ['bmujets_2015','bmujets_2016','bmujets_2017'],
+                're': ['rejets_2015','rejets_2016','rejets_2017'],
+                'rmu': ['rmujets_2015','rmujets_2016','rmujets_2017'],
+                'be0': ['bejets_2015','bejets_2016','bejets_2017'],
+                'bmu0': ['bmujets_2015','bmujets_2016','bmujets_2017'],
+                're0': ['rejets_2015','rejets_2016','rejets_2017'],
+                'rmu0': ['rmujets_2015','rmujets_2016','rmujets_2017'],
+                'be1': ['bejets_2015','bejets_2016','bejets_2017'],
+                'bmu1': ['bmujets_2015','bmujets_2016','bmujets_2017'],
+                're1': ['rejets_2015','rejets_2016','rejets_2017'],
+                'rmu1': ['rmujets_2015','rmujets_2016','rmujets_2017'],
+                'be2': ['bejets_2015','bejets_2016','bejets_2017'],
+                'bmu2': ['bmujets_2015','bmujets_2016','bmujets_2017'],
+                're2': ['rejets_2015','rejets_2016','rejets_2017'],
+                'rmu2': ['rmujets_2015','rmujets_2016','rmujets_2017'],
+                'be3': ['bejets_2015','bejets_2016','bejets_2017'],
+                'bmu3': ['bmujets_2015','bmujets_2016','bmujets_2017'],
+                're3': ['rejets_2015','rejets_2016','rejets_2017'],
+                'rmu3': ['rmujets_2015','rmujets_2016','rmujets_2017'],
                 'be2015': ['bejets_2015'],
                 'bmu2015': ['bmujets_2015'],
                 're2015': ['rejets_2015'],
@@ -329,8 +329,12 @@ class AnaTtresSL(Analysis):
                 'bmu2016': ['bmujets_2016'],
                 're2016': ['rejets_2016'],
                 'rmu2016': ['rmujets_2016'],
-                'ovre': ['rejets_2015','rejets_2016'],
-                'ovrmu': ['rmujets_2015','rmujets_2016']}
+                'be2017': ['bejets_2017'],
+                'bmu2017': ['bmujets_2017'],
+                're2017': ['rejets_2017'],
+                'rmu2017': ['rmujets_2017'],
+                'ovre': ['rejets_2015','rejets_2016','rejets_2017'],
+                'ovrmu': ['rmujets_2015','rmujets_2016','rmujets_2017']}
     def __init__(self, channel, suf, outputFile, do_tree = False):
         Analysis.__init__(self, channel, suf, outputFile, do_tree)
         self.applyQCD = False
@@ -540,10 +544,8 @@ class AnaTtresSL(Analysis):
                     passORChannels = True
                     break
             passSel[i] = passORChannels
-
         if not passSel[self.ch]:
             return False
-
         if not self.bot_tagger.passes(sel):
             return False
         # veto resolved event if it passes the boosted channel
@@ -562,8 +564,9 @@ class AnaTtresSL(Analysis):
         if ('re' in self.ch or 'rmu' in self.ch) and not "ov" in self.ch:
             if (passSel['be'] or passSel['bmu']) and top_tagged:
                 return False
-
-        if Btagcat != self.bcategory:
+	
+	print Btagcat,self.bcategory
+        if self.bcategory!=None and Btagcat != self.bcategory:
             return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples
