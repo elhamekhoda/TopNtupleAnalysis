@@ -33,7 +33,7 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('wccjets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
                   ('wcjets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
                   ('wljets', 'EXOT4'): ['MC16_13TeV_25ns_FS_EXOT4_Wjets221'],
-                  ('data', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4','Data18_13TeV_25ns_EXOT4'],
+                  ('data', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4','Data17_13TeV_25ns_EXOT4','Data18_13TeV_25ns_EXOT4'],
                   ('qcde', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4', 'Data16_13TeV_25ns_EXOT4'],
                   ('qcdmu', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
                   ('tt', 'EXOT4'):['MC16_13TeV_25ns_FS_EXOT4_ttbar_nonallhad'],
@@ -233,8 +233,10 @@ class Sample(object):
             if not force and inplace and bool(getattr(self, '_input_files', False)):
                 return self._input_files
             priority_key = priority_key or self.priority_key
-            for file, _ in (max(replica['pfns'].iteritems(), key = priority_key) for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root'])):
-                input_files.append(file)
+            for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root']):
+                if replica['pfns']:
+                    file, _ = max(replica['pfns'].iteritems(), key = priority_key)
+                    input_files.append(file)
         elif type(alist) == str:
             input_files = [alist]
         else:

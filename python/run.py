@@ -65,7 +65,7 @@ class Run(object):
                 infile.writelines('\n'.join(sample.input_files))
         return infile_fname
     
-    def command_lines(self, sample, output_files, infile = None):
+    def command_lines(self, sample, output_files, infile = None, compress_outputs = False):
         cmds = {'shebang': [], 'build': [], 'download': [], 'pre-exec': [], 'exec': [], 'post-exec': []}
         download_cmd = ''.join(sample.commit(only_retrieve_cmd = bool(sample.download_to)) or [])
         infile = infile or self.write_inputsfile(sample)
@@ -90,6 +90,8 @@ class Run(object):
                 cmds['build'].append('lsetup pyami rucio{}\n'.format(' -f' if self.system == 'naf' else ''))
         if download_cmd:
             cmds['download'].append(''.join(download_cmd))
+        if compress_outputs:
+            cmds['post-exec'].append('tar -czvf outputs.tar.gz ' + ' '.join((f for _,f in output_files)) + '\n')
         cmds['exec'].append(('python $WorkDir_DIR/python/TopNtupleAnalysis/makeHistograms.py' if os.getenv('AtlasProject') and self.cluster != None else os.path.join(self.source_dir,'makeHistograms.py'))   + ' \\\n'
                   + self.analysis_type + sample.is_data + sample.extra + ' --systs '  + sample.systematics + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
                   + '--files '    + infile + ' \\\n'
@@ -100,9 +102,9 @@ class Run(object):
                       infile = None,
                       runfile = sys.stdout,
                       stages = ('shebang', 'build', 'download', 'pre-exec', 'exec', 'post-exec'),
-                      check_exitcode = ('build', 'download', 'pre-exec', 'exec', 'post-exec')):
+                      check_exitcode = ('build', 'download', 'pre-exec', 'exec', 'post-exec'), **cl_kwds):
         infile = infile or self.write_inputsfile(sample)
-        command_lines = self.command_lines(sample, output_files = output_files, infile = infile)
+        command_lines = self.command_lines(sample, output_files = output_files, infile = infile, **cl_kwds)
         checker = ['if [ $? -ne 0 ]; then\n', 'exit $?\n', 'fi\n']
         lines = []
         for stage in stages:
@@ -121,6 +123,7 @@ class Run(object):
                 rerun_strategy = 'merge',
                 submit_kwds = {},
                 max_inputs_per_job = None,
+                compress = False,
                 **write_kwds):
         max_inputs_per_job = max_inputs_per_job if max_inputs_per_job != None else self.max_inputs_per_job
         if self.cluster == None:
@@ -169,7 +172,7 @@ class Run(object):
                             _submit_kwds['argument'].extend(['--inDS', ','.join(s._list_dids())])
                             _submit_kwds['argument'].extend(['--outDS',  'user.{CERN_USER}.{s.DSID[0]}.{s.physics_short}.{s.ami_tag[0]}.{r.tag}'.format(CERN_USER = samples.Sample._client.account, s = s, r = self)])
                             _submit_kwds['argument'].extend(['--writeInputToTxt=IN:' + infile])
-                            _submit_kwds['argument'].extend(['--outputs', ','.join([os.path.join(self.output_dir, job[1]) for job in jobs] + [infile])])
+                            _submit_kwds['argument'].extend(['--outputs', ','.join(['outputs.tar.gz'] if write_kwds.get('compress_outputs', False) else [os.path.join(self.output_dir, job[1]) for job in jobs] + [infile])])
                         self.cluster.submit2(runfile,
                                              stdout = os.path.join(self.log_dir, 'out.%s' % job_id),
                                              stderr = os.path.join(self.log_dir, 'out.%s' % job_id),
@@ -206,7 +209,7 @@ class Run(object):
 #            if self.do_merge: # TODO: seems to cause some issues. commented out until resolved
 #                cluster_arguments.extend(['--mergeOutput'])
 #                finalize_kwds['do_merge'] = False # this is going to pass to Run.finalize so that it won't merge twice
-            execute_kwds.setdefault('stages', ('exec',))
+            execute_kwds.setdefault('stages', ('exec','post-exec'))
             execute_kwds.setdefault('max_inputs_per_job', False)
             execute_kwds.setdefault('check_exitcode', tuple())
         self.execute(runfile_dir = runfile_dir, use_cluster = use_cluster, rerun_strategy = rerun_strategy, **execute_kwds)

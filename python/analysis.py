@@ -1,3 +1,4 @@
+import re
 import helpers
 import ROOT
 import math
@@ -31,11 +32,22 @@ class Analysis(object):
     me2XX = -1
     alphaS = -1
     tName  = "debug"
+    prog_bcatN = re.compile(r"^(?P<region>[a-zA-Z]+?)(?P<bcat_or_period>([+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?|))$")
 
     def __init__(self, channel, suf, outputFile, do_tree = False):
         self._outputFile = outputFile
         self.fi = ROOT.TFile.Open(outputFile + '.part', "recreate")
         self.ch = channel
+        channel_match = self.prog_bcatN.match(channel)
+        if channel_match:
+            channel_match = channel_match.groupdict()
+            self.region = channel_match['region']
+            if len(channel_match['bcat_or_period']) == 4 and channel_match['bcat_or_period'].isalnum():
+                self.period = int(channel_match['bcat_or_period'])
+                self.bcategory = None
+            else:
+                self.bcategory = int(channel_match['bcat_or_period']) if channel_match['bcat_or_period'] else None
+                self.period = None
         self.histSuffixes = suf
         self.noMttSlices = False
         self.applyMET = 0
@@ -131,9 +143,9 @@ class Analysis(object):
             self.branches[tname][s] = {}
             self.branches_noclear[tname][s] = {}
 
-            self.branches[tname][s]["eventNumber"] = std.vector(float)()
+            self.branches[tname][s]["eventNumber"] = std.vector(long)()
             self.trees[tname][s].Branch("eventNumber",self.branches[tname][s]["eventNumber"])
-            self.branches[tname][s]["runNumber"] = std.vector(float)()
+            self.branches[tname][s]["runNumber"] = std.vector(long)()
             self.trees[tname][s].Branch("runNumber",self.branches[tname][s]["runNumber"])
             self.branches[tname][s]["mcChannelNumber"] = std.vector(float)()
             self.trees[tname][s].Branch("mcChannelNumber",self.branches[tname][s]["mcChannelNumber"])
@@ -222,17 +234,26 @@ class Analysis(object):
         self.fi.Close()
 
     def end(self):
+        logger.info('Channel("{}")'.format(self.ch))
+        meta = []
+        if self.region:
+            meta.append('Region: {}'.format(self.region))
+        if self.period:
+            meta.append('Period: {}'.format(self.period))
+        if self.bcategory:
+            meta.append('B-tagging Categroy: {}'.format(self.bcategory))
+        logger.info('\t' + ' | '.join(meta))
         for histName in self.h:
             for s in self.histSuffixes:
                 if self.h[histName][s].GetEntries() == 0:
-                    logger.warning('Unfilled HIST({}<{}>)!'.format(histName, s))
+                    logger.debug('\tUnfilled HIST({}<{}>)!'.format(histName, s))
 
         y_err = ROOT.Double()
         for s in self.histSuffixes:
             h = self.h['finalNEvents'][s]
-            logger.debug("\tFinal NEvents <{syst}>: {y}".format(syst = s, y = h.Integral()))
+            logger.info("\tFinal NEvents <{syst}>: {y}".format(syst = s, y = h.Integral()))
             h = self.h['finalYields'][s]
-            logger.debug("\tFinal Yields <{syst}>: {y:.4g}+/-{y_err:.2g}".format(syst = s, y = h.IntegralAndError(0, h.GetNbinsX()+1, y_err), y_err = y_err))
+            logger.info("\tFinal Yields <{syst}>: {y:.4g}+/-{y_err:.2g}".format(syst = s, y = h.IntegralAndError(0, h.GetNbinsX()+1, y_err), y_err = y_err))
         self.write()
         head, sep, tail = self._outputFile.partition('file://')
         f = tail if head == '' else self._outputFile
@@ -280,26 +301,26 @@ class Analysis(object):
 
 class AnaTtresSL(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
-                'be': ['bejets_2015','bejets_2016'],
-                'bmu': ['bmujets_2015','bmujets_2016'],
-                're': ['rejets_2015','rejets_2016'],
-                'rmu': ['rmujets_2015','rmujets_2016'],
-                'be0': ['bejets_2015','bejets_2016'],
-                'bmu0': ['bmujets_2015','bmujets_2016'],
-                're0': ['rejets_2015','rejets_2016'],
-                'rmu0': ['rmujets_2015','rmujets_2016'],
-                'be1': ['bejets_2015','bejets_2016'],
-                'bmu1': ['bmujets_2015','bmujets_2016'],
-                're1': ['rejets_2015','rejets_2016'],
-                'rmu1': ['rmujets_2015','rmujets_2016'],
-                'be2': ['bejets_2015','bejets_2016'],
-                'bmu2': ['bmujets_2015','bmujets_2016'],
-                're2': ['rejets_2015','rejets_2016'],
-                'rmu2': ['rmujets_2015','rmujets_2016'],
-                'be3': ['bejets_2015','bejets_2016'],
-                'bmu3': ['bmujets_2015','bmujets_2016'],
-                're3': ['rejets_2015','rejets_2016'],
-                'rmu3': ['rmujets_2015','rmujets_2016'],
+                'be': ['bejets_2015','bejets_2016','bejets_2017'],
+                'bmu': ['bmujets_2015','bmujets_2016','bmujets_2017'],
+                're': ['rejets_2015','rejets_2016','rejets_2017'],
+                'rmu': ['rmujets_2015','rmujets_2016','rmujets_2017'],
+                'be0': ['bejets_2015','bejets_2016','bejets_2017'],
+                'bmu0': ['bmujets_2015','bmujets_2016','bmujets_2017'],
+                're0': ['rejets_2015','rejets_2016','rejets_2017'],
+                'rmu0': ['rmujets_2015','rmujets_2016','rmujets_2017'],
+                'be1': ['bejets_2015','bejets_2016','bejets_2017'],
+                'bmu1': ['bmujets_2015','bmujets_2016','bmujets_2017'],
+                're1': ['rejets_2015','rejets_2016','rejets_2017'],
+                'rmu1': ['rmujets_2015','rmujets_2016','rmujets_2017'],
+                'be2': ['bejets_2015','bejets_2016','bejets_2017'],
+                'bmu2': ['bmujets_2015','bmujets_2016','bmujets_2017'],
+                're2': ['rejets_2015','rejets_2016','rejets_2017'],
+                'rmu2': ['rmujets_2015','rmujets_2016','rmujets_2017'],
+                'be3': ['bejets_2015','bejets_2016','bejets_2017'],
+                'bmu3': ['bmujets_2015','bmujets_2016','bmujets_2017'],
+                're3': ['rejets_2015','rejets_2016','rejets_2017'],
+                'rmu3': ['rmujets_2015','rmujets_2016','rmujets_2017'],
                 'be2015': ['bejets_2015'],
                 'bmu2015': ['bmujets_2015'],
                 're2015': ['rejets_2015'],
@@ -308,8 +329,12 @@ class AnaTtresSL(Analysis):
                 'bmu2016': ['bmujets_2016'],
                 're2016': ['rejets_2016'],
                 'rmu2016': ['rmujets_2016'],
-                'ovre': ['rejets_2015','rejets_2016'],
-                'ovrmu': ['rmujets_2015','rmujets_2016']}
+                'be2017': ['bejets_2017'],
+                'bmu2017': ['bmujets_2017'],
+                're2017': ['rejets_2017'],
+                'rmu2017': ['rmujets_2017'],
+                'ovre': ['rejets_2015','rejets_2016','rejets_2017'],
+                'ovrmu': ['rmujets_2015','rmujets_2016','rmujets_2017']}
     def __init__(self, channel, suf, outputFile, do_tree = False):
         Analysis.__init__(self, channel, suf, outputFile, do_tree)
         self.applyQCD = False
@@ -519,10 +544,8 @@ class AnaTtresSL(Analysis):
                     passORChannels = True
                     break
             passSel[i] = passORChannels
-
         if not passSel[self.ch]:
             return False
-
         if not self.bot_tagger.passes(sel):
             return False
         # veto resolved event if it passes the boosted channel
@@ -541,19 +564,9 @@ class AnaTtresSL(Analysis):
         if ('re' in self.ch or 'rmu' in self.ch) and not "ov" in self.ch:
             if (passSel['be'] or passSel['bmu']) and top_tagged:
                 return False
-
-        if self.ch in ['be0', 'bmu0', 're0', 'rmu0']:
-            if Btagcat != 0:
-                return False
-        if self.ch in ['be1', 'bmu1', 're1', 'rmu1']:
-            if Btagcat != 1:
-                return False
-        if self.ch in ['be2', 'bmu2', 're2', 'rmu2']:
-            if Btagcat != 2:
-                return False
-        if self.ch in ['be3', 'bmu3', 're3', 'rmu3']:
-            if Btagcat != 3:
-                return False
+	
+        if self.bcategory!=None and Btagcat != self.bcategory:
+            return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples
         # commented now as it is not available in mc15c
@@ -835,6 +848,7 @@ class AnaTtresSL(Analysis):
 class AnaTtresFH(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
                 'bFH': ['bFH_2015','bFH_2016'],
+                'bFH-1': ['bFH_2015','bFH_2016'],
                 'bFH0': ['bFH_2015','bFH_2016'],
                 'bFH1': ['bFH_2015','bFH_2016'],
                 'bFH2': ['bFH_2015', 'bFH_2016'],
@@ -942,19 +956,8 @@ class AnaTtresFH(Analysis):
         if ('rFH' in self.ch or 'rFH' in self.ch) and not "ov" in self.ch:
             if passSel['bFH'] and top_tagged:
                 return False
-
-        if self.ch in ['bFH0']:
-            if Btagcat != 0:
-                return False
-        if self.ch in ['bFH1']:
-            if Btagcat != 1:
-                return False
-        if self.ch in ['bFH2']:
-            if Btagcat != 2:
-                return False
-        if self.ch in ['bFH3']:
-            if Btagcat != 3:
-                return False
+        if Btagcat != self.bcategory:
+            return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples
         # commented now as it is not available in mc15c
@@ -1129,13 +1132,15 @@ class AnaTtresFH(Analysis):
                     self.h[observable.name][syst].Fill(values, w)
 
     def set_top_tagger(self, expr, num_thad = 2, strategy = 'rebel', **kwds):
+        kwds.setdefault('min_pt', 500000)
         super(AnaTtresFH, self).set_top_tagger(expr, num_thad = num_thad, strategy = 'rebel', **kwds)
         if hasattr(self, 'bot_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger
 
     def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_FixedCutBEff77', **kwds):
         kwds.setdefault('do_ljet_association', True)
-        kwds.setdefault('min_nbjets', 1)
+        kwds.setdefault('strategy', 'obey')
+        kwds.setdefault('min_nbjets', 0)
         super(AnaTtresFH, self).set_bot_tagger(algorithm_WP_systs, **kwds)
         if hasattr(self, 'top_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger
