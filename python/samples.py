@@ -234,10 +234,9 @@ class Sample(object):
                 return self._input_files
             priority_key = priority_key or self.priority_key
             for replica in self._client.list_replicas([{'scope': self.ds_scope, 'name': dids} for dids in self._list_dids()], schemes = ['root']):
-                if not replica['pfns']:
-                    continue
-                file, _ = max(replica['pfns'].iteritems(), key = priority_key)
-                input_files.append(file)
+                if replica['pfns']:
+                    file, _ = max(replica['pfns'].iteritems(), key = priority_key)
+                    input_files.append(file)
         elif type(alist) == str:
             input_files = [alist]
         else:
