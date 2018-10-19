@@ -565,7 +565,6 @@ class AnaTtresSL(Analysis):
             if (passSel['be'] or passSel['bmu']) and top_tagged:
                 return False
 	
-	print Btagcat,self.bcategory
         if self.bcategory!=None and Btagcat != self.bcategory:
             return False
 
