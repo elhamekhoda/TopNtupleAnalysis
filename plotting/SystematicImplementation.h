@@ -15,9 +15,9 @@ using namespace std;
  * name of the sample the histogram is in.
  */
 class Syst {
-  public:
-  Syst();
-  virtual Hist get(const string &name, const string &fname) = 0;
+public:
+    Syst();
+    virtual Hist get(const string &name, const string &fname) = 0;
 };
 
 /*
@@ -25,14 +25,14 @@ class Syst {
  * The constructor receives the histogram suffixes to be concatenated to histogram name
  * when trying to find the syst. variations in the file.
  */
-class HistDiff : public Syst{
-  public:
-  string _a;
-  string _b;
-  int _smoothLevel;
-  std::vector<std::string> _toExclude;
-  HistDiff(const string &a, const string &b, int smoothLevel = 0, const std::vector<std::string> toExclude = std::vector<std::string>());
-  Hist get(const string &name, const string &fname);
+class HistDiff : public Syst {
+public:
+    string _a;
+    string _b;
+    int _smoothLevel;
+    std::vector<std::string> _toExclude;
+    HistDiff(const string &a, const string &b, int smoothLevel = 0, const std::vector<std::string> toExclude = std::vector<std::string>());
+    Hist get(const string &name, const string &fname);
 };
 
 /*
@@ -40,14 +40,14 @@ class HistDiff : public Syst{
  * The constructor receives the N histograms suffixes to be concatenated to histogram name
  * when trying to find the syst. variations in the file. The first histogram is the reference.
  */
-class HistDiffPdf : public Syst{
-  public:
-  vector<string> _file;
-  vector<string> _list;
-  vector<string> _sample;
-  int _smoothLevel;
-  HistDiffPdf(vector<string> &_file, vector<string> &list, vector<std::string> &sample, int smoothLevel = 0);
-  Hist get(const string &name, const string &fname);
+class HistDiffPdf : public Syst {
+public:
+    vector<string> _file;
+    vector<string> _list;
+    vector<string> _sample;
+    int _smoothLevel;
+    HistDiffPdf(vector<string> &_file, vector<string> &list, vector<std::string> &sample, int smoothLevel = 0);
+    Hist get(const string &name, const string &fname);
 };
 
 /*
@@ -55,14 +55,14 @@ class HistDiffPdf : public Syst{
  * The constructor receives the N histograms suffixes to be concatenated to histogram name
  * when trying to find the syst. variations in the file. The first histogram is the reference.
  */
-class HistDiffMany : public Syst{
-  public:
-  vector<string> _file;
-  vector<string> _list;
-  vector<string> _sample;
-  int _smoothLevel;
-  HistDiffMany(vector<string> &_file, vector<string> &list, vector<std::string> &sample, int smoothLevel = 0);
-  Hist get(const string &name, const string &fname);
+class HistDiffMany : public Syst {
+public:
+    vector<string> _file;
+    vector<string> _list;
+    vector<string> _sample;
+    int _smoothLevel;
+    HistDiffMany(vector<string> &_file, vector<string> &list, vector<std::string> &sample, int smoothLevel = 0);
+    Hist get(const string &name, const string &fname);
 };
 
 /*
@@ -71,13 +71,13 @@ class HistDiffMany : public Syst{
  * The constructor receives the fractional normalisation uncertainty.
  * It can also receive a list of file names for exclusive samples where it should be applied.
  */
-class HistNorm : public Syst{
-  public:
-  double _n;
-  std::vector<std::string> _only;
-  HistNorm(double n = 0);
-  HistNorm(double n, const std::vector<std::string> &only);
-  Hist get(const string &name, const string &fname);
+class HistNorm : public Syst {
+public:
+    double _n;
+    std::vector<std::string> _only;
+    HistNorm(double n = 0);
+    HistNorm(double n, const std::vector<std::string> &only);
+    Hist get(const string &name, const string &fname);
 };
 
 /*
@@ -90,11 +90,11 @@ class HistNorm : public Syst{
  * The class takes ownership of the pointers and deletes them.
  */
 class Symm : public Syst {
-  public:
-  unique_ptr<Syst> _a;
-  unique_ptr<Syst> _b;
-  Symm(Syst *a, Syst *b = 0);
-  Hist get(const string &name, const string &fname);
+public:
+    unique_ptr<Syst> _a;
+    unique_ptr<Syst> _b;
+    Symm(Syst *a, Syst *b = 0);
+    Hist get(const string &name, const string &fname);
 };
 
 /*
@@ -105,10 +105,10 @@ class Symm : public Syst {
  * to be called if the sample is MC.
  */
 class NotData : public Syst {
-  public:
-  unique_ptr<Syst> _a;
-  NotData(Syst *a);
-  Hist get(const string &name, const string &fname);
+public:
+    unique_ptr<Syst> _a;
+    NotData(Syst *a);
+    Hist get(const string &name, const string &fname);
 };
 
 /*
@@ -119,11 +119,11 @@ class NotData : public Syst {
  * takes ownership of them, deleting them as necessary.
  */
 class SystCorr : public Syst {
-  public:
-  unique_ptr<Syst> _a;
-  unique_ptr<Syst> _b;
-  SystCorr(Syst *a, Syst *b);
-  Hist get(const string &name, const string &fname);
+public:
+    unique_ptr<Syst> _a;
+    unique_ptr<Syst> _b;
+    SystCorr(Syst *a, Syst *b);
+    Hist get(const string &name, const string &fname);
 };
 
 /* Systematic variation class that takes the relative
@@ -131,15 +131,15 @@ class SystCorr : public Syst {
  * (whose names are specified in the constructor) and
  * returns them bin-by-bin.
  */
-class Relative : public Syst{
-  public:
-  string _a;
-  string _b;
-  vector<string> _only;
-  double _scale;
-  int _smoothLevel;
-  Relative(const string &a, const string &b, const vector<string> &only, double scale = 1.0, int smoothLevel = 0);
-  Hist get(const string &name, const string &fname);
+class Relative : public Syst {
+public:
+    string _a;
+    string _b;
+    vector<string> _only;
+    double _scale;
+    int _smoothLevel;
+    Relative(const string &a, const string &b, const vector<string> &only, double scale = 1.0, int smoothLevel = 0);
+    Hist get(const string &name, const string &fname);
 };
 
 /*
@@ -150,15 +150,15 @@ class Relative : public Syst{
  * If the vector only is non-empty, it specifies that this is only to be applied
  * to the sample whose file name is given in the contents of "only".
  */
-class RelativeISRFSR : public Syst{
-  public:
-  string _a;
-  string _b;
-  vector<string> _only;
-  float _factor;
-  int _smoothLevel;
-  RelativeISRFSR(const string &a, const string &b, const vector<string> &only, int smoothLevel = 0, float factor = 0.5);
-  Hist get(const string &name, const string &fname);
+class RelativeISRFSR : public Syst {
+public:
+    string _a;
+    string _b;
+    vector<string> _only;
+    float _factor;
+    int _smoothLevel;
+    RelativeISRFSR(const string &a, const string &b, const vector<string> &only, int smoothLevel = 0, float factor = 0.5);
+    Hist get(const string &name, const string &fname);
 };
 
 /*
@@ -169,14 +169,14 @@ class RelativeISRFSR : public Syst{
  * If the vector only is non-empty, it specifies that this is only to be applied
  * to the sample whose file name is given in the contents of "only".
  */
-class RelativeNominal : public Syst{
-  public:
-  string _a;
-  vector<string> _only;
-  float _factor;
-  int _smoothLevel;
-  RelativeNominal(const string &a, const vector<string> &only, int smoothLevel = 0, float factor = 1.0);
-  Hist get(const string &name, const string &fname);
+class RelativeNominal : public Syst {
+public:
+    string _a;
+    vector<string> _only;
+    float _factor;
+    int _smoothLevel;
+    RelativeNominal(const string &a, const vector<string> &only, int smoothLevel = 0, float factor = 1.0);
+    Hist get(const string &name, const string &fname);
 };
 
 #endif

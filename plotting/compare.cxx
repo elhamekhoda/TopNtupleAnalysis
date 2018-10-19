@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
 
-    
+
     if (!parseArguments(argc, argv, extOpt) || help) {
       dumpHelp("compare", extOpt, "plot\nPlot two histograms for comparison.\n");
       return 0;
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
 
     cout << "Yields:" << endl << endl;
     systCalc.printYields(stackConfig);
-  
+
     vector<string> extraText;
     string outfile = _outfile;
     string cname = "";
@@ -137,4 +137,3 @@ int main(int argc, char **argv) {
 
   return 0;
 }
-

@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
 
-    
+
     if (!parseArguments(argc, argv, extOpt) || help) {
       dumpHelp(std::string(argv[0]), extOpt, "plotRatioChannels\nCalculate systematic uncertainties and plot ratio of the histogram in two channels.\n");
       return 0;
@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
 
       cout << "Ratio nominal in data:" << systRatCalcD->_sr["Ratio"]._item[0].nominal << endl;
     }
-  
+
     // for MC eff. numerator using PP
     SampleSetConfiguration stackConfigNum = makeConfigurationMCOnly(prefix, h_items[0]);
     SystematicCalculator systCalcNum(stackConfigNum);
@@ -178,12 +178,12 @@ int main(int argc, char **argv) {
       cout << "MC numerator yields (standard):" << endl << endl;
       systCalcNum.printYields(stackConfigNum);
     }
-  
+
     // for MC eff. denominator
     SampleSetConfiguration stackConfigDen = makeConfigurationMCOnly(prefix, h_items[1]);
     SystematicCalculator systCalcDen(stackConfigDen);
     addAllSystematics(systCalcDen, prefix, h_items[1]);
-  
+
     systCalcDen.calculate(histogram);
 
     if (xMax > -998.0) stackConfigDen.limitMaxX(xMax);
@@ -239,4 +239,3 @@ int main(int argc, char **argv) {
 
   return 0;
 }
-

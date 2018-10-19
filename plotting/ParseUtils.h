@@ -5,13 +5,13 @@
 #include <getopt.h>
 
 struct extendedOption {
-  const char *name;
-  int has_arg; // no_argument, required_argument, optional_argument
-  int *flag;
-  int val;
-  const char *description;
-  void *pointerToValue;
-  enum extOptType { eOTFloat = 0, eOTString, eOTInt } type;
+	const char *name;
+	int has_arg; // no_argument, required_argument, optional_argument
+	int *flag;
+	int val;
+	const char *description;
+	void *pointerToValue;
+	enum extOptType { eOTFloat = 0, eOTString, eOTInt } type;
 };
 
 void buildOptions(struct extendedOption *extOpt, struct option *&opt, std::string &shortOpts);
