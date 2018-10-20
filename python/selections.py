@@ -198,7 +198,7 @@ class TrackJetBotTagger(Selection):
         self._branch_map = {'tjet_isbtagged': 'tjet_isbtagged_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
                             'tjet_SF': 'tjet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
                             'tjet_discriminant': 'tjet_{alg}'.format(alg = self.algorithm.lower())}
-        if is_HybWP and self.strategy == 'rebel':
+        if is_HybWP and strategy == 'rebel':
             logger.warn('When using Hybrid WP, the b-tagging strategy should always be `obey`!')
             self.strategy = 'obey'
         else:
