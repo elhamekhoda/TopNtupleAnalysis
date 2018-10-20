@@ -17,7 +17,7 @@ using namespace std;
  * with auxiliary operators to make the systematics handling easier.
  */
 class Hist {
-  public:
+public:
     vector<double> _x;  // x axis values
     vector<double> _y;  // y axis values
     vector<double> _ye; // y axis error bars
@@ -49,7 +49,7 @@ class Hist {
 
     /*
      * Acessors.
-     */ 
+     */
     double &operator[](int i);
     double operator[](int i) const;
     double &x(int i);
@@ -82,7 +82,7 @@ class Hist {
     void plusEqualsCorr(Hist a);
 
 
-    /* 
+    /*
      * Smoothen it.
      *
      */
@@ -101,7 +101,7 @@ class Hist {
 
     /*
      * Take maximum bin-by-bin, keeping sign.
-     */ 
+     */
     void max(Hist a, Hist b);
 
     /*
@@ -174,7 +174,7 @@ class Hist {
      * Take absolute value of all bins in histogram.
      */
     Hist abs();
-
+    // ClassDef(Hist,0) ;
 };
 
 ostream &operator<<(ostream &, Hist &h);

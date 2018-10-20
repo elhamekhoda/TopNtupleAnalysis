@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
       };
 
-    
+
     if (!parseArguments(argc, argv, extOpt) || help) {
       dumpHelp("plotCompareNominal", extOpt, "plot\nCalculate systematic uncertainties and make histograms with them.\n");
       return 0;
@@ -141,11 +141,11 @@ int main(int argc, char **argv) {
 
         std::vector<std::string> filenam;
         std::vector<std::string> sample;
-		if (prefix != "") {
+                if (prefix != "") {
           filenam.push_back(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), "ttpdf"));
-		} else {
+                } else {
           filenam.push_back(Form("%s_%s.root", channel.c_str(), "ttpdf"));
-		}
+                }
         sample.push_back("ttall");
         if (smooth) {
           systCalc.add(syst_items[z]+std::string("_smooth"), new NotData(new HistDiffMany(filenam, patterns, sample, true)), syst_items[z]+std::string(" smooth"));
@@ -156,12 +156,12 @@ int main(int argc, char **argv) {
           nsyst_items.push_back(syst_items[z]+std::string("_smooth")); nsyst_titles.push_back(syst_titles[z]+std::string(" smooth"));
         }
         nsyst_items.push_back(syst_items[z]); nsyst_titles.push_back(syst_titles[z]);
-		double up = 1.0;
-		if (syst_items[z].find("down") != std::string::npos) {
-		  up = -1.0;
-		}
-		std::vector<std::string> pattern;
-		pattern.push_back("qcd");
+                double up = 1.0;
+                if (syst_items[z].find("down") != std::string::npos) {
+                  up = -1.0;
+                }
+                std::vector<std::string> pattern;
+                pattern.push_back("qcd");
         if (smooth) {
           systCalc.add(syst_items[z]+std::string("_smooth"), new HistNorm(up*0.50, pattern), syst_items[z]+std::string(" smooth"));
         }
@@ -171,15 +171,15 @@ int main(int argc, char **argv) {
           nsyst_items.push_back(syst_items[z]+std::string("_smooth")); nsyst_titles.push_back(syst_titles[z]+std::string(" smooth"));
         }
         nsyst_items.push_back(syst_items[z]); nsyst_titles.push_back(syst_titles[z]);
-		double up = 1.0;
-		if (syst_items[z].find("down") != std::string::npos) {
-		  up = -1.0;
-		}
-		std::vector<std::string> pattern;
-		pattern.push_back("wbbjets");
-		pattern.push_back("wccjets");
-		pattern.push_back("wcjets");
-		pattern.push_back("wljets");
+                double up = 1.0;
+                if (syst_items[z].find("down") != std::string::npos) {
+                  up = -1.0;
+                }
+                std::vector<std::string> pattern;
+                pattern.push_back("wbbjets");
+                pattern.push_back("wccjets");
+                pattern.push_back("wcjets");
+                pattern.push_back("wljets");
         if (smooth) {
           systCalc.add(syst_items[z]+std::string("_smooth"), new HistNorm(up*1.00, pattern), syst_items[z]+std::string(" smooth"));
         }
@@ -220,22 +220,22 @@ int main(int argc, char **argv) {
                                                         pat, false, 1), other_titles[0]);
         systCalc.add(other_items[1], new RelativeNominal(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
                                                         pat, false, 1), other_titles[1]);
-	  } else {
+          } else {
         systCalc.add(other_items[0], new RelativeNominal(Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
                                                         pat, false, 1), other_titles[0]);
         systCalc.add(other_items[1], new RelativeNominal(Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
                                                         pat, false, 1), other_titles[1]);
-	  }
+          }
       //nsyst_items.push_back(other_items[0]); nsyst_titles.push_back(other_titles[0]);
       //if (prefix != "") {
       //  systCalc.add(other_items[0], new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
       //                                                  Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
       //                                                  pat, false, 0.5), other_titles[0]);
-	//  } else {
+        //  } else {
       //  systCalc.add(other_items[0], new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
       //                                                  Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
       //                                                  pat, false, 0.5), other_titles[0]);
-	//  }
+        //  }
 
       if (smooth) {
         std::string s = other_items[1];
@@ -247,22 +247,22 @@ int main(int argc, char **argv) {
           systCalc.add(s, new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
                                              Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
                                              pat, true, 0.5), st);
-		} else {
+                } else {
           systCalc.add(s, new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
                                              Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
                                              pat, true, 0.5), st);
-		}
+                }
       }
       nsyst_items.push_back(other_items[1]); nsyst_titles.push_back(other_titles[1]);
       if (prefix != "") {
         systCalc.add(other_items[1], new RelativeISRFSR(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[1].c_str()), \
                                                         Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
                                                         pat, false, 0.5), other_titles[1]);
-	  } else {
+          } else {
         systCalc.add(other_items[1], new RelativeISRFSR(Form("%s_%s.root", channel.c_str(), other_items[1].c_str()), \
                                                         Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
                                                         pat, false, 0.5), other_titles[1]);
-	  }
+          }
     }
     // compare with nominal
     if (other_items.size() == 1) {
@@ -286,10 +286,10 @@ int main(int argc, char **argv) {
       if (prefix != "") {
         systCalc.add(other_items[0], new RelativeNominal(Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), other_items[0].c_str()), \
                                                         pat, false, 1), other_titles[0]);
-	  } else {
+          } else {
         systCalc.add(other_items[0], new RelativeNominal(Form("%s_%s.root", channel.c_str(), other_items[0].c_str()), \
                                                         pat, false, 1), other_titles[0]);
-	  }
+          }
     }
     //addAllSystematics(systCalc, prefix, channel, false);
     systCalc.calculate(histogram);
@@ -302,13 +302,13 @@ int main(int argc, char **argv) {
 
     cout << "Yields:" << endl << endl;
     systCalc.printYields(stackConfig);
-  
+
     vector<string> extraText;
     string outfile = _outfile;
     if (outfile == "") {
-	  if (prefix != "") {
-	    outfile = prefix+"_";
-	  }
+          if (prefix != "") {
+            outfile = prefix+"_";
+          }
       outfile += histogram;
       outfile += string("_");
       outfile += channel;
@@ -320,7 +320,7 @@ int main(int argc, char **argv) {
       extraText.push_back("#mu channel");
     } else {
       extraText.push_back(channel);
-	}
+        }
     vector<string> split_extraText;
     split(_extraText, ';', split_extraText);
     for (vector<string>::iterator i = split_extraText.begin(); i!=split_extraText.end();++i) extraText.push_back(*i);
@@ -332,4 +332,3 @@ int main(int argc, char **argv) {
 
   return 0;
 }
-

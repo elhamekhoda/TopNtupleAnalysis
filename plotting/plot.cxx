@@ -35,7 +35,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-  TH1::AddDirectory(false);
+    TH1::AddDirectory(false);
 
 
     int help = 0;
@@ -43,7 +43,8 @@ int main(int argc, char **argv) {
     string prefix = "";
     string h_input = "lepPt";
     int mcOnly = 0;
-    string _outfile = "";
+    string _outfile = "", outexts;
+    string outdir = "./";
     int verbose = 0;
     int underflow = 0;
     string _extraText = "";
@@ -67,6 +68,7 @@ int main(int argc, char **argv) {
     int _logY = 0;
     float xLabelSize = -1;
     float yLabelSize = -1;
+    int topPurity = false;
 
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
@@ -74,7 +76,9 @@ int main(int argc, char **argv) {
         {"prefix",          required_argument,     0, 'p', "Prefix.", &prefix, extendedOption::eOTString},
         {"histogram",       required_argument,     0, 'h', "Histogram name.", &h_input, extendedOption::eOTString},
         {"mcOnly",          required_argument,     0, 'm', "Only look for the ttbarMatched histograms? (0/1)", &mcOnly, extendedOption::eOTInt},
+        {"outdir",          required_argument,     0,  6, "Output file.", &outdir, extendedOption::eOTString},
         {"outfile",         required_argument,     0, 'o', "Output file.", &_outfile, extendedOption::eOTString},
+        {"outexts",         required_argument,     0,  5, "Output exts.", &outexts, extendedOption::eOTString},
         {"verbose",         required_argument,     0, 'v', "Verbose. (0/1)", &verbose, extendedOption::eOTInt},
         {"underflow",       required_argument,     0, 'U', "Include underflow (0/1)", &underflow, extendedOption::eOTInt},
         {"extraText",       required_argument,     0, 'T', "Extra text to add in the plot.", &_extraText, extendedOption::eOTString},
@@ -99,25 +103,26 @@ int main(int argc, char **argv) {
         {"normBinWidth",    required_argument,     0, 'b', "Divide bin content by bin width?", &normBinWidth, extendedOption::eOTFloat},
         {"alternateStyle",  required_argument,     0, 'A', "Alternative style", &alternateStyle, extendedOption::eOTInt},
         {"logY",            required_argument,     0, 'g', "Y axis in log?", &_logY, extendedOption::eOTInt},
+        {"topPurity",       required_argument,     0,   4, "Draw top purity in the center?", &topPurity, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
-      };
+    };
 
-    
+
     if (!parseArguments(argc, argv, extOpt) || help) {
-      dumpHelp(std::string(argv[0]), extOpt, "plot\nCalculate systematic uncertainties and make histograms with them.\n");
-      return 0;
+        dumpHelp(std::string(argv[0]), extOpt, "plot\nCalculate systematic uncertainties and make histograms with them.\n");
+        return 0;
     } else {
-      std::cout << "Dumping options:" << std::endl;
-      dumpOptions(extOpt);
+        std::cout << "Dumping options:" << std::endl;
+        dumpOptions(extOpt);
     }
 
     logY = _logY;
     lumi_scale = lumi;
     if (config != "")
-      loadConfig(config.c_str());
+        loadConfig(config.c_str());
     else
-      loadConfig(std::string(argv[0]).substr(0, std::string(argv[0]).rfind('/'))+"/config.txt");
+        loadConfig(std::string(argv[0]).substr(0, std::string(argv[0]).rfind('/')) + "/config.txt");
 
     _stamp = stamp;
 
@@ -127,238 +132,250 @@ int main(int argc, char **argv) {
     std::string histogram = "";
     string histogram_num = "";
     string histogram_den = "";
-    if (h_items.size() == 1) 
-      histogram = h_items[0];
+    if (h_items.size() == 1)
+        histogram = h_items[0];
     else {
-      histogram_num = h_items[0];
-      histogram_den = h_items[1];
-      isRatio = true;
+        histogram_num = h_items[0];
+        histogram_den = h_items[1];
+        isRatio = true;
     }
 
     cout.setf(ios::fixed, ios::floatfield);
     cout.precision(1);
 
     if (!isRatio) {
-      // for Data/MC comparison
-      SampleSetConfiguration stackConfig = makeConfigurationPlots(prefix, channel, mcOnly);
-      SystematicCalculator systCalc(stackConfig);
-      bool splitUpDw = (saveTH1 != "");
-      addAllSystematics(systCalc, prefix, channel, splitUpDw);
-      systCalc.calculate(histogram);
+        // for Data/MC comparison
+        SampleSetConfiguration stackConfig = makeConfigurationPlots(prefix, channel, mcOnly);
+        SystematicCalculator systCalc(stackConfig);
+        bool splitUpDw = (saveTH1 != "");
+        addAllSystematics(systCalc, prefix, channel, splitUpDw);
+        systCalc.calculate(histogram);
 
 
-      std::vector<float> rebinAsym;
-      std::stringstream ss(rebinAsymStr);
-      float tmp = 0;
-      if (rebinAsymStr != "") {
-        while (ss >> tmp) {
-          rebinAsym.push_back(tmp);
-          if (ss.peek() == ',') ss.ignore();
+        std::vector<float> rebinAsym;
+        std::stringstream ss(rebinAsymStr);
+        float tmp = 0;
+        if (rebinAsymStr != "") {
+            while (ss >> tmp) {
+                rebinAsym.push_back(tmp);
+                if (ss.peek() == ',') ss.ignore();
+            }
         }
-      }
-      std::cout << "Rebinning to ";
-      for (size_t k = 0; k < rebinAsym.size(); ++k) std::cout << " " << rebinAsym[k];
-      std::cout << std::endl;
- 
-      if (underflow) stackConfig.showUnderflow();
-      if (xMax > -998.0) stackConfig.limitMaxX(xMax, true);
-      if (xMin > -998.0) stackConfig.limitMinX(xMin);
-      if (rebin != 1) stackConfig.rebin(rebin);
-      else if (rebinAsym.size() != 0) stackConfig.rebinAsym(rebinAsym);
-      if (normBinWidth > 0) stackConfig.normBinWidth(normBinWidth);
+        std::cout << "Rebinning to ";
+        for (size_t k = 0; k < rebinAsym.size(); ++k) std::cout << " " << rebinAsym[k];
+        std::cout << std::endl;
 
-      if (verbose) {
-        systCalc.printBigTable(stackConfig);
-      }
-      cout << "Systematic uncertainties:" << endl << endl;
-      systCalc.printSysts(stackConfig["MC"]);
-      cout << "Yields:" << endl << endl;
-      systCalc.printYields(stackConfig);
-  
-      vector<string> extraText;
-      string outfile = _outfile;
-      if (outfile == "") {
-	    if (prefix != "")
-          outfile = prefix+"_";
-		outfile += histogram;
-        outfile += string("_");
+        if (underflow) stackConfig.showUnderflow();
+        if (xMax > -998.0) stackConfig.limitMaxX(xMax, true);
+        if (xMin > -998.0) stackConfig.limitMinX(xMin);
+        if (rebin != 1) stackConfig.rebin(rebin);
+        else if (rebinAsym.size() != 0) stackConfig.rebinAsym(rebinAsym);
+        if (normBinWidth > 0) stackConfig.normBinWidth(normBinWidth);
+
+        if (verbose) {
+            systCalc.printBigTable(stackConfig);
+        }
+        cout << "Systematic uncertainties:" << endl << endl;
+        systCalc.printSysts(stackConfig["MC"]);
+        cout << "Yields:" << endl << endl;
+        systCalc.printYields(stackConfig);
+
+        vector<string> extraText;
+        string outfile = _outfile;
+        std::vector<string> outputfiles;
+        std::vector<string> outexts_vect;
+        if (outfile == "") {
+            if (prefix != "")
+                outfile = prefix + "_";
+            outfile += histogram;
+            outfile += string("_");
+            if (channel == "e" || channel == "el") {
+                outfile += "e";
+            } else if (channel == "mu") {
+                outfile += "mu";
+            } else if (channel == "comb") {
+                outfile += "comb";
+            } else {
+                outfile += channel;
+            }
+            if (stamp == 1) outfile += "_ATLASPrelim";
+            if (stamp == 2) outfile += "_ATLAS";
+            if (outexts == "") {
+                outputfiles.push_back(outdir + "/" + outfile + ".pdf");
+            } else {
+                split(outexts, ',', outexts_vect);
+                for (auto ext : outexts_vect) {
+                    outputfiles.push_back(outdir + "/" + outfile + ext);
+                }
+            }
+        }
         if (channel == "e" || channel == "el") {
-          outfile += "e";
+            extraText.push_back("e+jets");
         } else if (channel == "mu") {
-          outfile += "mu";
+            extraText.push_back("#mu+jets");
         } else if (channel == "comb") {
-          outfile += "comb";
+            //extraText.push_back("e,#mu-channel");
+        } else if (channel == "beX") {
+            extraText.push_back("boosted, e+jets");
+        } else if (channel == "bmuX") {
+            extraText.push_back("boosted, #mu+jets");
+        } else if (channel == "reX") {
+            extraText.push_back("resolved, e+jets");
+        } else if (channel == "rmuX") {
+            extraText.push_back("resolved, #mu+jets");
+        } else if (channel == "bFH") {
+            extraText.push_back("boosted, full hadronic");
         } else {
-          outfile += channel;
+            extraText.push_back(channel);
         }
-        if (stamp == 1) outfile += "_ATLASPrelim";
-        if (stamp == 2) outfile += "_ATLAS";
-        outfile += ".pdf";
-      }
-      if (channel == "e" || channel == "el") {
-        extraText.push_back("e+jets");
-      } else if (channel == "mu") {
-        extraText.push_back("#mu+jets");
-      } else if (channel == "comb") {
-        //extraText.push_back("e,#mu-channel");
-      } else if (channel == "beX") {
-        extraText.push_back("boosted, e+jets");
-      } else if (channel == "bmuX") {
-        extraText.push_back("boosted, #mu+jets");
-      } else if (channel == "reX") {
-        extraText.push_back("resolved, e+jets");
-      } else if (channel == "rmuX") {
-        extraText.push_back("resolved, #mu+jets");
-      } else {
-        extraText.push_back(channel);
-	  }
-      vector<string> split_extraText;
-      split(_extraText, ';', split_extraText);
-      for (vector<string>::iterator i = split_extraText.begin(); i!=split_extraText.end();++i) extraText.push_back(*i);
-      if (alternateStyle) {
-        drawDataMC2(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
-      } else {
-        drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi, yLabelSize, xLabelSize);
-      }
+        vector<string> split_extraText;
+        split(_extraText, ';', split_extraText);
+        for (vector<string>::iterator i = split_extraText.begin(); i != split_extraText.end(); ++i) extraText.push_back(*i);
+        if (alternateStyle) {
+            drawDataMC2(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
+        } else {
+            for (auto outfile : outputfiles) {
+                drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi, yLabelSize, xLabelSize, topPurity);
+            }
+        }
 
-      if (saveTH1 != "") {
-        stackConfig["MC"].saveTH1(saveTH1);
-        stackConfig["Data"].saveTH1(saveTH1);
-      }
+        if (saveTH1 != "") {
+            stackConfig["MC"].saveTH1(saveTH1);
+            stackConfig["Data"].saveTH1(saveTH1);
+        }
     } else { // if it is a ratio plot
 
-      shared_ptr<SystematicRatioCalculator> systRatCalcD;
-      shared_ptr<SystematicRatioCalculator> systRatCalc;
-      shared_ptr<SystematicRatioCalculator> systRatCalcMCAtNLO;
-      shared_ptr<SystematicRatioRatioCalculator> systRatRatCalc;
-      shared_ptr<SystematicRatioRatioCalculator> systRatRatCalcMCAtNLO;
+        shared_ptr<SystematicRatioCalculator> systRatCalcD;
+        shared_ptr<SystematicRatioCalculator> systRatCalc;
+        shared_ptr<SystematicRatioCalculator> systRatCalcMCAtNLO;
+        shared_ptr<SystematicRatioRatioCalculator> systRatRatCalc;
+        shared_ptr<SystematicRatioRatioCalculator> systRatRatCalcMCAtNLO;
 
-      if (!mcOnly) {
-        // for data eff. numerator
-        SampleSetConfiguration stackConfigNumD = makeConfigurationDataEff(prefix, channel);
-        SystematicCalculator systCalcNumD(stackConfigNumD);
-        addAllSystematics(systCalcNumD, prefix, channel);
+        if (!mcOnly) {
+            // for data eff. numerator
+            SampleSetConfiguration stackConfigNumD = makeConfigurationDataEff(prefix, channel);
+            SystematicCalculator systCalcNumD(stackConfigNumD);
+            addAllSystematics(systCalcNumD, prefix, channel);
 
-        systCalcNumD.calculate(histogram_num);
+            systCalcNumD.calculate(histogram_num);
 
-        if (xMax > -998.0) stackConfigNumD.limitMaxX(xMax);
-        if (xMin > -998.0) stackConfigNumD.limitMinX(xMin);
+            if (xMax > -998.0) stackConfigNumD.limitMaxX(xMax);
+            if (xMin > -998.0) stackConfigNumD.limitMinX(xMin);
 
-        if (verbose) {
-          cout << "Data numerator systs.:" << endl << endl;
-          systCalcNumD.printSysts(stackConfigNumD["MC"]);
-          cout << "Data numerator yields:" << endl << endl;
-          systCalcNumD.printYields(stackConfigNumD);
+            if (verbose) {
+                cout << "Data numerator systs.:" << endl << endl;
+                systCalcNumD.printSysts(stackConfigNumD["MC"]);
+                cout << "Data numerator yields:" << endl << endl;
+                systCalcNumD.printYields(stackConfigNumD);
+            }
+
+            // for data eff. denominator
+            SampleSetConfiguration stackConfigDenD = makeConfigurationDataEff(prefix, channel);
+            SystematicCalculator systCalcDenD(stackConfigDenD);
+            addAllSystematics(systCalcDenD, prefix, channel);
+
+            systCalcDenD.calculate(histogram_den);
+
+            if (xMax > -998.0) stackConfigDenD.limitMaxX(xMax);
+            if (xMin > -998.0) stackConfigDenD.limitMinX(xMin);
+
+            if (verbose) {
+                cout << "Data denominator systs.:" << endl << endl;
+                systCalcDenD.printSysts(stackConfigDenD["MC"]);
+                cout << "Data denominator yields:" << endl << endl;
+                systCalcDenD.printYields(stackConfigDenD);
+            }
+
+            // calculate ratio
+            systRatCalcD.reset(new SystematicRatioCalculator(systCalcNumD, systCalcDenD));
+            systRatCalcD->calculate(histogram_num, histogram_den, true);
+
+            cout << "Systematic uncertainties for data eff.:" << endl << endl << endl;
+            cout.precision(3);
+            cout << "Ratio nominal in data:" << systRatCalcD->_sr["Ratio"]._item[0].nominal << endl;
+            cout.precision(1);
+            systRatCalcD->printAverageSysts(systRatCalcD->_sr["Ratio"]);
+
+            systRatCalcD->printBinSysts(systRatCalcD->_sr["Ratio"]);
+
         }
 
-        // for data eff. denominator
-        SampleSetConfiguration stackConfigDenD = makeConfigurationDataEff(prefix, channel);
-        SystematicCalculator systCalcDenD(stackConfigDenD);
-        addAllSystematics(systCalcDenD, prefix, channel);
-  
-        systCalcDenD.calculate(histogram_den);
+        // for MC eff. numerator using PP
+        SampleSetConfiguration stackConfigNum = makeConfigurationMCEff(prefix, channel);
+        SystematicCalculator systCalcNum(stackConfigNum);
+        addAllSystematics(systCalcNum, prefix, channel);
 
-        if (xMax > -998.0) stackConfigDenD.limitMaxX(xMax);
-        if (xMin > -998.0) stackConfigDenD.limitMinX(xMin);
+        systCalcNum.calculate(histogram_num);
+
+        if (xMax > -998.0) stackConfigNum.limitMaxX(xMax);
+        if (xMin > -998.0) stackConfigNum.limitMinX(xMin);
 
         if (verbose) {
-          cout << "Data denominator systs.:" << endl << endl;
-          systCalcDenD.printSysts(stackConfigDenD["MC"]);
-          cout << "Data denominator yields:" << endl << endl;
-          systCalcDenD.printYields(stackConfigDenD);
+            cout << "MC numerator systs. (standard):" << endl << endl;
+            systCalcNum.printSysts(stackConfigNum["MC"]);
+            cout << "MC numerator yields (standard):" << endl << endl;
+            systCalcNum.printYields(stackConfigNum);
+        }
+
+        // for MC eff. denominator
+        SampleSetConfiguration stackConfigDen = makeConfigurationMCEff(prefix, channel);
+        SystematicCalculator systCalcDen(stackConfigDen);
+        addAllSystematics(systCalcDen, prefix, channel);
+
+        systCalcDen.calculate(histogram_den);
+
+        if (xMax > -998.0) stackConfigDen.limitMaxX(xMax);
+        if (xMin > -998.0) stackConfigDen.limitMinX(xMin);
+
+        if (verbose) {
+            cout << "MC denominator systs. (standard):" << endl << endl;
+            systCalcDen.printSysts(stackConfigDen["MC"]);
+            cout << "MC denominator yields (standard):" << endl << endl;
+            systCalcDen.printYields(stackConfigDen);
         }
 
         // calculate ratio
-        systRatCalcD.reset(new SystematicRatioCalculator(systCalcNumD, systCalcDenD));
-        systRatCalcD->calculate(histogram_num, histogram_den, true);
-  
-        cout << "Systematic uncertainties for data eff.:" << endl << endl << endl;
+        systRatCalc.reset(new SystematicRatioCalculator(systCalcNum, systCalcDen));
+        systRatCalc->calculate(histogram_num, histogram_den, false);
         cout.precision(3);
-        cout << "Ratio nominal in data:" << systRatCalcD->_sr["Ratio"]._item[0].nominal << endl;
+        cout << "Ratio nominal in MC (Standard):" << systRatCalc->_sr["Ratio"]._item[0].nominal << endl;
         cout.precision(1);
-        systRatCalcD->printAverageSysts(systRatCalcD->_sr["Ratio"]);
+        cout << "Systematic uncertainties for MC eff. (standard):" << endl << endl << endl;
+        systRatCalc->printAverageSysts(systRatCalc->_sr["Ratio"]);
 
-        systRatCalcD->printBinSysts(systRatCalcD->_sr["Ratio"]);
-  
-      }
-  
-      // for MC eff. numerator using PP
-      SampleSetConfiguration stackConfigNum = makeConfigurationMCEff(prefix, channel);
-      SystematicCalculator systCalcNum(stackConfigNum);
-      addAllSystematics(systCalcNum, prefix, channel);
+        systRatCalc->printBinSysts(systRatCalc->_sr["Ratio"]);
 
-      systCalcNum.calculate(histogram_num);
+        systRatRatCalc.reset(new SystematicRatioRatioCalculator(*systRatCalcD.get(), *systRatCalc.get()));
+        systRatRatCalc->calculate(histogram_num, histogram_den, false);
 
-      if (xMax > -998.0) stackConfigNum.limitMaxX(xMax);
-      if (xMin > -998.0) stackConfigNum.limitMinX(xMin);
+        std::cout << "Systematics on ratio of ratio: " << std::endl;
+        systRatRatCalc->printBinSysts(systRatRatCalc->_sr["Ratio"]);
 
-      if (verbose) {
-        cout << "MC numerator systs. (standard):" << endl << endl;
-        systCalcNum.printSysts(stackConfigNum["MC"]);
-        cout << "MC numerator yields (standard):" << endl << endl;
-        systCalcNum.printYields(stackConfigNum);
-      }
-  
-      // for MC eff. denominator
-      SampleSetConfiguration stackConfigDen = makeConfigurationMCEff(prefix, channel);
-      SystematicCalculator systCalcDen(stackConfigDen);
-      addAllSystematics(systCalcDen, prefix, channel);
-  
-      systCalcDen.calculate(histogram_den);
-
-      if (xMax > -998.0) stackConfigDen.limitMaxX(xMax);
-      if (xMin > -998.0) stackConfigDen.limitMinX(xMin);
-
-      if (verbose) {
-        cout << "MC denominator systs. (standard):" << endl << endl;
-        systCalcDen.printSysts(stackConfigDen["MC"]);
-        cout << "MC denominator yields (standard):" << endl << endl;
-        systCalcDen.printYields(stackConfigDen);
-      }
-
-      // calculate ratio
-      systRatCalc.reset(new SystematicRatioCalculator(systCalcNum, systCalcDen));
-      systRatCalc->calculate(histogram_num, histogram_den, false);
-      cout.precision(3);
-      cout << "Ratio nominal in MC (Standard):" << systRatCalc->_sr["Ratio"]._item[0].nominal << endl;
-      cout.precision(1);
-      cout << "Systematic uncertainties for MC eff. (standard):" << endl << endl << endl;
-      systRatCalc->printAverageSysts(systRatCalc->_sr["Ratio"]);
-
-      systRatCalc->printBinSysts(systRatCalc->_sr["Ratio"]);
-
-      systRatRatCalc.reset(new SystematicRatioRatioCalculator(*systRatCalcD.get(), *systRatCalc.get()));
-      systRatRatCalc->calculate(histogram_num, histogram_den, false);
-
-      std::cout << "Systematics on ratio of ratio: " << std::endl;
-      systRatRatCalc->printBinSysts(systRatRatCalc->_sr["Ratio"]);
-
-      vector<string> extraText;
-      vector<string> split_extraText;
-      split(_extraText, ';', split_extraText);
-      for (vector<string>::iterator i = split_extraText.begin(); i!=split_extraText.end();++i) extraText.push_back(*i);
-      string outfile = _outfile;
-      if (outfile == "") {
-        outfile = string("sf_")+prefix+"_"+histogram_num+string("_")+histogram_den+string("_");
-        outfile += channel;
-        if (stamp == 1) outfile += "_ATLASPrelim";
-        if (stamp == 2) outfile += "_ATLAS";
-        outfile += ".pdf";
-      }
-      if (channel == "e" || channel == "el") {
-        extraText.push_back("e channel");
-      } else if (channel == "mu") {
-        extraText.push_back("#mu channel");
-      } else if (channel == "comb") {
-        //extraText.push_back("e,#mu-channel");
-      }
-      if (!mcOnly) {
-        drawEff(&(systRatCalc->_sr["Ratio"]), extraText, outfile, yTitle, &(systRatCalcD->_sr["Ratio"]), false, mustBeBigger, yMax, xTitle, &(systRatRatCalc->_sr["Ratio"]), lumi);
-      } else {
-        drawEff(&(systRatCalc->_sr["Ratio"]), extraText, outfile, yTitle, 0, false, mustBeBigger, yMax, xTitle, 0, lumi);
-      }
+        vector<string> extraText;
+        vector<string> split_extraText;
+        split(_extraText, ';', split_extraText);
+        for (vector<string>::iterator i = split_extraText.begin(); i != split_extraText.end(); ++i) extraText.push_back(*i);
+        string outfile = _outfile;
+        if (outfile == "") {
+            outfile = string("sf_") + prefix + "_" + histogram_num + string("_") + histogram_den + string("_");
+            outfile += channel;
+            if (stamp == 1) outfile += "_ATLASPrelim";
+            if (stamp == 2) outfile += "_ATLAS";
+            outfile += ".pdf";
+        }
+        if (channel == "e" || channel == "el") {
+            extraText.push_back("e channel");
+        } else if (channel == "mu") {
+            extraText.push_back("#mu channel");
+        } else if (channel == "comb") {
+            //extraText.push_back("e,#mu-channel");
+        }
+        if (!mcOnly) {
+            drawEff(&(systRatCalc->_sr["Ratio"]), extraText, outfile, yTitle, &(systRatCalcD->_sr["Ratio"]), false, mustBeBigger, yMax, xTitle, &(systRatRatCalc->_sr["Ratio"]), lumi);
+        } else {
+            drawEff(&(systRatCalc->_sr["Ratio"]), extraText, outfile, yTitle, 0, false, mustBeBigger, yMax, xTitle, 0, lumi);
+        }
     } // ratio?
 
-  return 0;
+    return 0;
 }
-
