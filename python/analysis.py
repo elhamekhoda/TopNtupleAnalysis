@@ -240,7 +240,7 @@ class Analysis(object):
             meta.append('Region: {}'.format(self.region))
         if self.period:
             meta.append('Period: {}'.format(self.period))
-        if self.bcategory:
+        if self.bcategory != None:
             meta.append('B-tagging Categroy: {}'.format(self.bcategory))
         logger.info('\t' + ' | '.join(meta))
         for histName in self.h:
