@@ -224,9 +224,10 @@ def main(samples, systematics, **run_kwds):
     r.run(use_cluster = True, monitor = True)
 
 main(samples = s,
-     systematics = 'nominal',
-     output_dir = None,
-     analysis_type = 'AnaTtresSL',
+     systematics = 'nominal', # Change it to 'all' if you want to run all systematics
+     output_dir = None, # By default, it is set to `./output`
+     analysis_type = 'AnaTtresSL', # don't forget to change it to 'AnaTtresFH' if you're running full-hadronic analysis!
+     # max_inputs_per_job = 1, # used to control the number of inputs per job
      cluster = 'condor') # known to work: 'condor', 'lsf' and 'grid'
 ```
 
