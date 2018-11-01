@@ -847,12 +847,12 @@ class AnaTtresSL(Analysis):
 
 class AnaTtresFH(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
-                'bFH': ['bFH_2015','bFH_2016'],
-                'bFH-1': ['bFH_2015','bFH_2016'],
-                'bFH0': ['bFH_2015','bFH_2016'],
-                'bFH1': ['bFH_2015','bFH_2016'],
-                'bFH2': ['bFH_2015', 'bFH_2016'],
-                'bFH3': ['bFH_2015', 'bFH_2016'],
+                'bFH': ['bFH_2015', 'bFH_2016', 'bFH_2017', 'bFH_2018'],
+                'bFH-1': ['bFH_2015', 'bFH_2016', 'bFH_2017', 'bFH_2018'],
+                'bFH0': ['bFH_2015', 'bFH_2016', 'bFH_2017', 'bFH_2018'],
+                'bFH1': ['bFH_2015', 'bFH_2016', 'bFH_2017', 'bFH_2018'],
+                'bFH2': ['bFH_2015', 'bFH_2016', 'bFH_2017', 'bFH_2018'],
+                'bFH3': ['bFH_2015', 'bFH_2016', 'bFH_2017', 'bFH_2018'],
                 'rFH': ['rFH_2015', 'rFH_2016'],
                 'rFH0': ['rFH_2015', 'rFH_2016'],
                 'rFH1': ['rFH_2015', 'rFH_2016'],
@@ -956,7 +956,7 @@ class AnaTtresFH(Analysis):
         if ('rFH' in self.ch or 'rFH' in self.ch) and not "ov" in self.ch:
             if passSel['bFH'] and top_tagged:
                 return False
-        if Btagcat != self.bcategory:
+        if self.bcategory != None and Btagcat != self.bcategory:
             return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples

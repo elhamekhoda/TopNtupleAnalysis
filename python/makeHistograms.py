@@ -7,7 +7,7 @@ import csv
 import analysis
 import reweighting
 
-ROOT.ROOT.EnableImplicitMT(8) # Not sure if it works
+# ROOT.ROOT.EnableImplicitMT(4) # Not sure if it works
 logger = helpers.getLogger('TopNtupleAnalysis.makeHistograms')
 
 def main(parallel = True):

@@ -66,7 +66,7 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('wccjets', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Wjets221'],
                   ('wcjets', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Wjets221'],
                   ('wljets', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_Wjets221'],
-                  ('data', 'EXOT7'): ['Data15_13TeV_25ns_EXOT7','Data16_13TeV_25ns_EXOT7'],
+                  ('data', 'EXOT7'): ['Data15_13TeV_25ns_EXOT7','Data16_13TeV_25ns_EXOT7','Data17_13TeV_25ns_EXOT7','Data18_13TeV_25ns_EXOT7'],
                   ('tt', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_ttbar_allhad'],
                   ('ttV', 'EXOT7'): ['MC16_13TeV_25ns_FS_EXOT7_ttbarV'],
                   ('singletop', 'EXOT7'):['MC16_13TeV_25ns_FS_EXOT7_singletop'],
@@ -95,6 +95,11 @@ MAP_TO_SAMPLES.update(
                  ('data2015', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4'],
                  ('data2016', 'EXOT4'): ['Data16_13TeV_25ns_EXOT4'],
                  ('data2018', 'EXOT4'): ['Data18_13TeV_25ns_EXOT4'],
+                 # EXOT7
+                 ('data2015', 'EXOT7'): ['Data15_13TeV_25ns_EXOT7'],
+                 ('data2016', 'EXOT7'): ['Data16_13TeV_25ns_EXOT7'],
+                 ('data2017', 'EXOT7'): ['Data17_13TeV_25ns_EXOT7'],
+                 ('data2018openend', 'EXOT7'): ['Data18_OpenEnded_13TeV_25ns_EXOT7'],
                  }
 
   )
