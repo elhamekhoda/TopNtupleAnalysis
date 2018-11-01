@@ -151,7 +151,6 @@ Create your own scripts based on this! Some very nice examples can be found in `
 4.  `cd $TestArea/../run/` and run TopNtupleAnalysis  
     __For l+jets channels:__
      ```bash
-     
      $SourceArea/TopNtupleAnalysis/python/makeHistograms.py AnaTtresSL \
      -f tna-input.txt
      -o "(be , good, MV2c10_FixedCutBEff70):  be_zprime3000.root"
@@ -161,7 +160,6 @@ Create your own scripts based on this! Some very nice examples can be found in `
      ```
     __For full-hadronic channels:__
      ```bash
-     echo "$TestArea/../run/output.root" > tna-input.txt
      $SourceArea/TopNtupleAnalysis/python/makeHistograms.py AnaTtresFH \
      -f tna-input.txt
      -o "(bFH, good, MV2c10_FixedCutBEff70): bFH_zprime3000.root"
