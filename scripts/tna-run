@@ -8,13 +8,14 @@ An example of histogramming signal sample w/ M(Z')=[400, ... , 5000]GeV in l+jet
 
 # samples going to be processed.
 s = [samples.Sample(sample_name = s,
+                    deriv = 'EXOT4',
                     ds_fmt_options = {'suffix': '13022018v1_output.root'},
                     download_to = os.path.join(os.curdir, 'data'),
                     commit_when_init = False) for s in samples.MAP_TO_SAMPLES if 'zprime' in s]
 
 # This is for generating SumOfWeights files.
 # Possible systs are ['','systaf2',syst,'pdf','wjpdf']
-#samples.write_totalweight_of_samples(s, systs = ['']) # To use it, comment it out
+samples.write_totalweight_of_samples(s, systs = ['']) # Note that it will be stored in a text file, so you can comment it out next time to save some time.
 
 def main(samples, systematics, **run_kwds):
     r = run.Run(samples = samples, **run_kwds)
