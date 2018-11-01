@@ -280,7 +280,11 @@ class Analysis(object):
         # this applies the EWK weight
         if not self.noMttSlices:
             weight *= reweighting.EWKCorrection.get_weight(sel, s)
-
+            
+        # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
+        #### warning: disabled for now in mc15c
+        btagsf = self.bot_tagger.scale_factor(sel)
+        weight *= btagsf
         # this applies the W+jets Sherpa 2.2.0 nJets reweighting correction
         # WARNING: disable this if using 2.2.1
         #weight *= sel.weight_Sherpa22_corr
@@ -394,11 +398,6 @@ class AnaTtresSL(Analysis):
         if sel.mcChannelNumber == 0:
             return 1.0
         weight = Analysis.getWeight(self, sel, s)
-
-        # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
-        #### warning: disabled for now in mc15c
-        btagsf = self.bot_tagger.scale_factor(sel)
-        weight *= btagsf
 
         if s == "singletopup" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
             weight *= 1+0.053
