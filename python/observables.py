@@ -85,15 +85,15 @@ class _Observable(object):
 # Observable("NB_hadside", (4, 0, 4), """sel.NB_hadside""").queue()
 
 ### Basic Object ###
-# Observable("th_pt", do = ['tree'], only = ['be', 'bmu'], script = """lj.Perp()*1e-3""").queue()
-# Observable("th_eta", do = ['tree'], only = ['be', 'bmu'], script = """lj.Eta()""").queue()
-# Observable("th_phi", do = ['tree'], only = ['be', 'bmu'], script = """lj.Phi()""").queue()
-# Observable("th_m", do = ['tree'], only = ['be', 'bmu'], script = """lj.M()*1e-3""").queue()
+Observable("th_pt", do = ['tree'], only = ['be', 'bmu'], script = """lj.Perp()*1e-3""").queue()
+Observable("th_eta", do = ['tree'], only = ['be', 'bmu'], script = """lj.Eta()""").queue()
+Observable("th_phi", do = ['tree'], only = ['be', 'bmu'], script = """lj.Phi()""").queue()
+Observable("th_m", do = ['tree'], only = ['be', 'bmu'], script = """lj.M()*1e-3""").queue()
 
-# Observable("th_pt_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_pt*1e-3""", need_truth = True).queue()
-# Observable("th_eta_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_eta""", need_truth = True).queue()
-# Observable("th_phi_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_phi""", need_truth = True).queue()
-# Observable("th_m_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_m*1e-3""", need_truth = True).queue()
+Observable("th_pt_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_pt*1e-3""", need_truth = True).queue()
+Observable("th_eta_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_eta""", need_truth = True).queue()
+Observable("th_phi_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_phi""", need_truth = True).queue()
+Observable("th_m_MC", do = ['tree'], only = ['be', 'bmu'], script = """sel.MC_th_m*1e-3""", need_truth = True).queue()
 
 Observable("th1_pt", do = ['tree'], only = ['bFH'],  script = """lj1.Perp()""").queue()
 Observable("th1_eta", do = ['tree'], only = ['bFH'], script = """lj1.Eta()""").queue()
