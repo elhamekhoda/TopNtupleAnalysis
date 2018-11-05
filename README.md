@@ -201,10 +201,10 @@ An example of histogramming signal sample w/ M(Z')=[400, ... , 5000]GeV in l+jet
 """
 # samples going to be processed.
 s = [samples.Sample(sample_name = s,
-                    deriv = 'EXOT4',
+                    deriv = deriv,
                     ds_fmt_options = {'suffix': '13022018v1_output.root'},
                     download_to = os.path.join(os.curdir, 'data'),
-                    commit_when_init = False) for s in samples.MAP_TO_SAMPLES if 'zprime' in s]
+                    commit_when_init = False) for s, deriv in samples.MAP_TO_SAMPLES if 'zprime' in s and deriv = 'EXOT4']
 
 # This is for generating SumOfWeights files.
 # Possible systs are ['','systaf2',syst,'pdf','wjpdf']
