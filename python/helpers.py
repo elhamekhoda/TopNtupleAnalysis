@@ -5,6 +5,11 @@ import ast
 import os
 import re
 import subprocess
+try:
+    import ROOT.PathResolver
+    __PATHRESOLVER__ = True
+except:
+    __PATHRESOLVER__ = False
 
 sys.path.append('2HDM')
 
@@ -69,19 +74,26 @@ def init2HDM(MH,MA,SBA,TANB,TYPE):
     logger.info(T2HDM.model.modules)
 
 
-def loadXsec(m, fName):
-    f = open(fName)
-    for l in f.readlines():
-        lsplit = l.split()
-        length_lsplit = len(lsplit)
-        if l.startswith('#'):
-            continue
-        if length_lsplit == 0:
-            continue
-        if length_lsplit < 3:
-            logger.critical("loadXsec: I cannot understand this line: %s", lsplit)
-            continue
-        m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2]) # crossSection * k-factor. Note that in TopDataPreparation crossSection is the crossSection after filter efficiency applied.
+def loadXsec(m, fName = "dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data"):
+    if __PATHRESOLVER__:
+        fName = ROOT.PathResolver.FindCalibFile(fName)
+    else:
+        fName = os.path.join("/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/", fName)
+    if not os.path.exists(fName):
+        logger.critical('loadXsec: Can\'t access TDP in GroupData. Read cross-section from local records.')
+        fName = os.path.join(root_path, "scripts/XSection-MC15-13TeV-ttres.data")
+    with open(fName) as f:
+        for l in f.readlines():
+            lsplit = l.split()
+            length_lsplit = len(lsplit)
+            if l.startswith('#'):
+                continue
+            if length_lsplit == 0:
+                continue
+            if length_lsplit < 3:
+                logger.critical("loadXsec: I cannot understand this line: %s", lsplit)
+                continue
+            m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2]) # crossSection * k-factor. Note that in TopDataPreparation crossSection is the crossSection after filter efficiency applied.
 
 def addFilesInChain(c, txtFileOption, n = -1, sep = ','):
     '''Add files listed in a text file to the chain.
