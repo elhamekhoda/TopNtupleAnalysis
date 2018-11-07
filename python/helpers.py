@@ -73,7 +73,6 @@ def init2HDM(MH,MA,SBA,TANB,TYPE):
     logger.info("init2HDM: parameters: %s",T2HDM.model.parameters)
     logger.info(T2HDM.model.modules)
 
-
 def loadXsec(m, fName = "dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data"):
     if __PATHRESOLVER__:
         fName = ROOT.PathResolver.FindCalibFile(fName)
