@@ -1,7 +1,7 @@
 import ROOT
 
 class Reweighter(object):
-    SYSTS = {}
+    SYSTS = {'*': 0}
     @classmethod
     def get_SF(cls, ev, syst):
         raise NotImplementedError
@@ -22,12 +22,12 @@ class Reweighter(object):
             weight
         """
         if syst not in cls.SYSTS:
-            return w0
+            syst = '*'
         return w0*cls.get_SF(ev, cls.SYSTS[syst])
 
 class EWKCorrection(Reweighter):
     RUN_NUMBERS = [410471, 410470, 410000, 301528, 301529, 301530, 301531, 301532]
-    SYSTS = {'ttEWK__1up': 1, 'ttEWK__1down': 2}
+    SYSTS = {'ttEWK__1up': 1, 'ttEWK__1down': 2, '*': 0}
     @classmethod
     def get_SF(cls, ev, s):
         if ev.mcChannelNumber == 0:

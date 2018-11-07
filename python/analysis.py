@@ -888,6 +888,7 @@ class AnaTtresFH(Analysis):
         self.add("leadinglargeJetPhi", 32, -3.2, 3.2)
         self.add("leadinglargeJet_tau32_wta", 20, 0, 1)
         self.add("leadinglargeJet_tau21_wta", 20, 0, 1)
+        self.add("leadinglargeJet_DNNScore", 50, 0, 1)
         self.add2D("leadinglargeJetEtaPhi", 44, -2.2, 2.2, 64, -3.2, 3.2)
         self.add("btagged_tjet_closest_to_ljet1", 50, 0, (math.pi**2+2.5**2)**0.5)
         # Sub-leading hadronic top candidate
@@ -899,6 +900,7 @@ class AnaTtresFH(Analysis):
         self.add("subleadinglargeJetPhi", 32, -3.2, 3.2)
         self.add("subleadinglargeJet_tau32_wta", 20, 0, 1)
         self.add("subleadinglargeJet_tau21_wta", 20, 0, 1)
+        self.add("subleadinglargeJet_DNNScore", 50, 0, 1)
         self.add2D("subleadinglargeJetEtaPhi", 44, -2.2, 2.2, 64, -3.2, 3.2)
         self.add("btagged_tjet_closest_to_ljet2", 50, 0, (math.pi**2+2.5**2)**0.5)
         self.add("dPhiJJ", 60, -math.pi*1.2, math.pi*1.2)
@@ -922,6 +924,7 @@ class AnaTtresFH(Analysis):
                     self.add(observable.name, *observable.binning)
                 else:
                     self.addVar(observable.name, observable.binning)
+
     def selectChannel(self, sel, syst):
         if self.ch not in self.mapSel:
             logger.warn('The selected channel "{}" is not registered. The events will be processed anyway without any further constraint.'.format(self.ch))
@@ -940,7 +943,8 @@ class AnaTtresFH(Analysis):
 
         if not passSel[self.ch]:
             return False
-
+        if not sel.ljet_pt[0] > 500000: # Tigger threshold
+            return False
         if not self.bot_tagger.passes(sel):
             return False
         # veto resolved event if it passes the boosted channel
@@ -1045,6 +1049,7 @@ class AnaTtresFH(Analysis):
             self.h["leadinglargeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx1], w)
             self.h["leadinglargeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx1], w)
             self.h["leadinglargeJetEtaPhi"][syst].Fill(lj1.Eta(), lj1.Phi(), w)
+            self.h["leadinglargeJet_DNNScore"][syst].Fill(sel.ljet_DNNTopTag_score[goodJetIdx1], w)
             deltaR_closest_btjet_to_ljet1 = 1e6
             for bjet in bjets:
                 deltaR_closest_btjet_to_ljet1 = min(bjet.DeltaR(lj1), deltaR_closest_btjet_to_ljet1)
@@ -1059,6 +1064,7 @@ class AnaTtresFH(Analysis):
             self.h["subleadinglargeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx2], w)
             self.h["subleadinglargeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx2], w)
             self.h["subleadinglargeJetEtaPhi"][syst].Fill(lj2.Eta(), lj2.Phi(), w)
+            self.h["subleadinglargeJet_DNNScore"][syst].Fill(sel.ljet_DNNTopTag_score[goodJetIdx2], w)
 
             self.h["dPhiJJ"][syst].Fill(lj1.DeltaPhi(lj2), w)
             self.h["Ystar"][syst].Fill((lj1.Rapidity()-lj2.Rapidity())/2, w)
@@ -1131,7 +1137,6 @@ class AnaTtresFH(Analysis):
                     self.h[observable.name][syst].Fill(values, w)
 
     def set_top_tagger(self, expr, num_thad = 2, strategy = 'rebel', **kwds):
-        kwds.setdefault('min_pt', 500000)
         super(AnaTtresFH, self).set_top_tagger(expr, num_thad = num_thad, strategy = 'rebel', **kwds)
         if hasattr(self, 'bot_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger
@@ -1140,6 +1145,9 @@ class AnaTtresFH(Analysis):
         kwds.setdefault('do_ljet_association', True)
         kwds.setdefault('strategy', 'obey')
         kwds.setdefault('min_nbjets', 0)
+        kwds.setdefault('SF_type', 'eventlevel')
+        kwds.setdefault('do_association', False)
+        kwds.setdefault('do_truth_matching', False)
         super(AnaTtresFH, self).set_bot_tagger(algorithm_WP_systs, **kwds)
         if hasattr(self, 'top_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger

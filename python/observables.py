@@ -99,11 +99,12 @@ Observable("th1_pt", do = ['tree'], only = ['bFH'],  script = """lj1.Perp()""").
 Observable("th1_eta", do = ['tree'], only = ['bFH'], script = """lj1.Eta()""").queue()
 Observable("th1_phi", do = ['tree'], only = ['bFH'], script = """lj1.Phi()""").queue()
 Observable("th1_m", do = ['tree'], only = ['bFH'],   script = """lj1.M()""").queue()
+Observable("th1_DNN", do = ['tree'], only = ['bFH'],   script = """sel.ljet_DNNTopTag_score[goodJetIdx1] if goodJetIdx1 != -1 else -999""").queue()
 Observable("th2_pt", do = ['tree'], only = ['bFH'],  script = """lj2.Perp()""").queue()
 Observable("th2_eta", do = ['tree'], only = ['bFH'], script = """lj2.Eta()""").queue()
 Observable("th2_phi", do = ['tree'], only = ['bFH'], script = """lj2.Phi()""").queue()
 Observable("th2_m", do = ['tree'], only = ['bFH'],   script = """lj2.M()""").queue()
-
+Observable("th2_DNN", do = ['tree'], only = ['bFH'],   script = """sel.ljet_DNNTopTag_score[goodJetIdx2] if goodJetIdx2 != -1 else -999""").queue()
 # Observable('trkbjets_N', (4, 0, 5), do = ['hist', 'tree'], dtype = int, script = """sum(map(helpers.char2int, analysis.bot_tagger.tjet_isbtagged))""").queue()
 
 ### Jet Substructure ###
