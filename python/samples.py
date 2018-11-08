@@ -199,14 +199,13 @@ class Sample(object):
     def get_systematics(self):
         return self._systematics
     def set_systematics(self, astr = None):
+        systematics = "all"
         if astr != None:
-            self._systematics = astr
-            return
-        for name in ["data", "qcde", "qcdmu"]:
-            if name in self.sample_name:
-                self._systematics = "nominal"
-                return
-        self._systematics = "all"
+            systematics = astr
+        if any(name in self.sample_name for name in ["data", "qcde", "qcdmu"]):
+            systematics = "nominal"
+        self._systematics = systematics
+
     systematics = property(get_systematics, set_systematics)
     @property
     def is_data(self):
@@ -393,8 +392,14 @@ def part_sample(sample, max_input_files = 5, sort = True):
     if not sample.commited:
         sample.commit(only_retrieve_cmd = True)
     l = len(sample.input_files)
-    if l <= max_input_files or max_input_files in (None, 0, 'none', False):
+    systs = [sample.systematics] if type(sample.systematics) == str else list(sample.systematics)
+    if l <= max_input_files or max_input_files in (None, 0, 'none', False) and len(systs) == 1:
         return [sample]
-    ret = [SubSample(sample, sample.input_files[i:min(i+max_input_files, l)], suffix = '{:06d}'.format(suffix)) for suffix, i in enumerate(range(0, l, max_input_files), 1)]
+    ret = []
+    for suffix, i in enumerate(range(0, l, max_input_files), 1):
+        for syst in systs:
+            subsample = SubSample(sample, sample.input_files[i:min(i+max_input_files, l)], suffix = '{:06d}'.format(suffix))
+            subsample.systematics = syst
+            ret.append(subsample)
     return ret
 
