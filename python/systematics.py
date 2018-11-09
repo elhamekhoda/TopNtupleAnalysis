@@ -1,0 +1,1 @@
+ALL_SYSTEMATICS = ['nominal', 'ttNNLO_seq__1up', 'ttNNLO_seqExtended__1up']

@@ -396,10 +396,12 @@ def part_sample(sample, max_input_files = 5, sort = True):
     if l <= max_input_files or max_input_files in (None, 0, 'none', False) and len(systs) == 1:
         return [sample]
     ret = []
-    for suffix, i in enumerate(range(0, l, max_input_files), 1):
+    n = 1
+    for i in range(0, l, max_input_files):
         for syst in systs:
-            subsample = SubSample(sample, sample.input_files[i:min(i+max_input_files, l)], suffix = '{:06d}'.format(suffix))
+            subsample = SubSample(sample, sample.input_files[i:min(i+max_input_files, l)], suffix = '{:06d}'.format(n))
             subsample.systematics = syst
             ret.append(subsample)
+            n += 1
     return ret
 

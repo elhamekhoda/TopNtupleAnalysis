@@ -190,13 +190,13 @@ def main(parallel = True):
         systListTmp = []
         if 'all1' in options.systs:
             systListTmp.extend(systList[0:l])
-        if 'all2' in options.systs:
+        elif 'all2' in options.systs:
             systListTmp.extend(systList[l:2*l])
-        if 'all3' in options.systs:
+        elif 'all3' in options.systs:
             systListTmp.extend(systList[2*l:3*l])
-        if 'all4' in options.systs:
+        elif 'all4' in options.systs:
             systListTmp.extend(systList[3*l:])
-        if 'all' in options.systs:
+        elif 'all' in options.systs:
             systListTmp = systList
         systList = systListTmp
         logger.info("--> Setup to run over following systs. {}".format(systList))
