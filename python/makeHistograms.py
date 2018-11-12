@@ -51,12 +51,7 @@ def main(parallel = True):
             raise IOError('TotalMCWeights files not found. Did you create them first?\nUse samples.write_totalweight_of_samples() to create TotalMCWeights files.')
 
     logger.info("Loading xsec.")
-    xsec_mc15_13tev_ttres = "/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data"
-    if os.path.exists(xsec_mc15_13tev_ttres):
-        helpers.loadXsec(Xsec, xsec_mc15_13tev_ttres)
-    else:
-        logger.critical('Can\'t access TDP in GroupData. Read cross-section from local records.')
-        helpers.loadXsec(Xsec, os.path.join(helpers.root_path, "scripts/XSection-MC15-13TeV-ttres.data"))
+    helpers.loadXsec(Xsec, "dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data")
     Xsec[0] = 0 # No idea why there are these events in dijets samples @yu-heng
     # check if there is any W+jets sample there
     isWjets = False
@@ -195,13 +190,13 @@ def main(parallel = True):
         systListTmp = []
         if 'all1' in options.systs:
             systListTmp.extend(systList[0:l])
-        if 'all2' in options.systs:
+        elif 'all2' in options.systs:
             systListTmp.extend(systList[l:2*l])
-        if 'all3' in options.systs:
+        elif 'all3' in options.systs:
             systListTmp.extend(systList[2*l:3*l])
-        if 'all4' in options.systs:
+        elif 'all4' in options.systs:
             systListTmp.extend(systList[3*l:])
-        if 'all' in options.systs:
+        elif 'all' in options.systs:
             systListTmp = systList
         systList = systListTmp
         logger.info("--> Setup to run over following systs. {}".format(systList))

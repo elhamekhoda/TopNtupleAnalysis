@@ -74,7 +74,8 @@ class BoostedTopTagger(Selection):
             logger.info('StrExpression: "{}"'.format(_callable))
         self.num_top = num_top
         self.min_pt = min_pt
-        self.min_dPhi = 1.6
+        self.absdPhiJJRange = (1.6, float('inf'))
+        self.absdYJJRange = (float('-inf'), 1.8)
         self.bcategory = -1
         self.ljet_istoptagged = []
         self.ljet_angularcuts = []
@@ -141,7 +142,9 @@ class BoostedTopTagger(Selection):
             ret.append([])
             _ljet_istoptagged.append(0)
             for i2, p4_i2 in enumerate(self.ljet_p4):
-                ret[-1].append(int((i1 < i2) and (abs(p4_i1.DeltaPhi(p4_i2)) > self.min_dPhi)))
+                ret[-1].append(int((i1 < i2) and \
+                                   (self.absdPhiJJRange[0] < abs(p4_i1.DeltaPhi(p4_i2)) < self.absdPhiJJRange[1]) and \
+                                   (self.absdYJJRange[0] < abs(p4_i1.Rapidity()-p4_i2.Rapidity()) < self.absdYJJRange[1])))
         self.ljet_angularcuts = ret
         for i in range(len(self.ljet_angularcuts)):
             for j in range(len(self.ljet_angularcuts[i])):
@@ -180,7 +183,16 @@ class TrackJetBotTagger(Selection):
              'MV2c10':    {'FixedCutBEff60':  0.92, 'FixedCutBEff70':  0.79, 'FixedCutBEff77':  0.58, 'FixedCutBEff85':  0.05, 'pt':  7e3}}
             }
     # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
-    def __init__(self, algorithm = 'MV2c10', WP = 'FixedCutBEff70', trackjet_alg = 'AntiKt2PV0TrackJets', systematic_variation = '', strategy = 'obey', do_association = True, do_ljet_association = False, do_truth_matching = True, min_nbjets = 1):
+    def __init__(self, algorithm = 'MV2c10',
+                       WP = 'FixedCutBEff70',
+                       trackjet_alg = 'AntiKt2PV0TrackJets',
+                       systematic_variation = '',
+                       strategy = 'obey',
+                       do_association = True,
+                       do_ljet_association = False,
+                       do_truth_matching = True,
+                       SF_type = 'perjet',
+                       min_nbjets = 1):
         self.algorithm = algorithm
         self.WP = WP
         self.trackjet_alg = trackjet_alg
@@ -192,17 +204,19 @@ class TrackJetBotTagger(Selection):
         self.do_truth_matching = do_truth_matching
         is_HybWP = 'HybBEff' in self.WP
         if self.systematic_variation != '':
-            logger.warn('Please be informed: b-tagging scale factor with systematic variations is currently not valid'
-                        +' because the eigen matrix are not stored in the ttres ntuple produced by the current-version `HQTTtResonancesTools`.'
-                        +' Please consult us and make sure you really know what you\'re doing!')
+            logger.warn('Please be informed: per-jet b-tagging scale factor with systematic variations is currently not valid while the event-level one is'
+                       +'because the eigen matrix are not stored in the ttres ntuple produced by the current-version `HQTTtResonancesTools`.'
+                       +'Please consult us and make sure you really know what you\'re doing!')
         self._branch_map = {'tjet_isbtagged': 'tjet_isbtagged_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
                             'tjet_SF': 'tjet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
+                            'weight_SF': 'weight_trackjet_bTagSF_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
                             'tjet_discriminant': 'tjet_{alg}'.format(alg = self.algorithm.lower())}
         if is_HybWP and strategy == 'rebel':
             logger.warn('When using Hybrid WP, the b-tagging strategy should always be `obey`!')
             self.strategy = 'obey'
         else:
-            self.strategy = strategy 
+            self.strategy = strategy
+        self.scale_factor = getattr(self, '_' + SF_type + '_scale_factor')
         recomm = self.WP2D.get(self.trackjet_alg, {}).get(self.algorithm, {})
         self.min_discriminant = recomm.get(WP, -999)
         self.min_pt = recomm.get('pt', 10e3)
@@ -307,7 +321,7 @@ class TrackJetBotTagger(Selection):
     def truth_matching(self, ev):
         self.tjet_istrueb = [label==5 for label in ev.tjet_label]
 
-    def scale_factor(self, ev):
+    def _perjet_scale_factor(self, ev):
         """
         Retrieve the b-tagging scale factor with systematic variations specified accordingly
 
@@ -351,22 +365,22 @@ class TrackJetBotTagger(Selection):
             if 'down' in systematic_variation:
                 direction = 'down'
             # check if it is a b,c,light or extrapolation variation and set name
-            if 'btagbSF_' in systematic_variation:
+            elif 'btagbSF_' in systematic_variation:
                 varName = pref+'_eigen_B_'+direction
                 # get eigenvector index
                 eig = int(systematic_variation.split('_')[1])
-            if 'btagcSF_' in systematic_variation:
+            elif 'btagcSF_' in systematic_variation:
                 varName = pref+'_eigen_C_'+direction
                 # get eigenvector index
                 eig = int(systematic_variation.split('_')[1])
-            if 'btaglSF_' in systematic_variation:
+            elif 'btaglSF_' in systematic_variation:
                 varName = pref+'_eigen_Light_'+direction
                 # get eigenvector index
                 eig = int(systematic_variation.split('_')[1])
-            if 'btageSF_0' in systematic_variation:
+            elif 'btageSF_0' in systematic_variation:
                 varName = pref+'_syst_extrapolation_'+direction
                 eig = -1
-            if 'btageSF_1' in systematic_variation:
+            elif 'btageSF_1' in systematic_variation:
                 varName = pref+'_syst_extrapolation_from_charm_'+direction
                 eig = -1
         else: # not a b-tagging variation, so take the nominal
@@ -401,4 +415,42 @@ class TrackJetBotTagger(Selection):
                 scale_factor *= tjet_SF[i][eig]
             else: # extrapolation branches or the nominal, have no second index
                 scale_factor *= tjet_SF[i]
+        return scale_factor
+    def _eventlevel_scale_factor(self, ev):
+        '''
+        Use the event-level b-tagging efficiency scale factors from AnalysisTop. 
+        trk jet pT-dependent SF is not available.
+        '''
+        pref = self._branch_map['weight_SF']
+        varName = ''
+        eig = -1
+        systematic_variation = self.systematic_variation
+        if 'btag' in systematic_variation:
+            # get direction
+            direction = 'up'
+            if 'down' in systematic_variation:
+                direction = 'down'
+            # check if it is a b,c,light or extrapolation variation and set name
+            if 'btagbSF_' in systematic_variation:
+                varName = pref+'_eigenvars_B_'+direction
+                # get eigenvector index
+                eig = int(systematic_variation.split('_')[1])
+            elif 'btagcSF_' in systematic_variation:
+                varName = pref+'_eigenvars_C_'+direction
+                # get eigenvector index
+                eig = int(systematic_variation.split('_')[1])
+            elif 'btaglSF_' in systematic_variation:
+                varName = pref+'_eigenvars_Light_'+direction
+                # get eigenvector index
+                eig = int(systematic_variation.split('_')[1])
+            elif 'btageSF_0' in systematic_variation:
+                varName = pref+'_extrapolation_'+direction
+                eig = -1
+            elif 'btageSF_1' in systematic_variation:
+                varName = pref+'_extrapolation_from_charm_'+direction
+                eig = -1
+            scale_factor = getattr(ev, varName)[eig]
+        else: # not a b-tagging variation, so take the nominal
+            varName = pref
+            scale_factor = getattr(ev, varName)
         return scale_factor
