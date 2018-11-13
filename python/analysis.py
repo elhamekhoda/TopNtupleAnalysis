@@ -283,7 +283,7 @@ class Analysis(object):
             
         # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
         #### warning: disabled for now in mc15c
-        btagsf = self.bot_tagger.scale_factor(sel)
+        btagsf = self.bot_tagger.scale_factor(sel, s)
         weight *= btagsf
         # this applies the W+jets Sherpa 2.2.0 nJets reweighting correction
         # WARNING: disable this if using 2.2.1

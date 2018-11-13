@@ -226,7 +226,7 @@ def main(parallel = True):
         systList.append('qcdfwddw')
     else:
         systList = options.systs.split(',')
-
+    print systList
     # load analysis code
     histSuffixes = []
     for item in systList:

@@ -680,7 +680,7 @@ def hadd(a_dict, delete_sources = False, force_recreate = True):
         if offensive:
             logger.error('hadd: fail to merge. Maybe rerun this job and try to merge again.')
             continue
-        subprocess.check_call(['hadd'] + (['-f'] if force_recreate else []) + [k] + list(v))
+        subprocess.check_call(['hadd', '-j', '4'] + (['-f'] if force_recreate else []) + [k] + list(v))
         if delete_sources:
             for f in v:
                 os.remove(f)
