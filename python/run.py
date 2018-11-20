@@ -49,10 +49,13 @@ class Run(object):
         self.do_merge = True
         self._tag_fmt = 'histTNA_{date}{series}'
 
-    def add_selection(self, topo, lepton, period = '', b_category = '', top_tagger = 'good', bot_tagger = 'MV2c10_FixedCutBEff70', fname = '{channel}_{s.sample_name}{s.tag}.root'):
+    def add_selection(self, topo, lepton, period = '', b_category = '', top_tagger = 'good', bot_tagger = 'MV2c10_FixedCutBEff70', aux_selector = '', fname = '{channel}_{s.sample_name}{s.tag}.root'):
         assert lepton in ('e', 'mu', 'FH')
         assert topo in ('b', 'r')
-        self.selections.append(('({}{}{}{}, {}, {})'.format(topo, lepton, period, b_category, top_tagger, bot_tagger), fname))
+        if not aux_selector:
+            self.selections.append(('({}{}{}{}, {}, {})'.format(topo, lepton, period, b_category, top_tagger, bot_tagger), fname))
+        else:
+            self.selections.append(('({}{}{}{}, {}, {}, {})'.format(topo, lepton, period, b_category, top_tagger, bot_tagger, aux_selector), fname))
 
     @property
     def tag(self):

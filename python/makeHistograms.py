@@ -226,7 +226,6 @@ def main(parallel = True):
         systList.append('qcdfwddw')
     else:
         systList = options.systs.split(',')
-    print systList
     # load analysis code
     histSuffixes = []
     for item in systList:
@@ -245,6 +244,8 @@ def main(parallel = True):
             channels[ch + (options.top_tagger, )] = channels.pop(ch)
         if len(ch) == 2:
             channels[ch + (options.bot_tagger, )] = channels.pop(ch)
+        if len(ch) == 3:
+            channels[ch + ('', )] = channels.pop(ch)
 
 
     analysisCode = {}
@@ -278,7 +279,7 @@ def main(parallel = True):
         helpers.init2HDM(scalarMH,scalarMA,scalarSBA,scalarTANB,scalarTYPE)
         logger.info("2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE))
     for k in channels:
-        ch, top_tagger, bot_tagger = k
+        ch, top_tagger, bot_tagger, aux_selector = k
         analysisCode[k] = anaClass(ch, histSuffixes, channels[k])
         analysisCode[k].doTree = do_tree
         analysisCode[k].keep = options.WjetsHF
@@ -308,6 +309,7 @@ def main(parallel = True):
             analysisCode[k].scalarTYPE = scalarTYPE
         analysisCode[k].set_top_tagger(top_tagger)
         analysisCode[k].set_bot_tagger(bot_tagger)
+        analysisCode[k].set_aux_selector(aux_selector)
         if isinstance(analysisCode[k], analysis.AnaTtresSL):
             if ch.startswith('r'):
                 analysisCode[k].set_TtresChi2()

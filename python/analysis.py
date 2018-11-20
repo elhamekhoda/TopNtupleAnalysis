@@ -299,7 +299,8 @@ class Analysis(object):
         if len(attr)==2:
             algorithm_WP_systs.append(attr[0])
         self.bot_tagger = selections.TrackJetBotTagger(*algorithm_WP_systs, **kwds)
-
+    def set_aux_selector(self, expr = None):
+        self.aux_selector = selections.AuxSelector(expr)
     def set_TtresChi2(self):
         self.TtresChi2 = selections.TtresChi2(bot_tagger = self.bot_tagger)
 
@@ -544,6 +545,8 @@ class AnaTtresSL(Analysis):
                     break
             passSel[i] = passORChannels
         if not passSel[self.ch]:
+            return False
+        if not self.aux_selector.passes(sel):
             return False
         if not self.bot_tagger.passes(sel):
             return False
@@ -843,6 +846,9 @@ class AnaTtresSL(Analysis):
                         self.h[observable.name][syst].Fill(v, w)
                 else:
                     self.h[observable.name][syst].Fill(values, w)
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70', **kwds):
+        # kwds.setdefault('strategy', 'rebel')
+        Analysis.set_bot_tagger(self, algorithm_WP_systs, **kwds)
 
 class AnaTtresFH(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
@@ -942,6 +948,8 @@ class AnaTtresFH(Analysis):
             passSel[i] = passORChannels
 
         if not passSel[self.ch]:
+            return False
+        if not self.aux_selector.passes(sel):
             return False
         if not sel.ljet_pt[0] > 500000: # Tigger threshold
             return False

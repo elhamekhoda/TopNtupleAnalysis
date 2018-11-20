@@ -46,7 +46,7 @@ class TtresChi2(Selection):
         self.mtl = -1
         self.mth = -1
         self.mwh = -1
-        self.chi2 = 100000
+        self.chi2 = -999
         self.bcategory = -1
     def _bcategorize_obey(self, ev):
         raise DeprecationWarning("This is temporarily deprecated til we fix the bug of TtresChi2 btagging categorization in HQTTtResonancesTools -- 16.07.2018")
@@ -285,7 +285,7 @@ class TrackJetBotTagger(Selection):
             jet_p4.SetPtEtaPhiE(ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])
             self._jet_p4.push_back(jet_p4)
             trkbjet_associated = False
-            associated_btaggedtjet_index = -1
+            associated_btaggedtjet_index = -999
             for tjet_i in xrange(len(ev.tjet_pt)):
                 if self.tjet_isbtagged[tjet_i] and self.associated(self._tjet_p4[tjet_i], self._jet_p4[jet_i], self.max_deltaR, ev):
                     trkbjet_associated = True
@@ -303,7 +303,7 @@ class TrackJetBotTagger(Selection):
             ljet_p4.SetPtEtaPhiE(ev.ljet_pt[ljet_i], ev.ljet_eta[ljet_i], ev.ljet_phi[ljet_i], ev.ljet_e[ljet_i])
             self._ljet_p4.push_back(ljet_p4)
             trkbjet_associated = False
-            associated_btaggedtjet_index = -1
+            associated_btaggedtjet_index = -999
             for tjet_i in range(len(ev.tjet_pt)):
                 if self.tjet_isbtagged[tjet_i] and self.associated(self._tjet_p4[tjet_i], self._ljet_p4[ljet_i], self.max_ljet_deltaR, ev):
                     trkbjet_associated = True
@@ -449,3 +449,14 @@ class TrackJetBotTagger(Selection):
             varName = pref
             scale_factor = getattr(ev, varName)
         return scale_factor
+
+class AuxSelector(Selection):
+    def __init__(self, _callable = ''):
+        if type(_callable) == str and bool(_callable):
+            self._alg = lambda ev: eval(compile(_callable, '<auxiliary-selector>', 'eval'), {'ev': ev})
+        else:
+            self._alg = lambda ev: True
+        self.passed = False
+    def passes(self, ev):
+        self.passed = self._alg(ev)
+        return self.passed
