@@ -13,7 +13,7 @@ class Selection(object):
         raise NotImplementedError
 
 class TtresChi2(Selection):
-    def __init__(self, bot_tagger, max_chi2 = float('inf'), strategy = 'rebel'):
+    def __init__(self, bot_tagger, max_chi2 = 10**0.9, strategy = 'rebel'):
         self.strategy = strategy
         self.met = ROOT.TLorentzVector()
         self.bot_tagger = bot_tagger
@@ -40,7 +40,7 @@ class TtresChi2(Selection):
         self.mwh = ROOT.TopNtupleAnalysis.res_mwh()*1e-3
         self.chi2 = ROOT.TopNtupleAnalysis.res_chi2()
         self.bcategorize(ev)
-        return (self.chi2 < self.max_chi2)
+        return (0 <= self.chi2 < self.max_chi2)
     def reset(self):
         self.mtt = -1
         self.mtl = -1
@@ -272,7 +272,7 @@ class TrackJetBotTagger(Selection):
         return (sum(self.tjet_isbtagged) >= self.min_nbjets)
 
 
-    def associated(self, p4_1, p4_2, max_deltaR, ev):
+    def associated(self, p4_1, p4_2, max_deltaR):
         deltaR = p4_1.DeltaR(p4_2)
         return (deltaR < max_deltaR)
 
@@ -287,7 +287,7 @@ class TrackJetBotTagger(Selection):
             trkbjet_associated = False
             associated_btaggedtjet_index = -999
             for tjet_i in xrange(len(ev.tjet_pt)):
-                if self.tjet_isbtagged[tjet_i] and self.associated(self._tjet_p4[tjet_i], self._jet_p4[jet_i], self.max_deltaR, ev):
+                if self.tjet_isbtagged[tjet_i] and self.associated(self._tjet_p4[tjet_i], self._jet_p4[jet_i], self.max_deltaR):
                     trkbjet_associated = True
                     associated_btaggedtjet_index = tjet_i
                     break
@@ -305,7 +305,7 @@ class TrackJetBotTagger(Selection):
             trkbjet_associated = False
             associated_btaggedtjet_index = -999
             for tjet_i in range(len(ev.tjet_pt)):
-                if self.tjet_isbtagged[tjet_i] and self.associated(self._tjet_p4[tjet_i], self._ljet_p4[ljet_i], self.max_ljet_deltaR, ev):
+                if self.tjet_isbtagged[tjet_i] and self.associated(self._tjet_p4[tjet_i], self._ljet_p4[ljet_i], self.max_ljet_deltaR):
                     trkbjet_associated = True
                     associated_btaggedtjet_index = tjet_i
                     break
