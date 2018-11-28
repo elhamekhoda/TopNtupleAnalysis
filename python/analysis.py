@@ -1156,7 +1156,7 @@ class AnaTtresFH(Analysis):
         kwds.setdefault('min_nbjets', 0)
         kwds.setdefault('SF_type', 'eventlevel')
         kwds.setdefault('do_association', False)
-        # kwds.setdefault('do_truth_matching', False)
+        kwds.setdefault('do_truth_matching', False)
         super(AnaTtresFH, self).set_bot_tagger(algorithm_WP_systs, **kwds)
         if hasattr(self, 'top_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger
