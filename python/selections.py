@@ -13,7 +13,7 @@ class Selection(object):
         raise NotImplementedError
 
 class TtresChi2(Selection):
-    def __init__(self, bot_tagger, max_chi2 = float('inf'), strategy = 'deltaR'):
+    def __init__(self, bot_tagger, max_chi2 = 10**0.9, strategy = 'deltaR'):
         self.strategy = strategy
         self.met = ROOT.TLorentzVector()
         self.bot_tagger = bot_tagger
