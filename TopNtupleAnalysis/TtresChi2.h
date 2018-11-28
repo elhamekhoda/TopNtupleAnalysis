@@ -38,6 +38,10 @@ class TtresChi2{
 
   double res_chi2All, res_chi2WH, res_chi2TopH, res_chi2TopL, res_Mtl, res_Mwh, res_Mth, res_Mtt;
   TLorentzVector res_Tt;
+  TLorentzVector res_Wh;
+  TLorentzVector res_Wl;
+  TLorentzVector res_Th;
+  TLorentzVector res_Tl;
 
   std::vector < double > m_chi2Values;
   std::vector < double > m_chi2Wh_Values;
@@ -117,6 +121,10 @@ class TtresChi2{
   inline int getNChi2Values()       	{return m_nChi2Values;	}
   inline int getCategory()		{return m_category;	}
   inline TLorentzVector getResult_Tlv()	{return res_Tt;		}
+  inline TLorentzVector getResult_Th() {return res_Th;   }
+  inline TLorentzVector getResult_Tl() {return res_Tl;   }
+  inline TLorentzVector getResult_Wh() {return res_Wh;   }
+  inline TLorentzVector getResult_Wl() {return res_Wl;   }
 
 };
 

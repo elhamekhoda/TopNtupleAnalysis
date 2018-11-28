@@ -13,7 +13,7 @@ class Selection(object):
         raise NotImplementedError
 
 class TtresChi2(Selection):
-    def __init__(self, bot_tagger, max_chi2 = 10**0.9, strategy = 'rebel'):
+    def __init__(self, bot_tagger, max_chi2 = float('inf'), strategy = 'deltaR'):
         self.strategy = strategy
         self.met = ROOT.TLorentzVector()
         self.bot_tagger = bot_tagger
@@ -53,6 +53,34 @@ class TtresChi2(Selection):
         self.bcategory = ev.Btagcat
     def _bcategorize_rebel(self, ev):
         self.bcategory = ROOT.TopNtupleAnalysis.res_bcat()
+    def _bcategorize_deltaR(self, ev):
+        '''
+        
+        This is to replicate the deltaR association used in HQTTtResonancesTools for debugging purpose.
+        
+        '''
+        p4_th = self.get_tv("Th")
+        p4_tl = self.get_tv("Tl")
+        btagCat = 0
+        if not any(self.bot_tagger.tjet_isbtagged):
+            btagCat = -1
+        else:
+            for tjet_p4, isbtagged in zip(self.bot_tagger._tjet_p4, self.bot_tagger.tjet_isbtagged):
+                if not isbtagged:
+                    continue
+                if p4_tl.DeltaR(tjet_p4) < 1.:
+                    btagCat = 1
+                if p4_th.DeltaR(tjet_p4) < 1.:
+                    if btagCat != 1:
+                        btagCat = 2
+                    else:
+                        btagCat = 3
+                        break
+        self.bcategory = btagCat
+
+
+    def get_tv(self, target):
+        return ROOT.TopNtupleAnalysis.res_tv(target)*1e-3
 
 class BoostedTopTagger(Selection):
     """Boosted hadronic-top tagger
@@ -190,7 +218,7 @@ class TrackJetBotTagger(Selection):
                        do_association = True,
                        do_ljet_association = False,
                        do_truth_matching = True,
-                       SF_type = 'perjet',
+                       SF_type = 'eventlevel',
                        min_nbjets = 1):
         self.algorithm = algorithm
         self.WP = WP

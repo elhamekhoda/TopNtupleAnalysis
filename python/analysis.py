@@ -186,6 +186,7 @@ class Analysis(object):
                             continue
                     if observable.style == 'foreach':
                         self.branches[tname][s][observable.name] = std.vector(observable.dtype)()
+                        self.trees[tname][s].Branch(observable.name, self.branches[tname][s][observable.name])
                     else:
                         self.branches_noclear[tname][s][observable.name] = getattr(ctypes, 'c_' + str(observable.dtype.__name__))()
                         self.trees[tname][s].Branch(observable.name, ctypes.addressof(self.branches_noclear[tname][s][observable.name]), observable.name + ('/I' if observable.dtype == int else '/F'))
@@ -886,7 +887,7 @@ class AnaTtresFH(Analysis):
         ########################
 
         # Leading hadronic top candidate
-        self.addVar("leadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3])
+        self.addVar("leadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3, 2.5e3, 3e3, 4e3, 5e3])
         self.add("leadinglargeJetM", 30, 0, 300)
         self.add("leadinglargeJetY", 22, -2.2, 2.2)
         self.add("leadinglargeJetPtMtt", 50, 0, 1)
@@ -898,7 +899,7 @@ class AnaTtresFH(Analysis):
         self.add2D("leadinglargeJetEtaPhi", 44, -2.2, 2.2, 64, -3.2, 3.2)
         self.add("btagged_tjet_closest_to_ljet1", 50, 0, (math.pi**2+2.5**2)**0.5)
         # Sub-leading hadronic top candidate
-        self.addVar("subleadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3])
+        self.addVar("subleadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3, 2.5e3, 3e3, 4e3, 5e3])
         self.add("subleadinglargeJetM", 30, 0, 300)
         self.add("subleadinglargeJetY", 22, -2.2, 2.2)
         self.add("subleadinglargeJetPtMtt", 50, 0, 1)
@@ -1155,7 +1156,7 @@ class AnaTtresFH(Analysis):
         kwds.setdefault('min_nbjets', 0)
         kwds.setdefault('SF_type', 'eventlevel')
         kwds.setdefault('do_association', False)
-        kwds.setdefault('do_truth_matching', False)
+        # kwds.setdefault('do_truth_matching', False)
         super(AnaTtresFH, self).set_bot_tagger(algorithm_WP_systs, **kwds)
         if hasattr(self, 'top_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger

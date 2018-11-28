@@ -484,6 +484,11 @@ bool TtresChi2::findMinChiSquare(TLorentzVector* L, const std::vector<TLorentzVe
 			res_Mth=TopH.M();
 			res_Mtt=Tt.M();
 			res_Tt = Tt;  
+      res_Tl = Tlv;
+      res_Th = TopH;
+      res_Wh = Whad;
+      res_Wl = Wlv;
+
 			
 			//============================
 			// bjet category splitting

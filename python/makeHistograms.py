@@ -311,7 +311,7 @@ def main(parallel = True):
         analysisCode[k].set_bot_tagger(bot_tagger)
         analysisCode[k].set_aux_selector(aux_selector)
         if isinstance(analysisCode[k], analysis.AnaTtresSL):
-            if ch.startswith('r'):
+            if ch.startswith('r') or ch.startswith('ovr'):
                 analysisCode[k].set_TtresChi2()
         logger.info('({:^6},{:^6},{:^12}): {}'.format(ch.strip(), top_tagger, bot_tagger, channels[k]))
 

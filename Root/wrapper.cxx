@@ -160,6 +160,16 @@ int TopNtupleAnalysisUtils::res_bcat() {
   return m_chi2.getCategory();
 }
 
+TLorentzVector TopNtupleAnalysisUtils::res_tv(std::string target) {
+  TLorentzVector ret;
+  if      ( target == "Th" ) { ret = m_chi2.getResult_Th(); }
+  else if ( target == "Tl" ) { ret = m_chi2.getResult_Tl(); }
+  else if ( target == "Wh" ) { ret = m_chi2.getResult_Th(); }
+  else if ( target == "Wl" ) { ret = m_chi2.getResult_Wl(); }
+  else if ( target == "Tt" ) { ret = m_chi2.getResult_Tlv(); }
+  return ret;
+  }
+
 double TopNtupleAnalysisUtils::getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var) {
   float sf; 
   float t_pt = top.Perp();

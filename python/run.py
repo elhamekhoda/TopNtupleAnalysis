@@ -51,7 +51,7 @@ class Run(object):
 
     def add_selection(self, topo, lepton, period = '', b_category = '', top_tagger = 'good', bot_tagger = 'MV2c10_FixedCutBEff70', aux_selector = '', fname = '{channel}_{s.sample_name}{s.tag}.root'):
         assert lepton in ('e', 'mu', 'FH')
-        assert topo in ('b', 'r')
+        assert topo in ('b', 'r', 'ovr')
         if not aux_selector:
             self.selections.append(('({}{}{}{}, {}, {})'.format(topo, lepton, period, b_category, top_tagger, bot_tagger), fname))
         else:
