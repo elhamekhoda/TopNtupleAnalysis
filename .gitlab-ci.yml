@@ -14,7 +14,7 @@ variables:
     refs:
       - master
 
-.analysis_image: &image
+.login: &login
   image: lukasheinrich/recast_cvmfs_assisted:20161231
   tags:
     - cvmfs
@@ -38,4 +38,20 @@ build_image:
     BUILD_ARG_1: CI_JOB_TOKEN=${CI_JOB_TOKEN}
   tags:
     - docker-image-build
+  <<: *global
+
+deploy-ttresfullhad:
+  <<: *login
+  stage: deploy
+  script:
+    - lsetup git || echo ignore alrb
+    - git clone https://:@gitlab.cern.ch:8443/atlas-phys/exot/hqt/tt_tb_Resonances_Run2/ttResFullHad.git -b canary
+    - cd ttResFullHad
+    - git submodule update --init --remote source/$PACKAGE_NAME
+    - git add source/$PACKAGE_NAME
+    - git config user.email "${CERN_USER}@cern.ch"
+    - git config user.name "${CERN_USER}" 
+    - git commit -m "Auto Build - ${PACKAGE_NAME}" -m "See atlas-phys/exot/hqt/R21-ttbar-1lep/${PACKAGE_NAME}@${CI_COMMIT_SHA}"
+    - git push -u origin canary
+  allow_failure: true
   <<: *global
