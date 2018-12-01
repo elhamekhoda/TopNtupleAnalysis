@@ -139,8 +139,8 @@ Observable("th2_phi", do = ['tree'], only = ['bFH'], script = """lj2.Phi()""").q
 Observable("th2_m", do = ['tree'], only = ['bFH'],   script = """lj2.M()""").queue()
 Observable("th2_DNN", do = ['tree'], only = ['bFH'],   script = """sel.ljet_DNNTopTag_score[goodJetIdx2] if goodJetIdx2 != -1 else -999""").queue()
 
-Observable("akt10truthjet", do = ['tree'], only = ['bFH'], style = 'foreach', dtype = 'TLorentzVector', need_truth = True,
-           script = """[P4fromPtEtaPhiM(sel.akt10truthjet_pt[i], sel.akt10truthjet_eta[i], sel.akt10truthjet_phi[i], sel.akt10truthjet_m[i]) for i in xrange(sel.akt10truthjet_pt.size())]""").queue()
+#Observable("akt10truthjet", do = ['tree'], only = ['bFH'], style = 'foreach', dtype = 'TLorentzVector', need_truth = True,
+#           script = """[P4fromPtEtaPhiM(sel.akt10truthjet_pt[i], sel.akt10truthjet_eta[i], sel.akt10truthjet_phi[i], sel.akt10truthjet_m[i]) for i in xrange(sel.akt10truthjet_pt.size())]""").queue()
 
 
 # Observable('trkbjets_N', (4, 0, 5), do = ['hist', 'tree'], dtype = int, script = """sum(map(helpers.char2int, analysis.bot_tagger.tjet_isbtagged))""").queue()
