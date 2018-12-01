@@ -146,8 +146,8 @@ Observable("akt10truthjet", do = ['tree'], only = ['bFH'], style = 'foreach', dt
 # Observable('trkbjets_N', (4, 0, 5), do = ['hist', 'tree'], dtype = int, script = """sum(map(helpers.char2int, analysis.bot_tagger.tjet_isbtagged))""").queue()
 
 ### Jet Substructure ###
-# Observable("th_tau21_wta", do = ['tree'], only = ['b'], script = """sel.ljet_tau21_wta[analysis.top_tagger.thad_index] if analysis.top_tagger.thad_index != -1 else -999""").queue()
-# Observable("th_tau32_wta", do = ['tree'], only = ['b'], script = """sel.ljet_tau32_wta[analysis.top_tagger.thad_index] if analysis.top_tagger.thad_index != -1 else -999""").queue()
+Observable("th_tau21_wta", do = ['tree'], only = ['b'], script = """sel.ljet_tau21_wta[analysis.top_tagger.thad_index] if analysis.top_tagger.thad_index != -1 else -999""").queue()
+Observable("th_tau32_wta", do = ['tree'], only = ['b'], script = """sel.ljet_tau32_wta[analysis.top_tagger.thad_index] if analysis.top_tagger.thad_index != -1 else -999""").queue()
 # Observable("th_C2", (26, 0, 2), do = ['hist','tree'], only = ['b'], script = """sel.ljet_C2[analysis.top_tagger.thad_index] if analysis.top_tagger.thad_index != -1 else -999""").queue()
 # Observable("th_D2", (26, 0, 5), do = ['hist','tree'], only = ['b'], script = """sel.ljet_D2[analysis.top_tagger.thad_index] if analysis.top_tagger.thad_index != -1 else -999""").queue()
 # Observable("th_MClike", (4, -1, 3), dtype = int, do = ['hist','tree'], only = ['b'], script = """sel.ljet_MClike[analysis.top_tagger.thad_index] if analysis.top_tagger.thad_index != -1 else -1""").queue()
