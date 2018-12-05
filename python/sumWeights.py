@@ -2,6 +2,7 @@
 import ROOT
 import os
 import helpers
+import itertools
 logger = helpers.getLogger('TopNtupleAnalysis.sumWeights')
 
 pdfList = ['PDF4LHC15_nlo_30']

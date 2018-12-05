@@ -349,11 +349,7 @@ def main(parallel = True):
             if k % 10000 == 0:
                 logger.info("(tree = {:^10}, syst = {:^5}) Entry: {{:>{}}} / {}".format('<'+treeName+'>', '<'+suffix+'>', ent_length, ent).format(k))
             if isFirstEvent:
-                if not options.data and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532, 410009, 410120, 410121, 407009, 407010, 407011, 407012, 410004, 410003, 410002, 410001, 410500, 410159, 410501, 410502, 410503, 410504, 410505, 410506, 410509, 410511, 410512, 410225, 410250, 410251, 410252] + [410470, 410471]: #410525]:
-                    m = sel.mcChannelNumber
-                    if sel.mcChannelNumber in [301528, 301529, 301530, 301531, 301532]:
-                        m = 410000
-                    ROOT.TopNtupleAnalysis.InitNNLO(m)
+                reweighting.NNLOReweighting.initNNLO(sel.mcChannelNumber)
                 isFirstEvent = False
 
             # common part of the weight
@@ -399,15 +395,6 @@ def main(parallel = True):
                     pdfNumber = int(suffix.rsplit('_', 1)[1])
                     wjpdfList = [7]+range(11, 110+1)
                     weight_reco *= sel.mc_generator_weights[wjpdfList[pdfNumber]]
-                if not options.data and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532, 410009, 410120, 410121, 407009, 407010, 407011, 407012, 410004, 410003, 410002, 410001, 410500, 410159, 410501, 410502, 410503, 410504, 410505, 410506, 410509, 410511, 410512, 10225, 410250, 410251, 410252] + [410470, 410471]: #410525]:
-                    if 'ttNNLO_seq_' in suffix:
-                        weight_reco *= ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 1)
-                    if 'ttNNLO_topPt_' in suffix:
-                        weight_reco *= ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 0)
-                    if 'ttNNLO_topPtDiff_' in suffix:
-                        weight_reco *= ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 2)
-                    if 'ttNNLO_seqExtended_' in suffix:
-                        weight_reco *= ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 2)*ROOT.TopNtupleAnalysis.getNNLOWeight(sel.MC_ttbar_afterFSR_pt, sel.MC_t_afterFSR_pt, 1)
                 analysisCode[ana].run(sel, suffix, weight*weight_reco, weight)
 
     for k in analysisCode:

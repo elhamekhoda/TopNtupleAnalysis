@@ -278,14 +278,12 @@ class Analysis(object):
             wItem = getattr(sel, 'weight_'+item)
             weight *= wItem
 
-        # this applies the EWK weight
-        if not self.noMttSlices:
-            weight *= reweighting.EWKCorrection.get_weight(sel, s)
-            
+        # this applies the EWK weight to _only_ ttbar samples
+        weight *= reweighting.EWKCorrection.get_weight(sel, s)
+        # this compute the NNLO systematics to _only_ ttbar samples
+        weight *= reweighting.NNLOReweighting.get_weight(sel, s)
         # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
-        #### warning: disabled for now in mc15c
-        btagsf = self.bot_tagger.scale_factor(sel, s)
-        weight *= btagsf
+        weight *= self.bot_tagger.scale_factor(sel, s)
         # this applies the W+jets Sherpa 2.2.0 nJets reweighting correction
         # WARNING: disable this if using 2.2.1
         #weight *= sel.weight_Sherpa22_corr
@@ -572,8 +570,7 @@ class AnaTtresSL(Analysis):
             return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples
-        # commented now as it is not available in mc15c
-        if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
+        if sel.mcChannelNumber in [410000, 410470, 410471] and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
             if sel.MC_ttbar_beforeFSR_m > 1.1e6:
                 return False
 
@@ -972,8 +969,7 @@ class AnaTtresFH(Analysis):
             return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples
-        # commented now as it is not available in mc15c
-        if sel.mcChannelNumber == 410000 and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
+        if sel.mcChannelNumber in [410000, 410470, 410471] and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
             if sel.MC_ttbar_beforeFSR_m > 1.1e6:
                 return False
         return True

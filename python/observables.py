@@ -66,9 +66,7 @@ class _Observable(object):
                 return ret
 
 def P4fromPtEtaPhiM(pt, eta, phi, m):
-    p4 = ROOT.TLorentzVector()
-    p4.SetPtEtaPhiM(pt, eta, phi, m)
-    return p4
+    return ROOT.Math.PtEtaPhiMVector(pt, eta, phi, m)
 
 ### Chi2 ###
 # Observable("chi2", do = ['tree'], only = ['re','rmu'],   script = """analysis.TtresChi2.chi2""").queue()
@@ -133,12 +131,16 @@ Observable("th1_eta", do = ['tree'], only = ['bFH'], script = """lj1.Eta()""").q
 Observable("th1_phi", do = ['tree'], only = ['bFH'], script = """lj1.Phi()""").queue()
 Observable("th1_m", do = ['tree'], only = ['bFH'],   script = """lj1.M()""").queue()
 Observable("th1_DNN", do = ['tree'], only = ['bFH'],   script = """sel.ljet_DNNTopTag_score[goodJetIdx1] if goodJetIdx1 != -1 else -999""").queue()
+Observable("th1_isleading", do = ['tree'], only = ['bFH'], dtype = int,  script = """goodJetIdx1==0""").queue()
 Observable("th2_pt", do = ['tree'], only = ['bFH'],  script = """lj2.Perp()""").queue()
 Observable("th2_eta", do = ['tree'], only = ['bFH'], script = """lj2.Eta()""").queue()
 Observable("th2_phi", do = ['tree'], only = ['bFH'], script = """lj2.Phi()""").queue()
 Observable("th2_m", do = ['tree'], only = ['bFH'],   script = """lj2.M()""").queue()
 Observable("th2_DNN", do = ['tree'], only = ['bFH'],   script = """sel.ljet_DNNTopTag_score[goodJetIdx2] if goodJetIdx2 != -1 else -999""").queue()
+Observable("th2_issubleading", do = ['tree'], only = ['bFH'], dtype = int,  script = """goodJetIdx2==1""").queue()
 
+Observable("truth", do = ['tree'], need_truth = True, style = 'foreach', dtype = 'ROOT::Math::PtEtaPhiMVector', script = """[ROOT.Math.PtEtaPhiMVector(sel.truthparticle_pt.at(i), sel.truthparticle_eta.at(i), sel.truthparticle_phi.at(i), sel.truthparticle_m.at(i))*1e-3 for i in xrange(sel.truthparticle_pt.size())]""").queue()
+Observable("truth_id", do = ['tree'], need_truth = True, style = 'foreach', dtype = int, script = """sel.truthparticle_type""").queue()
 #Observable("akt10truthjet", do = ['tree'], only = ['bFH'], style = 'foreach', dtype = 'TLorentzVector', need_truth = True,
 #           script = """[P4fromPtEtaPhiM(sel.akt10truthjet_pt[i], sel.akt10truthjet_eta[i], sel.akt10truthjet_phi[i], sel.akt10truthjet_m[i]) for i in xrange(sel.akt10truthjet_pt.size())]""").queue()
 
@@ -158,5 +160,5 @@ Observable("th2_tau32_wta", do = ['tree'], only = ['bFH'], script = """sel.ljet_
 
 ### Pileup ###
 Observable("mu", do = ['tree'], style = 'single', script = """sel.mu""").queue()
-Observable("npv", do = ['tree'], style = 'single', script = """sel.npv""").queue()
+Observable("npv", do = ['tree'], style = 'single', dtype = int, script = """sel.npv""").queue()
 Observable("vtxz", do = ['tree'], style = 'single', script = """sel.vtxz""").queue()
