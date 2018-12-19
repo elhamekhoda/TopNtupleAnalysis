@@ -1,16 +1,11 @@
 #!/bin/bash
 
-export dir=/AtlasDisk/group/Zprime/AT-21.2.46_HVTcomb_v3/
-ls $dir/user.*.301323.*_output_root/* > Zprime500.txt
-ls $dir/user.*.301325.*_output_root/* > Zprime1000.txt
-ls $dir/user.*.301329.*_output_root/* > Zprime2000.txt
-ls $dir/user.*.302715.*_output_root/* > Wprime1000lep.txt
-ls $dir/user.*.302719.*_output_root/* > Wprime2000lep.txt
-ls $dir/user.*.302723.*_output_root/* > Wprime3000lep.txt
-ls $dir/user.*.306136.*_output_root/* > Wprime2000had.txt
-ls $dir/user.*.302736.*_output_root/* > Wprime3500had.txt
-	  
-for SAMPLE in Zprime500 Zprime1000 Zprime2000
+export dir=/AtlasDisk/user/scalvet/Zprime/ExotComb/Tuples/AnalysisTop-21.2.57_HVTcomb_v1/
+
+ls $dir | awk -v dir="$dir" -F '.' '{print "ls "dir"/user.*"$3"*_output.root/* > "$3".txt"}' |sh
+
+
+for SAMPLE in `ls $dir | awk  -F '.' '{print $3}'`
 do
 	echo "Doing "$SAMPLE
 	cd ../python

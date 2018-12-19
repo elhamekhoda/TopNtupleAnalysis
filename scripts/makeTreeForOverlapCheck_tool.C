@@ -56,16 +56,9 @@ void makeTreeForOverlapCheck_tool(std::string f_out_name){
 	  tree_in->GetEvent(i);
 	  	  
 	  if(mttReco->size()!=1) std::cerr << "Error: wrong length!! size= " << mttReco->size() << std::endl;
-	  	  
-	  if      (!f_out_name.compare("Zprime500"))  run_number = 301323;
-	  else if (!f_out_name.compare("Zprime1000")) run_number = 301325;
-	  else if (!f_out_name.compare("Zprime2000")) run_number = 301329;
-	  else if (!f_out_name.compare("Wprime1000lep")) run_number = 302715;
-	  else if (!f_out_name.compare("Wprime2000lep")) run_number = 302719;
-	  else if (!f_out_name.compare("Wprime3000lep")) run_number = 302723;
-	  else if (!f_out_name.compare("Wprime2000had")) run_number = 306136;
-	  else if (!f_out_name.compare("Wprime3500had")) run_number = 302736;
-	  else run_number = runNumber->at(0);
+	  
+	  //run_number=std::atoi(f_out_name);
+	  run_number = runNumber->at(0);
 
 	  event_number = eventNumber->at(0);
 	  m_tt = mttReco->at(0);
