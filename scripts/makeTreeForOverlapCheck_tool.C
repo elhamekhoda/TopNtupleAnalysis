@@ -45,7 +45,8 @@ void makeTreeForOverlapCheck_tool(std::string f_out_name){
 	std::vector<float>* mttReco=0;
 	
 	
-  	tree_in->SetBranchAddress("runNumber", &runNumber);
+  	//tree_in->SetBranchAddress("runNumber", &mcChannelNumber);
+  	tree_in->SetBranchAddress("mcChannelNumber", &runNumber);
   	tree_in->SetBranchAddress("eventNumber", &eventNumber);
   	tree_in->SetBranchAddress("mttReco", &mttReco);
   	region->clear();
