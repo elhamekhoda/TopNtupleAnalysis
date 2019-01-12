@@ -1142,6 +1142,7 @@ class AnaTtresFH(Analysis):
                     self.h[observable.name][syst].Fill(values, w)
 
     def set_top_tagger(self, expr, num_thad = 2, strategy = 'rebel', **kwds):
+        kwds.setdefault('min_pt', 350000)
         super(AnaTtresFH, self).set_top_tagger(expr, num_thad = num_thad, strategy = 'rebel', **kwds)
         if hasattr(self, 'bot_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger
