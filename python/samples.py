@@ -231,6 +231,10 @@ class Sample(object):
             return ' --WjetsHF c'
         elif 'wljets' in self.sample_name:
             return ' --WjetsHF l'
+        elif 'tt' == self.sample_name:
+            logger.info('You are running inclusive ttbar sample `alone`. Truth mtt > 1.1TeV cut will not be applied.')
+            logger.info('If you want to run with that instead (together with mtt sliced sample for example), use "tt_mttsliced".')
+            return ' --noMttSlices'
         return ''
     def get_input_files(self):
         if not self._input_files:

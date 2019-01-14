@@ -447,8 +447,7 @@ if __name__ == "__main__":
     parser.add_argument("-N", "--noMttSlices",
                         action='store_true',
                         dest="noMttSlices",
-                        default=False,
-                        help="If set, stop vetoing high mtt events in 410000 sample.")
+                        help="If set, stop vetoing truth mtt > 1.1TeV events in inclusive ttbar samples: [410000, 410470, 410471].")
     parser.add_argument("-M", "--applyMET",
                         dest="applyMET",
                         default="0",
@@ -525,7 +524,6 @@ if __name__ == "__main__":
                         metavar="FILES")
 
     options = parent_parser.parse_args()
-
     logger.info("-> Calling main")
     helpers.initialise_binds()
     main()
