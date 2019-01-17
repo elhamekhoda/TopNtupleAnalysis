@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <vector>
+#include "Math/Vector4D.h"
 #include "TLorentzVector.h"
 #include "TMath.h"
 
@@ -12,7 +13,8 @@ public:
 TopNtupleAnalysisUtils();
 virtual ~TopNtupleAnalysisUtils();
 void initWrapper(bool dt = true);
-void getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met);
+void getMtt(TLorentzVector lep, const std::vector<TLorentzVector> jets, const std::vector<bool> btag, TLorentzVector met);
+void getMtt(ROOT::Math::PtEtaPhiEVector lep, const std::vector<ROOT::Math::PtEtaPhiEVector> jets, const std::vector<bool> btag, ROOT::Math::PtEtaPhiEVector met);
 double res_mtt();
 double res_mtl();
 double res_mth();

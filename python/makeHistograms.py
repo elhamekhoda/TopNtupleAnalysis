@@ -71,7 +71,7 @@ def main(parallel = True):
         isTtbar = True
     if sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
         isSingleTop = True
-    if sel.mcChannelNumber in reweighting.EWKCorrection.RUN_NUMBERS:
+    if (sel.mcChannelNumber in reweighting.EWKCorrection.RUN_NUMBERS) and (not options.no_EWKCorrection):
         doEWK = True
 
 
@@ -284,6 +284,7 @@ def main(parallel = True):
         analysisCode[k].doTree = do_tree
         analysisCode[k].keep = options.WjetsHF
         analysisCode[k].applyQCD = False
+        analysisCode[k].doEWKCorrection = doEWK
         if options.qcd != "False":
             analysisCode[k].applyQCD = options.qcd
         if options.noMttSlices:
@@ -444,10 +445,16 @@ if __name__ == "__main__":
                         default="False",
                         help="Apply QCD weights?",
                         metavar="CHANNEL")
+    parser.add_argument("--no-EWKCorrection",
+                        default=False,
+                        help="Don't do Electroweak correction when running SM ttbar sample including the following:\n"
+                            +str(reweighting.EWKCorrection.RUN_NUMBERS))
     parser.add_argument("-N", "--noMttSlices",
                         action='store_true',
                         dest="noMttSlices",
-                        help="If set, stop vetoing truth mtt > 1.1TeV events in inclusive ttbar samples: [410000, 410470, 410471].")
+                        default=False,
+                        help="If set, stop vetoing high mtt ( > 1.1TeV) events in inclusive ttbar sample [410000, 410470, 410471].\n"
+                            +"This is mainly for running it together with mtt sliced ttbar samples")
     parser.add_argument("-M", "--applyMET",
                         dest="applyMET",
                         default="0",

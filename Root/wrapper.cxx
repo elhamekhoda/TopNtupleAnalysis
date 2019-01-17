@@ -2,7 +2,6 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include "TLorentzVector.h"
 #include "TopNtupleAnalysis/TtresChi2.h"
 #include "TopNtupleAnalysis/WeakCorrScaleFactorParam.h"
 #include "TopNtupleAnalysis/MMUtils.h"
@@ -131,7 +130,10 @@ double TopNtupleAnalysisUtils::getNNLOWeight(double ttbarPt, double topPt, int m
 }
 #endif
 
-void TopNtupleAnalysisUtils::getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
+void TopNtupleAnalysisUtils::getMtt(TLorentzVector lep, const std::vector<TLorentzVector> jets, const std::vector<bool> btag, TLorentzVector met) { 
+  m_status = m_chi2.findMinChiSquareSimple(lep, jets, btag, met);
+}
+void TopNtupleAnalysisUtils::getMtt(ROOT::Math::PtEtaPhiEVector lep, const std::vector<ROOT::Math::PtEtaPhiEVector> jets, const std::vector<bool> btag, ROOT::Math::PtEtaPhiEVector met) { 
   m_status = m_chi2.findMinChiSquareSimple(lep, jets, btag, met);
 }
 

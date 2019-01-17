@@ -328,19 +328,36 @@ bool TtresChi2::findMinChiSquare_AllRanges(TLorentzVector* L, const std::vector<
   return status;
 }
 
-
 bool TtresChi2::findMinChiSquareSimple(TLorentzVector lep, const std::vector<TLorentzVector> jet, const std::vector<bool> btag, TLorentzVector met) {
+  int  igj3, igj4; // index for the Whad
+  int igb3, igb4; // index for the b's
+  int  ign1;  // index for the neutrino (because chi2 can test both pz solution)
+  double chi2ming1, chi2ming1H, chi2ming1L;
+  std::vector<TLorentzVector *> j;
+  for (auto const &ji : jet) {
+    j.push_back(const_cast<TLorentzVector*>(&ji));
+  }
+  bool status = findMinChiSquare(&lep, &j, &btag, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
+  j.clear();
+  return status;
+}
+
+
+bool TtresChi2::findMinChiSquareSimple(ROOT::Math::PtEtaPhiEVector lep, const std::vector< ROOT::Math::PtEtaPhiEVector > jet, const std::vector<bool> btag, ROOT::Math::PtEtaPhiEVector  met) {
   int  igj3, igj4; // index for the Whad
   int igb3, igb4; // index for the b's
   int  ign1;  // index for the neutrino (because chi2 can test both pz solution)
   double chi2ming1, chi2ming1H, chi2ming1L;
 
   std::vector<TLorentzVector *> j;
-  for (unsigned int k = 0; k < jet.size(); ++k) {
-    j.push_back(new TLorentzVector(jet[k]));
+  for (auto const &ji : jet) {
+    j.push_back(new TLorentzVector(ji.Px(), ji.Py(), ji.Pz(), ji.E()));
   }
-  bool status = findMinChiSquare(&lep, &j, &btag, &met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
-  for (unsigned int k = 0; k < j.size(); ++k) delete j[k];
+  auto _lep = new TLorentzVector(lep.Px(), lep.Py(), lep.Pz(), lep.E());
+  auto _met = new TLorentzVector(met.Px(), met.Py(), met.Pz(), met.E());
+
+  bool status = findMinChiSquare(_lep, &j, &btag, _met, igj3, igj4, igb3, igb4, ign1, chi2ming1, chi2ming1H, chi2ming1L);
+  j.clear();
   return status;
 }
 

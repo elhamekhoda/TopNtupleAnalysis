@@ -65,9 +65,6 @@ class _Observable(object):
             else:
                 return ret
 
-def P4fromPtEtaPhiM(pt, eta, phi, m):
-    return ROOT.Math.PtEtaPhiMVector(pt, eta, phi, m)
-
 ### Chi2 ###
 # Observable("chi2", do = ['tree'], only = ['re','rmu'],   script = """analysis.TtresChi2.chi2""").queue()
 # Observable("chi2_mtl", (150, 0, 300), do = ['tree','hist'], only = ['re','rmu'],   script = """analysis.TtresChi2.mtl""").queue()
@@ -85,22 +82,22 @@ def P4fromPtEtaPhiM(pt, eta, phi, m):
 # Observable("btaggedtrackJetEta", (50, -4, 4), do = ['tree','hist'], script = """(tjet.Eta() for i, tjet in enumerate(analysis.bot_tagger._tjet_p4) if helpers.char2int(analysis.bot_tagger.tjet_isbtagged[i]))""", style = 'foreach').queue()
 # Observable("btaggedtrackJetPt", (50, 0, 500), do = ['tree','hist'], script = """(tjet.Pt()*1e-3 for i, tjet in enumerate(analysis.bot_tagger._tjet_p4) if helpers.char2int(analysis.bot_tagger.tjet_isbtagged[i]))""", style = 'foreach').queue()
 # Observable("btaggedtrackJetPhi", (50, -math.pi, math.pi), do = ['tree','hist'], script = """(tjet.Phi() for i, tjet in enumerate(analysis.bot_tagger._tjet_p4) if helpers.char2int(analysis.bot_tagger.tjet_isbtagged[i]))""", style = 'foreach').queue()
-# Observable("trackJetdeltaPhilep", (50, -math.pi, math.pi), """(tjet.DeltaPhi(l) for tjet in analysis.bot_tagger._tjet_p4)""", style = 'foreach').queue()
-# Observable("trackJetdeltaRlep", (50, 0, (math.pi**2+2.5**2)**0.5), """(tjet.DeltaR(l) for tjet in analysis.bot_tagger._tjet_p4)""", style = 'foreach').queue()
-# Observable("btaggedtrackJetdeltaPhilep", (50, -math.pi, math.pi), """(tjet.DeltaPhi(l) for i, tjet in enumerate(analysis.bot_tagger._tjet_p4) if helpers.char2int(analysis.bot_tagger.tjet_isbtagged[i]))""", style = 'foreach').queue()
-# Observable("btaggedtrackJetdeltaRlep", (50, 0, (math.pi**2+2.5**2)**0.5), """(tjet.DeltaR(l) for i, tjet in enumerate(analysis.bot_tagger._tjet_p4) if helpers.char2int(analysis.bot_tagger.tjet_isbtagged[i]))""", style = 'foreach').queue()
+# Observable("trackJetdeltaPhilep", (50, -math.pi, math.pi), """(ROOT.Math.VectorUtil.DeltaPhi(tjet, l) for tjet in analysis.bot_tagger._tjet_p4)""", style = 'foreach').queue()
+# Observable("trackJetdeltaRlep", (50, 0, (math.pi**2+2.5**2)**0.5), """(ROOT.Math.VectorUtil.DeltaR(tjet, l) for tjet in analysis.bot_tagger._tjet_p4)""", style = 'foreach').queue()
+# Observable("btaggedtrackJetdeltaPhilep", (50, -math.pi, math.pi), """(ROOT.Math.VectorUtil.DeltaPhi(tjet, l) for i, tjet in enumerate(analysis.bot_tagger._tjet_p4) if helpers.char2int(analysis.bot_tagger.tjet_isbtagged[i]))""", style = 'foreach').queue()
+# Observable("btaggedtrackJetdeltaRlep", (50, 0, (math.pi**2+2.5**2)**0.5), """(ROOT.Math.VectorUtil.DeltaR(tjet, l) for i, tjet in enumerate(analysis.bot_tagger._tjet_p4) if helpers.char2int(analysis.bot_tagger.tjet_isbtagged[i]))""", style = 'foreach').queue()
 # Observable("dNtruthMatchedBTrackJetdPt", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, isbtagged, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_isbtagged, analysis.bot_tagger.tjet_istrueb) if (isbtagged and istrueb))""", style = 'foreach').queue()
 # Observable("dNtruedBTrackJetdPt", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_istrueb) if istrueb)""", style = 'foreach').queue()
 # Observable("NtrueB", (6, 0, 6), do = ['tree','hist'], dtype = int, style = 'single', script = """sum(analysis.bot_tagger.tjet_istrueb)""", need_truth = True).queue()
 # Observable("NtaggedtrueB", (6, 0, 6), do = ['tree','hist'], dtype = int, style = 'single', script = """sum(isbtagged*istrueb for isbtagged, istrueb in zip(analysis.bot_tagger.tjet_isbtagged,analysis.bot_tagger.tjet_istrueb))""", need_truth = True).queue()
 
 # Observable("NtrueBfromT", (3, 0, 3), do = ['tree','hist'], need_truth = True, style = 'single', dtype = int,
-#            script = """any(P4fromPtEtaPhiM(sel.MC_b_from_t_pt, sel.MC_b_from_t_eta, sel.MC_b_from_t_phi, sel.MC_b_from_t_m).DeltaR(tjet_p4)<0.4 for tjet_p4, isbtagged in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_isbtagged) if helpers.char2int(isbtagged))""" + 
-#                    """+any(P4fromPtEtaPhiM(sel.MC_b_from_tbar_pt, sel.MC_b_from_tbar_eta, sel.MC_b_from_tbar_phi, sel.MC_b_from_tbar_m).DeltaR(tjet_p4)<0.4 for tjet_p4, isbtagged in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_isbtagged) if helpers.char2int(isbtagged))""").queue()
-# Observable("dNtruthMatchedBTrackJetdPt_lepside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, isbtagged, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_isbtagged, analysis.bot_tagger.tjet_istrueb) if (isbtagged and istrueb and p4.DeltaR(tlep)<1.0))""", style = 'foreach').queue()
-# Observable("dNtruedBTrackJetdPt_lepside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_istrueb) if istrueb and p4.DeltaR(tlep)<1.0)""", style = 'foreach').queue()
-# Observable("dNtruthMatchedBTrackJetdPt_hadside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, isbtagged, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_isbtagged, analysis.bot_tagger.tjet_istrueb) if (isbtagged and istrueb and p4.DeltaR(lj)<1.0))""", style = 'foreach').queue()
-# Observable("dNtruedBTrackJetdPt_hadside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_istrueb) if istrueb and p4.DeltaR(lj)<1.0)""", style = 'foreach').queue()
+#            script = """any(ROOT.Math.VectorUtil.DeltaR(ROOT.Math.PtEtaPhiMVector(sel.MC_b_from_t_pt, sel.MC_b_from_t_eta, sel.MC_b_from_t_phi, sel.MC_b_from_t_m), tjet_p4)<0.4 for tjet_p4, isbtagged in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_isbtagged) if helpers.char2int(isbtagged))""" + 
+#                    """+any(ROOT.Math.VectorUtil.DeltaR(ROOT.Math.PtEtaPhiMVector(sel.MC_b_from_tbar_pt, sel.MC_b_from_tbar_eta, sel.MC_b_from_tbar_phi, sel.MC_b_from_tbar_m), tjet_p4)<0.4 for tjet_p4, isbtagged in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_isbtagged) if helpers.char2int(isbtagged))""").queue()
+# Observable("dNtruthMatchedBTrackJetdPt_lepside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, isbtagged, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_isbtagged, analysis.bot_tagger.tjet_istrueb) if (isbtagged and istrueb and ROOT.Math.VectorUtil.DeltaR(p4, tlep)<1.0))""", style = 'foreach').queue()
+# Observable("dNtruedBTrackJetdPt_lepside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_istrueb) if istrueb and ROOT.Math.VectorUtil.DeltaR(p4, tlep)<1.0)""", style = 'foreach').queue()
+# Observable("dNtruthMatchedBTrackJetdPt_hadside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, isbtagged, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_isbtagged, analysis.bot_tagger.tjet_istrueb) if (isbtagged and istrueb and ROOT.Math.VectorUtil.DeltaR(p4, lj)<1.0))""", style = 'foreach').queue()
+# Observable("dNtruedBTrackJetdPt_hadside", (25, 0, 2500), """(p4.Pt()*1e-3 for (p4, istrueb) in zip(analysis.bot_tagger._tjet_p4, analysis.bot_tagger.tjet_istrueb) if istrueb and ROOT.Math.VectorUtil.DeltaR(p4, lj)<1.0)""", style = 'foreach').queue()
 # Observable("NB_lepside", (4, 0, 4), """sel.NB_lepside""").queue()
 # Observable("NB_hadside", (4, 0, 4), """sel.NB_hadside""").queue()
 # Observable("MC_b_from_t", do = ['tree'], only = ['bFH'], style = 'foreach', dtype = 'TLorentzVector' , need_truth = True,
@@ -139,8 +136,8 @@ Observable("th2_m", do = ['tree'], only = ['bFH'],   script = """lj2.M()""").que
 Observable("th2_DNN", do = ['tree'], only = ['bFH'],   script = """sel.ljet_DNNTopTag_score[goodJetIdx2] if goodJetIdx2 != -1 else -999""").queue()
 Observable("th2_issubleading", do = ['tree'], only = ['bFH'], dtype = int,  script = """goodJetIdx2==1""").queue()
 
-Observable("truth", do = ['tree'], need_truth = True, style = 'foreach', dtype = 'ROOT::Math::PtEtaPhiMVector', script = """[ROOT.Math.PtEtaPhiMVector(sel.truthparticle_pt.at(i), sel.truthparticle_eta.at(i), sel.truthparticle_phi.at(i), sel.truthparticle_m.at(i))*1e-3 for i in xrange(sel.truthparticle_pt.size())]""").queue()
-Observable("truth_id", do = ['tree'], need_truth = True, style = 'foreach', dtype = int, script = """sel.truthparticle_type""").queue()
+#Observable("truth", do = ['tree'], need_truth = True, style = 'foreach', dtype = 'ROOT::Math::PtEtaPhiMVector', script = """[ROOT.Math.PtEtaPhiMVector(sel.truthparticle_pt.at(i), sel.truthparticle_eta.at(i), sel.truthparticle_phi.at(i), sel.truthparticle_m.at(i))*1e-3 for i in xrange(sel.truthparticle_pt.size())]""").queue()
+#Observable("truth_id", do = ['tree'], need_truth = True, style = 'foreach', dtype = int, script = """sel.truthparticle_type""").queue()
 #Observable("akt10truthjet", do = ['tree'], only = ['bFH'], style = 'foreach', dtype = 'TLorentzVector', need_truth = True,
 #           script = """[P4fromPtEtaPhiM(sel.akt10truthjet_pt[i], sel.akt10truthjet_eta[i], sel.akt10truthjet_phi[i], sel.akt10truthjet_m[i]) for i in xrange(sel.akt10truthjet_pt.size())]""").queue()
 
