@@ -644,7 +644,7 @@ class AnaTtresSL(Analysis):
             self.h["yieldsPos"][syst].Fill(1, w)
         elif lQ < 0:
             self.h["yieldsNeg"][syst].Fill(1, w)
-        self.h["lepPt"][syst].Fill(l.Perp()*1e-3, w)
+        self.h["lepPt"][syst].Fill(l.Pt()*1e-3, w)
         self.h["lepEta"][syst].Fill(l.Eta(), w)
         self.h["lepPhi"][syst].Fill(l.Phi(), w)
         self.h["MET_phi"][syst].Fill(sel.met_phi, w)
@@ -662,7 +662,7 @@ class AnaTtresSL(Analysis):
             if dr < closestJetDr:
                 closestJetIdx = i
                 closestJetDr = dr
-                closestJetPt = cj.Perp()
+                closestJetPt = cj.Pt()
         try:
             btagged_tjet_closest_to_lep = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: DeltaR(btagged_tjet, l))
             self.h["btagged_tjet_closest_to_lep"][syst].Fill(DeltaR(btagged_tjet_closest_to_lep, l), w)
@@ -671,7 +671,7 @@ class AnaTtresSL(Analysis):
         self.h["closestJetDr"][syst].Fill(closestJetDr, w)
         self.h["closestJetPt"][syst].Fill(closestJetPt*1e-3, w)
         self.h["nTrkBtagJets"][syst].Fill(sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in self.bot_tagger.tjet_isbtagged), w)
-        self.h["mwt"][syst].Fill(math.sqrt(2*l.Perp()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3, w)
+        self.h["mwt"][syst].Fill(math.sqrt(2*l.Pt()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3, w)
         self.h["mu"][syst].Fill(sel.mu, w)
         self.h["npv"][syst].Fill(sel.npv, w)
         self.h["vtxz"][syst].Fill(sel.vtxz, w)
@@ -696,7 +696,7 @@ class AnaTtresSL(Analysis):
             w0 = w/self.w2HDM
             tlep = closeJet+nu+l
             mtt = (tlep+lj).M()*1e-3 # unit is GeV
-            self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
+            self.h["largeJetPt"][syst].Fill(lj.Pt()*1e-3, w)
             self.h["largeJetM"][syst].Fill(lj.M()*1e-3, w)
             self.h["largeJetEta"][syst].Fill(lj.Eta(), w)
             self.h["largeJetPhi"][syst].Fill(lj.Phi(), w)
@@ -711,7 +711,7 @@ class AnaTtresSL(Analysis):
                 self.h["mttPos"][syst].Fill(mtt, w)
             elif lQ < 0:
                 self.h["mttNeg"][syst].Fill(mtt, w)
-            self.h["largeJetPtMtt"][syst].Fill(lj.Perp()/(mtt*1e3), w)
+            self.h["largeJetPtMtt"][syst].Fill(lj.Pt()/(mtt*1e3), w)
             self.h['finalYields'][syst].Fill(1, w)
             self.h['finalNEvents'][syst].Fill(1)
             
@@ -765,7 +765,7 @@ class AnaTtresSL(Analysis):
                     self.h["btagged_tjet_closest_to_ljet"][syst].Fill(DeltaR(btagged_tjet_closest_to_ljet, lj), w)
                 except ValueError:
                     pass
-                self.h["largeJetPt"][syst].Fill(lj.Perp()*1e-3, w)
+                self.h["largeJetPt"][syst].Fill(lj.Pt()*1e-3, w)
                 self.h["largeJetM"][syst].Fill(lj.M()*1e-3, w)
                 self.h["largeJetEta"][syst].Fill(lj.Eta(), w)
                 self.h["largeJetPhi"][syst].Fill(lj.Phi(), w)
@@ -1049,10 +1049,10 @@ class AnaTtresFH(Analysis):
             ### boosted channel ###
             self.h["nlargeJets"][syst].Fill(sel.ljet_pt.size(), w)
             # Leading hadronic top candidate
-            self.h["leadinglargeJetPt"][syst].Fill(lj1.Perp(), w)
+            self.h["leadinglargeJetPt"][syst].Fill(lj1.Pt(), w)
             self.h["leadinglargeJetM"][syst].Fill(lj1.M(), w)
             self.h["leadinglargeJetY"][syst].Fill(lj1.Rapidity(), w)
-            self.h["leadinglargeJetPtMtt"][syst].Fill(lj1.Perp()/mtt, w)
+            self.h["leadinglargeJetPtMtt"][syst].Fill(lj1.Pt()/mtt, w)
             self.h["leadinglargeJetEta"][syst].Fill(lj1.Eta(), w)
             self.h["leadinglargeJetPhi"][syst].Fill(lj1.Phi(), w)
             self.h["leadinglargeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx1], w)
@@ -1064,10 +1064,10 @@ class AnaTtresFH(Analysis):
                 deltaR_closest_btjet_to_ljet1 = min(DeltaR(bjet, lj1), deltaR_closest_btjet_to_ljet1)
             self.h["btagged_tjet_closest_to_ljet1"][syst].Fill(deltaR_closest_btjet_to_ljet1, w)
             # Sub-leading hadronic top candidate
-            self.h["subleadinglargeJetPt"][syst].Fill(lj2.Perp(), w)
+            self.h["subleadinglargeJetPt"][syst].Fill(lj2.Pt(), w)
             self.h["subleadinglargeJetM"][syst].Fill(lj2.M(), w)
             self.h["subleadinglargeJetY"][syst].Fill(lj2.Rapidity(), w)
-            self.h["subleadinglargeJetPtMtt"][syst].Fill(lj2.Perp()/mtt, w)
+            self.h["subleadinglargeJetPtMtt"][syst].Fill(lj2.Pt()/mtt, w)
             self.h["subleadinglargeJetEta"][syst].Fill(lj2.Eta(), w)
             self.h["subleadinglargeJetPhi"][syst].Fill(lj2.Phi(), w)
             self.h["subleadinglargeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx2], w)
