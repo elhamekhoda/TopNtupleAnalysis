@@ -15,7 +15,7 @@ class Selection(object):
 class TtresChi2(Selection):
     def __init__(self, bot_tagger, max_chi2 = 10**0.9, strategy = 'deltaR'):
         self.strategy = strategy
-        self.met = ROOT.TLorentzVector()
+        self.met = ROOT.Math.PtEtaPhiEVector()
         self.bot_tagger = bot_tagger
         self.max_chi2 = max_chi2
         self.bcategory = -1
@@ -24,15 +24,15 @@ class TtresChi2(Selection):
         elif self.strategy == 'obey':
             logger.debug('The ttres-chi2 strategy is "obey", which means using the ttres-chi2 is done by external program. (i.e. HQTTtResonancesTools)')
         self.bcategorize = getattr(self, '_bcategorize_{}'.format(self.strategy))
-        self._lepton = ROOT.TLorentzVector()
+        self._lepton = ROOT.Math.PtEtaPhiEVector()
     def passes(self, ev, lepton = None):
         self.reset()
-        self.met.SetPtEtaPhiE(ev.met_met, 0, ev.met_phi, ev.met_met)
+        self.met.SetCoordinates(ev.met_met, 0, ev.met_phi, ev.met_met)
         lepton = lepton or self._lepton
         if len(ev.el_pt) == 1:
-            lepton.SetPtEtaPhiE(ev.el_pt[0], ev.el_eta[0], ev.el_phi[0], ev.el_e[0])
+            lepton.SetCoordinates(ev.el_pt[0], ev.el_eta[0], ev.el_phi[0], ev.el_e[0])
         elif len(ev.mu_pt) == 1:
-            lepton.SetPtEtaPhiE(ev.mu_pt[0], ev.mu_eta[0], ev.mu_phi[0], ev.mu_e[0])
+            lepton.SetCoordinates(ev.mu_pt[0], ev.mu_eta[0], ev.mu_phi[0], ev.mu_e[0])
         ROOT.TopNtupleAnalysis.getMtt(lepton, self.bot_tagger._jet_p4, self.bot_tagger.jet_isbtagged, self.met)
         self.mtt = ROOT.TopNtupleAnalysis.res_mtt()*1e-3
         self.mtl = ROOT.TopNtupleAnalysis.res_mtl()*1e-3
@@ -68,9 +68,9 @@ class TtresChi2(Selection):
             for tjet_p4, isbtagged in zip(self.bot_tagger._tjet_p4, self.bot_tagger.tjet_isbtagged):
                 if not isbtagged:
                     continue
-                if p4_tl.DeltaR(tjet_p4) < 1.:
+                if ROOT.Math.VectorUtil.DeltaR(p4_tl, tjet_p4) < 1.:
                     btagCat = 1
-                if p4_th.DeltaR(tjet_p4) < 1.:
+                if ROOT.Math.VectorUtil.DeltaR(p4_th, tjet_p4) < 1.:
                     if btagCat != 1:
                         btagCat = 2
                     else:
@@ -107,7 +107,7 @@ class BoostedTopTagger(Selection):
         self.bcategory = -1
         self.ljet_istoptagged = []
         self.ljet_angularcuts = []
-        self.ljet_p4 = ROOT.vector('TLorentzVector')()
+        self.ljet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiMVector')()
         if not callable(_callable):
             self._expr = _callable
             def _callable(ev):
@@ -132,8 +132,7 @@ class BoostedTopTagger(Selection):
     def retrieve_ljet_p4(self, ev):
         self.ljet_p4.clear()
         for i in xrange(ev.ljet_pt.size()):
-            p4 = ROOT.TLorentzVector()
-            p4.SetPtEtaPhiE(ev.ljet_pt[i], ev.ljet_eta[i], ev.ljet_phi[i],ev.ljet_e[i])
+            p4 = ROOT.Math.PtEtaPhiMVector(ev.ljet_pt[i], ev.ljet_eta[i], ev.ljet_phi[i],ev.ljet_m[i])
             self.ljet_p4.push_back(p4)
     def bcategorize(self, ev, bot_tagger = None):
         if not any(helpers.char2int(tagged) for tagged in self._bot_tagger.tjet_isbtagged):
@@ -171,7 +170,7 @@ class BoostedTopTagger(Selection):
             _ljet_istoptagged.append(0)
             for i2, p4_i2 in enumerate(self.ljet_p4):
                 ret[-1].append(int((i1 < i2) and \
-                                   (self.absdPhiJJRange[0] < abs(p4_i1.DeltaPhi(p4_i2)) < self.absdPhiJJRange[1]) and \
+                                   (self.absdPhiJJRange[0] < abs(ROOT.Math.VectorUtil.DeltaPhi(p4_i1,p4_i2)) < self.absdPhiJJRange[1]) and \
                                    (self.absdYJJRange[0] < abs(p4_i1.Rapidity()-p4_i2.Rapidity()) < self.absdYJJRange[1])))
         self.ljet_angularcuts = ret
         for i in range(len(self.ljet_angularcuts)):
@@ -251,22 +250,22 @@ class TrackJetBotTagger(Selection):
         elif self.strategy == 'obey':
             logger.debug('The b-tagging strategy is "obey", which means using the b-tagging is done by external program. (i.e. HQTTtResonancesTools)')
         self.passes = getattr(self, '_passes_{}'.format(self.strategy))
-        self._jet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
+        self._tjet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiEVector')()
+        self._jet_p4 = ROOT.vector(ROOT.Math.PtEtaPhiEVector)() # Used for `do_association`
         self.jet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Not used in boosted channel
         self.jet_associated_btaggedtjet_index = ROOT.vector('int')()
-        self._ljet_p4 = ROOT.vector('TLorentzVector')() # Used for `do_association`
+        self._ljet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiMVector')() # Used for `do_association`
         self.ljet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Used in boosted full-hadronic analysis
         self.ljet_associated_btaggedtjet_index = ROOT.vector('int')()
+        self.tjet_isbtagged = ROOT.vector(int)()
 
     def _passes_obey(self, ev):
-        self.tjet_isbtagged = ROOT.vector(int)()
+        self.tjet_isbtagged.clear()
+        self._tjet_p4.clear()
         for tagged in getattr(ev, self._branch_map['tjet_isbtagged']):
             self.tjet_isbtagged.push_back(helpers.char2int(tagged))
-        self._tjet_p4 = ROOT.vector('TLorentzVector')()
         for i in range(len(ev.tjet_pt)):
-            p4 = ROOT.TLorentzVector()
-            p4.SetPtEtaPhiE(ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i], ev.tjet_e[i])
-            self._tjet_p4.push_back(p4)
+            self._tjet_p4.push_back((ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i], ev.tjet_e[i]))
         if self.do_association:
             self.association(ev)
         if self.do_ljet_association:
@@ -278,11 +277,10 @@ class TrackJetBotTagger(Selection):
         return (sum(self.tjet_isbtagged) >= self.min_nbjets)
 
     def _passes_rebel(self, ev):
-        self.tjet_isbtagged = ROOT.vector(int)()
-        self._tjet_p4 = ROOT.vector('TLorentzVector')()
+        self.tjet_isbtagged.clear()
+        self._tjet_p4.clear()
         for i, discriminant in enumerate(getattr(ev, self._branch_map['tjet_discriminant'])):
-            p4 = ROOT.TLorentzVector()
-            p4.SetPtEtaPhiE(ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i],ev.tjet_e[i])
+            p4 = ROOT.Math.PtEtaPhiEVector(ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i],ev.tjet_e[i])
             if p4.Perp() > self.min_pt and math.fabs(p4.Eta()) < 2.5 and ev.tjet_numConstituents[i] >= 2:
                 self._tjet_p4.push_back(p4)
                 self.tjet_isbtagged.push_back(discriminant > self.min_discriminant)
@@ -301,7 +299,7 @@ class TrackJetBotTagger(Selection):
 
 
     def associated(self, p4_1, p4_2, max_deltaR):
-        deltaR = p4_1.DeltaR(p4_2)
+        deltaR = ROOT.Math.VectorUtil.DeltaR(p4_1, p4_2)
         return (deltaR < max_deltaR)
 
     def association(self, ev):
@@ -309,9 +307,7 @@ class TrackJetBotTagger(Selection):
         self._jet_p4.clear()
         self.jet_associated_btaggedtjet_index.clear()
         for jet_i in xrange(len(ev.jet_pt)):
-            jet_p4 = ROOT.TLorentzVector()
-            jet_p4.SetPtEtaPhiE(ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])
-            self._jet_p4.push_back(jet_p4)
+            self._jet_p4.push_back(((ev.jet_pt[jet_i], ev.jet_eta[jet_i], ev.jet_phi[jet_i], ev.jet_e[jet_i])))
             trkbjet_associated = False
             associated_btaggedtjet_index = -999
             for tjet_i in xrange(len(ev.tjet_pt)):
@@ -327,9 +323,7 @@ class TrackJetBotTagger(Selection):
         self._ljet_p4.clear()
         self.ljet_associated_btaggedtjet_index.clear()
         for ljet_i in xrange(len(ev.ljet_pt)):
-            ljet_p4 = ROOT.TLorentzVector()
-            ljet_p4.SetPtEtaPhiE(ev.ljet_pt[ljet_i], ev.ljet_eta[ljet_i], ev.ljet_phi[ljet_i], ev.ljet_e[ljet_i])
-            self._ljet_p4.push_back(ljet_p4)
+            self._ljet_p4.push_back((ev.ljet_pt[ljet_i], ev.ljet_eta[ljet_i], ev.ljet_phi[ljet_i], ev.ljet_m[ljet_i]))
             trkbjet_associated = False
             associated_btaggedtjet_index = -999
             for tjet_i in range(len(ev.tjet_pt)):

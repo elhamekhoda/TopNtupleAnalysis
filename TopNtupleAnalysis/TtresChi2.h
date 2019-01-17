@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "TLorentzVector.h"
+#include "Math/Vector4D.h"
 #include "TopNtupleAnalysis/TtresNeutrinoBuilder.h"
 
 
@@ -74,7 +75,8 @@ class TtresChi2{
 
   bool findMinChiSquare(TLorentzVector*, const std::vector<TLorentzVector*>*, const std::vector<bool>*, TLorentzVector*, int&, int&, int&, int&, int&, double&, double&, double&);
 
-  bool findMinChiSquareSimple(TLorentzVector lep, const std::vector<TLorentzVector> jet, const std::vector<bool> btag, TLorentzVector met);
+  bool findMinChiSquareSimple(TLorentzVector, const std::vector<TLorentzVector>, const std::vector<bool>, TLorentzVector met);
+  bool findMinChiSquareSimple(ROOT::Math::PtEtaPhiEVector, const std::vector< ROOT::Math::PtEtaPhiEVector >, const std::vector<bool>, ROOT::Math::PtEtaPhiEVector);
 
   bool findMinChiSquare_HighMass(TLorentzVector*, const std::vector<TLorentzVector*>*, const std::vector<bool>*, TLorentzVector*, int&, int&, int&, int&, double&, double&, double&);
 

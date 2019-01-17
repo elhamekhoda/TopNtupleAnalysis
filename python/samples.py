@@ -207,33 +207,33 @@ class Sample(object):
         systematics = "all"
         if astr != None:
             systematics = astr
-        if any(name in self.sample_name for name in ["data", "qcde", "qcdmu"]):
+        if any(name in self.parent.sample_name for name in ["data", "qcde", "qcdmu"]):
             systematics = "nominal"
         self._systematics = systematics
 
     systematics = property(get_systematics, set_systematics)
     @property
     def is_data(self):
-        if "data" in self.sample_name:
+        if "data" in self.parent.sample_name:
             return " -d "
-        if "qcde" in self.sample_name:
+        if "qcde" in self.parent.sample_name:
             return " -d -Q e "
-        if "qcdmu" in self.sample_name:
+        if "qcdmu" in self.parent.sample_name:
             return " -d -Q mu "
         return ""
     @property
     def extra(self):
-        if "wbbjets" in self.sample_name:
+        if "wbbjets" in self.parent.sample_name:
             return ' --WjetsHF bb '
-        elif 'wccjets' in self.sample_name:
+        elif 'wccjets' in self.parent.sample_name:
             return ' --WjetsHF cc'
-        elif 'wcjets' in self.sample_name:
+        elif 'wcjets' in self.parent.sample_name:
             return ' --WjetsHF c'
-        elif 'wljets' in self.sample_name:
+        elif 'wljets' in self.parent.sample_name:
             return ' --WjetsHF l'
-        elif 'tt' == self.sample_name:
-            logger.info('You are running inclusive ttbar sample `alone`. Truth mtt > 1.1TeV cut will not be applied.')
-            logger.info('If you want to run with that instead (together with mtt sliced sample for example), use "tt_mttsliced".')
+        if 'tt' == self.parent.sample_name:
+            logger.debug('When using inclusive ttbar sample exclusively, the `--noMttSlices` option is activated automatically.\n'
+                        +'\tIf you want to use it together with sliced mtt ttbar samples, use samples.Sample(\'tt_mttsliced\') instead.')
             return ' --noMttSlices'
         return ''
     def get_input_files(self):

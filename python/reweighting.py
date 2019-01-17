@@ -32,17 +32,17 @@ class EWKCorrection(Reweighter):
     RUN_NUMBERS += [410633, 410634, 410635, 410636, 410637] # mttsliced nonallhad
     RUN_NUMBERS += [410284, 410285, 410286, 410287, 410288] # mttsliced allhad
     SYSTS = {'ttEWK__1up': 1, 'ttEWK__1down': 2, '*': 0}
+    top = ROOT.TLorentzVector()
+    topbar = ROOT.TLorentzVector()
     @classmethod
     def get_SF(cls, ev, s):
         if ev.mcChannelNumber == 0:
             return 1.
         if ev.mcChannelNumber not in cls.RUN_NUMBERS:
             return 1.
-        top = ROOT.TLorentzVector()
-        top.SetPtEtaPhiM(ev.MC_t_pt, ev.MC_t_eta, ev.MC_t_phi, ev.MC_t_m)
-        topbar = ROOT.TLorentzVector()
-        topbar.SetPtEtaPhiM(ev.MC_tbar_pt, ev.MC_tbar_eta, ev.MC_tbar_phi, ev.MC_tbar_m)
-        w = ROOT.TopNtupleAnalysis.getEWK(top, topbar, ev.initial_type, s)
+        cls.top.SetPtEtaPhiM(ev.MC_t_pt, ev.MC_t_eta, ev.MC_t_phi, ev.MC_t_m)
+        cls.topbar.SetPtEtaPhiM(ev.MC_tbar_pt, ev.MC_tbar_eta, ev.MC_tbar_phi, ev.MC_tbar_m)
+        w = ROOT.TopNtupleAnalysis.getEWK(cls.top, cls.topbar, ev.initial_type, s)
         return w
 
 class NNLOReweighting(Reweighter):
