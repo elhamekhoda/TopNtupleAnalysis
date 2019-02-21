@@ -1,5 +1,8 @@
 import helpers
 import ROOT
+import wjets
+import copy
+from collections import defaultdict
 logger = helpers.getLogger('TopNtupleAnalysis.reweighting')
 
 class Reweighter(object):
@@ -13,7 +16,7 @@ class Reweighter(object):
         
         Parameters
         ----------
-        ev : {TTree}
+        ev : {TTree, TTchain}
         syst : {string}, optional
         w0 : {float}, optional
             original weight
@@ -25,7 +28,17 @@ class Reweighter(object):
         """
         if syst not in cls.SYSTS:
             syst = '*'
-        return w0*cls.get_SF(ev, cls.SYSTS[syst])
+        SF = cls.get_SF(ev, cls.SYSTS[syst])
+        if SF == 0.:
+            logger.debug('<{cls.__name__}> retrieves ScaleFactor which is ZERO.'.format(cls = cls))
+        elif SF < 0.:
+            logger.debug('<{cls.__name__}> retrieves ScaleFactor which is NEGATIVE.'.format(cls = cls))
+        w = w0*SF
+        return w
+
+class IDDefaultDict(defaultdict):
+    def __missing__(self, key):
+        return self.default_factory(key)
 
 class EWKCorrection(Reweighter):
     RUN_NUMBERS = [410471, 410470, 410000, 301528, 301529, 301530, 301531, 301532]
@@ -83,3 +96,49 @@ class NNLOReweighting(Reweighter):
             return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 2)
         if abss == 4:
             return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 2)*ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 1)
+
+class WjetSystWeight(Reweighter):
+    '''
+    W+jets C/A and HF syst. variations
+    assuming b-tagging
+    '''
+    RUN_NUMBERS = range(363330, 363354+1)+\
+                  range(363436, 363483+1)+\
+                  range(364156, 364197+1) # 2.2.1
+    SYSTS = IDDefaultDict(lambda id: id)
+    FLAGS = {1: 'cc', 2: 'c', 3: 'bb', 4: 'bb', 5: 'l'}
+    @classmethod
+    def get_SF(cls, ev, s):
+        if ev.mcChannelNumber == 0:
+            return 1.
+        if ev.mcChannelNumber not in cls.RUN_NUMBERS:
+            return 1.
+
+        nj = 4
+        if ev.jet_pt.size() > 4:
+            nj = 5
+        if ev.jet_pt.size() < 2:
+            nj = 2
+
+        # flavour fractions at pretag level
+        frac2 = {nj: {'el': {}, 'mu': {}}}
+
+        chan = 'not-exactly-one-charged-lepton'
+        if ev.el_pt.size() == 1:
+            chan = 'el'
+        elif ev.mu_pt.size() == 1:
+            chan = 'mu'
+
+        # You should always have exactly one electron or muon in a good event.
+        #It usually means the event selections are problematic (i.e. not exactly one electron or muon) if you get an error from here.
+        syst = s if s in wjets.flav_map[nj][chan] else ''
+
+        frac2[nj][chan][syst] = copy.deepcopy(wjets.frac[nj][chan][syst])
+        for f in frac2[nj][chan][syst]:
+            frac2[nj][chan][syst][f] *= wjets.flav_map[nj][chan][syst][f]
+
+        flav = cls.FLAGS.get(ev.Wfilter_Sherpa_nT, '')
+
+        f_ca = wjets.f_ca_map[nj][chan][syst]
+        hfweight = wjets.flav_map[nj][chan][syst][flav] / sum(frac2[nj][chan][syst][f] for f in ('bb', 'cc', 'c', 'l'))
+        return f_ca*hfweight

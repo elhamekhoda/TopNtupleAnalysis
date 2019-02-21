@@ -98,8 +98,9 @@ class Run(object):
             cmds['download'].append(''.join(download_cmd))
         if compress_outputs:
             cmds['post-exec'].append('tar -czvf outputs.tar.gz ' + ' '.join((f for _,f in output_files)) + '\n')
+        assert type(sample.systematics) == list, 'Seeing this means I make a mistake. Contact the developers'
         cmds['exec'].append(('python $WorkDir_DIR/python/TopNtupleAnalysis/makeHistograms.py' if os.getenv('AtlasProject') and self.cluster != None else os.path.join(self.source_dir,'makeHistograms.py'))   + ' \\\n'
-                  + self.analysis_type + sample.is_data + sample.extra + ' --systs '  + sample.systematics + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
+                  + self.analysis_type + sample.is_data + sample.extra + ' --systs '  + ','.join(sample.systematics) + ' ' + ' '.join(self.analysis_exts) + ' \\\n'
                   + '--files '    + infile + ' \\\n'
                   + ' \\\n'.join(['-o "{selection}:{output_file}"'.format(selection = selection, output_file = output_file) for selection, output_file in output_files]) + '\n')
         return cmds
@@ -185,7 +186,7 @@ class Run(object):
                                              log    = os.path.join(self.log_dir, 'log.%s' % job_id),
                                              **_submit_kwds)
 
-    def finalize(self, do_merge = None, delete_sources_after_merged = False):
+    def finalize(self, do_merge = None, delete_sources_after_merged = False, num_of_workers = 4, hadd_ext_options = []):
         do_merge = do_merge if do_merge != None else self.do_merge
         if do_merge == True:
             for outstream in self.outstreams.viewvalues():
@@ -194,7 +195,7 @@ class Run(object):
                     sub_outputs = outstream[selection]['sub_outputs']
                     if len(sub_outputs) == 1 and output == sub_outputs[0]:
                         continue
-                    helpers.hadd({output: sub_outputs}, delete_sources = delete_sources_after_merged)
+                    helpers.hadd({output: sub_outputs}, delete_sources = delete_sources_after_merged, N = int(num_of_workers), ext_options = hadd_ext_options)
 
     def wait(self):
         if self.cluster != None:
@@ -251,7 +252,7 @@ if __name__ == '__main__':
         run.run(use_cluster = True, monitor = True)
 
     main(samples = s,
-         systematics = 'nominal',
+         systematics = ['nominal'],
          output_dir = None,
          analysis_type = 'AnaTtresSL',
          max_inputs_per_job = None,

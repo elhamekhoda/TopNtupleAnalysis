@@ -2,7 +2,6 @@ import re
 import helpers
 import ROOT
 import math
-import copy
 import os
 import ctypes
 from array import array
@@ -10,17 +9,21 @@ from ROOT import std
 import observables
 import selections
 import reweighting
-import wjets
 logger = helpers.getLogger('TopNtupleAnalysis.analysis')
 
 GeV = 1e-3
 DeltaR = ROOT.Math.VectorUtil.DeltaR
 DeltaPhi = ROOT.Math.VectorUtil.DeltaPhi
 
+UNLOCKED = 0
+SELECTION_LOCKED = 1
+FILL_LOCKED = 2
+
 class Analysis(object):
     ch = ''
     fi = None
     histSuffixes = [] # systematic copies of histograms
+    treeSuffixes = {}
     h = {} # map of histogram names to map of systematics to histograms
     trees = {} # dictionary for debug trees
     branches = {} # dictionary for debug trees branches
@@ -33,10 +36,11 @@ class Analysis(object):
     me2SM = -1
     me2XX = -1
     alphaS = -1
-    tName  = "debug"
+    blinded = False
+    mapSel = {}
     prog_bcatN = re.compile(r"^(?P<region>[a-zA-Z]+?)(?P<bcat_or_period>([+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?|))$")
 
-    def __init__(self, channel, suf, outputFile, do_tree = False):
+    def __init__(self, channel, systgroups, outputFile, do_tree = False):
         self._outputFile = outputFile
         self.fi = ROOT.TFile.Open(outputFile + '.part', "recreate")
         self.ch = channel
@@ -50,7 +54,12 @@ class Analysis(object):
             else:
                 self.bcategory = int(channel_match['bcat_or_period']) if channel_match['bcat_or_period'] else None
                 self.period = None
-        self.histSuffixes = suf
+        self.systgroups = systgroups
+        self.histSuffixes =[]
+        self.treeSuffixes ={}
+        for systgroup in systgroups:
+            self.histSuffixes.extend(s.hist_suffix for s in systgroup.systematics)
+            self.treeSuffixes[systgroup.tree] = [s.hist_suffix for s in systgroup.systematics]
         self.noMttSlices = False
         self.doEWKCorrection = True
         self.applyMET = 0
@@ -93,14 +102,18 @@ class Analysis(object):
         self.addVar("mtt8TeVr",[0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
         self.addVar("trueMtt8TeV",  [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
         self.addVar("trueMtt8TeVr", [0,80,160,240,320,360,400,440,500,560,600,640,680,720,760,800,860,920,1040,1160,1280])
-
-        self.observables = [observable.registered(self) for observable in observables.ObservableList]
+        self._locked = UNLOCKED # this locks the selectors to avoid rerun all the selections for the same events with different systematics # 0: unlocked 1: selection locked 2: tree locked
+        self._passed = False
+        self.observables = [observable.registered(self) for observable in observables.ObservableList if ((observable.only is None) or any(only in self.ch for only in observable.only))]
         for observable in self.observables:
             if 'hist' in observable.do:
                 if type(observable.binning) == tuple:
                     self.add(observable.name, *observable.binning)
                 else:
                     self.addVar(observable.name, observable.binning)
+
+    def unlock(self):
+        self._locked = UNLOCKED
 
     @property
     def doTree(self):
@@ -126,73 +139,83 @@ class Analysis(object):
 
     def clearBranches(self):
         if not self._doTree: return
-        tname = self.tName
-        for s in self.histSuffixes:
-            for bname in self.branches[tname][s]:
-                self.branches[tname][s][bname].clear()
+        for k, branches in self.branches.iteritems():
+            if k.startswith('common'):
+                if self._locked < FILL_LOCKED:
+                    for branch in branches.itervalues():
+                        branch.clear()
+            else:
+                branches['w'].clear()
+                branches['w0'].clear()
 
     def addTree(self):
         if not self._doTree:
             return
-        tname = self.tName
-        self.trees[tname] = {}
-        self.branches[tname] = {}
-        self.branches_noclear[tname] = {}
+        self.trees = {}
+        self.branches = {}
+        self.branches_noclear = {}
         #self.fi.cd()
-        for s in self.histSuffixes:
-            logger.info("Adding <Tree(\"{}\")>".format(tname+s))
-            self.trees[tname][s] = ROOT.TTree(tname+s,tname+s)
-            self.trees[tname][s].SetDirectory(0)
-            self.branches[tname][s] = {}
-            self.branches_noclear[tname][s] = {}
+        for t, systs in self.treeSuffixes.iteritems():
+            trunk = 'common_'+t
+            self.branches[trunk] = {}
+            branches_noclear = {}
+            for s in systs:
+                out_tname = self.tName+s
+                logger.info("Adding <Tree(\"{}\")>".format(out_tname))
+                self.trees[s] = ROOT.TTree(out_tname, out_tname)
+                self.trees[s].SetDirectory(0)
+                self.branches[s] = {}
+                self.branches_noclear[s] = {}
 
-            self.branches[tname][s]["eventNumber"] = std.vector(long)()
-            self.trees[tname][s].Branch("eventNumber",self.branches[tname][s]["eventNumber"])
-            self.branches[tname][s]["runNumber"] = std.vector(long)()
-            self.trees[tname][s].Branch("runNumber",self.branches[tname][s]["runNumber"])
-            self.branches[tname][s]["mcChannelNumber"] = std.vector(float)()
-            self.trees[tname][s].Branch("mcChannelNumber",self.branches[tname][s]["mcChannelNumber"])
-            self.branches[tname][s]["aS"] = std.vector(float)()
-            self.trees[tname][s].Branch("aS",self.branches[tname][s]["aS"])
-            self.branches[tname][s]["w"] = std.vector(float)()
-            self.trees[tname][s].Branch("w",self.branches[tname][s]["w"])
-            self.branches[tname][s]["w0"] = std.vector(float)()
-            self.trees[tname][s].Branch("w0",self.branches[tname][s]["w0"])
-            self.branches[tname][s]["w2HDM"] = std.vector(float)()
-            self.trees[tname][s].Branch("w2HDM",self.branches[tname][s]["w2HDM"])
-            self.branches[tname][s]["me2SM"] = std.vector(float)()
-            self.trees[tname][s].Branch("me2SM",self.branches[tname][s]["me2SM"])
-            self.branches[tname][s]["me2XX"] = std.vector(float)()
-            self.trees[tname][s].Branch("me2XX",self.branches[tname][s]["me2XX"])
-            self.branches[tname][s]["id"] = std.vector(float)()
-            self.trees[tname][s].Branch("id",self.branches[tname][s]["id"])
-            self.branches[tname][s]["px"] = std.vector(float)()
-            self.trees[tname][s].Branch("px",self.branches[tname][s]["px"])
-            self.branches[tname][s]["py"] = std.vector(float)()
-            self.trees[tname][s].Branch("py",self.branches[tname][s]["py"])
-            self.branches[tname][s]["pz"] = std.vector(float)()
-            self.trees[tname][s].Branch("pz",self.branches[tname][s]["pz"])
-            self.branches[tname][s]["e"] = std.vector(float)()
-            self.trees[tname][s].Branch("e",self.branches[tname][s]["e"])
-            self.branches[tname][s]["mttReco"] = std.vector(float)()
-            self.trees[tname][s].Branch("mttReco",self.branches[tname][s]["mttReco"])
-            self.branches[tname][s]["mttTrue"] = std.vector(float)()
-            self.trees[tname][s].Branch("mttTrue",self.branches[tname][s]["mttTrue"])
+                self.branches[s]["w"] = std.vector(float)()
+                self.trees[s].Branch("w", self.branches[s]["w"])
+                self.branches[s]["w0"] = std.vector(float)()
+                self.trees[s].Branch("w0", self.branches[s]["w0"])
 
-            self.branches_noclear[tname][s]["Btagcat"] = ctypes.c_int()
-            self.trees[tname][s].Branch("Btagcat",ctypes.addressof(self.branches_noclear[tname][s]["Btagcat"]), 'Btagcat/I')
+                self.branches[s]["eventNumber"] = self.branches[trunk].setdefault("eventNumber", std.vector(long)())
+                self.trees[s].Branch("eventNumber",self.branches[s]["eventNumber"])
+                self.branches[s]["runNumber"] = self.branches[trunk].setdefault("runNumber", std.vector(long)())
+                self.trees[s].Branch("runNumber",self.branches[s]["runNumber"])
+                self.branches[s]["mcChannelNumber"] = self.branches[trunk].setdefault("mcChannelNumber", std.vector(float)())
+                self.trees[s].Branch("mcChannelNumber",self.branches[s]["mcChannelNumber"])
+                self.branches[s]["aS"] = self.branches[trunk].setdefault("aS", std.vector(float)())
+                self.trees[s].Branch("aS",self.branches[s]["aS"])
 
-            for observable in self.observables:
-                if 'tree' in observable.do:
-                    if observable.only != None:
-                        if not any(only in self.ch for only in observable.only):
-                            continue
-                    if observable.style == 'foreach':
-                        self.branches[tname][s][observable.name] = std.vector(observable.dtype)()
-                        self.trees[tname][s].Branch(observable.name, self.branches[tname][s][observable.name])
-                    else:
-                        self.branches_noclear[tname][s][observable.name] = getattr(ctypes, 'c_' + str(observable.dtype.__name__))()
-                        self.trees[tname][s].Branch(observable.name, ctypes.addressof(self.branches_noclear[tname][s][observable.name]), observable.name + ('/I' if observable.dtype == int else '/F'))
+                self.branches[s]["w2HDM"] = self.branches[trunk].setdefault("w2HDM", std.vector(float)())
+                self.trees[s].Branch("w2HDM",self.branches[s]["w2HDM"])
+                self.branches[s]["me2SM"] = self.branches[trunk].setdefault("me2SM", std.vector(float)())
+                self.trees[s].Branch("me2SM",self.branches[s]["me2SM"])
+                self.branches[s]["me2XX"] = self.branches[trunk].setdefault("me2XX", std.vector(float)())
+                self.trees[s].Branch("me2XX",self.branches[s]["me2XX"])
+                self.branches[s]["id"] = self.branches[trunk].setdefault("id", std.vector(float)())
+                self.trees[s].Branch("id",self.branches[s]["id"])
+                self.branches[s]["px"] = self.branches[trunk].setdefault("px", std.vector(float)())
+                self.trees[s].Branch("px",self.branches[s]["px"])
+                self.branches[s]["py"] = self.branches[trunk].setdefault("py", std.vector(float)())
+                self.trees[s].Branch("py",self.branches[s]["py"])
+                self.branches[s]["pz"] = self.branches[trunk].setdefault("pz", std.vector(float)())
+                self.trees[s].Branch("pz",self.branches[s]["pz"])
+                self.branches[s]["e"] = self.branches[trunk].setdefault("e", std.vector(float)())
+                self.trees[s].Branch("e",self.branches[s]["e"])
+                self.branches[s]["mttReco"] = self.branches[trunk].setdefault("mttReco", std.vector(float)())
+                self.trees[s].Branch("mttReco",self.branches[s]["mttReco"])
+                self.branches[s]["mttTrue"] = self.branches[trunk].setdefault("mttTrue", std.vector(float)())
+                self.trees[s].Branch("mttTrue",self.branches[s]["mttTrue"])
+
+                self.branches_noclear[s]["Btagcat"] = branches_noclear.setdefault("Btagcat", ctypes.c_int())
+                self.trees[s].Branch("Btagcat",ctypes.addressof(self.branches_noclear[s]["Btagcat"]), 'Btagcat/I')
+
+                for observable in self.observables:
+                    if 'tree' in observable.do:
+                        if observable.style == 'foreach':
+                            self.branches[s][observable.name] = self.branches[trunk].setdefault(observable.name, std.vector(observable.dtype)())
+                            self.trees[s].Branch(observable.name, self.branches[s][observable.name])
+                        else:
+                            self.branches_noclear[s][observable.name] = branches_noclear.setdefault(observable.name, getattr(ctypes, 'c_' + str(observable.dtype.__name__))())
+                            self.trees[s].Branch(observable.name, ctypes.addressof(self.branches_noclear[s][observable.name]), observable.name + ('/I' if observable.dtype == int else '/F'))
+
+
+
 
 
     def addVar(self, hName, nBinsList):
@@ -219,10 +242,9 @@ class Analysis(object):
             for s in self.histSuffixes:
                 self.h[hName][s].Write(hName+s)
         if self._doTree:
-            tname = self.tName+self.ch
-            for tname in self.trees:
-                for s in self.histSuffixes:
-                    self.trees[tname][s].Write(tname+s)
+            for tname in sorted(self.trees.iterkeys()):
+                if tname != 'common':
+                    self.trees[tname].Write(self.tName+tname)
         if(helpers.nameX!=""):
             out_nameX = ROOT.TNamed("nameX",helpers.nameX)
             out_nameX.Write()
@@ -266,33 +288,46 @@ class Analysis(object):
         except OSError as e:
             logger.error(e, exc_info=True)
 
+    def _selectChannel(self, sel, syst):
+        raise NotImplementedError
+
+    def selectChannel(self, sel, syst):
+        if self._locked != UNLOCKED: # this locks the selectors to avoid rerun all the selections for the same events with different systematics
+            # logger.info('<{}, {}> cached'.format(sel, syst))
+            return self._passed
+        # logger.info('<{}, {}> new one'.format(sel, syst))
+        self._passed = self._selectChannel(sel, syst)
+        self._locked = SELECTION_LOCKED
+        return self._passed
+
+    def _run(self, sel, syst, wo, wTruth):
+        raise NotImplementedError
+
+    def run(self, sel, syst, wo, wTruth):
+        assert self._locked != UNLOCKED, '`run` can be only executed after `selectChannel`'
+        self._run(sel, syst, wo, wTruth)
+        self._locked = FILL_LOCKED
+
     def getWeight(self, sel, s):
         # this applies all the weights that come out of the box
         if sel.mcChannelNumber == 0:
             return 1.0
-        k = s
-        if not s in helpers.weightSF:
-            k = ''
-        listWeights = helpers.weightSF[k]
         weight = 1.0
-        for item in listWeights:
-            if 'pileup' in item and not helpers.doPRW:
-                continue
-            wItem = getattr(sel, 'weight_'+item)
-            weight *= wItem
-
+        syst_name = s.name
+        for item in s.weight_map:
+            weight *= getattr(sel, item)
         # this applies the EWK weight to _only_ ttbar samples
         if self.doEWKCorrection:
-            weight *= reweighting.EWKCorrection.get_weight(sel, s)
+            weight *= reweighting.EWKCorrection.get_weight(sel, syst_name)
         # this compute the NNLO systematics to _only_ ttbar samples
-        weight *= reweighting.NNLOReweighting.get_weight(sel, s)
+        weight *= reweighting.NNLOReweighting.get_weight(sel, syst_name)
         # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
-        weight *= self.bot_tagger.scale_factor(sel, s)
+        weight *= self.bot_tagger.scale_factor(sel, syst_name)
         # this applies the W+jets Sherpa 2.2.0 nJets reweighting correction
         # WARNING: disable this if using 2.2.1
         #weight *= sel.weight_Sherpa22_corr
-
         return weight
+
     def set_top_tagger(self, expr, num_thad = 1, **kwds):
         self.top_tagger = selections.BoostedTopTagger(expr, num_top = num_thad, **kwds)
 
@@ -301,6 +336,7 @@ class Analysis(object):
         algorithm_WP_systs = attr[-1].split('_', 2)
         if len(attr)==2:
             algorithm_WP_systs.append(attr[0])
+        # print algorithm_WP_systs
         self.bot_tagger = selections.TrackJetBotTagger(*algorithm_WP_systs, **kwds)
     def set_aux_selector(self, expr = None):
         self.aux_selector = selections.AuxSelector(expr)
@@ -343,8 +379,8 @@ class AnaTtresSL(Analysis):
                 'rmu2017': ['rmujets_2017'],
                 'ovre': ['rejets_2015','rejets_2016','rejets_2017'],
                 'ovrmu': ['rmujets_2015','rmujets_2016','rmujets_2017']}
-    def __init__(self, channel, suf, outputFile, do_tree = False):
-        Analysis.__init__(self, channel, suf, outputFile, do_tree)
+    def __init__(self, channel, systgroups, outputFile, do_tree = False):
+        Analysis.__init__(self, channel, systgroups, outputFile, do_tree)
         self.applyQCD = False
         self.noMttSlices = False
         self.applyMET = 0
@@ -401,15 +437,17 @@ class AnaTtresSL(Analysis):
     def getWeight(self, sel, s):
         if sel.mcChannelNumber == 0:
             return 1.0
+
+        syst_name = s.name
         weight = Analysis.getWeight(self, sel, s)
 
-        if s == "singletopup" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
+        if syst_name == "singletopup" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
             weight *= 1+0.053
-        if s == "singletopdw" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
+        if syst_name == "singletopdw" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
             weight *= 1-0.053
-        if s == "ttxsecup" and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
+        if syst_name == "ttxsecup" and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
             weight *= 1+0.056
-        if s == "ttxsecdw" and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
+        if syst_name == "ttxsecdw" and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
             weight *= 1-0.061
 
         # for EFT
@@ -434,54 +472,7 @@ class AnaTtresSL(Analysis):
 
         # W+jets C/A and HF syst. variations
         # assuming b-tagging
-        hfweight = 1.0
-        f_ca = 1.0
-
-        nj = 4
-        if len(sel.jet_pt) > 4:
-            nj = 5
-        if len(sel.jet_pt) < 2:
-            nj = 2
-
-        # flavour fractions at pretag level
-        frac2 = {}
-        frac2[2] = {'el': {}, 'mu': {}}
-        frac2[3] = {'el': {}, 'mu': {}}
-        frac2[4] = {'el': {}, 'mu': {}}
-        frac2[5] = {'el': {}, 'mu': {}}
-
-        chan = 'not-exactly-one-charged-lepton'
-        if len(sel.el_pt) == 1:
-            chan = 'el'
-        elif len(sel.mu_pt) == 1:
-            chan = 'mu'
-        syst = ""
-        if s in wjets.flav_map[nj][chan]: # You should always have exactly one electron or muon in a good event. It usually means the event selections are problematic (i.e. not exactly one electron or muon) if you get an error from here.
-            syst = s
-
-        frac2[nj][chan][syst] = copy.deepcopy(wjets.frac[nj][chan][syst])
-        for f in frac2[nj][chan][syst]:
-            frac2[nj][chan][syst][f] *= wjets.flav_map[nj][chan][syst][f]
-
-        flav = ''
-        if sel.mcChannelNumber in helpers.listWjets22:
-            flag = sel.Wfilter_Sherpa_nT
-            if flag == 3 or flag == 4:
-                flav = 'bb'
-            elif flag == 1:
-                flav = 'cc'
-            elif flag == 2:
-                flav = 'c'
-            elif flag == 5:
-                flav = 'l'
-            f_ca = wjets.f_ca_map[nj][chan][syst]
-            norm = 1.0
-            hfweight = wjets.flav_map[nj][chan][syst][flav]
-            norm = 0
-            for f in ['bb', 'cc', 'c', 'l']:
-                norm += frac2[nj][chan][syst][f]
-            hfweight /= norm
-            weight *= f_ca*hfweight
+        weight *= reweighting.WjetSystWeight.get_weight(sel, syst_name)
         return weight
 
     def qcdWeight(self, sel, syst):
@@ -517,7 +508,7 @@ class AnaTtresSL(Analysis):
             muonTrigger = bool(int(sel.mu_trigMatch_HLT_mu20_iloose_L1MU15[0].encode('hex'), 16)) or bool(int(sel.mu_trigMatch_HLT_mu50[0].encode('hex'), 16))
             topoetcone20 = sel.mu_topoetcone20[0]
         jets = ROOT.vector('TLorentzVector')()
-        for k in range(0, len(sel.jet_pt)):
+        for k in xrange(sel.jet_pt.size()):
             j = ROOT.TLorentzVector()
             j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k])
             jets.push_back(j)
@@ -528,7 +519,7 @@ class AnaTtresSL(Analysis):
         elif math.fabs(l.Eta()) > 1.5 and 'qcdfwddw' in syst: w *= 0
         return w
 
-    def selectChannel(self, sel, syst):
+    def _selectChannel(self, sel, syst):
         if self.ch not in self.mapSel:
             logger.warn('The selected channel "{}" is not registered. The events will be processed anyway without any further constraint.'.format(self.ch))
             self.mapSel[self.ch] = [self.ch]
@@ -558,34 +549,24 @@ class AnaTtresSL(Analysis):
         if ('be' in self.ch or 'bmu' in self.ch):
             if not top_tagged:
                 return False
+            Btagcat = self.top_tagger.bcategory
 
         if ('re' in self.ch or 'rmu' in self.ch):
             if not self.TtresChi2.passes(sel):
                 return False
             Btagcat = self.TtresChi2.bcategory
-        else:
-            Btagcat = sel.Btagcat
 
         if ('re' in self.ch or 'rmu' in self.ch) and not "ov" in self.ch:
             if (passSel['be'] or passSel['bmu']) and top_tagged:
                 return False
 	
-        if self.bcategory!=None and Btagcat != self.bcategory:
+        if self.bcategory != None and Btagcat != self.bcategory:
             return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples
         if sel.mcChannelNumber in [410000, 410470, 410471] and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
             if sel.MC_ttbar_beforeFSR_m > 1.1e6:
                 return False
-
-        return True
-
-
-    def run(self, sel, syst, wo, wTruth):
-
-        ########################
-        self.clearBranches() ###
-        ########################
 
         if sel.mcChannelNumber in helpers.listWjets22:
             flag = sel.Wfilter_Sherpa_nT
@@ -605,15 +586,25 @@ class AnaTtresSL(Analysis):
                 if flag != 5:
                     return
 
+        if self.applyMET > 0 and not ('be' in self.ch or 'bmu' in self.ch):
+            if sel.met_met*1e-3 < self.applyMET:
+                return
+
+        return True
+
+
+    def _run(self, sel, syst, wo, wTruth):
+
+        ########################
+        self.clearBranches() ###
+        ########################
         w = wo
 
         if self.applyQCD:
             w *= self.qcdWeight(sel, syst)
-        if self.applyMET > 0 and not ('be' in self.ch or 'bmu' in self.ch):
-            if sel.met_met*1e-3 < self.applyMET:
-                return
-        isdata = sel.mcChannelNumber == 0
-        if(sel.mcChannelNumber != 0 and hasattr(sel, "MC_ttbar_beforeFSR_m") and sel.mcChannelNumber not in [407200, 407201, 407202, 407203, 407204]):
+
+        isdata = (sel.mcChannelNumber == 0)
+        if(not isdata and hasattr(sel, "MC_ttbar_beforeFSR_m") and sel.mcChannelNumber not in [407200, 407201, 407202, 407203, 407204]):
             w0 = w/self.w2HDM
             self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
             self.h["trueMttr"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
@@ -649,11 +640,12 @@ class AnaTtresSL(Analysis):
         self.h["lepPhi"][syst].Fill(l.Phi(), w)
         self.h["MET_phi"][syst].Fill(sel.met_phi, w)
         self.h["MET"][syst].Fill(sel.met_met*1e-3, w)
-        self.h["nJets"][syst].Fill(len(sel.jet_pt), w)
+        self.h["nJets"][syst].Fill(sel.jet_pt.size(), w)
+        self.h["nlargeJets"][syst].Fill(sel.ljet_pt.size(), w)
         closestJetIdx = -1
         closestJetPt = 0
         closestJetDr = 99
-        for i in range(0, len(sel.jet_pt)):
+        for i in xrange(sel.jet_pt.size()):
             cj = ROOT.TLorentzVector()
             cj.SetPtEtaPhiE(sel.jet_pt[i], sel.jet_eta[i], sel.jet_phi[i], sel.jet_e[i])
             dy = (cj.Rapidity() - l.Rapidity())
@@ -679,12 +671,12 @@ class AnaTtresSL(Analysis):
         ##double getMtt(TLorentzVector lep, std::vector<TLorentzVector> jets, std::vector<bool> btag, TLorentzVector met) {
         nu = ROOT.TopNtupleAnalysis.getNu(l, sel.met_met, sel.met_phi)
         if ('be' in self.ch or 'bmu' in self.ch):
-            for i in range(len(sel.jet_pt)):
+            for i in xrange(sel.jet_pt.size()):
                 if sel.jet_closeToLepton[i]:
                     closeJetIdx = i
                     break
             
-            goodJetIdx = self.top_tagger.ljet_istoptagged.index(True)
+            goodJetIdx = self.top_tagger.ljet_selected.index(1)
             lj.SetPtEtaPhiM(sel.ljet_pt[goodJetIdx], sel.ljet_eta[goodJetIdx], sel.ljet_phi[goodJetIdx], sel.ljet_m[goodJetIdx])
             closeJet = ROOT.TLorentzVector()
             closeJet.SetPtEtaPhiE(sel.jet_pt[closeJetIdx], sel.jet_eta[closeJetIdx], sel.jet_phi[closeJetIdx], sel.jet_e[closeJetIdx])
@@ -718,47 +710,45 @@ class AnaTtresSL(Analysis):
             ################################
             ### fill the tree ##############
             if self._doTree:
-                tname = self.tName
-                self.branches[tname][syst]["eventNumber"].push_back(sel.eventNumber)
-                self.branches[tname][syst]["runNumber"].push_back(sel.runNumber)
-                self.branches[tname][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
-                self.branches[tname][syst]["aS"].push_back(self.alphaS)
-                self.branches[tname][syst]["w"].push_back(w)
-                self.branches[tname][syst]["w0"].push_back(w0)
-                self.branches[tname][syst]["w2HDM"].push_back(self.w2HDM)
-                self.branches[tname][syst]["me2SM"].push_back(self.me2SM)
-                self.branches[tname][syst]["me2XX"].push_back(self.me2XX)
-                self.branches[tname][syst]["mttReco"].push_back(mtt)
-                self.branches_noclear[tname][syst]["Btagcat"].value = sel.Btagcat
-                # pME = helpers.getTruth4momenta(sel)
-                # truPttbar = pME[2]+pME[3]
-                if sel.mcChannelNumber != 0:
-                    self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
-                # for i in xrange(sel.MC_id_me.size()):
-                #     self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
-                #     self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
-                #     self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
-                #     self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
-                #     self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
-                ##################################
-                for observable in self.observables:
-                    if isdata and observable.need_truth:
-                        continue
-                    if 'tree' in observable.do:
-                        if observable.only != None:
-                            if not any (only in self.ch for only in observable.only):
-                                continue
-                        values = observable(_locals = locals())
-                        if observable.style == 'foreach':
-                            for v in values:
-                                self.branches[tname][syst][observable.name].push_back(v)
-                        else:
-                            self.branches_noclear[tname][syst][observable.name].value = values
+                self.branches[syst]["w"].push_back(w)
+                self.branches[syst]["w0"].push_back(w0)
+                if self._locked == SELECTION_LOCKED:
+                    self.branches[syst]["eventNumber"].push_back(sel.eventNumber)
+                    self.branches[syst]["runNumber"].push_back(sel.runNumber)
+                    self.branches[syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
+                    self.branches[syst]["aS"].push_back(self.alphaS)
+                    self.branches[syst]["w2HDM"].push_back(self.w2HDM)
+                    self.branches[syst]["me2SM"].push_back(self.me2SM)
+                    self.branches[syst]["me2XX"].push_back(self.me2XX)
+                    self.branches[syst]["mttReco"].push_back(mtt)
+                    self.branches_noclear[syst]["Btagcat"].value = sel.Btagcat
+                    # pME = helpers.getTruth4momenta(sel)
+                    # truPttbar = pME[2]+pME[3]
+                    if sel.mcChannelNumber != 0:
+                        self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                    # for i in xrange(sel.MC_id_me.size()):
+                    #     self.branches[syst]["id"].push_back(sel.MC_id_me[i])
+                    #     self.branches[syst]["px"].push_back(sel.MC_px_me[i])
+                    #     self.branches[syst]["py"].push_back(sel.MC_py_me[i])
+                    #     self.branches[syst]["pz"].push_back(sel.MC_pz_me[i])
+                    #     self.branches[syst]["e"].push_back(sel.MC_e_me[i])
+                    ##################################
+                    for observable in self.observables:
+                        if isdata and observable.need_truth:
+                            continue
+                        if 'tree' in observable.do:
+                            values = observable(_locals = locals())
+                            if observable.style == 'foreach':
+                                for v in values:
+                                    self.branches[syst][observable.name].push_back(v)
+                            else:
+                                self.branches_noclear[syst][observable.name].value = values
                 ### fill the tree ################
-                self.trees[tname][syst].Fill() ###
+
+                self.trees[syst].Fill() ###
                 ##################################
         elif 're' in self.ch or 'rmu' in self.ch:
-            if len(sel.ljet_pt) >= 1:
+            if sel.ljet_pt.size() >= 1:
                 lj.SetPtEtaPhiM(sel.ljet_pt[0], sel.ljet_eta[0], sel.ljet_phi[0], sel.ljet_m[0])
                 try:
                     btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: DeltaR(btagged_tjet, lj))
@@ -792,62 +782,64 @@ class AnaTtresSL(Analysis):
             ################################
             ### fill the tree ##############
             if self._doTree:
-                tname = self.tName
-                self.branches[tname][syst]["eventNumber"].push_back(sel.eventNumber)
-                self.branches[tname][syst]["runNumber"].push_back(sel.runNumber)
-                self.branches[tname][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
-                self.branches[tname][syst]["aS"].push_back(self.alphaS)
-                self.branches[tname][syst]["w"].push_back(w)
-                self.branches[tname][syst]["w0"].push_back(w0)
-                self.branches[tname][syst]["w2HDM"].push_back(self.w2HDM)
-                self.branches[tname][syst]["me2SM"].push_back(self.me2SM)
-                self.branches[tname][syst]["me2XX"].push_back(self.me2XX)
-                self.branches[tname][syst]["mttReco"].push_back(mtt)
-                self.branches_noclear[tname][syst]["Btagcat"].value = self.TtresChi2.bcategory
-                if sel.mcChannelNumber != 0:
-                    if not (helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
-                        self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
-                    else:
-                        pME = helpers.getTruth4momenta(sel)
-                        truPttbar = pME[2]+pME[3]
-                        self.branches[tname][syst]["mttTrue"].push_back(truPttbar.M())
-                        for i in xrange(sel.MC_id_me.size()):
-                            self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
-                            self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
-                            self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
-                            self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
-                            self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
+                self.branches[syst]["w"].push_back(w)
+                self.branches[syst]["w0"].push_back(w0)
+                if self._locked == SELECTION_LOCKED:
+                    self.branches[syst]["eventNumber"].push_back(sel.eventNumber)
+                    self.branches[syst]["runNumber"].push_back(sel.runNumber)
+                    self.branches[syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
+                    self.branches[syst]["aS"].push_back(self.alphaS)
 
-                for observable in self.observables:
-                    if isdata and observable.need_truth:
-                        continue
-                    if 'tree' in observable.do:
-                        if observable.only != None:
-                            if not any (only in self.ch for only in observable.only):
-                                continue
-                        values = observable( _locals = locals())
-                        if observable.style == 'foreach':
-                            for v in values:
-                                self.branches[tname][syst][observable.name].push_back(v)
+                    self.branches[syst]["w2HDM"].push_back(self.w2HDM)
+                    self.branches[syst]["me2SM"].push_back(self.me2SM)
+                    self.branches[syst]["me2XX"].push_back(self.me2XX)
+                    self.branches[syst]["mttReco"].push_back(mtt)
+                    self.branches_noclear[syst]["Btagcat"].value = self.TtresChi2.bcategory
+                    if sel.mcChannelNumber != 0:
+                        if not (helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+                            self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
                         else:
-                            self.branches_noclear[tname][syst][observable.name].value = values
+                            pME = helpers.getTruth4momenta(sel)
+                            truPttbar = pME[2]+pME[3]
+                            self.branches[syst]["mttTrue"].push_back(truPttbar.M())
+                            for i in xrange(sel.MC_id_me.size()):
+                                self.branches[syst]["id"].push_back(sel.MC_id_me[i])
+                                self.branches[syst]["px"].push_back(sel.MC_px_me[i])
+                                self.branches[syst]["py"].push_back(sel.MC_py_me[i])
+                                self.branches[syst]["pz"].push_back(sel.MC_pz_me[i])
+                                self.branches[syst]["e"].push_back(sel.MC_e_me[i])
+
+                    for observable in self.observables:
+                        if isdata and observable.need_truth:
+                            continue
+                        if 'tree' in observable.do:
+                            values = observable( _locals = locals())
+                            if observable.style == 'foreach':
+                                for v in values:
+                                    self.branches[syst][observable.name].push_back(v)
+                            else:
+                                self.branches_noclear[syst][observable.name].value = values
                 ##################################
                 ### fill the tree ################
-                self.trees[tname][syst].Fill() ###
+                self.trees[syst].Fill() ###
                 ##################################
+        else:
+            raise NameError( 'Undefined Channel <{}>'.format(self.ch) )
         for observable in self.observables:
             if isdata and observable.need_truth:
                 continue
             if 'hist' in observable.do:
-                if observable.only != None:
-                    if not any (only in self.ch for only in observable.only):
-                        continue
                 values = observable(_locals = locals())
                 if observable.style == 'foreach':
                     for v in values:
                         self.h[observable.name][syst].Fill(v, w)
                 else:
                     self.h[observable.name][syst].Fill(values, w)
+
+    def set_top_tagger(self, expr, num_thad = 1, strategy = 'obey', **kwds):
+        kwds.setdefault('do_truth_matching', True)
+        super(AnaTtresSL, self).set_top_tagger(expr, num_thad = num_thad, strategy = strategy, **kwds)
+
     def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70', **kwds):
         # kwds.setdefault('strategy', 'rebel')
         Analysis.set_bot_tagger(self, algorithm_WP_systs, **kwds)
@@ -868,10 +860,10 @@ class AnaTtresFH(Analysis):
                 'ovrFH': ['rFH_2015', 'rFH_2016'],
                 'ovrFH': ['rFH_2015', 'rFH_2016']
                 }
-    def __init__(self, channel, suf, outputFile, do_tree = False):
+    def __init__(self, channel, systgroups, outputFile, do_tree = False):
         if 'rFH' in channel:
             raise NotImplementedError("resolved (bucket) analysis is not yet implemented!")
-        Analysis.__init__(self, channel, suf, outputFile, do_tree)
+        Analysis.__init__(self, channel, systgroups, outputFile, do_tree)
         self.noMttSlices = False
         self.applyMET = 0
         self.eftLambda = -1
@@ -882,6 +874,7 @@ class AnaTtresFH(Analysis):
         self.me2SM = -1
         self.me2XX = -1
         self.alphaS = -1
+        self.blinded = False
         ########################
         ### make debug tree ####
         self.addTree() #########
@@ -933,7 +926,7 @@ class AnaTtresFH(Analysis):
                 else:
                     self.addVar(observable.name, observable.binning)
 
-    def selectChannel(self, sel, syst):
+    def _selectChannel(self, sel, syst):
         if self.ch not in self.mapSel:
             logger.warn('The selected channel "{}" is not registered. The events will be processed anyway without any further constraint.'.format(self.ch))
             self.mapSel[self.ch] = [self.ch]
@@ -953,20 +946,21 @@ class AnaTtresFH(Analysis):
             return False
         if not self.aux_selector.passes(sel):
             return False
-        if not sel.ljet_pt[0] > 500000: # Tigger threshold
-            return False
+        # if not sel.ljet_pt[0] > 500000: # Tigger threshold
+        #     return False
         if not self.bot_tagger.passes(sel):
             return False
         # veto resolved event if it passes the boosted channel
         top_tagged = self.top_tagger.passes(sel)
-
+        if 'bFH' in self.ch and not top_tagged:
+                return False
         if 'rFH' in self.ch:
             self.TtresBucket.passes(sel)
             Btagcat = self.TtresBucket.bcategory
         else:
             Btagcat = self.top_tagger.bcategory
 
-        if ('rFH' in self.ch or 'rFH' in self.ch) and not "ov" in self.ch:
+        if 'rFH' in self.ch and not "ov" in self.ch:
             if passSel['bFH'] and top_tagged:
                 return False
         if self.bcategory != None and Btagcat != self.bcategory:
@@ -976,11 +970,10 @@ class AnaTtresFH(Analysis):
         if sel.mcChannelNumber in [410000, 410470, 410471] and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
             if sel.MC_ttbar_beforeFSR_m > 1.1e6:
                 return False
-        return True
-    def run(self, sel, syst, wo, wTruth):
-        ########################
-        self.clearBranches() ###
-        ########################
+
+        if self.applyMET > 0 and not 'bFH' in self.ch:
+            if sel.met_met*1e-3 < self.applyMET:
+                return
 
         if sel.mcChannelNumber in helpers.listWjets22:
             flag = sel.Wfilter_Sherpa_nT
@@ -1000,32 +993,22 @@ class AnaTtresFH(Analysis):
                 if flag != 5:
                     return
 
+        return True
+    def _run(self, sel, syst, wo, wTruth):
+        ########################
+        self.clearBranches() ###
+        ########################
         w = wo
-
-        if self.applyMET > 0 and not 'bFH' in self.ch:
-            if sel.met_met*1e-3 < self.applyMET:
-                return
-
         isdata = sel.mcChannelNumber == 0
-        if(sel.mcChannelNumber != 0 and hasattr(sel, "MC_ttbar_beforeFSR_m") and sel.mcChannelNumber not in [407200, 407201, 407202, 407203, 407204]):
+        if (not isdata and hasattr(sel, "MC_ttbar_beforeFSR_m")):
             w0 = w/self.w2HDM
             self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
-            self.h["trueMttr"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
-            self.h["trueMtt8TeV"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
-            self.h["trueMtt8TeVr"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
-        if(sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
-            pME = helpers.getTruth4momenta(sel)
-            truPttbar = pME[2]+pME[3]
-            w0 = w/self.w2HDM
-            self.h["trueMtt"][syst].Fill(truPttbar.M(), w)
-            self.h["trueMttr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
-            self.h["trueMtt8TeV"][syst].Fill(truPttbar.M(), w)
-            self.h["trueMtt8TeVr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
+
         self.h["runNumber"][syst].Fill(sel.runNumber, w)
 
         self.h["MET_phi"][syst].Fill(sel.met_phi, w)
         self.h["MET"][syst].Fill(sel.met_met*1e-3, w)
-        self.h["nJets"][syst].Fill(len(sel.jet_pt), w)
+        self.h["nJets"][syst].Fill(sel.jet_pt.size(), w)
 
         self.h["nTrkBtagJets"][syst].Fill(sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in self.bot_tagger.tjet_isbtagged), w)
         self.h["mu"][syst].Fill(sel.mu, w)
@@ -1033,18 +1016,16 @@ class AnaTtresFH(Analysis):
         self.h["vtxz"][syst].Fill(sel.vtxz, w)
         self.h['NEvents'][syst].Fill(1, 1)
         self.h['yields'][syst].Fill(1, w)
-        if ('bFH' in self.ch) and self.top_tagger.passed:
-            goodJetIdx1 = self.top_tagger.ljet_istoptagged.index(1)
+        if 'bFH' in self.ch:
+            goodJetIdx1 = self.top_tagger.ljet_selected.index(1)
             lj1 = self.top_tagger.ljet_p4[goodJetIdx1]*GeV
-            goodJetIdx2 = self.top_tagger.ljet_istoptagged.index(1, goodJetIdx1+1)
+            goodJetIdx2 = self.top_tagger.ljet_selected.index(1, goodJetIdx1+1)
             lj2 = self.top_tagger.ljet_p4[goodJetIdx2]*GeV
             w0 = w/self.w2HDM
             mtt = (lj1+lj2).M() # unit is GeV
             bjets = list(tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i]))
             self.h["mtt"][syst].Fill(mtt, w)
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
-            self.h["mtt8TeV"][syst].Fill(mtt, w)
-            self.h["mtt8TeVr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             
             ### boosted channel ###
             self.h["nlargeJets"][syst].Fill(sel.ljet_pt.size(), w)
@@ -1090,54 +1071,50 @@ class AnaTtresFH(Analysis):
             ################################
             ### fill the tree ##############
             if self._doTree:
-                tname = self.tName
-                self.branches[tname][syst]["eventNumber"].push_back(sel.eventNumber)
-                self.branches[tname][syst]["runNumber"].push_back(sel.runNumber)
-                self.branches[tname][syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
-                self.branches[tname][syst]["aS"].push_back(self.alphaS)
-                self.branches[tname][syst]["w"].push_back(w)
-                self.branches[tname][syst]["w0"].push_back(w0)
-                self.branches[tname][syst]["w2HDM"].push_back(self.w2HDM)
-                self.branches[tname][syst]["me2SM"].push_back(self.me2SM)
-                self.branches[tname][syst]["me2XX"].push_back(self.me2XX)
-                self.branches[tname][syst]["mttReco"].push_back(mtt)
-                self.branches_noclear[tname][syst]["Btagcat"].value = self.top_tagger.bcategory
-                # pME = helpers.getTruth4momenta(sel)
-                # truPttbar = pME[2]+pME[3]
-                if sel.mcChannelNumber != 0:
-                    self.branches[tname][syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
-                # for i in xrange(sel.MC_id_me.size()):
-                #     self.branches[tname][syst]["id"].push_back(sel.MC_id_me[i])
-                #     self.branches[tname][syst]["px"].push_back(sel.MC_px_me[i])
-                #     self.branches[tname][syst]["py"].push_back(sel.MC_py_me[i])
-                #     self.branches[tname][syst]["pz"].push_back(sel.MC_pz_me[i])
-                #     self.branches[tname][syst]["e"].push_back(sel.MC_e_me[i])
-                ##################################
-                for observable in self.observables:
-                    if isdata and observable.need_truth:
-                        continue
-                    if 'tree' in observable.do:
-                        if observable.only != None:
-                            if not any (only in self.ch for only in observable.only):
-                                continue
-                        values = observable( _locals = locals())
-                        if observable.style == 'foreach':
-                            for v in values:
-                                self.branches[tname][syst][observable.name].push_back(v)
-                        else:
-                            self.branches_noclear[tname][syst][observable.name].value = values
+                self.branches[syst]["w"].push_back(w)
+                self.branches[syst]["w0"].push_back(w0)
+                if self._locked == SELECTION_LOCKED:
+                    self.branches[syst]["eventNumber"].push_back(sel.eventNumber)
+                    self.branches[syst]["runNumber"].push_back(sel.runNumber)
+                    self.branches[syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
+                    self.branches[syst]["aS"].push_back(self.alphaS)
+                    self.branches[syst]["w2HDM"].push_back(self.w2HDM)
+                    self.branches[syst]["me2SM"].push_back(self.me2SM)
+                    self.branches[syst]["me2XX"].push_back(self.me2XX)
+                    self.branches[syst]["mttReco"].push_back(mtt)
+                    self.branches_noclear[syst]["Btagcat"].value = self.top_tagger.bcategory
+                    # pME = helpers.getTruth4momenta(sel)
+                    # truPttbar = pME[2]+pME[3]
+                    if sel.mcChannelNumber != 0:
+                        self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                    # for i in xrange(sel.MC_id_me.size()):
+                    #     self.branches[syst]["id"].push_back(sel.MC_id_me[i])
+                    #     self.branches[syst]["px"].push_back(sel.MC_px_me[i])
+                    #     self.branches[syst]["py"].push_back(sel.MC_py_me[i])
+                    #     self.branches[syst]["pz"].push_back(sel.MC_pz_me[i])
+                    #     self.branches[syst]["e"].push_back(sel.MC_e_me[i])
+                    ##################################
+                    for observable in self.observables:
+                        if isdata and observable.need_truth:
+                            continue
+                        if 'tree' in observable.do:
+                            values = observable( _locals = locals())
+                            if observable.style == 'foreach':
+                                for v in values:
+                                    self.branches[syst][observable.name].push_back(v)
+                            else:
+                                self.branches_noclear[syst][observable.name].value = values
+
                 ##################################
                 ### fill the tree ################
-                self.trees[tname][syst].Fill() ###
+                self.trees[syst].Fill() ###
                 ##################################
-
+        else:
+            raise NameError( 'Undefined Channel <{}>'.format(self.ch) )
         for observable in self.observables:
             if isdata and observable.need_truth:
                 continue
             if 'hist' in observable.do:
-                if observable.only != None:
-                    if not any (only in self.ch for only in observable.only):
-                        continue
                 values = observable(_locals = locals())
                 if observable.style == 'foreach':
                     for v in values:
@@ -1147,7 +1124,12 @@ class AnaTtresFH(Analysis):
 
     def set_top_tagger(self, expr, num_thad = 2, strategy = 'rebel', **kwds):
         kwds.setdefault('min_pt', 350000)
-        super(AnaTtresFH, self).set_top_tagger(expr, num_thad = num_thad, strategy = 'rebel', **kwds)
+        kwds.setdefault('leading_only', True)
+        kwds.setdefault('do_truth_matching', True)
+        super(AnaTtresFH, self).set_top_tagger(expr, num_thad = num_thad, strategy = strategy, **kwds)
+        if self.blinded:
+            logger.warning('The deltaY cut is inverted to 1.8 <= deltaY(J,J)')
+            self.top_tagger.absdYJJRange = (1.8, float('inf'))
         if hasattr(self, 'bot_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger
 
@@ -1157,7 +1139,7 @@ class AnaTtresFH(Analysis):
         kwds.setdefault('min_nbjets', 0)
         kwds.setdefault('SF_type', 'eventlevel')
         kwds.setdefault('do_association', False)
-        kwds.setdefault('do_truth_matching', False)
+        # kwds.setdefault('do_truth_matching', False)
         super(AnaTtresFH, self).set_bot_tagger(algorithm_WP_systs, **kwds)
         if hasattr(self, 'top_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger
