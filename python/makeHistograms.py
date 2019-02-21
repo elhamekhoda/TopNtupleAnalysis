@@ -2,16 +2,17 @@
 import os
 import helpers
 import ROOT
-ROOT.PyConfig.IgnoreCommandLineOptions = True
 import csv
 import analysis
 import reweighting
+import systematics
 
 # ROOT.ROOT.EnableImplicitMT(4) # Not sure if it works
 logger = helpers.getLogger('TopNtupleAnalysis.makeHistograms')
 
-def main(parallel = True):
+def main(parallel = False):
     helpers.doPRW = not options.noPRW
+    systematics.DO_PRW = not options.noPRW
     accept_prob = float(options.accept_prob)
     randGen = ROOT.TRandom3(4357)
     do_tree = options.do_tree
@@ -20,11 +21,11 @@ def main(parallel = True):
     pdfList = options.pdf.split(',')
     Xsec = {}
 
-    sumOfWeights = {} # map of DSID to sum of weights
+    InvsumOfWeights = {} # map of DSID to inversed sum of weights
     # TODO
-    pdfSumOfWeights = {} # map of DSID to map of PDF variation names to sum of weights
+    InvpdfSumOfWeights = {} # map of DSID to map of PDF variation names to inversed sum of weights
 
-    sumOfWeightsAF2 = {} # map of DSID to sum of weights
+    InvsumOfWeightsAF2 = {} # map of DSID to sum of inversed weights
 
     fname_pat = "sumOfWeights{}_R21.txt"
     if not options.data:
@@ -40,24 +41,53 @@ def main(parallel = True):
                     for r in csv_reader:
                         if r['pdfName'] == 'nominal': # nominal for PDF variation sample
                             if t == 'systaf2':
-                                sumOfWeightsAF2[int(r['channel'])] = float(r['SumOfWeights'])
+                                InvsumOfWeightsAF2[int(r['channel'])] = 1./float(r['SumOfWeights'])
                             else:
-                                sumOfWeights[int(r['channel'])] = float(r['SumOfWeights'])
+                                InvsumOfWeights[int(r['channel'])] = 1./float(r['SumOfWeights'])
                         else:
-                            pdfSumOfWeights.setdefault(r['channel'], {}).setdefault(r['pdfName'], {})[r['pdfNumber']] = float(r['SumOfWeights'])
+                            InvpdfSumOfWeights.setdefault(r['channel'], {}).setdefault(r['pdfName'], {})[r['pdfNumber']] = 1./float(r['SumOfWeights'])
             except IOError:
                 logger.warn('FILE("{}") not found.'.format(fname))
-        if {} == sumOfWeights == pdfSumOfWeights == sumOfWeightsAF2:
+        if {} == InvsumOfWeights == InvpdfSumOfWeights == InvsumOfWeightsAF2:
             raise IOError('TotalMCWeights files not found. Did you create them first?\nUse samples.write_totalweight_of_samples() to create TotalMCWeights files.')
 
     logger.info("Loading xsec.")
     helpers.loadXsec(Xsec, "dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data")
     Xsec[0] = 0 # No idea why there are these events in dijets samples @yu-heng
+
     # check if there is any W+jets sample there
     isWjets = False
     doEWK = False
     isTtbar = False
     isSingleTop = False
+
+    @helpers.lru_cache(maxsize=100)
+    def _common_mc_weight(mc_weight, channel, suffix):
+        weight = 1
+        if not (isWjets and options.systs == 'pdf' and 'pdf_' in suffix): # use internal weights in this case
+            weight *= mc_weight
+        weight *= Xsec[channel]
+        if options.systs != 'pdf': #'pdf_' in suffix:
+            if not options.af2:
+                try:
+                    weight *= InvsumOfWeights[channel]
+                except:
+                    raise NameError('Could not find <DSID: %s> in DICT("sumOfWeights").' % channel)
+            else:
+                try:
+                    weight *= InvsumOfWeightsAF2[channel]
+                except:
+                    raise NameError('Could not find <DSID: %s> in DICT("sunOfWeightsAF2")' % channel)      
+        else:
+            if not 'pdf_' in suffix:
+                weight *= InvsumOfWeights[channel]
+            else:
+                pdfName, pdfNumber = suffix.split('_', 1)[1].rsplit('_', 1)
+                try:
+                    weight *= InvpdfSumOfWeights[channel][pdfName][int(pdfNumber)]
+                except:
+                    raise NameError('Could not find <DSID: %s> in DICT("pdfSumOfWeights").' % channel)
+        return weight
 
     logger.info("Loading first event")
     mt_load = ROOT.TChain("nominal")
@@ -74,165 +104,9 @@ def main(parallel = True):
     if (sel.mcChannelNumber in reweighting.EWKCorrection.RUN_NUMBERS) and (not options.no_EWKCorrection):
         doEWK = True
 
-
-    doQCD = False
-    doRew = False
-    doKKgluonRew = False
-    doDMRew = False
-    if options.qcd != "False":
-        doQCD = True
-    if options.EFT != '':
-        doRew = True
-    if options.KKgluon != '':
-        doKKgluonRew = True
-    if options.DM:
-        doDMRew = True
-
-
     # systematics list
-    if options.systs[0:3] == 'all':
-        systList = []
-        systList.append('nominal')
-        systList.append('ttNNLO_seq__1up')
-        systList.append('ttNNLO_seqExtended__1up')
-        systList.append('ttNNLO_topPt__1up')
-        systList.append('ttNNLO_topPtDiff__1up')
-        systList.append('mttSlope')
-        if isWjets:
-            systList.append('CAallMCAsym')
-            systList.append('wnorm__1up')
-            systList.append('wnorm__1down')
-            systList.append('wc__1up')
-            systList.append('wc__1down')
-            systList.append('wbb__1up')
-            systList.append('wbb__1down')
-            systList.append('wl__1up')
-            systList.append('wl__1down')
-            systList.append('ttgenup')
-            systList.append('ttgendw')
-            systList.append('ttpsup')
-            systList.append('ttpsdw')
-            systList.append('ttpspp8up')
-            systList.append('ttpspp8dw')
-            systList.append('ttpsoldup')
-            systList.append('ttpsolddw')
-            systList.append('ttisrfsrup')
-            systList.append('ttisrfsrdw')
-            systList.append('2to3ex')
-            for k in range(0, 30+1):
-                systList.append('pdf_PDF4LHC15_nlo_30_%d' % (k))
-            systList.append('elMisIDpos_up')
-            systList.append('elMisIDpos_down')
-            systList.append('ttEWK__1up')
-            systList.append('ttEWK__1down')
-        for i in range(0, 4):
-            systList.append('btagbSF_'+str(i)+'__1up')
-            systList.append('btagbSF_'+str(i)+'__1down')
-            if i == 0:
-                for j in range(1, 4):
-                    systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1up')
-                    systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1down')
-        for i in range(0, 4):
-            systList.append('btagcSF_'+str(i)+'__1up')
-            systList.append('btagcSF_'+str(i)+'__1down')
-            if i == 0:
-                for j in range(1, 4):
-                    systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1up')
-                    systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1down')
-        for i in range(0, 11):
-            systList.append('btaglSF_'+str(i)+'__1up')
-            systList.append('btaglSF_'+str(i)+'__1down')
-            if i == 0:
-                for j in range(1, 4):
-                    systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1up')
-                    systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1down')
-        systList.append('btageSF_0__1up')
-        systList.append('btageSF_0__1down')
-        systList.append('btageSF_1__1up')
-        systList.append('btageSF_1__1down')
-        if isWjets or isTtbar:
-            systList.append('ttxsecup')
-            systList.append('ttxsecdw')
-        if isWjets or isSingleTop:
-            systList.append('singletopup')
-            systList.append('singletopdw')
-        systList.extend(helpers.weightChangeSystematics)
-        systList.remove('')
-        if doEWK:
-            systList.append('ttEWK__1up')
-            systList.append('ttEWK__1down')
-        if options.EFT != '':
-            systList.append("eftScale__1up")
-            systList.append("eftScale__1down")
-        systematics  = 'EG_RESOLUTION_ALL__1down,EG_RESOLUTION_ALL__1up,EG_SCALE_ALL__1down,EG_SCALE_ALL__1up'
-        systematics += ',JET_JER_SINGLE_NP__1up'
-        # 3NP for the akt4 jets
-        #systematics += ',JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1down,JET_NPScenario1_JET_EtaIntercalibration_NonClosure__1up'
-        #systematics += ',JET_NPScenario1_JET_GroupedNP_2__1down,JET_NPScenario1_JET_GroupedNP_2__1up,JET_NPScenario1_JET_GroupedNP_3__1down,JET_NPScenario1_JET_GroupedNP_3__1up,JET_NPScenario1_JET_GroupedNP_1__1up,JET_NPScenario1_JET_GroupedNP_1__1down'
-        # 19 NP for the akt4 jets
-        #systematics += ',JET_21NP_JET_EffectiveNP_3__1down,JET_21NP_JET_EffectiveNP_6restTerm__1up,JET_21NP_JET_EffectiveNP_6restTerm__1down,JET_21NP_JET_Pileup_RhoTopology__1down,JET_21NP_JET_Pileup_OffsetNPV__1down,JET_21NP_JET_BJES_Response__1up,JET_21NP_JET_Pileup_RhoTopology__1up,JET_21NP_JET_EtaIntercalibration_TotalStat__1up,JET_21NP_JET_EffectiveNP_1__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1up,JET_21NP_JET_EffectiveNP_1__1down,JET_21NP_JET_BJES_Response__1down,JET_21NP_JET_Flavor_Response__1up,JET_21NP_JET_Pileup_OffsetMu__1up,JET_21NP_JET_EffectiveNP_4__1down,JET_21NP_JET_EffectiveNP_5__1up,JET_21NP_JET_EffectiveNP_5__1down,JET_21NP_JET_EffectiveNP_2__1down,JET_21NP_JET_PunchThrough_MC15__1down,JET_21NP_JET_EffectiveNP_2__1up,JET_21NP_JET_SingleParticle_HighPt__1up,JET_21NP_JET_EffectiveNP_3__1up,JET_21NP_JET_SingleParticle_HighPt__1down,JET_21NP_JET_Flavor_Composition__1up,JET_21NP_JET_Pileup_PtTerm__1down,JET_21NP_JET_PunchThrough_MC15__1up,JET_21NP_JET_Flavor_Response__1down,JET_21NP_JET_EtaIntercalibration_Modelling__1down,JET_21NP_JET_Flavor_Composition__1down,JET_21NP_JET_Pileup_PtTerm__1up,JET_21NP_JET_EtaIntercalibration_Modelling__1up,JET_21NP_JET_EffectiveNP_4__1up,JET_21NP_JET_Pileup_OffsetMu__1down,JET_21NP_JET_EtaIntercalibration_TotalStat__1down,JET_21NP_JET_Pileup_OffsetNPV__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1down'
-        systematics += ',JET_21NP_JET_EffectiveNP_3__1down,JET_21NP_JET_Pileup_RhoTopology__1down,JET_21NP_JET_Pileup_OffsetNPV__1down,JET_21NP_JET_BJES_Response__1up,JET_21NP_JET_Pileup_RhoTopology__1up,JET_21NP_JET_EtaIntercalibration_TotalStat__1up,JET_21NP_JET_EffectiveNP_1__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1up,JET_21NP_JET_EffectiveNP_1__1down,JET_21NP_JET_BJES_Response__1down,JET_21NP_JET_Flavor_Response__1up,JET_21NP_JET_Pileup_OffsetMu__1up,JET_21NP_JET_EffectiveNP_4__1down,JET_21NP_JET_EffectiveNP_5__1up,JET_21NP_JET_EffectiveNP_5__1down,JET_21NP_JET_EffectiveNP_2__1down,JET_21NP_JET_PunchThrough_MC15__1down,JET_21NP_JET_EffectiveNP_2__1up,JET_21NP_JET_SingleParticle_HighPt__1up,JET_21NP_JET_EffectiveNP_3__1up,JET_21NP_JET_SingleParticle_HighPt__1down,JET_21NP_JET_Flavor_Composition__1up,JET_21NP_JET_Pileup_PtTerm__1down,JET_21NP_JET_PunchThrough_MC15__1up,JET_21NP_JET_Flavor_Response__1down,JET_21NP_JET_EtaIntercalibration_Modelling__1down,JET_21NP_JET_Flavor_Composition__1down,JET_21NP_JET_Pileup_PtTerm__1up,JET_21NP_JET_EtaIntercalibration_Modelling__1up,JET_21NP_JET_EffectiveNP_4__1up,JET_21NP_JET_Pileup_OffsetMu__1down,JET_21NP_JET_EtaIntercalibration_TotalStat__1down,JET_21NP_JET_Pileup_OffsetNPV__1up,JET_21NP_JET_EtaIntercalibration_NonClosure__1down'
-        systematics += ',JET_21NP_JET_EffectiveNP_7__1down,JET_21NP_JET_EffectiveNP_7__1up,JET_21NP_JET_EffectiveNP_6__1up,JET_21NP_JET_EffectiveNP_6__1down,JET_21NP_JET_EffectiveNP_8restTerm__1up,JET_21NP_JET_EffectiveNP_8restTerm__1down'
-        systematics += ',MET_SoftTrk_ResoPara,MET_SoftTrk_ResoPerp,MET_SoftTrk_ScaleDown,MET_SoftTrk_ScaleUp'
-        # muon scale and resolution
-        systematics += ',MUON_SAGITTA_RESBIAS__1up,MUON_SAGITTA_RHO__1up,MUON_SAGITTA_RHO__1down,MUON_SAGITTA_RESBIAS__1down'
-        systematics += ',MUON_ID__1down,MUON_ID__1up,MUON_MS__1down,MUON_MS__1up,MUON_SCALE__1down,MUON_SCALE__1up'
-        # strong systematics for large-R jets
-        systematics += ',LARGERJET_Strong_JET_Comb_Modelling_All__1up,LARGERJET_Strong_JET_Comb_Modelling_All__1down,LARGERJET_Strong_JET_Comb_Baseline_All__1down,LARGERJET_Strong_JET_Comb_Baseline_All__1up,LARGERJET_Strong_JET_Comb_Tracking_All__1down,LARGERJET_Strong_JET_Comb_Tracking_All__1up,LARGERJET_Strong_JET_Comb_TotalStat_All__1down,LARGERJET_Strong_JET_Comb_TotalStat_All__1up'
-        # medium systematics for large-R jets
-        systematics += ',LARGERJET_Medium_JET_Comb_Baseline_Kin__1up,LARGERJET_Medium_JET_Comb_Baseline_Kin__1down,LARGERJET_Medium_JET_Comb_Modelling_Kin__1up,LARGERJET_Medium_JET_Comb_Modelling_Kin__1down,LARGERJET_Medium_JET_Comb_TotalStat_Kin__1up,LARGERJET_Medium_JET_Comb_TotalStat_Kin__1down,LARGERJET_Medium_JET_Comb_Tracking_Kin__1up,LARGERJET_Medium_JET_Comb_Tracking_Kin__1down,LARGERJET_Medium_JET_Rtrk_Baseline_Sub__1up,LARGERJET_Medium_JET_Rtrk_Baseline_Sub__1down,LARGERJET_Medium_JET_Rtrk_Modelling_Sub__1up,LARGERJET_Medium_JET_Rtrk_Modelling_Sub__1down,LARGERJET_Medium_JET_Rtrk_TotalStat_Sub__1up,LARGERJET_Medium_JET_Rtrk_TotalStat_Sub__1down,LARGERJET_Medium_JET_Rtrk_Tracking_Sub__1up,LARGERJET_Medium_JET_Rtrk_Tracking_Sub__1down'
-        # correlate large-R jets and small-R jets
-        ###systematics += ',CORR_LargeRSmallR_A__1up,CORR_LargeRSmallR_A__1down,CORR_LargeRSmallR_B__1up,CORR_LargeRSmallR_B__1down,CORR_LargeRSmallR_C__1up,CORR_LargeRSmallR_C__1down'
-        # large-R jet res.
-        systematics += ',LARGERJET_JER_LARGERJET_JER_PT__1up,LARGERJET_JER_LARGERJET_JER_TAU32__1up,LARGERJET_JER_LARGERJET_JER_MASS__1up'
-        systList.extend(systematics.split(','))
-        l = int(len(systList)/4)
-        systListTmp = []
-        if 'all1' in options.systs:
-            systListTmp.extend(systList[0:l])
-        elif 'all2' in options.systs:
-            systListTmp.extend(systList[l:2*l])
-        elif 'all3' in options.systs:
-            systListTmp.extend(systList[2*l:3*l])
-        elif 'all4' in options.systs:
-            systListTmp.extend(systList[3*l:])
-        elif 'all' in options.systs:
-            systListTmp = systList
-        systList = systListTmp
-        logger.info("--> Setup to run over following systs. {}".format(systList))
-    elif options.systs == 'pdf':
-        systList = []
-        systList.append('nominal')
-        for m in pdfList:
-            dsidWithThisPdf = -1
-            for k in pdfSumOfWeights.keys():
-                if m in pdfSumOfWeights[k]:
-                    dsidWithThisPdf = k
-                    break
-            nvar = len(pdfSumOfWeights[dsidWithThisPdf][m])
-            for k in range(0, nvar):
-                systList.append('pdf_%s_%d' % (m, k))
-    elif options.systs == 'wjttpdf':
-        systList = []
-        systList.append('nominal')
-        for k in range(0, 30+1):
-            systList.append('pdf_PDF4LHC15_nlo_30_%d' % (k))
-    elif options.systs == 'qcd':
-        systList = []
-        systList.append('nominal')
-        systList.append('qcdcenup')
-        systList.append('qcdcendw')
-        systList.append('qcdfwdup')
-        systList.append('qcdfwddw')
-    else:
-        systList = options.systs.split(',')
-    # load analysis code
-    histSuffixes = []
-    for item in systList:
-        if item == 'nominal':
-            histSuffixes.append('')
-        else:
-            histSuffixes.append(item)
+    systList = systematics.get_systs(options.systs, isTtbar, isSingleTop, isWjets, doEWK, options.EFT, pdfList, InvpdfSumOfWeights, analysis = options.analysis)
+    systgroups = list(systematics.grouped_systs(systList))
     if '\;' in options.output:
         logger.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
         channels = helpers.output_expr_reader_old(options.output)
@@ -280,11 +154,13 @@ def main(parallel = True):
         logger.info("2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE))
     for k in channels:
         ch, top_tagger, bot_tagger, aux_selector = k
-        analysisCode[k] = anaClass(ch, histSuffixes, channels[k])
+        analysisCode[k] = anaClass(ch, systgroups, channels[k])
         analysisCode[k].doTree = do_tree
         analysisCode[k].keep = options.WjetsHF
         analysisCode[k].applyQCD = False
         analysisCode[k].doEWKCorrection = doEWK
+        if isinstance(analysisCode[k], analysis.AnaTtresFH):
+            analysisCode[k].blinded = options.blinding
         if options.qcd != "False":
             analysisCode[k].applyQCD = options.qcd
         if options.noMttSlices:
@@ -318,85 +194,55 @@ def main(parallel = True):
 
     isFirstEvent = True
 
-    for s in systList:
-        # s is nominal, or the name of systematic
-        treeName = s # systematic name is the same as the TTree name
-        if treeName in helpers.weightChangeSystematics or 'btag' in treeName or 'wnorm' in treeName or 'wc__' in treeName or 'wl__' in treeName or 'wbb__' in treeName or 'CAallMCAsym' in treeName or 'ttEWK_' in treeName or 'pdf_' in treeName or 'ttNNLO_' in treeName:
-            treeName = 'nominal'
-        if isWjets and (('ttgen' in treeName) or ('ttpsold' in treeName) or ('ttpspp7' in treeName) or ('ttps' in treeName) or ('ttisrfsr' in treeName) or ('pdf_PDF4LHC15_nlo_30' in treeName) or ('ttxsec' in treeName) or ('singletop' in treeName) or ('elMisIDpos' in treeName) or ('2to3ex' in treeName)): # DANGER remember to change when doing W+jets PDF variation
-            treeName = 'nominal'
-        if 'ttxsec' in treeName and isTtbar:
-            treeName = 'nominal'
-        if 'singletop' in treeName and isSingleTop:
-            treeName = 'nominal'
-        if options.qcd != "False":
-            treeName = 'nominal_Loose'
-        mt = ROOT.TChain(treeName)
-        suffix = s
-        if suffix == 'nominal':
-            suffix = ''
-        helpers.addFilesInChain(mt, options.files)
-        sel = mt
+    for systgroup in systgroups:
+        treeName = systgroup.tree # systematic name is the same as the TTree name
+
+        sel = ROOT.TChain(treeName)
+
+        helpers.addFilesInChain(sel, options.files)
         if parallel:
             sel.SetImplicitMT(True)
-        ent = options.nevents or mt.GetEntries()
+        ent = options.nevents or sel.GetEntries()
         ent_length = len(str(ent))
-        for k in range(0, ent):
+        for k in xrange(ent):
             if options.data and accept_prob > 0:
                 randomNumber = randGen.Uniform(0, 1)
                 if randomNumber > accept_prob:
                     continue
-            mt.GetEntry(k)
-            if k % 10000 == 0:
-                logger.info("(tree = {:^10}, syst = {:^5}) Entry: {{:>{}}} / {}".format('<'+treeName+'>', '<'+suffix+'>', ent_length, ent).format(k))
-            if isFirstEvent:
-                reweighting.NNLOReweighting.initNNLO(sel.mcChannelNumber)
-                isFirstEvent = False
+            sel.GetEntry(k)
 
-            # common part of the weight
-            weight = 1
-            if not options.data:
-                if not (isWjets and options.systs == 'pdf' and 'pdf_' in suffix): # use internal weights in this case
-                    weight *= sel.weight_mc
-                channel = sel.mcChannelNumber
-                weight *= Xsec[channel]
-                if options.systs != 'pdf': #'pdf_' in suffix:
-                    if not options.af2:
-                        if not channel in sumOfWeights:
-                            raise NameError('Could not find <DSID: %s> in DICT("sumOfWeights").' % channel)
-                        else:
-                            weight /= sumOfWeights[channel]
-                    else:
-                        if not channel in sumOfWeightsAF2:
-                            raise NameError('Could not find <DSID: %s> in DICT("sunOfWeightsAF2")' % channel)
-                        else:
-                            weight /= sumOfWeightsAF2[channel]
+            for syst in systgroup.systematics:
+                suffix = syst.hist_suffix
+                if k % 10000 == 0:
+                    logger.info("(tree = {:^10}, syst = {:^5}) Entry: {{:>{}}} / {}".format('<'+treeName+'>', '<'+suffix+'>', ent_length, ent).format(k))
+                if isFirstEvent:
+                    reweighting.NNLOReweighting.initNNLO(sel.mcChannelNumber)
+                    isFirstEvent = False
+
+                # common part of the weight
+                if options.data:
+                    weight = 1.
                 else:
-                    if not 'pdf_' in suffix:
-                        weight /= sumOfWeights[channel]
-                    else:
+                    weight = _common_mc_weight(sel.weight_mc, sel.mcChannelNumber, suffix if 'pdf_' in suffix else '')
+
+                for ana in analysisCode.itervalues():
+                    if not ana.selectChannel(sel, suffix):
+                        continue
+                    weight_reco = ana.getWeight(sel, syst)
+                    if options.systs == 'pdf' and 'pdf_' in suffix and not isWjets: # for W+jets, use internal weights
                         pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
                         pdfNumber = int(suffix.rsplit('_', 1)[1])
-                        if not channel in pdfSumOfWeights:
-                            raise NameError('Could not find <DSID: %s> in DICT("pdfSumOfWeights").' % channel)
-                        else:
-                            weight /= pdfSumOfWeights[channel][pdfName][pdfNumber]
+                        pdfAttr = getattr(sel, pdfName)
+                        weight_reco *= pdfAttr[pdfNumber]
+                    elif (isWjets and options.systs == 'pdf' and 'pdf_' in suffix): # use internal weights in this case
+                        pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
+                        pdfNumber = int(suffix.rsplit('_', 1)[1])
+                        wjpdfList = [7]+range(11, 110+1)
+                        weight_reco *= sel.mc_generator_weights[wjpdfList[pdfNumber]]
+                    ana.run(sel, suffix, weight*weight_reco, weight)
 
-            for ana in analysisCode:
-                if not analysisCode[ana].selectChannel(sel, suffix):
-                    continue
-                weight_reco = analysisCode[ana].getWeight(sel, suffix)
-                if options.systs == 'pdf' and 'pdf_' in suffix and not isWjets: # for W+jets, use internal weights
-                    pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
-                    pdfNumber = int(suffix.rsplit('_', 1)[1])
-                    pdfAttr = getattr(sel, pdfName)
-                    weight_reco *= pdfAttr[pdfNumber]
-                elif (isWjets and options.systs == 'pdf' and 'pdf_' in suffix): # use internal weights in this case
-                    pdfName = (suffix.split('_', 1)[1]).rsplit('_', 1)[0]
-                    pdfNumber = int(suffix.rsplit('_', 1)[1])
-                    wjpdfList = [7]+range(11, 110+1)
-                    weight_reco *= sel.mc_generator_weights[wjpdfList[pdfNumber]]
-                analysisCode[ana].run(sel, suffix, weight*weight_reco, weight)
+            for ana in analysisCode.itervalues():
+                ana.unlock()
 
     for k in analysisCode:
         analysisCode[k].end()
@@ -446,13 +292,12 @@ if __name__ == "__main__":
                         help="Apply QCD weights?",
                         metavar="CHANNEL")
     parser.add_argument("--no-EWKCorrection",
-                        default=False,
+                        action="store_true",
                         help="Don't do Electroweak correction when running SM ttbar sample including the following:\n"
                             +str(reweighting.EWKCorrection.RUN_NUMBERS))
     parser.add_argument("-N", "--noMttSlices",
-                        action='store_true',
                         dest="noMttSlices",
-                        default=False,
+                        action="store_true",
                         help="If set, stop vetoing high mtt ( > 1.1TeV) events in inclusive ttbar sample [410000, 410470, 410471].\n"
                             +"This is mainly for running it together with mtt sliced ttbar samples")
     parser.add_argument("-M", "--applyMET",
@@ -508,9 +353,9 @@ if __name__ == "__main__":
                         action='store_true',
                         help='Make a mini-tree.')
 
-    parent_parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, parents = [parser]) 
+    parent_parser = argparse.ArgumentParser(formatter_class = argparse.ArgumentDefaultsHelpFormatter, parents = [parser]) 
     subparsers = parent_parser.add_subparsers(title = 'SL/FH ttbar resonances anaylsis', dest = 'analysis')
-    SLttres_parser = subparsers.add_parser('AnaTtresSL', parents = [parser], formatter_class=argparse.ArgumentDefaultsHelpFormatter, help = 'Semi-leptonic ttbar resonances anaylsis')
+    SLttres_parser = subparsers.add_parser('AnaTtresSL', parents = [parser], formatter_class = argparse.ArgumentDefaultsHelpFormatter, help = 'Semi-leptonic ttbar resonances anaylsis')
     SLttres_parser.add_argument("-o", "--output",
                         dest="output",
                         default = ["(re,good,MV2c10_70):hist_re.root",
@@ -521,7 +366,7 @@ if __name__ == "__main__":
                         nargs = '?',
                         help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
                         metavar="FILES")
-    FHttres_parser = subparsers.add_parser('AnaTtresFH', parents = [parser],formatter_class=argparse.ArgumentDefaultsHelpFormatter, help = 'Full-Hadronic ttbar resonances anaylsis')
+    FHttres_parser = subparsers.add_parser('AnaTtresFH', parents = [parser], formatter_class = argparse.ArgumentDefaultsHelpFormatter, help = 'Full-Hadronic ttbar resonances anaylsis')
     FHttres_parser.add_argument("-o", "--output",
                         dest="output",
                         default = ["(bFH,good,MV2c10_70):hist_bFH.root"],
@@ -529,7 +374,9 @@ if __name__ == "__main__":
                         nargs = '?',
                         help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
                         metavar="FILES")
-
+    FHttres_parser.add_argument('--blinding',
+                        action='store_true',
+                        help='Invert the deltaY cut')
     options = parent_parser.parse_args()
     logger.info("-> Calling main")
     helpers.initialise_binds()

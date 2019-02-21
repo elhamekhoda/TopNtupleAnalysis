@@ -1,10 +1,12 @@
 import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 import math
 import sys
 import ast
 import os
 import re
 import subprocess
+import urlparse
 try:
     import ROOT.PathResolver
     __PATHRESOLVER__ = True
@@ -521,42 +523,6 @@ listWjets22.extend(range(364156, 364197+1))
 
 doPRW = True
 
-# list of systematics related to changes in the weights only
-weightSF = {'' : ['pileup', 'leptonSF', 'jvt'], #, 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'eChargeSF__1up': ['pileup', 'leptonSF', 'jvt', 'indiv_SF_EL_ChargeID_UP'],
-            'eChargeSF__1down': ['pileup', 'leptonSF', 'jvt', 'indiv_SF_EL_ChargeID_DOWN'],
-            'eChargeMisIDStatSF__1up': ['pileup', 'leptonSF', 'jvt', 'indiv_SF_EL_ChargeMisID_STAT_UP'],
-            'eChargeMisIDStatSF__1down': ['pileup', 'leptonSF', 'jvt', 'indiv_SF_EL_ChargeMisID_STAT_DOWN'],
-            'eChargeMisIDSystSF__1up': ['pileup', 'leptonSF', 'jvt', 'indiv_SF_EL_ChargeMisID_SYST_UP'],
-            'eChargeMisIDSystSF__1down': ['pileup', 'leptonSF', 'jvt', 'indiv_SF_EL_ChargeMisID_SYST_DOWN'],
-            'eTrigSF__1up': ['pileup', 'leptonSF_EL_SF_Trigger_UP', 'jvt'], # 'indiv_SF_EL_ChargeMisID'],
-            'eTrigSF__1down': ['pileup', 'leptonSF_EL_SF_Trigger_DOWN', 'jvt'], # 'indiv_SF_EL_ChargeMisID'],
-            'eIDSF__1up': ['pileup', 'leptonSF_EL_SF_ID_UP'], #, 'jvt', 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'eIDSF__1down': ['pileup', 'leptonSF_EL_SF_ID_DOWN'], #, 'jvt', 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'eRecoSF__1up': ['pileup', 'leptonSF_EL_SF_Reco_UP'], #, 'jvt', 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'eRecoSF__1down': ['pileup', 'leptonSF_EL_SF_Reco_DOWN'], #, 'jvt', 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'eIsolSF__1up': ['pileup', 'leptonSF_EL_SF_Isol_UP', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'eIsolSF__1down': ['pileup', 'leptonSF_EL_SF_Isol_DOWN', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muTrigStatSF__1up': ['pileup', 'leptonSF_MU_SF_Trigger_STAT_UP', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muTrigStatSF__1down': ['pileup', 'leptonSF_MU_SF_Trigger_STAT_DOWN', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muTrigSystSF__1up': ['pileup', 'leptonSF_MU_SF_Trigger_SYST_UP', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muTrigSystSF__1down': ['pileup', 'leptonSF_MU_SF_Trigger_SYST_DOWN', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muIDStatSF__1up': ['pileup', 'leptonSF_MU_SF_ID_STAT_UP', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muIDStatSF__1down': ['pileup', 'leptonSF_MU_SF_ID_STAT_DOWN', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muIDSystSF__1up': ['pileup', 'leptonSF_MU_SF_ID_SYST_UP', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muIDSystSF__1down': ['pileup', 'leptonSF_MU_SF_ID_SYST_DOWN', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muIsolStatSF__1up': ['pileup', 'leptonSF_MU_SF_Isol_STAT_UP', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muIsolStatSF__1down': ['pileup', 'leptonSF_MU_SF_Isol_STAT_DOWN', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muIsolSystSF__1up': ['pileup', 'leptonSF_MU_SF_Isol_SYST_UP', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'muIsolSystSF__1down': ['pileup', 'leptonSF_MU_SF_Isol_SYST_DOWN', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'pileupSF__1up': ['pileup_UP', 'leptonSF', 'jvt'], #, 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'pileupSF__1down': ['pileup_DOWN', 'leptonSF', 'jvt'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'jvtSF__1up': ['pileup', 'leptonSF', 'jvt_UP'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-            'jvtSF__1down': ['pileup', 'leptonSF', 'jvt_DOWN'], # 'indiv_SF_EL_ChargeID', 'indiv_SF_EL_ChargeMisID'],
-           }
-
-weightChangeSystematics = weightSF.keys()
-
 def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel', debug_mode = False):
     """Intuitive Python ast-style expression parser
 
@@ -670,7 +636,12 @@ def char2int(char):
         return char
     return ord(char)
 
-def hadd(a_dict, delete_sources = False, force_recreate = True):
+def hadd(a_dict, delete_sources = False, force_recreate = True, N = 4, ext_options = []):
+    _ext_options = ext_options[:]
+    if force_recreate:
+        _ext_options.extend(['-f'])
+    if N > 1:
+        _ext_options.extend(['-j', str(N)])
     for k, v in a_dict.iteritems():
         offensive = False
         for source in v:
@@ -680,7 +651,11 @@ def hadd(a_dict, delete_sources = False, force_recreate = True):
         if offensive:
             logger.error('hadd: fail to merge. Maybe rerun this job and try to merge again.')
             continue
-        subprocess.check_call(['hadd', '-j', '4'] + (['-f'] if force_recreate else []) + [k] + list(v))
+        temp_target = k+'.tmp'
+        if force_recreate:
+            ext_options
+        subprocess.check_call(['hadd'] + _ext_options + [temp_target] + list(v))
+        os.rename(temp_target, k)
         if delete_sources:
             for f in v:
                 os.remove(f)
@@ -702,3 +677,24 @@ def check_for_panda():
         print 'Could not find `prun`. If you use `setupATLAS` (you should) then'
         print '">> lsetup pandas" and run this again'
         sys.exit()
+
+try:
+    from functools32 import lru_cache
+except:
+    from functools import wraps
+    def lru_cache(maxsize = 100):
+        '''
+        This does nothing but an identity decorator to avoid error.
+        '''
+        def decorating_function(user_function):
+            @wraps(user_function)
+            def wrapper(*args, **kwds):
+                return user_function(*args, **kwds)
+            return wrapper
+        return decorating_function
+
+def lan_path(url):
+    p = urlparse.urlparse(url).path
+    if p.startswith('//'):
+        p = p[1:]
+    return p

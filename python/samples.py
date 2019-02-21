@@ -70,6 +70,8 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('data', 'EXOT7'): ['Data15_13TeV_25ns_EXOT7','Data16_13TeV_25ns_EXOT7','Data17_13TeV_25ns_EXOT7','Data18_13TeV_25ns_EXOT7'],
                   ('tt', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad'],
                   ('tt_mttsliced', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad', 'MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad_mttsliced'],
+                  ('ttnonallhad', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad'],
+                  ('ttnonallhad_mttsliced', 'EXOT7'): ['MC16d_13TeV_25ns_FS_EXOT7_ttbar_nonallhad', 'MC16d_13TeV_25ns_FS_EXOT7_ttbar_nonallhad_mttsliced'],
                   ('ttV', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbarV'],
                   ('singletop', 'EXOT7'):['MC16a_13TeV_25ns_FS_EXOT7_singletop'],
                   ('zjets', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_Zjets221'],
@@ -204,11 +206,15 @@ class Sample(object):
     def get_systematics(self):
         return self._systematics
     def set_systematics(self, astr = None):
-        systematics = "all"
         if astr != None:
-            systematics = astr
+            if type(astr) == str:
+                systematics = [astr]
+            else:
+                systematics = list(astr)
+        else:
+            systematics = ["all"]
         if any(name in self.parent.sample_name for name in ["data", "qcde", "qcdmu"]):
-            systematics = "nominal"
+            systematics = ["nominal"]
         self._systematics = systematics
 
     systematics = property(get_systematics, set_systematics)
@@ -272,6 +278,8 @@ class Sample(object):
                 continue
             for _, rule in sorted(enumerate(rules), key = self.priority_key):
                 expires_at = rule['expires_at']
+                if expires_at is None:
+                  expires_at = 0
                 remained = expires_at - now
                 to_extended = max_extend - remained
                 seconds = int(math.floor(to_extended.total_seconds()))
@@ -398,6 +406,8 @@ class SubSample(Sample):
         raise NotImplementedError('I don\'t think you really want to do this.')
 
 def part_sample(sample, max_input_files = 5, sort = True):
+    if type(max_input_files) is not int:
+        max_input_files = max_input_files(sample)
     if not sample.commited:
         sample.commit(only_retrieve_cmd = True)
     l = len(sample.input_files)

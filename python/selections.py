@@ -23,6 +23,8 @@ class TtresChi2(Selection):
             logger.debug('The ttres-chi2 strategy is "rebel", which means ttres-chi2 will be re-computed internally')
         elif self.strategy == 'obey':
             logger.debug('The ttres-chi2 strategy is "obey", which means using the ttres-chi2 is done by external program. (i.e. HQTTtResonancesTools)')
+        else:
+            logger.debug('The ttres-chi2 strategy is "{}"'.format(self.strategy))
         self.bcategorize = getattr(self, '_bcategorize_{}'.format(self.strategy))
         self._lepton = ROOT.Math.PtEtaPhiEVector()
     def passes(self, ev, lepton = None):
@@ -96,26 +98,36 @@ class BoostedTopTagger(Selection):
     index_id : {str}, optional
             which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"), where 'i' is the id of the item.
     """
-    def __init__(self, _callable = None, num_top = 1, min_pt = 300000, strategy = 'obey', bot_tagger = None):
+    def __init__(self, _callable = None, num_top = 1, min_pt = 300000, strategy = 'obey', bot_tagger = None, do_truth_matching = False, leading_only = False):
         logger.info("Select events contain at least {} hadronic-top candidate(s) with pt > {} MeV".format(num_top, min_pt))
         if not callable(_callable):
             logger.info('StrExpression: "{}"'.format(_callable))
         self.num_top = num_top
         self.min_pt = min_pt
+        self.leading_only = leading_only
+        if self.leading_only:
+            logger.info('`Leading-only` scenario is chosen. Only events with leading {} large-R jets all top-tagged will pass.'.format(self.num_top))
+        else:
+            logger.info('`Leading-only` scenario is NOT chosen. All events with at least {} top-tagged large-R jets will pass.'.format(self.num_top))
+        self.do_truth_matching = do_truth_matching
         self.absdPhiJJRange = (1.6, float('inf'))
         self.absdYJJRange = (float('-inf'), 1.8)
         self.bcategory = -1
         self.ljet_istoptagged = []
         self.ljet_angularcuts = []
+        self.ljet_selected = []
         self.ljet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiMVector')()
+        if self.do_truth_matching:
+            self.truth_ljet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiMVector')()
         if not callable(_callable):
             self._expr = _callable
             def _callable(ev):
+                del self.ljet_istoptagged[:]
                 _top_tagger = lambda i: eval(helpers.branch_parser(self._expr,
                                                                    name_fmt = "ljet_{}",
                                                                    index_id = "i"),
                                              {'char2int': helpers.char2int, 'sel': ev, 'i': i})
-                for i in range(len(ev.ljet_pt)):
+                for i in xrange(len(ev.ljet_pt)):
                     if ev.ljet_pt[i] < self.min_pt:
                         self.ljet_istoptagged.append(0)
                     else:
@@ -132,19 +144,24 @@ class BoostedTopTagger(Selection):
     def retrieve_ljet_p4(self, ev):
         self.ljet_p4.clear()
         for i in xrange(ev.ljet_pt.size()):
-            p4 = ROOT.Math.PtEtaPhiMVector(ev.ljet_pt[i], ev.ljet_eta[i], ev.ljet_phi[i],ev.ljet_m[i])
-            self.ljet_p4.push_back(p4)
+            self.ljet_p4.push_back((ev.ljet_pt[i], ev.ljet_eta[i], ev.ljet_phi[i],ev.ljet_m[i]))
+    def retrieve_truth_ljet_p4(self, ev):
+        self.truth_ljet_p4.clear()
+        for i in xrange(ev.akt10truthjet_pt.size()):
+            self.truth_ljet_p4.push_back((ev.akt10truthjet_pt[i], ev.akt10truthjet_phi[i], ev.akt10truthjet_eta[i], ev.akt10truthjet_m[i]))
     def bcategorize(self, ev, bot_tagger = None):
         if not any(helpers.char2int(tagged) for tagged in self._bot_tagger.tjet_isbtagged):
             self.bcategory = -1
             return 
-        btagCat = 0
         if self.num_top == 1:
-            raise NotImplementedError
+            # In l+jets analysis, we have the b-tagging categories properly stored
+            self.bcategory = ev.Btagcat
         else:
+            # In fully hadronic channel, we need to do it manually
+            btagCat = 0
             i_top = 0
-            for i, istoptagged in enumerate(self.ljet_istoptagged):
-                if not istoptagged:
+            for i, isselected in enumerate(self.ljet_selected):
+                if not isselected:
                     continue
                 i_top += 1
                 if self._bot_tagger.ljet_isbtagged[i]:
@@ -154,65 +171,101 @@ class BoostedTopTagger(Selection):
                         btagCat = i_top
             self.bcategory = btagCat
     def _passes_obey(self, ev):
-        self.ljet_istoptagged = []
+        del self.ljet_selected[:]
         self.retrieve_ljet_p4(ev)
         self._alg(ev)
-        self.passed = sum(self.ljet_istoptagged) >= self.num_top
+        self.ljet_selected[:] = self.ljet_istoptagged[:]
+        self.passed = sum(self.ljet_selected if not self.leading_only else self.ljet_selected[:self.num_top]) >= self.num_top
         if self._bot_tagger != None:
             self.bcategorize(ev)
+        if self.do_truth_matching:
+            self.truth_matching(ev)
         return self.passed
     def angularcuts(self, ev):
         # This is a temporary solution. will be implemented in HQTTtresTools and be utilized directly here in the future
         ret = []
-        _ljet_istoptagged = []
+        _ljet_selected = []
         for i1, p4_i1 in enumerate(self.ljet_p4):
             ret.append([])
-            _ljet_istoptagged.append(0)
+            _ljet_selected.append(0)
             for i2, p4_i2 in enumerate(self.ljet_p4):
                 ret[-1].append(int((i1 < i2) and \
                                    (self.absdPhiJJRange[0] < abs(ROOT.Math.VectorUtil.DeltaPhi(p4_i1,p4_i2)) < self.absdPhiJJRange[1]) and \
                                    (self.absdYJJRange[0] < abs(p4_i1.Rapidity()-p4_i2.Rapidity()) < self.absdYJJRange[1])))
         self.ljet_angularcuts = ret
-        for i in range(len(self.ljet_angularcuts)):
-            for j in range(len(self.ljet_angularcuts[i])):
+        for i in xrange(len(self.ljet_angularcuts)):
+            for j in xrange(len(self.ljet_angularcuts[i])):
                 if i >= j:
                     continue
                 if self.ljet_istoptagged[i] * self.ljet_istoptagged[j]:
                     if self.ljet_angularcuts[i][j]:
-                        _ljet_istoptagged[i] = _ljet_istoptagged[j] = 1
-                    self.ljet_istoptagged = _ljet_istoptagged
+                        _ljet_selected[i] = _ljet_selected[j] = 1
+                    self.ljet_selected = _ljet_selected
                     return
-        self.ljet_istoptagged = _ljet_istoptagged
+        self.ljet_selected = _ljet_selected
 
     def _passes_rebel(self, ev):
-        self.ljet_istoptagged = []
+        del self.ljet_selected[:]
         self.retrieve_ljet_p4(ev)
         self._alg(ev)
         self.angularcuts(ev)
-        self.passed = sum(self.ljet_istoptagged) >= self.num_top
+        self.passed = sum(self.ljet_selected if not self.leading_only else self.ljet_selected[:self.num_top]) >= self.num_top
         if self._bot_tagger != None:
             self.bcategorize(ev)
+        if self.do_truth_matching:
+            self.truth_matching(ev)
         return self.passed
+
+    def truth_matching(self, ev):
+        if ev.mcChannelNumber == 0:
+            return
+        self.retrieve_truth_ljet_p4(ev)
+        ljet_truthjetid = []
+        for ljet_p4 in self.ljet_p4:
+            truth_ljet_i = -999 # -999 means no match
+            for i, truth_ljet_p4 in enumerate(self.truth_ljet_p4):
+                if (ROOT.Math.VectorUtil.DeltaR(ljet_p4, truth_ljet_p4) < 0.8):
+                    # minimum double matching
+                    # >>> 1. if find no unique match so far, continue searching.
+                    # >>> 2. if in the end still find no unique match, retrieve the one with highest pT
+                    if i in ljet_truthjetid:
+                        if truth_ljet_i is -1:
+                            truth_ljet_i = i
+                    else:
+                        truth_ljet_i = i
+                        break
+            ljet_truthjetid.append(truth_ljet_i)
+        self.ljet_truthjetid = ljet_truthjetid
+
+    def parton_matching(self, ev):
+        raise NotImplementedError
+
 
 class TrackJetBotTagger(Selection):
     WP2D = {'AntiKt2PV0TrackJets':
             {
              'MV2c10':    {'FixedCutBEff60':  0.86, 'FixedCutBEff70':  0.66, 'FixedCutBEff77':  0.38, 'FixedCutBEff85': -0.15, 'pt': 10e3},
-             'MV2c10mu':  {'FixedCutBEff60':  0.95, 'FixedCutBEff70':  0.87, 'FixedCutBEff77':  0.71, 'FixedCutBEff85':  0.23, 'pt': 10e3},
-             'MV2c10rnn': {'FixedCutBEff60':  0.96, 'FixedCutBEff70':  0.87, 'FixedCutBEff77':  0.71, 'FixedCutBEff85':  0.26, 'pt': 10e3},
+             'MV2c10mu':  {'FixedCutBEff60':  0.95, 'FixedCutBEff70':  0.87, 'FixedCutBEff77':  0.71, 'FixedCutBEff85':  0.23, 'pt': 10e3, 'status': ('deprecated',)},
+             'MV2c10rnn': {'FixedCutBEff60':  0.96, 'FixedCutBEff70':  0.87, 'FixedCutBEff77':  0.71, 'FixedCutBEff85':  0.26, 'pt': 10e3, 'status': ('deprecated',)},
              'DL1':       {'FixedCutBEff60':  2.74, 'FixedCutBEff70':  2.02, 'FixedCutBEff77':  1.45, 'FixedCutBEff85':  0.46, 'pt': 10e3},
-             'DL1mu':     {'FixedCutBEff60':  2.72, 'FixedCutBEff70':  1.83, 'FixedCutBEff77':  1.10, 'FixedCutBEff85':  0.12, 'pt': 10e3},
-             'DL1rnn':    {'FixedCutBEff60':  4.31, 'FixedCutBEff70':  2.98, 'FixedCutBEff77':  2.23, 'FixedCutBEff85':  1.32, 'pt': 10e3}
+             'DL1mu':     {'FixedCutBEff60':  2.72, 'FixedCutBEff70':  1.83, 'FixedCutBEff77':  1.10, 'FixedCutBEff85':  0.12, 'pt': 10e3, 'status': ('deprecated',)},
+             'DL1rnn':    {'FixedCutBEff60':  4.31, 'FixedCutBEff70':  2.98, 'FixedCutBEff77':  2.23, 'FixedCutBEff85':  1.32, 'pt': 10e3, 'status': ('deprecated',)}
             },
 
             'AntiKtVR30Rmax4Rmin02TrackJets':
             {
-             'MV2c10':    {'FixedCutBEff60':  0.92, 'FixedCutBEff70':  0.79, 'FixedCutBEff77':  0.58, 'FixedCutBEff85':  0.05, 'pt':  7e3}}
+             'MV2c10':    {'FixedCutBEff60':  0.92, 'FixedCutBEff70':  0.79, 'FixedCutBEff77':  0.58, 'FixedCutBEff85':  0.05, 'pt':  7e3},
+             'MV2r': {'pt': 7e3, 'status': ('uncalibrated',)},
+             'MV2rmu': {'pt': 7e3, 'status': ('uncalibrated',)},
+             'DL1':    {'pt': 7e3},
+             'DL1r': {'pt': 7e3, 'status': ('uncalibrated',)},
+             'DL1rmu': {'pt': 7e3, 'status': ('uncalibrated',)},
+            }
             }
     # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
     def __init__(self, algorithm = 'MV2c10',
                        WP = 'FixedCutBEff70',
-                       trackjet_alg = 'AntiKt2PV0TrackJets',
+                       trackjet_alg = 'AntiKtVR30Rmax4Rmin02TrackJets',
                        strategy = 'obey',
                        do_association = True,
                        do_ljet_association = False,
@@ -237,10 +290,13 @@ class TrackJetBotTagger(Selection):
             self.strategy = 'obey'
         else:
             self.strategy = strategy
-        self.scale_factor = getattr(self, '_' + SF_type + '_scale_factor')
         recomm = self.WP2D.get(self.trackjet_alg, {}).get(self.algorithm, {})
-        self.min_discriminant = recomm.get(WP, -999)
-        self.min_pt = recomm.get('pt', 10e3)
+        if 'uncalibrated' in recomm.get('status', tuple()):
+            logger.warn('This b-tagging WP is not yet calibrated. Unity scale factor will be used')
+            SF_type = 'uncalib'
+        self.scale_factor = getattr(self, '_' + SF_type + '_scale_factor')
+        self.min_discriminant = recomm.get(WP, -999) # Note that this will not be considered if the strategy is `obey`
+        self.min_pt = recomm.get('pt', 10e3) # Note that this will not be considered if the strategy is `obey`
         self.min_nbjets = min_nbjets
         logger.info("Select events contain at least {} b-tagged trk-jets with pt > {} MeV".format(self.min_nbjets, self.min_pt))
         if self.strategy == 'rebel':
@@ -264,7 +320,7 @@ class TrackJetBotTagger(Selection):
         self._tjet_p4.clear()
         for tagged in getattr(ev, self._branch_map['tjet_isbtagged']):
             self.tjet_isbtagged.push_back(helpers.char2int(tagged))
-        for i in range(len(ev.tjet_pt)):
+        for i in xrange(len(ev.tjet_pt)):
             self._tjet_p4.push_back((ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i], ev.tjet_e[i]))
         if self.do_association:
             self.association(ev)
@@ -280,12 +336,11 @@ class TrackJetBotTagger(Selection):
         self.tjet_isbtagged.clear()
         self._tjet_p4.clear()
         for i, discriminant in enumerate(getattr(ev, self._branch_map['tjet_discriminant'])):
-            p4 = ROOT.Math.PtEtaPhiEVector(ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i],ev.tjet_e[i])
-            if p4.Perp() > self.min_pt and math.fabs(p4.Eta()) < 2.5 and ev.tjet_numConstituents[i] >= 2:
-                self._tjet_p4.push_back(p4)
+            if ev.tjet_pt[i] > self.min_pt and math.fabs(ev.tjet_eta[i]) < 2.5 and ev.tjet_numConstituents[i] >= 2:
+                self._tjet_p4.push_back((ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i],ev.tjet_e[i]))
                 self.tjet_isbtagged.push_back(discriminant > self.min_discriminant)
             else:
-                self._tjet_p4.push_back(p4)
+                self._tjet_p4.push_back((ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i],ev.tjet_e[i]))
                 self.tjet_isbtagged.push_back(False)
         if self.do_association:
             self.association(ev)
@@ -326,7 +381,7 @@ class TrackJetBotTagger(Selection):
             self._ljet_p4.push_back((ev.ljet_pt[ljet_i], ev.ljet_eta[ljet_i], ev.ljet_phi[ljet_i], ev.ljet_m[ljet_i]))
             trkbjet_associated = False
             associated_btaggedtjet_index = -999
-            for tjet_i in range(len(ev.tjet_pt)):
+            for tjet_i in xrange(len(ev.tjet_pt)):
                 if self.tjet_isbtagged[tjet_i] and self.associated(self._tjet_p4[tjet_i], self._ljet_p4[ljet_i], self.max_ljet_deltaR):
                     trkbjet_associated = True
                     associated_btaggedtjet_index = tjet_i
@@ -335,7 +390,12 @@ class TrackJetBotTagger(Selection):
             self.ljet_associated_btaggedtjet_index.push_back(associated_btaggedtjet_index)
 
     def truth_matching(self, ev):
+        if ev.mcChannelNumber == 0:
+            return
         self.tjet_istrueb = [label==5 for label in ev.tjet_label]
+
+    def _uncalib_scale_factor(self, ev, systematic_variation = ''):
+        return 1.
 
     def _perjet_scale_factor(self, ev, systematic_variation = ''):
         """
@@ -437,8 +497,6 @@ class TrackJetBotTagger(Selection):
         trk jet pT-dependent SF is not available.
         '''
         pref = self._branch_map['weight_SF']
-        varName = ''
-        eig = -1
         if 'btag' in systematic_variation:
             # get direction
             direction = 'up'
@@ -446,25 +504,25 @@ class TrackJetBotTagger(Selection):
                 direction = 'down'
             # check if it is a b,c,light or extrapolation variation and set name
             if 'btagbSF_' in systematic_variation:
-                varName = pref+'_eigenvars_B_'+direction
+                varName = '{}_eigenvars_B_{}'.format(pref, direction)
                 # get eigenvector index
                 eig = int(systematic_variation.split('_')[1])
                 scale_factor = getattr(ev, varName)[eig]
             elif 'btagcSF_' in systematic_variation:
-                varName = pref+'_eigenvars_C_'+direction
+                varName = '{}_eigenvars_C_{}'.format(pref, direction)
                 # get eigenvector index
                 eig = int(systematic_variation.split('_')[1])
                 scale_factor = getattr(ev, varName)[eig]
             elif 'btaglSF_' in systematic_variation:
-                varName = pref+'_eigenvars_Light_'+direction
+                varName = '{}_eigenvars_Light_{}'.format(pref, direction)
                 # get eigenvector index
                 eig = int(systematic_variation.split('_')[1])
                 scale_factor = getattr(ev, varName)[eig]
             elif 'btageSF_0' in systematic_variation:
-                varName = pref+'_extrapolation_'+direction
+                varName = '{}_extrapolation_{}'.format(pref, direction)
                 scale_factor = getattr(ev, varName)
             elif 'btageSF_1' in systematic_variation:
-                varName = pref+'_extrapolation_from_charm_'+direction
+                varName = '{}_extrapolation_from_charm_{}'.format(pref, direction)
                 scale_factor = getattr(ev, varName)
             
         else: # not a b-tagging variation, so take the nominal
