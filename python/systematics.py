@@ -46,7 +46,10 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
         if expr[0:3] == 'all':
             if analysis == 'AnaTtresSL':
                 systList.append('nominal')
-                if ttbarHighOrderCorrection != 'NNLOQCDNLOEWK':
+                if ttbarHighOrderCorrection == 'NNLOQCDNLOEWK':
+                    systList.append('ttNNLOQCDNLOEWK__1up')
+                    systList.append('ttNNLOQCDNLOEWK__1down')
+                else:
                     systList.append('ttNNLO_seq__1up')
                     systList.append('ttNNLO_seqExtended__1up')
                     systList.append('ttNNLO_topPt__1up')
@@ -160,7 +163,10 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
                     'LARGERJET_Strong_JET_Comb_Tracking_All__1up', 
                     'LARGERJET_Strong_JET_MassRes_Top__1up'
                     ])
-                if ttbarHighOrderCorrection != 'NNLOQCDNLOEWK':
+                if ttbarHighOrderCorrection == 'NNLOQCDNLOEWK':
+                    systList.append('ttNNLOQCDNLOEWK__1up')
+                    systList.append('ttNNLOQCDNLOEWK__1down')
+                else:
                     systList.extend([
                         'ttNNLO_seqExtended__1up', 
                         'ttNNLO_seq__1up', 
