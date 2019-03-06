@@ -11,6 +11,9 @@ class Reweighter(object):
     def get_SF(cls, ev, syst):
         raise NotImplementedError
     @classmethod
+    def init(cls, mcChannelNumber):
+        pass
+    @classmethod
     def get_weight(cls, ev, syst = '', w0 = 1):
         """Retrieve the scale factor
         
@@ -48,6 +51,9 @@ class EWKCorrection(Reweighter):
     top = ROOT.TLorentzVector()
     topbar = ROOT.TLorentzVector()
     @classmethod
+    def init(cls, mcChannelNumber):
+        logger.warn(DeprecationWarning('This is deprecated. Consider to use the new `TTbarNNLOReweighting`'))
+    @classmethod
     def get_SF(cls, ev, s):
         if ev.mcChannelNumber == 0:
             return 1.
@@ -69,7 +75,8 @@ class NNLOReweighting(Reweighter):
              '*': 0
              }
     @classmethod
-    def initNNLO(cls, mcChannelNumber):
+    def init(cls, mcChannelNumber):
+        logger.warn(DeprecationWarning('This is deprecated. Consider to use the new `TTbarNNLOReweighting`'))
         if mcChannelNumber not in cls.RUN_NUMBERS:
             logger.info('<{}> is not a registered ttbar sample. NNLO Reweighter will not be activated.'.format(mcChannelNumber))
         else:
@@ -96,6 +103,47 @@ class NNLOReweighting(Reweighter):
             return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 2)
         if abss == 4:
             return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 2)*ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 1)
+
+class TTbarNNLOReweighting(Reweighter):
+    '''
+    This is the latest rel.21 recommendation for NLO EWK+NNLO QCD ttbar correction.
+    You shall never use it together with `EWKCorrection` or `NNLORweighting`, as it already account for both.
+    TopPt, TtbarMass, TopY dependent reweighting are available. By default TopPt is considered
+    '''
+    RUN_NUMBERS = [410471, 410470]
+    RUN_NUMBERS += [410633, 410634, 410635, 410636, 410637] # mttsliced nonallhad
+    RUN_NUMBERS += [410284, 410285, 410286, 410287, 410288] # mttsliced allhad
+    SYSTS = {'ttNNLOQCDNLOEWK__1up': 1, # mu_R/F=2.0
+             'ttNNLOQCDNLOEWK__1down': -1, # mu_R/F = 0.5
+             '*': 0
+             }
+
+    @classmethod
+    def init(cls, mcChannelNumber):
+        if mcChannelNumber not in cls.RUN_NUMBERS:
+            logger.info('<{}> is not a registered ttbar sample. TTbarNNLOReweighting will not be activated.'.format(mcChannelNumber))
+        else:
+            logger.info('<{}> is a registered ttbar sample. TTbarNNLOReweighting will be activated.'.format(mcChannelNumber))
+            if mcChannelNumber in [410284, 410285, 410286, 410287, 410288]:
+                mcChannelNumber = 410471
+            elif mcChannelNumber in [410633, 410634, 410635, 410636, 410637]:
+                mcChannelNumber = 410470
+            cls.REWEIGTER = ROOT.TTbarNNLOReweighter.TTbarNNLOReweighter(mcChannelNumber)
+            cls.REWEIGTER.Init()
+
+    @classmethod
+    def get_SF(cls, ev, s):
+        if ev.mcChannelNumber == 0:
+            return 1.
+        if ev.mcChannelNumber not in cls.RUN_NUMBERS:
+            return 1.
+        truth_top_pt = ev.MC_t_afterFSR_pt*1e-3 # in GeV
+        if s == 0:
+            return cls.REWEIGTER.GetTopPt_Powheg_Pythia8_Nominal(truth_top_pt)
+        if s == 1:
+            return cls.REWEIGTER.GetTopPt_ScaleMax_Powheg_Pythia8_Nominal(truth_top_pt)
+        if s == -1:
+            return cls.REWEIGTER.GetTopPt_ScaleMin_Powheg_Pythia8_Nominal(truth_top_pt)
 
 class WjetSystWeight(Reweighter):
     '''

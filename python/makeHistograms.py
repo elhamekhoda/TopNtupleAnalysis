@@ -101,11 +101,15 @@ def main(parallel = False):
         isTtbar = True
     if sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
         isSingleTop = True
-    if (sel.mcChannelNumber in reweighting.EWKCorrection.RUN_NUMBERS) and (not options.no_EWKCorrection):
-        doEWK = True
+    if options.ttbar_high_order == 'Rel20EWK':
+        if (sel.mcChannelNumber not in reweighting.EWKCorrection.RUN_NUMBERS):
+            options.ttbar_high_order = 'none'
+    elif options.ttbar_high_order == 'NNLOQCDNLOEWK':
+        if (sel.mcChannelNumber not in reweighting.TTbarNNLOReweighting.RUN_NUMBERS):
+            options.ttbar_high_order = 'none'
 
     # systematics list
-    systList = systematics.get_systs(options.systs, isTtbar, isSingleTop, isWjets, doEWK, options.EFT, pdfList, InvpdfSumOfWeights, analysis = options.analysis)
+    systList = systematics.get_systs(options.systs, isTtbar, isSingleTop, isWjets, doEWK, options.EFT, pdfList, InvpdfSumOfWeights, options.ttbar_high_order, analysis = options.analysis)
     systgroups = list(systematics.grouped_systs(systList))
     if '\;' in options.output:
         logger.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
@@ -158,7 +162,7 @@ def main(parallel = False):
         analysisCode[k].doTree = do_tree
         analysisCode[k].keep = options.WjetsHF
         analysisCode[k].applyQCD = False
-        analysisCode[k].doEWKCorrection = doEWK
+        analysisCode[k].ttbarHighOrder = options.ttbar_high_order
         if isinstance(analysisCode[k], analysis.AnaTtresFH):
             analysisCode[k].blinded = options.blinding
         if options.qcd != "False":
@@ -216,7 +220,11 @@ def main(parallel = False):
                 if k % 10000 == 0:
                     logger.info("(tree = {:^10}, syst = {:^5}) Entry: {{:>{}}} / {}".format('<'+treeName+'>', '<'+suffix+'>', ent_length, ent).format(k))
                 if isFirstEvent:
-                    reweighting.NNLOReweighting.initNNLO(sel.mcChannelNumber)
+                    if options.ttbar_high_order == 'NNLOQCDNLOEWK':
+                        reweighting.TTbarNNLOReweighting.init(sel.mcChannelNumber)
+                    else:
+                        reweighting.EWKCorrection.init(sel.mcChannelNumber)
+                        reweighting.NNLOReweighting.init(sel.mcChannelNumber)
                     isFirstEvent = False
 
                 # common part of the weight
@@ -291,10 +299,14 @@ if __name__ == "__main__":
                         default="False",
                         help="Apply QCD weights?",
                         metavar="CHANNEL")
-    parser.add_argument("--no-EWKCorrection",
-                        action="store_true",
-                        help="Don't do Electroweak correction when running SM ttbar sample including the following:\n"
-                            +str(reweighting.EWKCorrection.RUN_NUMBERS))
+    # parser.add_argument("--no-EWKCorrection",
+    #                     action="store_true",
+    #                     help="Don't do Electroweak correction when running SM ttbar sample including the following:\n"
+    #                         +str(reweighting.EWKCorrection.RUN_NUMBERS))
+    parser.add_argument("--ttbar-high-order",
+                        default =  'NNLOQCDNLOEWK',
+                        choices = ['Rel20EWK', 'NNLOQCDNLOEWK', 'none'],
+                        help = 'High Order Correction applied to registered ttbar sample.')
     parser.add_argument("-N", "--noMttSlices",
                         dest="noMttSlices",
                         action="store_true",

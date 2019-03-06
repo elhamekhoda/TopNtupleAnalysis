@@ -39,6 +39,7 @@ if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
     # Declare the package's dependencies:
     atlas_depends_on_subdirs(PUBLIC  TopDataPreparation
                                      NNLOReweighter
+                                     TTbarNNLOReweighter
                              PRIVATE Tools/PathResolver)
     if(TARGET NNLOReweighterPkg)
         add_definitions(-D NNLOReweighter_NNLOReweighter)

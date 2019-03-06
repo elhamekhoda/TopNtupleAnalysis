@@ -50,10 +50,12 @@ General Instruction
 The core program is `python/makeHistograms.py`.
 ```
 usage: makeHistograms.py [-h] [-d] [-f [FILE]] [-s SYSTEMATICS] [-W FLAVOURS]
-                         [-P PDFS] [-Q CHANNEL] [-N] [-M CUT]
-                         [-S MH,MA,SBA,TANB,TYPE] [-E LAMBDA,CVV] [-K WIDTH]
-                         [-D] [-p PDF] [-F] [-w] [-u FLOAT] [-t TOP_TAGGER]
-                         [-b BOT_TAGGER] [--nevents NEVENTS] [--do-tree]
+                         [-P PDFS] [-Q CHANNEL]
+                         [--ttbar-high-order {Rel20EWK,NNLOQCDNLOEWK,none}]
+                         [-N] [-M CUT] [-S MH,MA,SBA,TANB,TYPE]
+                         [-E LAMBDA,CVV] [-K WIDTH] [-D] [-p PDF] [-F] [-w]
+                         [-u FLOAT] [-t TOP_TAGGER] [-b BOT_TAGGER]
+                         [--nevents NEVENTS] [--do-tree]
                          {AnaTtresSL,AnaTtresFH} ...
 
 optional arguments:
@@ -72,6 +74,9 @@ optional arguments:
   -P PDFS, --pdf PDFS   Which PDFs to reweight to. (default: )
   -Q CHANNEL, --qcd CHANNEL
                         Apply QCD weights? (default: False)
+  --ttbar-high-order {Rel20EWK,NNLOQCDNLOEWK,none}
+                        High Order Correction applied to registered ttbar
+                        sample. (default: NNLOQCDNLOEWK)
   -N, --noMttSlices     If set, stop vetoing high mtt events in 410000 sample.
                         (default: False)
   -M CUT, --applyMET CUT

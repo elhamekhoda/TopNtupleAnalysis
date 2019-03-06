@@ -37,7 +37,7 @@ def grouped_systs(systematics, key = lambda tup: tup.tree):
     for k, g in itertools.groupby(sorted(systematics, key = key), key):
         yield SystematicsGroup(list(g))
 
-def get_systs(expr, isTtbar, isSingleTop, isWjets, doEWK, EFT, pdfList, pdfSumOfWeights, analysis = None):
+def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights, ttbarHighOrderCorrection, analysis = None):
     # systematics list
     systList = []
     if analysis is None:
@@ -46,10 +46,11 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, doEWK, EFT, pdfList, pdfSumOf
         if expr[0:3] == 'all':
             if analysis == 'AnaTtresSL':
                 systList.append('nominal')
-                systList.append('ttNNLO_seq__1up')
-                systList.append('ttNNLO_seqExtended__1up')
-                systList.append('ttNNLO_topPt__1up')
-                systList.append('ttNNLO_topPtDiff__1up')
+                if ttbarHighOrderCorrection != 'NNLOQCDNLOEWK':
+                    systList.append('ttNNLO_seq__1up')
+                    systList.append('ttNNLO_seqExtended__1up')
+                    systList.append('ttNNLO_topPt__1up')
+                    systList.append('ttNNLO_topPtDiff__1up')
                 systList.append('mttSlope')
 
                 for i in range(0, 4):
@@ -118,10 +119,7 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, doEWK, EFT, pdfList, pdfSumOf
                     'jvtSF__1up',
                     'pileupSF__1down', 
                     'pileupSF__1up', 
-                    'ttNNLO_seqExtended__1up', 
-                    'ttNNLO_seq__1up', 
-                    'ttNNLO_topPtDiff__1up', 
-                    'ttNNLO_topPt__1up',
+
 
                     'btagbSF_0__1up',
                     'btagbSF_0__1down',
@@ -162,6 +160,13 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, doEWK, EFT, pdfList, pdfSumOf
                     'LARGERJET_Strong_JET_Comb_Tracking_All__1up', 
                     'LARGERJET_Strong_JET_MassRes_Top__1up'
                     ])
+                if ttbarHighOrderCorrection != 'NNLOQCDNLOEWK':
+                    systList.extend([
+                        'ttNNLO_seqExtended__1up', 
+                        'ttNNLO_seq__1up', 
+                        'ttNNLO_topPtDiff__1up', 
+                        'ttNNLO_topPt__1up',
+                        ])
         if isWjets:
             systList.append('CAallMCAsym')
             systList.append('wnorm__1up')
@@ -195,7 +200,7 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, doEWK, EFT, pdfList, pdfSumOf
             systList.append('singletopdw')
 
         systList.remove('')
-        if doEWK:
+        if ttbarHighOrderCorrection == 'Rel20EWK':
             systList.append('ttEWK__1up')
             systList.append('ttEWK__1down')
         if EFT != '':
@@ -290,6 +295,8 @@ ALLSYSTS = OrderedDict((
     _syst('ttNNLO_topPt__1up', 'nominal'),
     _syst('ttEWK__1up', 'nominal'),
     _syst('ttEWK__1down', 'nominal'),
+    _syst('ttNNLOQCDNLOEWK__1up', 'nominal'),
+    _syst('ttNNLOQCDNLOEWK__1down', 'nominal'),
     _syst('btagbSF_0__1down', 'nominal'), 
     _syst('btagbSF_0__1up', 'nominal'), 
     _syst('btagbSF_0_pt1__1down', 'nominal'), 
