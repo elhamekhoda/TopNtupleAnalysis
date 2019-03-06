@@ -140,10 +140,10 @@ Observable("th2_issubleading", do = ['tree'], only = ['bFH'], dtype = int,  scri
 
 Observable("toptagged_N", (4, 0, 4), do = ['hist', 'tree'], only = ['bFH'], style = 'single', dtype = int,  script = """sum(analysis.top_tagger.ljet_istoptagged)""").queue()
 
-Observable("truth_ljet_pt_MA",  do = ['tree'], style = 'foreach', dtype = float, script = """(analysis.top_tagger.truth_ljet_p4[i].Pt()*1e-3 for i in analysis.top_tagger.ljet_truthjetid if i > 0)""", need_truth = True).queue()
-Observable("truth_ljet_eta_MA", do = ['tree'], style = 'foreach', dtype = float, script = """(analysis.top_tagger.truth_ljet_p4[i].Eta() for i in analysis.top_tagger.ljet_truthjetid if i > 0)""",     need_truth = True).queue()
-Observable("truth_ljet_phi_MA", do = ['tree'], style = 'foreach', dtype = float, script = """(analysis.top_tagger.truth_ljet_p4[i].Phi() for i in analysis.top_tagger.ljet_truthjetid if i > 0)""",     need_truth = True).queue()
-Observable("truth_ljet_m_MA"  , do = ['tree'], style = 'foreach', dtype = float, script = """(analysis.top_tagger.truth_ljet_p4[i].M()*1e-3 for i in analysis.top_tagger.ljet_truthjetid if i > 0)""",  need_truth = True).queue()
+Observable("truth_ljet_pt_MA",  do = ['tree'], style = 'foreach', dtype = float, script = """(analysis.top_tagger.truth_ljet_p4[i].Pt()*1e-3 for i in analysis.top_tagger.ljet_truthjetid if i >= 0)""", need_truth = True).queue()
+Observable("truth_ljet_eta_MA", do = ['tree'], style = 'foreach', dtype = float, script = """(analysis.top_tagger.truth_ljet_p4[i].Eta() for i in analysis.top_tagger.ljet_truthjetid if i >= 0)""",     need_truth = True).queue()
+Observable("truth_ljet_phi_MA", do = ['tree'], style = 'foreach', dtype = float, script = """(analysis.top_tagger.truth_ljet_p4[i].Phi() for i in analysis.top_tagger.ljet_truthjetid if i >= 0)""",     need_truth = True).queue()
+Observable("truth_ljet_m_MA"  , do = ['tree'], style = 'foreach', dtype = float, script = """(analysis.top_tagger.truth_ljet_p4[i].M()*1e-3 for i in analysis.top_tagger.ljet_truthjetid if i >= 0)""",  need_truth = True).queue()
 #Observable("truth", do = ['tree'], need_truth = True, style = 'foreach', dtype = 'ROOT::Math::PtEtaPhiMVector', script = """[ROOT.Math.PtEtaPhiMVector(sel.truthparticle_pt.at(i), sel.truthparticle_eta.at(i), sel.truthparticle_phi.at(i), sel.truthparticle_m.at(i))*1e-3 for i in xrange(sel.truthparticle_pt.size())]""").queue()
 #Observable("truth_id", do = ['tree'], need_truth = True, style = 'foreach', dtype = int, script = """sel.truthparticle_type""").queue()
 #Observable("akt10truthjet", do = ['tree'], only = ['bFH'], style = 'foreach', dtype = 'TLorentzVector', need_truth = True,

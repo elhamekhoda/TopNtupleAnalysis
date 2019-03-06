@@ -71,7 +71,7 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('tt', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad'],
                   ('tt_mttsliced', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad', 'MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad_mttsliced'],
                   ('ttnonallhad', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad'],
-                  ('ttnonallhad_mttsliced', 'EXOT7'): ['MC16d_13TeV_25ns_FS_EXOT7_ttbar_nonallhad', 'MC16d_13TeV_25ns_FS_EXOT7_ttbar_nonallhad_mttsliced'],
+                  ('ttnonallhad_mttsliced', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_nonallhad', 'MC16a_13TeV_25ns_FS_EXOT7_ttbar_nonallhad_mttsliced'],
                   ('ttV', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbarV'],
                   ('singletop', 'EXOT7'):['MC16a_13TeV_25ns_FS_EXOT7_singletop'],
                   ('zjets', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_Zjets221'],

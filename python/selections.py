@@ -116,6 +116,7 @@ class BoostedTopTagger(Selection):
         self.ljet_istoptagged = []
         self.ljet_angularcuts = []
         self.ljet_selected = []
+        self.ljet_truthjetid = []
         self.ljet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiMVector')()
         if self.do_truth_matching:
             self.truth_ljet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiMVector')()
@@ -148,7 +149,7 @@ class BoostedTopTagger(Selection):
     def retrieve_truth_ljet_p4(self, ev):
         self.truth_ljet_p4.clear()
         for i in xrange(ev.akt10truthjet_pt.size()):
-            self.truth_ljet_p4.push_back((ev.akt10truthjet_pt[i], ev.akt10truthjet_phi[i], ev.akt10truthjet_eta[i], ev.akt10truthjet_m[i]))
+            self.truth_ljet_p4.push_back((ev.akt10truthjet_pt[i], ev.akt10truthjet_eta[i], ev.akt10truthjet_phi[i], ev.akt10truthjet_m[i]))
     def bcategorize(self, ev, bot_tagger = None):
         if not any(helpers.char2int(tagged) for tagged in self._bot_tagger.tjet_isbtagged):
             self.bcategory = -1
@@ -229,13 +230,13 @@ class BoostedTopTagger(Selection):
                     # >>> 1. if find no unique match so far, continue searching.
                     # >>> 2. if in the end still find no unique match, retrieve the one with highest pT
                     if i in ljet_truthjetid:
-                        if truth_ljet_i is -1:
+                        if truth_ljet_i < 0:
                             truth_ljet_i = i
                     else:
                         truth_ljet_i = i
                         break
             ljet_truthjetid.append(truth_ljet_i)
-        self.ljet_truthjetid = ljet_truthjetid
+        self.ljet_truthjetid[:] = ljet_truthjetid[:]
 
     def parton_matching(self, ev):
         raise NotImplementedError
