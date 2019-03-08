@@ -9,6 +9,11 @@ Prerequisites
     ```bash
     acm clone_project MultiBJets/NNLOReweighter
     ```
+* Release 21 NNLO QCD+NLO EWK Correction (Only works with __Altas CMake__)
+
+    ```bash
+    acm clone_project lserkin/TTbarNNLOReweighter
+    ```
 * Grid Access: HQTTtResonancesTools (Only works with __Altas CMake__)
 
     ```bash

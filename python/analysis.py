@@ -38,6 +38,7 @@ class Analysis(object):
     alphaS = -1
     blinded = False
     mapSel = {}
+    ttbarHighOrder = 'none'
     prog_bcatN = re.compile(r"^(?P<region>[a-zA-Z]+?)(?P<bcat_or_period>([+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?|))$")
 
     def __init__(self, channel, systgroups, outputFile, do_tree = False):
@@ -60,16 +61,6 @@ class Analysis(object):
         for systgroup in systgroups:
             self.histSuffixes.extend(s.hist_suffix for s in systgroup.systematics)
             self.treeSuffixes[systgroup.tree] = [s.hist_suffix for s in systgroup.systematics]
-        self.noMttSlices = False
-        self.doEWKCorrection = True
-        self.applyMET = 0
-        self.eftLambda = -1
-        self.eftCvv = -1
-        self.KKgluonWidth = -1
-        self.w2HDM = 1
-        self.me2SM = -1
-        self.me2XX = -1
-        self.alphaS = -1
         self._doTree = do_tree
         self.tName  = "mini"
         self.h = {}
@@ -315,11 +306,14 @@ class Analysis(object):
         syst_name = s.name
         for item in s.weight_map:
             weight *= getattr(sel, item)
-        # this applies the EWK weight to _only_ ttbar samples
-        if self.doEWKCorrection:
-            weight *= reweighting.EWKCorrection.get_weight(sel, syst_name)
-        # this compute the NNLO systematics to _only_ ttbar samples
-        weight *= reweighting.NNLOReweighting.get_weight(sel, syst_name)
+        if self.ttbarHighOrder == 'NNLOQCDNLOEWK':
+            weight *= reweighting.TTbarNNLOReweighting.get_weight(sel, syst_name)
+        else:
+            # this applies the EWK weight to _only_ ttbar samples
+            if self.ttbarHighOrder == 'Rel20EWK':
+                weight *= reweighting.EWKCorrection.get_weight(sel, syst_name)
+            # this compute the NNLO systematics to _only_ ttbar samples
+            weight *= reweighting.NNLOReweighting.get_weight(sel, syst_name)
         # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
         weight *= self.bot_tagger.scale_factor(sel, syst_name)
         # this applies the W+jets Sherpa 2.2.0 nJets reweighting correction
