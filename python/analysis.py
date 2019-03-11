@@ -550,8 +550,8 @@ class AnaTtresSL(Analysis):
             return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples
-        if sel.mcChannelNumber in [410000, 410470, 410471] and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
-            if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+        if sel.mcChannelNumber in [410000, 410470, 410471] and hasattr(sel, "MC_ttbar_afterFSR_beforeDecay_m") and not self.noMttSlices:
+            if sel.MC_ttbar_afterFSR_beforeDecay_m > 1.1e6:
                 return False
 
         if sel.mcChannelNumber in helpers.listWjets22:

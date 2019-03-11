@@ -52,7 +52,8 @@ class EWKCorrection(Reweighter):
     topbar = ROOT.TLorentzVector()
     @classmethod
     def init(cls, mcChannelNumber):
-        logger.warn(DeprecationWarning('This is deprecated. Consider to use the new `TTbarNNLOReweighting`'))
+        logger.warn(DeprecationWarning('{} is deprecated. Consider to use the new `TTbarNNLOReweighting`'.format(cls.__name__)))
+        logger.info('Note that this is considered as a correction, i.e. change the nominal values')
     @classmethod
     def get_SF(cls, ev, s):
         if ev.mcChannelNumber == 0:
@@ -76,11 +77,12 @@ class NNLOReweighting(Reweighter):
              }
     @classmethod
     def init(cls, mcChannelNumber):
-        logger.warn(DeprecationWarning('This is deprecated. Consider to use the new `TTbarNNLOReweighting`'))
+        logger.warn(DeprecationWarning('{} is deprecated. Consider to use the new `TTbarNNLOReweighting`'.format(cls.__name__)))
         if mcChannelNumber not in cls.RUN_NUMBERS:
             logger.info('<{}> is not a registered ttbar sample. NNLO Reweighter will not be activated.'.format(mcChannelNumber))
         else:
             logger.info('<{}> is a registered ttbar sample. NNLO Reweighter will be activated.'.format(mcChannelNumber))
+            logger.info('Note that this is only consdier as a systematic not a correction, i.e. __DON\'T__ change the nominal values')
             if mcChannelNumber in [301528, 301529, 301530, 301531, 301532]:
                 mcChannelNumber = 410000
             elif mcChannelNumber in [410284, 410285, 410286, 410287, 410288]:
@@ -124,6 +126,7 @@ class TTbarNNLOReweighting(Reweighter):
             logger.info('<{}> is not a registered ttbar sample. TTbarNNLOReweighting will not be activated.'.format(mcChannelNumber))
         else:
             logger.info('<{}> is a registered ttbar sample. TTbarNNLOReweighting will be activated.'.format(mcChannelNumber))
+            logger.info('Note that this is considered as a correction, i.e. change the nominal values')
             if mcChannelNumber in [410284, 410285, 410286, 410287, 410288]:
                 mcChannelNumber = 410471
             elif mcChannelNumber in [410633, 410634, 410635, 410636, 410637]:
@@ -137,7 +140,7 @@ class TTbarNNLOReweighting(Reweighter):
             return 1.
         if ev.mcChannelNumber not in cls.RUN_NUMBERS:
             return 1.
-        truth_top_pt = ev.MC_t_afterFSR_pt*1e-3 # in GeV
+        truth_top_pt = ev.MC_t_afterFSR_SC_pt*1e-3 # in GeV
         if s == 0:
             return cls.REWEIGTER.GetTopPt_Powheg_Pythia8_Nominal(truth_top_pt)
         if s == 1:
