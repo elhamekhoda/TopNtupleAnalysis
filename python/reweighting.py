@@ -98,13 +98,13 @@ class NNLOReweighting(Reweighter):
         if abss == 0:
             return 1.
         if abss == 1:
-            return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 1)
+            return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_SC_pt, ev.MC_t_afterFSR_SC_pt, 1)
         if abss == 2:
-            return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 0)
+            return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_SC_pt, ev.MC_t_afterFSR_SC_pt, 0)
         if abss == 3:
-            return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 2)
+            return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_SC_pt, ev.MC_t_afterFSR_SC_pt, 2)
         if abss == 4:
-            return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 2)*ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_pt, ev.MC_t_afterFSR_pt, 1)
+            return ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_SC_pt, ev.MC_t_afterFSR_SC_pt, 2)*ROOT.TopNtupleAnalysis.getNNLOWeight(ev.MC_ttbar_afterFSR_SC_pt, ev.MC_t_afterFSR_SC_pt, 1)
 
 class TTbarNNLOReweighting(Reweighter):
     '''
