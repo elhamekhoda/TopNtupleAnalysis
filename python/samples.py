@@ -406,7 +406,7 @@ class SubSample(Sample):
         raise NotImplementedError('I don\'t think you really want to do this.')
 
 def part_sample(sample, max_input_files = 5, sort = True):
-    if type(max_input_files) is not int:
+    if callable(max_input_files):
         max_input_files = max_input_files(sample)
     if not sample.commited:
         sample.commit(only_retrieve_cmd = True)
