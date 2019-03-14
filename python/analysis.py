@@ -38,6 +38,7 @@ class Analysis(object):
     alphaS = -1
     blinded = False
     mapSel = {}
+    ttbarHighOrder = 'none'
     prog_bcatN = re.compile(r"^(?P<region>[a-zA-Z]+?)(?P<bcat_or_period>([+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?|))$")
 
     def __init__(self, channel, systgroups, outputFile, do_tree = False):
@@ -60,16 +61,6 @@ class Analysis(object):
         for systgroup in systgroups:
             self.histSuffixes.extend(s.hist_suffix for s in systgroup.systematics)
             self.treeSuffixes[systgroup.tree] = [s.hist_suffix for s in systgroup.systematics]
-        self.noMttSlices = False
-        self.doEWKCorrection = True
-        self.applyMET = 0
-        self.eftLambda = -1
-        self.eftCvv = -1
-        self.KKgluonWidth = -1
-        self.w2HDM = 1
-        self.me2SM = -1
-        self.me2XX = -1
-        self.alphaS = -1
         self._doTree = do_tree
         self.tName  = "mini"
         self.h = {}
@@ -90,7 +81,6 @@ class Analysis(object):
         self.add("mu", 100, 0, 100)
         self.add("vtxz", 40, -400, 400)
         self.add("npv", 50, 0, 50)
-        self.add("runNumber", 24647, 276261.5, 300908.5)
         ### boosted channel ###
         self.add("nlargeJets", 10, -0.5, 9.5)
         ### mass spectrum ###
@@ -316,11 +306,14 @@ class Analysis(object):
         syst_name = s.name
         for item in s.weight_map:
             weight *= getattr(sel, item)
-        # this applies the EWK weight to _only_ ttbar samples
-        if self.doEWKCorrection:
-            weight *= reweighting.EWKCorrection.get_weight(sel, syst_name)
-        # this compute the NNLO systematics to _only_ ttbar samples
-        weight *= reweighting.NNLOReweighting.get_weight(sel, syst_name)
+        if self.ttbarHighOrder == 'NNLOQCDNLOEWK':
+            weight *= reweighting.TTbarNNLOReweighting.get_weight(sel, syst_name)
+        else:
+            # this applies the EWK weight to _only_ ttbar samples
+            if self.ttbarHighOrder == 'Rel20EWK':
+                weight *= reweighting.EWKCorrection.get_weight(sel, syst_name)
+            # this compute the NNLO systematics to _only_ ttbar samples
+            weight *= reweighting.NNLOReweighting.get_weight(sel, syst_name)
         # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
         weight *= self.bot_tagger.scale_factor(sel, syst_name)
         # this applies the W+jets Sherpa 2.2.0 nJets reweighting correction
@@ -403,16 +396,9 @@ class AnaTtresSL(Analysis):
         self.add("lepPt", 100, 25, 525)
         self.add("lepEta", 20, -2.5, 2.5)
         self.add("lepPhi", 32, -3.2, 3.2)
-        self.add("nJets", 10, -0.5, 9.5)
-        self.add("nTrkBtagJets", 10, -0.5, 9.5)
-        self.addVar("MET", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
-        self.add("MET_phi", 32, -3.2, 3.2)
         self.add("mwt", 20, 0, 200)
         self.add("closestJetDr", 20, 0, 2.0)
         self.add("closestJetPt", 20, 0, 200)
-        self.add("mu", 100, 0, 100)
-        self.add("vtxz", 40, -400, 400)
-        self.add("npv", 50, 0, 50)
         self.addVar("closeJetPt", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
         self.addVar("largeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3])
         self.add("largeJetM", 30, 0, 300)
@@ -564,8 +550,8 @@ class AnaTtresSL(Analysis):
             return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples
-        if sel.mcChannelNumber in [410000, 410470, 410471] and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
-            if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+        if sel.mcChannelNumber in [410000, 410470, 410471] and hasattr(sel, "MC_ttbar_afterFSR_beforeDecay_m") and not self.noMttSlices:
+            if sel.MC_ttbar_afterFSR_beforeDecay_m > 1.1e6:
                 return False
 
         if sel.mcChannelNumber in helpers.listWjets22:
