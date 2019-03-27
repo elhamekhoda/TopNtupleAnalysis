@@ -875,6 +875,7 @@ class AnaTtresFH(Analysis):
 
         self.add("mtt", 6000 , 0, 6000)
         self.add("m_truthJJ", 6000, 0, 6000)
+        self.add("m_truthJJ_MA", 6000, 0, 6000)
         # Leading hadronic top candidate
         self.addVar("leadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3, 2.5e3, 3e3, 4e3, 5e3])
         self.add("leadinglargeJetM", 30, 0, 300)
@@ -923,8 +924,8 @@ class AnaTtresFH(Analysis):
 
     def addTree(self):
         super(AnaTtresFH, self).addTree()
-        print self.trees
         self.addBranch('m_truthJJ', array('d', [0]), isweight = False)
+        self.addBranch('m_truthJJ_MA', array('d', [0]), isweight = False)
 
     def _selectChannel(self, sel, syst):
         if self.ch not in self.mapSel:
@@ -1032,6 +1033,14 @@ class AnaTtresFH(Analysis):
             else:
                 m_truthJJ = -999
             self.h["m_truthJJ"][syst].Fill(m_truthJJ, w)
+            truthJJ_MA = [self.top_tagger.truth_ljet_p4[i] for i in self.top_tagger.ljet_truthjetid if i >= 0]
+            if len(truthJJ_MA) >= 2:
+                truthJ1_MA,truthJ2_MA = truthJJ_MA[0:2]
+                m_truthJJ_MA = (truthJ1_MA+truthJ2_MA).M()*1e-3
+            else:
+                m_truthJJ_MA = -999
+            self.h["m_truthJJ_MA"][syst].Fill(m_truthJJ_MA, w)
+
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             
             ### boosted channel ###
@@ -1082,6 +1091,7 @@ class AnaTtresFH(Analysis):
                 self.branches[syst]["w0"].push_back(w0)
                 if self._locked == SELECTION_LOCKED:
                     self.branches[syst]['m_truthJJ'][0] = m_truthJJ
+                    self.branches[syst]['m_truthJJ_MA'][0] = m_truthJJ_MA
                     self.branches[syst]["eventNumber"].push_back(sel.eventNumber)
                     self.branches[syst]["runNumber"].push_back(sel.runNumber)
                     self.branches[syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
