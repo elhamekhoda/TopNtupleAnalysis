@@ -270,33 +270,49 @@ class Sample(object):
     def get_replication_rules(self):
         for f in self._input_files:
             yield tuple(self._client.list_associated_rules_for_file(self.ds_scope, os.path.basename(urlparse.urlparse(f).path)))
-    def update_replication_lieftime(self, max_extend = datetime.timedelta(days=14), only = range(1), lower_limit = datetime.timedelta(days=3)):
+    def set_replication_lifetime(self, t = datetime.timedelta(days=14), only = range(1)):
+        for rules in self.get_replication_rules():
+            i = 0
+            for _, rule in sorted(enumerate(rules), key = self.priority_key):
+                if not (only and i not in only):
+                    seconds = int(math.floor(t.total_seconds()))
+                    try:
+                        logger.info('Update replication rule:')
+                        logger.info('\tname:{}'.format(rule['name']))
+                        logger.info('\tid:{}'.format(rule['id']))
+                        logger.info('\tRSE:{}'.format(rule['rse_expression']))
+                        logger.info('\tfor {} days'.format(t.days))
+                        self._client.update_replication_rule(rule['id'], {'lifetime': seconds})
+                        logger.info('\tSuccess!')
+                    except Exception as e:
+                        logger.exception(e)
+                i += 1
+    def extend_replication_lifetime(self, max_extend = datetime.timedelta(days=14), only = range(1), lower_limit = datetime.timedelta(days=3)):
         now = datetime.datetime.now()
         for rules in self.get_replication_rules():
             i = 0
-            if only and i not in only:
-                continue
             for _, rule in sorted(enumerate(rules), key = self.priority_key):
-                expires_at = rule['expires_at']
-                if expires_at is None:
-                  expires_at = 0
-                remained = expires_at - now
-                to_extended = max_extend - remained
-                seconds = int(math.floor(to_extended.total_seconds()))
-                try:
-                    logger.info('Update replication rule:')
-                    logger.info('\tname:{}'.format(rule['name']))
-                    logger.info('\tid:{}'.format(rule['id']))
-                    logger.info('\tRSE:{}'.format(rule['rse_expression']))
-                    if remained >= lower_limit:
-                        logger.info('\tSkip! Remaining lifetime is long enough (>={} days).'.format(lower_limit.days))
-                        i += 1
-                        continue
-                    logger.info('\tfor {} days'.format(to_extended.days))
-                    self._client.update_replication_rule(rule['id'], {'lifetime': seconds})
-                    logger.info('\tSuccess!')
-                except Exception as e:
-                    logger.exception(e)
+                if not (only and i not in only):
+                    expires_at = rule['expires_at']
+                    if expires_at is None:
+                      expires_at = datetime.datetime.max
+                    remained = expires_at - now
+                    to_extended = max_extend - remained
+                    seconds = int(math.floor(to_extended.total_seconds()))
+                    try:
+                        logger.info('Update replication rule:')
+                        logger.info('\tname:{}'.format(rule['name']))
+                        logger.info('\tid:{}'.format(rule['id']))
+                        logger.info('\tRSE:{}'.format(rule['rse_expression']))
+                        if remained >= lower_limit:
+                            logger.info('\tSkip! Remaining lifetime is long enough (>={} days).'.format(lower_limit.days))
+                            i += 1
+                            continue
+                        logger.info('\tfor {} days'.format(to_extended.days))
+                        self._client.update_replication_rule(rule['id'], {'lifetime': seconds})
+                        logger.info('\tSuccess!')
+                    except Exception as e:
+                        logger.exception(e)
                 i += 1
     def add_replication_rule(self, rse = None, only = range(1), allow_fail = True, **kwds):
         rse = rse or self.RSE_preferred
