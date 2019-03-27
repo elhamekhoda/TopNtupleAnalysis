@@ -255,12 +255,12 @@ class TrackJetBotTagger(Selection):
 
             'AntiKtVR30Rmax4Rmin02TrackJets':
             {
-             'MV2c10':    {'FixedCutBEff60':  0.92, 'FixedCutBEff70':  0.79, 'FixedCutBEff77':  0.58, 'FixedCutBEff85':  0.05, 'pt':  7e3},
-             'MV2r': {'pt': 7e3, 'status': ('uncalibrated',)},
-             'MV2rmu': {'pt': 7e3, 'status': ('uncalibrated',)},
-             'DL1':    {'pt': 7e3},
-             'DL1r': {'pt': 7e3, 'status': ('uncalibrated',)},
-             'DL1rmu': {'pt': 7e3, 'status': ('uncalibrated',)},
+             'MV2c10':    {'FixedCutBEff60':  0.92, 'FixedCutBEff70':  0.79, 'FixedCutBEff77':  0.58, 'FixedCutBEff85':  0.05, 'pt':  10e3},
+             'MV2r': {'pt': 10e3, 'status': ('uncalibrated',)},
+             'MV2rmu': {'pt': 10e3, 'status': ('uncalibrated',)},
+             'DL1':    {'pt': 10e3},
+             'DL1r': {'pt': 10e3, 'status': ('uncalibrated',)},
+             'DL1rmu': {'pt': 10e3, 'status': ('uncalibrated',)},
             }
             }
     # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018

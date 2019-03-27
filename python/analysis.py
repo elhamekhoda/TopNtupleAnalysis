@@ -9,6 +9,7 @@ from ROOT import std
 import observables
 import selections
 import reweighting
+import treetypes
 logger = helpers.getLogger('TopNtupleAnalysis.analysis')
 
 GeV = 1e-3
@@ -117,6 +118,7 @@ class Analysis(object):
         else:
             self.trees = {}
             self.branches = {}
+            self.branches_noclear = {}
 
     def add(self, hName, nBins, xLow, xHigh):
         self.h[hName] = {}
@@ -137,6 +139,18 @@ class Analysis(object):
             else:
                 branches['w'].clear()
                 branches['w0'].clear()
+
+    def addBranch(self, name, address, isweight):
+        print self.branches_noclear
+        for t, systs in self.treeSuffixes.iteritems():
+            trunk = 'common_'+t
+            for s in systs:
+                if not isinstance(address, array):
+                    self.branches[s][name] = self.branches[trunk].setdefault(name, address)
+                    self.trees[s].Branch(name, address)
+                else:
+                    self.branches_noclear[s][name] = address
+                    self.trees[s].Branch(name, address, name + ('/'+treetypes.convert('ARRAY', 'ROOTCODE', address.typecode)))
 
     def addTree(self):
         if not self._doTree:
@@ -385,10 +399,7 @@ class AnaTtresSL(Analysis):
         self.me2SM = -1
         self.me2XX = -1
         self.alphaS = -1
-        ########################
-        ### make debug tree ####
-        self.addTree() #########
-        ########################
+
         # make histograms
         self.add("yieldsPos", 1, 0.5, 1.5)
         self.add("yieldsNeg", 1, 0.5, 1.5)
@@ -861,11 +872,9 @@ class AnaTtresFH(Analysis):
         self.me2XX = -1
         self.alphaS = -1
         self.blinded = False
-        ########################
-        ### make debug tree ####
-        self.addTree() #########
-        ########################
 
+        self.add("mtt", 6000 , 0, 6000)
+        self.add("m_truthJJ", 6000, 0, 6000)
         # Leading hadronic top candidate
         self.addVar("leadinglargeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3, 2.5e3, 3e3, 4e3, 5e3])
         self.add("leadinglargeJetM", 30, 0, 300)
@@ -911,6 +920,11 @@ class AnaTtresFH(Analysis):
                     self.add(observable.name, *observable.binning)
                 else:
                     self.addVar(observable.name, observable.binning)
+
+    def addTree(self):
+        super(AnaTtresFH, self).addTree()
+        print self.trees
+        self.addBranch('m_truthJJ', array('d', [0]), isweight = False)
 
     def _selectChannel(self, sel, syst):
         if self.ch not in self.mapSel:
@@ -1011,6 +1025,13 @@ class AnaTtresFH(Analysis):
             mtt = (lj1+lj2).M() # unit is GeV
             bjets = list(tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i]))
             self.h["mtt"][syst].Fill(mtt, w)
+
+            if self.top_tagger.truth_ljet_p4.size() >= 2:
+                truthJ1,truthJ2 = self.top_tagger.truth_ljet_p4[0:2]
+                m_truthJJ = (truthJ1+truthJ2).M()*1e-3
+            else:
+                m_truthJJ = -999
+            self.h["m_truthJJ"][syst].Fill(m_truthJJ, w)
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             
             ### boosted channel ###
@@ -1060,6 +1081,7 @@ class AnaTtresFH(Analysis):
                 self.branches[syst]["w"].push_back(w)
                 self.branches[syst]["w0"].push_back(w0)
                 if self._locked == SELECTION_LOCKED:
+                    self.branches[syst]['m_truthJJ'][0] = m_truthJJ
                     self.branches[syst]["eventNumber"].push_back(sel.eventNumber)
                     self.branches[syst]["runNumber"].push_back(sel.runNumber)
                     self.branches[syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)
