@@ -1028,14 +1028,14 @@ class AnaTtresFH(Analysis):
             self.h["mtt"][syst].Fill(mtt, w)
 
             if self.top_tagger.truth_ljet_p4.size() >= 2:
-                truthJ1,truthJ2 = self.top_tagger.truth_ljet_p4.at(0), self.top_tagger.truth_ljet_p4.at(1)
+                truthJ1, truthJ2 = self.top_tagger.truth_ljet_p4.at(0), self.top_tagger.truth_ljet_p4.at(1)
                 m_truthJJ = (truthJ1+truthJ2).M()*1e-3
             else:
                 m_truthJJ = -999
             self.h["m_truthJJ"][syst].Fill(m_truthJJ, w)
             truthJJ_MA = [self.top_tagger.truth_ljet_p4[i] for i in self.top_tagger.ljet_truthjetid if i >= 0]
             if len(truthJJ_MA) >= 2:
-                truthJ1_MA,truthJ2_MA = truthJJ_MA.at(0),truthJJ_MA.at(1)
+                truthJ1_MA, truthJ2_MA = truthJJ_MA.at(0), truthJJ_MA.at(1)
                 m_truthJJ_MA = (truthJ1_MA+truthJ2_MA).M()*1e-3
             else:
                 m_truthJJ_MA = -999
