@@ -968,8 +968,8 @@ class AnaTtresFH(Analysis):
             return False
 
         # veto events in nominal ttbar overlapping with the mtt sliced samples
-        if sel.mcChannelNumber in [410000, 410470, 410471] and hasattr(sel, "MC_ttbar_beforeFSR_m") and not self.noMttSlices:
-            if sel.MC_ttbar_beforeFSR_m > 1.1e6:
+        if sel.mcChannelNumber in [410000, 410470, 410471] and hasattr(sel, "MC_ttbar_afterFSR_beforeDecay_m") and not self.noMttSlices:
+            if sel.MC_ttbar_afterFSR_beforeDecay_m > 1.1e6:
                 return False
 
         if self.applyMET > 0 and not 'bFH' in self.ch:
@@ -1028,14 +1028,14 @@ class AnaTtresFH(Analysis):
             self.h["mtt"][syst].Fill(mtt, w)
 
             if self.top_tagger.truth_ljet_p4.size() >= 2:
-                truthJ1,truthJ2 = self.top_tagger.truth_ljet_p4[0:2]
+                truthJ1,truthJ2 = self.top_tagger.truth_ljet_p4.at(0), self.top_tagger.truth_ljet_p4.at(1)
                 m_truthJJ = (truthJ1+truthJ2).M()*1e-3
             else:
                 m_truthJJ = -999
             self.h["m_truthJJ"][syst].Fill(m_truthJJ, w)
             truthJJ_MA = [self.top_tagger.truth_ljet_p4[i] for i in self.top_tagger.ljet_truthjetid if i >= 0]
             if len(truthJJ_MA) >= 2:
-                truthJ1_MA,truthJ2_MA = truthJJ_MA[0:2]
+                truthJ1_MA,truthJ2_MA = truthJJ_MA.at(0),truthJJ_MA.at(1)
                 m_truthJJ_MA = (truthJ1_MA+truthJ2_MA).M()*1e-3
             else:
                 m_truthJJ_MA = -999
