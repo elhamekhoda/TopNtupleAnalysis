@@ -1090,8 +1090,8 @@ class AnaTtresFH(Analysis):
                 self.branches[syst]["w"].push_back(w)
                 self.branches[syst]["w0"].push_back(w0)
                 if self._locked == SELECTION_LOCKED:
-                    self.branches[syst]['m_truthJJ'][0] = m_truthJJ
-                    self.branches[syst]['m_truthJJ_MA'][0] = m_truthJJ_MA
+                    self.branches_noclear[syst]['m_truthJJ'][0] = m_truthJJ
+                    self.branches_noclear[syst]['m_truthJJ_MA'][0] = m_truthJJ_MA
                     self.branches[syst]["eventNumber"].push_back(sel.eventNumber)
                     self.branches[syst]["runNumber"].push_back(sel.runNumber)
                     self.branches[syst]["mcChannelNumber"].push_back(sel.mcChannelNumber)

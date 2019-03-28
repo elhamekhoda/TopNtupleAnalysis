@@ -40,139 +40,133 @@ def grouped_systs(systematics, key = lambda tup: tup.tree):
 def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights, ttbarHighOrderCorrection, analysis = None):
     # systematics list
     systList = []
-    if analysis is None:
-        analysis = 'AnaTtresSL'
+    analysis = analysis if analysis is not None else 'AnaTtresSL'
     
-        if expr[0:3] == 'all':
-            if analysis == 'AnaTtresSL':
-                systList.append('nominal')
-                if ttbarHighOrderCorrection == 'NNLOQCDNLOEWK':
-                    systList.append('ttNNLOQCDNLOEWK__1up')
-                    systList.append('ttNNLOQCDNLOEWK__1down')
-                else:
-                    systList.append('ttNNLO_seq__1up')
-                    systList.append('ttNNLO_seqExtended__1up')
-                    systList.append('ttNNLO_topPt__1up')
-                    systList.append('ttNNLO_topPtDiff__1up')
-                systList.append('mttSlope')
+    if expr[0:3] == 'all':
+        if analysis == 'AnaTtresSL':
+            systList.append('nominal')
+            systList.append('mttSlope')
 
-                for i in range(0, 4):
-                    systList.append('btagbSF_'+str(i)+'__1up')
-                    systList.append('btagbSF_'+str(i)+'__1down')
-                    if i == 0:
-                        for j in range(1, 4):
-                            systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1up')
-                            systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1down')
-                for i in range(0, 4):
-                    systList.append('btagcSF_'+str(i)+'__1up')
-                    systList.append('btagcSF_'+str(i)+'__1down')
-                    if i == 0:
-                        for j in range(1, 4):
-                            systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1up')
-                            systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1down')
-                for i in range(0, 11):
-                    systList.append('btaglSF_'+str(i)+'__1up')
-                    systList.append('btaglSF_'+str(i)+'__1down')
-                    if i == 0:
-                        for j in range(1, 4):
-                            systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1up')
-                            systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1down')
-                systList.append('btageSF_0__1up')
-                systList.append('btageSF_0__1down')
-                systList.append('btageSF_1__1up')
-                systList.append('btageSF_1__1down')
+            for i in range(0, 4):
+                systList.append('btagbSF_'+str(i)+'__1up')
+                systList.append('btagbSF_'+str(i)+'__1down')
+                if i == 0:
+                    for j in range(1, 4):
+                        systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1up')
+                        systList.append('btagbSF_'+str(i)+'_pt'+str(j)+'__1down')
+            for i in range(0, 4):
+                systList.append('btagcSF_'+str(i)+'__1up')
+                systList.append('btagcSF_'+str(i)+'__1down')
+                if i == 0:
+                    for j in range(1, 4):
+                        systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1up')
+                        systList.append('btagcSF_'+str(i)+'_pt'+str(j)+'__1down')
+            for i in range(0, 11):
+                systList.append('btaglSF_'+str(i)+'__1up')
+                systList.append('btaglSF_'+str(i)+'__1down')
+                if i == 0:
+                    for j in range(1, 4):
+                        systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1up')
+                        systList.append('btaglSF_'+str(i)+'_pt'+str(j)+'__1down')
+            systList.append('btageSF_0__1up')
+            systList.append('btageSF_0__1down')
+            systList.append('btageSF_1__1up')
+            systList.append('btageSF_1__1down')
 
-                systList.extend([
-                    '',
-                    'eChargeMisIDStatSF__1down',
-                    'eChargeMisIDStatSF__1up',
-                    'eChargeMisIDSystSF__1down',
-                    'eChargeMisIDSystSF__1up',
-                    'eChargeSF__1down',
-                    'eChargeSF__1up',
-                    'eIDSF__1down',
-                    'eIDSF__1up',
-                    'eIsolSF__1down',
-                    'eIsolSF__1up',
-                    'eRecoSF__1down',
-                    'eRecoSF__1up',
-                    'eTrigSF__1down',
-                    'eTrigSF__1up',
-                    'jvtSF__1down',
-                    'jvtSF__1up',
-                    'muIDStatSF__1down',
-                    'muIDStatSF__1up',
-                    'muIDSystSF__1down',
-                    'muIDSystSF__1up',
-                    'muIsolStatSF__1down',
-                    'muIsolStatSF__1up',
-                    'muIsolSystSF__1down',
-                    'muIsolSystSF__1up',
-                    'muTrigStatSF__1down',
-                    'muTrigStatSF__1up',
-                    'muTrigSystSF__1down',
-                    'muTrigSystSF__1up',
-                    'pileupSF__1down',
-                    'pileupSF__1up']
-                    )
-            elif analysis == 'AnaTtresFH':
-                systList.extend([
-                    '',
-                    'jvtSF__1down', 
-                    'jvtSF__1up',
-                    'pileupSF__1down', 
-                    'pileupSF__1up', 
+            systList.extend([
+                '',
+                'eChargeMisIDStatSF__1down',
+                'eChargeMisIDStatSF__1up',
+                'eChargeMisIDSystSF__1down',
+                'eChargeMisIDSystSF__1up',
+                'eChargeSF__1down',
+                'eChargeSF__1up',
+                'eIDSF__1down',
+                'eIDSF__1up',
+                'eIsolSF__1down',
+                'eIsolSF__1up',
+                'eRecoSF__1down',
+                'eRecoSF__1up',
+                'eTrigSF__1down',
+                'eTrigSF__1up',
+                'jvtSF__1down',
+                'jvtSF__1up',
+                'muIDStatSF__1down',
+                'muIDStatSF__1up',
+                'muIDSystSF__1down',
+                'muIDSystSF__1up',
+                'muIsolStatSF__1down',
+                'muIsolStatSF__1up',
+                'muIsolSystSF__1down',
+                'muIsolSystSF__1up',
+                'muTrigStatSF__1down',
+                'muTrigStatSF__1up',
+                'muTrigSystSF__1down',
+                'muTrigSystSF__1up',
+                'pileupSF__1down',
+                'pileupSF__1up']
+                )
+        elif analysis == 'AnaTtresFH':
+            systList.extend([
+                '',
+                'jvtSF__1down', 
+                'jvtSF__1up',
+                'pileupSF__1down', 
+                'pileupSF__1up', 
 
 
-                    'btagbSF_0__1up',
-                    'btagbSF_0__1down',
-                    'btagbSF_1__1down', 
-                    'btagbSF_1__1up', 
-                    'btagbSF_2__1down', 
-                    'btagbSF_2__1up', 
-                    'btagbSF_3__1down', 
-                    'btagbSF_3__1up',
+                'btagbSF_0__1up',
+                'btagbSF_0__1down',
+                'btagbSF_1__1down', 
+                'btagbSF_1__1up', 
+                'btagbSF_2__1down', 
+                'btagbSF_2__1up', 
+                'btagbSF_3__1down', 
+                'btagbSF_3__1up',
 
-                    'btagcSF_0__1down', 
-                    'btagcSF_0__1up', 
-                    'btagcSF_1__1down', 
-                    'btagcSF_1__1up', 
-                    'btagcSF_2__1down', 
-                    'btagcSF_2__1up', 
+                'btagcSF_0__1down', 
+                'btagcSF_0__1up', 
+                'btagcSF_1__1down', 
+                'btagcSF_1__1up', 
+                'btagcSF_2__1down', 
+                'btagcSF_2__1up', 
 
-                    'btageSF_0__1down', 
-                    'btageSF_0__1up', 
-                    'btageSF_1__1down', 
-                    'btageSF_1__1up', 
-                    'btaglSF_0__1down', 
-                    'btaglSF_0__1up', 
-                    'btaglSF_1__1down', 
-                    'btaglSF_1__1up', 
-                    'btaglSF_2__1down', 
-                    'btaglSF_2__1up', 
-                    'btaglSF_3__1down', 
-                    'btaglSF_3__1up', 
+                'btageSF_0__1down', 
+                'btageSF_0__1up', 
+                'btageSF_1__1down', 
+                'btageSF_1__1up', 
+                'btaglSF_0__1down', 
+                'btaglSF_0__1up', 
+                'btaglSF_1__1down', 
+                'btaglSF_1__1up', 
+                'btaglSF_2__1down', 
+                'btaglSF_2__1up', 
+                'btaglSF_3__1down', 
+                'btaglSF_3__1up', 
 
-                    'LARGERJET_Strong_JET_Comb_Baseline_All__1down', 
-                    'LARGERJET_Strong_JET_Comb_Baseline_All__1up', 
-                    'LARGERJET_Strong_JET_Comb_Modelling_All__1down', 
-                    'LARGERJET_Strong_JET_Comb_Modelling_All__1up', 
-                    'LARGERJET_Strong_JET_Comb_TotalStat_All__1down', 
-                    'LARGERJET_Strong_JET_Comb_TotalStat_All__1up', 
-                    'LARGERJET_Strong_JET_Comb_Tracking_All__1down', 
-                    'LARGERJET_Strong_JET_Comb_Tracking_All__1up', 
-                    'LARGERJET_Strong_JET_MassRes_Top__1up'
-                    ])
-                if ttbarHighOrderCorrection == 'NNLOQCDNLOEWK':
-                    systList.append('ttNNLOQCDNLOEWK__1up')
-                    systList.append('ttNNLOQCDNLOEWK__1down')
-                else:
-                    systList.extend([
-                        'ttNNLO_seqExtended__1up', 
-                        'ttNNLO_seq__1up', 
-                        'ttNNLO_topPtDiff__1up', 
-                        'ttNNLO_topPt__1up',
-                        ])
+                'LARGERJET_Strong_JET_Comb_Baseline_All__1down', 
+                'LARGERJET_Strong_JET_Comb_Baseline_All__1up', 
+                'LARGERJET_Strong_JET_Comb_Modelling_All__1down', 
+                'LARGERJET_Strong_JET_Comb_Modelling_All__1up', 
+                'LARGERJET_Strong_JET_Comb_TotalStat_All__1down', 
+                'LARGERJET_Strong_JET_Comb_TotalStat_All__1up', 
+                'LARGERJET_Strong_JET_Comb_Tracking_All__1down', 
+                'LARGERJET_Strong_JET_Comb_Tracking_All__1up', 
+                'LARGERJET_Strong_JET_MassRes_Top__1up'
+                ])
+        if ttbarHighOrderCorrection == 'NNLOQCDNLOEWK':
+            systList.append('ttNNLOQCDNLOEWK__1up')
+            systList.append('ttNNLOQCDNLOEWK__1down')
+        else:
+            systList.extend([
+                'ttNNLO_seqExtended__1up', 
+                'ttNNLO_seq__1up', 
+                'ttNNLO_topPtDiff__1up', 
+                'ttNNLO_topPt__1up',
+                ])
+        if ttbarHighOrderCorrection == 'Rel20EWK':
+            systList.append('ttEWK__1up')
+            systList.append('ttEWK__1down')
         if isWjets:
             systList.append('CAallMCAsym')
             systList.append('wnorm__1up')
@@ -206,9 +200,7 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
             systList.append('singletopdw')
 
         systList.remove('')
-        if ttbarHighOrderCorrection == 'Rel20EWK':
-            systList.append('ttEWK__1up')
-            systList.append('ttEWK__1down')
+
         if EFT != '':
             systList.append("eftScale__1up")
             systList.append("eftScale__1down")
