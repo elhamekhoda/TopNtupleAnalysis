@@ -141,7 +141,7 @@ class Analysis(object):
                 branches['w0'].clear()
 
     def addBranch(self, name, address, isweight):
-        print self.branches_noclear
+        # print self.branches_noclear
         for t, systs in self.treeSuffixes.iteritems():
             trunk = 'common_'+t
             for s in systs:
@@ -1055,7 +1055,7 @@ class AnaTtresFH(Analysis):
             self.h["leadinglargeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx1], w)
             self.h["leadinglargeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx1], w)
             self.h["leadinglargeJetEtaPhi"][syst].Fill(lj1.Eta(), lj1.Phi(), w)
-            self.h["leadinglargeJet_DNNScore"][syst].Fill(sel.ljet_DNNTopTag_score[goodJetIdx1], w)
+            self.h["leadinglargeJet_DNNScore"][syst].Fill(sel.ljet_DNNContainedTopTag_score[goodJetIdx1], w)
             deltaR_closest_btjet_to_ljet1 = 1e6
             for bjet in bjets:
                 deltaR_closest_btjet_to_ljet1 = min(DeltaR(bjet, lj1), deltaR_closest_btjet_to_ljet1)
@@ -1070,7 +1070,7 @@ class AnaTtresFH(Analysis):
             self.h["subleadinglargeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx2], w)
             self.h["subleadinglargeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx2], w)
             self.h["subleadinglargeJetEtaPhi"][syst].Fill(lj2.Eta(), lj2.Phi(), w)
-            self.h["subleadinglargeJet_DNNScore"][syst].Fill(sel.ljet_DNNTopTag_score[goodJetIdx2], w)
+            self.h["subleadinglargeJet_DNNScore"][syst].Fill(sel.ljet_DNNContainedTopTag_score[goodJetIdx2], w)
 
             self.h["dPhiJJ"][syst].Fill(DeltaPhi(lj1, lj2), w)
             self.h["Ystar"][syst].Fill((lj1.Rapidity()-lj2.Rapidity())/2, w)

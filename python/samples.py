@@ -11,6 +11,7 @@ try:
     import HQTTtResonancesTools.Data_EXOT7_rel21
     import HQTTtResonancesTools.MC16a_EXOT4
     import HQTTtResonancesTools.MC16a_EXOT7
+    import HQTTtResonancesTools.MC16a_TOPQ1
 except ImportError as e:
     print e.message
     raise ImportError("HQTTtResonancesTools is not installed or dataset does not exist.")
@@ -71,7 +72,7 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('tt', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad'],
                   ('tt_mttsliced', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad', 'MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad_mttsliced'],
                   ('ttnonallhad', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad'],
-                  ('ttnonallhad_mttsliced', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_nonallhad', 'MC16a_13TeV_25ns_FS_EXOT7_ttbar_nonallhad_mttsliced'],
+                  ('ttnonallhad_mttsliced', 'EXOT7'): ['MC16a_13TeV_25ns_FS_TOPQ1_ttbar_nonallhad', 'MC16a_13TeV_25ns_FS_EXOT7_ttbar_nonallhad_mttsliced'],
                   ('ttV', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbarV'],
                   ('singletop', 'EXOT7'):['MC16a_13TeV_25ns_FS_EXOT7_singletop'],
                   ('zjets', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_Zjets221'],
@@ -116,7 +117,7 @@ def register_samples(mapping):
 def write_totalweight_of_samples(list_of_samples, systs = [''], online = True, mode = 'auto'):
     isFirst = True
     for s in list_of_samples:
-        s.sum_of_weights(systs = systs, online = online, mode = mode if isFirst else 'a')
+        s.sum_of_weights(systs = systs, online = online, mode = mode if isFirst else 'a', runNumber = s.runNumber, periodFraction = s.periodFraction)
         isFirst = False
 
 class Sample(object):
@@ -142,12 +143,26 @@ class Sample(object):
         raise NameError('"{}" not found in the current sample list.\nNote that a user-defined sample must be first registered to {} using {}.\nAlready Registered Samples: {}'
                         .format(obj, '`{}`'.format(__name__ + '.MAP_TO_SAMPLES'), '`{}`'.format(__name__ + '.register_samples'), sorted(MAP_TO_SAMPLES.iterkeys())))
 
-    def __init__(self, sample_name, input_files = None, ds_scope = DS_SCOPE, ds_pattern = DS_PATTERN, ds_fmt_options = {'suffix': '_output.root'}, tag = '', download_to = None, commit_when_init = True, deriv = 'EXOT4', RSE_preferred = None, priority_key = None):
+    def __init__(self, sample_name,
+                       input_files = None,
+                       ds_scope = DS_SCOPE,
+                       ds_pattern = DS_PATTERN,
+                       ds_fmt_options = {'suffix': '_output.root'},
+                       tag = '',
+                       download_to = None,
+                       commit_when_init = True,
+                       deriv = 'EXOT4',
+                       periodFraction = 1,
+                       runNumber = 'ALL',
+                       RSE_preferred = None,
+                       priority_key = None):
         self.parent = self
         self.ds_scope = ds_scope.format(s = self, **ds_fmt_options)
         if not isinstance(sample_name, str):
             sample_name, deriv = sample_name
         self.sample_name = sample_name
+        self.periodFraction = periodFraction
+        self.runNumber = runNumber
         self.sample = self.parse_dataset((sample_name, deriv))
         self.deriv = deriv
         self.RSE_preferred = RSE_preferred
@@ -366,9 +381,11 @@ class Sample(object):
             return cmds
     def __repr__(self):
         return '<{}.{}("{}"{})>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name, self.tag and '[{}]'.format(self.tag))
-    def sum_of_weights(self, systs = [''], online = True, mode = 'return'):
+    def sum_of_weights(self, systs = [''], online = True, mode = 'return', runNumber = None, periodFraction = None):
         if self.sample_name == 'data':
             raise TypeError('DO NOT use DATA Weights')
+        runNumber = runNumber or self.runNumber
+        periodFraction = periodFraction or self.periodFraction
         if not self.commited:
             online = True
         logger.info('Compute TOTAL MC Weights using {} datasets'.format('online' if online else 'offline'))
@@ -377,7 +394,7 @@ class Sample(object):
         infile = tempfile.NamedTemporaryFile(delete = False)
         infile.close()
         self.write_inputsfile(infile.name, inplace = False if online else True)
-        total_weights = sumWeights([infile.name]*len(systs), systs, suffix = '_R21',  mode = mode)[0]['SumOfWeights']
+        total_weights = sumWeights([infile.name]*len(systs), systs, suffix = '_R21',  mode = mode, runNumber = runNumber, periodFraction = periodFraction)[0]['SumOfWeights']
         os.remove(infile.name)
         return total_weights
     def write_inputsfile(self, fname, **set_input_files_kwds):
@@ -432,7 +449,9 @@ def part_sample(sample, max_input_files = 5, sort = True):
         return [sample]
     ret = []
     n = 1
-    for i in range(0, l, max_input_files):
+    if max_input_files in (None, 0):
+        max_input_files = l
+    for i in xrange(0, l, max_input_files):
         for syst in systs:
             subsample = SubSample(sample, sample.input_files[i:min(i+max_input_files, l)], suffix = '{:06d}'.format(n))
             subsample.systematics = syst
