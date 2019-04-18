@@ -241,17 +241,18 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
         systList = systListTmp
     elif expr == 'pdf':
         systList.append('nominal')
-        for m in pdfList:
-            dsidWithThisPdf = -1
-            for k in pdfSumOfWeights.keys():
-                if m in pdfSumOfWeights[k]:
-                    dsidWithThisPdf = k
-                    break
-            nvar = len(pdfSumOfWeights[dsidWithThisPdf][m])
-            for k in range(0, nvar):
-                syst_name = 'pdf_%s_%d' % (m, k)
-                logger.warning('PDFSystematic({}) not registered. This warning is usually harmless.'.format(syst_name))
-                systList.append(_syst(syst_name, 'nominal'))
+        for pdf in pdfList.iterkeys():
+            try:
+                for channel, channelWeights in pdfSumOfWeights.iteritems():
+                    for runNumber, runNumberWeights in channelWeights.itervalues():
+                        if pdf in runNumberWeights:
+                            raise StopIteration
+            except StopIteration:
+                nvar = len(runNumberWeights[pdf].keys())
+                for k in range(0, nvar):
+                    syst_name = 'pdf_%s_%d' % (channel, k)
+                    logger.warning('PDFSystematic({}) not registered. This warning is usually harmless.'.format(syst_name))
+                    systList.append(_syst(syst_name, 'nominal'))
     elif expr == 'wjttpdf':
         systList.append('nominal')
         for k in range(0, 30+1):

@@ -172,24 +172,27 @@ Create your own scripts based on this! Some very nice examples can be found in `
      ```bash
      $SourceArea/TopNtupleAnalysis/python/makeHistograms.py AnaTtresFH \
      -f tna-input.txt
-     -o "(bFH, good, MV2c10_FixedCutBEff70): bFH_zprime3000.root"
+     -o "(bFH, good_contained80, MV2c10_FixedCutBEff70): bFH_zprime3000.root"
      ```
 
     Change the flags according to [Usage](#usage) to adapt to your needs.  
     For example, you can change `good` to any top-tagger as you like.  
     Currently available top-taggers are listed below:
 
-    | Tagger      | Flag               |
-    |:-----------:|:------------------:|
-    | DNN@80      | `good_dnn80`       |
-    | BDT@80      | `good_bdt80`       |
-    | DNN Topo@80 | `good_topo80`      |
-    | MT@50       | `good_smooth_mt50` |
-    | MT@80       | `good_smooth_mt80` |
-    | TS@50       | `good_smooth_ts50` |
-    | TS@80       | `good_smooth_ts80` |
-    | QT@50       | `good_smooth_qt50` |
-    | QT@80       | `good_smooth_qt80` |
+    | Tagger                            | WP     | Flag                   |
+    |:---------------------------------:|:------:|:----------------------:|
+    | DNNContainted                     | 50%Eff | `good_dnn_contained50` |
+    | DNNContainted                     | 80%Eff | `good_dnn_contained80` |
+    | DNNInclusive                      | 50%Eff | `good_dnn_inclusive50` |
+    | DNNInclusive                      | 80%Eff | `good_dnn_inclusive80` |
+    | BDT                               | 80%Eff | `good_bdt80`           |
+    | DNN Topo                          | 80%Eff | `good_topo80`          |
+    | $`m_{comb}-\tau^{wta}_{32}`$      | 50%Eff | `good_smooth_mt50`     |
+    | $`m_{comb}-\tau^{wta}_{32}`$      | 80%Eff | `good_smooth_mt80`     |
+    | $`\tau^{wta}_{32}-\sqrt{d_{23}}`$ | 50%Eff | `good_smooth_ts50`     |
+    | $`\tau^{wta}_{32}-\sqrt{d_{23}}`$ | 80%Eff | `good_smooth_ts80`     |
+    | $`Q_w-\tau^{wta}_{32}`$           | 50%Eff | `good_smooth_qt50`     |
+    | $`Q_w-\tau^{wta}_{32}`$           | 80%Eff | `good_smooth_qt80`     |
 
 Auxiliary scripts
 -----------------

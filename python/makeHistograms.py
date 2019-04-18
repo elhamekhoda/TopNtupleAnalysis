@@ -21,35 +21,19 @@ def main(parallel = False):
     pdfList = options.pdf.split(',')
     Xsec = {}
 
-    InvsumOfWeights = {} # map of DSID to inversed sum of weights
-    # TODO
-    InvpdfSumOfWeights = {} # map of DSID to map of PDF variation names to inversed sum of weights
-
-    InvsumOfWeightsAF2 = {} # map of DSID to sum of inversed weights
+    InvSumOfWeights = {} # map of DSID to inversed sum of weights
 
     fname_pat = "sumOfWeights{}_R21.txt"
     if not options.data:
-        csv.register_dialect('sumOfWeightsDATA', delimiter = ' ', skipinitialspace = True, quoting = csv.QUOTE_NONE)
         for t in ('', 'syst', 'systaf2', 'pdf', 'wjpdf'):
             if options.pdf == '' and t in ('pdf', 'wjpdf'):
                 continue
-            try:
-                fname = os.path.join(helpers.data_path, fname_pat.format(t))
-                logger.info('Retrieve TOTAL MC weights from FILE("{}")'.format(fname))
-                with open(fname, 'rb') as fs:
-                    csv_reader = csv.DictReader(fs, dialect = 'sumOfWeightsDATA')
-                    for r in csv_reader:
-                        if r['pdfName'] == 'nominal': # nominal for PDF variation sample
-                            if t == 'systaf2':
-                                InvsumOfWeightsAF2[int(r['channel'])] = 1./float(r['SumOfWeights'])
-                            else:
-                                InvsumOfWeights[int(r['channel'])] = 1./float(r['SumOfWeights'])
-                        else:
-                            InvpdfSumOfWeights.setdefault(r['channel'], {}).setdefault(r['pdfName'], {})[r['pdfNumber']] = 1./float(r['SumOfWeights'])
-            except IOError:
-                logger.warn('FILE("{}") not found.'.format(fname))
-        if {} == InvsumOfWeights == InvpdfSumOfWeights == InvsumOfWeightsAF2:
+            fname = os.path.join(helpers.data_path, fname_pat.format(t))
+            InvSumOfWeights.update(helpers.readSumOfWeight(fname))
+        if {} == InvSumOfWeights:
             raise IOError('TotalMCWeights files not found. Did you create them first?\nUse samples.write_totalweight_of_samples() to create TotalMCWeights files.')
+        # print InvSumOfWeights
+
 
     logger.info("Loading xsec.")
     helpers.loadXsec(Xsec, "dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data")
@@ -62,32 +46,31 @@ def main(parallel = False):
     isSingleTop = False
 
     @helpers.lru_cache(maxsize=100)
-    def _common_mc_weight(mc_weight, channel, suffix):
+    def _common_mc_weight(mc_weight, channel, runNumber, suffix):
         weight = 1
         if not (isWjets and options.systs == 'pdf' and 'pdf_' in suffix): # use internal weights in this case
             weight *= mc_weight
         weight *= Xsec[channel]
-        if options.systs != 'pdf': #'pdf_' in suffix:
-            if not options.af2:
-                try:
-                    weight *= InvsumOfWeights[channel]
-                except:
-                    raise NameError('Could not find <DSID: %s> in DICT("sumOfWeights").' % channel)
-            else:
-                try:
-                    weight *= InvsumOfWeightsAF2[channel]
-                except:
-                    raise NameError('Could not find <DSID: %s> in DICT("sunOfWeightsAF2")' % channel)      
+        if (options.systs != 'pdf') or 'pdf_' not in suffix: #'pdf_' in suffix:
+            pdfName, pdfNumber = 'nominal', '-1'
         else:
-            if not 'pdf_' in suffix:
-                weight *= InvsumOfWeights[channel]
-            else:
-                pdfName, pdfNumber = suffix.split('_', 1)[1].rsplit('_', 1)
-                try:
-                    weight *= InvpdfSumOfWeights[channel][pdfName][int(pdfNumber)]
-                except:
-                    raise NameError('Could not find <DSID: %s> in DICT("pdfSumOfWeights").' % channel)
+            pdfName, pdfNumber = suffix.split('_', 1)[1].rsplit('_', 1)
+        try:
+            weight *= InvSumOfWeights[channel][runNumber][pdfName][pdfNumber]
+        except:
+            raise NameError('Could not find <DSID: {0}, PERIOD: {1}> in DICT("SumOfWeights").'.format(channel))
         return weight
+
+    def common_mc_weight(mc_weight, channel, runNumber, suffix):
+        keys = InvSumOfWeights[channel].keys()
+        if None in keys:
+            runNumber = None
+        else:
+            for low, high in keys:
+                if low <= runNumber <= high:
+                    runNumber = (low, high)
+                    break
+        return _common_mc_weight(mc_weight, channel, runNumber, suffix)
 
     logger.info("Loading first event")
     mt_load = ROOT.TChain("nominal")
@@ -101,15 +84,9 @@ def main(parallel = False):
         isTtbar = True
     if sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
         isSingleTop = True
-    if options.ttbar_high_order == 'Rel20EWK':
-        if (sel.mcChannelNumber not in reweighting.EWKCorrection.RUN_NUMBERS):
-            options.ttbar_high_order = 'none'
-    elif options.ttbar_high_order == 'NNLOQCDNLOEWK':
-        if (sel.mcChannelNumber not in reweighting.TTbarNNLOReweighting.RUN_NUMBERS):
-            options.ttbar_high_order = 'none'
 
     # systematics list
-    systList = systematics.get_systs(options.systs, isTtbar, isSingleTop, isWjets, options.EFT, pdfList, InvpdfSumOfWeights, options.ttbar_high_order, analysis = options.analysis)
+    systList = systematics.get_systs(options.systs, isTtbar, isSingleTop, isWjets, options.EFT, pdfList, InvSumOfWeights, options.ttbar_high_order, analysis = options.analysis)
     systgroups = list(systematics.grouped_systs(systList))
     if '\;' in options.output:
         logger.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
@@ -124,6 +101,19 @@ def main(parallel = False):
             channels[ch + (options.bot_tagger, )] = channels.pop(ch)
         if len(ch) == 3:
             channels[ch + ('', )] = channels.pop(ch)
+
+    if options.ttbar_high_order == 'Rel20EWK':
+        if (sel.mcChannelNumber in reweighting.EWKCorrection.RUN_NUMBERS):
+            reweighting.EWKCorrection.init(sel.mcChannelNumber)
+        else:
+            options.ttbar_high_order = 'none'
+        if (sel.mcChannelNumber in reweighting.NNLOReweighting.RUN_NUMBERS) and any('ttNNLO_' in syst.name for syst in systList):
+            reweighting.NNLOReweighting.init(sel.mcChannelNumber)
+    elif options.ttbar_high_order == 'NNLOQCDNLOEWK':
+        if sel.mcChannelNumber in reweighting.TTbarNNLOReweighting.RUN_NUMBERS:
+            reweighting.TTbarNNLOReweighting.init(sel.mcChannelNumber)
+        else:
+            options.ttbar_high_order = 'none'
 
 
     analysisCode = {}
@@ -196,8 +186,6 @@ def main(parallel = False):
                 analysisCode[k].set_TtresChi2()
         logger.info('({:^6},{:^6},{:^12}): {}'.format(ch.strip(), top_tagger, bot_tagger, channels[k]))
 
-    isFirstEvent = True
-
     for systgroup in systgroups:
         treeName = systgroup.tree # systematic name is the same as the TTree name
 
@@ -219,19 +207,12 @@ def main(parallel = False):
                 suffix = syst.hist_suffix
                 if k % 10000 == 0:
                     logger.info("(tree = {:^10}, syst = {:^5}) Entry: {{:>{}}} / {}".format('<'+treeName+'>', '<'+suffix+'>', ent_length, ent).format(k))
-                if isFirstEvent:
-                    if options.ttbar_high_order == 'NNLOQCDNLOEWK':
-                        reweighting.TTbarNNLOReweighting.init(sel.mcChannelNumber)
-                    else:
-                        reweighting.EWKCorrection.init(sel.mcChannelNumber)
-                        reweighting.NNLOReweighting.init(sel.mcChannelNumber)
-                    isFirstEvent = False
 
                 # common part of the weight
                 if options.data:
                     weight = 1.
                 else:
-                    weight = _common_mc_weight(sel.weight_mc, sel.mcChannelNumber, suffix if 'pdf_' in suffix else '')
+                    weight = common_mc_weight(sel.weight_mc, sel.mcChannelNumber, sel.randomRunNumber, suffix if 'pdf_' in suffix else '')
 
                 for ana in analysisCode.itervalues():
                     if not ana.selectChannel(sel, suffix):

@@ -96,6 +96,26 @@ def loadXsec(m, fName = "dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.
                 continue
             m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2]) # crossSection * k-factor. Note that in TopDataPreparation crossSection is the crossSection after filter efficiency applied.
 
+def readSumOfWeight(fname):
+    import csv
+    InvSumOfWeights = {}
+    try:
+        logger.info('Retrieve TOTAL MC weights from FILE("{}")'.format(fname))
+        csv.register_dialect('sumOfWeightsDATA', delimiter = ' ', skipinitialspace = True, quoting = csv.QUOTE_NONE)
+        with open(fname, 'rb') as fs:
+            csv_reader = csv.DictReader(fs, dialect = 'sumOfWeightsDATA')
+            for r in csv_reader:
+                periodFraction = float(r['periodFraction'])
+                runNumber = tuple(r['runNumber'].split('-'))
+                if len(runNumber) < 2:
+                    runNumber = None
+                else:
+                    runNumber = tuple(int(r) for r in runNumber)
+                InvSumOfWeights.setdefault(int(r['channel']), {}).setdefault(runNumber, {}).setdefault(r['pdfName'], {})[r['pdfNumber']] = periodFraction/float(r['SumOfWeights'])
+    except IOError:
+        logger.warn('FILE("{}") not found.'.format(fname))
+    return InvSumOfWeights
+
 def addFilesInChain(c, txtFileOption, n = -1, sep = ','):
     '''Add files listed in a text file to the chain.
     

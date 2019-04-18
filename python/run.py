@@ -186,7 +186,7 @@ class Run(object):
                                              log    = os.path.join(self.log_dir, 'log.%s' % job_id),
                                              **_submit_kwds)
 
-    def finalize(self, do_merge = None, delete_sources_after_merged = False, num_of_workers = 4, hadd_ext_options = []):
+    def finalize(self, do_merge = None, delete_sources_after_merged = False, num_of_workers = 4, hadd_ext_options = [], skip_merge_when_fail = False):
         do_merge = do_merge if do_merge != None else self.do_merge
         if do_merge == True:
             for outstream in self.outstreams.viewvalues():
@@ -195,7 +195,13 @@ class Run(object):
                     sub_outputs = outstream[selection]['sub_outputs']
                     if len(sub_outputs) == 1 and output == sub_outputs[0]:
                         continue
-                    helpers.hadd({output: sub_outputs}, delete_sources = delete_sources_after_merged, N = int(num_of_workers), ext_options = hadd_ext_options)
+                    try:
+                        helpers.hadd({output: sub_outputs}, delete_sources = delete_sources_after_merged, N = int(num_of_workers), ext_options = hadd_ext_options)
+                    except subprocess.CalledProcessError as e:
+                        if skip_merge_when_fail:
+                            logger.error(e)
+                        else:
+                            raise e
 
     def wait(self):
         if self.cluster != None:
