@@ -476,7 +476,7 @@ class AnaTtresSL(Analysis):
         if sel.mcChannelNumber != 0:
             return 1
 
-        nBtag = sum(helpers.char2int(jet_isbtagged) for jet_isbtagged in self.bot_tagger.jet_isbtagged)
+        nBtag = sum(bool(jet_isbtagged) for jet_isbtagged in self.bot_tagger.jet_isbtagged)
         isBoosted = 0
         #if 'be' in self.ch or 'bmu' in self.ch:
         #       isBoosted = 1
