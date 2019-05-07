@@ -37,7 +37,7 @@ def grouped_systs(systematics, key = lambda tup: tup.tree):
     for k, g in itertools.groupby(sorted(systematics, key = key), key):
         yield SystematicsGroup(list(g))
 
-def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights, ttbarHighOrderCorrection, analysis = None):
+def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights, ttbarHighOrderCorrection, applyQCD, analysis = None):
     # systematics list
     systList = []
     analysis = analysis if analysis is not None else 'AnaTtresSL'
@@ -257,7 +257,7 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
         systList.append('nominal')
         for k in range(0, 30+1):
             systList.append('pdf_PDF4LHC15_nlo_30_%d' % (k))
-    elif expr == 'qcd':
+    elif expr == 'qcdall':
         systList.append('nominal')
         systList.append('qcdcenup')
         systList.append('qcdcendw')
@@ -268,11 +268,14 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
     ret = []
 
     for syst_name in systList:
+        if applyQCD and syst_name == 'nominal':
+            syst_name = 'qcd'
         s = ALLSYSTS.get(syst_name, None)
         if s is None:
             logger.warning('Systematic({}) not registered. Will be considered as name of systematic tree.'.format(syst_name))
-            s = _syst(syst_name)
+            s = _syst(syst_name)[1]
         ret.append(s)
+
         s.weight_map[:] =  [w for w in s.weight_map if not (not DO_PRW and 'prw' in w)]
     assert len(ret) == len(systList)
     logger.info("--> Setup to run over following systs. {}".format(systList))
@@ -535,6 +538,7 @@ ALLSYSTS = OrderedDict((
     _syst('pdf_PDF4LHC15_nlo_30_29', 'nominal'),
     _syst('pdf_PDF4LHC15_nlo_30_30', 'nominal'),
     # QCD
+    _syst('qcd'     , 'nominal_Loose', hist_suffix = ''),
     _syst('qcdcenup', 'nominal_Loose'),
     _syst('qcdcendw', 'nominal_Loose'),
     _syst('qcdfwddw', 'nominal_Loose'),

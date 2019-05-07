@@ -86,7 +86,7 @@ def main(parallel = False):
         isSingleTop = True
 
     # systematics list
-    systList = systematics.get_systs(options.systs, isTtbar, isSingleTop, isWjets, options.EFT, pdfList, InvSumOfWeights, options.ttbar_high_order, analysis = options.analysis)
+    systList = systematics.get_systs(options.systs, isTtbar, isSingleTop, isWjets, options.EFT, pdfList, InvSumOfWeights, options.ttbar_high_order, (options.qcd != "False"), analysis = options.analysis)
     systgroups = list(systematics.grouped_systs(systList))
     if '\;' in options.output:
         logger.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
