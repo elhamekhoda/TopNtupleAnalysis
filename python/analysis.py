@@ -433,6 +433,8 @@ class AnaTtresSL(Analysis):
     # only apply the reco weights
     def getWeight(self, sel, s):
         if sel.mcChannelNumber == 0:
+            if self.applyQCD:
+                return self.qcdWeight(sel, s.name)
             return 1.0
 
         syst_name = s.name
@@ -470,12 +472,10 @@ class AnaTtresSL(Analysis):
         # W+jets C/A and HF syst. variations
         # assuming b-tagging
         weight *= reweighting.WjetSystWeight.get_weight(sel, syst_name)
+
         return weight
 
     def qcdWeight(self, sel, syst):
-        if sel.mcChannelNumber != 0:
-            return 1
-
         nBtag = sum(bool(jet_isbtagged) for jet_isbtagged in self.bot_tagger.jet_isbtagged)
         isBoosted = 0
         #if 'be' in self.ch or 'bmu' in self.ch:
@@ -596,9 +596,6 @@ class AnaTtresSL(Analysis):
         self.clearBranches() ###
         ########################
         w = wo
-
-        if self.applyQCD:
-            w *= self.qcdWeight(sel, syst)
 
         isdata = (sel.mcChannelNumber == 0)
         if(not isdata and hasattr(sel, "MC_ttbar_beforeFSR_m") and sel.mcChannelNumber not in [407200, 407201, 407202, 407203, 407204]):
