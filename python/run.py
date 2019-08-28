@@ -27,20 +27,20 @@ class Run(object):
             os.makedirs(self.log_dir)
         self.analysis_type = analysis_type
         if analysis_type == 'AnaTtresSL':
-            self.selections = [('(be,     good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu,    good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re,     good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu,    good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(be2015, good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu2015,good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re2015, good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu2015,good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(be2016, good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu2016,good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re2016, good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu2016,good, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root')]
+            self.selections = [('(be,     good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu,    good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re,     good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu,    good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(be2015, good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu2015,good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re2015, good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu2015,good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(be2016, good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu2016,good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re2016, good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu2016,good, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root')]
         elif analysis_type == 'AnaTtresFH':
-            self.selections = [('(bFH    ,good_dnn80, AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root')]
+            self.selections = [('(bFH    ,good_dnn80, AntiKtVR30Rmax4Rmin02TrackJets.DL1_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root')]
         self.analysis_exts = []
         self.max_inputs_per_job = max_inputs_per_job
         self.cluster = clusters.from_name.get(cluster)(cluster_type = None, cluster_status_update=(600,30), cluster_queue='None') if isinstance(cluster, str) else cluster

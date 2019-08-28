@@ -1,3 +1,4 @@
+import re
 import helpers
 import ROOT
 import math
@@ -98,7 +99,12 @@ class BoostedTopTagger(Selection):
     index_id : {str}, optional
             which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"), where 'i' is the id of the item.
     """
-    def __init__(self, _callable = None, num_top = 1, min_pt = 300000, strategy = 'obey', bot_tagger = None, do_truth_matching = False, leading_only = False):
+    WP2D = {'DNNTopQuarkContained80': {'short':'dnn_contained80', 'status': ('calibrated',)},
+            'DNNTopQuarkContained50': {'short':'dnn_contained50'},
+            'DNNTopQuarkInclusive80': {'short':'dnn_inclusive80'},
+            'DNNTopQuarkInclusive50': {'short':'dnn_inclusive50'},
+            }
+    def __init__(self, _callable = None, num_top = 1, min_pt = 300000, strategy = 'obey', bot_tagger = None, do_truth_matching = False, leading_only = False, _SF_callable = None):
         logger.info("Select events contain at least {} hadronic-top candidate(s) with pt > {} MeV".format(num_top, min_pt))
         if not callable(_callable):
             logger.info('StrExpression: "{}"'.format(_callable))
@@ -117,24 +123,17 @@ class BoostedTopTagger(Selection):
         self.ljet_angularcuts = []
         self.ljet_selected = []
         self.ljet_truthjetid = []
+        self.ljet_toptagSF = []
         self.ljet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiMVector')()
         if self.do_truth_matching:
             self.truth_ljet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiMVector')()
         if not callable(_callable):
-            self._expr = _callable
-            def _callable(ev):
-                del self.ljet_istoptagged[:]
-                _top_tagger = lambda i: eval(helpers.branch_parser(self._expr,
-                                                                   name_fmt = "ljet_{}",
-                                                                   index_id = "i"),
-                                             {'char2int': helpers.char2int, 'sel': ev, 'i': i})
-                for i in xrange(len(ev.ljet_pt)):
-                    if ev.ljet_pt[i] < self.min_pt:
-                        self.ljet_istoptagged.append(0)
-                    else:
-                        self.ljet_istoptagged.append(_top_tagger(i))
-
-        self._alg = _callable
+            _callable, SF = helpers.branch_parser(_callable, name_fmt = "ljet_{}", index_id = "i",
+                                          ast_kwds = dict(calib_taggers_expr = [d['short'] for d in self.WP2D.itervalues() if 'calibrated' in d.setdefault('status', tuple())]))
+        self._top_tagger = _callable
+        self._SF = SF if _SF_callable is None else _SF_callable
+        self._SFreader = re.compile(r'^toptagSF_(?P<row>\d)__1(?P<direction>(up|down))$')
+        self.scale_factor = getattr(self, '_perjet_scale_factor')
         self.passed = False
         self._bot_tagger = bot_tagger
         self.strategy = strategy
@@ -142,6 +141,13 @@ class BoostedTopTagger(Selection):
             self.passes = self._passes_obey
         elif self.strategy == 'rebel':
             self.passes = self._passes_rebel
+    def _alg(self, ev):
+        del self.ljet_istoptagged[:]
+        for i in xrange(len(ev.ljet_pt)):
+            if ev.ljet_pt[i] < self.min_pt:
+                self.ljet_istoptagged.append(0)
+            else:
+                self.ljet_istoptagged.append(self._top_tagger(ev, i))
     def retrieve_ljet_p4(self, ev):
         self.ljet_p4.clear()
         for i in xrange(ev.ljet_pt.size()):
@@ -192,7 +198,8 @@ class BoostedTopTagger(Selection):
             for i2, p4_i2 in enumerate(self.ljet_p4):
                 ret[-1].append(int((i1 < i2) and \
                                    (self.absdPhiJJRange[0] < abs(ROOT.Math.VectorUtil.DeltaPhi(p4_i1,p4_i2)) < self.absdPhiJJRange[1]) and \
-                                   (self.absdYJJRange[0] < abs(p4_i1.Rapidity()-p4_i2.Rapidity()) < self.absdYJJRange[1])))
+                                   (self.absdYJJRange[0] < abs(p4_i1.Rapidity()-p4_i2.Rapidity()) < self.absdYJJRange[1])
+                                   ))
         self.ljet_angularcuts = ret
         for i in xrange(len(self.ljet_angularcuts)):
             for j in xrange(len(self.ljet_angularcuts[i])):
@@ -241,6 +248,25 @@ class BoostedTopTagger(Selection):
     def parton_matching(self, ev):
         raise NotImplementedError
 
+    def _perjet_scale_factor(self, ev, systematic_variation = ''):
+        del self.ljet_toptagSF[:]
+        matched = self._SFreader.match(systematic_variation)
+        if matched:
+            temp = matched.groupdict()
+            direction = temp['direction']
+            row_i = int(temp['row'])
+        else: #not a top-tagging variation, so take the nominal
+            direction = ''
+            row_i = 0
+        for i in xrange(len(ev.ljet_pt)):
+            if ev.ljet_pt[i] < self.min_pt:
+                self.ljet_toptagSF.append(1)
+            else:
+                self.ljet_toptagSF.append(self._SF(ev, i, direction, row_i))
+        scale_factor = 1.
+        for SF in self.ljet_toptagSF[:self.num_top if self.leading_only else None]:
+            scale_factor *= SF
+        return scale_factor
 
 class TrackJetBotTagger(Selection):
     WP2D = {'AntiKt2PV0TrackJets':
@@ -441,7 +467,7 @@ class TrackJetBotTagger(Selection):
             if 'down' in systematic_variation:
                 direction = 'down'
             # check if it is a b,c,light or extrapolation variation and set name
-            elif 'btagbSF_' in systematic_variation:
+            if 'btagbSF_' in systematic_variation:
                 varName = pref+'_eigen_B_'+direction
                 # get eigenvector index
                 eig = int(systematic_variation.split('_')[1])

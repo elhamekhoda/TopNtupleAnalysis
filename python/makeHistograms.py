@@ -107,7 +107,7 @@ def main(parallel = False):
             reweighting.EWKCorrection.init(sel.mcChannelNumber)
         else:
             options.ttbar_high_order = 'none'
-        if (sel.mcChannelNumber in reweighting.NNLOReweighting.RUN_NUMBERS) and any('ttNNLO_' in syst.name for syst in systList):
+        if (sel.mcChannelNumber in reweighting.NNLOReweighting.RUN_NUMBERS) and any('ttNNLO_' in syst.signature for syst in systList):
             reweighting.NNLOReweighting.init(sel.mcChannelNumber)
     elif options.ttbar_high_order == 'NNLOQCDNLOEWK':
         if sel.mcChannelNumber in reweighting.TTbarNNLOReweighting.RUN_NUMBERS:
@@ -178,7 +178,7 @@ def main(parallel = False):
             analysisCode[k].scalarSBA  = scalarSBA
             analysisCode[k].scalarTANB = scalarTANB
             analysisCode[k].scalarTYPE = scalarTYPE
-        analysisCode[k].set_top_tagger(top_tagger)
+        analysisCode[k].set_top_tagger(top_tagger, _SF_callable = (lambda ev,i: 1.) if options.data else None)
         analysisCode[k].set_bot_tagger(bot_tagger)
         analysisCode[k].set_aux_selector(aux_selector)
         if isinstance(analysisCode[k], analysis.AnaTtresSL):
@@ -196,6 +196,8 @@ def main(parallel = False):
             sel.SetImplicitMT(True)
         ent = options.nevents or sel.GetEntries()
         ent_length = len(str(ent))
+        syst_length = max(len(syst.name) for syst in systgroup.systematics)
+        heartbeat_fmt = "(tree = {:^10}, syst = {{:^{}}}) Entry: {{:>{}}} / {}".format('<'+treeName+'>', syst_length+2, ent_length, ent)
         for k in xrange(ent):
             if options.data and accept_prob > 0:
                 randomNumber = randGen.Uniform(0, 1)
@@ -206,7 +208,7 @@ def main(parallel = False):
             for syst in systgroup.systematics:
                 suffix = syst.hist_suffix
                 if k % 10000 == 0:
-                    logger.info("(tree = {:^10}, syst = {:^5}) Entry: {{:>{}}} / {}".format('<'+treeName+'>', '<'+suffix+'>', ent_length, ent).format(k))
+                    logger.info(heartbeat_fmt.format( '<'+suffix+'>', k))
 
                 # common part of the weight
                 if options.data:
@@ -351,10 +353,10 @@ if __name__ == "__main__":
     SLttres_parser = subparsers.add_parser('AnaTtresSL', parents = [parser], formatter_class = argparse.ArgumentDefaultsHelpFormatter, help = 'Semi-leptonic ttbar resonances anaylsis')
     SLttres_parser.add_argument("-o", "--output",
                         dest="output",
-                        default = ["(re,good,MV2c10_70):hist_re.root",
-                                   "(rmu,good,MV2c10_70):hist_rmu.root",
-                                   "(be,good,MV2c10_70):hist_be.root",
-                                   "(bmu,good,MV2c10_70):hist_bmu.root"],
+                        default = ["(re,good,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_re.root",
+                                   "(rmu,good,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_rmu.root",
+                                   "(be,good,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_be.root",
+                                   "(bmu,good,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_bmu.root"],
                         action = AppendActionCleanDefault,
                         nargs = '?',
                         help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
@@ -362,7 +364,7 @@ if __name__ == "__main__":
     FHttres_parser = subparsers.add_parser('AnaTtresFH', parents = [parser], formatter_class = argparse.ArgumentDefaultsHelpFormatter, help = 'Full-Hadronic ttbar resonances anaylsis')
     FHttres_parser.add_argument("-o", "--output",
                         dest="output",
-                        default = ["(bFH,good,MV2c10_70):hist_bFH.root"],
+                        default = ["(bFH,good,AntiKtVR30Rmax4Rmin02TrackJets.DL1_77):hist_bFH.root"],
                         action = AppendActionCleanDefault,
                         nargs = '?',
                         help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
