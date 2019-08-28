@@ -25,7 +25,7 @@ import helpers
 
 logger = helpers.getLogger('TopNtupleAnalysis.samples')
 
-DS_PATTERN = '{s.ds_scope}.{{{{s.DSID[{{i}}]}}}}.*.DAOD_{s.deriv}.*{suffix}'
+DS_PATTERN = '{s.ds_scope}.{{{{s.DSID[{{i}}]}}}}.*.DAOD_{s.deriv}.{{{{s.ami_tag[{{i}}]}}}}.*{suffix}'
 DS_SCOPE = 'user.{s._client.account}'
 
 MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
@@ -155,7 +155,9 @@ class Sample(object):
                        periodFraction = 1,
                        runNumber = 'ALL',
                        RSE_preferred = None,
-                       priority_key = None):
+                       priority_key = None,
+                       force_amitag = None
+                       ):
         self.parent = self
         self.ds_scope = ds_scope.format(s = self, **ds_fmt_options)
         if not isinstance(sample_name, str):
@@ -167,7 +169,12 @@ class Sample(object):
         self.deriv = deriv
         self.RSE_preferred = RSE_preferred
         self.priority_key = priority_key or (lambda pfns: ((pfns[1].get('rse') or pfns[1]['rse_expression']) == self.RSE_preferred, pfns[1]['priority']))
+        
+        force_amitag = force_amitag if (force_amitag is not None) else (sample_name is 'data') # default to use ami-tag to prevent ambiguity caused by the period containers
+        if not force_amitag:
+            ds_pattern = ds_pattern.replace('{{{{s.ami_tag[{{i}}]}}}}.', '')
         self._ds_pattern_fmt = ds_pattern.format(s = self, **ds_fmt_options)
+
         if self._ds_pattern_fmt.startswith('user.'):
             head, _, tail = self._ds_pattern_fmt.partition(':')
             self.ds_scope = head if tail else '.'.join(head.split('.')[:2])
@@ -201,7 +208,7 @@ class Sample(object):
 
     @property
     def ds_pattern(self):
-        return sorted(set(self._ds_pattern_fmt.format(i=i).format(s=self) for i in range(len(self.shortNameDatasets))))
+        return sorted(set(self._ds_pattern_fmt.format(i=i).format(s=self) for i in xrange(len(self.shortNameDatasets))))
     @property
     def physics_short(self):
         return self.sample.name

@@ -317,19 +317,21 @@ class Analysis(object):
         if sel.mcChannelNumber == 0:
             return 1.0
         weight = 1.0
-        syst_name = s.name
+        syst_sig = s.signature
         for item in s.weight_map:
             weight *= getattr(sel, item)
         if self.ttbarHighOrder == 'NNLOQCDNLOEWK':
-            weight *= reweighting.TTbarNNLOReweighting.get_weight(sel, syst_name)
+            weight *= reweighting.TTbarNNLOReweighting.get_weight(sel, syst_sig)
         else:
             # this applies the EWK weight to _only_ ttbar samples
             if self.ttbarHighOrder == 'Rel20EWK':
-                weight *= reweighting.EWKCorrection.get_weight(sel, syst_name)
+                weight *= reweighting.EWKCorrection.get_weight(sel, syst_sig)
             # this compute the NNLO systematics to _only_ ttbar samples
-            weight *= reweighting.NNLOReweighting.get_weight(sel, syst_name)
+            weight *= reweighting.NNLOReweighting.get_weight(sel, syst_sig)
+        # just add the toptagging SFs on top of those, as this Analysis implementation applies top-tagging
+        weight *= self.top_tagger.scale_factor(sel, syst_sig)
         # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
-        weight *= self.bot_tagger.scale_factor(sel, syst_name)
+        weight *= self.bot_tagger.scale_factor(sel, syst_sig)
         # this applies the W+jets Sherpa 2.2.0 nJets reweighting correction
         # WARNING: disable this if using 2.2.1
         #weight *= sel.weight_Sherpa22_corr
@@ -416,6 +418,7 @@ class AnaTtresSL(Analysis):
         self.add("largeJetPtMtt", 50, 0, 1)
         self.add("largeJetEta", 20, -2., 2.)
         self.add("largeJetPhi", 32, -3.2, 3.2)
+        self.add("largeJet_label", 10, 0, 10)
         self.addVar("mtlep_boo", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
         self.addVar("mtlep_res", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
         self.addVar("mthad_res", [80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 340, 380, 420, 460, 500])
@@ -429,6 +432,9 @@ class AnaTtresSL(Analysis):
         self.add("btagged_tjet_closest_to_ljet", 50, 0, (math.pi**2+2.5**2)**0.5)
         self.add("btagged_tjet_closest_to_lep", 50, 0, (math.pi**2+2.5**2)**0.5)
 
+    def addTree(self):
+        super(AnaTtresSL, self).addTree()
+        self.addBranch('th_label', array('i', [0]), isweight = False)
 
     # only apply the reco weights
     def getWeight(self, sel, s):
@@ -437,16 +443,16 @@ class AnaTtresSL(Analysis):
                 return self.qcdWeight(sel, s.name)
             return 1.0
 
-        syst_name = s.name
+        syst_sig = s.name
         weight = Analysis.getWeight(self, sel, s)
 
-        if syst_name == "singletopup" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
+        if syst_sig == "singletopup" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
             weight *= 1+0.053
-        if syst_name == "singletopdw" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
+        if syst_sig == "singletopdw" and sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
             weight *= 1-0.053
-        if syst_name == "ttxsecup" and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
+        if syst_sig == "ttxsecup" and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
             weight *= 1+0.056
-        if syst_name == "ttxsecdw" and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
+        if syst_sig == "ttxsecdw" and sel.mcChannelNumber in [410000, 301528, 301529, 301530, 301531, 301532]:
             weight *= 1-0.061
 
         # for EFT
@@ -471,7 +477,7 @@ class AnaTtresSL(Analysis):
 
         # W+jets C/A and HF syst. variations
         # assuming b-tagging
-        weight *= reweighting.WjetSystWeight.get_weight(sel, syst_name)
+        weight *= reweighting.WjetSystWeight.get_weight(sel, syst_sig)
 
         return weight
 
@@ -688,6 +694,7 @@ class AnaTtresSL(Analysis):
             self.h["largeJetPhi"][syst].Fill(lj.Phi(), w)
             self.h["largeJet_tau32_wta"][syst].Fill(sel.ljet_tau32_wta[goodJetIdx], w)
             self.h["largeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx], w)
+            self.h["largeJet_label"][syst].Fill(sel.ljet_label[goodJetIdx], w)
             self.h["mtlep_boo"][syst].Fill(tlep.M()*1e-3, w)
             self.h["mtt"][syst].Fill(mtt, w)
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
@@ -789,6 +796,7 @@ class AnaTtresSL(Analysis):
                     self.branches[syst]["me2XX"].push_back(self.me2XX)
                     self.branches[syst]["mttReco"].push_back(mtt)
                     self.branches_noclear[syst]["Btagcat"].value = self.TtresChi2.bcategory
+                    self.branches_noclear[syst]["th_label"][0] = sel.ljet_label[0] if sel.ljet_pt.size() >= 1 else -999
                     if sel.mcChannelNumber != 0:
                         if not (helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
                             self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
@@ -883,6 +891,7 @@ class AnaTtresFH(Analysis):
         self.add("leadinglargeJet_tau32_wta", 20, 0, 1)
         self.add("leadinglargeJet_tau21_wta", 20, 0, 1)
         self.add("leadinglargeJet_DNNScore", 50, 0, 1)
+        self.add("leadinglargeJet_label", 10, 0, 10)
         self.add2D("leadinglargeJetEtaPhi", 44, -2.2, 2.2, 64, -3.2, 3.2)
         self.add("btagged_tjet_closest_to_ljet1", 50, 0, (math.pi**2+2.5**2)**0.5)
         # Sub-leading hadronic top candidate
@@ -895,6 +904,7 @@ class AnaTtresFH(Analysis):
         self.add("subleadinglargeJet_tau32_wta", 20, 0, 1)
         self.add("subleadinglargeJet_tau21_wta", 20, 0, 1)
         self.add("subleadinglargeJet_DNNScore", 50, 0, 1)
+        self.add("subleadinglargeJet_label", 10, 0, 10)
         self.add2D("subleadinglargeJetEtaPhi", 44, -2.2, 2.2, 64, -3.2, 3.2)
         self.add("btagged_tjet_closest_to_ljet2", 50, 0, (math.pi**2+2.5**2)**0.5)
         self.add("dPhiJJ", 60, -math.pi*1.2, math.pi*1.2)
@@ -923,6 +933,8 @@ class AnaTtresFH(Analysis):
         super(AnaTtresFH, self).addTree()
         self.addBranch('m_truthJJ', array('d', [0]), isweight = False)
         self.addBranch('m_truthJJ_MA', array('d', [0]), isweight = False)
+        self.addBranch('th1_label', array('i', [0]), isweight = False)
+        self.addBranch('th2_label', array('i', [0]), isweight = False)
 
     def _selectChannel(self, sel, syst):
         if self.ch not in self.mapSel:
@@ -1053,6 +1065,7 @@ class AnaTtresFH(Analysis):
             self.h["leadinglargeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx1], w)
             self.h["leadinglargeJetEtaPhi"][syst].Fill(lj1.Eta(), lj1.Phi(), w)
             self.h["leadinglargeJet_DNNScore"][syst].Fill(sel.ljet_DNNContainedTopTag_score[goodJetIdx1], w)
+            self.h["leadinglargeJet_label"][syst].Fill(sel.ljet_label[goodJetIdx1], w)
             deltaR_closest_btjet_to_ljet1 = 1e6
             for bjet in bjets:
                 deltaR_closest_btjet_to_ljet1 = min(DeltaR(bjet, lj1), deltaR_closest_btjet_to_ljet1)
@@ -1068,6 +1081,7 @@ class AnaTtresFH(Analysis):
             self.h["subleadinglargeJet_tau21_wta"][syst].Fill(sel.ljet_tau21_wta[goodJetIdx2], w)
             self.h["subleadinglargeJetEtaPhi"][syst].Fill(lj2.Eta(), lj2.Phi(), w)
             self.h["subleadinglargeJet_DNNScore"][syst].Fill(sel.ljet_DNNContainedTopTag_score[goodJetIdx2], w)
+            self.h["subleadinglargeJet_label"][syst].Fill(sel.ljet_label[goodJetIdx2], w)
 
             self.h["dPhiJJ"][syst].Fill(DeltaPhi(lj1, lj2), w)
             self.h["Ystar"][syst].Fill((lj1.Rapidity()-lj2.Rapidity())/2, w)
@@ -1102,6 +1116,8 @@ class AnaTtresFH(Analysis):
                     # truPttbar = pME[2]+pME[3]
                     if sel.mcChannelNumber != 0:
                         self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                    self.branches_noclear[syst]['th1_label'][0] = sel.ljet_label[goodJetIdx1]
+                    self.branches_noclear[syst]['th2_label'][0] = sel.ljet_label[goodJetIdx2]
                     # for i in xrange(sel.MC_id_me.size()):
                     #     self.branches[syst]["id"].push_back(sel.MC_id_me[i])
                     #     self.branches[syst]["px"].push_back(sel.MC_px_me[i])
@@ -1142,13 +1158,14 @@ class AnaTtresFH(Analysis):
         kwds.setdefault('leading_only', True)
         kwds.setdefault('do_truth_matching', True)
         super(AnaTtresFH, self).set_top_tagger(expr, num_thad = num_thad, strategy = strategy, **kwds)
+        self.top_tagger.absdYJJRange = (float('-inf'), float('inf'))
+        self.top_tagger.absdPhiJJRange = (float('-inf'), float('inf'))
         if self.blinded:
             logger.warning('The deltaY cut is inverted to 1.8 <= deltaY(J,J)')
             self.top_tagger.absdYJJRange = (1.8, float('inf'))
         if hasattr(self, 'bot_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger
-
-    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_FixedCutBEff77', **kwds):
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70', **kwds):
         kwds.setdefault('do_ljet_association', True)
         kwds.setdefault('strategy', 'obey')
         kwds.setdefault('min_nbjets', 0)

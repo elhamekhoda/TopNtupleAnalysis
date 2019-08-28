@@ -96,7 +96,7 @@ def loadXsec(m, fName = "dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.
                 continue
             m[int(lsplit[0])] = float(lsplit[1])*float(lsplit[2]) # crossSection * k-factor. Note that in TopDataPreparation crossSection is the crossSection after filter efficiency applied.
 
-def readSumOfWeight(fname):
+def readSumOfWeight(fname, ret_raw = False):
     import csv
     InvSumOfWeights = {}
     try:
@@ -104,14 +104,17 @@ def readSumOfWeight(fname):
         csv.register_dialect('sumOfWeightsDATA', delimiter = ' ', skipinitialspace = True, quoting = csv.QUOTE_NONE)
         with open(fname, 'rb') as fs:
             csv_reader = csv.DictReader(fs, dialect = 'sumOfWeightsDATA')
-            for r in csv_reader:
-                periodFraction = float(r['periodFraction'])
-                runNumber = tuple(r['runNumber'].split('-'))
-                if len(runNumber) < 2:
-                    runNumber = None
+            for i, r in enumerate(csv_reader):
+                if ret_raw:
+                    InvSumOfWeights[i] = r
                 else:
-                    runNumber = tuple(int(r) for r in runNumber)
-                InvSumOfWeights.setdefault(int(r['channel']), {}).setdefault(runNumber, {}).setdefault(r['pdfName'], {})[r['pdfNumber']] = periodFraction/float(r['SumOfWeights'])
+                    periodFraction = float(r['periodFraction'])
+                    runNumber = tuple(r['runNumber'].split('-'))
+                    if len(runNumber) < 2:
+                        runNumber = None
+                    else:
+                        runNumber = tuple(int(r) for r in runNumber)
+                    InvSumOfWeights.setdefault(int(r['channel']), {}).setdefault(runNumber, {}).setdefault(r['pdfName'], {})[r['pdfNumber']] = periodFraction/float(r['SumOfWeights'])
     except IOError:
         logger.warn('FILE("{}") not found.'.format(fname))
     return InvSumOfWeights
@@ -543,7 +546,7 @@ listWjets22.extend(range(364156, 364197+1))
 
 doPRW = True
 
-def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel', debug_mode = False):
+def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel', debug_mode = False, ast_kwds = {}):
     """Intuitive Python ast-style expression parser
 
     Used for hadronic-top tagging flag specification
@@ -563,7 +566,16 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel',
         A program can evaluate the input expression. eval(program) := (ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]
     """
     class RewriteName(ast.NodeTransformer):
+        _sf_format = 'ljet_topTagSF_{}'
+        def __init__(self, calib_taggers_expr = []):
+            super(RewriteName, self).__init__()
+            self.calib_taggers_expr = [re.compile(r'^good_({})'.format(expr)) if isinstance(expr, str) else expr for expr in calib_taggers_expr]
+            self._sfbranch = ''
         def visit_Name(self, node):
+            for matched in (prog.match(node.id) for prog in self.calib_taggers_expr):
+                if matched:
+                    self._sfbranch = self._sf_format.format(matched.group(1))
+                    break
             attr = ast.Attribute(value=ast.Name(id=tree_name, ctx=ast.Load()), attr=name_fmt.format(node.id), ctx=ast.Load())
             node = ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id=index_id, ctx=ast.Load())), ctx=node.ctx)
             node = ast.Call(func=ast.Name(id='char2int',ctx=ast.Load()), args = [node], keywords=[], ctx=ast.Load())
@@ -572,20 +584,52 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel',
         def visit_Str(self, node):
             node = ast.Name(id=node.s, ctx=node.ctx)
             return self.visit_Name(node)
-    node_renamer = RewriteName()
+        def get_sfbranch(self, systematic_variation = ''):
+            if self._sfbranch != '':
+                attr = ast.Attribute(value=ast.Name(id=tree_name, ctx=ast.Load()), attr=self._sfbranch+systematic_variation, ctx=ast.Load())
+                if systematic_variation != '':
+                    attr = ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id='var_row', ctx=ast.Load())), ctx=ast.Load())
+                node = ast.Expression(body=ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id=index_id, ctx=ast.Load())), ctx=ast.Load()))
+            else:
+                node = ast.Expression(body = ast.Num(1))
+            ast.fix_missing_locations(node)
+            return node
+    node_renamer = RewriteName(**ast_kwds)
     if isinstance(expr, str):
         expr = ast.parse(expr.strip(), mode = 'eval')
     else:
         expr = ast.Expression(body=expr)
     node_renamer.visit(expr)
+
+    expr_sf = node_renamer.get_sfbranch()
+    expr_sf_vars__1up = node_renamer.get_sfbranch('_effvars__1up')
+    expr_sf_vars__1down = node_renamer.get_sfbranch('_effvars__1down')
     if debug_mode:
         try:
             import astunparse
             logger.debug(astunparse.unparse(expr))
             logger.debug(ast.dump(expr))
+            logger.debug(astunparse.unparse(expr_sf))
+            logger.debug(ast.dump(expr_sf))
+            logger.debug(astunparse.unparse(expr_sf_vars__1up))
+            logger.debug(ast.dump(expr_sf_vars__1up))
+            logger.debug(astunparse.unparse(expr_sf_vars__1down))
+            logger.debug(ast.dump(expr_sf_vars__1down))
         except Exception as e:
             logger.error(e, exc_info = True)
-    return compile(expr, '<top-tagger>', 'eval')
+
+    tag = lambda ev, i: eval(compile(expr, '<top-tagger>', 'eval'), {'char2int': char2int, 'sel': ev, 'i': i})
+    sf = lambda ev, i: eval(compile(expr_sf, '<top-tagger-SF>', 'eval'), {'sel': ev, 'i': i})
+    sf_effvars__1up = lambda ev, var_row, i: eval(compile(expr_sf_vars__1up, '<top-tagger-SF>', 'eval'), {'sel': ev, 'var_row': var_row, 'i': i})
+    sf_effvars__1down = lambda ev, var_row, i: eval(compile(expr_sf_vars__1down, '<top-tagger-SF>', 'eval'), {'sel': ev, 'var_row': var_row, 'i': i})
+    def SF(ev, i, direction = '', var_row = 0):
+        if direction == '':
+            return sf(ev, i)
+        elif direction == 'up':
+            return sf_effvars__1up(ev, var_row, i)
+        elif direction == 'down':
+            return sf_effvars__1down(ev, var_row, i)
+    return tag, SF
 
 def output_expr_reader_old(expr):
     expr = expr.strip()
