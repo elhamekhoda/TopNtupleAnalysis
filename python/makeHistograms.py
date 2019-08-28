@@ -353,10 +353,10 @@ if __name__ == "__main__":
     SLttres_parser = subparsers.add_parser('AnaTtresSL', parents = [parser], formatter_class = argparse.ArgumentDefaultsHelpFormatter, help = 'Semi-leptonic ttbar resonances anaylsis')
     SLttres_parser.add_argument("-o", "--output",
                         dest="output",
-                        default = ["(re,good,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_re.root",
-                                   "(rmu,good,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_rmu.root",
-                                   "(be,good,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_be.root",
-                                   "(bmu,good,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_bmu.root"],
+                        default = ["(re,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_re.root",
+                                   "(rmu,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_rmu.root",
+                                   "(be,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_be.root",
+                                   "(bmu,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_bmu.root"],
                         action = AppendActionCleanDefault,
                         nargs = '?',
                         help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',
@@ -364,7 +364,7 @@ if __name__ == "__main__":
     FHttres_parser = subparsers.add_parser('AnaTtresFH', parents = [parser], formatter_class = argparse.ArgumentDefaultsHelpFormatter, help = 'Full-Hadronic ttbar resonances anaylsis')
     FHttres_parser.add_argument("-o", "--output",
                         dest="output",
-                        default = ["(bFH,good,AntiKtVR30Rmax4Rmin02TrackJets.DL1_77):hist_bFH.root"],
+                        default = ["(bFH,good_dnn_contained80,AntiKtVR30Rmax4Rmin02TrackJets.DL1_77):hist_bFH.root"],
                         action = AppendActionCleanDefault,
                         nargs = '?',
                         help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',

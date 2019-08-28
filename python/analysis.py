@@ -354,26 +354,26 @@ class Analysis(object):
 
 class AnaTtresSL(Analysis):
     mapSel = {  # OR all channels in the comma-separated list
-                'be': ['bejets_2015','bejets_2016','bejets_2017'],
-                'bmu': ['bmujets_2015','bmujets_2016','bmujets_2017'],
-                're': ['rejets_2015','rejets_2016','rejets_2017'],
-                'rmu': ['rmujets_2015','rmujets_2016','rmujets_2017'],
-                'be0': ['bejets_2015','bejets_2016','bejets_2017'],
-                'bmu0': ['bmujets_2015','bmujets_2016','bmujets_2017'],
-                're0': ['rejets_2015','rejets_2016','rejets_2017'],
-                'rmu0': ['rmujets_2015','rmujets_2016','rmujets_2017'],
-                'be1': ['bejets_2015','bejets_2016','bejets_2017'],
-                'bmu1': ['bmujets_2015','bmujets_2016','bmujets_2017'],
-                're1': ['rejets_2015','rejets_2016','rejets_2017'],
-                'rmu1': ['rmujets_2015','rmujets_2016','rmujets_2017'],
-                'be2': ['bejets_2015','bejets_2016','bejets_2017'],
-                'bmu2': ['bmujets_2015','bmujets_2016','bmujets_2017'],
-                're2': ['rejets_2015','rejets_2016','rejets_2017'],
-                'rmu2': ['rmujets_2015','rmujets_2016','rmujets_2017'],
-                'be3': ['bejets_2015','bejets_2016','bejets_2017'],
-                'bmu3': ['bmujets_2015','bmujets_2016','bmujets_2017'],
-                're3': ['rejets_2015','rejets_2016','rejets_2017'],
-                'rmu3': ['rmujets_2015','rmujets_2016','rmujets_2017'],
+                'be': ['bejets_2015','bejets_2016','bejets_2017','bejets_2018'],
+                'bmu': ['bmujets_2015','bmujets_2016','bmujets_2017','bmujets_2018'],
+                're': ['rejets_2015','rejets_2016','rejets_2017','rejets_2018'],
+                'rmu': ['rmujets_2015','rmujets_2016','rmujets_2017','rmujets_2018'],
+                'be0': ['bejets_2015','bejets_2016','bejets_2017','bejets_2018'],
+                'bmu0': ['bmujets_2015','bmujets_2016','bmujets_2017','bmujets_2018'],
+                're0': ['rejets_2015','rejets_2016','rejets_2017','rejets_2018'],
+                'rmu0': ['rmujets_2015','rmujets_2016','rmujets_2017','rmujets_2018'],
+                'be1': ['bejets_2015','bejets_2016','bejets_2017','bejets_2018'],
+                'bmu1': ['bmujets_2015','bmujets_2016','bmujets_2017','bmujets_2018'],
+                're1': ['rejets_2015','rejets_2016','rejets_2017','rejets_2018'],
+                'rmu1': ['rmujets_2015','rmujets_2016','rmujets_2017','rmujets_2018'],
+                'be2': ['bejets_2015','bejets_2016','bejets_2017','bejets_2018'],
+                'bmu2': ['bmujets_2015','bmujets_2016','bmujets_2017','bmujets_2018'],
+                're2': ['rejets_2015','rejets_2016','rejets_2017','rejets_2018'],
+                'rmu2': ['rmujets_2015','rmujets_2016','rmujets_2017','rmujets_2018'],
+                'be3': ['bejets_2015','bejets_2016','bejets_2017','bejets_2018'],
+                'bmu3': ['bmujets_2015','bmujets_2016','bmujets_2017','bmujets_2018'],
+                're3': ['rejets_2015','rejets_2016','rejets_2017','rejets_2018'],
+                'rmu3': ['rmujets_2015','rmujets_2016','rmujets_2017','rmujets_2018'],
                 'be2015': ['bejets_2015'],
                 'bmu2015': ['bmujets_2015'],
                 're2015': ['rejets_2015'],
@@ -386,8 +386,8 @@ class AnaTtresSL(Analysis):
                 'bmu2017': ['bmujets_2017'],
                 're2017': ['rejets_2017'],
                 'rmu2017': ['rmujets_2017'],
-                'ovre': ['rejets_2015','rejets_2016','rejets_2017'],
-                'ovrmu': ['rmujets_2015','rmujets_2016','rmujets_2017']}
+                'ovre': ['rejets_2015','rejets_2016','rejets_2017','rejets_2018'],
+                'ovrmu': ['rmujets_2015','rmujets_2016','rmujets_2017','rmujets_2018']}
     def __init__(self, channel, systgroups, outputFile, do_tree = False):
         Analysis.__init__(self, channel, systgroups, outputFile, do_tree)
         self.applyQCD = False
@@ -854,13 +854,13 @@ class AnaTtresFH(Analysis):
                 'bFH1': ['bFH_2015', 'bFH_2016', 'bFH_2017', 'bFH_2018'],
                 'bFH2': ['bFH_2015', 'bFH_2016', 'bFH_2017', 'bFH_2018'],
                 'bFH3': ['bFH_2015', 'bFH_2016', 'bFH_2017', 'bFH_2018'],
-                'rFH': ['rFH_2015', 'rFH_2016'],
-                'rFH0': ['rFH_2015', 'rFH_2016'],
-                'rFH1': ['rFH_2015', 'rFH_2016'],
-                'rFH2': ['rFH_2015', 'rFH_2016'],
-                'rFH3': ['rFH_2015', 'rFH_2016'],
-                'ovrFH': ['rFH_2015', 'rFH_2016'],
-                'ovrFH': ['rFH_2015', 'rFH_2016']
+                'rFH': ['rFH_2015', 'rFH_2016', 'rFH_2017', 'rFH_2018'],
+                'rFH0': ['rFH_2015', 'rFH_2016', 'rFH_2017', 'rFH_2018'],
+                'rFH1': ['rFH_2015', 'rFH_2016', 'rFH_2017', 'rFH_2018'],
+                'rFH2': ['rFH_2015', 'rFH_2016', 'rFH_2017', 'rFH_2018'],
+                'rFH3': ['rFH_2015', 'rFH_2016', 'rFH_2017', 'rFH_2018'],
+                'ovrFH': ['rFH_2015', 'rFH_2016', 'rFH_2017', 'rFH_2018'],
+                'ovrFH': ['rFH_2015', 'rFH_2016', 'rFH_2017', 'rFH_2018']
                 }
     def __init__(self, channel, systgroups, outputFile, do_tree = False):
         if 'rFH' in channel:
