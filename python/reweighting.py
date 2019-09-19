@@ -69,7 +69,7 @@ class NNLOReweighting(Reweighter):
     RUN_NUMBERS = [410471, 410470, 410000, 301528, 301529, 301530, 301531, 301532]
     RUN_NUMBERS += [410633, 410634, 410635, 410636, 410637] # mttsliced nonallhad
     RUN_NUMBERS += [410284, 410285, 410286, 410287, 410288] # mttsliced allhad
-    SYSTS = {'ttNNLO_seqExtended__1up': 1, 'ttNNLO_seqExtended__1down': -1,
+    SYSTS = {'ttNNLO_seq__1up': 1, 'ttNNLO_seq__1down': -1,
              'ttNNLO_topPt__1up': 2, 'ttNNLO_topPt__1down': -2,
              'ttNNLO_topPtDiff__1up': 3, 'ttNNLO_topPtDiff__1down': -3,
              'ttNNLO_seqExtended__1up': 4, 'ttNNLO_seqExtended__1down': -4,
