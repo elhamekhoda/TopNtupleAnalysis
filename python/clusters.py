@@ -1108,7 +1108,7 @@ class PBSCluster(Cluster):
     running_tag = ['T','E','R']
     complete_tag = ['C']
     
-    maximum_submited_jobs = 2500
+    maximum_submited_jobs = 400
 
     @multiple_try()
     def submit(self, prog, argument=[], cwd=None, stdout=None, stderr=None, log=None,
@@ -1147,7 +1147,7 @@ class PBSCluster(Cluster):
         command = ['qsub','-o', stdout,
                    '-N', me_dir, 
                    '-e', stderr,
-                   '-V']
+                   '-V', '-l walltime=8:00:00,mem=2000m']
 
         if self.cluster_queue and self.cluster_queue != 'None':
             command.extend(['-q', self.cluster_queue])
@@ -1199,7 +1199,8 @@ class PBSCluster(Cluster):
         cmd = "qstat"
         status = subprocess.Popen([cmd], stdout=subprocess.PIPE)
 
-        me_dir = self.get_jobs_identifier(me_dir)
+        #me_dir = self.get_jobs_identifier(me_dir)
+        me_dir = ".submit"
 
         ongoing = []
 
