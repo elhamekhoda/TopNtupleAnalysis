@@ -1158,8 +1158,6 @@ class AnaTtresFH(Analysis):
         kwds.setdefault('leading_only', True)
         kwds.setdefault('do_truth_matching', True)
         super(AnaTtresFH, self).set_top_tagger(expr, num_thad = num_thad, strategy = strategy, **kwds)
-        self.top_tagger.absdYJJRange = (float('-inf'), float('inf'))
-        self.top_tagger.absdPhiJJRange = (float('-inf'), float('inf'))
         if self.blinded:
             logger.warning('The deltaY cut is inverted to 1.8 <= deltaY(J,J)')
             self.top_tagger.absdYJJRange = (1.8, float('inf'))
