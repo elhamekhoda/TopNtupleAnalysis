@@ -127,6 +127,7 @@ void SystematicCalculatorBase::printSysts(SampleSet &st) {
         double s = fabs(totalSyst(st, systName));
         string systTitle = _syst_title[systName];
         cout << setw(50) << systTitle << " & " << setw(20) << s * 100.0 / total_nom;
+        // cout << s << "     " << st._item[0].nominal.yield() << "      " << total_nom ;
         cout << " \\\\" << endl;
         total_syst += s * s;
     }

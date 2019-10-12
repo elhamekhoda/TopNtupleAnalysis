@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
 
     int help = 0;
     string channel = "e";
+    string channel_label = "";
     string prefix = "";
     string h_input = "lepPt";
     int mcOnly = 0;
@@ -73,19 +74,20 @@ int main(int argc, char **argv) {
     static struct extendedOption extOpt[] = {
         {"help",            no_argument,       &help,   1, "Display help", &help, extendedOption::eOTInt},
         {"channel",         required_argument,     0, 'c', "Channel: one of e, mu, comb", &channel, extendedOption::eOTString},
+        {"channel_label",   required_argument,     0, '9', "Channel Label", &channel_label, extendedOption::eOTString},
         {"prefix",          required_argument,     0, 'p', "Prefix.", &prefix, extendedOption::eOTString},
         {"histogram",       required_argument,     0, 'h', "Histogram name.", &h_input, extendedOption::eOTString},
         {"mcOnly",          required_argument,     0, 'm', "Only look for the ttbarMatched histograms? (0/1)", &mcOnly, extendedOption::eOTInt},
-        {"outdir",          required_argument,     0,  6, "Output file.", &outdir, extendedOption::eOTString},
+        {"outdir",          required_argument,     0, '6', "Output file.", &outdir, extendedOption::eOTString},
         {"outfile",         required_argument,     0, 'o', "Output file.", &_outfile, extendedOption::eOTString},
-        {"outexts",         required_argument,     0,  5, "Output exts.", &outexts, extendedOption::eOTString},
+        {"outexts",         required_argument,     0, '5', "Output exts.", &outexts, extendedOption::eOTString},
         {"verbose",         required_argument,     0, 'v', "Verbose. (0/1)", &verbose, extendedOption::eOTInt},
         {"underflow",       required_argument,     0, 'U', "Include underflow (0/1)", &underflow, extendedOption::eOTInt},
         {"extraText",       required_argument,     0, 'T', "Extra text to add in the plot.", &_extraText, extendedOption::eOTString},
         {"yTitle",          required_argument,     0, 'E', "Y title.", &yTitle, extendedOption::eOTString},
         {"xTitle",          required_argument,     0, 't', "X title.", &xTitle, extendedOption::eOTString},
-        {"xLabelSize",      required_argument,     0,  2, "Label size of the Y axis.", &yLabelSize, extendedOption::eOTFloat},
-        {"yLabelSize",      required_argument,     0,  3, "Label size of the X axis.", &xLabelSize, extendedOption::eOTFloat},
+        {"xLabelSize",      required_argument,     0, '2', "Label size of the X axis.", &xLabelSize, extendedOption::eOTFloat},
+        {"yLabelSize",      required_argument,     0, '3', "Label size of the Y axis.", &yLabelSize, extendedOption::eOTFloat},
         {"xMax",            required_argument,     0, 'X', "Limit X maximum value.", &xMax, extendedOption::eOTFloat},
         {"xMin",            required_argument,     0, 'x', "Limit X minimum value.", &xMin, extendedOption::eOTFloat},
         {"mustBeBigger",    required_argument,     0, 'M', "Widen range of the Y axis in the ratio plots.", &mustBeBigger, extendedOption::eOTInt},
@@ -95,7 +97,7 @@ int main(int argc, char **argv) {
         {"yMax",            required_argument,     0, 'Y', "Maximum of the Y axis.", &yMax, extendedOption::eOTFloat},
         {"yMin",            required_argument,     0, 'y', "Minimum of the Y axis.", &yMin, extendedOption::eOTFloat},
         {"arrow",           required_argument,     0, 'a', "Draw arrow.", &arrow, extendedOption::eOTInt},
-        {"stamp",           required_argument,     0, 's', "0 = ATLAS Internal, 1 = ATLAS Preliminary.", &stamp, extendedOption::eOTInt},
+        {"stamp",           required_argument,     0, 's', "-999 = No ATLAS stamp, -1 = ATLAS Work in progress, 0 = ATLAS Internal, 1 = ATLAS Preliminary.", &stamp, extendedOption::eOTInt},
         {"lumi",            required_argument,     0, 'l', "Luminosity value to show", &lumi, extendedOption::eOTFloat},
         {"config",          required_argument,     0, 'C', "Configuration file for items.", &config, extendedOption::eOTString},
         {"smoothen",        required_argument,     0, 'k', "Smoothen systematics.", &smooth, extendedOption::eOTInt},
@@ -103,7 +105,7 @@ int main(int argc, char **argv) {
         {"normBinWidth",    required_argument,     0, 'b', "Divide bin content by bin width?", &normBinWidth, extendedOption::eOTFloat},
         {"alternateStyle",  required_argument,     0, 'A', "Alternative style", &alternateStyle, extendedOption::eOTInt},
         {"logY",            required_argument,     0, 'g', "Y axis in log?", &_logY, extendedOption::eOTInt},
-        {"topPurity",       required_argument,     0,   4, "Draw top purity in the center?", &topPurity, extendedOption::eOTInt},
+        {"topPurity",       required_argument,     0, '4', "Draw top purity in the center?", &topPurity, extendedOption::eOTInt},
 
         {0, 0, 0, 0, 0, 0, extendedOption::eOTInt}
     };
@@ -119,10 +121,15 @@ int main(int argc, char **argv) {
 
     logY = _logY;
     lumi_scale = lumi;
-    if (config != "")
-        loadConfig(config.c_str());
-    else
-        loadConfig(std::string(argv[0]).substr(0, std::string(argv[0]).rfind('/')) + "/config.txt");
+    try {
+        if (config != "")
+            loadConfig(config.c_str());
+        else
+            loadConfig(std::string(argv[0]).substr(0, std::string(argv[0]).rfind('/')) + "/config.txt");
+        }
+    catch(...) {
+        throw "ERROR: load config file failed!";
+    }
 
     _stamp = stamp;
 
@@ -148,9 +155,9 @@ int main(int argc, char **argv) {
         SampleSetConfiguration stackConfig = makeConfigurationPlots(prefix, channel, mcOnly);
         SystematicCalculator systCalc(stackConfig);
         bool splitUpDw = (saveTH1 != "");
-        addAllSystematics(systCalc, prefix, channel, splitUpDw);
+        addAllSystematics(systCalc, prefix, channel, true);
+        // addAllSystematics(systCalc, prefix, channel, splitUpDw);
         systCalc.calculate(histogram);
-
 
         std::vector<float> rebinAsym;
         std::stringstream ss(rebinAsymStr);
@@ -170,6 +177,7 @@ int main(int argc, char **argv) {
         if (xMin > -998.0) stackConfig.limitMinX(xMin);
         if (rebin != 1) stackConfig.rebin(rebin);
         else if (rebinAsym.size() != 0) stackConfig.rebinAsym(rebinAsym);
+        std::cout << "normBinWidth:" << normBinWidth << std::endl;
         if (normBinWidth > 0) stackConfig.normBinWidth(normBinWidth);
 
         if (verbose) {
@@ -209,24 +217,28 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        if (channel == "e" || channel == "el") {
-            extraText.push_back("e+jets");
-        } else if (channel == "mu") {
-            extraText.push_back("#mu+jets");
-        } else if (channel == "comb") {
-            //extraText.push_back("e,#mu-channel");
-        } else if (channel == "beX") {
-            extraText.push_back("boosted, e+jets");
-        } else if (channel == "bmuX") {
-            extraText.push_back("boosted, #mu+jets");
-        } else if (channel == "reX") {
-            extraText.push_back("resolved, e+jets");
-        } else if (channel == "rmuX") {
-            extraText.push_back("resolved, #mu+jets");
-        } else if (channel == "bFH") {
-            extraText.push_back("boosted, full hadronic");
+        if ( channel_label == "") {
+            if (channel == "e" || channel == "el") {
+                extraText.push_back("e+jets");
+            } else if (channel == "mu") {
+                extraText.push_back("#mu+jets");
+            } else if (channel == "comb") {
+                //extraText.push_back("e,#mu-channel");
+            } else if (channel == "beX") {
+                extraText.push_back("boosted, e+jets");
+            } else if (channel == "bmuX") {
+                extraText.push_back("boosted, #mu+jets");
+            } else if (channel == "reX") {
+                extraText.push_back("resolved, e+jets");
+            } else if (channel == "rmuX") {
+                extraText.push_back("resolved, #mu+jets");
+            } else if (channel == "bFH") {
+                extraText.push_back("boosted, fully hadronic");
+            } else {
+                extraText.push_back(channel);
+            }
         } else {
-            extraText.push_back(channel);
+            extraText.push_back(channel_label);
         }
         vector<string> split_extraText;
         split(_extraText, ';', split_extraText);
@@ -235,6 +247,7 @@ int main(int argc, char **argv) {
             drawDataMC2(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi);
         } else {
             for (auto outfile : outputfiles) {
+                // std::cout << "topPurity:" << topPurity << std::endl;
                 drawDataMC(stackConfig, extraText, outfile, true, xTitle, yTitle, mustBeBigger, posLegend, yMin, yMax, arrow, lumi, yLabelSize, xLabelSize, topPurity);
             }
         }

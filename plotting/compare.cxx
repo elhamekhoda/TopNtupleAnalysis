@@ -85,8 +85,8 @@ int main(int argc, char **argv) {
 
     vector<string> items;
     vector<string> titles;
-    split(h_files, ',', items);
-    split(h_titles, ',', titles);
+    split(h_files, ",", items);
+    split(h_titles, ",", titles);
     string histogram = h_input;
 
     cout.setf(ios::fixed, ios::floatfield);

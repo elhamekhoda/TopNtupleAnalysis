@@ -25,26 +25,28 @@
 #include <boost/format.hpp>
 #include <fstream>
 
-int _stamp = 0;
-std::map<std::string, std::string> name = std::map<std::string, std::string>();
-std::multimap<std::string, std::vector<std::string> > syst = std::multimap<std::string, std::vector<std::string> >();
+int _stamp;
+std::map<std::string, std::string> name;
+std::multimap<std::string, std::vector<std::string> > syst;
 
-std::map<std::string, std::string> title = std::map<std::string, std::string>();
-std::map<std::string, std::string> latex = std::map<std::string, std::string>();
-std::map<std::string, int> fillColor = std::map<std::string, int>();
-std::map<std::string, float> scale = std::map<std::string, float>();
+std::map<std::string, std::string> title;
+std::map<std::string, std::string> latex;
+std::map<std::string, int> fillColor;
+std::map<std::string, int> lineColor;
+std::map<std::string, float> scale;
+std::map<std::string, std::string> type;
+std::map<std::string, int> lineStyle;
 
+std::multimap<std::string, std::vector<std::string> > syst_model_nominal;
+std::multimap<std::string, std::vector<std::string> > syst_model;
+std::multimap<std::string, std::vector<std::string> > syst_flat;
+std::multimap<std::string, std::vector<std::string> > syst_pdf;
+std::multimap<std::string, std::vector<std::string> > syst_pdf_simple;
 
-std::multimap<std::string, std::vector<std::string> > syst_model_nominal = std::multimap<std::string, std::vector<std::string> >();
-std::multimap<std::string, std::vector<std::string> > syst_model = std::multimap<std::string, std::vector<std::string> >();
-std::multimap<std::string, std::vector<std::string> > syst_flat = std::multimap<std::string, std::vector<std::string> >();
-std::multimap<std::string, std::vector<std::string> > syst_pdf = std::multimap<std::string, std::vector<std::string> >();
-std::multimap<std::string, std::vector<std::string> > syst_pdf_simple = std::multimap<std::string, std::vector<std::string> >();
-
-float lumi_scale = -0.0;
-int logY = 0;
-int smooth = 0;
-
+float lumi_scale;
+int logY;
+int smooth;
+bool doASIMOV = false;
 using namespace std;
 
 std::vector<std::string> parse(const std::string& line) {
@@ -52,6 +54,9 @@ std::vector<std::string> parse(const std::string& line) {
     std::string item;
     std::stringstream ss(line);
     while (ss >> item) {
+        if (item[0] == '#') {
+            result.push_back("");
+        }
         if (item[0] == '"') {
             if (item[item.length() - 1] == '"') {
                 result.push_back(item.substr(1, item.length() - 2));
@@ -80,13 +85,28 @@ void loadConfig(const std::string &file) {
         if (el.size() == 0)
             continue;
         if (el[0] == "sample") {
+            static std::vector<std::string> color;
+            split(el[5], ';', color);
             name[el[1]] = el[2];
             title[el[1]] = el[3];
             latex[el[1]] = el[4];
-            fillColor[el[1]] = std::atoi(el[5].c_str());
-            scale[el[1]] = 1.0;
+            fillColor[el[1]] = std::atoi(color.at(color.size() - 1).c_str());
+            // std::cout << ">>>>>" << "FillColor:" << el[1] << ")" << fillColor[el[1]] << std::endl;
+            if (color.size() == 1) {
+                lineColor[el[1]] = kBlack;
+            } else {
+                lineColor[el[1]] = std::atoi(color.at(0).c_str());
+            }
+            color.clear();
+            type[el[1]] = (el[1].find("data") != std::string::npos || el[1].find("ASIMOV") != std::string::npos) ? "Data" : "MC";
             if (el.size() >= 7)
-                scale[el[1]] = std::atof(el[6].c_str());
+                type[el[1]] = el[6];
+            lineStyle[el[1]] = 1;
+            if (el.size() >= 8)
+                lineStyle[el[1]] = std::atof(el[7].c_str());
+            scale[el[1]] = 1.0;  
+            if (el.size() >= 9)
+                scale[el[1]] = std::atof(el[8].c_str());
         } else if (el[0] == "syst") {
             std::multimap<std::string, std::vector<std::string> >::iterator it = syst.insert(std::pair<std::string, std::vector<std::string> >(el[1], std::vector<std::string>()));
             it->second.push_back(el[2]);
@@ -118,7 +138,7 @@ void loadConfig(const std::string &file) {
     }
 }
 
-shared_ptr<TGraphAsymmErrors> normaliseBand(shared_ptr<TGraphAsymmErrors> band, TH1D *MC_sum, TH1D *ratio) {
+shared_ptr<TGraphAsymmErrors> normaliseBand(shared_ptr<TGraphAsymmErrors> band, TH1D *MC_sum, TH1D *ratio, float alpha) {
     shared_ptr<TGraphAsymmErrors> rat((TGraphAsymmErrors *) band->Clone("ratio_band"));
     for (int k = 1; k < MC_sum->GetNbinsX() + 1; ++k) {
         double mx, my;
@@ -147,18 +167,18 @@ shared_ptr<TGraphAsymmErrors> normaliseBand(shared_ptr<TGraphAsymmErrors> band, 
             rat->SetPointEYlow(k - 1, 0);
         }
     }
-
+    rat->SetFillColorAlpha(rat->GetFillColor(), alpha);
     return rat;
 }
 
-shared_ptr<TGraphErrors> TH1toGraph(TH1D *Data) {
-    shared_ptr<TGraphErrors> rat(new TGraphErrors(Data->GetNbinsX()));
+TGraphAsymmErrors* TH1toGraph(TH1D *Data) {
+    TGraphAsymmErrors* rat = new TGraphAsymmErrors(Data);
     for (int k = 1; k < Data->GetNbinsX() + 1; ++k) {
         double mx, my;
-        rat->SetPoint(k - 1, Data->GetBinCenter(k), Data->GetBinContent(k));
-        rat->SetPointError(k - 1, Data->GetBinWidth(k) * 0.5,  Data->GetBinError(k));
-        //rat->SetPointEXhigh(k-1, Data->GetBinWidth(k)*0.5);
-        //rat->SetPointEXlow(k-1, Data->GetBinWidth(k)*0.5);
+        // rat->SetPoint(k - 1, Data->GetBinCenter(k), Data->GetBinContent(k));
+        // rat->SetPointError(k - 1, Data->GetBinWidth(k) * 0.5,  Data->GetBinError(k));
+        rat->SetPointEXhigh(k - 1, Data->GetBinWidth(k) * 0.5);
+        rat->SetPointEXlow(k - 1, Data->GetBinWidth(k) * 0.5);
         //rat->SetPointEYhigh(k-1, Data->GetBinError(k));
         //rat->SetPointEYlow(k-1, Data->GetBinError(k));
     }
@@ -168,7 +188,6 @@ shared_ptr<TGraphErrors> TH1toGraph(TH1D *Data) {
     rat->SetLineStyle(Data->GetLineStyle());
     rat->SetLineColor(Data->GetLineColor());
     rat->SetLineWidth(Data->GetLineWidth());
-
     return rat;
 }
 
@@ -199,11 +218,410 @@ void addSystToStat(shared_ptr<TH1D> Data, shared_ptr<TGraphAsymmErrors> band) {
 
 shared_ptr<TH1D> normaliseBandLine(shared_ptr<TH1D> band, TH1D *MC_sum) {
     shared_ptr<TH1D> rat((TH1D *) band->Clone(Form("ratio_band%s", band->GetName())));
+    rat->SetFillColorAlpha(rat->GetFillColor(), 1.);
     rat->Divide(band.get(), MC_sum);
     for (int k = 1; k < MC_sum->GetNbinsX() + 1; ++k) {
         if (MC_sum->GetBinContent(k) == 0) rat->SetBinContent(k, 1);
     }
     return rat;
+}
+
+void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, const std::string &xTitle, const std::string &yTitle, int mustBeBigger, int posLegend, float yMin, float yMax, int useArrow, double lumi, float xLabelSize, float yLabelSize, int topPurity) {
+    TStyle *atlasStyle = AtlasStyle();
+    gROOT->SetStyle("ATLAS");
+    gROOT->ForceStyle();
+
+    shared_ptr<TCanvas> c(new TCanvas("c", "", 800, 600));
+    // do ratio?
+    TPad *pad_main = 0;
+    TPad *pad_ratio = 0;
+    TPad *top_purity = 0;
+    std::vector<float> pad_prop;
+    if (ratio && stackConfig._stack.find("Data") != stackConfig._stack.end() && topPurity) {
+        pad_prop = {0.55, 0.2, 0.25};
+        c->Divide(1, pad_prop.size(), 0.015, 0.01);
+
+        pad_ratio = (TPad *) c->cd(3);
+        pad_ratio->SetPad(0.0, 0.0, 1.0, pad_prop.at(2));
+        pad_ratio->SetTopMargin(0.06);
+        pad_ratio->SetBottomMargin(0.3);
+
+        top_purity = (TPad *) c->cd(2);
+        top_purity->SetPad(0.0, pad_prop.at(2), 1.0, pad_prop.at(2) + pad_prop.at(1));
+        top_purity->SetTopMargin(0.06);
+        top_purity->SetBottomMargin(0.1);
+
+        pad_main = (TPad *) c->cd(1);
+        pad_main->SetPad(0.0, pad_prop.at(1) + pad_prop.at(2), 1., pad_prop.at(0) + pad_prop.at(1) + pad_prop.at(2));
+        pad_main->SetBottomMargin(0.05);
+    } else if (ratio && stackConfig._stack.find("Data") != stackConfig._stack.end()) {
+        pad_prop = {0.6, 0.4};
+        c->Divide(1, pad_prop.size(), 0.015, 0.01);
+        pad_ratio = (TPad *) c->cd(2);
+        pad_ratio->SetPad(0.0, 0.0, 1.0,  pad_prop.at(1));
+        pad_ratio->SetTopMargin(0.06);
+        pad_ratio->SetBottomMargin(0.3);
+
+        pad_main = (TPad *) c->cd(1);
+        pad_main->SetPad(0.0, pad_prop.at(1), 1., pad_prop.at(0) + pad_prop.at(1));
+        pad_main->SetBottomMargin(0.05);
+    } else {
+        pad_main = (TPad *) c->cd(1);
+    }
+
+    c->cd(1);
+
+    // make legend
+    //shared_ptr<TLegend> leg(new TLegend(0.55, 0.6, 0.85, 0.92));
+    shared_ptr<TLegend> leg;
+    if (posLegend == 0)
+        leg.reset(new TLegend(0.55, 0.63, 0.88, 0.92));
+    else if (posLegend == 1)
+        leg.reset(new TLegend(0.18, 0.25, 0.45, 0.65));
+    else if (posLegend == 2 || posLegend == 5)
+        leg.reset(new TLegend(0.5, 0.3, 0.88, 0.72));
+    else if (posLegend == 3)
+        leg.reset(new TLegend(0.18, 0.32, 0.45, 0.74));
+    else if (posLegend == 6)
+        leg.reset(new TLegend(0.55, 0.68, 0.88, 0.92));
+    else if (posLegend == 7)
+        leg.reset(new TLegend(0.55, 0.68, 0.88, 0.92));
+    else if (posLegend == 8)
+        leg.reset(new TLegend(0.3, 0.3, 0.88, 0.72));
+    //leg->SetNColumns(2);
+    leg->SetFillStyle(0);
+    leg->SetBorderSize(0);
+    leg->SetTextFont(43);
+    leg->SetTextSize(18.9);
+    leg->SetLineColor(1);
+    leg->SetLineStyle(1);
+    leg->SetLineWidth(1);
+
+    shared_ptr<TH1D> Data;
+    if (stackConfig._stack.find("Data") != stackConfig._stack.end())
+        Data = stackConfig["Data"].makeTH1("Data");
+    if (Data) {
+        if (doASIMOV) {
+            Data->Sumw2(false);
+        }
+        Data->SetStats(0);
+        leg->AddEntry(Data.get(), stackConfig["Data"]._item[0].name_plot.c_str(), "LP");
+    }
+
+    // make MC stack and add entries in legend
+    vector<shared_ptr<TH1D> > vechist;
+    shared_ptr<THStack> MC = stackConfig["MC"].makeStack("MC", leg, vechist);
+
+    vector<shared_ptr<TH1D> > overlaid;
+    for (auto const samples: stackConfig._stack) {
+        std::string type = samples.first;
+        auto sample = samples.second;
+        if (type == "Data") continue;
+        if (type == "MC") continue;
+        shared_ptr<TH1D> h = sample.makeTH1(type);
+        overlaid.push_back(h);
+        leg->AddEntry(h.get(), sample._item[0].name_plot.c_str(), "LP");
+    }
+
+    // make syst. band
+    // shared_ptr<TGraphAsymmErrors> band = stackConfig["MC"].makeBand();
+    shared_ptr<TGraphAsymmErrors> band(TH1toGraph((TH1D*)MC->GetStack()->Last()));
+    shared_ptr<TGraphAsymmErrors> statsys_band = stackConfig["MC"].makeBand();
+
+    //band->SetFillStyle(3354);
+    band->SetFillStyle(1001);
+    band->SetFillColorAlpha(kGreen - 9, 0.5);
+    statsys_band->SetFillStyle(1001);
+    statsys_band->SetFillColorAlpha(kGreen + 3, 0.5);
+
+
+    if (band) {
+        // leg->AddEntry(band.get(), "Bkg. uncertainty", "F");
+        addStatToSyst((TH1D*)MC->GetStack()->Last(), statsys_band);
+        leg->AddEntry(band.get(), "#sigma_{MC Stat.}", "F");
+        leg->AddEntry(statsys_band.get(), "#sigma_{MC Stat.} #oplus #sigma_{Syst.}", "F");
+    }
+
+    double maximum = MC->GetMaximum();
+    if (Data) maximum = std::max(Data->GetBinContent(Data->GetMaximumBin()), MC->GetMaximum());
+    maximum *= 1.8;
+    double minimum = 0.1;
+    if (logY) {
+        maximum *= 10000;
+    }
+
+    if (yMax > 0) maximum = yMax;
+    if (yMin > 0) minimum = yMin;
+
+    MC->SetMaximum(maximum);
+    MC->SetMinimum(minimum);
+    if (Data) {
+        Data->SetMaximum(maximum);
+        if (yTitle != "") Data->GetYaxis()->SetTitle(yTitle.c_str());
+        Data->SetMinimum(minimum);
+    }
+
+    MC->Draw();
+
+    if (xLabelSize != -1) {
+        MC->GetXaxis()->SetLabelSize(xLabelSize);
+        MC->GetXaxis()->SetTitleSize(xLabelSize);
+        MC->GetXaxis()->SetTitleOffset(1.1);
+    }
+    if (yLabelSize != -1) MC->GetYaxis()->SetLabelSize(yLabelSize);
+    if (yTitle != "") MC->GetYaxis()->SetTitle(yTitle.c_str());
+    if (!ratio || !Data) {
+        if (xTitle == "")
+            MC->GetXaxis()->SetTitle(vechist[0]->GetXaxis()->GetTitle());
+        else
+            MC->GetXaxis()->SetTitle(xTitle.c_str());
+        if (yTitle != "")
+            MC->GetYaxis()->SetTitle(yTitle.c_str());
+        else
+            MC->GetYaxis()->SetTitle(vechist[0]->GetYaxis()->GetTitle());
+    } else {
+        MC->GetXaxis()->SetLabelSize(0);
+    }
+    c->Update();
+
+    MC->Draw("same");
+    statsys_band->Draw("2 ][ same");
+    band->Draw("2 ][ same");
+
+    if (Data)
+        Data->Draw("e same");
+    if (logY) {
+        MC->SetMinimum(std::max(minimum, 1e-10));
+        pad_main->SetLogy();
+    }
+
+    for (auto h : overlaid) {
+        h->Draw("HIST SAME");
+    }
+
+    leg->Draw();
+    gPad->RedrawAxis();
+
+    shared_ptr<TGraph> arrow;
+    shared_ptr<TGraph> arrowdw;
+    shared_ptr<TH1D> rat;
+    shared_ptr<TGraphAsymmErrors> rat_band;
+    shared_ptr<TGraphAsymmErrors> rat_statsyst_band;
+    shared_ptr<TLine> lin;
+
+    if (ratio && Data) {
+        TH1D *MC_sum = (TH1D *) MC->GetStack()->Last();
+        for (size_t bini = 0; bini <= MC_sum->GetNbinsX() + 1; bini++) {
+            MC_sum->SetBinError(bini, 0.);
+        }
+        rat.reset((TH1D *) Data->Clone("ratio"));
+        arrow.reset(new TGraph(Data->GetNbinsX() + 1));
+        arrowdw.reset(new TGraph(Data->GetNbinsX() + 1));
+
+        rat->Divide(Data.get(), MC_sum);//, 1, 1, "B");
+        rat_band = normaliseBand(band, MC_sum, 0, 1.0);
+        rat_statsyst_band = normaliseBand(statsys_band, MC_sum, 0, 1.0);
+
+        // addStatToSyst(rat.get(), rat_statsyst_band);
+
+        double theMax = 1.6;
+        double theMin = 0.4;
+        pad_ratio->cd();
+        rat->SetStats(0);
+        if (!mustBeBigger) {
+            rat->GetYaxis()->SetRangeUser(0.5, 1.501);
+            theMax = 1.6;
+            theMin = 0.5;
+        } else if (mustBeBigger == 1) {
+            rat->GetYaxis()->SetRangeUser(0.0, 2.3);
+            theMax = 2.3;
+            theMin = 0.0;
+        } else if (mustBeBigger == 10) {
+            rat->GetYaxis()->SetRangeUser(0., 10.);
+            rat->SetTitle("");
+        }
+        if (xTitle == "")
+            rat->GetXaxis()->SetTitle(MC_sum->GetXaxis()->GetTitle());
+        else
+            rat->GetXaxis()->SetTitle(xTitle.c_str());
+        rat->GetYaxis()->SetTitle("Data / Bkg.");
+        rat->GetYaxis()->SetNdivisions(3, 0, 5);
+        rat->GetXaxis()->SetLabelFont(42);
+        rat->GetXaxis()->SetTitleFont(42);
+        rat->GetYaxis()->SetLabelFont(42);
+        rat->GetYaxis()->SetTitleFont(42);
+
+        if (topPurity) {
+            rat->GetXaxis()->SetTitleSize(0.15);
+            rat->GetXaxis()->SetTitleOffset(0.8);
+            rat->GetXaxis()->SetLabelSize(0.15);
+            rat->GetYaxis()->SetTitleSize(0.15);
+            rat->GetYaxis()->SetTitleOffset(0.40);
+            rat->GetYaxis()->SetLabelSize(0.15);
+            rat->GetYaxis()->SetLabelOffset(0.02);
+        } else {
+            rat->GetXaxis()->SetTitleSize(0.1);//rat->GetXaxis()->SetTitleSize(0.2);
+            rat->GetXaxis()->SetTitleOffset(1.1);//1.1);
+            rat->GetXaxis()->SetLabelSize(0.1); //rat->GetXaxis()->SetLabelSize(0.18);
+
+            rat->GetYaxis()->SetTitleSize(MC->GetYaxis()->GetTitleSize()*pad_prop.at(0) / pad_prop.at(pad_prop.size() - 1)); //0.18);
+            rat->GetYaxis()->SetTitleOffset(MC->GetYaxis()->GetTitleOffset()*pad_prop.at(pad_prop.size() - 1) / pad_prop.at(0)); //0.40);
+            rat->GetYaxis()->SetLabelSize(MC->GetYaxis()->GetLabelSize()*pad_prop.at(0) / pad_prop.at(pad_prop.size() - 1)); //0.15);
+            rat->GetYaxis()->SetLabelOffset(MC->GetYaxis()->GetLabelOffset()*pad_prop.at(0) / pad_prop.at(pad_prop.size() - 1)); //0.02);
+        }
+        rat->SetTitle("");
+
+        arrow->SetMarkerSize(1.5);
+        arrow->SetMarkerStyle(26);
+        arrow->SetMarkerColor(kBlack);
+        arrowdw->SetMarkerSize(1.5);
+        arrowdw->SetMarkerStyle(32);
+        arrowdw->SetMarkerColor(kBlack);
+        for (int z = 0; z < rat->GetNbinsX() + 1; ++z) {
+            if (rat->GetBinError(z) == 0 && rat->GetBinContent(z) == 0) {
+                continue;
+            }
+            //if (rat->GetBinContent(z) > theMax || (rat->GetBinContent(z) == 0 && MC_sum->GetBinContent(z) != 0)) {
+            if (rat->GetBinContent(z) > theMax) {
+                arrow->SetPoint(z, rat->GetBinCenter(z), theMax - 0.15);
+            } else {
+                arrow->SetPoint(z, rat->GetBinCenter(z), -1);
+            }
+            if (rat->GetBinContent(z) < theMin) {
+                arrowdw->SetPoint(z, rat->GetBinCenter(z), theMin + 0.15);
+            } else {
+                arrowdw->SetPoint(z, rat->GetBinCenter(z), theMax + 10);
+            }
+            //if (rat->GetBinContent(z) == 0 && MC_sum->GetBinContent(z) != 0) {
+            //  float myx = rat->GetBinCenter(z);
+            //  rat->Fill(myx, 0.001);
+            //}
+        }
+        rat->Draw("e 0");
+        rat_statsyst_band->Draw("2 ][ same");
+        rat_band->Draw("2 ][ same");
+        rat->Draw("e same");
+        if (useArrow) {
+            arrow->Draw("p same");
+            arrowdw->Draw("p same");
+        }
+        gPad->RedrawAxis();
+        lin.reset(new TLine(rat->GetXaxis()->GetBinLowEdge(1), 1, rat->GetXaxis()->GetBinUpEdge(rat->GetNbinsX()), 1));
+        lin->SetLineColor(kBlack);
+        lin->SetLineWidth(3);
+        lin->SetLineStyle(2);
+        lin->Draw();
+
+        if (topPurity) {
+            c->cd(2);
+            c->cd(2)->SetFrameFillColor(38);
+            gStyle->SetOptStat(0);
+            for (auto h : *MC->GetHists()) {
+                // std::cout << "Hist:" << h->GetName() << std::endl;
+            }
+            auto top_purity_hist = (TH1D*) MC->GetHists()->FindObject("MC0")->Clone("topPurity");
+            top_purity_hist->Divide(top_purity_hist, ((TH1D*)MC->GetStack()->Last()), 1, 1, "B");
+            // top_purity_hist->Smooth(1);
+            top_purity_hist->SetFillColor(10);
+            top_purity_hist->SetFillStyle(1001);
+
+            auto top_purity_graph = new TGraphAsymmErrors(top_purity_hist);
+            top_purity_graph->SetFillColorAlpha(kGreen - 8, 0.5);
+            top_purity_graph->SetLineColorAlpha(kBlack, 1);
+
+            top_purity_hist->Draw("HIST");
+            // top_purity_graph->Draw("HX");
+            top_purity_graph->Draw("E02");
+            // top_purity_hist->Draw("HIST");
+            top_purity_graph->SetMarkerSize(0);
+            // top_purity_graph->SetLine
+            // top_purity_hist->SetMar(0);
+            top_purity_hist->GetXaxis()->SetLabelSize(0);
+            top_purity_hist->GetYaxis()->SetRangeUser(-0.001, 1.001);
+            top_purity_hist->GetYaxis()->SetTitle("Top Purity");
+            top_purity_hist->GetYaxis()->SetTitleSize(0.15);
+            top_purity_hist->GetYaxis()->SetLabelSize(0.15);
+            top_purity_hist->GetYaxis()->SetLabelOffset(0.02);
+            top_purity_hist->GetYaxis()->SetTitleOffset(0.40);
+            top_purity_hist->GetYaxis()->SetLabelOffset(0.02);
+            top_purity_hist->GetYaxis()->SetNdivisions(3, 0, 5);
+            // c->cd(2)->UseCurrentStyle();
+            c->Update();
+        }
+    }
+
+    // major hack to remove the zero label in the main plot, which is cut in half by the ratio pad
+    if (ratio) {
+        TPad *pe = new TPad("pe", "pe", 0, 0, 0.99 * c->cd(1)->GetLeftMargin(), 0.18);
+        pe->SetFillColor(c->cd(1)->GetFillColor());
+        pe->SetBorderMode(0);
+        //pe->Draw();
+    }
+
+    string _stampText = "Internal";
+    if (_stamp == 1)
+        _stampText = "Preliminary";
+    else if (_stamp == 2)
+        _stampText = "";
+    else if (_stamp == -1)
+        _stampText = "Work in progress";
+    auto* label = new TPaveText(0.2, 0.67, 0.55, 0.92, "NB NDC");
+    if (_stamp != -999) {
+        label->AddText((boost::format("#font[72]{ATLAS} %s") % _stampText).str().c_str());
+        float label_size = 0.06;
+        if (pad_ratio == nullptr) {
+            label_size = 0.04;
+        }
+        ((TText *)label->GetListOfLines()->Last())->SetTextSize(label_size);
+    }
+    label->AddText((boost::format("#sqrt{s} = 13 TeV, %s fb^{-1}") % lumi).str().c_str());
+    for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
+        label->AddText((*i).c_str());
+    }
+    label->SetFillColor(0);
+    label->SetFillStyle(0);
+    label->SetLineWidth(0);
+    label->SetTextAlign(13);
+    label->Draw();
+    // if (posLegend != 2 && posLegend != 5 && posLegend != 6) {
+    //   stampATLAS(_stampText, 0.20, 0.86, (bool) Data);
+    //   stampLumiText2(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    // } else if (posLegend == 5) {
+    //   stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
+    //   stampLumiText2(lumi, 0.20, 0.75, "#sqrt{s} = 13 TeV", 0.05);
+    // } else if (posLegend == 6 || posLegend == 7) {
+    //   stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
+    //   stampLumiText2(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    // } else if (posLegend == 8) {
+    //   stampATLAS(_stampText, 0.30, 0.88, (bool) Data);
+    //   stampLumiText2(lumi, 0.30, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    // } else {
+    //   stampATLAS(_stampText, 0.25, 0.88, (bool) Data);
+    //   stampLumiText2(lumi, 0.25, 0.78, "#sqrt{s} = 13 TeV", 0.05);
+    // }
+    // if (posLegend < 2 || posLegend == 6) {
+    //   for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
+    //     double pos = (double) ((int) (i - extraText.begin()));
+    //     stampText(*i, 0.20, 0.70-0.06*pos, 0.06*0.9);
+    //   }
+    // } else if (posLegend == 7) {
+    //   for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
+    //     double pos = (double) ((int) (i - extraText.begin()));
+    //     stampText(*i, 0.60, 0.40-0.06*pos, 0.06*0.9);
+    //   }
+    // } else if (posLegend == 8) {
+    //   for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
+    //     double pos = (double) ((int) (i - extraText.begin()));
+    //     stampText(*i, 0.55, 0.88-0.06*pos, 0.06*0.9);
+    //   }
+    // } else {
+    //   for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
+    //     double pos = (double) ((int) (i - extraText.begin()));
+    //     stampText(*i, 0.55, 0.88-0.06*pos, 0.06*0.9);
+    //   }
+    // }
+
+    c->SaveAs(outfile.c_str());
 }
 
 void drawCompare(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, double lumi) {
@@ -235,7 +653,7 @@ void drawCompare(SampleSetConfiguration &stackConfig, const vector<std::string> 
     leg->SetBorderSize(0);
 
     // make MC stack and add entries in legend
-    vector<shared_ptr<TH1D> > hists;
+    vector<shared_ptr<TH1D>> hists;
     string name_first = "";
     double maximum = 0;
     for (map<string, SampleSet>::iterator i = stackConfig._stack.begin(); i != stackConfig._stack.end(); ++i) {
@@ -313,6 +731,8 @@ void drawCompare(SampleSetConfiguration &stackConfig, const vector<std::string> 
         _stampText = "Preliminary";
     else if (_stamp == 2)
         _stampText = "";
+    else if (_stamp == -1)
+        _stampText = "Work in progress";
     auto* label = new TPaveText(0.2, 0.65, 0.55, 0.9, "NB NDC");
     label->AddText((boost::format("#font[72]{ATLAS} %s") % _stampText).str().c_str());
     ((TText *)label->GetListOfLines()->Last())->SetTextSize(0.06);
@@ -451,7 +871,7 @@ void drawDataMC2(SampleSetConfiguration &stackConfig, const vector<std::string> 
         arrowdw.reset(new TGraph(Data->GetNbinsX() + 1));
 
         rat->Divide(Data.get(), MC_sum);//, 1, 1, "B");
-        rat_band = normaliseBand(band, MC_sum, rat.get());
+        rat_band = normaliseBand(band, MC_sum, rat.get(), 1.0);
         addStatToSyst(rat.get(), rat_band);
 
         double theMax = 1.6;
@@ -539,6 +959,8 @@ void drawDataMC2(SampleSetConfiguration &stackConfig, const vector<std::string> 
         _stampText = "Preliminary";
     else if (_stamp == 2)
         _stampText = "";
+    else if (_stamp == -1)
+        _stampText = "Work in progress";
     if (posLegend != 2 && posLegend != 5 && posLegend != 6) {
         stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
         stampLumiText2(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
@@ -576,352 +998,6 @@ void drawDataMC2(SampleSetConfiguration &stackConfig, const vector<std::string> 
             stampText(*i, 0.55, 0.88 - 0.06 * pos, 0.06 * 0.9);
         }
     }
-
-    c->SaveAs(outfile.c_str());
-}
-
-void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &extraText, const std::string &outfile, bool ratio, const std::string &xTitle, const std::string &yTitle, int mustBeBigger, int posLegend, float yMin, float yMax, int useArrow, double lumi, float xLabelSize, float yLabelSize, int topPurity) {
-    TStyle *atlasStyle = AtlasStyle();
-    gROOT->SetStyle("ATLAS");
-    gROOT->ForceStyle();
-
-    shared_ptr<TCanvas> c(new TCanvas("c", "", 800, 600));
-
-    // do ratio?
-    TPad *pad_main = 0;
-    TPad *pad_ratio = 0;
-    TPad *top_purity = 0;
-    std::vector<float> pad_prop;
-    if (ratio && stackConfig._stack.find("Data") != stackConfig._stack.end() && topPurity) {
-        pad_prop = {0.55, 0.2, 0.25};
-        c->Divide(1, pad_prop.size(), 0.015, 0.01);
-
-        pad_ratio = (TPad *) c->cd(3);
-        pad_ratio->SetPad(0.0, 0.0, 1.0, pad_prop.at(0));
-        pad_ratio->SetTopMargin(0.06);
-        pad_ratio->SetBottomMargin(0.3);
-
-        top_purity = (TPad *) c->cd(2);
-        top_purity->SetPad(0.0, pad_prop.at(0), 1.0, pad_prop.at(0)+pad_prop.at(1));
-        top_purity->SetTopMargin(0.06);
-        top_purity->SetBottomMargin(0.1);
-
-        pad_main = (TPad *) c->cd(1);
-        pad_main->SetPad(0.0, pad_prop.at(0)+pad_prop.at(1), 1., pad_prop.at(0)+pad_prop.at(1)+pad_prop.at(2));
-        pad_main->SetBottomMargin(0.05);
-    }
-    else if (ratio && stackConfig._stack.find("Data") != stackConfig._stack.end()) {
-        pad_prop = {0.6, 0.4};
-        c->Divide(1, pad_prop.size(), 0.015, 0.01);
-        pad_ratio = (TPad *) c->cd(2);
-        pad_ratio->SetPad(0.0, 0.0, 1.0,  pad_prop.at(1));
-        pad_ratio->SetTopMargin(0.06);
-        pad_ratio->SetBottomMargin(0.3);
-
-        pad_main = (TPad *) c->cd(1);
-        pad_main->SetPad(0.0, pad_prop.at(1), 1., pad_prop.at(0)+pad_prop.at(1));
-        pad_main->SetBottomMargin(0.05);
-    }
-
-    c->cd(1);
-
-    // make syst. band
-    shared_ptr<TGraphAsymmErrors> band = stackConfig["MC"].makeBand();
-    //band->SetFillStyle(3354);
-    band->SetFillStyle(1001);
-    band->SetFillColorAlpha(kGreen - 8, 0.5);
-
-    // make legend
-    //shared_ptr<TLegend> leg(new TLegend(0.55, 0.6, 0.85, 0.92));
-    shared_ptr<TLegend> leg;
-    if (posLegend == 0)
-        leg.reset(new TLegend(0.55, 0.68, 0.88, 0.92));
-    else if (posLegend == 1)
-        leg.reset(new TLegend(0.18, 0.25, 0.45, 0.65));
-    else if (posLegend == 2 || posLegend == 5)
-        leg.reset(new TLegend(0.5, 0.3, 0.88, 0.72));
-    else if (posLegend == 3)
-        leg.reset(new TLegend(0.18, 0.32, 0.45, 0.74));
-    else if (posLegend == 6)
-        leg.reset(new TLegend(0.55, 0.68, 0.88, 0.92));
-    else if (posLegend == 7)
-        leg.reset(new TLegend(0.55, 0.68, 0.88, 0.92));
-    else if (posLegend == 8)
-        leg.reset(new TLegend(0.3, 0.3, 0.88, 0.72));
-    //leg->SetNColumns(2);
-    leg->SetFillStyle(0);
-    leg->SetBorderSize(0);
-    leg->SetTextFont(43);
-    leg->SetTextSize(18.9);
-    leg->SetLineColor(1);
-    leg->SetLineStyle(1);
-    leg->SetLineWidth(1);
-
-    shared_ptr<TH1D> Data;
-    if (stackConfig._stack.find("Data") != stackConfig._stack.end())
-        Data = stackConfig["Data"].makeTH1("Data");
-    if (Data) {
-        Data->SetStats(0);
-        leg->AddEntry(Data.get(), "Data", "LP");
-    }
-
-    // make MC stack and add entries in legend
-    vector<shared_ptr<TH1D> > vechist;
-    shared_ptr<THStack> MC = stackConfig["MC"].makeStack("MC", leg, vechist);
-
-    if (band) {
-        // leg->AddEntry(band.get(), "Bkg. uncertainty", "F");
-        leg->AddEntry(band.get(), "EWK Corr. #oplus NNLO Syst.", "F");
-    }
-
-    double maximum = MC->GetMaximum();
-    if (Data) maximum = std::max(Data->GetBinContent(Data->GetMaximumBin()), MC->GetMaximum());
-    maximum *= 1.8;
-    double minimum = 0.1;
-    if (logY) {
-        maximum *= 10000;
-    }
-    if (yMax > 0)
-        maximum = yMax;
-    if (yMin > 0)
-        minimum = yMin;
-
-    MC->SetMaximum(maximum);
-    if (Data) {
-        Data->SetMaximum(maximum);
-        if (yTitle != "") Data->GetYaxis()->SetTitle(yTitle.c_str());
-        Data->SetMinimum(minimum);
-    }
-    MC->SetMinimum(minimum);
-    MC->Draw();
-    if (xLabelSize != -1) MC->GetXaxis()->SetLabelSize(xLabelSize);
-    if (yLabelSize != -1) MC->GetYaxis()->SetLabelSize(yLabelSize);
-    if (yTitle != "") MC->GetYaxis()->SetTitle(yTitle.c_str());
-    if (!ratio || !Data) {
-        if (xTitle == "")
-            MC->GetXaxis()->SetTitle(vechist[0]->GetXaxis()->GetTitle());
-        else
-            MC->GetXaxis()->SetTitle(xTitle.c_str());
-        if (yTitle != "")
-            MC->GetYaxis()->SetTitle(yTitle.c_str());
-        else
-            MC->GetYaxis()->SetTitle(vechist[0]->GetYaxis()->GetTitle());
-    } else {
-        MC->GetXaxis()->SetLabelSize(0);
-    }
-    c->Update();
-    MC->Draw("same");
-    band->Draw("2 ][ same");
-    if (Data)
-        Data->Draw("e same");
-    if (logY) {
-        pad_main->SetLogy();
-    }
-    leg->Draw();
-    gPad->RedrawAxis();
-
-    shared_ptr<TGraph> arrow;
-    shared_ptr<TGraph> arrowdw;
-    shared_ptr<TH1D> rat;
-    shared_ptr<TGraphAsymmErrors> rat_band;
-    shared_ptr<TLine> lin;
-    if (ratio && Data) {
-        TH1D *MC_sum = (TH1D *) MC->GetStack()->Last();
-        rat.reset((TH1D *) Data->Clone("ratio"));
-        arrow.reset(new TGraph(Data->GetNbinsX() + 1));
-        arrowdw.reset(new TGraph(Data->GetNbinsX() + 1));
-
-        rat->Divide(Data.get(), MC_sum);//, 1, 1, "B");
-        rat_band = normaliseBand(band, MC_sum, 0);
-
-        double theMax = 1.6;
-        double theMin = 0.4;
-        pad_ratio->cd();
-        rat->SetStats(0);
-        if (!mustBeBigger) {
-            rat->GetYaxis()->SetRangeUser(0.5, 1.501);
-            theMax = 1.6;
-            theMin = 0.5;
-        } else if (mustBeBigger == 1) {
-            rat->GetYaxis()->SetRangeUser(0.0, 2.3);
-            theMax = 2.3;
-            theMin = 0.0;
-        } else if (mustBeBigger == 10){
-        rat->GetYaxis()->SetRangeUser(0.1, rat->GetMaximum()*1.2);
-        rat->SetTitle("");
-    }
-        if (xTitle == "")
-            rat->GetXaxis()->SetTitle(MC_sum->GetXaxis()->GetTitle());
-        else
-            rat->GetXaxis()->SetTitle(xTitle.c_str());
-        rat->GetYaxis()->SetTitle("Data / Bkg.");
-        rat->GetYaxis()->SetNdivisions(3, 0, 5);
-        rat->GetXaxis()->SetLabelFont(42);
-        rat->GetXaxis()->SetTitleFont(42);
-        rat->GetYaxis()->SetLabelFont(42);
-        rat->GetYaxis()->SetTitleFont(42);
-
-        if (topPurity) {
-            rat->GetXaxis()->SetTitleSize(0.1);
-            rat->GetXaxis()->SetTitleOffset(1.1);
-            rat->GetXaxis()->SetLabelSize(0.1);
-            rat->GetYaxis()->SetTitleSize(0.15);
-            rat->GetYaxis()->SetTitleOffset(0.40);
-            rat->GetYaxis()->SetLabelSize(0.15);
-            rat->GetYaxis()->SetLabelOffset(0.02);
-        }
-        else {
-            rat->GetXaxis()->SetTitleSize(0.1);//rat->GetXaxis()->SetTitleSize(0.2);
-            rat->GetXaxis()->SetTitleOffset(1.1);//1.1);
-            rat->GetXaxis()->SetLabelSize(0.1); //rat->GetXaxis()->SetLabelSize(0.18);
-
-            rat->GetYaxis()->SetTitleSize(MC->GetYaxis()->GetTitleSize()*pad_prop.at(0)/pad_prop.at(pad_prop.size()-1));//0.18);
-            rat->GetYaxis()->SetTitleOffset(MC->GetYaxis()->GetTitleOffset()*pad_prop.at(pad_prop.size()-1)/pad_prop.at(0));//0.40);
-            rat->GetYaxis()->SetLabelSize(MC->GetYaxis()->GetLabelSize()*pad_prop.at(0)/pad_prop.at(pad_prop.size()-1));//0.15);
-            rat->GetYaxis()->SetLabelOffset(MC->GetYaxis()->GetLabelOffset()*pad_prop.at(0)/pad_prop.at(pad_prop.size()-1));//0.02);
-        }
-        rat->SetTitle("");
-
-        arrow->SetMarkerSize(1.5);
-        arrow->SetMarkerStyle(26);
-        arrow->SetMarkerColor(kBlack);
-        arrowdw->SetMarkerSize(1.5);
-        arrowdw->SetMarkerStyle(32);
-        arrowdw->SetMarkerColor(kBlack);
-        for (int z = 0; z < rat->GetNbinsX() + 1; ++z) {
-            if (rat->GetBinError(z) == 0 && rat->GetBinContent(z) == 0) {
-                continue;
-            }
-            //if (rat->GetBinContent(z) > theMax || (rat->GetBinContent(z) == 0 && MC_sum->GetBinContent(z) != 0)) {
-            if (rat->GetBinContent(z) > theMax) {
-                arrow->SetPoint(z, rat->GetBinCenter(z), theMax - 0.15);
-            } else {
-                arrow->SetPoint(z, rat->GetBinCenter(z), -1);
-            }
-            if (rat->GetBinContent(z) < theMin) {
-                arrowdw->SetPoint(z, rat->GetBinCenter(z), theMin + 0.15);
-            } else {
-                arrowdw->SetPoint(z, rat->GetBinCenter(z), theMax + 10);
-            }
-            //if (rat->GetBinContent(z) == 0 && MC_sum->GetBinContent(z) != 0) {
-            //  float myx = rat->GetBinCenter(z);
-            //  rat->Fill(myx, 0.001);
-            //}
-        }
-        rat->Draw("e 0");
-        rat_band->Draw("2 ][ same");
-        rat->Draw("e same");
-        if (useArrow) {
-            arrow->Draw("p same");
-            arrowdw->Draw("p same");
-        }
-        gPad->RedrawAxis();
-        lin.reset(new TLine(rat->GetXaxis()->GetBinLowEdge(1), 1, rat->GetXaxis()->GetBinUpEdge(rat->GetNbinsX()), 1));
-        lin->SetLineColor(kBlack);
-        lin->SetLineWidth(3);
-        lin->SetLineStyle(2);
-        lin->Draw();
-
-        if (topPurity) {
-            c->cd(2);
-            c->cd(2)->SetFrameFillColor(38);
-            gStyle->SetOptStat(0);
-            for (auto h: *MC->GetHists()){
-            std::cout << "Hist:" << h->GetName() << std::endl;
-            }
-            auto top_purity_hist = (TH1D*) MC->GetHists()->FindObject("MC0")->Clone("topPurity");
-            top_purity_hist->Divide(top_purity_hist, ((TH1D*)MC->GetStack()->Last()), 1, 1, "B");
-            // top_purity_hist->Smooth(1);
-            top_purity_hist->SetFillColor(10);
-            top_purity_hist->SetFillStyle(1001);
-
-            auto top_purity_graph = new TGraphAsymmErrors(top_purity_hist);
-            top_purity_graph->SetFillColorAlpha(kGreen - 8, 0.5);
-            top_purity_graph->SetLineColorAlpha(kBlack, 1);
-
-            top_purity_hist->Draw("HIST");
-            // top_purity_graph->Draw("HX");
-            top_purity_graph->Draw("E02");
-            // top_purity_hist->Draw("HIST");
-            top_purity_graph->SetMarkerSize(0);
-            // top_purity_graph->SetLine
-            // top_purity_hist->SetMar(0);
-            top_purity_hist->GetXaxis()->SetLabelSize(0);
-            top_purity_hist->GetYaxis()->SetRangeUser(-0.001, 1.001);
-            top_purity_hist->GetYaxis()->SetTitle("Top Purity");
-            top_purity_hist->GetYaxis()->SetTitleSize(0.15);
-            top_purity_hist->GetYaxis()->SetLabelSize(0.15);
-            top_purity_hist->GetYaxis()->SetLabelOffset(0.02);
-            top_purity_hist->GetYaxis()->SetTitleOffset(0.40);
-            top_purity_hist->GetYaxis()->SetLabelOffset(0.02);
-            top_purity_hist->GetYaxis()->SetNdivisions(3, 0, 5);
-            // c->cd(2)->UseCurrentStyle();
-            c->Update();
-        }
-    }
-
-    // major hack to remove the zero label in the main plot, which is cut in half by the ratio pad
-    if (ratio) {
-        TPad *pe = new TPad("pe", "pe", 0, 0, 0.99 * c->cd(1)->GetLeftMargin(), 0.18);
-        pe->SetFillColor(c->cd(1)->GetFillColor());
-        pe->SetBorderMode(0);
-        //pe->Draw();
-    }
-
-    string _stampText = "Internal";
-    if (_stamp == 1)
-        _stampText = "Preliminary";
-    else if (_stamp == 2)
-        _stampText = "";
-    auto* label = new TPaveText(0.2, 0.62, 0.55, 0.92, "NB NDC");
-    label->AddText((boost::format("#font[72]{ATLAS} %s") % _stampText).str().c_str());
-    ((TText *)label->GetListOfLines()->Last())->SetTextSize(0.08);
-    label->AddText((boost::format("#sqrt{s} = 13 TeV, %s fb^{-1}") % lumi).str().c_str());
-    for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
-        label->AddText((*i).c_str());
-    }
-    label->SetFillColor(0);
-    label->SetFillStyle(0);
-    label->SetLineWidth(0);
-    label->SetTextAlign(13);
-    label->Draw();
-    // if (posLegend != 2 && posLegend != 5 && posLegend != 6) {
-    //   stampATLAS(_stampText, 0.20, 0.86, (bool) Data);
-    //   stampLumiText2(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
-    // } else if (posLegend == 5) {
-    //   stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
-    //   stampLumiText2(lumi, 0.20, 0.75, "#sqrt{s} = 13 TeV", 0.05);
-    // } else if (posLegend == 6 || posLegend == 7) {
-    //   stampATLAS(_stampText, 0.20, 0.88, (bool) Data);
-    //   stampLumiText2(lumi, 0.20, 0.78, "#sqrt{s} = 13 TeV", 0.05);
-    // } else if (posLegend == 8) {
-    //   stampATLAS(_stampText, 0.30, 0.88, (bool) Data);
-    //   stampLumiText2(lumi, 0.30, 0.78, "#sqrt{s} = 13 TeV", 0.05);
-    // } else {
-    //   stampATLAS(_stampText, 0.25, 0.88, (bool) Data);
-    //   stampLumiText2(lumi, 0.25, 0.78, "#sqrt{s} = 13 TeV", 0.05);
-    // }
-    // if (posLegend < 2 || posLegend == 6) {
-    //   for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
-    //     double pos = (double) ((int) (i - extraText.begin()));
-    //     stampText(*i, 0.20, 0.70-0.06*pos, 0.06*0.9);
-    //   }
-    // } else if (posLegend == 7) {
-    //   for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
-    //     double pos = (double) ((int) (i - extraText.begin()));
-    //     stampText(*i, 0.60, 0.40-0.06*pos, 0.06*0.9);
-    //   }
-    // } else if (posLegend == 8) {
-    //   for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
-    //     double pos = (double) ((int) (i - extraText.begin()));
-    //     stampText(*i, 0.55, 0.88-0.06*pos, 0.06*0.9);
-    //   }
-    // } else {
-    //   for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
-    //     double pos = (double) ((int) (i - extraText.begin()));
-    //     stampText(*i, 0.55, 0.88-0.06*pos, 0.06*0.9);
-    //   }
-    // }
 
     c->SaveAs(outfile.c_str());
 }
@@ -1071,7 +1147,7 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
             ratExtra[z]->GetYaxis()->SetRangeUser(0.7, 1.3);
             ratExtra[z]->SetTitle("");
         }
-        rat_band = normaliseBand(band, MC_sum, 0);
+        rat_band = normaliseBand(band, MC_sum, 0, 1.0);
 
         c->cd(2);
         rat->SetStats(0);
@@ -1143,6 +1219,8 @@ void drawDataMCCompare(SampleSetConfiguration &stackConfig, const vector<std::st
         _stampText = "Preliminary";
     else if (_stamp == 2)
         _stampText = "";
+    else if (_stamp == -1)
+        _stampText = "Work in progress";
     stampATLAS(_stampText, 0.20, 0.89);
     stampLumi(lumi, 0.20, 0.81);
     for (vector<string>::const_iterator i = extraText.begin(); i != extraText.end(); ++i) {
@@ -1280,13 +1358,13 @@ void drawChannelRatio(SampleSet *ssMC, const vector<std::string> &extraText, con
             rat.reset((TH1D *) Data->Clone("ratio_std"));
             rat->Divide(Data.get(), MC.get(), 1, 1, "B");
             if (band) {
-                rat_band = normaliseBand(band, MC.get(), 0);
+                rat_band = normaliseBand(band, MC.get(), 0, 1.0);
             }
         }
     } else if (MC && bandMC) {
         rat.reset((TH1D *) MC->Clone("ratio_std"));
         rat->Divide(MC.get(), MC.get(), 1, 1, "");
-        rat_band = normaliseBand(bandMC, MC.get(), 0);
+        rat_band = normaliseBand(bandMC, MC.get(), 0, 1.0);
     }
 
     c->cd(2);
@@ -1300,8 +1378,8 @@ void drawChannelRatio(SampleSet *ssMC, const vector<std::string> &extraText, con
             rat->GetYaxis()->SetRangeUser(0.1, 1.9);
         else if (mustBeBigger == 2)
             rat->GetYaxis()->SetRangeUser(0.8, 1.2);
-        else if (mustBeBigger == 3){
-            rat->GetYaxis()->SetRangeUser(0.1, rat->GetMaximum()*1.2);
+        else if (mustBeBigger == 3) {
+            rat->GetYaxis()->SetRangeUser(0.1, rat->GetMaximum() * 1.2);
         }
         rat->SetTitle("");
         rat->GetXaxis()->SetTitle(MC->GetXaxis()->GetTitle());
@@ -1368,6 +1446,8 @@ void drawChannelRatio(SampleSet *ssMC, const vector<std::string> &extraText, con
         _stampText = "Preliminary";
     else if (_stamp == 2)
         _stampText = "";
+    else if (_stamp == -1)
+        _stampText = "Work in progress";
     stampATLAS(_stampText, xstart, ystart);
     stampLumiText(lumi, xstart, ystart - 0.10, "#sqrt{s} = 13 TeV", 0.05);
 
@@ -1517,7 +1597,7 @@ void drawEff(SampleSet *ssMC, const vector<std::string> &extraText, const std::s
             rat.reset((TH1D *) Data->Clone("ratio_std"));
             rat->Divide(Data.get(), MC.get(), 1, 1, "B");
             if (band) {
-                rat_band = normaliseBand(band, MC.get(), 0);
+                rat_band = normaliseBand(band, MC.get(), 0, 1.0);
             }
         }
     }
@@ -1599,6 +1679,8 @@ void drawEff(SampleSet *ssMC, const vector<std::string> &extraText, const std::s
         _stampText = "Preliminary";
     else if (_stamp == 2)
         _stampText = "";
+    else if (_stamp == -1)
+        _stampText = "Work in progress";
     stampATLAS(_stampText, xstart, ystart);
     stampLumiText(lumi, xstart, ystart - 0.10, "#sqrt{s} = 13 TeV", 0.05);
 
@@ -1774,38 +1856,67 @@ TStyle *AtlasStyle()  {
 
 SampleSetConfiguration makeConfigurationPlots(const string &prefix, const string &channel, bool isMcOnly) {
     SampleSetConfiguration stackConfig;
-
+    doASIMOV = false;
     stackConfig.addType("MC");
     if (!isMcOnly)
         stackConfig.addType("Data");
+    std::string ASIMOV_id;
+    std::string ASIMOV_longTitle;
+    std::string ASIMOV_latexTitle;
+    int ASIMOV_fillC;
+    for (std::map<std::string, std::string>::iterator it = name.begin(); it != name.end(); ++it) {
+        std::string id = it->first;
+        if (id.find("ASIMOV") != std::string::npos) {
+            doASIMOV = true;
+            ASIMOV_id = id;
+            ASIMOV_longTitle = title[id];
+            ASIMOV_latexTitle = latex[id];
+            break;
+            // stackConfig.addType("Data");
+        }
+    }
     for (std::map<std::string, std::string>::iterator it = name.begin(); it != name.end(); ++it) {
         std::string id = it->first;
         std::string file = it->second;
         std::string longTitle = title[id];
         std::string latexTitle = latex[id];
         int fillC = fillColor[id];
+        int lineC = lineColor[id];
+        int lineS = lineStyle[id];
         float sc = scale[id];
+        if (id.find("ASIMOV") != std::string::npos) continue;
         if (prefix != "") {
-            if (it->first.find("data") != std::string::npos) {
-                if (!isMcOnly)
+            if (type[it->first] == "Data") {
+                if (!isMcOnly) {
                     stackConfig.add("Data", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
-                                    "PL", 1, kBlack, 1,    0, 20, 1, "e", sc);
+                                    "PL", lineS, lineC, 1,    0, 20, 1, "e", sc);
+                }
             } else {
-                stackConfig.add("MC", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
-                                "F", 1, kBlack, 1001,      fillC, 1, 0, "hist", sc);
+                stackConfig.add(type[it->first], Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                                "F", lineS, lineC, (fillC == -1) ? 0 : 1001,      fillC, 1, 0, "hist", sc);
+                if (doASIMOV) {
+                    stackConfig.add("Data", Form("%s_%s_%s.root", prefix.c_str(), channel.c_str(), file.c_str()), ASIMOV_id.c_str(), ASIMOV_latexTitle.c_str(), ASIMOV_longTitle.c_str(),
+                                    "PL", lineS, lineC, 1,    0, 20, 1, "e", sc);
+                }
             }
         } else {
-            if (it->first.find("data") != std::string::npos) {
+            if (type[it->first] == "Data") {
                 if (!isMcOnly)
                     stackConfig.add("Data", Form("%s_%s.root", channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
-                                    "PL", 1, kBlack, 1,    0, 20, 1, "e", sc);
+                                    "PL", lineS, lineC, 1,    0, 20, 1, "e", sc);
             } else {
-                stackConfig.add("MC", Form("%s_%s.root", channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
-                                "F", 1, kBlack, 1001,      fillC, 1, 0, "hist", sc);
+                stackConfig.add(type[it->first], Form("%s_%s.root", channel.c_str(), file.c_str()), id.c_str(), latexTitle.c_str(), longTitle.c_str(),
+                                "F", lineS, lineC,  (fillC == -1) ? 0 : 1001,      fillC, 1, 0, "hist", sc);
+                if (doASIMOV && (type[it->first] == "MC")) {
+                    // std::cout << "ASIMOV ID: " << ASIMOV_id << std::endl;
+                    // std::cout << ASIMOV_latexTitle << std::endl;
+                    // std::cout << ASIMOV_longTitle << std::endl;
+                    stackConfig.add("Data", Form("%s_%s.root", channel.c_str(), file.c_str()), ASIMOV_id.c_str(), ASIMOV_latexTitle.c_str(), ASIMOV_longTitle.c_str(),
+                                    "PL", lineS, lineC, 1,    0, 20, 1, "e", sc);
+                }
             }
         }
     }
-
     return stackConfig;
 }
 
@@ -2144,11 +2255,25 @@ void handler(int sig) {
     exit(1);
 }
 
-void split(const std::string &s, char delim, std::vector<std::string> &elems) {
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
+template <typename Container>
+void split(const std::string & input,
+           const std::string & delimiters,
+           Container & output,
+           bool trim_empty) {
+    const auto size = input.size();
+    std::string::size_type pos{0};
+    std::string::size_type last_pos{0};
+
+    while (last_pos < size + 1) {
+        pos = input.find_first_of(delimiters, last_pos);
+        if (pos == std::string::npos) {
+            pos = size;
+        }
+
+        if (pos != last_pos || not trim_empty) {
+            output.emplace_back(input.data() + last_pos, pos - last_pos);
+        }
+
+        last_pos = pos + 1;
     }
 }
-
