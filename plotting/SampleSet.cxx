@@ -72,8 +72,8 @@ shared_ptr<TGraphAsymmErrors> SampleSet::makeBand(bool isRatio) {
         Hist this_syst;
         for (int j = 0; j < _item.size(); ++j) {
             Sample &one_item = _item[j];
-            cout << ">>>>>>>>>>> " << sNames[k] << "," << one_item.legname << " <<<<<<<<<<" << endl;
-            cout << one_item.syst[sNames[k]] << endl;
+            // cout << ">>>>>>>>>>> " << sNames[k] << "," << one_item.legname << " <<<<<<<<<<" << endl;
+            // cout << one_item.syst[sNames[k]] << endl;
             this_syst += one_item.syst[sNames[k]];
         }
 
@@ -246,6 +246,9 @@ void SampleSetConfiguration::rebinAsym(std::vector<float> &b) {
     for (map<string, SampleSet>::iterator i = _stack.begin(); i != _stack.end(); ++i) { // for every element in the stack (one for data, one for MC)
         // i->second is a stack
         // i->second._item is the list of items of the stack
+        for (auto bi: b) {
+            std::cout << bi << std::endl;
+        }
         for (int j = 0; j < i->second._item.size(); ++j) {
             Sample &one_item = i->second._item[j];
             //one_item.nominal and one_item.syst(map of string, Hist)

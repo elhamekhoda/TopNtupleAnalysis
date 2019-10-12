@@ -1,0 +1,95 @@
+sample   0data         data__DL1_FixedCutBEff77_DNN80                "Data"                            "Data"                               1
+#sample   0ASIMOV         __DL1_FixedCutBEff77_DNN80                "ASIMOV"                            "ASIMOV"                               1
+sample    1tt           tt_mttsliced__DL1_FixedCutBEff77_DNN80                  "t#bar{t} (all-had)"            "$t\bar{t}$ (all-had)"             0
+sample    3ttnonallhad  ttnonallhad_mttsliced__DL1_FixedCutBEff77_DNN80         "t#bar{t} (non-all-had)"        "$t\bar{t}$ (non-all-had)"         3
+sample   4zprime4000         zprime4000__DL1_FixedCutBEff77_DNN80                "4000 GeV Z'"                            "4000 GeV Z'"                               632;-1 OVERLAY 2 1
+
+##########################################################dijet#######################################################
+# sample    2Multijet    dijets__DL1_FixedCutBEff77_DNN80                        "Pythia8 Multijet"                       "Pythia8 Multijet"                         38
+# syst      ttewk      "tt electroweak corr."           ttEWK__1up                                   ttEWK__1down                                                      N zprime,dijets
+# syst       nnlo1        "NNLO Reweighting1"             ttNNLO_seq__1up                            -                                                      N zprime,dijets
+# syst       nnlo2        "NNLO Reweighting2"             ttNNLO_seqExtended__1up                    -                                                      N zprime,dijets,ttnonallhad
+# syst       nnlo3        "NNLO Reweighting3"             ttNNLO_topPt__1up                          -                                                      N zprime,dijets
+# syst       nnlo4        "NNLO Reweighting4"             ttNNLO_topPtDiff__1up                      -                                                      N zprime,dijets,ttnonallhad
+# syst_flat  lumi          "luminosity"                         "tt,dijets"                 0.017                     -0.017             N
+######################################################################################################################
+#######################################################DD dijet#######################################################
+sample    2Multijet    DDdijets__DL1_FixedCutBEff77_DNN80                        "Data-driven Multijet"                       "Data-driven Multijet"                         38
+syst      ttewk      "tt electroweak corr."           ttEWK__1up                                   ttEWK__1down                                                      N zprime
+syst       nnlo1        "NNLO Reweighting1"             ttNNLO_seq__1up                            -                                                      N zprime
+syst       nnlo2        "NNLO Reweighting2"             ttNNLO_seqExtended__1up                    -                                                      N zprime,dijets,ttnonallhad
+syst       nnlo3        "NNLO Reweighting3"             ttNNLO_topPt__1up                          -                                                      N zprime
+syst       nnlo4        "NNLO Reweighting4"             ttNNLO_topPtDiff__1up                      -                                                      N zprime,dijets,ttnonallhad
+syst_flat  lumi          "luminosity"                         "tt"                 0.017                     -0.017             N
+######################################################################################################################
+#syst      tthighorder      "ttbar"   ttNNLOQCDNLOEWK__1up                         ttNNLOQCDNLOEWK__1down                                 N DDdijets,dijets
+syst      pileup     "pile up"                        pileupSF__1up                              pileupSF__1down                                      N
+syst      jvt        "JVT"                            jvtSF__1up                                 jvtSF__1down                                         N
+syst      btagb0     "b-tagging eff. (E0)"            btagbSF_0__1up                             btagbSF_0__1down                                     N
+syst      btagb1     "b-tagging eff. (E1)"            btagbSF_1__1up                             btagbSF_1__1down                                     N
+syst      btagb2     "b-tagging eff. (E2)"            btagbSF_2__1up                             btagbSF_2__1down                                     N
+syst      btagb3     "b-tagging eff. (E3)"            btagbSF_3__1up                             btagbSF_3__1down                                     N
+
+syst      btagc0     "b-tagging c mistag (E0)"        btagcSF_0__1up                             btagcSF_0__1down                                     N
+syst      btagc1     "b-tagging c mistag (E1)"        btagcSF_1__1up                             btagcSF_1__1down                                     N
+syst      btagc2     "b-tagging c mistag (E2)"        btagcSF_2__1up                             btagcSF_2__1down                                     N
+
+syst      btagl0     "b-tagging light mistag (E0)"        btaglSF_0__1up                             btaglSF_0__1down                                     N
+syst      btagl1     "b-tagging light mistag (E1)"        btaglSF_1__1up                             btaglSF_1__1down                                     N
+syst      btagl2     "b-tagging light mistag (E2)"        btaglSF_2__1up                             btaglSF_2__1down                                     N
+syst      btagl3     "b-tagging light mistag (E3)"        btaglSF_3__1up                             btaglSF_3__1down                                     N
+syst      btage1     "b-tagging extrap. (charm)"      btageSF_1__1up                             btageSF_1__1down                                     N
+syst      btage0     "b-tagging extrap."              btageSF_0__1up                             btageSF_0__1down                                     N
+
+#syst      akt10model "anti-$k_t$ R=1.0 comb. modelling" LARGERJET_Strong_JET_Comb_Modelling_All__1up LARGERJET_Strong_JET_Comb_Modelling_All__1down    N
+#syst      akt10baseline "anti-$k_t$ R=1.0 comb. baseline" LARGERJET_Strong_JET_Comb_Baseline_All__1up LARGERJET_Strong_JET_Comb_Baseline_All__1down    N
+#syst      akt10track "anti-$k_t$ R=1.0 comb. tracking" LARGERJET_Strong_JET_Comb_Tracking_All__1up LARGERJET_Strong_JET_Comb_Tracking_All__1down    N
+#syst      akt10stat "anti-$k_t$ R=1.0 comb. total stat." LARGERJET_Strong_JET_Comb_TotalStat_All__1up LARGERJET_Strong_JET_Comb_TotalStat_All__1down    N
+#syst      akt10topmass "anti-$k_t$ R=1.0 top mass reso." LARGERJET_Strong_JET_MassRes_Top__1up -    N
+
+syst      toptag0     "top-tagging eff. (E0)"            toptagSF_0__1up                             toptagSF_0__1down                                     N
+syst      toptag1     "top-tagging eff. (E1)"            toptagSF_1__1up                             toptagSF_1__1down                                     N
+syst      toptag2     "top-tagging eff. (E2)"            toptagSF_2__1up                             toptagSF_2__1down                                     N
+syst      toptag3     "top-tagging eff. (E3)"            toptagSF_3__1up                             toptagSF_3__1down                                     N
+syst      toptag4     "top-tagging eff. (E4)"            toptagSF_4__1up                             toptagSF_4__1down                                     N
+syst      toptag5     "top-tagging eff. (E5)"            toptagSF_5__1up                             toptagSF_5__1down                                     N
+syst      toptag6     "top-tagging eff. (E6)"            toptagSF_6__1up                             toptagSF_6__1down                                     N
+syst      toptag7     "top-tagging eff. (E7)"            toptagSF_7__1up                             toptagSF_7__1down                                     N
+syst      toptag8     "top-tagging eff. (E8)"            toptagSF_8__1up                             toptagSF_8__1down                                     N
+syst      toptag9     "top-tagging eff. (E9)"            toptagSF_9__1up                             toptagSF_9__1down                                     N
+syst      toptag10     "top-tagging eff. (E10)"            toptagSF_10__1up                             toptagSF_10__1down                                     N
+syst      toptag11     "top-tagging eff. (E11)"            toptagSF_11__1up                             toptagSF_11__1down                                     N
+syst      toptag12     "top-tagging eff. (E12)"            toptagSF_12__1up                             toptagSF_12__1down                                     N
+syst      toptag13     "top-tagging eff. (E13)"            toptagSF_13__1up                             toptagSF_13__1down                                     N
+
+
+#######################################################DON'T NEED #######################################################
+
+#sample    2wbbjets      wbbjets                              "W+bb+jets"           "$W$+bb+jets"        416
+#sample    3wccjets      wccjets                              "W+cc+jets"           "$W$+cc+jets"        432
+#sample    4wcjets       wcjets                               "W+c+jets"            "$W$+c+jets"         632
+#sample    5wljets       wljets                               "W+l+jets"            "$W$+l+jets"         863
+#sample    6singletop    singletop                            "single top"          "single top"         62
+#sample    7zjets        zjets                                "Z+jets"              "$Z$+jets"           95
+#sample    8aqcde        qcde                                 "QCD (e)"             "QCD (e)"            901
+#sample    8bqcdmu       qcdmu                                "QCD (#mu)"           "QCD ($\mu$)"        902
+#sample    9vv           vv                                   "diboson"             "diboson"            5
+#sample    91ttv         ttv                                  "ttV"                 "$t\bar{t}V$"        7
+
+#syst      mutrigstat "muon trigger (stat)"            muTrigStatSF__1up                          muTrigStatSF__1down                                  N 
+#syst      mutrigsyst "muon trigger (syst)"            muTrigSystSF__1up                          muTrigSystSF__1down                                  N
+#syst      muidstat   "muon ID (stat)"                 muIDStatSF__1up                            muIDStatSF__1down                                    N
+#syst      muidsyst   "muon ID (syst)"                 muIDSystSF__1up                            muIDSystSF__1down                                    N
+#syst      muisolstat "muon isolation (stat)"          muIsolStatSF__1up                          muIsolStatSF__1down                                  N
+#syst      muisolsyst "muon isolation (syst)"          muIsolSystSF__1up                          muIsolSystSF__1down                                  N
+
+
+
+#syst      muresms    "muon res. (MS)"                 MUON_MS__1up                               MUON_MS__1down                                       N
+#syst      muresid    "muon res. (ID)"                 MUON_ID__1up                               MUON_ID__1down                                       N
+#syst      muscale    "muon scale"                     MUON_SCALE__1up                            MUON_SCALE__1down                                    N
+#syst      muresbias  "muon res. bias"                 MUON_SAGITTA_RESBIAS__1up                  MUON_SAGITTA_RESBIAS__1down                          N
+#syst      muresrho   "muon rho"                       MUON_SAGITTA_RHO__1up                      MUON_SAGITTA_RHO__1down                              N
+
+
+

@@ -690,7 +690,6 @@ void Hist::limitMinX(double xMin) {
 
 void Hist::normBinWidth(float s) {
     if (_size <= 2) return;
-
     for (size_t i = 1; i < _size - 1; ++i) {
         double binwidth = _x[i + 1] - _x[i];
         _y[i] *= s / binwidth;

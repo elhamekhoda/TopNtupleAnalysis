@@ -26,7 +26,7 @@ extern int logY;
 
 void loadConfig(const std::string &file = "config.txt");
 
-shared_ptr<TGraphErrors> TH1toGraph(TH1D *Data);
+TGraphAsymmErrors* TH1toGraph(TH1D *Data);
 SampleSetConfiguration makeConfigurationPlots(const string &prefix, const string &channel, bool isMcOnly = false);
 SampleSetConfiguration makeConfigurationPlotsCompare(const string &prefix, const string &channel, const vector<string> &other, const vector<string> &title, bool isMcOnly = false);
 
@@ -37,7 +37,20 @@ SampleSetConfiguration makeConfigurationMCEff(const string &prefix, const string
 SampleSetConfiguration makeConfigurationDataEff(const string &prefix, const string &channel);
 void addAllSystematics(SystematicCalculator &systCalc, const std::string &prefix, const std::string &channel, bool updw = false);
 
-void split(const std::string &s, char delim, std::vector<std::string> &elems);
+template <typename Container>
+void split(const std::string & input,
+           const std::string & delimiters,
+           Container & output,
+           bool trim_empty = false);
+
+template <typename Container>
+void split(const std::string & input,
+           const char delimiters,
+           Container & output,
+           bool trim_empty = false) {
+	const std::string deli(&delimiters);
+	split(input, deli, output, trim_empty);
+}
 
 void addStatToSyst(TH1D *Data, shared_ptr<TGraphAsymmErrors> band);
 void addSystToStat(shared_ptr<TH1D> Data, shared_ptr<TGraphAsymmErrors> band);
@@ -55,7 +68,7 @@ void stampATLAS(const std::string &text, float x, float y, bool hasRatio = true)
 void stampLumiText(float lumi, float x, float y, const std::string &text, float size = 0.06);
 void stampLumiText2(float lumi, float x, float y, const std::string &text, float size = 0.06);
 
-shared_ptr<TGraphErrors> normaliseBand(shared_ptr<TGraphErrors> band, TH1D *MC_sum, TH1D *ratio = 0);
+shared_ptr<TGraphErrors> normaliseBand(shared_ptr<TGraphErrors> band, TH1D *MC_sum, TH1D *ratio = 0, float alpha = 1.0);
 //shared_ptr<TGraphErrors> normaliseBandFkr(shared_ptr<TGraphErrors> band, TH1D *MC_sum, TH1D *Data);
 //shared_ptr<TH1D> normaliseBand(shared_ptr<TH1D> band, TH1D *MC_sum, TH1D *ratio = 0);
 
