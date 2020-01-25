@@ -132,7 +132,7 @@ class BoostedTopTagger(Selection):
                                           ast_kwds = dict(calib_taggers_expr = [d['short'] for d in self.WP2D.itervalues() if 'calibrated' in d.setdefault('status', tuple())]))
         self._top_tagger = _callable
         self._SF = SF if _SF_callable is None else _SF_callable
-        self._SFreader = re.compile(r'^toptagSF_(?P<row>\d)__1(?P<direction>(up|down))$')
+        self._SFreader = re.compile(r'^toptagSF_(?P<row>\d+)__1(?P<direction>(up|down))$')
         self.scale_factor = getattr(self, '_perjet_scale_factor')
         self.passed = False
         self._bot_tagger = bot_tagger
