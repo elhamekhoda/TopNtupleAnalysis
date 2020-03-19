@@ -27,18 +27,18 @@ class Run(object):
             os.makedirs(self.log_dir)
         self.analysis_type = analysis_type
         if analysis_type == 'AnaTtresSL':
-            self.selections = [('(be,     good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu,    good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re,     good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu,    good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(be2015, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu2015,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re2015, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu2015,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(be2016, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu2016,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re2016, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu2016,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root')]
+            self.selections = [('(be,     good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu,    good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re,     good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu,    good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(be2015, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu2015,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re2015, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu2015,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(be2016, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu2016,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re2016, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu2016,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root')]
         elif analysis_type == 'AnaTtresFH':
             self.selections = [('(bFH    ,good_dnn_contained80             , AntiKtVR30Rmax4Rmin02TrackJets.DL1_FixedCutBEff77   )', '{channel}_{s.sample_name}{s.tag}.root')]
         self.analysis_exts = []
