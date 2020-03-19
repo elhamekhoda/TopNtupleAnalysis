@@ -34,7 +34,7 @@ add_definitions(-Wno-unused-variable)
 add_definitions(-Wno-unused-but-set-variable)
 #---Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)
 string(ASCII 27 ESC)
-if("$ENV{AtlasProject}" STREQUAL AnalysisTop)
+if("$ENV{AtlasProject}" STREQUAL AnalysisBase)
     atlas_subdir( TopNtupleAnalysis )
     find_package(ROOT REQUIRED Minuit TreePlayer Physics Matrix LHAPDF)
     # Declare the package's dependencies:
