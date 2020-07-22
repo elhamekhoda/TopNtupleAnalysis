@@ -34,6 +34,7 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('wccjets', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_Wjets221'],
                   ('wcjets', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_Wjets221'],
                   ('wljets', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_Wjets221'],
+                  ('wjets', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_Wjets221'],
                   ('data', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4','Data17_13TeV_25ns_EXOT4','Data18_13TeV_25ns_EXOT4'],
                   ('qcde', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4', 'Data16_13TeV_25ns_EXOT4'],
                   ('qcdmu', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
@@ -69,6 +70,7 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('wcjets', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_Wjets221'],
                   ('wljets', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_Wjets221'],
                   ('data', 'EXOT7'): ['Data15_13TeV_25ns_EXOT7','Data16_13TeV_25ns_EXOT7','Data17_13TeV_25ns_EXOT7','Data18_13TeV_25ns_EXOT7'],
+                  ('data_debug', 'EXOT7'): ['Data15_13TeV_25ns_debug_stream_EXOT7','Data16_13TeV_25ns_debug_stream_EXOT7','Data17_13TeV_25ns_debug_stream_EXOT7','Data18_13TeV_25ns_debug_stream_EXOT7'],
                   ('tt', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad'],
                   ('tt_mttsliced', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad', 'MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad_mttsliced'],
                   ('ttnonallhad', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_ttbar_allhad'],
@@ -92,6 +94,7 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('zprime3000', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_Zprime3000'],
                   ('zprime4000', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_Zprime4000'],
                   ('zprime5000', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_Zprime5000'],
+                  ('zprime6000', 'EXOT7'): ['MC16a_13TeV_25ns_FS_EXOT7_Zprime6000'],
                   # TOPQ1
                   ('tt_mttsliced', 'TOPQ1'): ['MC16a_13TeV_25ns_FS_TOPQ1_ttbar_nonallhad', 'MC16a_13TeV_25ns_FS_TOPQ1_ttbar_nonallhad_mttsliced'],
                  }
@@ -390,6 +393,8 @@ class Sample(object):
         return '<{}.{}("{}"{})>'.format(self.__class__.__module__, self.__class__.__name__, self.sample_name, self.tag and '[{}]'.format(self.tag))
     def sum_of_weights(self, systs = [''], online = True, mode = 'return', runNumber = None, periodFraction = None):
         if self.sample_name == 'data':
+            raise TypeError('DO NOT use DATA Weights')
+        elif self.sample_name == 'data_debug':
             raise TypeError('DO NOT use DATA Weights')
         runNumber = runNumber or self.runNumber
         periodFraction = periodFraction or self.periodFraction
