@@ -197,8 +197,11 @@ TLorentzVector TopNtupleAnalysisUtils::getNu(TLorentzVector l, double met, doubl
   }
   return nu;
 }
-Double_t TopNtupleAnalysisUtils::wfunction(Int_t E, Double_t x) {
-  return get_wfunction(E, x);
+//Double_t TopNtupleAnalysisUtils::wfunction(Int_t E, Double_t x) {
+//  return get_wfunction(E, x);
+//}
+Double_t TopNtupleAnalysisUtils::wfunction(Int_t E, Int_t DM, Double_t x) {
+  return get_wfunction(E, DM, x);
 }
 
 #ifndef NOEFT

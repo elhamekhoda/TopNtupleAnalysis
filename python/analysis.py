@@ -20,6 +20,9 @@ UNLOCKED = 0
 SELECTION_LOCKED = 1
 FILL_LOCKED = 2
 
+#Define a list of Z'_DM mass points for reweigting Z'_SSM to Z'_DM
+DM_mass_list = [10, 100, 150, 200, 250, 350, 500, 750, 1000, 10000]  #in GeV
+
 class Analysis(object):
     ch = ''
     fi = None
@@ -175,6 +178,9 @@ class Analysis(object):
                 self.trees[s].Branch("w", self.branches[s]["w"])
                 self.branches[s]["w0"] = std.vector(float)()
                 self.trees[s].Branch("w0", self.branches[s]["w0"])
+                #for m in DM_mass_list:
+                #    self.branches[s]["w_DM"+str(m)] = self.branches[trunk].setdefault("w_DM"+str(m),std.vector(float)())
+                #    self.trees[s].Branch("w_DM"+str(m), self.branches[s]["w_DM"+str(m)])
 
                 self.branches[s]["eventNumber"] = self.branches[trunk].setdefault("eventNumber", std.vector(long)())
                 self.trees[s].Branch("eventNumber",self.branches[s]["eventNumber"])
@@ -562,7 +568,7 @@ class AnaTtresSL(Analysis):
         if ('re' in self.ch or 'rmu' in self.ch) and not "ov" in self.ch:
             if (passSel['be'] or passSel['bmu']) and top_tagged:
                 return False
-	
+
         if self.bcategory != None and Btagcat != self.bcategory:
             return False
 
@@ -610,14 +616,15 @@ class AnaTtresSL(Analysis):
             self.h["trueMttr"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
             self.h["trueMtt8TeV"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
             self.h["trueMtt8TeVr"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w0*(self.w2HDM-1.))
-        if(sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
-            pME = helpers.getTruth4momenta(sel)
-            truPttbar = pME[2]+pME[3]
-            w0 = w/self.w2HDM
-            self.h["trueMtt"][syst].Fill(truPttbar.M(), w)
-            self.h["trueMttr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
-            self.h["trueMtt8TeV"][syst].Fill(truPttbar.M(), w)
-            self.h["trueMtt8TeVr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
+            if(sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+                pME = helpers.getTruth4momenta(sel)
+                truPttbar = pME[2]+pME[3]
+                w0 = w/self.w2HDM
+                self.h["trueMtt"][syst].Fill(truPttbar.M(), w)
+                self.h["trueMttr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
+                self.h["trueMtt8TeV"][syst].Fill(truPttbar.M(), w)
+                self.h["trueMtt8TeVr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
+        
         self.h['NEvents'][syst].Fill(1, 1)
         self.h["yields"][syst].Fill(1, w)
         self.h["runNumber"][syst].Fill(sel.runNumber, w)
@@ -625,12 +632,18 @@ class AnaTtresSL(Analysis):
         lj = ROOT.TLorentzVector()
         tlep = ROOT.TLorentzVector()
         lQ = 0
+        l_true_type = -999
+        l_true_origin = -999
         if len(sel.el_pt) == 1:
             l.SetPtEtaPhiE(sel.el_pt[0], sel.el_eta[0], sel.el_phi[0], sel.el_e[0])
             lQ = sel.el_charge[0]
+            l_true_type = sel.el_true_type[0]
+            l_true_origin = sel.el_true_origin[0]
         elif len(sel.mu_pt) == 1:
             l.SetPtEtaPhiE(sel.mu_pt[0], sel.mu_eta[0], sel.mu_phi[0], sel.mu_e[0])
             lQ = sel.mu_charge[0]
+            l_true_type = sel.mu_true_type[0]
+            l_true_origin = sel.mu_true_origin[0]
         if lQ > 0:
             self.h["yieldsPos"][syst].Fill(1, w)
         elif lQ < 0:
@@ -723,16 +736,18 @@ class AnaTtresSL(Analysis):
                     self.branches[syst]["me2XX"].push_back(self.me2XX)
                     self.branches[syst]["mttReco"].push_back(mtt)
                     self.branches_noclear[syst]["Btagcat"].value = sel.Btagcat
-                    # pME = helpers.getTruth4momenta(sel)
-                    # truPttbar = pME[2]+pME[3]
-                    if sel.mcChannelNumber != 0:
-                        self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
-                    # for i in xrange(sel.MC_id_me.size()):
-                    #     self.branches[syst]["id"].push_back(sel.MC_id_me[i])
-                    #     self.branches[syst]["px"].push_back(sel.MC_px_me[i])
-                    #     self.branches[syst]["py"].push_back(sel.MC_py_me[i])
-                    #     self.branches[syst]["pz"].push_back(sel.MC_pz_me[i])
-                    #     self.branches[syst]["e"].push_back(sel.MC_e_me[i])
+                    self.branches_noclear[syst]["th_label"][0] = sel.ljet_label[goodJetIdx] if sel.ljet_pt.size() >= 1 else -999
+                    if hasattr(sel, "MC_id_me"):
+                        pME = helpers.getTruth4momenta(sel)
+                        truPttbar = pME[2]+pME[3]
+                        if sel.mcChannelNumber != 0:
+                           self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                        for i in xrange(sel.MC_id_me.size()):
+                            self.branches[syst]["id"].push_back(sel.MC_id_me[i])
+                            self.branches[syst]["px"].push_back(sel.MC_px_me[i])
+                            self.branches[syst]["py"].push_back(sel.MC_py_me[i])
+                            self.branches[syst]["pz"].push_back(sel.MC_pz_me[i])
+                            self.branches[syst]["e"].push_back(sel.MC_e_me[i])
                     ##################################
                     for observable in self.observables:
                         if isdata and observable.need_truth:
@@ -797,10 +812,11 @@ class AnaTtresSL(Analysis):
                     self.branches[syst]["mttReco"].push_back(mtt)
                     self.branches_noclear[syst]["Btagcat"].value = self.TtresChi2.bcategory
                     self.branches_noclear[syst]["th_label"][0] = sel.ljet_label[0] if sel.ljet_pt.size() >= 1 else -999
+                    
                     if sel.mcChannelNumber != 0:
-                        if not (helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]):
+                        if not (helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]) and hasattr(sel, "MC_ttbar_beforeFSR_m"):
                             self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
-                        else:
+                        elif hasattr(sel, "MC_id_me"):
                             pME = helpers.getTruth4momenta(sel)
                             truPttbar = pME[2]+pME[3]
                             self.branches[syst]["mttTrue"].push_back(truPttbar.M())
@@ -810,7 +826,7 @@ class AnaTtresSL(Analysis):
                                 self.branches[syst]["py"].push_back(sel.MC_py_me[i])
                                 self.branches[syst]["pz"].push_back(sel.MC_pz_me[i])
                                 self.branches[syst]["e"].push_back(sel.MC_e_me[i])
-
+                    
                     for observable in self.observables:
                         if isdata and observable.need_truth:
                             continue
@@ -878,7 +894,7 @@ class AnaTtresFH(Analysis):
         self.alphaS = -1
         self.blinded = False
 
-        self.add("mtt", 6000 , 0, 6000)
+        self.add("mtt", 7000 , 0, 7000)
         self.add("m_truthJJ", 6000, 0, 6000)
         self.add("m_truthJJ_MA", 6000, 0, 6000)
         # Leading hadronic top candidate
@@ -1010,6 +1026,14 @@ class AnaTtresFH(Analysis):
         ########################
         w = wo
         isdata = sel.mcChannelNumber == 0
+
+        # for DM reweighting
+        if self.DMMass:
+            w_DM = {}
+            for m in DM_mass_list:
+                #print "in mass : ",m
+                w_DM['DM'+str(m)] = helpers.getDMWeight(sel, m)
+
         if (not isdata and hasattr(sel, "MC_ttbar_beforeFSR_m")):
             w0 = w/self.w2HDM
             self.h["trueMtt"][syst].Fill(sel.MC_ttbar_beforeFSR_m*1e-3, w)
@@ -1098,9 +1122,12 @@ class AnaTtresFH(Analysis):
             ################################
             ### fill the tree ##############
             if self._doTree:
+                #print "fillg branch"
                 self.branches[syst]["w"].push_back(w)
                 self.branches[syst]["w0"].push_back(w0)
                 if self._locked == SELECTION_LOCKED:
+                    for m in DM_mass_list:
+                        self.branches[syst]['w_DM'+str(m)].push_back(w_DM['DM'+str(m)])
                     self.branches_noclear[syst]['m_truthJJ'][0] = m_truthJJ
                     self.branches_noclear[syst]['m_truthJJ_MA'][0] = m_truthJJ_MA
                     self.branches[syst]["eventNumber"].push_back(sel.eventNumber)
@@ -1135,6 +1162,7 @@ class AnaTtresFH(Analysis):
                                     self.branches[syst][observable.name].push_back(v)
                             else:
                                 self.branches_noclear[syst][observable.name].value = values
+                    #print "=============================="
 
                 ##################################
                 ### fill the tree ################

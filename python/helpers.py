@@ -354,14 +354,15 @@ def getMomenta(sel,topology):
     if(n>5): p.append([ sel.MC_e_me[me["j2"]["idx"]], sel.MC_px_me[me["j2"]["idx"]], sel.MC_py_me[me["j2"]["idx"]], sel.MC_pz_me[me["j2"]["idx"]] ])
     return p
 
-def getDMWeight(sel):
+def getDMWeight(sel, DM_mass):
     # mass in GeV
     massMap = {301322: 500, 301323: 500, 305786: 600, 301324: 750, 305787: 800, 301325: 1000, 301326: 1250, 301327: 1500, 301328: 1750, 301329: 2000, 301330: 2250, 301331: 2500,301332: 2750, 301333: 3000, 301334: 4000, 301335: 5000}
     try:
         mass = massMap[sel.mcChannelNumber]
     except: # no mc id in this map, do not reweight
         return 1.0
-    return ROOT.TopNtupleAnalysis.wfunction(mass, sel.MC_ttbar_beforeFSR_m*1e-3)
+    #return ROOT.TopNtupleAnalysis.wfunction(mass, sel.MC_ttbar_beforeFSR_m*1e-3)
+    return ROOT.TopNtupleAnalysis.wfunction(mass, DM_mass, sel.MC_ttbar_beforeFSR_m*1e-3)
 
 def getKKgluonWidthWeight(width, sel, s = ""):
     if sel.MC_ttbar_beforeFSR_m < 0:
