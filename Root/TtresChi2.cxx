@@ -17,7 +17,7 @@ TtresChi2::TtresChi2(std::string units){
   m_Btag = AFFECTBTAG;
   m_RunMode = RUNDEFAULT;
   m_NeutrinoBuilder = new TtresNeutrinoBuilder(units);
-  Init(DATA2015_MC15);
+  Init(DATA_MC_Run2_TrackJET);
   res_chi2All  = -1.;
   res_chi2WH   = -1.;
   res_chi2TopH = -1.;
@@ -46,7 +46,58 @@ void TtresChi2::Init(Chi2Version version, double highJetMass) {
 
   switch (version){
 
-     case DATA2015_MC15C:
+     case DATA_MC_Run2_TrackJET:
+       
+        
+
+        MjjP=80.36*m_Units;
+        SMjjP=12.50*m_Units;
+
+        m_TopMinusW_had_mean=86.12*m_Units;
+        m_TopMinusW_had_sigma=16.64*m_Units;
+
+        m_Top_lep_mean=165.95*m_Units;
+        m_Top_lep_sigma=26.03*m_Units;
+
+        m_PtDiff_mean=-3.86*m_Units;
+        m_PtDiff_sigma=37.42*m_Units;
+
+        m_PtDiffRel_mean=-0.0012;
+        m_PtDiffRel_sigma=0.0048;
+
+        m_PtDiffRelMass_mean=-0.0012;
+        m_PtDiffRelMass_sigma=0.0419;
+
+        MTHJJ=175.04*m_Units;
+        STHJJ=14.87*m_Units;
+        break;
+
+
+    case DATA_MC_Run2_CaloJET:
+        
+        MjjP=80.48*m_Units;
+        SMjjP=12.41*m_Units;
+
+        m_TopMinusW_had_mean=86.26*m_Units;
+        m_TopMinusW_had_sigma=16.61*m_Units;
+
+        m_Top_lep_mean=165.92*m_Units;
+        m_Top_lep_sigma=26.18*m_Units;
+
+        m_PtDiff_mean=-3.65*m_Units;
+        m_PtDiff_sigma=38.57*m_Units;
+
+        m_PtDiffRel_mean=-0.0012;
+        m_PtDiffRel_sigma=0.0048;
+
+        m_PtDiffRelMass_mean=-0.0012;
+        m_PtDiffRelMass_sigma=0.0419;
+
+        MTHJJ=175.04*m_Units;
+        STHJJ=14.87*m_Units;
+        break;
+
+    case DATA2015_MC15C:
         // TopAnalysis 2.4.12
         // Parton matching: HQTTtResonancesTools
         // Using MC15C derivations
@@ -72,6 +123,9 @@ void TtresChi2::Init(Chi2Version version, double highJetMass) {
         MTHJJ=175.04*m_Units;
         STHJJ=14.87*m_Units;
         break;
+
+
+
 
      case DATA2015_MC15:   
   	// TopAnalysis 2.3.15b
@@ -516,19 +570,19 @@ bool TtresChi2::findMinChiSquare(TLorentzVector* L, const std::vector<TLorentzVe
 				if(isJetBtagged->at(k)){//b-jet on the hadronic side
 					m_category = 2;
 				}else if(isJetBtagged->at(m)){//b-jet on the leptonic side
-					m_category = 3;
+					m_category = 1;
 				}else{
 					std::cerr << "<!> In TtresChi2::findMinChiSquare : cannot find the corresponding category." << std::endl;
 				}
 			}else if(n_bjets>=2){
 				if(isJetBtagged->at(k)){//b-jet on the hadronic side
 					if(isJetBtagged->at(m)){//b-jet on the leptonic side too
-						m_category = 1;
+						m_category = 3;
 					}else{//b-jet only on the hadronic side
 						m_category = 2;
 					}
 				}else if(isJetBtagged->at(m)){
-					m_category = 3;
+					m_category = 1;
 				}else{
 					std::cerr << "<!> In TtresChi2::findMinChiSquare : cannot find the corresponding category." << std::endl;
 				}
