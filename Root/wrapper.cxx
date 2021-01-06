@@ -166,7 +166,7 @@ TLorentzVector TopNtupleAnalysisUtils::res_tv(std::string target) {
   TLorentzVector ret;
   if      ( target == "Th" ) { ret = m_chi2.getResult_Th(); }
   else if ( target == "Tl" ) { ret = m_chi2.getResult_Tl(); }
-  else if ( target == "Wh" ) { ret = m_chi2.getResult_Th(); }
+  else if ( target == "Wh" ) { ret = m_chi2.getResult_Wh(); }
   else if ( target == "Wl" ) { ret = m_chi2.getResult_Wl(); }
   else if ( target == "Tt" ) { ret = m_chi2.getResult_Tlv(); }
   return ret;
