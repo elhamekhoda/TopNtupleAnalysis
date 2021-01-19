@@ -338,7 +338,7 @@ if __name__ == "__main__":
                         default='good',
                         help='"GLOBAL" Boosted top tagger which will applied to the large-R jet for the hadronic-top reconstruction in the boost selection. Simple logical operation are supported. ONLY WORK IF YOU DON\'T USE ANY TOP-TAGGER IN THE _OUTPUT_ SELECTIONS.')
     parser.add_argument('-b', '--bot-tagger',
-                        default='MV2c10_70',
+                        default='DL1r_FixedCutBEff70',
                         help='"GLOBAL" b-quark tagger. ONLY WORK IF YOU DON\'T USE ANY BOT-TAGGER IN THE _OUTPUT_ SELECTIONS.')
     parser.add_argument('--nevents',
                         default = None,
@@ -353,10 +353,10 @@ if __name__ == "__main__":
     SLttres_parser = subparsers.add_parser('AnaTtresSL', parents = [parser], formatter_class = argparse.ArgumentDefaultsHelpFormatter, help = 'Semi-leptonic ttbar resonances anaylsis')
     SLttres_parser.add_argument("-o", "--output",
                         dest="output",
-                        default = ["(re,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_re.root",
-                                   "(rmu,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_rmu.root",
-                                   "(be,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_be.root",
-                                   "(bmu,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.MV2c10_70):hist_bmu.root"],
+                        default = ["(re,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70):hist_re.root",
+                                   "(rmu,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70):hist_rmu.root",
+                                   "(be,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70):hist_be.root",
+                                   "(bmu,good_dnn_inclusive80*angular_cuts,AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70):hist_bmu.root"],
                         action = AppendActionCleanDefault,
                         nargs = '?',
                         help='You can run more than 1 channels in the same time. The syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>, [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]". See Also: `--top-tagger`',

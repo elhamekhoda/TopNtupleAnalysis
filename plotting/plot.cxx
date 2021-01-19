@@ -224,13 +224,13 @@ int main(int argc, char **argv) {
                 extraText.push_back("#mu+jets");
             } else if (channel == "comb") {
                 //extraText.push_back("e,#mu-channel");
-            } else if (channel == "beX") {
+            } else if (channel == "be") {
                 extraText.push_back("boosted, e+jets");
-            } else if (channel == "bmuX") {
+            } else if (channel == "bmu") {
                 extraText.push_back("boosted, #mu+jets");
-            } else if (channel == "reX") {
+            } else if (channel == "re") {
                 extraText.push_back("resolved, e+jets");
-            } else if (channel == "rmuX") {
+            } else if (channel == "rmu") {
                 extraText.push_back("resolved, #mu+jets");
             } else if (channel == "bFH") {
                 extraText.push_back("boosted, fully hadronic");

@@ -288,7 +288,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
         leg.reset(new TLegend(0.55, 0.68, 0.88, 0.92));
     else if (posLegend == 8)
         leg.reset(new TLegend(0.3, 0.3, 0.88, 0.72));
-    //leg->SetNColumns(2);
+    leg->SetNColumns(2);
     leg->SetFillStyle(0);
     leg->SetBorderSize(0);
     leg->SetTextFont(43);
@@ -328,11 +328,13 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
     shared_ptr<TGraphAsymmErrors> band(TH1toGraph((TH1D*)MC->GetStack()->Last()));
     shared_ptr<TGraphAsymmErrors> statsys_band = stackConfig["MC"].makeBand();
 
-    //band->SetFillStyle(3354);
     band->SetFillStyle(1001);
+    //band->SetFillStyle(1001);
     band->SetFillColorAlpha(kGreen - 9, 0.5);
-    statsys_band->SetFillStyle(1001);
-    statsys_band->SetFillColorAlpha(kGreen + 3, 0.5);
+    band->SetFillColorAlpha(kAzure + 1, 0.5);
+    statsys_band->SetFillStyle(3005);
+    //statsys_band->SetFillColorAlpha(kGreen + 3, 0.5);
+    statsys_band->SetFillColorAlpha(kBlue + 1, 0.5);
 
 
     if (band) {

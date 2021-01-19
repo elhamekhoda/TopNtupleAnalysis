@@ -79,7 +79,7 @@ class Run(object):
         if self.cluster != None:
             cmds['build'].append('pwd="$PWD"\n')
             cmds['build'].append('source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh\n')
-            cmds['build'].append('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
+            #cmds['build'].append('export X509_USER_PROXY=$HOME/.globus/job_proxy.pem\n')
             cmds['build'].append('cd {}\n'.format(os.path.join(os.getenv("WorkDir_DIR"), '..')))
             if self.cluster.name == 'lsf': 
                 # This is needed because the default python version for LSF in lxplus is way too old.

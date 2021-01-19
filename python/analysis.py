@@ -346,13 +346,17 @@ class Analysis(object):
     def set_top_tagger(self, expr, num_thad = 1, **kwds):
         self.top_tagger = selections.BoostedTopTagger(expr, num_top = num_thad, **kwds)
 
-    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70', **kwds):
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70', **kwds):
         attr = algorithm_WP_systs.split('.',2)
         algorithm_WP_systs = attr[-1].split('_', 2)
         if len(attr)==2:
             algorithm_WP_systs.append(attr[0])
         # print algorithm_WP_systs
-        self.bot_tagger = selections.TrackJetBotTagger(*algorithm_WP_systs, **kwds)
+        if 'Track' in attr[0]:
+            self.bot_tagger = selections.TrackJetBotTagger(*algorithm_WP_systs, **kwds)
+        else:
+            self.bot_tagger = selections.CaloJetBotTagger(*algorithm_WP_systs, **kwds)
+        logger.info("Setting up b-tagging, jet collection: \033[42;1m {} \033[0m".format(attr[0]))
     def set_aux_selector(self, expr = None):
         self.aux_selector = selections.AuxSelector(expr)
     def set_TtresChi2(self):
@@ -392,6 +396,10 @@ class AnaTtresSL(Analysis):
                 'bmu2017': ['bmujets_2017'],
                 're2017': ['rejets_2017'],
                 'rmu2017': ['rmujets_2017'],
+                'be2018': ['bejets_2018'],
+                'bmu2018': ['bmujets_2018'],
+                're2018': ['rejets_2018'],
+                'rmu2018': ['rmujets_2018'],
                 'ovre': ['rejets_2015','rejets_2016','rejets_2017','rejets_2018'],
                 'ovrmu': ['rmujets_2015','rmujets_2016','rmujets_2017','rmujets_2018']}
     def __init__(self, channel, systgroups, outputFile, do_tree = False):
@@ -437,6 +445,8 @@ class AnaTtresSL(Analysis):
         self.add("largeJet_tau21_wta", 20, 0, 1)
         self.add("btagged_tjet_closest_to_ljet", 50, 0, (math.pi**2+2.5**2)**0.5)
         self.add("btagged_tjet_closest_to_lep", 50, 0, (math.pi**2+2.5**2)**0.5)
+        self.add("btagged_calojet_closest_to_ljet", 50, 0, (math.pi**2+2.5**2)**0.5)
+        self.add("btagged_calojet_closest_to_lep", 50, 0, (math.pi**2+2.5**2)**0.5)
 
     def addTree(self):
         super(AnaTtresSL, self).addTree()
@@ -624,7 +634,6 @@ class AnaTtresSL(Analysis):
                 self.h["trueMttr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
                 self.h["trueMtt8TeV"][syst].Fill(truPttbar.M(), w)
                 self.h["trueMtt8TeVr"][syst].Fill(truPttbar.M(), w0*(self.w2HDM-1.))
-        
         self.h['NEvents'][syst].Fill(1, 1)
         self.h["yields"][syst].Fill(1, w)
         self.h["runNumber"][syst].Fill(sel.runNumber, w)
@@ -637,13 +646,15 @@ class AnaTtresSL(Analysis):
         if len(sel.el_pt) == 1:
             l.SetPtEtaPhiE(sel.el_pt[0], sel.el_eta[0], sel.el_phi[0], sel.el_e[0])
             lQ = sel.el_charge[0]
-            l_true_type = sel.el_true_type[0]
-            l_true_origin = sel.el_true_origin[0]
+            if not isdata:
+                l_true_type = sel.el_true_type[0]
+                l_true_origin = sel.el_true_origin[0]
         elif len(sel.mu_pt) == 1:
             l.SetPtEtaPhiE(sel.mu_pt[0], sel.mu_eta[0], sel.mu_phi[0], sel.mu_e[0])
             lQ = sel.mu_charge[0]
-            l_true_type = sel.mu_true_type[0]
-            l_true_origin = sel.mu_true_origin[0]
+            if not isdata:
+                l_true_type = sel.mu_true_type[0]
+                l_true_origin = sel.mu_true_origin[0]
         if lQ > 0:
             self.h["yieldsPos"][syst].Fill(1, w)
         elif lQ < 0:
@@ -673,6 +684,11 @@ class AnaTtresSL(Analysis):
             self.h["btagged_tjet_closest_to_lep"][syst].Fill(DeltaR(btagged_tjet_closest_to_lep, l), w)
         except ValueError:
             btagged_tjet_closest_to_lep = None
+        try:
+            btagged_calojet_closest_to_lep = min((jet for i, jet in enumerate(self.bot_tagger._jet_p4) if helpers.char2int(self.bot_tagger.jet_isbtagged[i])), key = lambda btagged_jet: DeltaR(btagged_jet, l))
+            self.h["btagged_calojet_closest_to_lep"][syst].Fill(DeltaR(btagged_calojet_closest_to_lep, l), w)
+        except ValueError:
+            btagged_jet_closest_to_lep = None
         self.h["closestJetDr"][syst].Fill(closestJetDr, w)
         self.h["closestJetPt"][syst].Fill(closestJetPt*1e-3, w)
         self.h["nTrkBtagJets"][syst].Fill(sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in self.bot_tagger.tjet_isbtagged), w)
@@ -696,6 +712,11 @@ class AnaTtresSL(Analysis):
             try:
                 btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: DeltaR(btagged_tjet, lj))
                 self.h["btagged_tjet_closest_to_ljet"][syst].Fill(DeltaR(btagged_tjet_closest_to_ljet, lj), w)
+            except ValueError:
+                pass
+            try:
+                btagged_calojet_closest_to_ljet = min((jet for i, jet in enumerate(self.bot_tagger._jet_p4) if helpers.char2int(self.bot_tagger.jet_isbtagged[i])), key = lambda btagged_jet: DeltaR(btagged_jet, lj))
+                self.h["btagged_calojet_closest_to_ljet"][syst].Fill(DeltaR(btagged_calojet_closest_to_ljet, lj), w)
             except ValueError:
                 pass
             w0 = w/self.w2HDM
@@ -738,8 +759,8 @@ class AnaTtresSL(Analysis):
                     self.branches_noclear[syst]["Btagcat"].value = sel.Btagcat
                     self.branches_noclear[syst]["th_label"][0] = sel.ljet_label[goodJetIdx] if sel.ljet_pt.size() >= 1 else -999
                     if hasattr(sel, "MC_id_me"):
-                        pME = helpers.getTruth4momenta(sel)
-                        truPttbar = pME[2]+pME[3]
+                        #pME = helpers.getTruth4momenta(sel)
+                        #truPttbar = pME[2]+pME[3]
                         if sel.mcChannelNumber != 0:
                            self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
                         for i in xrange(sel.MC_id_me.size()):
@@ -769,6 +790,11 @@ class AnaTtresSL(Analysis):
                 try:
                     btagged_tjet_closest_to_ljet = min((tjet for i, tjet in enumerate(self.bot_tagger._tjet_p4) if helpers.char2int(self.bot_tagger.tjet_isbtagged[i])), key = lambda btagged_tjet: DeltaR(btagged_tjet, lj))
                     self.h["btagged_tjet_closest_to_ljet"][syst].Fill(DeltaR(btagged_tjet_closest_to_ljet, lj), w)
+                except ValueError:
+                    pass
+                try:
+                    btagged_calojet_closest_to_ljet = min((jet for i, jet in enumerate(self.bot_tagger._jet_p4) if helpers.char2int(self.bot_tagger.jet_isbtagged[i])), key = lambda btagged_jet: DeltaR(btagged_jet, lj))
+                    self.h["btagged_calojet_closest_to_ljet"][syst].Fill(DeltaR(btagged_calojet_closest_to_ljet, lj), w)
                 except ValueError:
                     pass
                 self.h["largeJetPt"][syst].Fill(lj.Pt()*1e-3, w)
@@ -857,10 +883,15 @@ class AnaTtresSL(Analysis):
     def set_top_tagger(self, expr, num_thad = 1, strategy = 'obey', **kwds):
         kwds.setdefault('do_truth_matching', True)
         super(AnaTtresSL, self).set_top_tagger(expr, num_thad = num_thad, strategy = strategy, **kwds)
+        if hasattr(self, 'bot_tagger'):
+            self.top_tagger._bot_tagger = self.bot_tagger
 
-    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt2PV0TrackJets.MV2c10_FixedCutBEff70', **kwds):
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70', **kwds):
         # kwds.setdefault('strategy', 'rebel')
-        Analysis.set_bot_tagger(self, algorithm_WP_systs, **kwds)
+        kwds.setdefault('min_nbjets', 1)
+        super(AnaTtresSL, self).set_bot_tagger(algorithm_WP_systs, **kwds)
+        if hasattr(self, 'top_tagger'):
+            self.top_tagger._bot_tagger = self.bot_tagger
 
 class AnaTtresFH(Analysis):
     mapSel = {  # OR all channels in the comma-separated list

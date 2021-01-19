@@ -14,7 +14,7 @@ class Selection(object):
         raise NotImplementedError
 
 class TtresChi2(Selection):
-    def __init__(self, bot_tagger, max_chi2 = 10**0.9, strategy = 'deltaR'):
+    def __init__(self, bot_tagger, max_chi2 = 10**0.9, strategy = 'rebel'):
         self.strategy = strategy
         self.met = ROOT.Math.PtEtaPhiEVector()
         self.bot_tagger = bot_tagger
@@ -65,21 +65,39 @@ class TtresChi2(Selection):
         p4_th = self.get_tv("Th")
         p4_tl = self.get_tv("Tl")
         btagCat = 0
-        if not any(self.bot_tagger.tjet_isbtagged):
-            btagCat = -1
-        else:
-            for tjet_p4, isbtagged in zip(self.bot_tagger._tjet_p4, self.bot_tagger.tjet_isbtagged):
-                if not isbtagged:
-                    continue
-                if ROOT.Math.VectorUtil.DeltaR(p4_tl, tjet_p4) < 1.:
-                    btagCat = 1
-                if ROOT.Math.VectorUtil.DeltaR(p4_th, tjet_p4) < 1.:
-                    if btagCat != 1:
-                        btagCat = 2
-                    else:
-                        btagCat = 3
-                        break
-        self.bcategory = btagCat
+        if 'AntiKt4' in self.bot_tagger.jet_collection:
+          if not any(self.bot_tagger.jet_isbtagged):
+              btagCat = -1
+          else:
+              for jet_p4, isbtagged in zip(self.bot_tagger._jet_p4, self.bot_tagger.calojet_isbtagged):
+                  if not isbtagged:
+                      continue
+                  if ROOT.Math.VectorUtil.DeltaR(p4_tl, jet_p4) < 1.:
+                      btagCat = 1
+                  if ROOT.Math.VectorUtil.DeltaR(p4_th, jet_p4) < 1.:
+                      if btagCat != 1:
+                          btagCat = 2
+                      else:
+                          btagCat = 3
+                          break
+          self.bcategory = btagCat
+
+        elif 'Track' in self.bot_tagger.jet_collection:
+          if not any(self.bot_tagger.tjet_isbtagged):
+              btagCat = -1
+          else:
+              for tjet_p4, isbtagged in zip(self.bot_tagger._tjet_p4, self.bot_tagger.tjet_isbtagged):
+                  if not isbtagged:
+                      continue
+                  if ROOT.Math.VectorUtil.DeltaR(p4_tl, tjet_p4) < 1.:
+                      btagCat = 1
+                  if ROOT.Math.VectorUtil.DeltaR(p4_th, tjet_p4) < 1.:
+                      if btagCat != 1:
+                          btagCat = 2
+                      else:
+                          btagCat = 3
+                          break
+          self.bcategory = btagCat
 
 
     def get_tv(self, target):
@@ -157,7 +175,12 @@ class BoostedTopTagger(Selection):
         for i in xrange(ev.akt10truthjet_pt.size()):
             self.truth_ljet_p4.push_back((ev.akt10truthjet_pt[i], ev.akt10truthjet_eta[i], ev.akt10truthjet_phi[i], ev.akt10truthjet_m[i]))
     def bcategorize(self, ev, bot_tagger = None):
-        if not any(helpers.char2int(tagged) for tagged in self._bot_tagger.tjet_isbtagged):
+        jet_type = ''
+        if 'AntiKt4' in self._bot_tagger.jet_collection:
+          jet_type = 'calojet'
+        else:
+          jet_type = 'tjet'
+        if not any(helpers.char2int(tagged) for tagged in eval('self._bot_tagger.'+jet_type+'_isbtagged')):
             self.bcategory = -1
             return 
         if self.num_top == 1:
@@ -290,9 +313,9 @@ class TrackJetBotTagger(Selection):
             }
             }
     # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
-    def __init__(self, algorithm = 'MV2c10',
+    def __init__(self, algorithm = 'DL1r',
                        WP = 'FixedCutBEff70',
-                       trackjet_alg = 'AntiKtVR30Rmax4Rmin02TrackJets',
+                       jet_collection = 'AntiKtVR30Rmax4Rmin02TrackJets',
                        strategy = 'obey',
                        do_association = True,
                        do_ljet_association = False,
@@ -301,7 +324,7 @@ class TrackJetBotTagger(Selection):
                        min_nbjets = 1):
         self.algorithm = algorithm
         self.WP = WP
-        self.trackjet_alg = trackjet_alg
+        self.jet_collection = jet_collection
         self.max_deltaR = 0.4 # Used for `do_association`
         self.max_ljet_deltaR = 1.0 # Used for `do_ljet_association`
         self.do_association = do_association
@@ -317,7 +340,7 @@ class TrackJetBotTagger(Selection):
             self.strategy = 'obey'
         else:
             self.strategy = strategy
-        recomm = self.WP2D.get(self.trackjet_alg, {}).get(self.algorithm, {})
+        recomm = self.WP2D.get(self.jet_collection, {}).get(self.algorithm, {})
         if 'uncalibrated' in recomm.get('status', tuple()):
             logger.warn('This b-tagging WP is not yet calibrated. Unity scale factor will be used')
             SF_type = 'uncalib'
@@ -518,6 +541,164 @@ class TrackJetBotTagger(Selection):
             else: # extrapolation branches or the nominal, have no second index
                 scale_factor *= tjet_SF[i]
         return scale_factor
+    def _eventlevel_scale_factor(self, ev, systematic_variation = ''):
+        '''
+        Use the event-level b-tagging efficiency scale factors from AnalysisTop. 
+        trk jet pT-dependent SF is not available.
+        '''
+        pref = self._branch_map['weight_SF']
+        if 'btag' in systematic_variation:
+            # get direction
+            direction = 'up'
+            if 'down' in systematic_variation:
+                direction = 'down'
+            # check if it is a b,c,light or extrapolation variation and set name
+            if 'btagbSF_' in systematic_variation:
+                varName = '{}_eigenvars_B_{}'.format(pref, direction)
+                # get eigenvector index
+                eig = int(systematic_variation.split('_')[1])
+                scale_factor = getattr(ev, varName)[eig]
+            elif 'btagcSF_' in systematic_variation:
+                varName = '{}_eigenvars_C_{}'.format(pref, direction)
+                # get eigenvector index
+                eig = int(systematic_variation.split('_')[1])
+                scale_factor = getattr(ev, varName)[eig]
+            elif 'btaglSF_' in systematic_variation:
+                varName = '{}_eigenvars_Light_{}'.format(pref, direction)
+                # get eigenvector index
+                eig = int(systematic_variation.split('_')[1])
+                scale_factor = getattr(ev, varName)[eig]
+            elif 'btageSF_0' in systematic_variation:
+                varName = '{}_extrapolation_{}'.format(pref, direction)
+                scale_factor = getattr(ev, varName)
+            elif 'btageSF_1' in systematic_variation:
+                varName = '{}_extrapolation_from_charm_{}'.format(pref, direction)
+                scale_factor = getattr(ev, varName)
+            
+        else: # not a b-tagging variation, so take the nominal
+            varName = pref
+            scale_factor = getattr(ev, varName)
+        return scale_factor
+
+class CaloJetBotTagger(Selection):
+    WP2D = {'AntiKt4EMPFlowJets_BTagging201903':
+            {
+              'MV2c10': {'FixedCutBEff60':  0.94, 'FixedCutBEff70':  0.83, 'FixedCutBEff77':  0.63, 'FixedCutBEff85':  0.07, 'pt':  20e3},
+              'MV2r':   {'pt': 20e3, 'status': ('uncalibrated',)},
+              'MV2rmu': {'pt': 20e3, 'status': ('uncalibrated',)},
+              'DL1':    {'FixedCutBEff60':  4.415, 'FixedCutBEff70':  3.095, 'FixedCutBEff77':  2.015, 'FixedCutBEff85':  0.365, 'pt': 20e3},
+              'DL1r':   {'FixedCutBEff60':  4.565, 'FixedCutBEff70':  3.245, 'FixedCutBEff77':  2.195, 'FixedCutBEff85':  0.665, 'pt': 20e3},
+              'DL1rmu': {'pt': 20e3, 'status': ('uncalibrated',)},
+              }
+            }
+    # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
+
+    def __init__(self, algorithm = 'DL1r',
+                       WP = 'FixedCutBEff70',
+                       jet_collection = 'AntiKt4EMPFlowJets_BTagging201903',
+                       strategy = 'obey',
+                       do_association = True,
+                       do_ljet_association = False,
+                       do_truth_matching = True,
+                       SF_type = 'eventlevel',
+                       min_nbjets = 1):
+        self.algorithm = algorithm
+        self.WP = WP
+        self.jet_collection = jet_collection
+        self.max_deltaR = 0.4 # Used for `do_association`
+        self.max_ljet_deltaR = 1.0 # Used for `do_ljet_association`
+        self.do_association = do_association
+        self.do_ljet_association = do_ljet_association
+        self.do_truth_matching = do_truth_matching
+        is_HybWP = 'HybBEff' in self.WP
+        self._branch_map = {'calojet_isbtagged': 'jet_isbtagged_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
+                            'calojet_SF': 'jet_btag_SF_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
+                            'weight_SF': 'weight_bTagSF_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
+                            'tjet_isbtagged': 'tjet_isbtagged_{alg}_{WP}'.format(alg = self.algorithm, WP = ('HybBEff_' if is_HybWP else '') + self.WP.split('BEff')[-1]),
+                           }
+        if is_HybWP and strategy == 'rebel':
+            logger.warn('When using Hybrid WP, the b-tagging strategy should always be `obey`!')
+            self.strategy = 'obey'
+        else:
+            self.strategy = strategy
+        recomm = self.WP2D.get(self.jet_collection, {}).get(self.algorithm, {})
+        if 'uncalibrated' in recomm.get('status', tuple()):
+            logger.warn('This b-tagging WP is not yet calibrated. Unity scale factor will be used')
+            SF_type = 'uncalib'
+        self.scale_factor = getattr(self, '_' + SF_type + '_scale_factor')
+        self.min_discriminant = recomm.get(WP, -999) # Note that this will not be considered if the strategy is `obey`
+        self.min_pt = recomm.get('pt', 25e3) # Note that this will not be considered if the strategy is `obey`
+        self.min_nbjets = min_nbjets
+        logger.info("Select events contain at least {} b-tagged calo-jets with pt > {} MeV".format(self.min_nbjets, self.min_pt))
+        if self.strategy == 'rebel':
+            logger.debug('The b-tagging strategy is "rebel", which means b-tagging will be re-computed internally')
+            if self.min_discriminant == -999:
+                raise KeyError('For STRATEGY("rebel"), you always need an available "Alg./WP" stored in WP2D!')
+        elif self.strategy == 'obey':
+            logger.debug('The b-tagging strategy is "obey", which means using the b-tagging is done by external program. (i.e. HQTTtResonancesTools)')
+        self.passes = getattr(self, '_passes_{}'.format(self.strategy))
+        self._jet_p4 = ROOT.vector(ROOT.Math.PtEtaPhiEVector)() # calorimeter jet
+        self.jet_isbtagged = ROOT.vector('bool')() # if any of the associated caorimeter jets is b-tagged. Not used in boosted channel
+        self._ljet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiMVector')() # Used for `do_association`
+        self.ljet_isbtagged = ROOT.vector('bool')() # if any of the associated track jets is b-tagged. Used in boosted full-hadronic analysis
+        self.ljet_associated_btaggedjet_index = ROOT.vector('int')()
+        self.calojet_isbtagged = ROOT.vector(int)()
+        self._tjet_p4 = ROOT.vector('ROOT::Math::PtEtaPhiEVector')()
+        self.tjet_isbtagged = ROOT.vector(int)()
+
+    def _passes_obey(self, ev):
+        self.calojet_isbtagged.clear()
+        self.jet_isbtagged.clear()
+        self._jet_p4.clear()
+        self.tjet_isbtagged.clear()
+        self._tjet_p4.clear()
+        for tagged in getattr(ev, self._branch_map['tjet_isbtagged']):
+            self.tjet_isbtagged.push_back(helpers.char2int(tagged))
+        for i in xrange(len(ev.tjet_pt)):
+            self._tjet_p4.push_back((ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i], ev.tjet_e[i]))
+        for tagged in getattr(ev, self._branch_map['calojet_isbtagged']):
+            self.jet_isbtagged.push_back(bool(helpers.char2int(tagged)))
+            self.calojet_isbtagged.push_back(helpers.char2int(tagged))
+        for i in xrange(len(ev.jet_pt)):
+            self._jet_p4.push_back((ev.jet_pt[i], ev.jet_eta[i], ev.jet_phi[i], ev.jet_e[i]))
+        if self.do_ljet_association:
+            self.ljet_association(ev)
+        if self.min_nbjets == 0:
+            return True
+        return (sum(self.calojet_isbtagged) >= self.min_nbjets)
+
+
+    def associated(self, p4_1, p4_2, max_deltaR):
+        deltaR = ROOT.Math.VectorUtil.DeltaR(p4_1, p4_2)
+        return (deltaR < max_deltaR)
+
+
+    def ljet_association(self, ev):
+        self.ljet_isbtagged.clear()
+        self._ljet_p4.clear()
+        self.ljet_associated_btaggedjet_index.clear()
+        for ljet_i in xrange(len(ev.ljet_pt)):
+            self._ljet_p4.push_back((ev.ljet_pt[ljet_i], ev.ljet_eta[ljet_i], ev.ljet_phi[ljet_i], ev.ljet_m[ljet_i]))
+            calobjet_associated = False
+            associated_btaggedcalojet_index = -999
+            for calojet_i in xrange(len(ev.jet_pt)):
+                if self.jet_isbtagged[calojet_i] and self.associated(self._jet_p4[tjet_i], self._ljet_p4[ljet_i], self.max_ljet_deltaR):
+                    calobjet_associated = True
+                    associated_btaggedcalojet_index = calojet_i
+                    break
+            self.ljet_isbtagged.push_back(calobjet_associated)
+            self.ljet_associated_btaggedjet_index.push_back(associated_btaggedcalojet_index)
+
+
+    def truth_matching(self, ev):
+        if ev.mcChannelNumber == 0:
+            return
+        self.jet_istrueb = [label==5 for label in ev.jet_truthflav]
+
+
+    def _uncalib_scale_factor(self, ev, systematic_variation = ''):
+        return 1.
+
     def _eventlevel_scale_factor(self, ev, systematic_variation = ''):
         '''
         Use the event-level b-tagging efficiency scale factors from AnalysisTop. 
