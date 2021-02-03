@@ -24,8 +24,7 @@ int res_bcat();
 TLorentzVector res_tv(std::string target);
 double getEWK(TLorentzVector top, TLorentzVector topbar, int initial_type, int var = 0);
 TLorentzVector getNu(TLorentzVector l, double met, double met_phi);
-double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron, int muonTrigger, float topoetcone20, int runNumber);
-//Double_t wfunction(Int_t E, Double_t x);
+double getQCDWeight(int btags, int boosted, TLorentzVector met, TLorentzVector lep, int isTight, std::vector<TLorentzVector> jet, float sd0, int isElectron,  float topoetcone20, int runNumber);
 Double_t wfunction(Int_t E, Int_t DM, Double_t x);
 // #ifdef NNLOReweighter_NNLOReweighter
 void InitNNLO(int mcChannelNumber);
@@ -40,3 +39,4 @@ double getEFTSMWeight(int i1_pid, int i2_pid, std::vector<int> f_pid, TLorentzVe
 ClassDef(TopNtupleAnalysisUtils, 0)
 };
 #endif
+
