@@ -468,11 +468,11 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
                                        
                    if (isElectron) getRatesResolvedEl(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, absEta, cosDPhi, mWt, topoetcone, runNumber);
                    else            getRatesResolvedMu(realRate, realRate_err, fakeRate, fakeRate_err, lepPt, closejl_DR, closejl_pT, cosDPhi, MET, mWt, deltaPhi, topoetcone, runNumber);	
-
+/*
    float fake_eta_ratio(1.);
    float eff_eta_ratio(1.);
    if(m_etaCorr > 0){
-/*
+
     if(isElectron)
 	  {
 	     fake_eta_ratio = getEtaCorrectionFactor1(fake_lepEta_1bin_e_20161, fake_lepEta_20bins_e_20161, absEta);
@@ -511,11 +511,11 @@ float MMUtils::getMMweights(const Event &evt, const int runMM_StatErr, const boo
    
    float fake_corr = 1;
    float real_corr = 1;
-   if(m_etaCorr > 0 ){
+  /* if(m_etaCorr > 0 ){
    	fake_corr *= fake_eta_ratio;
    	real_corr *= eff_eta_ratio;
    }
-   
+   */
 if(m_DRCorr > 0 ){
    	fake_corr *= fake_DR_ratio;
    	real_corr *= eff_DR_ratio;
