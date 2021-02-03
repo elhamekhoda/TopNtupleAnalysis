@@ -498,7 +498,7 @@ class AnaTtresSL(Analysis):
         return weight
 
     def qcdWeight(self, sel, syst):
-        nBtag = sum(bool(jet_isbtagged) for jet_isbtagged in self.bot_tagger.jet_isbtagged)
+        nBtag = sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in self.bot_tagger.tjet_isbtagged)
         isBoosted = 0
         #if 'be' in self.ch or 'bmu' in self.ch:
         #       isBoosted = 1
@@ -509,7 +509,6 @@ class AnaTtresSL(Analysis):
         lisTight = 0
         lsd0 = 0
         isElectron = 0
-        muonTrigger = 0
         topoetcone20 = 0
         runNumber = sel.runNumber
         if len(sel.el_pt) == 1:
@@ -524,14 +523,13 @@ class AnaTtresSL(Analysis):
             lisTight = sel.mu_isTight[0]
             lisTight = bool(int(lisTight.encode('hex'), 16))
             lsd0 = sel.mu_d0sig[0]
-            muonTrigger = bool(int(sel.mu_trigMatch_HLT_mu20_iloose_L1MU15[0].encode('hex'), 16)) or bool(int(sel.mu_trigMatch_HLT_mu50[0].encode('hex'), 16))
             topoetcone20 = sel.mu_topoetcone20[0]
         jets = ROOT.vector('TLorentzVector')()
         for k in xrange(sel.jet_pt.size()):
             j = ROOT.TLorentzVector()
             j.SetPtEtaPhiE(sel.jet_pt[k], sel.jet_eta[k], sel.jet_phi[k], sel.jet_e[k])
             jets.push_back(j)
-        w = ROOT.TopNtupleAnalysis.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, muonTrigger, topoetcone20, runNumber)
+        w = ROOT.TopNtupleAnalysis.getQCDWeight(nBtag, isBoosted, met, l, lisTight, jets, lsd0, isElectron, topoetcone20, runNumber)
         if   math.fabs(l.Eta()) <= 1.5 and 'qcdcenup' in syst: w *= 1.5
         elif math.fabs(l.Eta()) <= 1.5 and 'qcdcendw' in syst: w *= 0.5
         elif math.fabs(l.Eta()) > 1.5 and 'qcdfwdup' in syst: w *= 2.0
