@@ -148,6 +148,53 @@ class TTbarNNLOReweighting(Reweighter):
         if s == -1:
             return cls.REWEIGTER.GetTopPt_ScaleMin_Powheg_Pythia8_Nominal(truth_top_pt)
 
+class TTbarNNLORecursiveReweighting(Reweighter):
+    RUN_NUMBERS = [410471, 410470]
+    RUN_NUMBERS += [410633, 410634, 410635, 410636, 410637] # mttsliced nonallhad
+    RUN_NUMBERS += [410284, 410285, 410286, 410287, 410288] # mttsliced allhad
+    SYSTS = {'ttNNLOQCDNLOEWK__1up': 1, # mu_R/F=2.0
+             'ttNNLOQCDNLOEWK__1down': -1, # mu_R/F = 0.5
+             '*': 0
+             }
+
+    @classmethod
+    def init(cls, mcChannelNumber):
+        if mcChannelNumber not in cls.RUN_NUMBERS:
+            logger.info('<{}> is not a registered ttbar sample. TTbarNNLORecursiveReweighting will not be activated.'.format(mcChannelNumber))
+        else:
+            logger.info('<{}> is a registered ttbar sample. TTbarNNLORecursiveReweighting will be activated.'.format(mcChannelNumber))
+            logger.info('Note that this is considered as a correction, i.e. change the nominal values')
+            if mcChannelNumber in [410284, 410285, 410286, 410287, 410288]:
+                mcChannelNumber = 410471
+            elif mcChannelNumber in [410633, 410634, 410635, 410636, 410637]:
+                mcChannelNumber = 410470
+
+            cls.NOMINAL_REWEIGTER = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(0, 0)
+            cls.NOMINAL_REWEIGTER.Init()
+
+            cls.UP_REWEIGTER = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(0, 1)
+            cls.UP_REWEIGTER.Init()
+
+            cls.DOWN_REWEIGTER = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(0, -1)
+            cls.DOWN_REWEIGTER.Init()
+
+    @classmethod
+    def get_SF(cls, ev, s):
+        if ev.mcChannelNumber == 0:
+            return 1.
+        if ev.mcChannelNumber not in cls.RUN_NUMBERS:
+            return 1.
+        truth_top_pt = ev.MC_t_afterFSR_SC_pt*1e-3 # in GeV
+        truth_antitop_pt = ev.MC_tbar_afterFSR_SC_pt*1e-3
+        truth_ttbar_m = ev.MC_ttbar_afterFSR_SC_m*1e-3
+        truth_ttbar_pt = ev.MC_ttbar_afterFSR_SC_pt*1e-3
+        if s == 0:
+            return cls.NOMINAL_REWEIGTER.GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt)
+        if s == 1:
+            return cls.UP_REWEIGHTER.GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt)
+        if s == -1:
+            return cls.DOWN_REWEIGHTER.GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt)
+
 class WjetSystWeight(Reweighter):
     '''
     W+jets C/A and HF syst. variations
