@@ -115,6 +115,12 @@ def main(parallel = False):
         else:
             options.ttbar_high_order = 'none'
 
+    elif options.ttbar_high_order == 'NNLORecursive':
+	if sel.mcChannelNumber in reweighting.TTbarNNLORecursiveReweighting.RUN_NUMBERS:
+	    reweighting.TTbarNNLORecursiveReweighting.init(sel.mcChannelNumber)
+        else:
+            options.ttbar_high_order = 'none'
+
 
     analysisCode = {}
     #print "Systematics: ", histSuffixes
@@ -288,7 +294,7 @@ if __name__ == "__main__":
     #                         +str(reweighting.EWKCorrection.RUN_NUMBERS))
     parser.add_argument("--ttbar-high-order",
                         default =  'NNLOQCDNLOEWK',
-                        choices = ['Rel20EWK', 'NNLOQCDNLOEWK', 'none'],
+                        choices = ['Rel20EWK', 'NNLOQCDNLOEWK', 'NNLORecursive', 'none'],
                         help = 'High Order Correction applied to registered ttbar sample.')
     parser.add_argument("-N", "--noMttSlices",
                         dest="noMttSlices",

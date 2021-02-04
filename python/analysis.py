@@ -326,7 +326,9 @@ class Analysis(object):
         syst_sig = s.signature
         for item in s.weight_map:
             weight *= getattr(sel, item)
-        if self.ttbarHighOrder == 'NNLOQCDNLOEWK':
+        if self.ttbarHighOrder == 'NNLORecursive':
+            weight *= reweighting.TTbarNNLORecursiveReweighting.get_weight(sel, syst_sig)
+        elif self.ttbarHighOrder == 'NNLOQCDNLOEWK':
             weight *= reweighting.TTbarNNLOReweighting.get_weight(sel, syst_sig)
         else:
             # this applies the EWK weight to _only_ ttbar samples
