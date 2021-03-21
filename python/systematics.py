@@ -328,7 +328,6 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
             'MUON_SCALE__1down',
             'MUON_ID__1down',
             'MUON_MS__1down',
-            
             ## large-R jet JES (strong scenario)
             #'CombMass_strong_JET_Comb_Modelling_All__1up',
             #'CombMass_strong_JET_Comb_Modelling_All__1down',
@@ -374,16 +373,15 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
         if ttbarHighOrderCorrection == 'NNLOQCDNLOEWK':
             systList.append('ttNNLOQCDNLOEWK__1up')
             systList.append('ttNNLOQCDNLOEWK__1down')
-        else:
+        elif ttbarHighOrderCorrection == 'Rel20EWK':
+            systList.append('ttEWK__1up')
+            systList.append('ttEWK__1down')
             systList.extend([
                 'ttNNLO_seqExtended__1up', 
                 'ttNNLO_seq__1up', 
                 'ttNNLO_topPtDiff__1up', 
                 'ttNNLO_topPt__1up',
                 ])
-        if ttbarHighOrderCorrection == 'Rel20EWK':
-            systList.append('ttEWK__1up')
-            systList.append('ttEWK__1down')
         if isWjets:
             systList.append('CAallMCAsym')
             systList.append('wnorm__1up')
@@ -418,7 +416,7 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
 
         if analysis == 'AnaTtresSL':
             systList.append('nominal')
-            systList.append('mttSlope')
+            #systList.append('mttSlope')
             systList.extend([
                 '',
                 # 'eChargeMisIDStatSF__1down',
@@ -447,8 +445,7 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
                 # 'muTrigStatSF__1up',
                 # 'muTrigSystSF__1down',
                 # 'muTrigSystSF__1up'
-                ]
-                )
+                ])
         elif analysis == 'AnaTtresFH':
             systList.extend([
                 '',
