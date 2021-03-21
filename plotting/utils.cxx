@@ -253,18 +253,18 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
 
         pad_main = (TPad *) c->cd(1);
         pad_main->SetPad(0.0, pad_prop.at(1) + pad_prop.at(2), 1., pad_prop.at(0) + pad_prop.at(1) + pad_prop.at(2));
-        pad_main->SetBottomMargin(0.05);
+        pad_main->SetBottomMargin(0.02);
     } else if (ratio && stackConfig._stack.find("Data") != stackConfig._stack.end()) {
-        pad_prop = {0.6, 0.4};
+        pad_prop = {0.6, 0.35};
         c->Divide(1, pad_prop.size(), 0.015, 0.01);
         pad_ratio = (TPad *) c->cd(2);
         pad_ratio->SetPad(0.0, 0.0, 1.0,  pad_prop.at(1));
-        pad_ratio->SetTopMargin(0.06);
+        pad_ratio->SetTopMargin(0.005);
         pad_ratio->SetBottomMargin(0.3);
 
         pad_main = (TPad *) c->cd(1);
-        pad_main->SetPad(0.0, pad_prop.at(1), 1., pad_prop.at(0) + pad_prop.at(1));
-        pad_main->SetBottomMargin(0.05);
+        pad_main->SetPad(0.0, pad_prop.at(1)-0.01, 1., pad_prop.at(0) + pad_prop.at(1));
+        pad_main->SetBottomMargin(0.02);
     } else {
         pad_main = (TPad *) c->cd(1);
     }
@@ -328,13 +328,13 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
     shared_ptr<TGraphAsymmErrors> band(TH1toGraph((TH1D*)MC->GetStack()->Last()));
     shared_ptr<TGraphAsymmErrors> statsys_band = stackConfig["MC"].makeBand();
 
-    band->SetFillStyle(1001);
+    band->SetFillStyle(3354);
     //band->SetFillStyle(1001);
-    band->SetFillColorAlpha(kGreen - 9, 0.5);
-    band->SetFillColorAlpha(kAzure + 1, 0.5);
-    statsys_band->SetFillStyle(3005);
+    //band->SetFillColorAlpha(kGreen - 9, 0.5);
+    band->SetFillColorAlpha(kAzure + 3, 0.5);
+    statsys_band->SetFillStyle(1001);
     //statsys_band->SetFillColorAlpha(kGreen + 3, 0.5);
-    statsys_band->SetFillColorAlpha(kBlue + 1, 0.5);
+    statsys_band->SetFillColorAlpha(kAzure + 10, 0.5);
 
 
     if (band) {
@@ -431,7 +431,7 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
         pad_ratio->cd();
         rat->SetStats(0);
         if (!mustBeBigger) {
-            rat->GetYaxis()->SetRangeUser(0.5, 1.501);
+            rat->GetYaxis()->SetRangeUser(0.4, 1.6);
             theMax = 1.6;
             theMin = 0.5;
         } else if (mustBeBigger == 1) {

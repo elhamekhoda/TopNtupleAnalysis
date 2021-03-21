@@ -44,6 +44,7 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('zjets', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_Zjets221'],
                   ('dijets', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_dijets'],
                   ('vv', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_VV'],
+                  ('ttV', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_ttbarV'],
                   ('zprime400', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_Zprime400'],
                   ('zprime500', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_Zprime500'],
                   ('zprime750', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_Zprime750'],
