@@ -421,15 +421,15 @@ class AnaTtresSL(Analysis):
         # make histograms
         self.add("yieldsPos", 1, 0.5, 1.5)
         self.add("yieldsNeg", 1, 0.5, 1.5)
-
-        self.add("lepPt", 100, 25, 525)
+        self.addVar("lepPt", array('i', [x for x in range(25, 550, 5)] + [555, 565, 575, 600, 625, 675, 725, 775, 825, 900, 1000]))
         self.add("lepEta", 20, -2.5, 2.5)
+        self.add("lepCharge", 5, -2.5, 2.5)
         self.add("lepPhi", 32, -3.2, 3.2)
         self.add("mwt", 20, 0, 200)
         self.add("closestJetDr", 20, 0, 2.0)
-        self.add("closestJetPt", 20, 0, 200)
+        self.addVar("closestJetPt", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 440, 500, 560, 620, 700, 800, 900, 1000])
         self.addVar("closeJetPt", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
-        self.addVar("largeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3])
+        self.addVar("largeJetPt", [300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500, 540, 580, 620, 660, 700, 800, 1e3, 1.2e3, 1.5e3, 2e3, 2.5e3])
         self.add("largeJetM", 30, 0, 300)
         self.add("largeJetPtMtt", 50, 0, 1)
         self.add("largeJetEta", 20, -2., 2.)
@@ -452,7 +452,7 @@ class AnaTtresSL(Analysis):
 
     def addTree(self):
         super(AnaTtresSL, self).addTree()
-        self.addBranch('th_label', array('i', [0]), isweight = False)
+        self.addBranch('ljet_label', array('i', [0]), isweight = False)
 
     # only apply the reco weights
     def getWeight(self, sel, s):
@@ -662,6 +662,7 @@ class AnaTtresSL(Analysis):
         self.h["lepPt"][syst].Fill(l.Pt()*1e-3, w)
         self.h["lepEta"][syst].Fill(l.Eta(), w)
         self.h["lepPhi"][syst].Fill(l.Phi(), w)
+        self.h["lepCharge"][syst].Fill(lQ, w)
         self.h["MET_phi"][syst].Fill(sel.met_phi, w)
         self.h["MET"][syst].Fill(sel.met_met*1e-3, w)
         self.h["nJets"][syst].Fill(sel.jet_pt.size(), w)
@@ -757,18 +758,19 @@ class AnaTtresSL(Analysis):
                     self.branches[syst]["me2XX"].push_back(self.me2XX)
                     self.branches[syst]["mttReco"].push_back(mtt)
                     self.branches_noclear[syst]["Btagcat"].value = sel.Btagcat
-                    self.branches_noclear[syst]["th_label"][0] = sel.ljet_label[goodJetIdx] if sel.ljet_pt.size() >= 1 else -999
-                    if hasattr(sel, "MC_id_me"):
-                        #pME = helpers.getTruth4momenta(sel)
-                        #truPttbar = pME[2]+pME[3]
-                        if sel.mcChannelNumber != 0:
-                           self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
-                        for i in xrange(sel.MC_id_me.size()):
-                            self.branches[syst]["id"].push_back(sel.MC_id_me[i])
-                            self.branches[syst]["px"].push_back(sel.MC_px_me[i])
-                            self.branches[syst]["py"].push_back(sel.MC_py_me[i])
-                            self.branches[syst]["pz"].push_back(sel.MC_pz_me[i])
-                            self.branches[syst]["e"].push_back(sel.MC_e_me[i])
+                    self.branches_noclear[syst]["ljet_label"][0] = sel.ljet_label[goodJetIdx] if sel.ljet_pt.size() >= 1 else -999
+                    # commenting out since we do not 
+                    # if hasattr(sel, "MC_id_me"):
+                        # #pME = helpers.getTruth4momenta(sel)
+                        # #truPttbar = pME[2]+pME[3]
+                        # if sel.mcChannelNumber != 0:
+                        #    self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
+                        # for i in xrange(sel.MC_id_me.size()):
+                        #     self.branches[syst]["id"].push_back(sel.MC_id_me[i])
+                        #     self.branches[syst]["px"].push_back(sel.MC_px_me[i])
+                        #     self.branches[syst]["py"].push_back(sel.MC_py_me[i])
+                        #     self.branches[syst]["pz"].push_back(sel.MC_pz_me[i])
+                        #     self.branches[syst]["e"].push_back(sel.MC_e_me[i])
                     ##################################
                     for observable in self.observables:
                         if isdata and observable.need_truth:
@@ -837,7 +839,7 @@ class AnaTtresSL(Analysis):
                     self.branches[syst]["me2XX"].push_back(self.me2XX)
                     self.branches[syst]["mttReco"].push_back(mtt)
                     self.branches_noclear[syst]["Btagcat"].value = self.TtresChi2.bcategory
-                    self.branches_noclear[syst]["th_label"][0] = sel.ljet_label[0] if sel.ljet_pt.size() >= 1 else -999
+                    self.branches_noclear[syst]["ljet_label"][0] = sel.ljet_label[0] if sel.ljet_pt.size() >= 1 else -999
                     
                     if sel.mcChannelNumber != 0:
                         if not (helpers.nameX!="" and sel.mcChannelNumber in [407200, 407201, 407202, 407203, 407204]) and hasattr(sel, "MC_ttbar_beforeFSR_m"):
@@ -846,12 +848,13 @@ class AnaTtresSL(Analysis):
                             pME = helpers.getTruth4momenta(sel)
                             truPttbar = pME[2]+pME[3]
                             self.branches[syst]["mttTrue"].push_back(truPttbar.M())
-                            for i in xrange(sel.MC_id_me.size()):
-                                self.branches[syst]["id"].push_back(sel.MC_id_me[i])
-                                self.branches[syst]["px"].push_back(sel.MC_px_me[i])
-                                self.branches[syst]["py"].push_back(sel.MC_py_me[i])
-                                self.branches[syst]["pz"].push_back(sel.MC_pz_me[i])
-                                self.branches[syst]["e"].push_back(sel.MC_e_me[i])
+                            # commenting out since we do not need these now
+                            # for i in xrange(sel.MC_id_me.size()):
+                            #     self.branches[syst]["id"].push_back(sel.MC_id_me[i])
+                            #     self.branches[syst]["px"].push_back(sel.MC_px_me[i])
+                            #     self.branches[syst]["py"].push_back(sel.MC_py_me[i])
+                            #     self.branches[syst]["pz"].push_back(sel.MC_pz_me[i])
+                            #     self.branches[syst]["e"].push_back(sel.MC_e_me[i])
                     
                     for observable in self.observables:
                         if isdata and observable.need_truth:

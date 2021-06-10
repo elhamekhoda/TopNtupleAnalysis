@@ -334,7 +334,8 @@ void drawDataMC(SampleSetConfiguration &stackConfig, const vector<std::string> &
     band->SetFillColorAlpha(kAzure + 3, 0.5);
     statsys_band->SetFillStyle(1001);
     //statsys_band->SetFillColorAlpha(kGreen + 3, 0.5);
-    statsys_band->SetFillColorAlpha(kAzure + 10, 0.5);
+    //statsys_band->SetFillColorAlpha(kAzure + 10, 0.5);
+    statsys_band->SetFillColorAlpha(kGray, 0.5);
 
 
     if (band) {

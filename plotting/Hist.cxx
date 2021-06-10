@@ -42,7 +42,7 @@ Hist::Hist(const string &name, const string &syst, const string &file) {
         throw string("Failed to get histogram in file ") + file + string(", trying to get ") + name + string(" for syst ") + syst;
     }
     if (file.find("data") == std::string::npos && file.find("Data") == std::string::npos &&
-            file.find("QCD") == std::string::npos && file.find("qcd") == std::string::npos && lumi_scale > 0)
+            file.find("QCD") == std::string::npos && file.find("dijets") == std::string::npos && file.find("qcd") == std::string::npos && lumi_scale > 0)
         h->Scale(lumi_scale * 1000);
     _size = 0;
     for (int i = 0; i <= h->GetNbinsX() + 1; ++i) {

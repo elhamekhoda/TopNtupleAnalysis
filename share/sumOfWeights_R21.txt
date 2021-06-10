@@ -1,1 +1,2 @@
              channel                  pdfName                pdfNumber              totalEvents             SumOfWeights                runNumber           periodFraction                   nFiles
+              410470                  nominal                       -1                    50000               36496244.0                      ALL              1.00000e+00                        1
