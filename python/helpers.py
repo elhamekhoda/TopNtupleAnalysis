@@ -567,10 +567,10 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel',
         A program can evaluate the input expression. eval(program) := (ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]
     """
     class RewriteName(ast.NodeTransformer):
-        _sf_format = 'ljet_topTagSF_{}'
+        _sf_format = 'ljet_tagSF_{}'
         def __init__(self, calib_taggers_expr = []):
             super(RewriteName, self).__init__()
-            self.calib_taggers_expr = [re.compile(r'^good_({})'.format(expr)) if isinstance(expr, str) else expr for expr in calib_taggers_expr]
+            self.calib_taggers_expr = [re.compile(r'^isTagged_({})'.format(expr)) if isinstance(expr, str) else expr for expr in calib_taggers_expr]
             self._sfbranch = ''
         def visit_Name(self, node):
             for matched in (prog.match(node.id) for prog in self.calib_taggers_expr):

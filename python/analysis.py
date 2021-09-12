@@ -495,7 +495,7 @@ class AnaTtresSL(Analysis):
 
         # W+jets C/A and HF syst. variations
         # assuming b-tagging
-        weight *= reweighting.WjetSystWeight.get_weight(sel, syst_sig)
+        #weight *= reweighting.WjetSystWeight.get_weight(sel, syst_sig)
 
         return weight
 
@@ -566,7 +566,7 @@ class AnaTtresSL(Analysis):
         # veto resolved event if it passes the boosted channel
         top_tagged = self.top_tagger.passes(sel)
         if ('be' in self.ch or 'bmu' in self.ch):
-            if not top_tagged:
+            if not top_tagged:   #To invert the cut remove `not`
                 return False
             Btagcat = self.top_tagger.bcategory
 
@@ -588,22 +588,23 @@ class AnaTtresSL(Analysis):
                 return False
 
         if sel.mcChannelNumber in helpers.listWjets22:
-            flag = sel.Wfilter_Sherpa_nT
-            if self.keep == 'bb':
-                if flag != 3 and flag != 4:
-                    return
-            if self.keep == 'cc':
-                if flag != 1:
-                    return
-            if self.keep == 'bbcc':
-                if flag != 3 and flag != 4 and flag != 1:
-                    return
-            if self.keep == 'c':
-                if flag != 2:
-                    return
-            if self.keep == 'l':
-                if flag != 5:
-                    return
+            if hasattr(sel, "Wfilter_Sherpa_nT"):
+                flag = sel.Wfilter_Sherpa_nT
+                if self.keep == 'bb':
+                    if flag != 3 and flag != 4:
+                        return
+                if self.keep == 'cc':
+                    if flag != 1:
+                        return
+                if self.keep == 'bbcc':
+                    if flag != 3 and flag != 4 and flag != 1:
+                        return
+                if self.keep == 'c':
+                    if flag != 2:
+                        return
+                if self.keep == 'l':
+                    if flag != 5:
+                        return
 
         if self.applyMET > 0 and not ('be' in self.ch or 'bmu' in self.ch):
             if sel.met_met*1e-3 < self.applyMET:
@@ -757,7 +758,7 @@ class AnaTtresSL(Analysis):
                     self.branches[syst]["me2SM"].push_back(self.me2SM)
                     self.branches[syst]["me2XX"].push_back(self.me2XX)
                     self.branches[syst]["mttReco"].push_back(mtt)
-                    self.branches_noclear[syst]["Btagcat"].value = sel.Btagcat
+                    self.branches_noclear[syst]["Btagcat"].value = sel.Btagcat_calojet
                     self.branches_noclear[syst]["ljet_label"][0] = sel.ljet_label[goodJetIdx] if sel.ljet_pt.size() >= 1 else -999
                     # commenting out since we do not 
                     # if hasattr(sel, "MC_id_me"):
@@ -884,7 +885,7 @@ class AnaTtresSL(Analysis):
                     self.h[observable.name][syst].Fill(values, w)
 
     def set_top_tagger(self, expr, num_thad = 1, strategy = 'obey', **kwds):
-        kwds.setdefault('do_truth_matching', True)
+        kwds.setdefault('do_truth_matching', False)
         super(AnaTtresSL, self).set_top_tagger(expr, num_thad = num_thad, strategy = strategy, **kwds)
         if hasattr(self, 'bot_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger

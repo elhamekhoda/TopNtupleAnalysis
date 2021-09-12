@@ -1108,7 +1108,7 @@ class PBSCluster(Cluster):
     running_tag = ['T','E','R']
     complete_tag = ['C']
     
-    maximum_submited_jobs = 300
+    maximum_submited_jobs = 200
 
     @multiple_try()
     def submit(self, prog, argument=[], cwd=None, stdout=None, stderr=None, log=None,
@@ -2197,10 +2197,18 @@ class CERNGrid(Cluster):
                 break
 
         pat = re.compile("INFO : succeeded. new jediTaskID=(\d+)",re.MULTILINE)
+        pat_react = re.compile("INFO : reactivation accepted. jediTaskID=(\d+)",re.MULTILINE)
+        pat_run = re.compile("ERROR : task submission failed. jediTaskID=(\d+)",re.MULTILINE)
         try:
             id = pat.search(output).groups()[0]
         except:
-            raise ClusterManagmentError, 'fail to submit to the cluster: \n%s' \
+            try:
+                id = pat_react.search(output).groups()[0]
+            except:
+                try:
+                    id = pat_run.search(output).groups()[0]
+                except:
+                    raise ClusterManagmentError, 'fail to submit to the cluster: \n%s' \
                                                                         % output 
         self.submitted += 1
         self.submitted_ids.append(id)
