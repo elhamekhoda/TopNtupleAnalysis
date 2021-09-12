@@ -27,18 +27,18 @@ class Run(object):
             os.makedirs(self.log_dir)
         self.analysis_type = analysis_type
         if analysis_type == 'AnaTtresSL':
-            self.selections = [('(be,     good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu,    good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re,     good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu,    good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(be2015, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu2015,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re2015, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu2015,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(be2016, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu2016,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re2016, good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu2016,good_dnn_inclusive80*angular_cuts, AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70)', '{channel}_{s.sample_name}{s.tag}.root')]
+            self.selections = [('(be,     isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu,    isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re,     isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu,    isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(be2015, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu2015,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re2015, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu2015,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(be2016, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu2016,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re2016, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu2016,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root')]
         elif analysis_type == 'AnaTtresFH':
             self.selections = [('(bFH    ,good_dnn_contained80             , AntiKtVR30Rmax4Rmin02TrackJets.DL1_FixedCutBEff77   )', '{channel}_{s.sample_name}{s.tag}.root')]
         self.analysis_exts = []
@@ -176,8 +176,14 @@ class Run(object):
                         job_id = self.cluster.get_identifier()
                         _submit_kwds = copy.deepcopy(submit_kwds)
                         if isinstance(self.cluster, clusters.CERNGrid):
+                            sysName = s.systematics[0].replace("CategoryReduction_","")
+                            sysName = sysName.replace("NonClosure_", "")
+                            sysName = sysName.replace("EtaIntercalibration", "eta")
+                            if 'nominal' in sysName:
+                                sysName = 'nominal'
                             _submit_kwds['argument'].extend(['--inDS', ','.join(s._list_dids())])
-                            _submit_kwds['argument'].extend(['--outDS',  'user.{CERN_USER}.{s.DSID[0]}.{s.physics_short}.{s.ami_tag[0]}.{r.tag}'.format(CERN_USER = samples.Sample._client.account, s = s, r = self)])
+                            #_submit_kwds['argument'].extend(['--outDS',  'user.{CERN_USER}.{s.DSID[0]}.{s.physics_short}.{s.ami_tag[0]}.{r.tag}'.format(CERN_USER = samples.Sample._client.account, s = s, r = self)])
+                            _submit_kwds['argument'].extend(['--outDS',  'user.{CERN_USER}.{s.DSID[0]}.{sysName}.{r.tag}'.format(CERN_USER = samples.Sample._client.account, s = s, r = self, sysName = sysName)])
                             _submit_kwds['argument'].extend(['--writeInputToTxt=IN:' + infile])
                             _submit_kwds['argument'].extend(['--outputs', ','.join(['outputs.tar.gz'] if write_kwds.get('compress_outputs', False) else [os.path.join(self.output_dir, job[1]) for job in jobs] + [infile])])
                         self.cluster.submit2(runfile,

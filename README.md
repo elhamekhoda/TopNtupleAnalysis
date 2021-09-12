@@ -4,16 +4,22 @@ This is a framework for reading flat ntuples generated from AnalysisTop, running
 Prerequisites
 -------------
 #### Optional
-* NNLO Reweighting: NNLOReweighter (Only works with __Altas CMake__)
+* Release 20 NNLO Reweighting: NNLOReweighter (Only works with __Altas CMake__)
 
     ```bash
     acm clone_project MultiBJets/NNLOReweighter
     ```
-* Release 21 NNLO QCD+NLO EWK Correction (Only works with __Altas CMake__)
+* Release 21 [NNLO QCD+NLO EWK Correction](https://gitlab.cern.ch/lserkin/TTbarNNLOReweighter) (Only works with __Altas CMake__)
 
     ```bash
     acm clone_project lserkin/TTbarNNLOReweighter
     ```
+  * Release 21 [NNLO QCD+NLO EWK Recursive Correction](https://gitlab.cern.ch/pinamont/TTbarNNLOReweighter) (Only works with __Altas CMake__)
+
+    ```bash
+    acm clone_project pinamont/TTbarNNLOReweighter
+    ```
+
 * Grid Access: HQTTtResonancesTools (Only works with __Altas CMake__)
 
     ```bash
@@ -118,11 +124,11 @@ optional arguments:
                         large-R jet for the hadronic-top reconstruction in the
                         boost selection. Simple logical operation are
                         supported. ONLY WORK IF YOU DON'T USE ANY TOP-TAGGER
-                        IN THE _OUTPUT_ SELECTIONS. (default: good)
+                        IN THE _OUTPUT_ SELECTIONS. (default: isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80)
   -b BOT_TAGGER, --bot-tagger BOT_TAGGER
                         "GLOBAL" b-quark tagger. ONLY WORK IF YOU DON'T USE
                         ANY BOT-TAGGER IN THE _OUTPUT_ SELECTIONS. (default:
-                        MV2c10_70)
+                        DL1r_FixedCutBEff77)
   --nevents NEVENTS     Number of events are going to be processed for test-
                         only purpose. (default: None)
   --do-tree             Make a mini-tree. (default: False)
@@ -135,10 +141,10 @@ SL/FH ttbar resonances anaylsis:
                             syntax is "-o (<topo><lep>[<b-cat>], [<top-tagger>,
                             [<bot-tagger>]]):<output_fname> [-o ... [-o ...]]".
                             See Also: `--top-tagger` (default:
-                            ['(re,good,MV2c10_70):hist_re.root',
-                            '(rmu,good,MV2c10_70):hist_rmu.root',
-                            '(be,good,MV2c10_70):hist_be.root',
-                            '(bmu,good,MV2c10_70):hist_bmu.root'])
+                            ['(re,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80,DL1r_FixedCutBEff77):hist_re.root',
+                            '(rmu,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80,DL1r_FixedCutBEff77):hist_rmu.root',
+                            '(be,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80,DL1r_FixedCutBEff77):hist_be.root',
+                            '(bmu,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80,DL1r_FixedCutBEff77):hist_bmu.root'])
     AnaTtresFH          Full-Hadronic ttbar resonances anaylsis
       -o [FILES], --output [FILES]
                             You can run more than 1 channels in the same time. The
@@ -165,10 +171,10 @@ Create your own scripts based on this! Some very nice examples can be found in `
      ```bash
      $SourceArea/TopNtupleAnalysis/python/makeHistograms.py AnaTtresSL \
      -f tna-input.txt
-     -o "(be , good, MV2c10_FixedCutBEff70):  be_zprime3000.root"
-     -o "(bmu, good, MV2c10_FixedCutBEff70): bmu_zprime3000.root"
-     -o "(re , good, MV2c10_FixedCutBEff70):  re_zprime3000.root"
-     -o "(rmu, good, MV2c10_FixedCutBEff70): rmu_zprime3000.root"
+     -o "(be , isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, DL1r_FixedCutBEff77):  be_zprime3000.root"
+     -o "(bmu, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, DL1r_FixedCutBEff77): bmu_zprime3000.root"
+     -o "(re , isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, DL1r_FixedCutBEff77):  re_zprime3000.root"
+     -o "(rmu, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, DL1r_FixedCutBEff77): rmu_zprime3000.root"
      ```
     __For full-hadronic channels:__
      ```bash
@@ -177,24 +183,18 @@ Create your own scripts based on this! Some very nice examples can be found in `
      -o "(bFH, good_contained80, MV2c10_FixedCutBEff70): bFH_zprime3000.root"
      ```
 
+#### Supported top-taggers
     Change the flags according to [Usage](#usage) to adapt to your needs.  
     For example, you can change `good` to any top-tagger as you like.  
     Currently available top-taggers are listed below:
 
     | Tagger                            | WP     | Flag                   |
     |:---------------------------------:|:------:|:----------------------:|
-    | DNNContainted                     | 50%Eff | `good_dnn_contained50` |
-    | DNNContainted                     | 80%Eff | `good_dnn_contained80` |
-    | DNNInclusive                      | 50%Eff | `good_dnn_inclusive50` |
-    | DNNInclusive                      | 80%Eff | `good_dnn_inclusive80` |
-    | BDT                               | 80%Eff | `good_bdt80`           |
-    | DNN Topo                          | 80%Eff | `good_topo80`          |
-    | $`m_{comb}-\tau^{wta}_{32}`$      | 50%Eff | `good_smooth_mt50`     |
-    | $`m_{comb}-\tau^{wta}_{32}`$      | 80%Eff | `good_smooth_mt80`     |
-    | $`\tau^{wta}_{32}-\sqrt{d_{23}}`$ | 50%Eff | `good_smooth_ts50`     |
-    | $`\tau^{wta}_{32}-\sqrt{d_{23}}`$ | 80%Eff | `good_smooth_ts80`     |
-    | $`Q_w-\tau^{wta}_{32}`$           | 50%Eff | `good_smooth_qt50`     |
-    | $`Q_w-\tau^{wta}_{32}`$           | 80%Eff | `good_smooth_qt80`     |
+    | DNNContainted                     | 50%Eff | `isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkContained50` |
+    | DNNContainted                     | 80%Eff | `isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkContained80` |
+    | DNNInclusive                      | 50%Eff | `isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive50` |
+    | DNNInclusive                      | 80%Eff | `isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80` |
+
 
 Auxiliary scripts
 -----------------

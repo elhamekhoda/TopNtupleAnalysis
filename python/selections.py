@@ -44,6 +44,7 @@ class TtresChi2(Selection):
         self.chi2 = ROOT.TopNtupleAnalysis.res_chi2()
         self.bcategorize(ev)
         return (0 <= self.chi2 < self.max_chi2)
+        #return (self.chi2  >= self.max_chi2)   # to reverse the  ChiSq cut
     def reset(self):
         self.mtt = -1
         self.mtl = -1
@@ -117,15 +118,16 @@ class BoostedTopTagger(Selection):
     index_id : {str}, optional
             which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"), where 'i' is the id of the item.
     """
-    WP2D = {'DNNTopQuarkContained80': {'short':'dnn_contained80', 'status': ('calibrated',)},
-            'DNNTopQuarkContained50': {'short':'dnn_contained50'},
-            'DNNTopQuarkInclusive80': {'short':'dnn_inclusive80'},
-            'DNNTopQuarkInclusive50': {'short':'dnn_inclusive50'},
+    WP2D = {'DNNTopQuarkContained80': {'short':'JSSWTopTaggerDNN_DNNTaggerTopQuarkContained80', 'status': ('calibrated',)},
+            'DNNTopQuarkContained50': {'short':'JSSWTopTaggerDNN_DNNTaggerTopQuarkContained50'},
+            'DNNTopQuarkInclusive80': {'short':'JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80', 'status': ('calibrated',)},
+            'DNNTopQuarkInclusive50': {'short':'JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive50'},
             }
     def __init__(self, _callable = None, num_top = 1, min_pt = 300000, strategy = 'obey', bot_tagger = None, do_truth_matching = False, leading_only = False, _SF_callable = None):
         logger.info("Select events contain at least {} hadronic-top candidate(s) with pt > {} MeV".format(num_top, min_pt))
         if not callable(_callable):
             logger.info('StrExpression: "{}"'.format(_callable))
+        self.tagger_name = str(_callable)
         self.num_top = num_top
         self.min_pt = min_pt
         self.leading_only = leading_only
@@ -162,7 +164,8 @@ class BoostedTopTagger(Selection):
     def _alg(self, ev):
         del self.ljet_istoptagged[:]
         for i in xrange(len(ev.ljet_pt)):
-            if ev.ljet_pt[i] < self.min_pt:
+            tagger_range_check = ord(eval('ev.ljet_passedRangeCheck_JSSWTopTaggerDNN_'+ self.tagger_name.split('*')[0].split('_')[2])[i])
+            if (ev.ljet_pt[i] < self.min_pt) or (tagger_range_check == 0) :
                 self.ljet_istoptagged.append(0)
             else:
                 self.ljet_istoptagged.append(self._top_tagger(ev, i))
@@ -185,7 +188,16 @@ class BoostedTopTagger(Selection):
             return 
         if self.num_top == 1:
             # In l+jets analysis, we have the b-tagging categories properly stored
-            self.bcategory = ev.Btagcat
+            if jet_type == 'calojet':
+                if hasattr(ev, "Btagcat_calojet"):
+                    self.bcategory = ev.Btagcat_calojet
+                else:
+                    self.bcategory = ev.Btagcat
+            elif jet_type == 'tjet':
+                if hasattr(ev, "Btagcat_tjet"):
+                    self.bcategory = ev.Btagcat_tjet
+                else:
+                    self.bcategory = ev.Btagcat
         else:
             # In fully hadronic channel, we need to do it manually
             btagCat = 0
@@ -206,6 +218,7 @@ class BoostedTopTagger(Selection):
         self._alg(ev)
         self.ljet_selected[:] = self.ljet_istoptagged[:]
         self.passed = sum(self.ljet_selected if not self.leading_only else self.ljet_selected[:self.num_top]) >= self.num_top
+        #self.passed = sum(self.ljet_selected if not self.leading_only else self.ljet_selected[:self.num_top]) < self.num_top
         if self._bot_tagger != None:
             self.bcategorize(ev)
         if self.do_truth_matching:
@@ -282,7 +295,8 @@ class BoostedTopTagger(Selection):
             direction = ''
             row_i = 0
         for i in xrange(len(ev.ljet_pt)):
-            if ev.ljet_pt[i] < self.min_pt:
+            tagger_range_check = ord(eval('ev.ljet_passedRangeCheck_JSSWTopTaggerDNN_'+ self.tagger_name.split('*')[0].split('_')[2])[i])
+            if tagger_range_check == 0:
                 self.ljet_toptagSF.append(1)
             else:
                 self.ljet_toptagSF.append(self._SF(ev, i, direction, row_i))
