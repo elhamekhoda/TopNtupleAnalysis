@@ -65,6 +65,7 @@ class Analysis(object):
         for systgroup in systgroups:
             self.histSuffixes.extend(s.hist_suffix for s in systgroup.systematics)
             self.treeSuffixes[systgroup.tree] = [s.hist_suffix for s in systgroup.systematics]
+        logger.info(self.histSuffixes)
         self._doTree = do_tree
         self.tName  = "mini"
         self.h = {}
@@ -105,6 +106,14 @@ class Analysis(object):
                     self.add(observable.name, *observable.binning)
                 else:
                     self.addVar(observable.name, observable.binning)
+
+    def addSumOfWeights(self, sumOfWeights):
+        self.h['sumOfWeights'] = {}
+        #self.fi.cd()
+        self.h['sumOfWeights'][''] = ROOT.TH1D('sumOfWeights', "", 1, 0.5, 1.5)
+        self.h['sumOfWeights'][''].Sumw2()
+        self.h['sumOfWeights'][''].SetDirectory(0)
+	self.h['sumOfWeights'][''].Fill(1, sumOfWeights)
 
     def unlock(self):
         self._locked = UNLOCKED
@@ -335,7 +344,7 @@ class Analysis(object):
             if self.ttbarHighOrder == 'Rel20EWK':
                 weight *= reweighting.EWKCorrection.get_weight(sel, syst_sig)
             # this compute the NNLO systematics to _only_ ttbar samples
-            weight *= reweighting.NNLOReweighting.get_weight(sel, syst_sig)
+#            weight *= reweighting.NNLOReweighting.get_weight(sel, syst_sig)
         # just add the toptagging SFs on top of those, as this Analysis implementation applies top-tagging
         weight *= self.top_tagger.scale_factor(sel, syst_sig)
         # just add the btagging SFs on top of those, as this Analysis implementation applies b-tagging
