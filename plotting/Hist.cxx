@@ -32,6 +32,7 @@ Hist::Hist(TH1 &h) {
 
 Hist::Hist(const string &name, const string &syst, const string &file) {
     TFile *f = new TFile(file.c_str());
+    std::cout << file.c_str() << std::endl;
     if (!f || !f->IsOpen()) {
         throw string("Failed to open file ") + file + string(", trying to get ") + name + string(" for syst ") + syst;
     }
@@ -44,6 +45,9 @@ Hist::Hist(const string &name, const string &syst, const string &file) {
     if (file.find("data") == std::string::npos && file.find("Data") == std::string::npos &&
             file.find("QCD") == std::string::npos && file.find("dijets") == std::string::npos && file.find("qcd") == std::string::npos && lumi_scale > 0)
         h->Scale(lumi_scale * 1000);
+    	TH1 *sumOfWeights = (TH1 *) f->Get("sumOfWeights");
+        h->Scale(1/sumOfWeights->Integral());
+	}
     _size = 0;
     for (int i = 0; i <= h->GetNbinsX() + 1; ++i) {
         _size++;
