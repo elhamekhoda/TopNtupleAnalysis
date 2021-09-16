@@ -109,11 +109,11 @@ class Analysis(object):
 
     def addSumOfWeights(self, sumOfWeights):
         self.h['sumOfWeights'] = {}
-        #self.fi.cd()
-        self.h['sumOfWeights'][''] = ROOT.TH1D('sumOfWeights', "", 1, 0.5, 1.5)
-        self.h['sumOfWeights'][''].Sumw2()
-        self.h['sumOfWeights'][''].SetDirectory(0)
-	self.h['sumOfWeights'][''].Fill(1, sumOfWeights)
+        for s in self.histSuffixes:
+            self.h['sumOfWeights'][s] = ROOT.TH1D('sumOfWeights', "", 1, 0.5, 1.5)
+            self.h['sumOfWeights'][s].Sumw2()
+            self.h['sumOfWeights'][s].SetDirectory(0)
+            self.h['sumOfWeights'][s].Fill(1, sumOfWeights)
 
     def unlock(self):
         self._locked = UNLOCKED
@@ -335,7 +335,7 @@ class Analysis(object):
         syst_sig = s.signature
         for item in s.weight_map:
             weight *= getattr(sel, item)
-        if self.ttbarHighOrder == 'NNLORecursive':
+        if self.ttbarHighOrder in ('NNLORecursive2d', 'NNLORecursive3d'):
             weight *= reweighting.TTbarNNLORecursiveReweighting.get_weight(sel, syst_sig)
         elif self.ttbarHighOrder == 'NNLOQCDNLOEWK':
             weight *= reweighting.TTbarNNLOReweighting.get_weight(sel, syst_sig)

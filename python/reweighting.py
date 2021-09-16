@@ -1,3 +1,4 @@
+import os
 import helpers
 import ROOT
 import wjets
@@ -148,35 +149,52 @@ class TTbarNNLOReweighting(Reweighter):
         if s == -1:
             return cls.REWEIGTER.GetTopPt_ScaleMin_Powheg_Pythia8_Nominal(truth_top_pt)
 
+
 class TTbarNNLORecursiveReweighting(Reweighter):
+    # Reweighter to be used with https://gitlab.cern.ch/pinamont/TTbarNNLOReweighter/-/tree/master
     RUN_NUMBERS = [410471, 410470]
     RUN_NUMBERS += [410633, 410634, 410635, 410636, 410637] # mttsliced nonallhad
     RUN_NUMBERS += [410284, 410285, 410286, 410287, 410288] # mttsliced allhad
-    SYSTS = {'ttNNLOQCDNLOEWK__1up': 1, # mu_R/F=2.0
-             'ttNNLOQCDNLOEWK__1down': -1, # mu_R/F = 0.5
+    RW_LISTS = {
+        2: ["TTbarM", "TopPt", "TopPt", "TTbarM", "TopPt", "TopPt"],
+        3:  ["TTbarPt", "TTbarM", "TopPt", "TopPt", "TTbarPt", "TTbarM", "TopPt", "TopPt", "TTbarPt", "TTbarM", "TopPt", "TopPt"]
+    }
+    SYSTS = {'ttNNLOrec_toppt__1up': 1,
+             'ttNNLOrec_toppt__1down': -1,
+              'ttNNLOrec_ttmass__1up': 2,
+              'ttNNLOrec_ttmass__1down': -2,
+              'ttNNLOrec_ttpt__1up': 3,
+              'ttNNLOrec_ttpt__1down': -3,
              '*': 0
              }
 
     @classmethod
-    def init(cls, mcChannelNumber):
+    def init(cls, mcChannelNumber, D=2):
         if mcChannelNumber not in cls.RUN_NUMBERS:
             logger.info('<{}> is not a registered ttbar sample. TTbarNNLORecursiveReweighting will not be activated.'.format(mcChannelNumber))
         else:
             logger.info('<{}> is a registered ttbar sample. TTbarNNLORecursiveReweighting will be activated.'.format(mcChannelNumber))
             logger.info('Note that this is considered as a correction, i.e. change the nominal values')
-            if mcChannelNumber in [410284, 410285, 410286, 410287, 410288]:
-                mcChannelNumber = 410471
-            elif mcChannelNumber in [410633, 410634, 410635, 410636, 410637]:
-                mcChannelNumber = 410470
 
-            cls.NOMINAL_REWEIGTER = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(0, 0)
-            cls.NOMINAL_REWEIGTER.Init()
+        systs = [0, 1, -1, 2, -2]
+        if D == 3:
+            systs += [3, -3]
 
-            cls.UP_REWEIGTER = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(0, 1)
-            cls.UP_REWEIGTER.Init()
-
-            cls.DOWN_REWEIGTER = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(0, -1)
-            cls.DOWN_REWEIGTER.Init()
+        # Add reweighters to dictionary, and properly set the data path and suffixes depending on the reweighting dimensionality
+        cls.reweighters = {}
+        for syst in systs:
+            cls.reweighters[syst] = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(0, syst, False)
+        rw_path = helpers.find_dir_recursive(os.path.dirname(os.path.realpath(__file__)), "TTbarNNLOReweighter")
+        for reweighter in cls.reweighters.values():
+            if D == 2:
+                reweighter.SetInputDirectory(os.path.join(rw_path, 'data_2d'))
+                reweighter.SetInputSuffix("_2iter_2021_1e8")
+            elif D == 3:
+                reweighter.SetInputDirectory(os.path.join(rw_path, 'data'))
+                reweighter.SetInputSuffix("_MATRIX_3iter_1e8")
+            for rw in cls.RW_LISTS[D]:
+                reweighter.AddRew(rw)
+            reweighter.Init()
 
     @classmethod
     def get_SF(cls, ev, s):
@@ -188,12 +206,9 @@ class TTbarNNLORecursiveReweighting(Reweighter):
         truth_antitop_pt = ev.MC_tbar_afterFSR_SC_pt*1e-3
         truth_ttbar_m = ev.MC_ttbar_afterFSR_SC_m*1e-3
         truth_ttbar_pt = ev.MC_ttbar_afterFSR_SC_pt*1e-3
-        if s == 0:
-            return cls.NOMINAL_REWEIGTER.GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt)
-        if s == 1:
-            return cls.UP_REWEIGHTER.GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt)
-        if s == -1:
-            return cls.DOWN_REWEIGHTER.GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt)
+        return cls.reweighters[s].GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt)
+
+
 
 class WjetSystWeight(Reweighter):
     '''

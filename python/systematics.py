@@ -382,6 +382,15 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
                 'ttNNLO_topPtDiff__1up', 
                 'ttNNLO_topPt__1up',
                 ])
+        elif ttbarHighOrderCorrection in ('NNLORecursive2d', 'NNLORecursive3d'):
+            systList.extend(['ttNNLOrec_toppt__1up',
+                             'ttNNLOrec_toppt__1down',
+                             'ttNNLOrec_ttmass__1up',
+                             'ttNNLOrec_ttmass__1down',
+                             ])
+            if ttbarHighOrderCorrection == 'NNLORecursive3d':
+                systList.extend(['ttNNLOrec_ttpt__1up',
+                                 'ttNNLOrec_ttpt__1down'])
         if isWjets:
             systList.append('CAallMCAsym')
             systList.append('wnorm__1up')
@@ -534,7 +543,7 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
             s = _syst(syst_name)[1]
         ret.append(s)
 
-        s.weight_map[:] =  [w for w in s.weight_map if not (not DO_PRW and 'prw' in w)]
+        s.weight_map[:] = [w for w in s.weight_map if not (not DO_PRW and 'prw' in w)]
     assert len(ret) == len(systList)
     logger.info("--> Setup to run over following systs. {}".format(systList))
     return ret
@@ -557,6 +566,12 @@ ALLSYSTS = OrderedDict((
     _syst('ttEWK__1down', 'nominal'),
     _syst('ttNNLOQCDNLOEWK__1up', 'nominal'),
     _syst('ttNNLOQCDNLOEWK__1down', 'nominal'),
+    _syst('ttNNLOrec_toppt__1up', 'nominal'),
+    _syst('ttNNLOrec_toppt__1down', 'nominal'),
+    _syst('ttNNLOrec_ttmass__1up', 'nominal'),
+    _syst('ttNNLOrec_ttmass__1down', 'nominal'),
+    _syst('ttNNLOrec_ttpt__1up', 'nominal'),
+    _syst('ttNNLOrec_ttpt__1down', 'nominal'),
     # top-tagging efficiency: Dijet_Modelling
     _syst('toptagSF_0__1down', 'nominal'), 
     _syst('toptagSF_0__1up',   'nominal'), 

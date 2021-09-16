@@ -30,6 +30,23 @@ import logging
 msgfmt = '%(asctime)s %(levelname)-7s %(name)-35s %(message)s'
 datefmt = '%H:%M:%S'
 
+
+def find_dir_recursive(start, to_find, count=4):
+    """
+    :param start: The starting directory
+    :param to_find: The basename of the directory to find
+    :param count: How many steps up to search in parent directories
+    :return: The path of the found directory, if it is found
+    """
+    if count == 0:
+        return None
+    for root, dirs, files in os.walk(start):
+        if os.path.isdir(root) and os.path.basename(root) == to_find:
+            return root
+
+    return find_dir_recursive(os.path.dirname(start), to_find, count - 1)
+
+
 def getLogger(name = None, level = logging.DEBUG):
     logger = logging.getLogger(name)
     try:

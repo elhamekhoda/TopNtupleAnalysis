@@ -85,11 +85,10 @@ optional arguments:
   -P PDFS, --pdf PDFS   Which PDFs to reweight to. (default: )
   -Q CHANNEL, --qcd CHANNEL
                         Apply QCD weights? (default: False)
-  --ttbar-high-order {Rel20EWK,NNLOQCDNLOEWK,NNLORecursive,none}
+  --ttbar-high-order {Rel20EWK,NNLOQCDNLOEWK,NNLORecursive2d,NNLORecursive3d,none}
                         High Order Correction applied to registered ttbar
-                        sample. NNLORecursive requires the checking out
-			of the [TTbarNNLOReweighter](https://gitlab.cern.ch/pinamont/TTbarNNLOReweighter) package.
-			(default: NNLOQCDNLOEWK)
+                        sample. NNLORecursive options require checking out TTbarNNLOReweighter @ https://gitlab.cern.ch/pinamont/TTbarNNLOReweighter.
+			(default: NNLORecursive2d)
   -N, --noMttSlices     If set, stop vetoing high mtt events in 410000 sample.
                         (default: False)
   -M CUT, --applyMET CUT
