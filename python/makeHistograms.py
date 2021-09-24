@@ -6,7 +6,6 @@ import csv
 import analysis
 import reweighting
 import systematics
-import sumWeights
 
 # ROOT.ROOT.EnableImplicitMT(4) # Not sure if it works
 logger = helpers.getLogger('TopNtupleAnalysis.makeHistograms')
@@ -22,6 +21,20 @@ def main(parallel = False):
     pdfList = options.pdf.split(',')
     Xsec = {}
 
+    InvSumOfWeights = {} # map of DSID to inversed sum of weights
+
+    fname_pat = "sumOfWeights{}_R21.txt"
+    if not options.data:
+        for t in ('', 'syst', 'systaf2', 'pdf', 'wjpdf'):
+            if options.pdf == '' and t in ('pdf', 'wjpdf'):
+                continue
+            fname = os.path.join(helpers.data_path, fname_pat.format(t))
+            InvSumOfWeights.update(helpers.readSumOfWeight(fname))
+        if {} == InvSumOfWeights:
+            raise IOError('TotalMCWeights files not found. Did you create them first?\nUse samples.write_totalweight_of_samples() to create TotalMCWeights files.')
+        # print InvSumOfWeights
+
+
     logger.info("Loading xsec.")
     helpers.loadXsec(Xsec, "dev/AnalysisTop/TopDataPreparation/XSection-MC15-13TeV.data")
     Xsec[0] = 0 # No idea why there are these events in dijets samples @yu-heng
@@ -31,6 +44,33 @@ def main(parallel = False):
     doEWK = False
     isTtbar = False
     isSingleTop = False
+
+    @helpers.lru_cache(maxsize=100)
+    def _common_mc_weight(mc_weight, channel, runNumber, suffix):
+        weight = 1
+        if not (isWjets and options.systs == 'pdf' and 'pdf_' in suffix): # use internal weights in this case
+            weight *= mc_weight
+        weight *= Xsec[channel]
+        if (options.systs != 'pdf') or 'pdf_' not in suffix: #'pdf_' in suffix:
+            pdfName, pdfNumber = 'nominal', '-1'
+        else:
+            pdfName, pdfNumber = suffix.split('_', 1)[1].rsplit('_', 1)
+        try:
+            weight *= InvSumOfWeights[channel][runNumber][pdfName][pdfNumber]
+        except:
+            raise NameError('Could not find <DSID: {0}, PERIOD: {1}> in DICT("SumOfWeights").'.format(channel))
+        return weight
+
+    def common_mc_weight(mc_weight, channel, runNumber, suffix):
+        keys = InvSumOfWeights[channel].keys()
+        if None in keys:
+            runNumber = None
+        else:
+            for low, high in keys:
+                if low <= runNumber <= high:
+                    runNumber = (low, high)
+                    break
+        return _common_mc_weight(mc_weight, channel, runNumber, suffix)
 
     logger.info("Loading first event")
     mt_load = ROOT.TChain("nominal")
@@ -44,11 +84,9 @@ def main(parallel = False):
         isTtbar = True
     if sel.mcChannelNumber in [410011, 410012, 410013, 410014, 410015, 410016, 410025, 410026]:
         isSingleTop = True
-    weightsDict = sumWeights.sumWeights(options.files, ['']*len(options.files), '', mode='return')
-    sumOfWeights = sum(sample["SumOfWeights"] for sample in weightsDict)
-    logger.info("Calculated sum of weights: {}".format(sumOfWeights))
+
     # systematics list
-    systList = systematics.get_systs(options.systs, isTtbar, isSingleTop, isWjets, options.EFT, pdfList, weightsDict, options.ttbar_high_order, (options.qcd != "False"), analysis = options.analysis)
+    systList = systematics.get_systs(options.systs, isTtbar, isSingleTop, isWjets, options.EFT, pdfList, InvSumOfWeights, options.ttbar_high_order, (options.qcd != "False"), analysis = options.analysis)
     systgroups = list(systematics.grouped_systs(systList))
     if '\;' in options.output:
         logger.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
@@ -122,13 +160,11 @@ def main(parallel = False):
         logger.info("2HDM setup: mH=%g, mA=%g, sba=%g, tanb=%g, type=%g" % (scalarMH, scalarMA, scalarSBA, scalarTANB, scalarTYPE))
     for k in channels:
         ch, top_tagger, bot_tagger, aux_selector = k
-        logger.info(ch)
         analysisCode[k] = anaClass(ch, systgroups, channels[k])
         analysisCode[k].doTree = do_tree
         analysisCode[k].keep = options.WjetsHF
         analysisCode[k].applyQCD = False
         analysisCode[k].ttbarHighOrder = options.ttbar_high_order
-	analysisCode[k].addSumOfWeights(sumOfWeights)
         if isinstance(analysisCode[k], analysis.AnaTtresFH):
             analysisCode[k].blinded = options.blinding
         if options.qcd != "False":
@@ -189,10 +225,8 @@ def main(parallel = False):
                 # common part of the weight
                 if options.data:
                     weight = 1.
-		elif isWjets and options.systs == 'pdf' and 'pdf_' in suffix:
-		    weight = Xsec[sel.mcChannelNumber]
                 else:
-                    weight = Xsec[sel.mcChannelNumber] * sel.weight_mc
+                    weight = common_mc_weight(sel.weight_mc, sel.mcChannelNumber, sel.randomRunNumber, suffix if 'pdf_' in suffix else '')
 
                 for ana in analysisCode.itervalues():
                     if not ana.selectChannel(sel, suffix):
