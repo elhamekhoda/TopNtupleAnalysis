@@ -56,8 +56,8 @@ void TopNtupleAnalysisUtils::initWrapper(bool dt) {
     std::cout << data_dir;
 // 4jets    
      mm_e[1*10+4]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e, 
-             data_dir+"QCDestimation/RATES_2015_2016/hist_real_1btag_4jets_2018_re.root",     // real2015+2016+2017+2018 
-             data_dir+"QCDestimation/RATES_2015_2016/hist_fake_1btag_4jets_2018_re.root");   // fake2015+2016+2017+2018
+             data_dir+"QCDestimation/RATES_2015_2016/hist_real_1btag_4jets_run2_re.root",     // real2015+2016+2017+2018 
+             data_dir+"QCDestimation/RATES_2015_2016/hist_fake_1btag_4jets_run2_re.root");   // fake2015+2016+2017+2018
 
      mm_mu[1*10+4] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu, 
              data_dir+"QCDestimation/RATES_2015_2016/hist_real_1btag_4jets_run2r145_rmu.root",   // real2015+2016+2017+2018
@@ -66,8 +66,8 @@ void TopNtupleAnalysisUtils::initWrapper(bool dt) {
 //3jets-Ecxlusive
 
  mm_e[1*10+3]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e,     
-             data_dir+"QCDestimation/RATES_2015_2016/hist_real_1btag_4jets_2018_re.root",     // real2015+2016+2017+2018 
-             data_dir+"QCDestimation/RATES_2015_2016/hist_fake_1btag_3jets_2018_re.root");   // fake2015+2016+2017+2018
+             data_dir+"QCDestimation/RATES_2015_2016/hist_real_1btag_4jets_run2_re.root",     // real2015+2016+2017+2018 
+             data_dir+"QCDestimation/RATES_2015_2016/hist_fake_1btag_3jets_run2_ree.root");   // fake2015+2016+2017+2018
 
  mm_mu[1*10+3] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu,       
              data_dir+"QCDestimation/RATES_2015_2016/hist_real_1btag_4jets_run2r145_rmu.root",   // real2015+2016+2017+2018
@@ -77,7 +77,7 @@ void TopNtupleAnalysisUtils::initWrapper(bool dt) {
 
  mm_e[1*10+2]  = new MMUtils(1, runMM_etaCorr_e, runMM_DRCorr_e,     
              data_dir+"QCDestimation/RATES_2015_2016/hist_real_1btag_4jets_2018_re.root",     // real2015+2016+2017+2018 
-             data_dir+"QCDestimation/RATES_2015_2016/hist_fake_1btag_2jets_2018_re.root");   // fake2015+2016+2017+2018
+             data_dir+"QCDestimation/RATES_2015_2016/hist_fake_1btag_2jets_run2_ree.root");   // fake2015+2016+2017+2018
 
  mm_mu[1*10+2] = new MMUtils(1, runMM_etaCorr_mu, runMM_DRCorr_mu,       
              data_dir+"QCDestimation/RATES_2015_2016/hist_real_1btag_4jets_run2r145_rmu.root",   // real2015+2016+2017+2018
