@@ -388,16 +388,14 @@ void MMUtils::getRatesResolvedEl(float &realRate, float &realRate_err, float &fa
     if(m_isBtagged==1) {
 
       if(closejl_DR >= 0.4) {
-              if(lepPt_min >= 70 && lepPt_min < 100 && topoet_min >= 6)   topoet_min = 4;
-              if(lepPt_min >= 100) {get2Drates(fakeRate, fakeRate_err, fake_map1_resolved_e_2016_hDR, lepPt_min, lepPt_min);}
-              else{    get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_2016_hDR, lepPt_min, topoet_min);}
- 
+              if(lepPt_min >= 35 && lepPt_min < 40 && topoet_min >= 10 && topoet_min < 30)   topoet_min = 7;
+                       get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_2016_hDR, lepPt_min, topoet_min);
 
       }
       else{
-              get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_2016_lDR, lepPt_min, topoet_min);
-
-      }
+             if(lepPt_min >= 100) {get2Drates(fakeRate, fakeRate_err, fake_map1_resolved_e_2016_lDR, lepPt_min, lepPt_min);}
+             if(lepPt_min < 100) {get2Drates(fakeRate, fakeRate_err, fake_map_resolved_e_2016_lDR, lepPt_min, topoet_min);} 
+          }
     }
    return;
 }
