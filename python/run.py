@@ -27,18 +27,18 @@ class Run(object):
             os.makedirs(self.log_dir)
         self.analysis_type = analysis_type
         if analysis_type == 'AnaTtresSL':
-            self.selections = [('(be,     isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu,    isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re,     isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu,    isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(be2015, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu2015,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re2015, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu2015,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(be2016, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(bmu2016,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(re2016, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
-                               ('(rmu2016,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root')]
+            self.selections = [('(be,     isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu,    isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re,     isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu,    isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(be2015, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu2015,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re2015, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu2015,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(be2016, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(bmu2016,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(re2016, isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root'),
+                               ('(rmu2016,isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cut, AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77)', '{channel}_{s.sample_name}{s.tag}.root')]
         elif analysis_type == 'AnaTtresFH':
             self.selections = [('(bFH    ,good_dnn_contained80             , AntiKtVR30Rmax4Rmin02TrackJets.DL1_FixedCutBEff77   )', '{channel}_{s.sample_name}{s.tag}.root')]
         self.analysis_exts = []

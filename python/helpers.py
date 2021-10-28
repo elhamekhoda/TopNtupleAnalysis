@@ -578,6 +578,9 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel',
         which translates "(isTopTagged_50|isTopTagged_80)&isWTagged_80" to "(ljet_isTopTagged_50[i]|isTopTagged_80[i])&isWTagged_80[i]"),
         where 'i' is the id of the item.
 
+    top-tagging SF structure in the ntuple: vector < vector < float > >
+        Shape : (njets,36)
+        For each jet : {toptagSF_0__1up,toptagSF_0__1down,toptagSF_1__1up,toptagSF_1__1down,...}
     Returns
     -------
     program
@@ -605,9 +608,12 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel',
         def get_sfbranch(self, systematic_variation = ''):
             if self._sfbranch != '':
                 attr = ast.Attribute(value=ast.Name(id=tree_name, ctx=ast.Load()), attr=self._sfbranch+systematic_variation, ctx=ast.Load())
-                if systematic_variation != '':
-                    attr = ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id='var_row', ctx=ast.Load())), ctx=ast.Load())
                 node = ast.Expression(body=ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id=index_id, ctx=ast.Load())), ctx=ast.Load()))
+                if systematic_variation != '':
+                    attr = ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id=index_id, ctx=ast.Load())), ctx=ast.Load())
+                    node = ast.Expression(body=ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id='var_row', ctx=ast.Load())), ctx=ast.Load()))
+                else:
+                    node = ast.Expression(body=ast.Subscript(value=attr, slice=ast.Index(value=ast.Name(id=index_id, ctx=ast.Load())), ctx=ast.Load()))
             else:
                 node = ast.Expression(body = ast.Num(1))
             ast.fix_missing_locations(node)
@@ -620,8 +626,8 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel',
     node_renamer.visit(expr)
 
     expr_sf = node_renamer.get_sfbranch()
-    expr_sf_vars__1up = node_renamer.get_sfbranch('_effvars__1up')
-    expr_sf_vars__1down = node_renamer.get_sfbranch('_effvars__1down')
+    expr_sf_vars__1up = node_renamer.get_sfbranch('_variations')
+    expr_sf_vars__1down = node_renamer.get_sfbranch('_variations')
     if debug_mode:
         try:
             import astunparse
@@ -638,8 +644,8 @@ def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel',
 
     tag = lambda ev, i: eval(compile(expr, '<top-tagger>', 'eval'), {'char2int': char2int, 'sel': ev, 'i': i})
     sf = lambda ev, i: eval(compile(expr_sf, '<top-tagger-SF>', 'eval'), {'sel': ev, 'i': i})
-    sf_effvars__1up = lambda ev, var_row, i: eval(compile(expr_sf_vars__1up, '<top-tagger-SF>', 'eval'), {'sel': ev, 'var_row': var_row, 'i': i})
-    sf_effvars__1down = lambda ev, var_row, i: eval(compile(expr_sf_vars__1down, '<top-tagger-SF>', 'eval'), {'sel': ev, 'var_row': var_row, 'i': i})
+    sf_effvars__1up = lambda ev, var_row, i: eval(compile(expr_sf_vars__1up, '<top-tagger-SF>', 'eval'), {'sel': ev, 'var_row': 2*var_row, 'i': i})
+    sf_effvars__1down = lambda ev, var_row, i: eval(compile(expr_sf_vars__1down, '<top-tagger-SF>', 'eval'), {'sel': ev, 'var_row': 2*var_row+1, 'i': i})
     def SF(ev, i, direction = '', var_row = 0):
         if direction == '':
             return sf(ev, i)
