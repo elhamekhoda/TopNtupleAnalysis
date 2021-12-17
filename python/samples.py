@@ -39,6 +39,11 @@ MAP_TO_SAMPLES = {# (<sample>, <derivation>): <physics_short>
                   ('qcde', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4', 'Data16_13TeV_25ns_EXOT4'],
                   ('qcdmu', 'EXOT4'): ['Data15_13TeV_25ns_EXOT4','Data16_13TeV_25ns_EXOT4'],
                   ('tt', 'EXOT4'):['MC16a_13TeV_25ns_FS_EXOT4_ttbar_nonallhad'],
+                  ('tt_af2', 'EXOT4'):['MC16a_13TeV_25ns_FS_EXOT4_ttbar_nonallhad_af2'],
+                  ('tt_had', 'EXOT4'):['MC16a_13TeV_25ns_FS_EXOT4_ttbar_nonallhad_had'],
+                  ('tt_hdamp', 'EXOT4'):['MC16a_13TeV_25ns_FS_EXOT4_ttbar_nonallhad_hdamp'],
+                  ('tt_hs', 'EXOT4'):['MC16a_13TeV_25ns_FS_EXOT4_ttbar_nonallhad_HS'],
+                  ('tt_meoff', 'TOPQ1'):['MC16a_13TeV_25ns_FS_EXOT4_ttbar_nonallhad_MECoff'],
                   ('tt_mttsliced', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_ttbar_nonallhad', 'MC16a_13TeV_25ns_FS_EXOT4_ttbar_nonallhad_mttsliced'],
                   ('singletop', 'EXOT4'):['MC16a_13TeV_25ns_FS_EXOT4_singletop'],
                   ('zjets', 'EXOT4'): ['MC16a_13TeV_25ns_FS_EXOT4_Zjets221'],
@@ -134,6 +139,7 @@ class Sample(object):
                 if set(physics_short.split(',')).issubset(obj.datasets):
                     sample.name = dataset_name
                     sample.datasets.extend(obj.datasets)
+                    print "dataset_name: ", dataset_name
                     return sample
         else:
             if not isinstance(obj, str):

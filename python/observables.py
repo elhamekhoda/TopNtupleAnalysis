@@ -107,14 +107,6 @@ class _Observable(object):
 # Observable("MC_b_from_tbar", do = ['tree'], only = ['bFH'], style = 'foreach', dtype = 'ROOT::Math::PtEtaPhiMVector', need_truth = True,
 #            script = """[(sel.MC_b_from_tbar_pt, sel.MC_b_from_tbar_eta, sel.MC_b_from_tbar_phi, sel.MC_b_from_tbar_m)]""").queue()
 
-Observable("lep_pt", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l.Pt()*1e-3""").queue()
-Observable("lep_eta", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l.Eta()""").queue()
-Observable("lep_phi", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l.Phi()""").queue()
-Observable("lep_m", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l.M()*1e-3""").queue()
-Observable("lep_true_type", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l_true_type""").queue()
-Observable("lep_true_origin", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l_true_origin""").queue()
-Observable("lep_charge", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """lQ""").queue()
-
 
 # Observable("jet_pt", do = ['tree'], style = 'foreach', script = """(pt*1e-3 for pt in sel.jet_pt)""").queue()
 # Observable("jet_eta", do = ['tree'], style = 'foreach', script = """(eta for eta in sel.jet_eta)""").queue()
@@ -154,32 +146,43 @@ Observable("lep_charge", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], scrip
 # Observable("ljet_istoptag_dnn_inclusive80", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(x for x in sel.ljet_good_dnn_inclusive80)""").queue()
 
 ### Basic Object ###
-Observable("met_met", do = ['tree'],   script = """sel.met_met*1e-3""").queue()
-Observable("met_phi", do = ['tree'],   script = """sel.met_phi""").queue()
-Observable("mwt", do = ['tree'],   script = """math.sqrt(2*l.Pt()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3""").queue()
-Observable("jet_N", do = ['tree'], style = 'single', dtype = int,  script = """sel.jet_pt.size()""").queue()
-Observable("ljet_N", do = ['tree'], style = 'single', dtype = int,  script = """sel.ljet_pt.size()""").queue()
-Observable("tjet_N", do = ['tree'], style = 'single', dtype = int,  script = """sel.tjet_pt.size()""").queue()
-Observable("btjet_N", do = ['tree'], style = 'single', dtype = int,  script = """sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in analysis.bot_tagger.tjet_isbtagged)""").queue()
+# MET and jet  variables
+# Observable("met_met", do = ['tree'],   script = """sel.met_met*1e-3""").queue()
+# Observable("met_phi", do = ['tree'],   script = """sel.met_phi""").queue()
+# Observable("mwt", do = ['tree'],   script = """math.sqrt(2*l.Pt()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3""").queue()
+# Observable("jet_N", do = ['tree'], style = 'single', dtype = int,  script = """sel.jet_pt.size()""").queue()
+# Observable("ljet_N", do = ['tree'], style = 'single', dtype = int,  script = """sel.ljet_pt.size()""").queue()
+# Observable("tjet_N", do = ['tree'], style = 'single', dtype = int,  script = """sel.tjet_pt.size()""").queue()
+# Observable("btjet_N", do = ['tree'], style = 'single', dtype = int,  script = """sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in analysis.bot_tagger.tjet_isbtagged)""").queue()
 
-Observable("ljet_pt", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """lj.Pt()*1e-3""").queue()
-Observable("ljet_eta", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """lj.Eta()""").queue()
-Observable("ljet_phi", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """lj.Phi()""").queue()
-Observable("ljet_m", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """lj.M()*1e-3""").queue()
-#large-R jet substructure variables
-Observable("ljet_tau21_wta", do = ['tree'], only = ['be', 'bmu'], script = """sel.ljet_tau21_wta[goodJetIdx] if goodJetIdx != -1 else -999""").queue()
-Observable("ljet_tau32_wta", do = ['tree'], only = ['be', 'bmu'], script = """sel.ljet_tau32_wta[goodJetIdx] if goodJetIdx != -1 else -999""").queue()
-Observable("ljet_tau21_wta", do = ['tree'], only = ['re', 'rmu'], script = """sel.ljet_tau21_wta[0] if len(sel.ljet_tau21_wta) != 0 else -999""").queue()
-Observable("ljet_tau32_wta", do = ['tree'], only = ['re', 'rmu'], script = """sel.ljet_tau32_wta[0] if len(sel.ljet_tau32_wta) != 0 else -999""").queue()
+# Observable("ljet_pt", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """lj.Pt()*1e-3""").queue()
+# Observable("ljet_eta", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """lj.Eta()""").queue()
+# Observable("ljet_phi", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """lj.Phi()""").queue()
+# Observable("ljet_m", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """lj.M()*1e-3""").queue()
+# #large-R jet substructure variables
+# Observable("ljet_tau21_wta", do = ['tree'], only = ['be', 'bmu'], script = """sel.ljet_tau21_wta[goodJetIdx] if goodJetIdx != -1 else -999""").queue()
+# Observable("ljet_tau32_wta", do = ['tree'], only = ['be', 'bmu'], script = """sel.ljet_tau32_wta[goodJetIdx] if goodJetIdx != -1 else -999""").queue()
+# Observable("ljet_tau21_wta", do = ['tree'], only = ['re', 'rmu'], script = """sel.ljet_tau21_wta[0] if len(sel.ljet_tau21_wta) != 0 else -999""").queue()
+# Observable("ljet_tau32_wta", do = ['tree'], only = ['re', 'rmu'], script = """sel.ljet_tau32_wta[0] if len(sel.ljet_tau32_wta) != 0 else -999""").queue()
 
-Observable("closestJetDr", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """closestJetDr""").queue()
-Observable("closestJetPt", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """closestJetPt*1e-3""").queue()
+# Observable("closestJetDr", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """closestJetDr""").queue()
+# Observable("closestJetPt", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """closestJetPt*1e-3""").queue()
 
-Observable("mtlep_boo", do = ['tree'], only = ['be', 'bmu'], script = """tlep.M()*1e-3""").queue()
-Observable("mtlep_res", do = ['tree'], only = ['re', 'rmu'], script = """analysis.TtresChi2.mtl""").queue()
-Observable("mthad_res", do = ['tree'], only = ['re', 'rmu'], script = """analysis.TtresChi2.mth""").queue()
-Observable("mwhad_res", do = ['tree'], only = ['re', 'rmu'], script = """analysis.TtresChi2.mwh""").queue()
-Observable("chi2", do = ['tree'], only = ['re','rmu'],   script = """analysis.TtresChi2.chi2""").queue()
+# # Lepton variables
+# Observable("lep_pt", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l.Pt()*1e-3""").queue()
+# Observable("lep_eta", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l.Eta()""").queue()
+# Observable("lep_phi", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l.Phi()""").queue()
+# Observable("lep_m", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l.M()*1e-3""").queue()
+# Observable("lep_true_type", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l_true_type""").queue()
+# Observable("lep_true_origin", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l_true_origin""").queue()
+# Observable("lep_charge", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """lQ""").queue()
+
+# # Reconstructed top-quarks
+# Observable("mtlep_boo", do = ['tree'], only = ['be', 'bmu'], script = """tlep.M()*1e-3""").queue()
+# Observable("mtlep_res", do = ['tree'], only = ['re', 'rmu'], script = """analysis.TtresChi2.mtl""").queue()
+# Observable("mthad_res", do = ['tree'], only = ['re', 'rmu'], script = """analysis.TtresChi2.mth""").queue()
+# Observable("mwhad_res", do = ['tree'], only = ['re', 'rmu'], script = """analysis.TtresChi2.mwh""").queue()
+# Observable("chi2", do = ['tree'], only = ['re','rmu'],   script = """analysis.TtresChi2.chi2""").queue()
 
 #Observable("MA_thFJ_pt", do = ['tree'], only = ['be', 'bmu'], script = """sel.MA_thFJ_pt""").queue()
 #Observable("MA_thFJ_eta", do = ['tree'], only = ['be', 'bmu'], script = """sel.MA_thFJ_eta""").queue()
@@ -307,6 +310,24 @@ Observable("btag_SF", do = ['tree'], need_truth = True, only = ['truebFH', 'bFH'
 # Observable("tjet_ghostlabel", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu', 'bFH'], script = """(x for x in sel.tjet_ghostlabel)""").queue()
 # Observable("tjet_numConstituents", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu', 'bFH'], script = """(x for x in sel.tjet_numConstituents)""").queue()
 
+
+#truth variables
+# Observable("t_afterFSR_SC_pt", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """sel.MC_t_afterFSR_SC_pt*1e-3""").queue()
+# Observable("t_afterFSR_SC_eta", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """sel.MC_t_afterFSR_SC_eta""").queue()
+# Observable("t_afterFSR_SC_phi", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """sel.MC_t_afterFSR_SC_phi""").queue()
+# Observable("t_afterFSR_SC_m", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """sel.MC_t_afterFSR_SC_m*1e-3""").queue()
+
+# Observable("tbar_afterFSR_SC_pt", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """sel.MC_tbar_afterFSR_SC_pt*1e-3""").queue()
+# Observable("tbar_afterFSR_SC_eta", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """sel.MC_tbar_afterFSR_SC_eta""").queue()
+# Observable("tbar_afterFSR_SC_phi", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """sel.MC_tbar_afterFSR_SC_phi""").queue()
+# Observable("tbar_afterFSR_SC_m", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """sel.MC_tbar_afterFSR_SC_m*1e-3""").queue()
+
+
+# Observable("ttbar_afterFSR_SC_m", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """sel.MC_ttbar_afterFSR_SC_m*1e-3""").queue()
+
+
+
+
 ### Jet Substructure ###
 Observable("th1_tau21_wta", do = ['tree'], only = ['bFH'], script = """sel.ljet_tau21_wta[goodJetIdx1] if goodJetIdx1 != -1 else -999""").queue()
 Observable("th1_tau32_wta", do = ['tree'], only = ['bFH'], script = """sel.ljet_tau32_wta[goodJetIdx1] if goodJetIdx1 != -1 else -999""").queue()
@@ -317,7 +338,7 @@ Observable("th2_tau32_wta", do = ['tree'], only = ['bFH'], script = """sel.ljet_
 # Observable("th_MClike", (4, -1, 3), dtype = int, do = ['hist','tree'], only = ['b'], script = """sel.ljet_MClike[analysis.top_tagger.thad_index] if analysis.top_tagger.thad_index != -1 else -1""").queue()
 
 ### Pileup ###
-Observable("mu", do = ['tree'], style = 'single', script = """sel.mu""").queue()
-Observable("npv", do = ['tree'], style = 'single', dtype = int, script = """sel.npv""").queue()
-Observable("vtxz", do = ['tree'], style = 'single', script = """sel.vtxz""").queue()
-Observable("lumiblock", do = ['tree'], style = 'single', script = """sel.lumiblock""").queue()
+# Observable("mu", do = ['tree'], style = 'single', script = """sel.mu""").queue()
+# Observable("npv", do = ['tree'], style = 'single', dtype = int, script = """sel.npv""").queue()
+# Observable("vtxz", do = ['tree'], style = 'single', script = """sel.vtxz""").queue()
+# Observable("lumiblock", do = ['tree'], style = 'single', script = """sel.lumiblock""").queue()

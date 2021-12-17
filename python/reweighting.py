@@ -204,8 +204,17 @@ class TTbarNNLORecursiveReweighting(Reweighter):
             return 1.
         truth_top_pt = ev.MC_t_afterFSR_SC_pt*1e-3 # in GeV
         truth_antitop_pt = ev.MC_tbar_afterFSR_SC_pt*1e-3
-        truth_ttbar_m = ev.MC_ttbar_afterFSR_SC_m*1e-3
-        truth_ttbar_pt = ev.MC_ttbar_afterFSR_SC_pt*1e-3
+
+
+        tbar_after_SC = ROOT.TLorentzVector()
+        tbar_after_SC.SetPtEtaPhiM(ev.MC_tbar_afterFSR_SC_pt, ev.MC_tbar_afterFSR_SC_eta, ev.MC_tbar_afterFSR_SC_phi, ev.MC_tbar_afterFSR_SC_m)
+        t_after_SC = ROOT.TLorentzVector()
+        t_after_SC.SetPtEtaPhiM(ev.MC_t_afterFSR_SC_pt, ev.MC_t_afterFSR_SC_eta, ev.MC_t_afterFSR_SC_phi, ev.MC_t_afterFSR_SC_m)
+
+        ttbar_after_SC = t_after_SC + tbar_after_SC
+        truth_ttbar_m = ttbar_after_SC.M()*1e-3
+        truth_ttbar_pt = ttbar_after_SC.Pt()*1e-3
+
         return cls.reweighters[s].GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt)
 
 

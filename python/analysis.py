@@ -198,16 +198,16 @@ class Analysis(object):
                 self.trees[s].Branch("me2SM",self.branches[s]["me2SM"])
                 self.branches[s]["me2XX"] = self.branches[trunk].setdefault("me2XX", std.vector(float)())
                 self.trees[s].Branch("me2XX",self.branches[s]["me2XX"])
-                self.branches[s]["id"] = self.branches[trunk].setdefault("id", std.vector(float)())
-                self.trees[s].Branch("id",self.branches[s]["id"])
-                self.branches[s]["px"] = self.branches[trunk].setdefault("px", std.vector(float)())
-                self.trees[s].Branch("px",self.branches[s]["px"])
-                self.branches[s]["py"] = self.branches[trunk].setdefault("py", std.vector(float)())
-                self.trees[s].Branch("py",self.branches[s]["py"])
-                self.branches[s]["pz"] = self.branches[trunk].setdefault("pz", std.vector(float)())
-                self.trees[s].Branch("pz",self.branches[s]["pz"])
-                self.branches[s]["e"] = self.branches[trunk].setdefault("e", std.vector(float)())
-                self.trees[s].Branch("e",self.branches[s]["e"])
+                # self.branches[s]["id"] = self.branches[trunk].setdefault("id", std.vector(float)())
+                # self.trees[s].Branch("id",self.branches[s]["id"])
+                # self.branches[s]["px"] = self.branches[trunk].setdefault("px", std.vector(float)())
+                # self.trees[s].Branch("px",self.branches[s]["px"])
+                # self.branches[s]["py"] = self.branches[trunk].setdefault("py", std.vector(float)())
+                # self.trees[s].Branch("py",self.branches[s]["py"])
+                # self.branches[s]["pz"] = self.branches[trunk].setdefault("pz", std.vector(float)())
+                # self.trees[s].Branch("pz",self.branches[s]["pz"])
+                # self.branches[s]["e"] = self.branches[trunk].setdefault("e", std.vector(float)())
+                # self.trees[s].Branch("e",self.branches[s]["e"])
                 self.branches[s]["mttReco"] = self.branches[trunk].setdefault("mttReco", std.vector(float)())
                 self.trees[s].Branch("mttReco",self.branches[s]["mttReco"])
                 self.branches[s]["mttTrue"] = self.branches[trunk].setdefault("mttTrue", std.vector(float)())
@@ -454,6 +454,7 @@ class AnaTtresSL(Analysis):
     def addTree(self):
         super(AnaTtresSL, self).addTree()
         self.addBranch('ljet_label', array('i', [0]), isweight = False)
+        self.addBranch('lep_charge', array('f', [0]), isweight = False)
 
     # only apply the reco weights
     def getWeight(self, sel, s):
@@ -761,6 +762,7 @@ class AnaTtresSL(Analysis):
                     self.branches[syst]["mttReco"].push_back(mtt)
                     self.branches_noclear[syst]["Btagcat"].value = sel.Btagcat_calojet
                     self.branches_noclear[syst]["ljet_label"][0] = sel.ljet_label[goodJetIdx] if sel.ljet_pt.size() >= 1 else -999
+                    self.branches_noclear[syst]["lep_charge"][0] = lQ
                     # commenting out since we do not 
                     # if hasattr(sel, "MC_id_me"):
                         # #pME = helpers.getTruth4momenta(sel)
