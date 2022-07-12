@@ -168,30 +168,60 @@ class TTbarNNLORecursiveReweighting(Reweighter):
              '*': 0
              }
 
+    # This sample map correponds to different reweighting data used by TTbarNNLOReweighter.
+    # https://gitlab.cern.ch/pinamont/TTbarNNLOReweighter/-/blob/master/Root/TTbarNNLORecursiveRew.cxx#L135
+    SYST_SAMPLE_MAP = {
+        410464: 4,
+        410465: 4,
+        410557: 3,
+        410558: 3,
+        411233: 1,
+        411234: 1,
+        410480: 5,
+        410482: 5,
+        411288: -1
+    }
+
+    RUN_NUMBERS += list(SYST_SAMPLE_MAP.keys())
+
     @classmethod
     def init(cls, mcChannelNumber, D=2):
         if mcChannelNumber not in cls.RUN_NUMBERS:
             logger.info('<{}> is not a registered ttbar sample. TTbarNNLORecursiveReweighting will not be activated.'.format(mcChannelNumber))
+            return
         else:
             logger.info('<{}> is a registered ttbar sample. TTbarNNLORecursiveReweighting will be activated.'.format(mcChannelNumber))
             logger.info('Note that this is considered as a correction, i.e. change the nominal values')
 
-        systs = [0, 1, -1, 2, -2]
-        if D == 3:
-            systs += [3, -3]
+        # If we're using a tt generator systematic sample, map that to a sample_id TTbarNNLORecursiveRew will recognize.
+        # if we're running over a non-nominal tt generator sample, we don't want to include other systematics.
+        if mcChannelNumber in cls.SYST_SAMPLE_MAP:
+            sample_id = cls.SYST_SAMPLE_MAP[mcChannelNumber]
+            systs = [0]
+        else:
+            sample_id = 0
+            systs = [0, 1, -1, 2, -2]
+            if D == 3:
+                systs += [3, -3]
 
         # Add reweighters to dictionary, and properly set the data path and suffixes depending on the reweighting dimensionality
         cls.reweighters = {}
         for syst in systs:
-            cls.reweighters[syst] = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(0, syst, False)
+            cls.reweighters[syst] = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(sample_id, syst, False)
         rw_path = helpers.find_dir_recursive(os.path.dirname(os.path.realpath(__file__)), "TTbarNNLOReweighter")
+
+        if D == 2:
+            input_directory = os.path.join(rw_path, 'data_2d')
+            input_suffix = "_2iter_2021_1e8"
+        elif D == 3:
+            input_directory = os.path.join(rw_path, 'data')
+            input_suffix = "_MATRIX_3iter_1e8"
+        else:
+            raise ValueError("Recursive reweighter must be 2D or 3D.")
+
         for reweighter in cls.reweighters.values():
-            if D == 2:
-                reweighter.SetInputDirectory(os.path.join(rw_path, 'data_2d'))
-                reweighter.SetInputSuffix("_2iter_2021_1e8")
-            elif D == 3:
-                reweighter.SetInputDirectory(os.path.join(rw_path, 'data'))
-                reweighter.SetInputSuffix("_MATRIX_3iter_1e8")
+            reweighter.SetInputDirectory(input_directory)
+            reweighter.SetInputSuffix(input_suffix)
             for rw in cls.RW_LISTS[D]:
                 reweighter.AddRew(rw)
             reweighter.Init()
