@@ -115,15 +115,9 @@ def main(parallel = False):
         else:
             options.ttbar_high_order = 'none'
 
-    elif options.ttbar_high_order in ('NNLORecursive2d', 'NNLORecursive3d'):
-        D = 0
-        if '2d' in options.ttbar_high_order:
-            D = 2
-        elif '3d' in options.ttbar_high_order:
-            D = 3
-
+    elif options.ttbar_high_order == 'NNLORecursive2d':
         if sel.mcChannelNumber in reweighting.TTbarNNLORecursiveReweighting.RUN_NUMBERS:
-            reweighting.TTbarNNLORecursiveReweighting.init(sel.mcChannelNumber, D)
+            reweighting.TTbarNNLORecursiveReweighting.init(sel.mcChannelNumber)
         else:
             options.ttbar_high_order = 'none'
 
@@ -300,7 +294,7 @@ if __name__ == "__main__":
     #                         +str(reweighting.EWKCorrection.RUN_NUMBERS))
     parser.add_argument("--ttbar-high-order",
                         default =  'NNLORecursive2d',
-                        choices = ['Rel20EWK', 'NNLOQCDNLOEWK', 'NNLORecursive2d', 'NNLORecursive3d', 'none'],
+                        choices = ['Rel20EWK', 'NNLOQCDNLOEWK', 'NNLORecursive2d', 'none'],
                         help = 'High Order Correction applied to registered ttbar sample.')
     parser.add_argument("-N", "--noMttSlices",
                         dest="noMttSlices",
