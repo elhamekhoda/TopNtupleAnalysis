@@ -32,7 +32,7 @@ class Reweighter(object):
         """
         if syst not in cls.SYSTS:
             syst = '*'
-        SF = cls.get_SF(ev, cls.SYSTS[syst])
+        SF = cls.get_SF(ev, syst)
         if SF == 0.:
             logger.debug('<{cls.__name__}> retrieves ScaleFactor which is ZERO.'.format(cls = cls))
         elif SF < 0.:
@@ -61,6 +61,9 @@ class EWKCorrection(Reweighter):
             return 1.
         if ev.mcChannelNumber not in cls.RUN_NUMBERS:
             return 1.
+
+        s = cls.SYSTS[s]
+
         cls.top.SetPtEtaPhiM(ev.MC_t_pt, ev.MC_t_eta, ev.MC_t_phi, ev.MC_t_m)
         cls.topbar.SetPtEtaPhiM(ev.MC_tbar_pt, ev.MC_tbar_eta, ev.MC_tbar_phi, ev.MC_tbar_m)
         w = ROOT.TopNtupleAnalysis.getEWK(cls.top, cls.topbar, ev.initial_type, s)
@@ -95,6 +98,9 @@ class NNLOReweighting(Reweighter):
     def get_SF(cls, ev, s):
         if ev.mcChannelNumber == 0:
             return 1.
+
+        s = cls.SYSTS[s]
+
         abss = abs(s) # we only have 1up always
         if abss == 0:
             return 1.
@@ -141,6 +147,9 @@ class TTbarNNLOReweighting(Reweighter):
             return 1.
         if ev.mcChannelNumber not in cls.RUN_NUMBERS:
             return 1.
+
+        s = cls.SYSTS[s]
+
         truth_top_pt = ev.MC_t_afterFSR_SC_pt*1e-3 # in GeV
         if s == 0:
             return cls.REWEIGTER.GetTopPt_Powheg_Pythia8_Nominal(truth_top_pt)
@@ -155,18 +164,34 @@ class TTbarNNLORecursiveReweighting(Reweighter):
     RUN_NUMBERS = [410471, 410470]
     RUN_NUMBERS += [410633, 410634, 410635, 410636, 410637] # mttsliced nonallhad
     RUN_NUMBERS += [410284, 410285, 410286, 410287, 410288] # mttsliced allhad
-    RW_LISTS = {
-        2: ["TTbarM", "TopPt", "TopPt", "TTbarM", "TopPt", "TopPt"],
-        3:  ["TTbarPt", "TTbarM", "TopPt", "TopPt", "TTbarPt", "TTbarM", "TopPt", "TopPt", "TTbarPt", "TTbarM", "TopPt", "TopPt"]
-    }
-    SYSTS = {'ttNNLOrec_toppt__1up': 1,
-             'ttNNLOrec_toppt__1down': -1,
-              'ttNNLOrec_ttmass__1up': 2,
-              'ttNNLOrec_ttmass__1down': -2,
-              'ttNNLOrec_ttpt__1up': 3,
-              'ttNNLOrec_ttpt__1down': -3,
-             '*': 0
-             }
+
+    #syst_name: (syst id, sample id)
+    SYSTS = {
+         # 'ttNNLOrec_toppt__1up': (1, 0),
+         # 'ttNNLOrec_toppt__1down': (-1, 0),
+         # 'ttNNLOrec_ttmass__1up': (2, 0),
+         # 'ttNNLOrec_ttmass__1down': (-2, 0),
+         # 'ttNNLOrec_ttpt__1up': (3, 0),
+         # 'ttNNLOrec_ttpt__1down': (-3, 0),
+         'ttNNLOrec_muRtoppt__1up': (11, 0),
+         'ttNNLOrec_muRtoppt__1down': (-11, 0),
+         'ttNNLOrec_muFtoppt__1up': (21, 0),
+         'ttNNLOrec_muFtoppt__1down': (-21, 0),
+         'ttNNLOrec_muRttmass__1up': (12, 0),
+         'ttNNLOrec_muRttmass__1down': (-12, 0),
+         'ttNNLOrec_muFttmass__1up': (22, 0),
+         'ttNNLOrec_muFttmass__1down': (-22, 0),
+         'fake_NNLO_oneemission_ttmass': (0, 0),
+         'fake_NNLO_oneemission_toppt': (0, 0),
+         'fake_NNLO_nominal': (3000, 0),
+         'tt_muR__1up': (0, 6),
+         'tt_muR__1down': (0, 7),
+         'tt_muF__1up': (0, 8),
+         'tt_muF__1down': (0, 9),
+         'FSR_up': (0, 10),
+         'FSR_down': (0, 11),
+         '*': (0, 0)
+     }
 
     # This sample map correponds to different reweighting data used by TTbarNNLOReweighter.
     # https://gitlab.cern.ch/pinamont/TTbarNNLOReweighter/-/blob/master/Root/TTbarNNLORecursiveRew.cxx#L135
@@ -185,7 +210,7 @@ class TTbarNNLORecursiveReweighting(Reweighter):
     RUN_NUMBERS += list(SYST_SAMPLE_MAP.keys())
 
     @classmethod
-    def init(cls, mcChannelNumber, D=2):
+    def init(cls, mcChannelNumber):
         if mcChannelNumber not in cls.RUN_NUMBERS:
             logger.info('<{}> is not a registered ttbar sample. TTbarNNLORecursiveReweighting will not be activated.'.format(mcChannelNumber))
             return
@@ -193,38 +218,32 @@ class TTbarNNLORecursiveReweighting(Reweighter):
             logger.info('<{}> is a registered ttbar sample. TTbarNNLORecursiveReweighting will be activated.'.format(mcChannelNumber))
             logger.info('Note that this is considered as a correction, i.e. change the nominal values')
 
+        rw_path = helpers.find_dir_recursive(os.path.dirname(os.path.realpath(__file__)), "TTbarNNLOReweighter")
+        input_directory = os.path.join(rw_path, 'data_2d')
+
         # If we're using a tt generator systematic sample, map that to a sample_id TTbarNNLORecursiveRew will recognize.
         # if we're running over a non-nominal tt generator sample, we don't want to include other systematics.
-        if mcChannelNumber in cls.SYST_SAMPLE_MAP:
-            sample_id = cls.SYST_SAMPLE_MAP[mcChannelNumber]
-            systs = [0]
-        else:
-            sample_id = 0
-            systs = [0, 1, -1, 2, -2]
-            if D == 3:
-                systs += [3, -3]
-
-        # Add reweighters to dictionary, and properly set the data path and suffixes depending on the reweighting dimensionality
         cls.reweighters = {}
-        for syst in systs:
-            cls.reweighters[syst] = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(sample_id, syst, False)
-        rw_path = helpers.find_dir_recursive(os.path.dirname(os.path.realpath(__file__)), "TTbarNNLOReweighter")
-
-        if D == 2:
-            input_directory = os.path.join(rw_path, 'data_2d')
-            input_suffix = "_2iter_2021_1e8"
-        elif D == 3:
-            input_directory = os.path.join(rw_path, 'data')
-            input_suffix = "_MATRIX_3iter_1e8"
-        else:
-            raise ValueError("Recursive reweighter must be 2D or 3D.")
-
-        for reweighter in cls.reweighters.values():
+        if mcChannelNumber in cls.SYST_SAMPLE_MAP:
+            reweighter = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(cls.SYST_SAMPLE_MAP[mcChannelNumber], 0, False)
             reweighter.SetInputDirectory(input_directory)
-            reweighter.SetInputSuffix(input_suffix)
-            for rw in cls.RW_LISTS[D]:
-                reweighter.AddRew(rw)
+            reweighter.SetInputSuffix("_3iter_2022_1e8")
+            reweighter.SetDefault2D()
             reweighter.Init()
+            cls.reweighters["*"] = reweighter
+        else:
+            for syst_name, (syst_id, sample_id) in cls.SYSTS.items():
+                reweighter = ROOT.TTbarNNLORecursiveRew.TTbarNNLORecursiveRew(sample_id, syst_id, False)
+                reweighter.SetInputDirectory(input_directory)
+                reweighter.SetInputSuffix(
+                    "_3iter_2022_1e8"
+                    if syst_id == 0
+                    else "_3iter_2022_1e8_LUX"
+                )
+
+                reweighter.SetDefault2D()
+                reweighter.Init()
+                cls.reweighters[syst_name] = reweighter
 
     @classmethod
     def get_SF(cls, ev, s):
@@ -244,6 +263,16 @@ class TTbarNNLORecursiveReweighting(Reweighter):
         ttbar_after_SC = t_after_SC + tbar_after_SC
         truth_ttbar_m = ttbar_after_SC.M()*1e-3
         truth_ttbar_pt = ttbar_after_SC.Pt()*1e-3
+
+        if s == 'fake_NNLO_oneemission_ttmass':
+            return cls.reweighters['fake_NNLO_oneemission_ttmass'].GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt) \
+                   * (9.62236e-01 + ( 2.78789e-06 * truth_ttbar_m)**0.5)
+
+        if s == 'fake_NNLO_oneemission_toppt':
+            return cls.reweighters['fake_NNLO_oneemission_toppt'].GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt) \
+                    * ((9.78044e-01 + (4.35553e-06 * truth_ttbar_pt)**0.5)
+                       if truth_ttbar_pt > 0
+                       else 1)
 
         return cls.reweighters[s].GetWeight(truth_top_pt, truth_antitop_pt, truth_ttbar_m, truth_ttbar_pt)
 
@@ -265,6 +294,8 @@ class WjetSystWeight(Reweighter):
             return 1.
         if ev.mcChannelNumber not in cls.RUN_NUMBERS:
             return 1.
+
+        s = cls.SYSTS[s]
 
         nj = 4
         if ev.jet_pt.size() > 4:
