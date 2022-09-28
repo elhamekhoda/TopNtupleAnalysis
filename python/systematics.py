@@ -415,23 +415,26 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
                 'ttNNLO_topPtDiff__1up',
                 'ttNNLO_topPt__1up',
                 ])
-        elif ttbarHighOrderCorrection in ('NNLORecursive2d', 'NNLORecursive3d'):
-            systList.extend(['ttNNLOrec_toppt__1up',
-                             'ttNNLOrec_toppt__1down',
-                             'ttNNLOrec_ttmass__1up',
-                             'ttNNLOrec_ttmass__1down',
-                             'ttNNLOrec_muRtoppt__1up',
-                             'ttNNLOrec_muRtoppt__1down',
-                             'ttNNLOrec_muFtoppt__1up',
-                             'ttNNLOrec_muFtoppt__1down',
-                             'ttNNLOrec_muRttmass__1up',
-                             'ttNNLOrec_muRttmass__1down',
-                             'ttNNLOrec_muFttmass__1up',
-                             'ttNNLOrec_muFttmass__1down',
-                             ])
-            if ttbarHighOrderCorrection == 'NNLORecursive3d':
-                systList.extend(['ttNNLOrec_ttpt__1up',
-                                 'ttNNLOrec_ttpt__1down'])
+        elif ttbarHighOrderCorrection == 'NNLORecursive2d':
+            systList.extend([
+                'ttNNLOrec_muRtoppt__1up',
+                'ttNNLOrec_muRtoppt__1down',
+                'ttNNLOrec_muFtoppt__1up',
+                'ttNNLOrec_muFtoppt__1down',
+                'ttNNLOrec_muRttmass__1up',
+                'ttNNLOrec_muRttmass__1down',
+                'ttNNLOrec_muFttmass__1up',
+                'ttNNLOrec_muFttmass__1down',
+                'tt_muR__1up',
+                'tt_muR__1down',
+                'tt_muF__1up',
+                'tt_muF__1down',
+                'fake_NNLO_oneemission_ttmass',
+                'fake_NNLO_oneemission_toppt',
+                'FSR_up',
+                'FSR_down',
+             ])
+
         if isWjets:
             systList.append('CAallMCAsym')
             systList.append('wnorm__1up')
@@ -619,20 +622,22 @@ ALLSYSTS = OrderedDict((
     _syst('ttEWK__1down', 'nominal'),
     _syst('ttNNLOQCDNLOEWK__1up', 'nominal'),
     _syst('ttNNLOQCDNLOEWK__1down', 'nominal'),
-    _syst('ttNNLOrec_toppt__1up', 'nominal'),
-    _syst('ttNNLOrec_toppt__1down', 'nominal'),
-    _syst('ttNNLOrec_ttmass__1up', 'nominal'),
-    _syst('ttNNLOrec_ttmass__1down', 'nominal'),
-    _syst('ttNNLOrec_ttpt__1up', 'nominal'),
-    _syst('ttNNLOrec_ttpt__1down', 'nominal'),
-    _syst('ttNNLOrec_muRtoppt__1up','nominal'),
-    _syst('ttNNLOrec_muRtoppt__1down','nominal'),
-    _syst('ttNNLOrec_muFtoppt__1up','nominal'),
-    _syst('ttNNLOrec_muFtoppt__1down','nominal'),
-    _syst('ttNNLOrec_muRttmass__1up','nominal'),
-    _syst('ttNNLOrec_muRttmass__1down','nominal'),
-    _syst('ttNNLOrec_muFttmass__1up','nominal'),
-    _syst('ttNNLOrec_muFttmass__1down','nominal'),
+    _syst('ttNNLOrec_muRtoppt__1up', 'nominal'),
+    _syst('ttNNLOrec_muRtoppt__1down', 'nominal'),
+    _syst('ttNNLOrec_muFtoppt__1up', 'nominal'),
+    _syst('ttNNLOrec_muFtoppt__1down', 'nominal'),
+    _syst('ttNNLOrec_muRttmass__1up', 'nominal'),
+    _syst('ttNNLOrec_muRttmass__1down', 'nominal'),
+    _syst('ttNNLOrec_muFttmass__1up', 'nominal'),
+    _syst('ttNNLOrec_muFttmass__1down', 'nominal'),
+    _syst('fake_NNLO_oneemission_ttmass', 'nominal'),
+    _syst('fake_NNLO_oneemission_toppt', 'nominal'),
+    _syst('tt_muR__1up', 'nominal'),
+    _syst('tt_muR__1down', 'nominal'),
+    _syst('tt_muF__1up', 'nominal'),
+    _syst('tt_muF__1down', 'nominal'),
+    _syst('FSR_up', 'nominal'),
+
     # top-tagging efficiency: JET_JetTagSF_Dijet_Modelling
     _syst('toptagSF_0__1down', 'nominal'),
     _syst('toptagSF_0__1up',   'nominal'),

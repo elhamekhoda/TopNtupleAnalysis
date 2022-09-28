@@ -328,7 +328,7 @@ class Analysis(object):
         syst_sig = s.signature
         for item in s.weight_map:
             weight *= getattr(sel, item)
-        if self.ttbarHighOrder in ('NNLORecursive2d', 'NNLORecursive3d'):
+        if self.ttbarHighOrder == 'NNLORecursive2d':
             weight *= reweighting.TTbarNNLORecursiveReweighting.get_weight(sel, syst_sig)
         elif self.ttbarHighOrder == 'NNLOQCDNLOEWK':
             weight *= reweighting.TTbarNNLOReweighting.get_weight(sel, syst_sig)
