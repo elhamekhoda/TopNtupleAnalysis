@@ -112,6 +112,7 @@ def sumWeights(files, types, suffix, mode = 'auto', runNumber = 'ALL', periodFra
         nFiles = {}
         sumOfWeights = {} # map of DSID to sum of weights
         totalEvents = {}
+        totalEvents_mcgen = {}
         t_sumWeights = ROOT.TChain("sumWeights")
         helpers.addFilesInChain(t_sumWeights, [f])
 
@@ -121,11 +122,22 @@ def sumWeights(files, types, suffix, mode = 'auto', runNumber = 'ALL', periodFra
                 sumOfWeights[t_sumWeights.dsid] = 0
                 totalEvents[t_sumWeights.dsid] = 0
                 nFiles[t_sumWeights.dsid] = 0
+                if t == "ttgen":
+                    if t_sumWeights.dsid != 410470:
+                        logger.error('DSID = %d. This is not a registered ttbar ntuples.'%t_sumWeights.dsid )
+                        return 
+                    totalEvents_mcgen[t_sumWeights.dsid] = {}
             if t_sumWeights.dsid in xrange(361020, 361033):
                 sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEvents
             else:
                 sumOfWeights[t_sumWeights.dsid] += t_sumWeights.totalEventsWeighted
             totalEvents[t_sumWeights.dsid] += t_sumWeights.totalEvents
+            if t == "ttgen":
+                for l in helpers.ttgen_uncert.keys():
+                    if l not in totalEvents_mcgen[t_sumWeights.dsid]:
+                        totalEvents_mcgen[t_sumWeights.dsid][l] = 0
+                    totalEvents_mcgen[t_sumWeights.dsid][l] += t_sumWeights.totalEventsWeighted_mc_generator_weights[helpers.ttgen_uncert[l]]
+
             nFiles[t_sumWeights.dsid] += 1
         for channel in sorted(sumOfWeights.iterkeys()):
             entry = {'channel': channel,
@@ -140,6 +152,24 @@ def sumWeights(files, types, suffix, mode = 'auto', runNumber = 'ALL', periodFra
             lines.append(l_fmt.format(**entry))
             logger.debug(lines[-1])
             ret.append(entry)
+            if t == "ttgen":
+                for name,value in helpers.ttgen_uncert.items():
+                    if 'tt_pdf'  in name:
+                        pdf_number = int(name.replace('tt_pdf_', ''))
+                    else:
+                        pdf_number = -1
+                    entry = {'channel': channel,
+                             'pdfName': name,
+                             'pdfNumber': pdf_number,
+                             'totalEvents': totalEvents[channel],
+                             'SumOfWeights': totalEvents_mcgen[channel][name],
+                             'runNumber': runNumber,
+                             'periodFraction': '{:.5e}'.format(periodFraction),
+                             'nFiles': nFiles[channel]
+                             }
+                    lines.append(l_fmt.format(**entry))
+                    logger.debug(lines[-1])
+                    ret.append(entry)
 
         if mode != 'return':
             sumOfWeights_file = os.path.join(helpers.data_path, "sumOfWeights%s%s.txt") % (t, suffix)

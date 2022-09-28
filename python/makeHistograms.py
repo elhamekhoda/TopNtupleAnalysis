@@ -25,8 +25,8 @@ def main(parallel = False):
 
     fname_pat = "sumOfWeights{}_R21.txt"
     if not options.data:
-        for t in ('', 'syst', 'systaf2', 'pdf', 'wjpdf'):
-            if options.pdf == '' and t in ('pdf', 'wjpdf'):
+        for t in ('', 'syst', 'systaf2', 'pdf', 'wjpdf', 'ttgen'):
+            if options.pdf == '' and t in ('pdf', 'wjpdf', 'ttgen'):
                 continue
             fname = os.path.join(helpers.data_path, fname_pat.format(t))
             InvSumOfWeights.update(helpers.readSumOfWeight(fname))
@@ -48,14 +48,17 @@ def main(parallel = False):
     @helpers.lru_cache(maxsize=100)
     def _common_mc_weight(mc_weight, channel, runNumber, suffix):
         weight = 1
-        if not (isWjets and options.systs == 'pdf' and 'pdf_' in suffix): # use internal weights in this case
+        if not ( (isWjets and options.systs == 'pdf' and 'pdf_' in suffix) or (options.systs == 'ttgen') or ('tt_' in options.systs)): # use internal weights in this case
             weight *= mc_weight
         weight *= Xsec[channel]
-        if (options.systs != 'pdf') or 'pdf_' not in suffix: #'pdf_' in suffix:
+        if (options.systs != 'pdf') and ('pdf_' not in suffix): #'pdf_' in suffix:
             pdfName, pdfNumber = 'nominal', '-1'
+        elif (options.systs == 'ttgen' or('pdf_' in suffix)):
+            pdfName, pdfNumber = suffix, suffix.split('_', 1)[1].rsplit('_', 1)[1]
         else:
             pdfName, pdfNumber = suffix.split('_', 1)[1].rsplit('_', 1)
         try:
+            # print channel, runNumber, pdfNumber
             weight *= InvSumOfWeights[channel][runNumber][pdfName][pdfNumber]
         except:
             raise NameError('Could not find <DSID: {0}, PERIOD: {1}> in DICT("SumOfWeights").'.format(channel))
@@ -88,6 +91,7 @@ def main(parallel = False):
     # systematics list
     systList = systematics.get_systs(options.systs, isTtbar, isSingleTop, isWjets, options.EFT, pdfList, InvSumOfWeights, options.ttbar_high_order, (options.qcd != "False"), analysis = options.analysis)
     systgroups = list(systematics.grouped_systs(systList))
+    # print ("******************** ", systList)
     if '\;' in options.output:
         logger.warn('The "-o <channel1>,<ouput_fname1>\;<channel2>,<ouput_fname2>..." syntax is deprecated.\nPlease use the "-o <channel1>:<ouput_fname1>, [[-o <channel2>:<ouput_fname2>] -o ...]" syntax.', DeprecationWarning)
         channels = helpers.output_expr_reader_old(options.output)
@@ -242,6 +246,9 @@ def main(parallel = False):
                         pdfNumber = int(suffix.rsplit('_', 1)[1])
                         wjpdfList = [7]+range(11, 110+1)
                         weight_reco *= sel.mc_generator_weights[wjpdfList[pdfNumber]]
+                    elif (options.systs == 'ttgen' or ('tt_' in suffix)): # use internal weights in the case of ttbar generator uncertainties
+                        weight_reco *= sel.mc_generator_weights[helpers.ttgen_uncert[suffix]]
+                        #print helpers.ttgen_uncert[suffix], suffix
                     ana.run(sel, suffix, weight*weight_reco, weight)
 
             for ana in analysisCode.itervalues():

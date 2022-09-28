@@ -71,10 +71,10 @@ class _Observable(object):
 # Observable("chi2_mth", (150, 0, 300), do = ['tree','hist'], only = ['re','rmu'],   script = """analysis.TtresChi2.mth""").queue()
 # Observable("chi2_mwh", (150, 0, 300), do = ['tree','hist'], only = ['re','rmu'],   script = """analysis.TtresChi2.mwh""").queue()
 
-#Observable("chi2_Th", do = ['tree'], only = ['re','rmu'], dtype = 'TLorentzVector', style = 'foreach', script = """[analysis.TtresChi2.get_tv("Th")]""").queue()
-#Observable("chi2_Wh", do = ['tree'], only = ['re','rmu'], dtype = 'TLorentzVector', style = 'foreach', script = """[analysis.TtresChi2.get_tv("Wh")]""").queue()
-#Observable("chi2_Tl", do = ['tree'], only = ['re','rmu'], dtype = 'TLorentzVector', style = 'foreach', script = """[analysis.TtresChi2.get_tv("Tl")]""").queue()
-#Observable("chi2_Wl", do = ['tree'], only = ['re','rmu'], dtype = 'TLorentzVector', style = 'foreach', script = """[analysis.TtresChi2.get_tv("Wl")]""").queue()
+# Observable("chi2_Th", do = ['tree'], only = ['re','rmu'], dtype = 'TLorentzVector', style = 'foreach', script = """[analysis.TtresChi2.get_tv("Th")]""").queue()
+# Observable("chi2_Wh", do = ['tree'], only = ['re','rmu'], dtype = 'TLorentzVector', style = 'foreach', script = """[analysis.TtresChi2.get_tv("Wh")]""").queue()
+# Observable("chi2_Tl", do = ['tree'], only = ['re','rmu'], dtype = 'TLorentzVector', style = 'foreach', script = """[analysis.TtresChi2.get_tv("Tl")]""").queue()
+# Observable("chi2_Wl", do = ['tree'], only = ['re','rmu'], dtype = 'TLorentzVector', style = 'foreach', script = """[analysis.TtresChi2.get_tv("Wl")]""").queue()
 ### Track Jets ###
 # Observable("trackJetEta", (50, -4, 4), """(tjet.Eta() for tjet in analysis.bot_tagger._tjet_p4)""", style = 'foreach').queue()
 # Observable("trackJetPt", (50, 0, 500), """(tjet.Pt()*1e-3 for tjet in analysis.bot_tagger._tjet_p4)""", style = 'foreach', do = ['tree', 'hist']).queue()
@@ -142,8 +142,8 @@ class _Observable(object):
 # Observable("ljet_phi", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(phi for phi in sel.ljet_phi)""").queue()
 # Observable("ljet_m", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(m*1e-3 for m in sel.ljet_m)""").queue()
 
-# Observable("ljet_istoptag_dnn_contained80", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(x for x in sel.ljet_good_dnn_contained80)""").queue()
-# Observable("ljet_istoptag_dnn_inclusive80", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(x for x in sel.ljet_good_dnn_inclusive80)""").queue()
+# Observable("ljet_istoptag_dnn_contained80", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(x for x in sel.ljet_isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkContained80)""").queue()
+# Observable("ljet_istoptag_dnn_inclusive80", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(x for x in sel.ljet_isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80)""").queue()
 
 ### Basic Object ###
 # MET and jet  variables
@@ -154,6 +154,7 @@ class _Observable(object):
 # Observable("ljet_N", do = ['tree'], style = 'single', dtype = int,  script = """sel.ljet_pt.size()""").queue()
 # Observable("tjet_N", do = ['tree'], style = 'single', dtype = int,  script = """sel.tjet_pt.size()""").queue()
 # Observable("btjet_N", do = ['tree'], style = 'single', dtype = int,  script = """sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in analysis.bot_tagger.tjet_isbtagged)""").queue()
+Observable("bjet_N", do = ['tree'], style = 'single', dtype = int,  script = """sum(helpers.char2int(calojet_isbtagged) for calojet_isbtagged in analysis.bot_tagger.calojet_isbtagged)""").queue()
 
 # Observable("ljet_pt", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """lj.Pt()*1e-3""").queue()
 # Observable("ljet_eta", do = ['tree'], only = ['re', 'rmu', 'be', 'bmu'], script = """lj.Eta()""").queue()
@@ -175,7 +176,6 @@ class _Observable(object):
 # Observable("lep_m", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l.M()*1e-3""").queue()
 # Observable("lep_true_type", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l_true_type""").queue()
 # Observable("lep_true_origin", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """l_true_origin""").queue()
-# Observable("lep_charge", do = ['tree'], only = ['be', 'bmu', 're', 'rmu'], script = """lQ""").queue()
 
 # # Reconstructed top-quarks
 # Observable("mtlep_boo", do = ['tree'], only = ['be', 'bmu'], script = """tlep.M()*1e-3""").queue()
@@ -269,7 +269,7 @@ Observable("btag_SF", do = ['tree'], need_truth = True, only = ['truebFH', 'bFH'
 # Observable("tjet_e",   do = ['tree'], style = 'foreach', script = """(tjet.E()*1e-3 for tjet in analysis.bot_tagger._tjet_p4)""").queue()
 #Observable("tjet_isbtag_DL185", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(ord(x) for x in sel.tjet_isbtagged_DL1_85)""").queue()
 # Observable("tjet_isbtag_DL177", do = ['tree'], style = 'foreach', script = """(ord(x) for x in sel.tjet_isbtagged_DL1_77)""").queue()
-#Observable("tjet_isbtag_DL170", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(ord(x) for x in sel.tjet_isbtagged_DL1_70)""").queue()
+# Observable("tjet_isbtag_DL170", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(ord(x) for x in sel.tjet_isbtagged_DL1_70)""").queue()
 #Observable("tjet_isbtag_DL160", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(ord(x) for x in sel.tjet_isbtagged_DL1_60)""").queue()
 #Observable("tjet_isbtag_DL1r85", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(ord(x) for x in sel.tjet_isbtagged_DL1r_85)""").queue()
 # Observable("tjet_isbtag_DL1r77", do = ['tree'], style = 'foreach', only = ['be', 'bmu', 're', 'rmu'], script = """(ord(x) for x in sel.tjet_isbtagged_DL1r_77)""").queue()

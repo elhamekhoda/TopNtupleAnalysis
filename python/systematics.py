@@ -420,6 +420,14 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
                              'ttNNLOrec_toppt__1down',
                              'ttNNLOrec_ttmass__1up',
                              'ttNNLOrec_ttmass__1down',
+                             'ttNNLOrec_muRtoppt__1up',
+                             'ttNNLOrec_muRtoppt__1down',
+                             'ttNNLOrec_muFtoppt__1up',
+                             'ttNNLOrec_muFtoppt__1down',
+                             'ttNNLOrec_muRttmass__1up',
+                             'ttNNLOrec_muRttmass__1down',
+                             'ttNNLOrec_muFttmass__1up',
+                             'ttNNLOrec_muFttmass__1down',
                              ])
             if ttbarHighOrderCorrection == 'NNLORecursive3d':
                 systList.extend(['ttNNLOrec_ttpt__1up',
@@ -563,6 +571,18 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
         systList.append('qcdcendw')
         systList.append('qcdfwdup')
         systList.append('qcdfwddw')
+    if expr == 'ttgen':
+        for k in range(0, 30+1):
+            systList.append('tt_pdf_%d' % (k))
+        systList.extend([
+            'tt_muF__1up',
+            'tt_muF__1down',
+            'tt_muR__1up',
+            'tt_muR__1down',
+            'tt_ISR__1up',
+            'tt_ISR__1down',
+            'tt_FSR__1up',
+            'tt_FSR__1down'])
     else:
         systList = expr.split(',')
     ret = []
@@ -605,6 +625,14 @@ ALLSYSTS = OrderedDict((
     _syst('ttNNLOrec_ttmass__1down', 'nominal'),
     _syst('ttNNLOrec_ttpt__1up', 'nominal'),
     _syst('ttNNLOrec_ttpt__1down', 'nominal'),
+    _syst('ttNNLOrec_muRtoppt__1up','nominal'),
+    _syst('ttNNLOrec_muRtoppt__1down','nominal'),
+    _syst('ttNNLOrec_muFtoppt__1up','nominal'),
+    _syst('ttNNLOrec_muFtoppt__1down','nominal'),
+    _syst('ttNNLOrec_muRttmass__1up','nominal'),
+    _syst('ttNNLOrec_muRttmass__1down','nominal'),
+    _syst('ttNNLOrec_muFttmass__1up','nominal'),
+    _syst('ttNNLOrec_muFttmass__1down','nominal'),
     # top-tagging efficiency: JET_JetTagSF_Dijet_Modelling
     _syst('toptagSF_0__1down', 'nominal'),
     _syst('toptagSF_0__1up',   'nominal'),
@@ -1121,6 +1149,46 @@ ALLSYSTS = OrderedDict((
     _syst('pdf_PDF4LHC15_nlo_30_28', 'nominal'),
     _syst('pdf_PDF4LHC15_nlo_30_29', 'nominal'),
     _syst('pdf_PDF4LHC15_nlo_30_30', 'nominal'),
+# ttgen
+    _syst('tt_muF__1up', 'nominal'),
+    _syst('tt_muF__1down', 'nominal'),
+    _syst('tt_muR__1up', 'nominal'),
+    _syst('tt_muR__1down', 'nominal'),
+    _syst('tt_ISR__1up',  'nominal'),
+    _syst('tt_ISR__1down',  'nominal'),
+    _syst('tt_FSR__1up',  'nominal'),
+    _syst('tt_FSR__1down',  'nominal'),
+    _syst('tt_pdf_0', 'nominal'),
+    _syst('tt_pdf_1', 'nominal'),
+    _syst('tt_pdf_2', 'nominal'),
+    _syst('tt_pdf_3', 'nominal'),
+    _syst('tt_pdf_4', 'nominal'),
+    _syst('tt_pdf_5', 'nominal'),
+    _syst('tt_pdf_6', 'nominal'),
+    _syst('tt_pdf_7', 'nominal'),
+    _syst('tt_pdf_8', 'nominal'),
+    _syst('tt_pdf_9', 'nominal'),
+    _syst('tt_pdf_10', 'nominal'),
+    _syst('tt_pdf_11', 'nominal'),
+    _syst('tt_pdf_12', 'nominal'),
+    _syst('tt_pdf_13', 'nominal'),
+    _syst('tt_pdf_14', 'nominal'),
+    _syst('tt_pdf_15', 'nominal'),
+    _syst('tt_pdf_16', 'nominal'),
+    _syst('tt_pdf_17', 'nominal'),
+    _syst('tt_pdf_18', 'nominal'),
+    _syst('tt_pdf_19', 'nominal'),
+    _syst('tt_pdf_20', 'nominal'),
+    _syst('tt_pdf_21', 'nominal'),
+    _syst('tt_pdf_22', 'nominal'),
+    _syst('tt_pdf_23', 'nominal'),
+    _syst('tt_pdf_24', 'nominal'),
+    _syst('tt_pdf_25', 'nominal'),
+    _syst('tt_pdf_26', 'nominal'),
+    _syst('tt_pdf_27', 'nominal'),
+    _syst('tt_pdf_28', 'nominal'),
+    _syst('tt_pdf_29', 'nominal'),
+    _syst('tt_pdf_30', 'nominal'),
     # QCD
     _syst('qcd'     , 'nominal_Loose', hist_suffix = ''),
     _syst('qcdcenup', 'nominal_Loose'),

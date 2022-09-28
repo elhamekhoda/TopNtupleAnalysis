@@ -1147,7 +1147,7 @@ class PBSCluster(Cluster):
         command = ['qsub','-o', stdout,
                    '-N', me_dir, 
                    '-e', stderr,
-                   '-V', '-l walltime=10:00:00,mem=2000m']
+                   '-V', '-l nodes=1:ppn=1,walltime=10:00:00,mem=2000m']
 
         if self.cluster_queue and self.cluster_queue != 'None':
             command.extend(['-q', self.cluster_queue])

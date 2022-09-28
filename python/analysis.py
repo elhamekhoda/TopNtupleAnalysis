@@ -79,6 +79,7 @@ class Analysis(object):
         self.add('finalYields', 1, 0.5, 1.5)
         self.add("runNumber", 24647, 276261.5, 300908.5)
         self.add("nJets", 10, -0.5, 9.5)
+        self.add("nBtagJets", 10, -0.5, 9.5)
         self.add("nTrkBtagJets", 10, -0.5, 9.5)
         self.addVar("MET", [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 380, 450, 500])
         self.add("MET_phi", 32, -3.2, 3.2)
@@ -349,7 +350,7 @@ class Analysis(object):
     def set_top_tagger(self, expr, num_thad = 1, **kwds):
         self.top_tagger = selections.BoostedTopTagger(expr, num_top = num_thad, **kwds)
 
-    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70', **kwds):
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77', **kwds):
         attr = algorithm_WP_systs.split('.',2)
         algorithm_WP_systs = attr[-1].split('_', 2)
         if len(attr)==2:
@@ -696,6 +697,7 @@ class AnaTtresSL(Analysis):
         self.h["closestJetDr"][syst].Fill(closestJetDr, w)
         self.h["closestJetPt"][syst].Fill(closestJetPt*1e-3, w)
         self.h["nTrkBtagJets"][syst].Fill(sum(helpers.char2int(tjet_isbtagged) for tjet_isbtagged in self.bot_tagger.tjet_isbtagged), w)
+        self.h["nBtagJets"][syst].Fill(sum(helpers.char2int(calojet_isbtagged) for calojet_isbtagged in self.bot_tagger.calojet_isbtagged), w)
         self.h["mwt"][syst].Fill(math.sqrt(2*l.Pt()*sel.met_met*(1 - math.cos(l.Phi() - sel.met_phi)))*1e-3, w)
         self.h["mu"][syst].Fill(sel.mu, w)
         self.h["npv"][syst].Fill(sel.npv, w)
@@ -763,12 +765,12 @@ class AnaTtresSL(Analysis):
                     self.branches_noclear[syst]["Btagcat"].value = sel.Btagcat_calojet
                     self.branches_noclear[syst]["ljet_label"][0] = sel.ljet_label[goodJetIdx] if sel.ljet_pt.size() >= 1 else -999
                     self.branches_noclear[syst]["lep_charge"][0] = lQ
+                    if hasattr(sel, "MC_ttbar_beforeFSR_m") and sel.mcChannelNumber != 0:
+                        self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
                     # commenting out since we do not 
                     # if hasattr(sel, "MC_id_me"):
                         # #pME = helpers.getTruth4momenta(sel)
                         # #truPttbar = pME[2]+pME[3]
-                        # if sel.mcChannelNumber != 0:
-                        #    self.branches[syst]["mttTrue"].push_back(sel.MC_ttbar_beforeFSR_m*1e-3)
                         # for i in xrange(sel.MC_id_me.size()):
                         #     self.branches[syst]["id"].push_back(sel.MC_id_me[i])
                         #     self.branches[syst]["px"].push_back(sel.MC_px_me[i])
@@ -893,7 +895,7 @@ class AnaTtresSL(Analysis):
         if hasattr(self, 'bot_tagger'):
             self.top_tagger._bot_tagger = self.bot_tagger
 
-    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKtVR30Rmax4Rmin02TrackJets.DL1r_FixedCutBEff70', **kwds):
+    def set_bot_tagger(self, algorithm_WP_systs = 'AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77', **kwds):
         # kwds.setdefault('strategy', 'rebel')
         kwds.setdefault('min_nbjets', 1)
         super(AnaTtresSL, self).set_bot_tagger(algorithm_WP_systs, **kwds)

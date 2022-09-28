@@ -6,6 +6,7 @@ import ast
 import os
 import re
 import subprocess
+from collections import OrderedDict
 import urlparse
 try:
     import ROOT.PathResolver
@@ -563,6 +564,23 @@ listWjets22.extend(range(364156, 364197+1))
 #    return ROOT.TopNtupleAnalysis.getWjets22Weight(njet)
 
 doPRW = True
+
+
+# ttbar generator uncertainties
+ttgen_uncert = OrderedDict()
+ttgen_uncert['tt_muF__1up'] =  1
+ttgen_uncert['tt_muF__1down'] =  2
+ttgen_uncert['tt_muR__1up'] =  3
+ttgen_uncert['tt_muR__1down'] =  4
+ttgen_uncert['tt_ISR__1up'] =  193
+ttgen_uncert['tt_ISR__1down'] = 194
+ttgen_uncert['tt_FSR__1up'] = 198
+ttgen_uncert['tt_FSR__1down'] = 199
+
+for x,idx in enumerate([11]+[i for i in range (115,145)]):
+    ttgen_uncert['tt_pdf_'+str(x)] = idx
+
+
 
 def branch_parser(expr, name_fmt = "ljet_{}", index_id = 'i', tree_name = 'sel', debug_mode = False, ast_kwds = {}):
     """Intuitive Python ast-style expression parser

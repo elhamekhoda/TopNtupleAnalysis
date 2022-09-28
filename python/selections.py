@@ -608,7 +608,7 @@ class CaloJetBotTagger(Selection):
     # https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BTaggingBenchmarksRelease21 -- 01.18.2018
 
     def __init__(self, algorithm = 'DL1r',
-                       WP = 'FixedCutBEff70',
+                       WP = 'FixedCutBEff77',
                        jet_collection = 'AntiKt4EMPFlowJets_BTagging201903',
                        strategy = 'obey',
                        do_association = True,
@@ -680,6 +680,7 @@ class CaloJetBotTagger(Selection):
         if self.min_nbjets == 0:
             return True
         return (sum(self.calojet_isbtagged) >= self.min_nbjets)
+        # return (sum(self.calojet_isbtagged) == self.min_nbjets)  # changed it to ==, to make it exactly 0 btag
 
 
     def associated(self, p4_1, p4_2, max_deltaR):
