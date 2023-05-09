@@ -650,15 +650,15 @@ class AnaTtresSL(Analysis):
         if len(sel.el_pt) == 1:
             l.SetPtEtaPhiE(sel.el_pt[0], sel.el_eta[0], sel.el_phi[0], sel.el_e[0])
             lQ = sel.el_charge[0]
-            if not isdata:
-                l_true_type = sel.el_true_type[0]
-                l_true_origin = sel.el_true_origin[0]
+            # if not isdata:
+            #     l_true_type = sel.el_true_type[0]
+            #     l_true_origin = sel.el_true_origin[0]
         elif len(sel.mu_pt) == 1:
             l.SetPtEtaPhiE(sel.mu_pt[0], sel.mu_eta[0], sel.mu_phi[0], sel.mu_e[0])
             lQ = sel.mu_charge[0]
-            if not isdata:
-                l_true_type = sel.mu_true_type[0]
-                l_true_origin = sel.mu_true_origin[0]
+            # if not isdata:
+            #     l_true_type = sel.mu_true_type[0]
+            #     l_true_origin = sel.mu_true_origin[0]
         if lQ > 0:
             self.h["yieldsPos"][syst].Fill(1, w)
         elif lQ < 0:

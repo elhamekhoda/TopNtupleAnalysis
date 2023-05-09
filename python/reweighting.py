@@ -184,6 +184,7 @@ class TTbarNNLORecursiveReweighting(Reweighter):
          'fake_NNLO_oneemission_ttmass': (0, 0),
          'fake_NNLO_oneemission_toppt': (0, 0),
          'fake_NNLO_nominal': (3000, 0),
+         'NNLO_ordering': (0, 0),
          'tt_muR__1up': (0, 6),
          'tt_muR__1down': (0, 7),
          'tt_muF__1up': (0, 8),
@@ -240,8 +241,10 @@ class TTbarNNLORecursiveReweighting(Reweighter):
                     if syst_id == 0
                     else "_3iter_2022_1e8_LUX"
                 )
-
-                reweighter.SetDefault2D()
+                if syst_name == 'NNLO_ordering':
+                    reweighter.SetInverted2D()
+                else:
+                    reweighter.SetDefault2D()
                 reweighter.Init()
                 cls.reweighters[syst_name] = reweighter
 

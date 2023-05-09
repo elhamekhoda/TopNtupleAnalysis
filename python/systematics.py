@@ -433,6 +433,7 @@ def get_systs(expr, isTtbar, isSingleTop, isWjets, EFT, pdfList, pdfSumOfWeights
                 'fake_NNLO_oneemission_toppt',
                 'FSR_up',
                 'FSR_down',
+                'NNLO_ordering'
              ])
 
         if isWjets:
@@ -632,6 +633,7 @@ ALLSYSTS = OrderedDict((
     _syst('ttNNLOrec_muFttmass__1down', 'nominal'),
     _syst('fake_NNLO_oneemission_ttmass', 'nominal'),
     _syst('fake_NNLO_oneemission_toppt', 'nominal'),
+    _syst('NNLO_ordering', 'nominal'),
     _syst('tt_muR__1up', 'nominal'),
     _syst('tt_muR__1down', 'nominal'),
     _syst('tt_muF__1up', 'nominal'),
