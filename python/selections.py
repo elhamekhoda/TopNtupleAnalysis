@@ -666,10 +666,6 @@ class CaloJetBotTagger(Selection):
         self._jet_p4.clear()
         self.tjet_isbtagged.clear()
         self._tjet_p4.clear()
-        for tagged in getattr(ev, self._branch_map['tjet_isbtagged']):
-            self.tjet_isbtagged.push_back(helpers.char2int(tagged))
-        for i in xrange(len(ev.tjet_pt)):
-            self._tjet_p4.push_back((ev.tjet_pt[i], ev.tjet_eta[i], ev.tjet_phi[i], ev.tjet_e[i]))
         for tagged in getattr(ev, self._branch_map['calojet_isbtagged']):
             self.jet_isbtagged.push_back(bool(helpers.char2int(tagged)))
             self.calojet_isbtagged.push_back(helpers.char2int(tagged))

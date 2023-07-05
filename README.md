@@ -3,17 +3,6 @@ This is a framework for reading flat ntuples generated from AnalysisTop, running
 
 Prerequisites
 -------------
-#### Optional
-* Release 20 NNLO Reweighting: NNLOReweighter (Only works with __Altas CMake__)
-
-    ```bash
-    acm clone_project MultiBJets/NNLOReweighter
-    ```
-* Release 21 [NNLO QCD+NLO EWK Correction](https://gitlab.cern.ch/lserkin/TTbarNNLOReweighter) (Only works with __Altas CMake__)
-
-    ```bash
-    acm clone_project lserkin/TTbarNNLOReweighter
-    ```
   * Release 21 [NNLO QCD+NLO EWK Recursive Correction](https://gitlab.cern.ch/pinamont/TTbarNNLOReweighter) (Only works with __Altas CMake__)
 
     ```bash
@@ -23,10 +12,18 @@ Prerequisites
 * Grid Access: HQTTtResonancesTools (Only works with __Altas CMake__)
 
     ```bash
-    acm clone_project elham/BoostedJetTaggers
     acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/TtResonancesTools
     acm clone_project atlas-phys/exot/hqt/R21-ttbar-1lep/HQTTtResonancesTools
     ```
+
+
+#### Optional
+* Release 20 NNLO Reweighting: NNLOReweighter (Only works with __Altas CMake__)
+
+    ```bash
+    acm clone_project MultiBJets/NNLOReweighter
+    ```
+
 * EFTLib: LHAPDF
 
 General Instruction
