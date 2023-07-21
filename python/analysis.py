@@ -90,6 +90,10 @@ class Analysis(object):
         self.add("nlargeJets", 10, -0.5, 9.5)
         ### mass spectrum ###
         self.add("mtt", 600 , 0, 6000)
+        self.add("mttb0", 600 , 0, 6000)
+        self.add("mttb1", 600 , 0, 6000)
+        self.add("mttb2", 600 , 0, 6000)
+        self.add("mttb3", 600 , 0, 6000)
         self.add("mttr", 600, 0, 6000)
         self.add("trueMtt", 600, 0, 6000)
         self.add("trueMttr", 600, 0, 6000)
@@ -737,6 +741,17 @@ class AnaTtresSL(Analysis):
             self.h["largeJet_label"][syst].Fill(sel.ljet_label[goodJetIdx], w)
             self.h["mtlep_boo"][syst].Fill(tlep.M()*1e-3, w)
             self.h["mtt"][syst].Fill(mtt, w)
+            # # fill mttb based on b tag
+            if sel.Btagcat_calojet == 0:
+                self.h['mttb0'][syst].Fill(mtt, w)
+            elif sel.Btagcat_calojet == 1:
+                self.h['mttb1'][syst].Fill(mtt, w)
+            elif sel.Btagcat_calojet == 2:
+                self.h['mttb2'][syst].Fill(mtt, w)
+            elif sel.Btagcat_calojet == 3:
+                self.h['mttb3'][syst].Fill(mtt, w)
+            else:
+                logger.debug("btagcat is: {}".format(sel.Btagcat_calojet))
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             self.h["mtt8TeV"][syst].Fill(mtt, w)
             self.h["mtt8TeVr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
@@ -816,6 +831,17 @@ class AnaTtresSL(Analysis):
             w0 = w/self.w2HDM
             mtt = self.TtresChi2.mtt
             self.h["mtt"][syst].Fill(mtt, w)
+            # # fill mttb based on b tag
+            if self.TtresChi2.bcategory == 0:
+                self.h["mttb0"][syst].Fill(mtt, w)
+            elif self.TtresChi2.bcategory == 1:
+                self.h["mttb1"][syst].Fill(mtt, w)
+            elif self.TtresChi2.bcategory == 2:
+                self.h["mttb2"][syst].Fill(mtt, w)
+            elif self.TtresChi2.bcategory == 3:
+                self.h["mttb3"][syst].Fill(mtt, w)
+            else:
+                logger.debug("btagcat is: {}".format(self.TtresChi2.bcategory))
             self.h["mttr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
             self.h["mtt8TeV"][syst].Fill(mtt, w)
             self.h["mtt8TeVr"][syst].Fill(mtt, w0*(self.w2HDM-1.))
