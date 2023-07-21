@@ -479,8 +479,8 @@ def part_sample(sample, max_input_files = 5, sort = True):
         sample.commit(only_retrieve_cmd = True)
     l = len(sample.input_files)
     systs = [sample.systematics] if type(sample.systematics) == str else list(sample.systematics)
-    if l <= max_input_files or max_input_files in (None, 0, 'none', False) and len(systs) == 1:
-        return [sample]
+    if l <= max_input_files or max_input_files in (None, 0, 'none', False):
+        max_input_files = l
     ret = []
     n = 1
     if max_input_files in (None, 0):
