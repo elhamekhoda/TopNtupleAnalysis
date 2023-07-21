@@ -16,38 +16,15 @@ import re
 from datetime import datetime
 today = datetime.date(datetime.now())
 
+############## SETTINGS ##############
+runMCData = ['zprime']
 # zp_map = {'zprime400':'301322', 'zprime500':'301323', 'zprime750':'301324', 'zprime1000':'301325', 'zprime1250':'301326', 'zprime1500':'301327', 'zprime1750':'301328', 'zprime2000':'301329', 'zprime2250':'301330', 'zprime2500':'301331', 'zprime2750':'301332', 'zprime3000':'301333', 'zprime4000':'301334', 'zprime5000':'301335'}
-zp_map = {'zprime1000': '301325'}
-
-LUMI = OrderedDict((
-('2015', dict(lumi=3.21956)),
-('2016', dict(lumi=32.9881)),
-('2017', dict(lumi=44.3074)),
-('2018', dict(lumi=58.4501)))
-)
-
+zp_map = {'zprime3000': '301333'}
 # PERIODS = ['2015+2016', '2017', '2018']
 PERIODS = ['2018']
 PERIODS_TO_RUN = ['2018']
-# PERIODS = ['2015+2016']
-# PERIODS_TO_RUN = ['2015+2016']
-ntup_dir ='/pscratch/sd/e/elham/ttres_ntuples/'
-# ntup_dir = '/global/cscratch1/sd/elham/ttres_ntuples/'
-# lep_dir ='/elham_syst/'
-
-
-
-# Running on files with systematics (May 2023)
-outpath = '/pscratch/sd/e/elham/ttres_histograms/tt1lep_10may2023/mc16e/'
-# outpath = '/global/cscratch1/sd/elham/ttres_histograms/tt1lep_10may2023/mc16e/'
-
-def get_lumi(*periods):
-    lumi = 0
-    for p in periods:
-        for pp in p.split('+'):
-            lumi += LUMI[pp.strip()]['lumi']
-    return lumi
-
+ntup_dir = '/home/schuya/ttres/ntuples/mc16e/'
+outpath = '/home/schuya/ttres/histograms/2023_07/mc16e/'
 HYPER = {
          # '2015+2016':{'MC': {'suffix': '1lep.MC16a.21-02-180v10_output_root', 'period': '276262-311481', 'periodFraction': None, 'dir': 'mc16a_21.2.180', 'campaign': '2015+2016'}, 'data': {'suffix': 'FH.2015and2016.rel21.65v3_output_root', 'dir': 'mc16a_21.2.74', 'campaign': '2015+2016'}},
         #  '2017'     :{'MC': {'suffix': '1lep.ttbar.21-02-180v3_mc16d_output_root', 'period': '325713-340453', 'periodFraction': None, 'dir': 'mc16d_21.2.180', 'campaign': '2017'}, 'data': {'suffix': 'FH.2017.rel21.65v4_output_root', 'campaign': '2017'}},
@@ -56,24 +33,37 @@ HYPER = {
          # '2018'     :{'MC': {'suffix': '1lep.MC16d_ttbar_systematics_output_root', 'period': '348885-999999', 'periodFraction': None, 'dir': 'mc16d_21.2.180', 'campaign': '2018'}, 'data': {'suffix': '1lep.data18.21-02-155v0_output_root', 'dir': 'mc16e_21.2.155', 'campaign': '2018'}},
          '2018'     :{'MC': {'suffix': '1lep.MC16e.21-02-243_syst_output_root', 'period': '348885-999999', 'periodFraction': None, 'dir': 'mc16e_21.2.243', 'campaign': '2018'}, 'data': {'suffix': '1lep.data18.21-02-180v0_output_root', 'dir': 'mc16e_21.2.180', 'campaign': '2018'}},
                       }
-
-for hyper, d in HYPER.iteritems():
-    d['MC']['periodFraction'] = get_lumi(hyper)/get_lumi(*PERIODS)
-
-
-#runMCData = ['multijet','tt','ttnonallhad','zprime', 'singletop', 'diboson', 'Wjets', 'Zjets', 'data']
-#runMCData = ['singletop', 'diboson', 'multijet']
-#runMCData = ['tt', 'wjets', 'zjets']
-runMCData = ['zprime']
-
 TRACKJET_CLEANING = ''
 BLINDING = False
-RECOMPUTE_WEIGHT = True
+RECOMPUTE_WEIGHT = False
 CORRECTION = 'none'
 # un-comment it for ttbar sample
 # CORRECTION = 'NNLORecursive2d'
-
 TTGENSYST = False
+weight_mode = 'auto' # set to 'auto' to append to existing weights file, 'w' to overwrite
+RSE_preferred = 'MWT2_UC_LOCALGROUPDISK'
+SPLIT_SYSTEMATICS = True # If true, run each systematic separately. Otherwise, group systematics by tree name.
+MAX_INPUTS_PER_JOB = 50 # Maximum number of input files per job
+USE_CLUSTER = True
+
+############## END SETTINGS ##############
+
+LUMI = OrderedDict((
+('2015', dict(lumi=3.21956)),
+('2016', dict(lumi=32.9881)),
+('2017', dict(lumi=44.3074)),
+('2018', dict(lumi=58.4501)))
+)
+
+def get_lumi(*periods):
+    lumi = 0
+    for p in periods:
+        for pp in p.split('+'):
+            lumi += LUMI[pp.strip()]['lumi']
+    return lumi
+
+for hyper, d in HYPER.iteritems():
+    d['MC']['periodFraction'] = get_lumi(hyper)/get_lumi(*PERIODS)
 
 def add_sliced_dijet_samples(slices = xrange(0,13)):
     for i in slices:
@@ -91,7 +81,6 @@ add_sliced_dijet_samples()
 # dijets sample
 s = []
 
-weight_mode = 'w'
 def compute_weight(sa):
     print(sa)
     global weight_mode
@@ -102,31 +91,7 @@ def compute_weight(sa):
             samples.write_totalweight_of_samples(sa, systs = [''], online = False, mode=weight_mode)
         weight_mode = 'auto'
 
-
 campaign = [HYPER[p]['MC'] for p in PERIODS_TO_RUN ]#, 'e']
-
-if 'multijet' in runMCData:
-    import HQTTtResonancesTools.MC16a_EXOT7
-    for sl in xrange(0, 13):
-        ss = None
-        dsid = 361020 + sl
-        for c in (c for c in campaign if c['campaign'] in ('2017')):
-            _ss = samples.Sample(sample_name = 'dijets_JZ%sW'%sl,
-                          deriv = 'EXOT4',
-                          ds_scope = 'user.elham',
-                          #ds_fmt_options = {'suffix': c['suffix']},
-                          #RSE_preferred = 'DESY-HH_LOCALGROUPDISK',
-                          input_files=glob.glob(ntup_dir+c['dir']+'dijet/user.kkrowpma.%s.Pythia8EvtGen.DAOD_EXOT4.*_p3990.%s/*'%(dsid,c['suffix'])),
-                          commit_when_init = True,
-                          runNumber = c['period'],
-                          periodFraction = 1
-                          )
-            compute_weight([_ss])
-            if ss is None:
-                ss = _ss
-            else:
-                ss._input_files.extend(_ss._input_files)
-        s += [ss]
 
 if 'tt' in runMCData:
     ss = None
@@ -136,7 +101,7 @@ if 'tt' in runMCData:
                             deriv = 'EXOT4',
                             ds_scope = 'user.elham',
                             ds_fmt_options = {'suffix': c['suffix']},
-                            RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
+                            RSE_preferred = RSE_preferred,
                             #input_files=glob.glob(ntup_dir+c['dir']+'ttbar/user.elham.410470.PhPy8EG.DAOD_EXOT4.e6337_s3126_r10724_p4149.1lep.MC16e.21-02-155v00_syst_output_root/*'),
                             # input_files=glob.glob(ntup_dir+c['dir']+'ttbar/user.elham.410470.PhPy8EG.DAOD_EXOT4.e6337_a875_*_p4396.%s/*'%(c['suffix'])),
                             input_files=glob.glob(ntup_dir+c['dir']+'ttbar/user.bngair.410470.PhPy8EG.DAOD_EXOT4.e6337_s3126_r10201_p4396.1lep.ttbar.21-02-180v3_mc16d_output_root/*'),
@@ -160,7 +125,7 @@ if 'tt_af2' in runMCData:
                             deriv = 'EXOT4',
                             ds_scope = 'user.bngair',
                             ds_fmt_options = {'suffix': c['suffix']},
-                            RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
+                            RSE_preferred = RSE_preferred,
                             #input_files=glob.glob(ntup_dir+c['dir']+'ttbar/user.elham.410470.PhPy8EG.DAOD_EXOT4.e6337_s3126_r10724_p4149.1lep.MC16e.21-02-155v00_syst_output_root/*'),
                             input_files=glob.glob(ntup_dir+c['dir']+'tt_af2/user.bngair.410470.PhPy8EG.DAOD_EXOT4.e6337_a875_*_p4149.%s/*'%(c['suffix'])),
                             # input_files=glob.glob(ntup_dir+c['dir']+'ttbar/user.elham.410470.PhPy8EG.DAOD_EXOT4.e6337_s3126_*_p4396.%s/*'%(c['suffix'])),
@@ -184,7 +149,7 @@ if 'tt_hs' in runMCData:
                             deriv = 'EXOT4',
                             ds_scope = 'user.elham',
                             ds_fmt_options = {'suffix': c['suffix']},
-                            RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
+                            RSE_preferred = RSE_preferred,
                             input_files=glob.glob(ntup_dir+c['dir']+'tt_hs/user.bngair.41046*.*.e6762_a875_*_p4396.%s/*'%(c['suffix'])),
                             # input_files=glob.glob(ntup_dir+c['dir']+'ttbar/user.elham.410470.PhPy8EG.DAOD_EXOT4.e6337_s3126_*_p4396.%s/*'%(c['suffix'])),
                             commit_when_init = True,
@@ -207,7 +172,7 @@ if 'tt_had' in runMCData:
                             deriv = 'EXOT4',
                             ds_scope = 'user.elham',
                             ds_fmt_options = {'suffix': c['suffix']},
-                            RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
+                            RSE_preferred = RSE_preferred,
                             input_files=glob.glob(ntup_dir+c['dir']+'tt_had/user.bngair.41055*.*_p4396.%s/*'%(c['suffix'])),
                             # input_files=glob.glob(ntup_dir+c['dir']+'ttbar/user.elham.410470.PhPy8EG.DAOD_EXOT4.e6337_s3126_*_p4396.%s/*'%(c['suffix'])),
                             commit_when_init = True,
@@ -230,7 +195,7 @@ if 'tt_hdamp' in runMCData:
                             deriv = 'EXOT4',
                             ds_scope = 'user.elham',
                             ds_fmt_options = {'suffix': c['suffix']},
-                            RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
+                            RSE_preferred = RSE_preferred,
                             input_files=glob.glob(ntup_dir+c['dir']+'tt_hdamp/user.bngair.41048*.*_p4149.%s/*'%(c['suffix'])),
                             # input_files=glob.glob(ntup_dir+c['dir']+'ttbar/user.elham.410470.PhPy8EG.DAOD_EXOT4.e6337_s3126_*_p4396.%s/*'%(c['suffix'])),
                             commit_when_init = True,
@@ -254,7 +219,7 @@ if 'tt_meoff' in runMCData:
                             deriv = 'TOPQ1',
                             ds_scope = 'user.elham',
                             ds_fmt_options = {'suffix': c['suffix']},
-                            RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
+                            RSE_preferred = RSE_preferred,
                             input_files=glob.glob(ntup_dir+c['dir']+'ttbar_MECoff/user.elham.411288.*_p4346.%s/*'%(c['suffix'])),
                             # input_files=glob.glob(ntup_dir+c['dir']+'ttbar/user.elham.410470.PhPy8EG.DAOD_EXOT4.e6337_s3126_*_p4396.%s/*'%(c['suffix'])),
                             commit_when_init = True,
@@ -300,9 +265,9 @@ if 'singletop' in runMCData:
                             ds_scope = 'user.elham',
                             # ds_scope = 'user.kkrowpma',
                             ds_fmt_options = {'suffix': c['suffix']},
-                            input_files=glob.glob(ntup_dir+c['dir']+'singletop/user.elham.*.*.DAOD_EXOT4.*_p4149.%s/*'%(c['suffix'])),
+                            input_files=glob.glob(ntup_dir+'singletop/user.elham.*.*.DAOD_EXOT4.*_p4149.%s/*'%(c['suffix'])),
                             # input_files=glob.glob(ntup_dir+c['dir']+'singletop/user.kkrowpma.*.*.DAOD_EXOT4.*_p4149.%s/*'%(c['suffix'])),
-                            RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
+                            RSE_preferred = RSE_preferred,
                             commit_when_init = True,
                             runNumber = c['period'],
                             periodFraction = c['periodFraction']
@@ -323,8 +288,8 @@ if 'diboson' in runMCData:
                             deriv = 'EXOT4',
                             ds_scope = 'user.elham',
                             ds_fmt_options = {'suffix': c['suffix']},
-                            input_files=glob.glob(ntup_dir+c['dir']+'diboson/user.elham.*.*.DAOD_EXOT4.*_p4149.%s/*'%(c['suffix'])),
-                            RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
+                            input_files=glob.glob(ntup_dir+'diboson/user.elham.*.*.DAOD_EXOT4.*_p4149.%s/*'%(c['suffix'])),
+                            RSE_preferred = RSE_preferred,
                             commit_when_init = True,
                             runNumber = c['period'],
                             periodFraction = c['periodFraction']
@@ -345,8 +310,8 @@ if 'wjets2211' in runMCData:
                             deriv = 'EXOT4',
                             ds_scope = 'user.elham',
                             ds_fmt_options = {'suffix': c['suffix']},
-                            input_files=glob.glob(ntup_dir+c['dir']+'wjets2211/user.elham.*.*.DAOD_EXOT4.*_p4149.%s/*'%(c['suffix'])),
-                            RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
+                            input_files=glob.glob(ntup_dir+'Wjets/user.elham.*.*.DAOD_EXOT4.*_p4149.%s/*'%(c['suffix'])),
+                            RSE_preferred = RSE_preferred,
                             commit_when_init = True,
                             runNumber = c['period'],
                             periodFraction = c['periodFraction']
@@ -367,8 +332,8 @@ if 'zjets2211' in runMCData:
                             deriv = 'EXOT4',
                             ds_scope = 'user.elham',
                             ds_fmt_options = {'suffix': c['suffix']},
-                            input_files=glob.glob(ntup_dir+c['dir']+'zjets2211/user.elham.*.*.DAOD_EXOT4.*_p4149.%s/*'%(c['suffix'])),
-                            RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
+                            input_files=glob.glob(ntup_dir+'Zjets/user.elham.*.*.DAOD_EXOT4.*_p4149.%s/*'%(c['suffix'])),
+                            RSE_preferred = RSE_preferred,
                             commit_when_init = True,
                             runNumber = c['period'],
                             periodFraction = c['periodFraction']
@@ -423,7 +388,7 @@ if 'zprime' in runMCData:
                                 ds_scope = 'user.elham',
                                 ds_fmt_options = {'suffix': c['suffix']},
                                 #input_files=glob.glob(ntup_dir+c['dir']+'zprime/user.kkrowpma.%s.Pythia8EvtGen.DAOD_EXOT4.*_p3992.%s/*'%(zp_map[sn],c['suffix'])),
-                                input_files=glob.glob(ntup_dir+c['dir']+'/zprime/user.elham.%s.Pythia8EvtGen.DAOD_EXOT4.*_p4149.%s/*'%(zp_map[sn],c['suffix'])),
+                                input_files=glob.glob(ntup_dir+'Zprime/user.elham.%s.Pythia8EvtGen.DAOD_EXOT4.*_p4149.%s/*'%(zp_map[sn],c['suffix'])),
                                 #RSE_preferred = 'AGLT2_LOCALGROUPDISK',
                                 RSE_preferred = 'CA-SFU-T2_LOCALGROUPDISK',
                                 #download_to = os.path.join(os.curdir, 'data'),
@@ -457,53 +422,6 @@ if 'data' in runMCData:
         else:
             ss._input_files.extend(_ss._input_files)
     s += [ss]
-    # print s[-1]._list_dids()
-# sys.exit(1)
-# for ss in s:
-#     ss.input_files = map(helpers.lan_path, ss.input_files)
-# a._input_files += b._input_files
-
-# s += [a]
-# print 'sliced ttbar'
-# a = samples.Sample(sample_name = 'tt_mttsliced',
-#                    deriv = 'TOPQ1',
-#                    tag = 'nonallhad',
-#                    ds_scope = 'user.yuchen',
-#                    ds_fmt_options = {'suffix': 'FH.MC.20181127v0_output.root'},
-#                    RSE_preferred = 'DESY-HH_LOCALGROUPDISK',
-#                    # commit_when_init = False
-#                    )
-# print 'inclusive ttbar'
-# b = samples.Sample(sample_name = 'tt_mttsliced',
-#                    deriv = 'TOPQ1',
-#                    tag = 'nonallhad',
-#                    ds_scope = 'user.yuchen',
-#                    ds_fmt_options = {'suffix': 'mtt_0_1100.FH.MC.20181205v0_output.root'},
-#                    RSE_preferred = 'DESY-HH_LOCALGROUPDISK',
-#                    # commit_when_init = False
-#                    )
-
-# a._input_files += b._input_files
-
-# s += [a]
-# datadir = Path('../data')
-# for dataset in datadir.glob('./*/'):
-#     if dataset.name not in ('tt',):
-#         continue
-#     ss = samples.Sample(dataset.name, deriv = 'EXOT7', input_files = [str(f.resolve()) for f in dataset.glob('*.root')])
-#     ss.systematics = 'nominal,ttEWK__1up,ttEWK__1down'
-#     s.append(ss)
-#     print ss.input_files
-
-
-# for ss in s:
-#     ss.add_replication_rule()
-# for ss in s:
-#     print ss
-
-#     ss.commit()
-#     # ss.get_replication_rules()
-#     ss.update_replication_lieftime(only = range(1))
 
 systs_nom = [
 #usually useed
@@ -514,110 +432,110 @@ systs_nom = [
 'pileupSF__1up', 
 # # #-----
 
-# 'eChargeMisIDStatSF__1down',
-# 'eChargeMisIDStatSF__1up',
-# 'eChargeMisIDSystSF__1down',
-# 'eChargeMisIDSystSF__1up',
-# 'eChargeSF__1down',
-# 'eChargeSF__1up',
-# 'eIDSF__1down',
-# 'eIDSF__1up',
-# 'eIsolSF__1down',
-# 'eIsolSF__1up',
-# 'eRecoSF__1down',
-# 'eRecoSF__1up',
-# 'eTrigSF__1down',
-# 'eTrigSF__1up',
-# 'muIDStatSF__1down',
-# 'muIDStatSF__1up',
-# 'muIDSystSF__1down',
-# 'muIDSystSF__1up',
-# 'muIsolStatSF__1down',
-# 'muIsolStatSF__1up',
-# 'muIsolSystSF__1down',
-# 'muIsolSystSF__1up',
-# 'muTrigStatSF__1down',
-# 'muTrigStatSF__1up',
-# 'muTrigSystSF__1down',
-# 'muTrigSystSF__1up',
+'eChargeMisIDStatSF__1down',
+'eChargeMisIDStatSF__1up',
+'eChargeMisIDSystSF__1down',
+'eChargeMisIDSystSF__1up',
+'eChargeSF__1down',
+'eChargeSF__1up',
+'eIDSF__1down',
+'eIDSF__1up',
+'eIsolSF__1down',
+'eIsolSF__1up',
+'eRecoSF__1down',
+'eRecoSF__1up',
+'eTrigSF__1down',
+'eTrigSF__1up',
+'muIDStatSF__1down',
+'muIDStatSF__1up',
+'muIDSystSF__1down',
+'muIDSystSF__1up',
+'muIsolStatSF__1down',
+'muIsolStatSF__1up',
+'muIsolSystSF__1down',
+'muIsolSystSF__1up',
+'muTrigStatSF__1down',
+'muTrigStatSF__1up',
+'muTrigSystSF__1down',
+'muTrigSystSF__1up',
 
-# #usually used
-# 'btagbSF_0__1down',
-# 'btagbSF_0__1up',
-# 'btagbSF_1__1down',
-# 'btagbSF_1__1up',
-# 'btagbSF_2__1down',
-# 'btagbSF_2__1up',
-# 'btagbSF_3__1down',
-# 'btagbSF_3__1up',
-# 'btagbSF_4__1down',
-# 'btagbSF_4__1up',
-# 'btagbSF_5__1down',
-# 'btagbSF_5__1up',
-# 'btagbSF_6__1down',
-# 'btagbSF_6__1up',
-# 'btagbSF_7__1down',
-# 'btagbSF_7__1up',
-# 'btagbSF_8__1down',
-# 'btagbSF_8__1up',
-# 'btagcSF_0__1down',
-# 'btagcSF_0__1up',
-# 'btagcSF_1__1down',
-# 'btagcSF_1__1up',
-# 'btagcSF_2__1down',
-# 'btagcSF_2__1up',
-# 'btagcSF_3__1down',
-# 'btagcSF_3__1up',
-# 'btageSF_0__1down',
-# 'btageSF_0__1up',
-# 'btageSF_1__1down',
-# 'btageSF_1__1up',
-# 'btaglSF_0__1down',
-# 'btaglSF_0__1up',
-# 'btaglSF_1__1down',
-# 'btaglSF_1__1up',
-# 'btaglSF_2__1down',
-# 'btaglSF_2__1up',
-# 'btaglSF_3__1down',
-# 'btaglSF_3__1up',
+#usually used
+'btagbSF_0__1down',
+'btagbSF_0__1up',
+'btagbSF_1__1down',
+'btagbSF_1__1up',
+'btagbSF_2__1down',
+'btagbSF_2__1up',
+'btagbSF_3__1down',
+'btagbSF_3__1up',
+'btagbSF_4__1down',
+'btagbSF_4__1up',
+'btagbSF_5__1down',
+'btagbSF_5__1up',
+'btagbSF_6__1down',
+'btagbSF_6__1up',
+'btagbSF_7__1down',
+'btagbSF_7__1up',
+'btagbSF_8__1down',
+'btagbSF_8__1up',
+'btagcSF_0__1down',
+'btagcSF_0__1up',
+'btagcSF_1__1down',
+'btagcSF_1__1up',
+'btagcSF_2__1down',
+'btagcSF_2__1up',
+'btagcSF_3__1down',
+'btagcSF_3__1up',
+'btageSF_0__1down',
+'btageSF_0__1up',
+'btageSF_1__1down',
+'btageSF_1__1up',
+'btaglSF_0__1down',
+'btaglSF_0__1up',
+'btaglSF_1__1down',
+'btaglSF_1__1up',
+'btaglSF_2__1down',
+'btaglSF_2__1up',
+'btaglSF_3__1down',
+'btaglSF_3__1up',
 
-# #top-tag SF
-# 'toptagSF_0__1up',
-# 'toptagSF_0__1down',
-# 'toptagSF_1__1up',
-# 'toptagSF_1__1down',
-# 'toptagSF_2__1up',
-# 'toptagSF_2__1down',
-# 'toptagSF_3__1up',
-# 'toptagSF_3__1down',
-# 'toptagSF_4__1up',
-# 'toptagSF_4__1down',
-# 'toptagSF_5__1up',
-# 'toptagSF_5__1down',
-# 'toptagSF_6__1up',
-# 'toptagSF_6__1down',
-# 'toptagSF_7__1up',
-# 'toptagSF_7__1down',
-# 'toptagSF_8__1up',
-# 'toptagSF_8__1down',
-# 'toptagSF_9__1up',
-# 'toptagSF_9__1down',
-# 'toptagSF_10__1up',
-# 'toptagSF_10__1down',
-# 'toptagSF_11__1up',
-# 'toptagSF_11__1down',
-# 'toptagSF_12__1up',
-# 'toptagSF_12__1down',
-# 'toptagSF_13__1up',
-# 'toptagSF_13__1down',
-# 'toptagSF_14__1up',
-# 'toptagSF_14__1down',
-# 'toptagSF_15__1up',
-# 'toptagSF_15__1down',
-# 'toptagSF_16__1up',
-# 'toptagSF_16__1down',
-# 'toptagSF_17__1up',
-# 'toptagSF_17__1down',
+#top-tag SF
+'toptagSF_0__1up',
+'toptagSF_0__1down',
+'toptagSF_1__1up',
+'toptagSF_1__1down',
+'toptagSF_2__1up',
+'toptagSF_2__1down',
+'toptagSF_3__1up',
+'toptagSF_3__1down',
+'toptagSF_4__1up',
+'toptagSF_4__1down',
+'toptagSF_5__1up',
+'toptagSF_5__1down',
+'toptagSF_6__1up',
+'toptagSF_6__1down',
+'toptagSF_7__1up',
+'toptagSF_7__1down',
+'toptagSF_8__1up',
+'toptagSF_8__1down',
+'toptagSF_9__1up',
+'toptagSF_9__1down',
+'toptagSF_10__1up',
+'toptagSF_10__1down',
+'toptagSF_11__1up',
+'toptagSF_11__1down',
+'toptagSF_12__1up',
+'toptagSF_12__1down',
+'toptagSF_13__1up',
+'toptagSF_13__1down',
+'toptagSF_14__1up',
+'toptagSF_14__1down',
+'toptagSF_15__1up',
+'toptagSF_15__1down',
+'toptagSF_16__1up',
+'toptagSF_16__1down',
+'toptagSF_17__1up',
+'toptagSF_17__1down',
 ]
 
 syst_ttgen = [
@@ -951,7 +869,11 @@ systs_ext = [
 ]
 
 def grouped_systs(systs):
-    return [','.join(syst.name for syst in sg.systematics) for sg in systematics.grouped_systs(map(systematics.syst, systs))]
+    if SPLIT_SYSTEMATICS:
+        key = lambda tup: tup.name
+    else:
+        key = lambda tup: tup.tree
+    return [','.join(syst.name for syst in sg.systematics) for sg in systematics.grouped_systs(map(systematics.syst, systs), key=key)]
 
 def max_input(x):
     if 'dijets' in x.sample_name:
@@ -977,13 +899,6 @@ if True:
     btaggings = ['AntiKt4EMPFlowJets_BTagging201903.DL1r_FixedCutBEff77']
     for btagging in btaggings:
         for l in ('e', 'mu'):
-        #runs.setdefault(btagging.split('.')[1]+'_NoTopTagging', []).append(dict(aux_selector = TRACKJET_CLEANING, topo='b',lepton='FH',b_category = str(i),top_tagger='1', bot_tagger = btagging,fname = '{channel}_{s.sample_name}_{s.tag}_'+btagging.split('.')[1]+'_NoTopTagging.root'))
-        # runs.setdefault(btagging.split('.')[1]+'_DNN50', []).append(dict(aux_selector = TRACKJET_CLEANING, topo='b',lepton='FH',b_category = '1',top_tagger='good_dnn_contained50', bot_tagger = btagging,fname = '{channel}_{s.sample_name}_{s.tag}_'+btagging.split('.')[1]+'_DNN50.root'))
-        #runs.setdefault(btagging.split('.')[1]+'_DNN50', []).append(dict(aux_selector = TRACKJET_CLEANING, topo='b',lepton='FH',b_category = str(i),top_tagger='good_dnn_contained50', bot_tagger = btagging,fname = '{channel}_{s.sample_name}_{s.tag}_'+btagging.split('.')[1]+'_DNN50.root'))
-            #runs.setdefault(btagging.split('.')[1]+'_DNNincl80', []).append(dict(aux_selector = TRACKJET_CLEANING, topo='b',lepton=l,b_category ='',top_tagger='good_dnn_inclusive80*angular_cuts', bot_tagger = btagging,fname = '{channel}_{s.sample_name}_{s.tag}_'+btagging.split('.')[1]+'_DNNincl80.root'))  #angular_cuts
-            #runs.setdefault(btagging.split('.')[1]+'_DNNincl80', []).append(dict(aux_selector = TRACKJET_CLEANING, topo='r',lepton=l,b_category ='',top_tagger='good_dnn_inclusive80*angular_cuts', bot_tagger = btagging,fname = '{channel}_{s.sample_name}_{s.tag}_'+btagging.split('.')[1]+'_DNNincl80.root'))
-            #runs.setdefault(btagging.split('.')[1]+'_DNNcont80', []).append(dict(aux_selector = TRACKJET_CLEANING, topo='b',lepton=l,b_category ='',top_tagger='good_dnn_contained80*angular_cuts', bot_tagger = btagging,fname = '{channel}_{s.sample_name}_{s.tag}_'+btagging.split('.')[1]+'_DNNcont80.root'))  #angular_cuts
-            #runs.setdefault(btagging.split('.')[1]+'_DNNcont80', []).append(dict(aux_selector = TRACKJET_CLEANING, topo='r',lepton=l,b_category ='',top_tagger='good_dnn_contained80*angular_cuts', bot_tagger = btagging,fname = '{channel}_{s.sample_name}_{s.tag}_'+btagging.split('.')[1]+'_DNNcont80.root'))
             runs.setdefault(btagging.split('.')[1]+'_DNNincl80', []).append(dict(aux_selector = TRACKJET_CLEANING, topo='b',lepton=l,b_category ='',top_tagger='isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cuts', bot_tagger = btagging,fname = '{channel}_{s.sample_name}_{s.tag}_'+btagging.split('.')[1]+'_DNNincl80.root'))  #angular_cuts
             runs.setdefault(btagging.split('.')[1]+'_DNNincl80', []).append(dict(aux_selector = TRACKJET_CLEANING, topo='r',lepton=l,b_category ='',top_tagger='isTagged_JSSWTopTaggerDNN_DNNTaggerTopQuarkInclusive80*angular_cuts', bot_tagger = btagging,fname = '{channel}_{s.sample_name}_{s.tag}_'+btagging.split('.')[1]+'_DNNincl80.root'))
     for _r in runs.values():
@@ -1017,16 +932,9 @@ if True:
             elif 'tt' in sample.sample_name:
               # sample.systematics = grouped_systs(systs_nom+systs_ext+systs_ttbar)
               sample.systematics = grouped_systs(systs_ttbar)
-            # elif 'zjets' in sample.sample_name:
-            #   sample.systematics = grouped_systs(systs_nom)
-            # elif 'wjets' in sample.sample_name:
-            #   sample.systematics = grouped_systs(systs_nom)
-            # elif 'ttV' in sample.sample_name:
-            #   sample.systematics = grouped_systs(systs_nom)
             else:
-                sample.systematics = grouped_systs(systs_nom)
+                sample.systematics = grouped_systs(systs_nom+systs_ext)
             print (sample.systematics)
-            # sample.systematics = ['nominal']
         # only channels be, bmu, re, rmu 2015+2016
         r.selections = []
         for sel in sels:
@@ -1041,7 +949,7 @@ if True:
         if r.cluster != None:
             setattr(r.cluster, 'max_runtime', 3600*2)
             r.cluster.isFirst = not bool(i)
-        r.run(use_cluster = True,
+        r.run(use_cluster = USE_CLUSTER,
               monitor = False,  #Usually I use Flase 
               # rerun_strategy = 'none', # avalible: ['merge', 'force', 'none']
               delete_sources_after_merged = True,  # Elham changed to False (June 2021)
@@ -1070,13 +978,12 @@ if True:
             analysis_exts.append('--blinding')
         r = main(samples = s,
              systematics = grouped_systs,
-             #output_dir = None,
             #  log_dir=
              output_dir = '{}{}_{}'.format(outpath,i,runMCData[0]),
              analysis_type = 'AnaTtresSL',
              analysis_exts=analysis_exts,
              i = i,
-             max_inputs_per_job = 10, #max_input,
+             max_inputs_per_job = MAX_INPUTS_PER_JOB,
              cluster = 'condor') # known to work: 'condor', 'lsf' and 'grid'
     r.wait()
 
