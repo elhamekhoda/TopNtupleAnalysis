@@ -485,6 +485,8 @@ def part_sample(sample, max_input_files = 5, sort = True):
     n = 1
     if max_input_files in (None, 0):
         max_input_files = l
+    if max_input_files == 0:
+        max_input_files = 1
     for i in xrange(0, l, max_input_files):
         for syst in systs:
             subsample = SubSample(sample, sample.input_files[i:min(i+max_input_files, l)], suffix = '{:06d}'.format(n))
