@@ -6,6 +6,7 @@ from TopNtupleAnalysis import helpers
 import sys
 from collections import OrderedDict
 import glob
+import argparse
 
 """
 An example of histogramming signal sample w/ M(Z')=[400, ... , 5000]GeV in l+jets analysis using batch system `HTCondor`
@@ -16,15 +17,25 @@ import re
 from datetime import datetime
 today = datetime.date(datetime.now())
 
+parser = argparse.ArgumentParser()
+parser.add_argument("sample", help="the input sample name", choices=['tt', 'tt_af2', 'tt_hs', 'tt_had', 'tt_hdamp', 'tt_meoff', 'ttallhad', 'singletop', 'diboson', 'wjets2211', 'zjets2211', 'ttv', 'zprime', 'data'])
+parser.add_argument('--max-inputs-per-job', type=int, default=500, help='Maximum number of input files per job')
+parser.add_argument('--max-files-open-hadd', type=int, default=10, help='Maximum number of input files per job')
+
+args = parser.parse_args()
+
+runMCData = [args.sample]
+MAX_INPUTS_PER_JOB =  args.max_inputs_per_job
+
 ############## SETTINGS ##############
-runMCData = ['zprime']
-# zp_map = {'zprime400':'301322', 'zprime500':'301323', 'zprime750':'301324', 'zprime1000':'301325', 'zprime1250':'301326', 'zprime1500':'301327', 'zprime1750':'301328', 'zprime2000':'301329', 'zprime2250':'301330', 'zprime2500':'301331', 'zprime2750':'301332', 'zprime3000':'301333', 'zprime4000':'301334', 'zprime5000':'301335'}
-zp_map = {'zprime3000': '301333'}
+# runMCData = ['zprime', 'wjets2211', 'zjets2211', 'singletop', 'diboson']
+zp_map = {'zprime400':'301322', 'zprime500':'301323', 'zprime750':'301324', 'zprime1000':'301325', 'zprime1250':'301326', 'zprime1500':'301327', 'zprime1750':'301328', 'zprime2000':'301329', 'zprime2250':'301330', 'zprime2500':'301331', 'zprime2750':'301332', 'zprime3000':'301333', 'zprime4000':'301334', 'zprime5000':'301335'}
+# zp_map = {'zprime3000': '301333'}
 # PERIODS = ['2015+2016', '2017', '2018']
 PERIODS = ['2018']
 PERIODS_TO_RUN = ['2018']
-ntup_dir = '/home/schuya/ttres/ntuples/mc16e/'
-outpath = '/home/schuya/ttres/histograms/2023_07/mc16e/'
+ntup_dir = '/data/schuya/ttbar_resonance/ntuples/mc16e/'
+outpath = '/data/schuya/ttbar_resonance/histograms/2023_07/mc16e/'
 HYPER = {
          # '2015+2016':{'MC': {'suffix': '1lep.MC16a.21-02-180v10_output_root', 'period': '276262-311481', 'periodFraction': None, 'dir': 'mc16a_21.2.180', 'campaign': '2015+2016'}, 'data': {'suffix': 'FH.2015and2016.rel21.65v3_output_root', 'dir': 'mc16a_21.2.74', 'campaign': '2015+2016'}},
         #  '2017'     :{'MC': {'suffix': '1lep.ttbar.21-02-180v3_mc16d_output_root', 'period': '325713-340453', 'periodFraction': None, 'dir': 'mc16d_21.2.180', 'campaign': '2017'}, 'data': {'suffix': 'FH.2017.rel21.65v4_output_root', 'campaign': '2017'}},
@@ -43,9 +54,7 @@ TTGENSYST = False
 weight_mode = 'auto' # set to 'auto' to append to existing weights file, 'w' to overwrite
 RSE_preferred = 'MWT2_UC_LOCALGROUPDISK'
 SPLIT_SYSTEMATICS = True # If true, run each systematic separately. Otherwise, group systematics by tree name.
-MAX_INPUTS_PER_JOB = 50 # Maximum number of input files per job
 USE_CLUSTER = True
-
 ############## END SETTINGS ##############
 
 LUMI = OrderedDict((
@@ -301,7 +310,7 @@ if 'diboson' in runMCData:
         else:
             ss._input_files.extend(_ss._input_files)
     s += [ss]
-
+    
 if 'wjets2211' in runMCData:
     ss = None
     for c in campaign:
@@ -956,7 +965,7 @@ if True:
               # execute_kwds = {'compress_outputs': True, 'submit_kwds': {'argument': ['--site', 'DESY-HH,AUTO', '--destSE', 'DESY-HH_SCRATCHDISK']}},
             #   execute_kwds = {'compress_outputs': True, 'submit_kwds': {'argument': ['--qos', 'shared', '-C', 'cpu', '--account', 'atlas', '--image', 'zlmarshall/atlas-grid-centos7:20230424']}},
             #   execute_kwds = {'compress_outputs': True, 'submit_kwds': {'argument': ['--qos', 'shared', '-C', 'haswell', '--account', 'atlas', '--image', 'zlmarshall/atlas-grid-centos7:20230424']}},
-              finalize_kwds = {'num_of_workers': 8, 'skip_merge_when_fail': True}#, 'hadd_ext_options': ['-n','100']}#, 'do_merge':False}
+              finalize_kwds = {'num_of_workers': 8, 'skip_merge_when_fail': True, 'hadd_ext_options': ['-n',str(args.max_files_open_hadd)]}#, 'hadd_ext_options': ['-n','100']}#, 'do_merge':False}
               # This is to control `Run.execute` and can be also used to control batch submission,
               # like site name where jobs are sent in grid for example. Comment it out to use it.
               )

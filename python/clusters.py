@@ -877,22 +877,35 @@ class CondorCluster(Cluster):
     def submit(self, prog, argument=[], cwd=None, stdout=None, stderr=None, log=None,
                required_output=[], nb_submit=0):
         """Submit a job prog to a Condor cluster"""
-        
+        # text = """Executable = %(prog)s
+        #           output = %(stdout)s
+        #           error = %(stderr)s
+        #           log = %(log)s
+        #           %(argument)s
+        #           +MaxRuntime = %(max_runtime)s
+        #           +RequestRuntime = %(max_runtime)s
+        #           environment = CONDOR_ID=$(Cluster).$(Process)
+        #           Universe = vanilla
+        #           notification = Error
+        #           Initialdir = %(cwd)s
+        #           %(requirement)s
+        #           getenv=True
+        #           queue 1
+        #        """
         text = """Executable = %(prog)s
-                  output = %(stdout)s
-                  error = %(stderr)s
-                  log = %(log)s
-                  %(argument)s
-                  +MaxRuntime = %(max_runtime)s
-                  +RequestRuntime = %(max_runtime)s
-                  environment = CONDOR_ID=$(Cluster).$(Process)
-                  Universe = vanilla
-                  notification = Error
-                  Initialdir = %(cwd)s
-                  %(requirement)s
-                  getenv=True
-                  queue 1
-               """
+            output = %(stdout)s
+            error = %(stderr)s
+            log = %(log)s
+            %(argument)s
+            environment = CONDOR_ID=$(Cluster).$(Process)
+            Universe = vanilla
+            notification = Error
+            Initialdir = %(cwd)s
+            %(requirement)s
+            getenv=True
+            +queue="short"
+            queue 1
+        """
         
         if self.cluster_queue not in ['None', None]:
             requirement = 'Requirements = %s=?=True' % self.cluster_queue
